@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.api.battles.model.actor
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
@@ -24,9 +22,9 @@ import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.net.messages.client.battle.BattleApplyPassResponsePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
+import java.util.UUID
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
 
 abstract class BattleActor(
@@ -76,7 +74,7 @@ abstract class BattleActor(
   fun turn() {
         val request = request ?: return
         responses.clear()
-        if(activePokemon.any { it.isAlive() }) {
+        if (activePokemon.any { it.isAlive() }) {
             mustChoose = true
             sendUpdate(BattleMakeChoicePacket())
         }
@@ -90,15 +88,15 @@ abstract class BattleActor(
         }
     }
 
-    fun upkeep() {
+    fun postUpdate() {
         val request = request ?: return
         val forceSwitchPokemon = request.forceSwitch.mapIndexedNotNull { index, b -> if (b) activePokemon[index] else null }
         if (forceSwitchPokemon.isEmpty()) {
             return
         }
 
+        mustChoose = true // This must happen before the sendUpdate, not after, otherwise AI-driven actors will get locked (they may reply instantly)
         sendUpdate(BattleMakeChoicePacket())
-        mustChoose = true
     }
 
     fun setActionResponses(responses: List<ShowdownActionResponse>) {
@@ -154,6 +152,11 @@ abstract class BattleActor(
     open fun sendMessage(component: Component) {
         sendUpdate(BattleMessagePacket(component))
     }
+    /**
+     * Called when this actor's Pokemon uses a move. Default implementation does nothing.
+     * Subclasses (NPC-backed actors, players, etc) may override to trigger animations or UI.
+     */
+    open fun onUseMove(user: BattlePokemon, target: BattlePokemon?) {}
     open fun awardExperience(battlePokemon: BattlePokemon, experience: Int) {}
     open fun sendUpdate(packet: NetworkPacket<*>) {}
 

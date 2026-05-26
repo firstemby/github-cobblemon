@@ -13,11 +13,13 @@ import com.cobblemon.mod.common.api.item.PokemonAndMoveSelectingItem
 import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
@@ -28,8 +30,8 @@ class PPUpItem(
 }), PokemonAndMoveSelectingItem {
 
     override val bagItem = null
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any(::canUseOnMove)
-    override fun canUseOnMove(move: Move) = move.raisedPpStages < 3
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+    override fun canUseOnMove(stack: ItemStack, move: Move) = move.raisedPpStages < 3
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
@@ -37,8 +39,9 @@ class PPUpItem(
         move: Move
     ) {
         if (move.raiseMaxPP(amount)) {
-            if (!player.isCreative) {
-                stack.shrink(1)
+            stack.consume(1, player)
+            if (!player.hasInfiniteMaterials()) {
+                player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
             }
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_PILLS_USE, 1F, 1F)
         }

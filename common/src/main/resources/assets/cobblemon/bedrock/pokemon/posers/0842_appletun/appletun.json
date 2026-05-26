@@ -1,0 +1,40 @@
+{
+  "portraitScale": 1.83,
+  "portraitTranslation": [-0.75, -1.20, 0],
+  "profileScale": 0.68,
+  "profileTranslation": [0.00, 0.63, 0],
+  "rootBone": "appletun",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('appletun', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('appletun', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('appletun', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('appletun', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('appletun', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('appletun', 'blink')"
+      ]
+    }
+  }
+ }

@@ -42,20 +42,74 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "features": [
-    "shulker"
-  ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 1.25,
     "height": 1.7,
-    "fixed": false
+    "fixed": false,
+    "width": 1.25
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/hover",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "20-40",
+          "JUMP": "5-10",
+          "SKILL": "25-45",
+          "SPEED": "15-25",
+          "STAMINA": "0-5"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "0-4"
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {
@@ -216,8 +270,26 @@
     "tutor:stringshot",
     "tutor:swift",
     "tutor:telekinesis",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "preEvolution": "pineco",
-  "evolutions": []
+  "evolutions": [],
+  "features": [
+    "shulker"
+  ]
 }

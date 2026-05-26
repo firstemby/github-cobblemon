@@ -5,13 +5,27 @@
     {
       "aspects": [],
       "poser": "cobblemon:staraptor",
-      "model": "cobblemon:staraptor.geo",
+      "model": "cobblemon:staraptor_male.geo",
       "texture": "cobblemon:textures/pokemon/0398_staraptor/staraptor.png",
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0398_staraptor/staraptor_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0398_staraptor/staraptor_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

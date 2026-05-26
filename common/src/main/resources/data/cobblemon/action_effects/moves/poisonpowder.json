@@ -6,8 +6,8 @@
     },
     {
       "type": "animation",
-      "animation": ["poisonpowder", "status"],
-      "delay": 1.15
+      "animation": ["poisonpowder", "powder", "status", "cry"],
+      "delay": 1.25
     },
     {
       "type": "entity_particles",

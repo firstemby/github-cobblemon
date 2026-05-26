@@ -7,6 +7,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     id("dev.architectury.loom")
+    id("net.nemerosa.versioning")
 }
 
 java {
@@ -50,6 +51,11 @@ publishing {
             groupId = "com.cobblemon"
             artifactId = project.findProperty("maven.artifactId")?.toString() ?: project.name
             version = project.writeVersion(VersionType.PUBLISHING)
+            pom {
+                properties = mapOf(
+                    "gitCommit" to versioning.info.commit
+                )
+            }
         }
     }
 }

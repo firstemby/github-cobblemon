@@ -44,130 +44,97 @@
   "catchRate": 45,
   "eggCycles": 35,
   "baseFriendship": 50,
-  "baseScale": 1.8,
+  "baseScale": 1.0,
   "hitbox": {
-    "width": 1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.leather.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.leather.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "35-65",
+          "JUMP": "45-75",
+          "SKILL": "35-70",
+          "SPEED": "45-75",
+          "STAMINA": "40-65"
         }
       },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-75",
+          "JUMP": "25-35",
+          "SKILL": "15-45",
+          "SPEED": "10-20",
+          "STAMINA": "20-45"
         }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can stay off the ground",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:composite",
-      "transitionStrategy": "cobblemon:strategy/jump",
-      "defaultBehaviour": {
-        "key": "cobblemon:land/generic"
-      },
-      "alternateBehaviour": {
-        "key": "cobblemon:air/bird"
       }
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -0.5
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "HOVER"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.7,
-              "z": -1
-            }
-          },
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -1
-            }
-          }
-        ]
-      },
-      {
-        "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -1.5
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "HOVER"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.4,
-              "z": -1
-            }
-          },
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -0.2
-            }
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "aerodactyl",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       },
       "walk": {
         "walkSpeed": 0.3
@@ -175,7 +142,9 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -303,7 +272,6 @@
     "tutor:laserfocus",
     "tutor:meteorbeam",
     "tutor:ominouswind",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -315,7 +283,30 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:thunderfang",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dragonrage",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:rockthrow",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:celebrate"
   ],
   "evolutions": [],
   "forms": [
@@ -350,9 +341,9 @@
         "speed": 150
       },
       "baseExperienceYield": 215,
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

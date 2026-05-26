@@ -128,7 +128,18 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:thunderbolt",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -139,7 +150,33 @@
       "trigger": {
         "variant": "item_interact",
         "requiredContext": "cobblemon:sun_stone"
+      },
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
       }
     }
-  ]
+  ],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  }
 }

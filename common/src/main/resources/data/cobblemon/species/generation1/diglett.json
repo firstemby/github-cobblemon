@@ -55,13 +55,34 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
         "canSwimInWater": false,
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "diglett",
+          "tier": 1
+        },
+        {
+          "pokemon": "dugtrio",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -180,7 +201,25 @@
     "tutor:stoneedge",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:furyswipes",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -325,7 +364,22 @@
         "tutor:steelbeam",
         "tutor:stompingtantrum",
         "tutor:stoneedge",
-        "tutor:suckerpunch"
+        "tutor:suckerpunch",
+        "legacy:aerialace",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:furyswipes",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:scratch",
+        "legacy:slash",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic",
+        "legacy:uproar"
       ],
       "evolutions": [
         {
@@ -363,6 +417,37 @@
             "percentage": 2.5
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "diglett",
+              "tier": 1
+            },
+            {
+              "pokemon": "dugtrio",
+              "tier": 2
+            }
+          ]
+        },
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInWater": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
       }
     }
   ]

@@ -55,12 +55,49 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ralts",
+          "tier": 1
+        },
+        {
+          "pokemon": "kirlia",
+          "tier": 2
+        },
+        {
+          "pokemon": "gallade mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "gardevoir mega=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "gallade mega",
+          "tier": 5
+        },
+        {
+          "pokemon": "gardevoir mega",
+          "tier": 6
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -215,7 +252,26 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sing",
+    "special:wish"
   ],
   "evolutions": [
     {

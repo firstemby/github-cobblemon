@@ -4,6 +4,9 @@
   "profileScale": 0.59,
   "profileTranslation": [0.05, 0.87, 0],
   "rootBone": "simipour",
+  "animations": {
+    "cry": "q.bedrock_stateful('simipour', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import net.minecraft.ResourceLocationException
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import net.minecraft.ResourceLocationException
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -35,6 +35,11 @@ fun String.asIdentifierDefaultingNamespace(namespace: String = Cobblemon.MODID):
     val id = this.lowercase()
     return if (id.contains(":")) ResourceLocation.fromNamespaceAndPath(id.substringBefore(":"), id.substringAfter(":")) else ResourceLocation.fromNamespaceAndPath(namespace, id)
 }
+
+fun ResourceLocation.toAssetPath(prefix: String = "", suffix: String = ""): ResourceLocation {
+    return ResourceLocation.fromNamespaceAndPath(this.namespace, "$prefix$path$suffix")
+}
+
 
 /**
  * Attempts to parse an [ResourceLocation] from the [StringReader].

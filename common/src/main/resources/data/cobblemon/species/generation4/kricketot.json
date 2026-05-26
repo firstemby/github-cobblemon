@@ -52,12 +52,42 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kricketot",
+          "tier": 1
+        },
+        {
+          "pokemon": "kricketune",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:metronome",
+        "percentage": 2.5
+      },
       {
         "item": "cobblemon:coba_berry",
         "percentage": 2.5
@@ -81,7 +111,10 @@
     "tutor:bugbite",
     "tutor:endeavor",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:mudslap",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "evolutions": [
     {
@@ -95,7 +128,18 @@
           "variant": "level",
           "minLevel": 10
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

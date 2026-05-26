@@ -542,10 +542,7 @@
 							"offset": [0, 22.15, -5],
 							"rotation": [-90, 0, 0]
 						},
-						"item": {
-							"offset": [0, 22.15, -5],
-							"rotation": [-90, 0, 0]
-						}
+						"item": [0, 22.15, -5]
 					}
 				},
 				{
@@ -719,6 +716,14 @@
 					"cubes": [
 						{"origin": [1.4, 22, -2.4], "size": [2, 2, 1], "inflate": 0.04, "uv": [46, 6]}
 					]
+				},
+				{
+					"name": "seat_1_locator",
+					"parent": "torso2",
+					"pivot": [0, 13, 6],
+					"locators": {
+						"seat_1": [0, 13, 6]
+					}
 				},
 				{
 					"name": "legs",

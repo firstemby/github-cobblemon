@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 672,
   "name": "Skiddo",
   "primaryType": "grass",
@@ -42,9 +43,61 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
+    "height": 1.25,
+    "fixed": false,
+    "width": 0.9
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "40-65",
+          "JUMP": "30-40",
+          "SKILL": "20-40",
+          "SPEED": "30-45",
+          "STAMINA": "30-45"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skiddo",
+          "tier": 1
+        },
+        {
+          "pokemon": "gogoat",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.35
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,
@@ -149,7 +202,18 @@
     "tutor:synthesis",
     "tutor:wildcharge",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -160,10 +224,12 @@
       ],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 32
+          "minLevel": 32,
+          "variant": "level"
         }
-      ]
+      ],
+      "result": "gogoat",
+      "variant": "level_up"
     }
   ]
 }

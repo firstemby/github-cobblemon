@@ -12,16 +12,17 @@ import com.bedrockk.molang.Expression
 import com.bedrockk.molang.ast.BooleanExpression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.rules.selector.AllSpawnDetailSelector
-import com.cobblemon.mod.common.api.spawning.rules.selector.AllSpawningContextSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.AllSpawnablePositionSelector
 import com.cobblemon.mod.common.api.spawning.rules.selector.SpawnDetailSelector
-import com.cobblemon.mod.common.api.spawning.rules.selector.SpawningContextSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.SpawnablePositionSelector
 import com.cobblemon.mod.common.util.resolveBoolean
+import com.google.gson.annotations.SerializedName
 
 /**
- * A rule component that targets specific spawns and contexts and judges whether it
+ * A rule component that targets specific spawns and spawnable positions and judges whether it
  * is allowed to spawn. This runs prior to the regular SpawnDetail conditions.
  *
  * @author Hiroku
@@ -31,14 +32,17 @@ class FilterRuleComponent : SpawnRuleComponent {
     @Transient
     val runtime = MoLangRuntime().setup()
 
-    val spawnSelector: SpawnDetailSelector = AllSpawnDetailSelector
-    val contextSelector: SpawningContextSelector = AllSpawningContextSelector
+    @SerializedName("spawnDetailSelector", alternate = ["spawnSelector"])
+    val spawnDetailSelector: SpawnDetailSelector = AllSpawnDetailSelector
+    @SerializedName("spawnablePositionSelector", alternate = ["contextSelector"])
+    val spawnablePositionSelector: SpawnablePositionSelector = AllSpawnablePositionSelector
     val allow: Expression = BooleanExpression(true)
 
-    override fun affectSpawnable(detail: SpawnDetail, ctx: SpawningContext): Boolean {
-        return if (spawnSelector.selects(detail) && contextSelector.selects(ctx)) {
+    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean {
+        return if (spawnDetailSelector.selects(detail) && spawnablePositionSelector.selects(spawnablePosition)) {
             runtime.environment.setSimpleVariable("spawn", detail.struct)
-            runtime.environment.setSimpleVariable("context", ctx.getOrSetupStruct())
+            runtime.environment.setSimpleVariable("spawn_detail", detail.struct)
+            runtime.environment.setSimpleVariable("spawnable_position", spawnablePosition.getOrSetupStruct())
             runtime.resolveBoolean(allow)
         } else {
             true

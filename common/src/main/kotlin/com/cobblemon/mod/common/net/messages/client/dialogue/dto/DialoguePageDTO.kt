@@ -13,13 +13,9 @@ import com.cobblemon.mod.common.api.dialogue.DialoguePage
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.util.readIdentifier
-import com.cobblemon.mod.common.util.readList
-import com.cobblemon.mod.common.util.readNullable
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.readText
-import com.cobblemon.mod.common.util.writeCollection
 import com.cobblemon.mod.common.util.writeIdentifier
-import com.cobblemon.mod.common.util.writeNullable
 import com.cobblemon.mod.common.util.writeString
 import com.cobblemon.mod.common.util.writeText
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -30,6 +26,8 @@ class DialoguePageDTO : Encodable, Decodable {
     var speaker: String? = null
     lateinit var background: ResourceLocation
     var lines: MutableList<MutableComponent> = mutableListOf()
+    var textColor: String? = null
+    var gibber: DialogueGibberDTO? = null
     // Later can include some face data probably
     var clientActions = mutableListOf<String>()
 
@@ -38,6 +36,7 @@ class DialoguePageDTO : Encodable, Decodable {
         this.speaker = dialoguePage.speaker
         this.background = dialoguePage.background ?: activeDialogue.dialogueReference.background
         this.lines = dialoguePage.lines.map { it(activeDialogue) }.toMutableList()
+        this.textColor = dialoguePage.textColor
         this.clientActions = dialoguePage.clientActions.map { it.originalString }.toMutableList()
     }
 
@@ -45,6 +44,8 @@ class DialoguePageDTO : Encodable, Decodable {
         buffer.writeNullable(speaker) { _, value -> buffer.writeString(value)}
         buffer.writeIdentifier(background)
         buffer.writeCollection(lines) { _, value -> buffer.writeText(value) }
+        buffer.writeNullable(textColor) { _, value -> buffer.writeString(value)}
+        buffer.writeNullable(gibber) { _, value -> value.encode(buffer) }
         buffer.writeInt(clientActions.size)
         clientActions.forEach { buffer.writeString(it) }
     }
@@ -53,6 +54,8 @@ class DialoguePageDTO : Encodable, Decodable {
         speaker = buffer.readNullable { buffer.readString() }
         background = buffer.readIdentifier()
         lines = buffer.readList { (it as RegistryFriendlyByteBuf).readText().copy() }.toMutableList()
+        textColor = buffer.readNullable { buffer.readString() }
+        gibber = buffer.readNullable { DialogueGibberDTO.decode(buffer) }
         val clientActionsSize = buffer.readInt()
         for (i in 0 until clientActionsSize) {
             clientActions.add(buffer.readString())

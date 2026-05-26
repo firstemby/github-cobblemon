@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.integration.jei.berry
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.jei.CobblemonJeiProvider
 import com.cobblemon.mod.common.item.berry.BerryItem
+import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 
@@ -37,5 +38,5 @@ class BerryMutationProvider : CobblemonJeiProvider {
         registration.addRecipes(BerryRecipeCategory.RECIPE_TYPE, berryMutationRecipes)
     }
 
-
+    override fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration) { }
 }

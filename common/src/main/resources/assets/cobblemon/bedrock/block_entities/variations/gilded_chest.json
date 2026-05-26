@@ -6,7 +6,7 @@
       "aspects": [],
       "poser": "cobblemon:gilded_chest",
       "model": "cobblemon:gilded_chest.geo",
-      "texture": "cobblemon:textures/block/gilded_chest.png",
+      "texture": "cobblemon:textures/block/functional/gilded_chest.png",
       "layers": []
     }
   ]

@@ -43,19 +43,75 @@
   "baseFriendship": 35,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.8,
     "height": 3.4,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/hover",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "45-60",
+          "JUMP": "45-80",
+          "SKILL": "60-70",
+          "SPEED": "15-25",
+          "STAMINA": "0-5"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "4"
+    },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0033,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "day"
+      ]
     }
   },
   "drops": {
@@ -205,7 +261,6 @@
     "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
-    "tutor:rockslide",
     "tutor:rocksmash",
     "tutor:shadowball",
     "tutor:skillswap",
@@ -218,7 +273,28 @@
     "tutor:telekinesis",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:bulldoze",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "dusclops",
   "evolutions": []

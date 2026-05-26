@@ -1,0 +1,146 @@
+{
+    "name": "cobblemon:habitats/thermal_crevices",
+    "fallback": "cobblemon:habitats/crevice_fallback",
+    "elements": [
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice8",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/thermal_crevice_fallback6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/thermal_crevice",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

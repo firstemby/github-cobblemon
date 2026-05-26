@@ -50,6 +50,26 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -184,7 +204,11 @@
     "tutor:steelbeam",
     "tutor:throatchop",
     "tutor:thunderbolt",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "preEvolution": "meowth galarian",
   "evolutions": []

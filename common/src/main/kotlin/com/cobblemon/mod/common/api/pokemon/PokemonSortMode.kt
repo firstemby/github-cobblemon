@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 enum class PokemonSortMode(val comparator: Comparator<Pokemon?>, val reverseComparator: Comparator<Pokemon?>) {
     NAME({ it?.getDisplayName()?.string }),
     LEVEL({ it?.level }),
-    TYPE({ it?.primaryType?.name }),
+    TYPE({ it?.primaryType?.showdownId }),
     POKEDEX_NUMBER({ it?.species?.nationalPokedexNumber }),
     GENDER({ it?.gender });
 

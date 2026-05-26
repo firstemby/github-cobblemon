@@ -14,7 +14,9 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
 import com.cobblemon.mod.common.api.multiblock.condition.BlockRelativeCondition
+import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.RestorationTankBlock
+import com.cobblemon.mod.common.block.entity.FossilMultiblockEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.blockPositionsAsList
 import net.minecraft.advancements.critereon.BlockPredicate
@@ -121,6 +123,13 @@ class FossilMultiblockBuilder(val centerPos: BlockPos) : MultiblockStructureBuil
         val analyzerEntity = world.getBlockEntity(fossilAnalyzerPos) as? MultiblockEntity
         val tankBaseEntity = world.getBlockEntity(restorationTankPos) as? MultiblockEntity
         val tankTopEntity = world.getBlockEntity(restorationTankPos.above()) as? MultiblockEntity
+        if (monitorEntity is FossilMultiblockEntity) {
+            val monitorState = world.getBlockState(monitorPos)
+            monitorEntity.dropDisk(world, monitorPos, monitorState)
+            if (monitorState.hasProperty(MonitorBlock.SCREEN)) {
+                world.setBlockAndUpdate(monitorPos, monitorState.setValue(MonitorBlock.SCREEN, MonitorBlock.MonitorScreen.OFF))
+            }
+        }
         val structure = FossilMultiblockStructure(monitorPos, fossilAnalyzerPos, restorationTankPos)
 
         structure.tankConnectorDirection = dirsToCheck.filter {

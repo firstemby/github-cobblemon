@@ -4,7 +4,9 @@
   "profileScale": 0.63,
   "profileTranslation": [0, 0.64, 0],
   "rootBone": "goldeen",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('goldeen', 'cry')"
+  },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],

@@ -16,7 +16,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_shiny.png",
       "layers": [
         {
@@ -27,67 +29,9 @@
       ]
     },
     {
-      "aspects": ["color-black"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_black.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-blue"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_blue.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-brown"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_brown.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-cyan"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_cyan.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-gray"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_gray.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-green"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_green.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-light_blue"],
+      "aspects": [
+        "rainbow-light_blue"
+      ],
       "layers": [
         {
           "name": "paint",
@@ -97,47 +41,9 @@
       ]
     },
     {
-      "aspects": ["color-light_gray"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_light_gray.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-lime"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_lime.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-magenta"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_magenta.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-orange"],
-      "layers": [
-        {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_orange.png"
-        }
-      ]
-    },
-    {
-      "aspects": ["color-pink"],
+      "aspects": [
+        "rainbow-pink"
+      ],
       "layers": [
         {
           "name": "paint",
@@ -147,7 +53,21 @@
       ]
     },
     {
-      "aspects": ["color-purple"],
+      "aspects": [
+        "rainbow-magenta"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_magenta.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-purple"
+      ],
       "layers": [
         {
           "name": "paint",
@@ -157,7 +77,81 @@
       ]
     },
     {
-      "aspects": ["color-red"],
+      "aspects": [
+        "rainbow-blue"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_blue.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-cyan"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_cyan.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-green"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_green.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-lime"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_lime.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-yellow"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_yellow.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-orange"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_orange.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "rainbow-red"
+      ],
       "layers": [
         {
           "name": "paint",
@@ -167,7 +161,189 @@
       ]
     },
     {
-      "aspects": ["color-white"],
+      "aspects": [
+        "color-light_blue"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_light_blue.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-pink"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_pink.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-magenta"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_magenta.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-purple"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_purple.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-blue"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_blue.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-cyan"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_cyan.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-green"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_green.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-lime"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_lime.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-yellow"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_yellow.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-orange"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_orange.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-red"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_red.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-black"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_black.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-brown"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_brown.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-gray"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_gray.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-light_gray"
+      ],
+      "layers": [
+        {
+          "name": "paint",
+          "translucent": true,
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_light_gray.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-white"
+      ],
       "layers": [
         {
           "name": "paint",
@@ -177,12 +353,14 @@
       ]
     },
     {
-      "aspects": ["color-yellow"],
+      "aspects": [
+        "alpha_eyes"
+      ],
       "layers": [
         {
-          "name": "paint",
-          "translucent": true,
-          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_paint_yellow.png"
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0235_smeargle/smeargle_alpha.png",
+          "emissive": true
         }
       ]
     }

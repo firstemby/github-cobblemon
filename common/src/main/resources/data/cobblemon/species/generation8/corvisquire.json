@@ -50,13 +50,43 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.18
+      },
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "corvisquire",
+          "tier": 1
+        },
+        {
+          "pokemon": "honchkrow",
+          "tier": 2
+        },
+        {
+          "pokemon": "corviknight",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -150,7 +180,10 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "rookidee",
   "evolutions": [

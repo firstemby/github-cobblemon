@@ -6,7 +6,7 @@
     },
     {
       "type": "animation",
-      "animation": ["bite", "dark", "physical"],
+      "animation": ["bite", "fang", "physical"],
       "delay": 1.05
     },
     {

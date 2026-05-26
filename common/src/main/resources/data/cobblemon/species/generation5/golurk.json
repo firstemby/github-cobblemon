@@ -43,25 +43,112 @@
   "catchRate": 90,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1.65,
+  "baseScale": 1.0,
   "hitbox": {
-    "width": 1.4,
-    "height": 3.5,
-    "fixed": false
+    "height": 5.1,
+    "fixed": false,
+    "width": 2.5
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/rocket",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.driver_input() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.rocket.stereo",
+            "volumeExpr": "math.pow(math.min((q.driver_input() / 1.5) + (q.ride_velocity() / 1.5), 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.driver_input() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.rocket.mono",
+            "volumeExpr": "math.pow(math.min((q.driver_input() / 1.5) + (q.ride_velocity() / 1.5), 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "10-35",
+          "JUMP": "25-40",
+          "SKILL": "15-30",
+          "SPEED": "45-75",
+          "STAMINA": "30-50"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": true,
+        "stats": {
+          "ACCELERATION": "65-80",
+          "JUMP": "40-60",
+          "SKILL": "40-65",
+          "SPEED": "35-50",
+          "STAMINA": "60-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      },
+      {
+        "locator": "seat_3"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "3"
+    },
     "moving": {
-      "walk": {
-        "walkSpeed": 0.25
+      "fly": {
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true,
         "canSwimInWater": false
+      },
+      "walk": {
+        "walkSpeed": 0.35
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {
@@ -232,8 +319,23 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "golett",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 10,
+    "liquidGlowMode": "BOTH"
+  },
+  "standingEyeHeight": 0.98
 }

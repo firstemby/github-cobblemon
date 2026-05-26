@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:flying_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:flying_gem_block",
+    "count": 1
+  },
+  "criteria": {
+    "has_flying_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:flying_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:flying_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flying_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

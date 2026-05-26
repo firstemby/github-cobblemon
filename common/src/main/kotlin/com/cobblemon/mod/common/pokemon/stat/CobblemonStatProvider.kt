@@ -21,9 +21,9 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonStatTypeAdapter
 import com.cobblemon.mod.common.util.readSizedInt
 import com.cobblemon.mod.common.util.writeSizedInt
-import net.minecraft.network.RegistryFriendlyByteBuf
 import kotlin.math.truncate
 import kotlin.random.Random
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -86,7 +86,7 @@ object CobblemonStatProvider : StatProvider {
     }
 
     override fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int {
-        val iv = pokemon.ivs.getOrDefault(stat)
+        val iv = pokemon.ivs.getEffectiveBattleIV(stat)
         val base = pokemon.form.baseStats[stat]!!
         val ev = pokemon.evs.getOrDefault(stat)
         val level = pokemon.level

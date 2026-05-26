@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
@@ -49,7 +50,6 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -82,6 +82,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionResult
@@ -102,13 +103,19 @@ object CobblemonFabric : CobblemonImplementation {
     fun initialize() {
         Cobblemon.preInitialize(this)
 
+        Cobblemon.statistics.registerStats()
+        Cobblemon.statistics.stats.forEach { entry ->
+            val cobblemonStat = entry.value
+            Registry.register(BuiltInRegistries.CUSTOM_STAT, cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
+            Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
+        }
+
         Cobblemon.initialize()
         networkManager.registerMessages()
         networkManager.registerServerHandlers()
 
         //This has to be registered elsewhere on forge so we cant do it in common
         CobblemonSherds.registerSherds()
-
         CobblemonBlockPredicates.touch()
         CobblemonPlacementModifierTypes.touch()
         CobblemonProcessorTypes.touch()
@@ -165,12 +172,17 @@ object CobblemonFabric : CobblemonImplementation {
             CobblemonStructureProcessorListOverrides.register(server)
         }
         ServerLifecycleEvents.SERVER_STARTED.register { server -> PlatformEvents.SERVER_STARTED.post(ServerEvent.Started(server)) }
-        ServerLifecycleEvents.SERVER_STOPPING.register { server -> PlatformEvents.SERVER_STOPPING.post(ServerEvent.Stopping(server)) }
+        ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+            server.playerList.players.forEach { player -> PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(player)) }
+            PlatformEvents.SERVER_STOPPING.post(ServerEvent.Stopping(server))
+        }
         ServerLifecycleEvents.SERVER_STOPPED.register { server -> PlatformEvents.SERVER_STOPPED.post(ServerEvent.Stopped(server)) }
         ServerTickEvents.START_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_PRE.post(ServerTickEvent.Pre(server)) }
         ServerTickEvents.END_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_POST.post(ServerTickEvent.Post(server)) }
         ServerPlayConnectionEvents.JOIN.register { handler, _, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGIN.post(ServerPlayerEvent.Login(handler.player)) } }
-        ServerPlayConnectionEvents.DISCONNECT.register { handler, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) } }
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, server ->
+            if (!server.isStopped) server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) }
+        }
         ServerLivingEntityEvents.ALLOW_DEATH.register { entity, _, _ ->
             if (entity is ServerPlayer) {
                 PlatformEvents.PLAYER_DEATH.postThen(
@@ -249,6 +261,7 @@ object CobblemonFabric : CobblemonImplementation {
         EntityDataSerializers.registerSerializer(IdentifierDataSerializer)
         EntityDataSerializers.registerSerializer(UUIDSetDataSerializer)
         EntityDataSerializers.registerSerializer(NPCPlayerTextureSerializer)
+        EntityDataSerializers.registerSerializer(RideBoostsDataSerializer)
     }
 
     override fun registerItems() {
@@ -286,8 +299,11 @@ object CobblemonFabric : CobblemonImplementation {
         CobblemonBlockEntities.register { identifier, type -> Registry.register(CobblemonBlockEntities.registry, identifier, type) }
     }
 
+    override fun registerPoiTypes() {
+        CobblemonPoiTypes.register { identifier, type -> PointOfInterestHelper.register(identifier, type.maxTickets, type.validRange, type.matchingStates) }
+    }
+
     override fun registerVillagers() {
-        CobblemonVillagerPoiTypes.register { identifier, type -> PointOfInterestHelper.register(identifier, type.maxTickets, type.validRange, type.matchingStates) }
         CobblemonVillagerProfessions.register { identifier, profession -> Registry.register(CobblemonVillagerProfessions.registry, identifier, profession) }
 
         CobblemonTradeOffers.tradeOffersForAll().forEach { tradeOffer -> TradeOfferHelper.registerVillagerOffers(tradeOffer.profession, tradeOffer.requiredLevel) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
@@ -295,12 +311,25 @@ object CobblemonFabric : CobblemonImplementation {
         CobblemonTradeOffers.resolveWanderingTradeOffers().forEach { tradeOffer -> TradeOfferHelper.registerWanderingTraderOffers(if (tradeOffer.isRareTrade) 2 else 1) { factories -> factories.addAll(tradeOffer.tradeOffers) } }
     }
 
+    override fun registerRecipeSerializers() {
+        CobblemonRecipeSerializers.register { identifier, factory -> Registry.register(CobblemonRecipeSerializers.registry, identifier, factory) }
+    }
+
+    override fun registerRecipeTypes() {
+        CobblemonRecipeTypes.register { identifier, factory -> Registry.register(CobblemonRecipeTypes.registry, identifier, factory) }
+    }
+
+
     override fun registerWorldGenFeatures() {
         CobblemonFeatures.register { identifier, feature -> Registry.register(CobblemonFeatures.registry, identifier, feature) }
     }
 
     override fun registerParticles() {
         CobblemonParticles.register { identifier, particleType -> Registry.register(CobblemonParticles.registry, identifier, particleType) }
+    }
+
+    override fun registerMenu() {
+        CobblemonMenuType.register { identifier, factory -> Registry.register(CobblemonMenuType.registry, identifier, factory) }
     }
 
     override fun addFeatureToWorldGen(feature: ResourceKey<PlacedFeature>, step: GenerationStep.Decoration, validTag: TagKey<Biome>?) {
@@ -334,6 +363,12 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerCompostable(item: ItemLike, chance: Float) {
         CompostingChanceRegistry.INSTANCE.add(item, chance)
+    }
+
+    override fun registerMobEffects() {
+        CobblemonMobEffects.register { identifier, effect ->
+            Registry.register(CobblemonMobEffects.registry, identifier, effect)
+        }
     }
 
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {

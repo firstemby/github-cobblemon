@@ -20,6 +20,8 @@ import java.nio.file.Path
 import java.util.*
 
 object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
+    const val DEFAULT_PATH = "playermolangdata/"
+    const val DEFAULT_FOLDER_STRUCTURE = "%s/%s.dat"
     lateinit var savePath: Path
     val cache = mutableMapOf<UUID, VariableStruct>()
     val dirty = mutableListOf<UUID>()
@@ -57,7 +59,7 @@ object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         dirty.add(uuid)
     }
 
-    override fun load(uuid: UUID): VariableStruct {
+    override fun load(uuid: UUID, filePath: String?): VariableStruct {
         return if (cache.contains(uuid))
             cache[uuid]!!
         else {
@@ -68,7 +70,7 @@ object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
                 return data
             }
 
-            val nbt = NbtIo.readCompressed(file(uuid), NbtAccounter.unlimitedHeap())
+            val nbt = NbtIo.readCompressed(file(uuid, filePath ?: DEFAULT_PATH), NbtAccounter.unlimitedHeap())
 
             // If it's not a VariableStruct then someone's fucked around and will subsequently find out
             val data = readMoValueFromNBT(nbt) as VariableStruct
@@ -77,8 +79,8 @@ object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         }
     }
 
-    fun save(uuid: UUID) {
-        val file = file(uuid)
+    fun save(uuid: UUID, filePath: String? = null) {
+        val file = file(uuid, filePath ?: DEFAULT_PATH)
         val data = cache[uuid] ?: return
         val nbt = writeMoValueToNBT(data)!! as CompoundTag
         file.toFile().parentFile.mkdirs()
@@ -86,5 +88,5 @@ object NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         dirty -= uuid
     }
 
-    private fun file(uuid: UUID) = savePath.resolve("playermolangdata/${uuid.toString().substring(0, 2)}/$uuid.dat")
+    private fun file(uuid: UUID, filePath: String = DEFAULT_PATH) = savePath.resolve(filePath + DEFAULT_FOLDER_STRUCTURE.format(uuid.toString().substring(0, 2), uuid))
 }

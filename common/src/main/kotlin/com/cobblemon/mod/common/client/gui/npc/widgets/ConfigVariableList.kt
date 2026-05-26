@@ -9,9 +9,8 @@
 package com.cobblemon.mod.common.client.gui.npc.widgets
 
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.npc.NPCClasses
-import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable
-import com.cobblemon.mod.common.api.npc.configuration.NPCConfigVariable.NPCVariableType
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable.MoLangVariableType
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorButton
 import com.cobblemon.mod.common.client.gui.npc.NPCEditorScreen
@@ -58,12 +57,9 @@ class ConfigVariableList(
         this.y = listY
         correctSize()
         setRenderHeader(false, 0)
-        val npcClass = NPCClasses.getByIdentifier(parent.dto.npcClass)
-        if (npcClass != null) {
-            npcClass.config.forEach { variable ->
-                val value = parent.dto.variables[variable.variableName] ?: variable.defaultValue
-                addEntry(ConfigVariable(variable, value, this))
-            }
+        parent.dto.registeredVariables.sortedBy { it.category.string }.forEach { variable ->
+            val value = parent.dto.variables[variable.variableName] ?: variable.defaultValue
+            addEntry(ConfigVariable(variable, value, this))
         }
     }
 
@@ -117,7 +113,7 @@ class ConfigVariableList(
 
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + WIDTH)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + HEIGHT))
 
-    class ConfigVariable(val variable: NPCConfigVariable, val value: String, private val parent: ConfigVariableList) : Entry<ConfigVariable>() {
+    class ConfigVariable(val variable: MoLangConfigVariable, val value: String, private val parent: ConfigVariableList) : Entry<ConfigVariable>() {
         val client: Minecraft = Minecraft.getInstance()
         var _focused = false
         var children = mutableListOf<GuiEventListener>()
@@ -144,7 +140,7 @@ class ConfigVariableList(
                 textValue = it
                 parent.parent.dto.variables[variable.variableName] = it
             }
-            if (variable.type == NPCVariableType.NUMBER) {
+            if (variable.type == MoLangVariableType.NUMBER) {
                 it.setFilter { value -> value.toDoubleOrNull() != null || value.isBlank() || value == "." || value == "-" }
             }
         }
@@ -164,7 +160,7 @@ class ConfigVariableList(
         }
 
         init {
-            if (variable.type == NPCVariableType.BOOLEAN) {
+            if (variable.type == MoLangVariableType.BOOLEAN) {
                 children.add(toggleButton) // children.add(cycleButton)
             } else {
                 children.add(editBox)
@@ -195,7 +191,7 @@ class ConfigVariableList(
         ) {
             val x = rowLeft - 4
             val y = rowTop
-            if (variable.type == NPCVariableType.BOOLEAN) {
+            if (variable.type == MoLangVariableType.BOOLEAN) {
                 toggleButton.x = x
                 toggleButton.y = y + 9
                 toggleButton.render(context, mouseX, mouseY, partialTicks)

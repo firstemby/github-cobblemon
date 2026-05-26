@@ -55,13 +55,30 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
         "canSwimInWater": false,
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dugtrio",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -191,7 +208,27 @@
     "tutor:stoneedge",
     "tutor:suckerpunch",
     "tutor:throatchop",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:furyswipes",
+    "legacy:hiddenpower",
+    "legacy:highhorsepower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scaryface",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "diglett",
   "evolutions": [],
@@ -350,7 +387,22 @@
         "tutor:stoneedge",
         "tutor:suckerpunch",
         "tutor:throatchop",
-        "tutor:uproar"
+        "tutor:uproar",
+        "legacy:aerialace",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:furyswipes",
+        "legacy:hiddenpower",
+        "legacy:highhorsepower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:scratch",
+        "legacy:slash",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "preEvolution": "diglett alolan",
       "evolutions": [],
@@ -375,6 +427,33 @@
             "percentage": 5.0
           }
         ]
+      },
+      "behaviour": {
+        "herd": {
+          "maxSize": "3",
+          "toleratedLeaders": [
+            {
+              "pokemon": "dugtrio",
+              "tier": 1
+            }
+          ]
+        },
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInWater": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
       }
     }
   ]

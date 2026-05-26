@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.jellicent_male",
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 5,
@@ -31,6 +31,55 @@
 						{"origin": [-1.5, 40, -1.5], "size": [3, 5, 0], "uv": [0, 109]},
 						{"origin": [-1.5, 40, -1.5], "size": [0, 5, 3], "uv": [0, 111]}
 					]
+				},
+				{
+					"name": "locator_mouth",
+					"parent": "head",
+					"pivot": [0, 33, -12],
+					"locators": {
+						"mouth": [0, 33, -12]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "head",
+					"pivot": [0, 36.75, -12],
+					"locators": {
+						"item_face": [0, 36.75, -12]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "head",
+					"pivot": [0, 36, -12],
+					"locators": {
+						"face": [0, 36, -12]
+					}
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "head",
+					"pivot": [0, 39.5, 4.75],
+					"rotation": [-10, 0, 0],
+					"locators": {
+						"seat_1": [0, 39.5, 4.75]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "head",
+					"pivot": [0, 43.4, -2.5],
+					"locators": {
+						"item_hat": [0, 43.4, -2.5]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "head",
+					"pivot": [0, 40, -7],
+					"locators": {
+						"head": [0, 40, -7]
+					}
 				},
 				{
 					"name": "stache_left",
@@ -100,6 +149,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-3.25, 36.75, -12],
+					"locators": {
+						"eye1": [-3.25, 36.75, -12]
+					}
+				},
+				{
 					"name": "left_eye",
 					"parent": "head",
 					"pivot": [3.25, 36.5, 0],
@@ -109,6 +166,14 @@
 						{"origin": [2.25, 35.5, -12.02], "size": [2, 2, 0], "uv": [20, 8]},
 						{"origin": [2.75, 36.25, -12.03], "size": [1, 1, 0], "uv": [0, 0]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [3.25, 36.75, -12],
+					"locators": {
+						"eye2": [3.25, 36.75, -12]
+					}
 				},
 				{
 					"name": "right_eye_closed",
@@ -159,6 +224,25 @@
 					]
 				},
 				{
+					"name": "locator_hand_primary",
+					"parent": "right_hand_bend",
+					"pivot": [-18, 21, 0],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"hand_primary": [-18, 21, 0],
+						"physical": [-18, 21, 0],
+						"special": [-18, 21, 0]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "right_hand_bend",
+					"pivot": [-20.5, 20.5, -1.5],
+					"locators": {
+						"item": [-20.5, 20.5, -1.5]
+					}
+				},
+				{
 					"name": "left_arm",
 					"parent": "neck",
 					"pivot": [2.25, 21, 0],
@@ -182,6 +266,15 @@
 					"cubes": [
 						{"origin": [16.25, 21, -3], "size": [6, 0, 6], "uv": [0, 16]}
 					]
+				},
+				{
+					"name": "locator_hand_secondary",
+					"parent": "left_hand_bend",
+					"pivot": [18, 21, 0],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"hand_secondary": [18, 21, 0]
+					}
 				},
 				{
 					"name": "frill_back",
@@ -274,6 +367,38 @@
 					"cubes": [
 						{"origin": [-2.75, 1.25, -2.35], "size": [5, 5, 0], "uv": [0, 67]}
 					]
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 25, -20],
+					"locators": {
+						"target": [0, 25, -20]
+					}
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 33, 0],
+					"locators": {
+						"middle": [0, 33, 0]
+					}
+				},
+				{
+					"name": "locator_root",
+					"parent": "jellicent",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "jellicent",
+					"pivot": [0, 40, 0],
+					"locators": {
+						"top": [0, 40, 0]
+					}
 				}
 			]
 		}

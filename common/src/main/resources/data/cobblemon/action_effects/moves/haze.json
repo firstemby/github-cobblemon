@@ -21,7 +21,7 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:haze_actorshroud",
-      "locator": "middle"
+      "locator": "root"
     },
     {
       "type": "pause",

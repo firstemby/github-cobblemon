@@ -10,14 +10,14 @@ package com.cobblemon.mod.common.api.pokemon.status
 
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.VolatileStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.AttractStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.BurnStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.FrozenStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.ParalysisStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.SleepStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.AttractStatus
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -34,17 +34,24 @@ object Statuses {
     private val volatileStatuses = mutableListOf<Status>()
     private val allStatuses = mutableListOf<Status>()
 
+    @JvmField
     val POISON = registerStatus(PoisonStatus())
+    @JvmField
     val POISON_BADLY = registerStatus(PoisonBadlyStatus())
+    @JvmField
     val PARALYSIS = registerStatus(ParalysisStatus())
+    @JvmField
     val SLEEP = registerStatus(SleepStatus())
+    @JvmField
     val FROZEN = registerStatus(FrozenStatus())
+    @JvmField
     val BURN = registerStatus(BurnStatus())
+    @JvmField
     val ATTRACT = registerStatus(AttractStatus())
+    @JvmField
     val CONFUSE = registerStatus(ConfuseStatus())
 
-
-
+    @JvmStatic
     fun <T: Status> registerStatus(status: T) : T {
         if (status is PersistentStatus) {
             persistentStatuses.add(status)
@@ -56,7 +63,10 @@ object Statuses {
         return status
     }
 
+    @JvmStatic
     fun getStatus(name: ResourceLocation) = allStatuses.find { status -> status.name == name }
+    @JvmStatic
     fun getStatus(showdownName: String) = allStatuses.find { it.showdownName == showdownName }
+    @JvmStatic
     fun getPersistentStatuses() = persistentStatuses
 }

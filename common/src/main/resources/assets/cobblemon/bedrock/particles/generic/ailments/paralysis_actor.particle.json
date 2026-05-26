@@ -5,7 +5,7 @@
             "identifier": "cobblemon:paralysis_actor",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/paralysis-spark"
+                "texture": "textures/particles/generic/status/paralysis_spark"
             }
         },
         "events": {

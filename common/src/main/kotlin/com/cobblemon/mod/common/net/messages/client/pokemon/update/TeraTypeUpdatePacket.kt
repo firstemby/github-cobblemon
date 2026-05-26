@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since July 19, 2023
  */
-class TeraTypeUpdatePacket(pokemon: () -> Pokemon, value: TeraType) : SingleUpdatePacket<TeraType, TeraTypeUpdatePacket>(pokemon, value) {
+class TeraTypeUpdatePacket(pokemon: () -> Pokemon?, value: TeraType) : SingleUpdatePacket<TeraType, TeraTypeUpdatePacket>(pokemon, value) {
     override val id = ID
 
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {

@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.writeString
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AspectsUpdatePacket(pokemon: () -> Pokemon, value: Set<String>): SingleUpdatePacket<Set<String>, AspectsUpdatePacket>(pokemon, value) {
+class AspectsUpdatePacket(pokemon: () -> Pokemon?, value: Set<String>): SingleUpdatePacket<Set<String>, AspectsUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         buffer.writeCollection(this.value) { pb, value -> pb.writeString(value) }

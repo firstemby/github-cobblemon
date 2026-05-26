@@ -44,20 +44,81 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.8,
     "height": 1.8,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/hover",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "40-60",
+          "JUMP": "15-25",
+          "SKILL": "40-60",
+          "SPEED": "30-40",
+          "STAMINA": "5-10"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "8",
+      "toleratedLeaders": [
+        {
+          "pokemon": "klinklang",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
+      "fly": {
+        "canFly": true
+      },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {
@@ -149,9 +210,18 @@
     "tutor:steelroller",
     "tutor:telekinesis",
     "tutor:thunderbolt",
-    "tutor:trick",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "klang",
   "evolutions": []

@@ -143,7 +143,10 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "grookey",
   "evolutions": [
@@ -160,5 +163,34 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "thwackey",
+          "tier": 1
+        },
+        {
+          "pokemon": "rillaboom",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

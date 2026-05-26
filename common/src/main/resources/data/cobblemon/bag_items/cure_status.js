@@ -8,22 +8,25 @@
 
 {
     use(battle, pokemon, itemId, data) {
-        var statuses = [];
-        var shouldCure = true;
-        if (data.length > 0) {
-            shouldCure = false;
-            for (const status of data) {
-                if (pokemon.status == status) {
-                    shouldCure = true;
-                }
+        const curedVolatiles = [];
+        var shouldCureNonvolatile = false;
+
+        for (const status of data) {
+            if (pokemon.status == status) {
+                shouldCureNonvolatile = true;
+            }
+            else if (pokemon.volatiles[status]) {
+                curedVolatiles.push(status);
             }
         }
 
-        if (shouldCure) {
+        if (shouldCureNonvolatile) {
             pokemon.cureStatus(true);
         }
-        if (data.length == 0) {
-            pokemon.removeVolatile('confusion');
+        if (curedVolatiles.length != 0) {
+            for (const volatile of curedVolatiles) {
+                pokemon.removeVolatile(volatile);
+            }
         }
     }
 }

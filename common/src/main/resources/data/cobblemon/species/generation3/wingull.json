@@ -56,11 +56,8 @@
         "canFly": true
       },
       "swim": {
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       },
       "walk": {
         "walkSpeed": 0.3
@@ -69,7 +66,33 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wattrel",
+          "tier": 1
+        },
+        {
+          "pokemon": "kilowattrel",
+          "tier": 2
+        },
+        {
+          "pokemon": "wingull",
+          "tier": 3
+        },
+        {
+          "pokemon": "pelipper",
+          "tier": 4
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -175,7 +198,25 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

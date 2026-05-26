@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -119,7 +120,7 @@ class HealingMachineBlockEntity(
         updateBlockChargeLevel(HealingMachineBlock.MAX_CHARGE_LEVEL + 1)
         val world = level ?: return
         if (!world.isClientSide) world.playSoundServer(
-            position = blockPos.toVec3d(),
+            position = blockPos.bottomCenter,
             sound = CobblemonSounds.HEALING_MACHINE_ACTIVE,
             volume = 1F,
             pitch = 1F
@@ -132,6 +133,10 @@ class HealingMachineBlockEntity(
         if (player != null) {
             val party = player.party()
             party.heal()
+            val healPC = player.level().gameRules.getBoolean(CobblemonGameRules.HEALERS_HEAL_PC);
+            if (healPC){
+                player.pc().forEach {it.heal()}
+            }
             player.sendSystemMessage(lang("healingmachine.healed").green(), true)
         } else {
             val npc = level

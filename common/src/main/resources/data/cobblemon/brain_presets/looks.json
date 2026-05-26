@@ -1,9 +1,0 @@
-[
-  {
-    "type": "add_tasks_to_activity",
-    "activity": "core",
-    "tasksByPriority": {
-      "0": [ "look_at_target" ]
-    }
-  }
-]

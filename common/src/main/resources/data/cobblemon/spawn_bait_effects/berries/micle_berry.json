@@ -1,0 +1,10 @@
+{
+    "item": "cobblemon:micle_berry",
+    "effects": [
+        {
+            "type": "cobblemon:mark_chance",
+            "chance": 1.0,
+            "value": 5.0
+        }
+    ]
+}

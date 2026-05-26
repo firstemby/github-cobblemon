@@ -1,0 +1,9 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/lush_den"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_lush_den"
+    }
+}

@@ -10,40 +10,142 @@
       "layers": []
     },
     {
-      "aspects": ["tree-oak"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_oak.png"
-    },
-    {
-      "aspects": ["tree-spruce"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_spruce.png"
-    },
-    {
-      "aspects": ["tree-acacia"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_acacia.png"
-    },
-    {
-      "aspects": ["tree-birch"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_birch.png"
-    },
-    {
-      "aspects": ["tree-darkoak"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_dark_oak.png"
-    },
-    {
-      "aspects": ["tree-jungle"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_jungle.png"
-    },
-    {
-      "aspects": ["tree-mangrove"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_mangrove.png"
-    },
-    {
-      "aspects": ["tree-cherry"],
-      "texture": "cobblemon:textures/pokemon/0775_komala/komala_cherry.png"
-    },
-    {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0775_komala/komala_shiny.png"
+    },
+    {
+      "aspects": [
+        "tree-oak"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_oak.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-spruce"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_spruce.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-acacia"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_acacia.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-birch"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_birch.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-darkoak"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_dark_oak.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-jungle"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_jungle.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-mangrove"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_mangrove.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-cherry"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_cherry.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-crimson"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_crimson.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-warped"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_warped.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-apricorn"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_apricorn.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "tree-saccharine"
+      ],
+      "layers": [
+        {
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_saccharine.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0775_komala/komala_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -4,12 +4,23 @@
   "variations": [
     {
       "aspects": ["female"],
+      "poser": "cobblemon:unfezant_female",
       "model": "cobblemon:unfezant_female.geo",
       "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_female.png"
     },
     {
       "aspects": ["female", "shiny"],
       "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_female_shiny.png"
+    },
+    {
+      "aspects": ["female", "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0521_unfezant/unfezant_female_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

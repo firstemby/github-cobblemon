@@ -5,7 +5,7 @@
             "identifier": "cobblemon:withdraw_actor2",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/withdraw"
+                "texture": "textures/particles/moves/withdraw"
             }
         },
         "events": {

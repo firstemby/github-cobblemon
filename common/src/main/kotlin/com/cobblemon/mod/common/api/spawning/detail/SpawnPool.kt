@@ -16,13 +16,14 @@ import com.cobblemon.mod.common.api.spawning.SpawnSet
 import com.cobblemon.mod.common.api.spawning.condition.PrecalculationResult
 import com.cobblemon.mod.common.api.spawning.condition.RootPrecalculation
 import com.cobblemon.mod.common.api.spawning.condition.SpawningPrecalculation
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -32,7 +33,7 @@ import net.minecraft.server.packs.PackType
  * A single spawn pool may be used for many different [Spawner]s. Note that changing the
  * [details] list will change the spawns for any [Spawner] sharing this pool. If you want
  * to make a change for a pool specifically to one spawner, take a copy of the pool using
- * [copy], and change that spawner's pool using [Spawner.setSpawnPool].
+ * [copy], and change that spawner's pool using [Spawner.spawnPool] setters.
  *
  * @author Hiroku
  * @since February 9th, 2022
@@ -47,7 +48,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     override fun sync(player: ServerPlayer) {}
     override fun reload(data: Map<ResourceLocation, SpawnSet>) {
         details.clear()
-        for (set in data.values) {
+        for (set in data.values.filter { it.isEnabled() }) {
             details.addAll(set.filter { it.isValid() })
         }
         val server = server()
@@ -59,13 +60,12 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     }
 
     val details = mutableListOf<SpawnDetail>()
+    /** Tracks which buckets are in use by the pool, to prevent spawners for rolling buckets that don't exist. */
+    val buckets = mutableListOf<String>()
     var precalculation: PrecalculationResult<*> = RootPrecalculation.generate(details, emptyList())
     val precalculators = mutableListOf<SpawningPrecalculation<*>>()
-//    /** A set of all [RegisteredSpawningContext]s that are mentioned in this pool. */
-//    val contexts = mutableSetOf<RegisteredSpawningContext<*>>()
 
     override fun iterator() = details.iterator()
-
 
     fun addPrecalculators(vararg precalculators: SpawningPrecalculation<*>): SpawnPool {
         this.precalculators.addAll(precalculators)
@@ -73,34 +73,41 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
         return this
     }
 
+    fun onServerLoad(server: MinecraftServer) {
+        for (detail in details) {
+            detail.onServerLoad(server)
+        }
+        precalculate()
+    }
+
     /**
      * Precalculates spawns into hash mappings using the [precalculators] included
-     * in this pool as well as the range of contexts mentioned in the pool. This
-     * will speed up retrieval later, and thins the herd of spawns that need to be
+     * in this pool as well as the range of spawnable positions mentioned in the pool.
+     * This will speed up retrieval later, and thins the herd of spawns that need to be
      * thoroughly examined when a spawn is occurring. This function will probably
      * be slow, especially if there are many precalculators and spawns.
      */
     fun precalculate() {
+        buckets.clear()
+        buckets.addAll(details.asSequence().map(SpawnDetail::bucket).distinct())
+
         if (precalculators.isEmpty()) {
             precalculation = RootPrecalculation.generate(details, emptyList())
         } else {
             precalculation = precalculators.first().generate(details, precalculators.subList(1, precalculators.size))
         }
-
-//        contexts.clear()
-//        details.forEach { contexts.add(it.context) }
     }
 
     /**
      * Retrieves the spawns that are precalculated as being potentially spawns at
-     * this context. This, at most, prunes some spawns that were definitely not
-     * possible here. The returned list can and almost certainly will include more
-     * spawns that are not possible for this context - this function is simple
+     * this spawnable position. This, at most, prunes some spawns that were definitely
+     * not possible here. The returned list can and almost certainly will include more
+     * spawns that are not possible for this spawnable position - this function is simple
      * to leverage the precalculation to get a smaller list of spawns as quickly
      * as possible.
      */
-    fun retrieve(ctx: SpawningContext): List<SpawnDetail> {
-        return precalculation.retrieve(ctx)
+    fun retrieve(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+        return precalculation.retrieve(bucket, spawnablePosition)
     }
 
     /**

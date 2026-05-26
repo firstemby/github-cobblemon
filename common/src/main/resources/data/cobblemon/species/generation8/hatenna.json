@@ -129,7 +129,10 @@
     "tutor:skillswap",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -145,5 +148,36 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hattrem",
+          "tier": 1
+        },
+        {
+          "pokemon": "hatterene",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  }
 }

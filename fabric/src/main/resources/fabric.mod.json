@@ -22,11 +22,14 @@
     "client": [
       "com.cobblemon.mod.fabric.client.CobblemonFabricClient"
     ],
+    "fabric-datagen": [
+      "com.cobblemon.mod.fabric.data.generator.CobblemonFabricDataGenerator"
+    ],
     "jei_mod_plugin": [
       "com.cobblemon.mod.common.integration.jei.CobblemonJeiPlugin"
     ],
     "dynamiclights": [
-      "com.cobblemon.mod.fabric.compat.lambdynamiclights.LambDynamicLightsCompatEntrypoint"
+      "com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer"
     ],
     "modmenu": [
       "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"
@@ -39,7 +42,7 @@
   "accessWidener": "cobblemon-common.accesswidener",
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
-    "fabric-api": "*",
+    "fabric-api": ">=${fabric_api_version}",
     "minecraft": "${minecraft_version}",
     "java": "${java_version}"
   },

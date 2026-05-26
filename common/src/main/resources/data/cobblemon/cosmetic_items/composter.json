@@ -3,8 +3,6 @@
   "cosmeticItems": [
     {
       "consumedItem": "minecraft:composter",
-      "displayName": "cobblemon.cosmetic.composter",
-      "displayItem": "minecraft:composter",
       "aspects": ["cosmetic_item-composter"]
     }
   ]

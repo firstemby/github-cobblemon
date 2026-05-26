@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " RR",
-        "SSR",
+        "SGR",
         "SS "
     ],
     "key": {
@@ -11,7 +11,10 @@
         },
         "R": {
             "item": "minecraft:rabbit_hide"
-        }
+        },
+		"G": {
+			"item": "cobblemon:ground_gem"
+		}
     },
     "result": {
         "id": "cobblemon:soft_sand"

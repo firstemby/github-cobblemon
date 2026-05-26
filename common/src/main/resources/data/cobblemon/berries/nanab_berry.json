@@ -39,23 +39,23 @@
     {
       "position": {
         "x": 7.5,
-        "y": 24.0,
+        "y": 24,
         "z": 1.75
       },
       "rotation": {
         "x": -7.5,
-        "y": 10.0,
-        "z": 0.0
+        "y": 10,
+        "z": 0
       }
     },
     {
       "position": {
-        "x": 14.0,
+        "x": 14,
         "y": 15.75,
         "z": 9.25
       },
       "rotation": {
-        "x": -15.0,
+        "x": -15,
         "y": -117.5,
         "z": 7.5
       }
@@ -67,21 +67,21 @@
         "z": 13.5
       },
       "rotation": {
-        "x": 165.0,
-        "y": 45.0,
-        "z": 165.0
+        "x": 165,
+        "y": 45,
+        "z": 165
       }
     },
     {
       "position": {
-        "x": 2.0,
+        "x": 2,
         "y": 15.75,
         "z": 9.75
       },
       "rotation": {
         "x": -12.5,
-        "y": 100.0,
-        "z": 0.0
+        "y": 100,
+        "z": 0
       }
     },
     {
@@ -92,15 +92,15 @@
       },
       "rotation": {
         "x": -12.5,
-        "y": 30.0,
-        "z": -5.0
+        "y": 30,
+        "z": -5
       }
     },
     {
       "position": {
         "x": 14.25,
         "y": 23.25,
-        "z": 5.0
+        "z": 5
       },
       "rotation": {
         "x": -32.5,
@@ -110,33 +110,33 @@
     },
     {
       "position": {
-        "x": 13.0,
+        "x": 13,
         "y": 22.5,
-        "z": 14.0
+        "z": 14
       },
       "rotation": {
         "x": 177.5,
         "y": -27.5,
-        "z": 175.0
+        "z": 175
       }
     },
     {
       "position": {
         "x": 7.5,
         "y": 17.25,
-        "z": 14.0
+        "z": 14
       },
       "rotation": {
-        "x": -5.0,
-        "y": 170.0,
-        "z": 5.0
+        "x": -5,
+        "y": 170,
+        "z": 5
       }
     },
     {
       "position": {
         "x": 11.25,
-        "y": 17.0,
-        "z": 2.0
+        "y": 17,
+        "z": 2
       },
       "rotation": {
         "x": -2.5,
@@ -146,14 +146,14 @@
     },
     {
       "position": {
-        "x": 2.0,
+        "x": 2,
         "y": 23.5,
         "z": 5.25
       },
       "rotation": {
         "x": -32.5,
-        "y": 75.0,
-        "z": -30.0
+        "y": 75,
+        "z": -30
       }
     }
   ],
@@ -164,26 +164,65 @@
       "z": 8.1
     },
     "rotation": {
-      "x": 5.0,
-      "y": -10.0,
+      "x": 5,
+      "y": -10,
       "z": -7.5
     }
   },
+  "pokeSnackPositionings": [
+    {
+      "position": {
+        "x": 8,
+        "y": 10.65,
+        "z": 3.3
+      },
+      "rotation": {
+        "x": 155,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "position": {
+        "x": 12.3,
+        "y": 10.65,
+        "z": 11.25
+      },
+      "rotation": {
+        "x": -25,
+        "y": -60,
+        "z": 180
+      }
+    },
+    {
+      "position": {
+        "x": 3.7,
+        "y": 10.65,
+        "z": 11.25
+      },
+      "rotation": {
+        "x": -25,
+        "y": 60,
+        "z": 180
+      }
+    }
+  ],
   "mutations": {
     "cobblemon:oran_berry": "cobblemon:leppa_berry",
     "cobblemon:mago_berry": "cobblemon:magost_berry"
   },
   "sproutShape": "tall-sprout",
   "matureShape": "tall-mature",
-  "flavors": {
-    "SWEET": 20,
-    "BITTER": 10
-  },
-  "weight": 15.0,
+  "weight": 15,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",
   "flowerTexture": "cobblemon:flower",
   "fruitModel": "cobblemon:nanab_berry.geo",
   "fruitTexture": "cobblemon:nanab",
-  "boneMealChance": 0.56
+  "boneMealChance": 0.56,
+  "colour": "PINK",
+  "flavours": {
+    "SWEET": 10,
+    "BITTER": 5
+  }
 }

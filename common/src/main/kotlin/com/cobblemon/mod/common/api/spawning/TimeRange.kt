@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.api.spawning.TimeRange.Companion.timeRanges
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
+import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
 
 /**
  * A range of time ticks for a world mainly to be used in [SpawningCondition]s. A time range
@@ -33,16 +34,17 @@ class TimeRange : IntRanges {
             "any" to TimeRange(0..23999),
             "day" to TimeRange(23460..23999, 0..12541),
             "night" to TimeRange(12542..23459),
-            "noon" to TimeRange(5000..6999),
-            "midnight" to TimeRange(17000..18999),
-            "dawn" to TimeRange(22300..23999, 0..999),
-            "dusk" to TimeRange(11834..13701),
-            "twilight" to TimeRange(11834..13701, 22300..23999, 0..166),
             "morning" to TimeRange(23000..23999, 0..4999),
+            "noon" to TimeRange(5000..6999),
             "afternoon" to TimeRange(7000..12999),
-			"predawn" to TimeRange(19000..22999),
-            "evening" to TimeRange(13000..16999)
+            "evening" to TimeRange(13000..16999),
+            "midnight" to TimeRange(17000..18999),
+            "predawn" to TimeRange(19000..22999),
+            "dawn" to TimeRange(22300..23999, 0..166),
+            "dusk" to TimeRange(11834..13701),
+            "twilight" to TimeRange(11834..13701, 22300..23999, 0..166)
         )
+        val adapter = IntRangesAdapter(timeRanges) { TimeRange(*it) }
     }
 
     constructor() : super()

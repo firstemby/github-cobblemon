@@ -50,7 +50,23 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "depth": "comatose",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -154,7 +170,6 @@
     "tutor:laserfocus",
     "tutor:leechlife",
     "tutor:magicalleaf",
-    "tutor:poisonjab",
     "tutor:psychocut",
     "tutor:rest",
     "tutor:seedbomb",
@@ -164,7 +179,18 @@
     "tutor:superpower",
     "tutor:synthesis",
     "tutor:worryseed",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "fomantis",
   "evolutions": []

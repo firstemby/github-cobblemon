@@ -25,7 +25,7 @@ class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
         val context = TradeTrigger.Context(PokemonProperties())
         val transformed = pokemon.triggerTransformations(TradeTrigger::class.java, context)
         if (transformed.any()) {
-            this.consumeItem(player, stack)
+            stack.consume(1, player)
             return true
         }
         return false

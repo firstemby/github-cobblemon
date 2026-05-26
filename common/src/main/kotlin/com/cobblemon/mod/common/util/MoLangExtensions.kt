@@ -16,23 +16,29 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
 import com.bedrockk.molang.runtime.struct.ContextStruct
+import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.ListExpression
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.molang.ReferenceExpression
 import com.cobblemon.mod.common.api.molang.SingleExpression
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.core.BlockPos
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
 val genericRuntime = MoLangRuntime().setup()
+/** Don't run this from not-the-main thread. */
+val mainThreadRuntime: MoLangRuntime by lazy { MoLangRuntime().setup() }
 
 fun MoLangRuntime.resolve(expression: Expression, context: Map<String, MoValue> = contextOrEmpty): MoValue = try {
 //    environment.structs["context"] = ContextStruct(context)
@@ -128,6 +134,42 @@ fun MoLangRuntime.resolveFloat(expression: ExpressionLike, pokemon: BattlePokemo
     return resolveFloat(expression, context)
 }
 
+fun <T> MoLangRuntime.queryObject(name: String, vararg args: MoValue): T? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is ObjectValue<*>) {
+        return null
+    }
+    return value.obj as? T
+}
+
+fun MoLangRuntime.queryDouble(name: String, vararg args: MoValue): Double? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is DoubleValue) {
+        return null
+    }
+    return value.asDouble()
+}
+
+fun MoLangRuntime.queryString(name: String, vararg args: MoValue): String? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is StringValue) {
+        return null
+    }
+    return value.asString()
+}
+
+fun MoLangRuntime.queryBoolean(name: String, vararg args: MoValue): Boolean? {
+    val params = MoParams(environment, args.toList())
+    val value = environment.query.functions.get(name)?.apply(params) ?: return null
+    if (value !is DoubleValue) {
+        return null
+    }
+    return value.asDouble() != 0.0
+}
+
 
 fun Expression.getString() = originalString ?: "0"
 fun Double.asExpressionLike() = SingleExpression(NumberExpression(this))
@@ -146,11 +188,16 @@ fun String.asExpression() = try {
 }
 
 fun String.asExpressionLike() = try {
-    val ls = MoLang.createParser(if (this == "") "0.0" else this).parse()
-    if (ls.size == 1) {
-        SingleExpression(ls[0])
+    val identifier = ResourceLocation.tryParse(this)
+    if (":" in this && identifier != null) {
+        ReferenceExpression(identifier)
     } else {
-        ListExpression(ls)
+        val ls = MoLang.createParser(if (this == "") "0.0" else this).parse()
+        if (ls.size == 1) {
+            SingleExpression(ls[0])
+        } else {
+            ListExpression(ls)
+        }
     }
 } catch (exc: Exception) {
     Cobblemon.LOGGER.error("Failed to parse MoLang expressions: $this")
@@ -196,6 +243,22 @@ fun ArrayStruct.getString(index: Int) = map["$index"]!!.asString()
 fun ArrayStruct.asBlockPos() = BlockPos(getDouble(0).toInt(), getDouble(1).toInt(), getDouble(2).toInt())
 fun ArrayStruct.asVec3d() = Vec3(getDouble(0), getDouble(1), getDouble(2))
 
+fun <T> VariableStruct.getObject(name: String): T? {
+    val value = map[name] ?: return null
+    if (value !is ObjectValue<*>) {
+        return null
+    }
+    return value.obj as? T
+}
+
+fun <T> VariableStruct.getObjectList(name: String): List<T> {
+    val value = map[name] ?: return emptyList()
+    if (value !is ArrayStruct) {
+        return emptyList()
+    }
+    return value.map.values.mapNotNull { (it as? ObjectValue<T>)?.obj }
+}
+
 fun MoLangRuntime.clone(): MoLangRuntime {
     val runtime = MoLangRuntime()
     runtime.environment.cloneFrom(environment)
@@ -224,4 +287,10 @@ fun Iterable<MoValue>.asArrayValue(): ArrayStruct {
     val array = ArrayStruct()
     forEachIndexed { index, value -> array.setDirectly("$index", value) }
     return array
+}
+
+fun MoLangEnvironment.createDuplicateRuntime(): MoLangRuntime {
+    val runtime = MoLangRuntime()
+    runtime.environment.cloneFrom(this)
+    return runtime
 }

@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDispla
 import com.cobblemon.mod.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AddEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
+class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 

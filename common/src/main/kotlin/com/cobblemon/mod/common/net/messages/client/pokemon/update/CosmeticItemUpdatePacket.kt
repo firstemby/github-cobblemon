@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.util.writeItemStack
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
 
-class CosmeticItemUpdatePacket(pokemon: () -> Pokemon, value: ItemStack) : SingleUpdatePacket<ItemStack, CosmeticItemUpdatePacket>(pokemon, value) {
+class CosmeticItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack) : SingleUpdatePacket<ItemStack, CosmeticItemUpdatePacket>(pokemon, value) {
     override val id = ID
 
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {

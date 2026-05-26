@@ -361,6 +361,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.75, 19.75, -19],
+					"locators": {
+						"eye1": [-2.75, 19.75, -19]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_right",
 					"pivot": [-2.41, 19.75, -17.41],
@@ -378,12 +386,28 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.75, 19.75, -19],
+					"locators": {
+						"eye2": [2.75, 19.75, -19]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [2.41, 19.75, -17.41],
 					"cubes": [
 						{"origin": [1.91, 18.75, -18.91], "size": [1, 2, 3], "inflate": 0.02, "uv": [50, 18]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "torso3",
+					"pivot": [0, 24, -2],
+					"locators": {
+						"seat_1": [0, 24, -2]
+					}
 				},
 				{
 					"name": "ftorso2",

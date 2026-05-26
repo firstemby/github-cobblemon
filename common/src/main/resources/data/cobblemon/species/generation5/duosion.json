@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 578,
   "name": "Duosion",
   "primaryType": "psychic",
@@ -41,11 +42,49 @@
   "catchRate": 100,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": false,
+  "standingEyeHeight": 0.65,
+  "swimmingEyeHeight": 0.65,
+  "flyingEyeHeight": 0.65,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 1.8,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      },
+      "swim": {
+        "swimSpeed": "0.2",
+        "avoidsWater": true
+      }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "duosion",
+          "tier": 1
+        },
+        {
+          "pokemon": "reuniclus",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,
@@ -149,7 +188,6 @@
     "tm:zenheadbutt",
     "tutor:afteryou",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:endeavor",
     "tutor:energyball",
@@ -176,7 +214,17 @@
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "solosis",
   "evolutions": [

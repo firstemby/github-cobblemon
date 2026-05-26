@@ -5,9 +5,10 @@
 			"loop": true,
 			"bones": {
 				"body": {
-					"position": [0, -9, 0]
+					"position": [0, -9, 0],
+					"rotation": [25, 0, 0]
 				},
-				"torso": {
+				"_torso_disabled_because_it_cannot_be_reparented": {
 					"rotation": [25, 0, 0]
 				},
 				"arm_right": {

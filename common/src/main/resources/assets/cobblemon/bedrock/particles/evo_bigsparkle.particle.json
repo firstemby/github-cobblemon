@@ -5,7 +5,7 @@
             "identifier": "cobblemon:evo_bigsparkle",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/bigsparkle"
+                "texture": "textures/particles/generic/sparkle/bigsparkle"
             }
         },
         "components": {

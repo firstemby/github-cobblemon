@@ -4,6 +4,9 @@
   "profileScale": 0.58,
   "profileTranslation": [-0.03, 0.51, 0],
   "rootBone": "musharna",
+  "animations": {
+    "cry": "q.bedrock_stateful('musharna', 'cry')"
+  },
   "poses": {
     "portrait": {
       "poseTypes": ["PORTRAIT"],

@@ -18,13 +18,13 @@ import net.minecraft.world.phys.Vec3
  * This is intended to contain mutable state that is passed between the client and server
  * or temporary state that is used during the riding process.
  *
- * This will be destroyed when the a user dismounts the Pokemon.
+ * This will be destroyed when the main rider dismounts the Pokemon.
  *
  * @author landonjw
  */
 open class RidingBehaviourState {
-    open val rideVelocity: SidedRidingState<Vec3> = ridingState(Vec3.ZERO, Side.BOTH)
-    open val stamina: SidedRidingState<Float> = ridingState(1.0F, Side.BOTH)
+    open val rideVelocity: SidedRidingState<Vec3> = ridingState(Vec3.ZERO, Side.CLIENT)
+    open val stamina: SidedRidingState<Float> = ridingState(1.0F, Side.CLIENT)
 
     open fun reset() {
         rideVelocity.set(Vec3.ZERO, true)
@@ -53,7 +53,6 @@ open class RidingBehaviourState {
         rideVelocity.set(buffer.readVec3(), true)
         stamina.set(buffer.readFloat(), true)
     }
-
 }
 
 fun <T> ridingState(value: T, side: Side) = SidedRidingState(value, side)

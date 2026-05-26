@@ -54,18 +54,35 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.15
       },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "archen",
+          "tier": 1
+        },
+        {
+          "pokemon": "archeops",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -186,7 +203,17 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

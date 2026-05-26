@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 853,
   "name": "Grapploct",
   "primaryType": "fighting",
@@ -41,20 +42,30 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.2,
+    "height": 2.25,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -151,7 +162,10 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:suckerpunch",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "clobbopus",
   "evolutions": []

@@ -1,8 +1,8 @@
 {
   "portraitScale": 1.8,
-  "portraitTranslation": [0.0, -0.75, 0],
+  "portraitTranslation": [-0.05, 0.03, 0],
   "profileScale": 0.85,
-  "profileTranslation": [0.0, 0.24, 0],
+  "profileTranslation": [0.0, 0.4, 0],
   "rootBone": "abra",
   "animations": {
     "faint": "q.bedrock_stateful('abra', 'faint')",
@@ -11,7 +11,10 @@
   "poses": {
     "sleep": {
       "poseTypes": ["SLEEP"],
-      "animations": ["q.bedrock('abra', 'sleep')"]
+      "animations": ["q.bedrock('abra', 'sleep')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
     },
     "standing": {
       "poseName": "standing",

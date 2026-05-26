@@ -8,9 +8,10 @@
 
 package com.cobblemon.mod.common.api.riding.stats
 
-import com.cobblemon.mod.common.api.berry.Flavor
+import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 
 /**
  * A stat that is used for riding Pokémon. The exact implementation of each of these depends on the [com.cobblemon.mod.common.api.riding.controller.RideController].
@@ -19,20 +20,19 @@ import net.minecraft.network.chat.Component
  * @since February 17th, 2025
  */
 enum class RidingStat(
-    val flavour: Flavor
+    val flavour: Flavour
 ) {
-    SPEED(Flavor.SWEET),
-    ACCELERATION(Flavor.SPICY),
-    SKILL(Flavor.DRY),
-    JUMP(Flavor.BITTER),
-    STAMINA(Flavor.SOUR);
+    ACCELERATION(Flavour.SPICY),
+    SKILL(Flavour.DRY),
+    SPEED(Flavour.SWEET),
+    STAMINA(Flavour.SOUR),
+    JUMP(Flavour.BITTER);
 
     companion object {
         fun getByName(name: String) = RidingStat.entries.firstOrNull { it.name.equals(name, ignoreCase = true) }
+        fun getByFlavour(flavour: Flavour) = RidingStat.entries.firstOrNull { it.flavour == flavour }
     }
 
-    val displayName: Component
-        get() = lang("riding.stat.${name.lowercase()}.name")
-    val description: Component
-        get() = lang("riding.stat.${name.lowercase()}.desc")
+    val displayName: MutableComponent
+        get() = lang("ui.stats.ride.${name.lowercase()}")
 }

@@ -18,7 +18,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -60,10 +59,8 @@ open class ViewerCountBlockEntity(type: BlockEntityType<*>?, blockPos: BlockPos,
         return this.saveWithoutMetadata(registryLookup)
     }
 
-    fun updateBlock(level: Level) {
-        val oldState = level.getBlockState(blockPos)
-        level.sendBlockUpdated(blockPos, oldState, level.getBlockState(blockPos), Block.UPDATE_ALL)
-        level.updateNeighbourForOutputSignal(blockPos, level.getBlockState(blockPos).block)
+    open fun updateBlock(level: Level, state: BlockState) {
+        level.setBlockAndUpdate(blockPos, state)
         setChanged()
     }
 
@@ -87,10 +84,12 @@ open class ViewerCountBlockEntity(type: BlockEntityType<*>?, blockPos: BlockPos,
         return world.getEntities(EntityTypeTest.forClass(Player::class.java), box) { player: Player? -> isPlayerLookingAt(world, player!!, pos) }.size
     }
 
+    fun hasViewer(): Boolean = viewerCount > 0
+
     fun changeViewerCount(amount: Int) {
-        if (level != null) {
+        level?.let {
             viewerCount = maxOf(0, amount)
-            updateBlock(level!!)
+            updateBlock(it, blockState)
         }
     }
 

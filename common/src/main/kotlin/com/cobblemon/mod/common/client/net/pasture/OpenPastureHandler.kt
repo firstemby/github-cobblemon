@@ -26,6 +26,6 @@ object OpenPastureHandler : ClientNetworkPacketHandler<OpenPasturePacket> {
             pasturedPokemon = SettableObservable(packet.tetheredPokemon)
         )
 
-        client.setScreen(PCGUI(pc = CobblemonClient.storage.pcStores[packet.pcId]!!, party = CobblemonClient.storage.myParty, configuration = pcConfiguration))
+        client.setScreen(PCGUI(pc = CobblemonClient.storage.pcStores[packet.pcId]!!, party = CobblemonClient.storage.party, configuration = pcConfiguration))
     }
 }

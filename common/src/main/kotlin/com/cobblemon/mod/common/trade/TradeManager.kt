@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.trade
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.TradeCompletedEvent
+import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
+import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.text.aqua
@@ -98,22 +98,51 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         }
     }
 
-    fun performTrade(player1: TradeParticipant, pokemon1: Pokemon, player2: TradeParticipant, pokemon2: Pokemon) {
+    fun performTrade(
+        activeTrade: ActiveTrade,
+        player1: TradeParticipant,
+        pokemon1: Pokemon,
+        player2: TradeParticipant,
+        pokemon2: Pokemon
+    ) {
         val party1 = player1.party
         val party2 = player2.party
 
-        party1.remove(pokemon1)
-        party2.remove(pokemon2)
+        if (pokemon1 !in party1 || pokemon2 !in party2) {
+            Cobblemon.LOGGER.warn("Attempted to perform a trade with Pokémon that aren't in the party anymore. Could be attempted duping between ${player1.name} and ${player2.name}")
+            activeTrade.cancelTrade()
+            return
+        }
 
-        pokemon1.setFriendship(pokemon1.form.baseFriendship)
-        pokemon2.setFriendship(pokemon2.form.baseFriendship)
+        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
+            party1.remove(pokemon1)
+            party2.remove(pokemon2)
 
-        party2.add(pokemon1)
-        party1.add(pokemon2)
+            // If player1 is the OT, keep track of the friendship
+            pokemon1.cacheFriendship(player1.uuid)
+            // If player2 is the OT, keep track of the friendship
+            pokemon2.cacheFriendship(player2.uuid)
 
-        pokemon1.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon2))
-        pokemon2.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon1))
+            // If pokemon2 was originally player1's, set the friendship back to what it was at point of trading
+            if (!pokemon2.restoreFriendship(player1.uuid)) {
+                // Otherwise, reset the friendship
+                pokemon2.setFriendship(pokemon2.form.baseFriendship)
+            }
+            // If pokemon1 was originally player2's, set the friendship back to what it was at point of trading
+            if (!pokemon1.restoreFriendship(player2.uuid)) {
+                // Otherwise, reset the friendship
+                pokemon1.setFriendship(pokemon1.form.baseFriendship)
+            }
 
-        CobblemonEvents.TRADE_COMPLETED.post(TradeCompletedEvent(player1, pokemon2, player2, pokemon1))
+            party2.add(pokemon1)
+            party1.add(pokemon2)
+
+            pokemon1.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon2))
+            pokemon2.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon1))
+
+            activeTrade.completeTrade()
+
+            CobblemonEvents.TRADE_EVENT_POST.post(TradeEvent.Post(player1, pokemon2, player2, pokemon1))
+        }
     }
 }

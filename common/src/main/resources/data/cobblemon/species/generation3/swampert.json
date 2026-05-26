@@ -43,7 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.9,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1.6,
     "height": 2,
@@ -53,10 +53,20 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -228,7 +238,25 @@
     "tutor:superpower",
     "tutor:uproar",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "marshtomp",
   "evolutions": [],
@@ -265,7 +293,26 @@
       "baseExperienceYield": 318,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6"
+        },
+        "moving": {
+          "swim": {
+            "canBreatheUnderwater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     }
   ]
 }

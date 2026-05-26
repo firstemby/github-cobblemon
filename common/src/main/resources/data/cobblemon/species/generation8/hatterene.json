@@ -161,7 +161,10 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "hattrem",
   "evolutions": [],
@@ -187,5 +190,27 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    }
+  }
 }

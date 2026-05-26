@@ -44,14 +44,48 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "features": [
-    "galarian"
-  ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.8,
     "height": 1.8,
-    "fixed": false
+    "fixed": false,
+    "width": 0.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "20-40",
+          "JUMP": "15-35",
+          "SKILL": "15-45",
+          "SPEED": "25-45",
+          "STAMINA": "35-60"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 2,
@@ -230,7 +264,34 @@
     "tutor:trick",
     "tutor:uproar",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:zapcannon",
+    "special:followme"
   ],
   "preEvolution": "mimejr",
   "evolutions": [],
@@ -273,6 +334,13 @@
         "special_defence": 0,
         "speed": 2
       },
+      "baseScale": 0.8,
+      "hitbox": {
+        "height": 2.3,
+        "fixed": false,
+        "width": 0.8
+      },
+      "riding": {},
       "drops": {
         "amount": 1,
         "entries": [
@@ -422,23 +490,42 @@
         "tutor:tripleaxel",
         "tutor:uproar",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:captivate",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:naturalgift",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "preEvolution": "mimejr",
       "evolutions": [
         {
+          "consumeHeldItem": false,
           "id": "mrmime_mrrime",
           "result": "mrrime",
           "learnableMoves": [],
           "requirements": [
             {
-              "variant": "level",
-              "minLevel": 42
+              "minLevel": 42,
+              "variant": "level"
             }
-          ]
+          ],
+          "result": "mrrime",
+          "variant": "level_up"
         }
       ],
       "battleOnly": false
     }
+  ],
+  "features": [
+    "galarian"
   ]
 }

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.util.codec.internal
 
 import com.cobblemon.mod.common.api.mark.Marks
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -19,8 +20,8 @@ import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
 import net.minecraft.resources.ResourceLocation
-import java.util.*
 import net.minecraft.world.item.ItemStack
 
 internal data class ClientPokemonP3(
@@ -34,7 +35,11 @@ internal data class ClientPokemonP3(
     val activeMark: Optional<ResourceLocation>,
     val marks: Set<ResourceLocation>,
     val potentialMarks: Set<ResourceLocation>,
-    val markings: List<Int>
+    val markings: List<Int>,
+    val rideBoosts: Map<String, Float>,
+    val currentFullness: Int,
+    val interactionCooldowns: Map<ResourceLocation, Int>,
+    val isAlpha: Boolean,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -53,6 +58,10 @@ internal data class ClientPokemonP3(
         other.potentialMarks.clear()
         other.potentialMarks += this.potentialMarks.map { Marks.getByIdentifier(it) }.filterNotNull().toMutableSet()
         other.markings = this.markings
+        this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
+        other.currentFullness = this.currentFullness
+        other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
+        other.isAlpha = isAlpha
         return other
     }
 
@@ -72,8 +81,12 @@ internal data class ClientPokemonP3(
                 ResourceLocation.CODEC.optionalFieldOf(DataKeys.POKEMON_ACTIVE_MARK).forGetter(ClientPokemonP3::activeMark),
                 Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::marks),
                 Codec.list(ResourceLocation.CODEC).fieldOf(DataKeys.POKEMON_POTENTIAL_MARKS).xmap({ it.toSet() }, { it.toMutableList() }).forGetter(ClientPokemonP3::potentialMarks),
-                Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings)
-            ).apply(instance, ::ClientPokemonP3)
+                Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(ClientPokemonP3::markings),
+                Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
+                Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(ClientPokemonP3::isAlpha)
+                ).apply(instance, ::ClientPokemonP3)
         }
 
         internal fun from(pokemon: Pokemon): ClientPokemonP3 = ClientPokemonP3(
@@ -87,9 +100,13 @@ internal data class ClientPokemonP3(
             Optional.ofNullable(pokemon.heldItemVisible),
             Optional.ofNullable(pokemon.cosmeticItem.takeIf { !it.isEmpty }),
             Optional.ofNullable(pokemon.activeMark?.identifier),
-            pokemon.marks.map { it.identifier }.toSet(),
-            pokemon.potentialMarks.map { it.identifier }.toSet(),
-            pokemon.markings
+            pokemon.marks.toList().map { it.identifier }.toSet(),
+            pokemon.potentialMarks.toList().map { it.identifier }.toSet(),
+            pokemon.markings,
+            pokemon.getRideBoosts().mapKeys { it.key.name },
+            pokemon.currentFullness,
+            pokemon.interactionCooldowns,
+            pokemon.isAlpha,
         )
     }
 }

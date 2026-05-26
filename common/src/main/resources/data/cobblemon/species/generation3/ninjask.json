@@ -48,15 +48,45 @@
     "height": 0.9,
     "fixed": false
   },
+  "ai": [
+    {
+      "type": "cobblemon:set_variables",
+      "variableValues": {
+        "hover_wander_minimum_height": 2,
+        "hover_wander_maximum_height": 10
+      }
+    }
+  ],
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ninjask",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "moves": [
@@ -159,8 +189,31 @@
     "tutor:stringshot",
     "tutor:swift",
     "tutor:uproar",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "nincada",
-  "evolutions": []
+  "evolutions": [],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 5.0
+      }
+    ]
+  }
 }

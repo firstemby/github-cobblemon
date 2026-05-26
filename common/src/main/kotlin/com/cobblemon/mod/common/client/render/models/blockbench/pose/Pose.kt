@@ -35,6 +35,7 @@ class Pose(
     val onTransitionedInto: (PosableState) -> Unit = {},
     /** If there are no dedicated transition animations, the interpolation animation will take this many ticks. */
     val transformTicks: Int,
+    val transformToTicks: Int?,
     val namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
     val animations: Array<PoseAnimation>,
     val transformedParts: Array<ModelPartTransformation>,
@@ -45,7 +46,7 @@ class Pose(
     val transitions = mutableMapOf<String, (Pose, Pose) -> ActiveAnimation>()
 
     fun apply(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float) {
-        animations.filter { state.shouldIdleRun(it, 0F) }.forEach { animation ->
+        animations.asSequence().filter { state.shouldIdleRun(it, 0F) }.forEach { animation ->
             animation.apply(context, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, state.getIdleIntensity(animation))
         }
     }

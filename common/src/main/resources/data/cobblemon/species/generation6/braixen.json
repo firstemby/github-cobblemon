@@ -51,8 +51,32 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.4
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "delphox",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -184,7 +208,19 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "fennekin",
   "evolutions": [

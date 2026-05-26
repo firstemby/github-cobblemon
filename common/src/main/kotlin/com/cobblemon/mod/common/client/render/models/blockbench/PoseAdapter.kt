@@ -10,21 +10,18 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
-import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
 import com.cobblemon.mod.common.util.isDusk
-import com.cobblemon.mod.common.util.isStandingOnRedSand
-import com.cobblemon.mod.common.util.isStandingOnSand
-import com.cobblemon.mod.common.util.isStandingOnSandOrRedSand
+import com.cobblemon.mod.common.util.isStandingOn
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import net.minecraft.world.entity.Entity
 import java.lang.reflect.Type
+import net.minecraft.world.entity.Entity
 
 /**
  * An adapter for deserializing a [Pose] object from a JSON object.
@@ -42,7 +39,11 @@ class PoseAdapter(
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Pose {
         val model = modelFinder()
         val obj = json as JsonObject
-        val pose = JsonPose(model, obj)
+        val pose = try {
+            JsonPose(model, obj)
+        } catch (e: Exception) {
+            throw IllegalArgumentException("Failed to deserialize pose from JSON: $json", e)
+        }
 
         val conditionsList = mutableListOf<(PosableState) -> Boolean>()
 
@@ -52,14 +53,23 @@ class PoseAdapter(
             }
         }
 
+        if (json.has("isRideStyle")) {
+            val styles = json.get("isRideStyle").asJsonArray.map { it.asString }
+            conditionsList.add {
+                val pokemon = it.getEntity() as? PokemonEntity ?: return@add false
+                val rideStyle = pokemon.ridingController?.context?.style ?: return@add false
+                return@add styles.any { it == rideStyle.name }
+            }
+        }
+
         addCondition("isTouchingWater") { entity, expectedValue -> entity.isInWater == expectedValue }
         addCondition("isInWaterOrRain") { entity, expectedValue -> entity.isInWaterOrRain == expectedValue }
         addCondition("isUnderWater") { entity, expectedValue -> entity.isUnderWater == expectedValue }
 
         // Kept for compatibility
-        addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOnRedSand() == expectedValue }
-        addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOnSand() == expectedValue }
-        addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOnSandOrRedSand() == expectedValue }
+        addCondition("isStandingOnRedSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:red_sand")) == expectedValue }
+        addCondition("isStandingOnSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:sand")) == expectedValue }
+        addCondition("isStandingOnSandOrRedSand") { entity, expectedValue -> entity.isStandingOn(setOf("minecraft:sand", "minecraft:red_sand")) == expectedValue }
 
         addCondition("isDusk") { entity, expectedValue -> entity.isDusk() == expectedValue }
 
@@ -70,14 +80,7 @@ class PoseAdapter(
 
         if (json.has("conditions")) {
             val conditionSet = json.get("conditions").asJsonArray.map { it.asString.asExpressionLike() }
-            conditionsList.add { state ->
-                val entity = state.getEntity()
-                if (entity is PosableEntity) {
-                    conditionSet.any { it.resolveBoolean(state.runtime) }
-                } else {
-                    false
-                }
-            }
+            conditionsList.add { state -> conditionSet.any { it.resolveBoolean(state.runtime) } }
         }
 
         val poseCondition: (PosableState) -> Boolean = if (conditionsList.isEmpty()) { { true } } else conditionsList.reduce { acc, function -> { acc(it) && function(it) } }
@@ -87,6 +90,7 @@ class PoseAdapter(
             poseTypes = pose.poseTypes.toSet(),
             condition = poseCondition,
             transformTicks = pose.transformTicks,
+            transformToTicks = pose.transformToTicks,
             animations = pose.idleAnimations,
             transformedParts = pose.transformedParts,
             quirks = pose.quirks.toTypedArray(),

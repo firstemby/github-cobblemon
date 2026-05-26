@@ -16,19 +16,25 @@ import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
 import com.cobblemon.mod.common.client.settings.ServerSettings
-import com.cobblemon.mod.common.pokemon.*
+import com.cobblemon.mod.common.pokemon.EVs
+import com.cobblemon.mod.common.pokemon.FormData
+import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.IVs
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
+import java.util.UUID
 import net.minecraft.core.UUIDUtil
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
-import java.util.*
 
 internal class ClientPokemonP1(
     val uuid: UUID,
@@ -61,8 +67,11 @@ internal class ClientPokemonP1(
         other.setFriendship(this.friendship)
         // Applied before current health for calcs to take place
         other.ivs.doWithoutEmitting {
-            this.ivs.forEach {
-                other.ivs[it.key] = it.value
+            this.ivs.forEach { (stat, value) ->
+                other.ivs[stat] = value
+                if(this.ivs.isHyperTrained(stat)) {
+                    other.ivs.setHyperTrainedIV(stat, this.ivs.hyperTrainedIVs[stat]!!)
+                }
             }
         }
         other.evs.doWithoutEmitting {

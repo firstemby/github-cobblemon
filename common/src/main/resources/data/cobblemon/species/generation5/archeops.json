@@ -56,14 +56,30 @@
         "canFly": true
       },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
     },
     "walk": {
-      "walkSpeed": 0.27
+      "walkSpeed": 0.23
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "archeops",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -76,129 +92,69 @@
     ]
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can fly",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can stay off the ground",
-        "ranges": {
-          "LAND": "2-10",
-          "AIR": "100-101"
-        }
-      }
-    },
-    "behaviour": {
-      "key": "cobblemon:composite",
-      "transitionStrategy": "cobblemon:strategy/jump",
-      "defaultBehaviour": {
-        "key": "cobblemon:land/generic",
-        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [
-          0,
-          "0.3*q.jump_strength/50",
-          "-1 * 0.5*q.jump_strength/50"
-        ]
-      },
-      "alternateBehaviour": {
+    "behaviours": {
+      "AIR": {
         "key": "cobblemon:air/bird",
-        "gravity": "q.gravity * (0.1 + (q.passenger_count - 1) * 0.1)",
-        "speed": "Math.clamp(q.entity.velocity.horizontal_magnitude + 0.33, 0, 1)",
-        "jumpVector": [
-          0,
-          "0.3*q.jump_strength/50",
-          0
-        ]
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForPassengers": true,
+            "playForNonPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForPassengers": false,
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForPassengers": true,
+            "playForNonPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.leather.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForPassengers": false,
+            "playForNonPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.leather.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "45-75",
+          "JUMP": "30-65",
+          "SKILL": "55-85",
+          "SPEED": "45-70",
+          "STAMINA": "0-10"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-65",
+          "JUMP": "15-25",
+          "SKILL": "10-25",
+          "SPEED": "25-45",
+          "STAMINA": "20-45"
+        }
       }
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -0.5
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "HOVER"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.7,
-              "z": -1
-            }
-          },
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -1
-            }
-          }
-        ]
+        "locator": "seat_1"
       },
       {
-        "offset": {
-          "x": 0,
-          "y": 1.5,
-          "z": -1.5
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "HOVER"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.4,
-              "z": -1
-            }
-          },
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.2,
-              "z": -0.2
-            }
-          }
-        ]
+        "locator": "seat_2"
       }
     ]
   },
@@ -323,7 +279,17 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "archen",
   "evolutions": []

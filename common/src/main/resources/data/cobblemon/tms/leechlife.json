@@ -1,0 +1,19 @@
+{
+  "moveName": "leechlife",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:big_root",
+      "count": 2
+    }
+  ]
+}

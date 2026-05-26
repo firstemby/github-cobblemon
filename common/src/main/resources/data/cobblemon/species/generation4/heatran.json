@@ -151,7 +151,60 @@
     "tutor:steelbeam",
     "tutor:steelroller",
     "tutor:stompingtantrum",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:bugbite",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:roar",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar",
+    "special:eruption"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
+  },
+  "lightingData": {
+    "lightLevel": 12,
+    "liquidGlowMode": "LAND"
+  },
+  "drops": {
+    "amount": 8,
+    "entries": [
+      {
+        "item": "minecraft:magma_cream",
+        "quantityRange": "2-4"
+      },
+      {
+        "item": "minecraft:blaze_powder",
+        "quantityRange": "2-4"
+      }
+    ]
+  }
 }

@@ -16,10 +16,10 @@ import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.lang
@@ -56,21 +56,24 @@ open class MoveTemplate(
     val priority: Int,
     val critRatio: Double,
     val effectChances: Array<Double>,
-    val actionEffect: ActionEffectTimeline?
+    val weight: Float
 ) : ShowdownIdentifiable {
     val struct: MoStruct by lazy {
         QueryStruct(hashMapOf())
             .addFunction("name") { StringValue(name) }
-            .addFunction("type") { StringValue(elementalType.name) }
+            .addFunction("display_name") { StringValue(displayName.string) }
+            .addFunction("description") { StringValue(description.string) }
+            .addFunction("type") { StringValue(elementalType.showdownId) }
             .addFunction("damage_category") { StringValue(damageCategory.name) }
             .addFunction("power") { DoubleValue(power) }
             .addFunction("target") { StringValue(target.name) }
             .addFunction("accuracy") { DoubleValue(accuracy) }
             .addFunction("pp") { DoubleValue(pp) }
+            .addFunction("max_pp") { DoubleValue(maxPp) }
             .addFunction("priority") { DoubleValue(priority) }
             .addFunction("crit_ratio") { DoubleValue(critRatio) }
+            .addFunction("weight") { DoubleValue(weight.toDouble()) }
     }
-
 
     val displayName: MutableComponent
         get() = lang("move.$name")
@@ -90,7 +93,7 @@ open class MoveTemplate(
         priority = 0,
         critRatio = 0.0,
         effectChances = emptyArray(),
-        actionEffect = null
+        weight = 0F,
     )
 
     companion object {
@@ -98,27 +101,9 @@ open class MoveTemplate(
 
         @JvmStatic
         val BY_STRING_CODEC: Codec<MoveTemplate> = CodecUtils.createByStringCodec(
-            Moves::getByName,
+            Moves::getByNameOrDummy,
             MoveTemplate::name
         ) { id -> "No MoveTemplate for ID $id" }
-        val hiddenPowerTable = arrayOf(
-            ElementalTypes.FIGHTING,
-            ElementalTypes.FLYING,
-            ElementalTypes.POISON,
-            ElementalTypes.GROUND,
-            ElementalTypes.ROCK,
-            ElementalTypes.BUG,
-            ElementalTypes.GHOST,
-            ElementalTypes.STEEL,
-            ElementalTypes.FIRE,
-            ElementalTypes.WATER,
-            ElementalTypes.GRASS,
-            ElementalTypes.ELECTRIC,
-            ElementalTypes.PSYCHIC,
-            ElementalTypes.ICE,
-            ElementalTypes.DRAGON,
-            ElementalTypes.DARK
-        )
     }
 
     /**
@@ -147,21 +132,7 @@ open class MoveTemplate(
             return this.elementalType
         }
         if (name == "hiddenpower") {
-            val ivs = pokemon.ivs
-            val ivArray = arrayOf(
-                ivs[Stats.HP],
-                ivs[Stats.ATTACK],
-                ivs[Stats.DEFENCE],
-                ivs[Stats.SPEED],
-                ivs[Stats.SPECIAL_ATTACK],
-                ivs[Stats.SPECIAL_DEFENCE]
-            ).map { it ?: return@getEffectiveElementalType ElementalTypes.NORMAL }
-            var tableIndex = 0
-            ivArray.forEachIndexed { index, it ->
-                tableIndex += (it % 2) shl index
-            }
-            tableIndex = tableIndex * 15 / 63
-            return hiddenPowerTable[tableIndex.coerceAtMost(hiddenPowerTable.size - 1)]
+            return HiddenPowerUtil.getHiddenPowerType(pokemon)
         }
         // TODO: Handle ability suppression: clientactivebattlepokemon needs data about volatiles
         // TODO: Handle Liquid Voice: need to know what moves have the sound flag
@@ -195,4 +166,12 @@ open class MoveTemplate(
     }
 
     override fun showdownId() = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+
+    fun getSelectionWeight(form: FormData): Float {
+        return if (this in form.signatureMoves) {
+            weight * MovesetBuilder.signatureMoveWeightMultiplier
+        } else {
+            weight
+        }
+    }
 }

@@ -8,16 +8,16 @@
 
 package com.cobblemon.mod.common.api.spawning.condition
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 
 /**
- * A basic spawning condition that works for any type of spawning context.
+ * A basic spawning condition that works for any type of spawnable position.
  *
  * @author Hiroku
  * @since February 7th, 2022
  */
-class BasicSpawningCondition : SpawningCondition<SpawningContext>() {
-    override fun contextClass(): Class<out SpawningContext> = SpawningContext::class.java
+class BasicSpawningCondition : SpawningCondition<SpawnablePosition>() {
+    override fun spawnablePositionClass(): Class<out SpawnablePosition> = SpawnablePosition::class.java
     companion object {
         const val NAME = "basic"
     }

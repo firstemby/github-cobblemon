@@ -30,7 +30,7 @@ data class PokemonInteractionGUICreationEvent(
     }
 
     private fun getNextFreeOrientation(): Orientation {
-        var largest = Orientation.TOP_LEFT
+        var largest = Orientation.NORTH
         for (orientation in Orientation.entries) {
             if(!options.containsKey(orientation)) {
                 return orientation

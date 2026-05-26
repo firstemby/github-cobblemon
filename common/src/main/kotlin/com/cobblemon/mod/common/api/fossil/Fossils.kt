@@ -69,6 +69,7 @@ object Fossils: JsonDataRegistry<Fossil> {
     /**
      * Gets all loaded [Fossil]s.
      */
+    @JvmStatic
     fun all() = this.fossils.values.toList()
 
     /**
@@ -76,6 +77,7 @@ object Fossils: JsonDataRegistry<Fossil> {
      * @param identifier The identifier of the fossil.
      * @return The [Fossil] if loaded, otherwise null.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation): Fossil? = this.fossils[identifier]
 
     /**
@@ -83,6 +85,7 @@ object Fossils: JsonDataRegistry<Fossil> {
      * @param fossilStacks The fossil [ItemStack]'s.
      * @return The [Fossil] if found, otherwise null.
      */
+    @JvmStatic
     fun getFossilByItemStacks(fossilStacks: List<ItemStack>): Fossil? {
         return this.all().firstOrNull { it.matchesIngredients(fossilStacks) }
     }
@@ -92,6 +95,7 @@ object Fossils: JsonDataRegistry<Fossil> {
      * @param fossilStacks The fossil [ItemStack]'s.
      * @return The [Fossil] if found to be a superset, otherwise null.
      */
+    @JvmStatic
     fun getSubFossilByItemStacks(fossilStacks: List<ItemStack>): Fossil? {
         return this.all().firstOrNull { it.matchesIngredientsSubSet(fossilStacks) }
     }
@@ -100,6 +104,7 @@ object Fossils: JsonDataRegistry<Fossil> {
      * @param itemStack The ingredient [ItemStack].
      * @return true if it's a fossil ingredient, otherwise false.
      */
+    @JvmStatic
     fun isFossilIngredient(itemStack: ItemStack): Boolean {
         return this.all().any { it.isIngredient(itemStack) }
     }

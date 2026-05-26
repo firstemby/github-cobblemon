@@ -25,7 +25,7 @@ public abstract class EntityVillagerMixin {
     @Inject(method = "wantsToPickUp", at = @At(value = "RETURN"), cancellable = true)
     private void cobblemon$canGather(ItemStack stack, CallbackInfoReturnable<Boolean> ci) {
         final Villager villager = (Villager) (Object) this;
-        if(ci.getReturnValue() == false && Objects.equals(villager.getVillagerData().getProfession(), VillagerProfession.FARMER) && villager.getInventory().canAddItem(stack)) {
+        if (ci.getReturnValue() == false && Objects.equals(villager.getVillagerData().getProfession(), VillagerProfession.FARMER) && villager.getInventory().canAddItem(stack)) {
             if(VillagerGatherableItems.INSTANCE.getVillagerGatherableItems().contains(stack.getItem()))
                 ci.setReturnValue(true);
         }

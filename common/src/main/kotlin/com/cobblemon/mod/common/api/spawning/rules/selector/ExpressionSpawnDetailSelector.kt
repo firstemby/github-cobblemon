@@ -22,6 +22,7 @@ class ExpressionSpawnDetailSelector : SpawnDetailSelector {
 
     override fun selects(spawnDetail: SpawnDetail): Boolean {
         runtime.environment.setSimpleVariable("spawn", spawnDetail.struct)
+        runtime.environment.setSimpleVariable("spawn_detail", spawnDetail.struct)
         return runtime.resolveBoolean(expression)
     }
 }

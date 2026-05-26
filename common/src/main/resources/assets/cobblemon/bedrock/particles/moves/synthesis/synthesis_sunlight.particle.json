@@ -5,7 +5,7 @@
             "identifier": "cobblemon:synthesis_sunlight",
             "basic_render_parameters": {
                 "material": "particles_add",
-                "texture": "textures/particle/lightbeam"
+                "texture": "textures/particles/generic/lightbeam"
             }
         },
         "components": {

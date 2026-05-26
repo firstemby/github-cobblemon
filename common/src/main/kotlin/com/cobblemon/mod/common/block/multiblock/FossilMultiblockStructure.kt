@@ -38,6 +38,7 @@ import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.server
 import java.util.UUID
 import kotlin.math.ceil
+import kotlin.random.Random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
@@ -122,19 +123,17 @@ class FossilMultiblockStructure (
 
 
                 val ballType = (stack.item as PokeBallItem).pokeBall
-                if (!player.isCreative) {
-                    stack?.shrink(1)
-                }
+                stack?.consume(1, player)
 
-                val pokemon = this.resultingFossil?.result?.create(player)
+                val pokemon = this.resultingFossil?.result?.create(player)?.also(::rollShiny)?.also(::rollAlpha)
 
                 if(pokemon != null) {
                     pokemon.caughtBall = ballType
-                    player.party().add(pokemon)
                     this.fossilState.growthState = "Taken"
                     player.playSound(CobblemonSounds.FOSSIL_MACHINE_RETRIEVE_POKEMON, 1.0F, 1.0F)
                     CobblemonEvents.FOSSIL_REVIVED.post(FossilRevivedEvent(pokemon, player))
                     CobblemonCriteria.RESURRECT_POKEMON.trigger(player, pokemon)
+                    player.party().add(pokemon)
                 }
 
                 // Turn the monitor off
@@ -181,9 +180,7 @@ class FossilMultiblockStructure (
                 }
                 if (player is ServerPlayer) {
                     val copyFossilStack = stack.copyWithCount(1)
-                    if (!player.isCreative) {
-                        stack?.shrink(1)
-                    }
+                    stack?.consume(1, player)
                     fossilOwnerUUID = player.uuid
                     fossilInventory.add(copyFossilStack)
                     this.updateFossilType(world)
@@ -203,7 +200,7 @@ class FossilMultiblockStructure (
                     && this.organicMaterialInside < MATERIAL_TO_START
                     && insertOrganicMaterial(ItemStack(stack.item, 1), world)) {
                 this.lastInteraction = world.gameTime
-                if (!player.isCreative) {
+                if (!player.hasInfiniteMaterials()) {
                     val returnItem = NaturalMaterials.getReturnItem(stack)
                     stack?.shrink(1)
                     player.giveOrDropItemStack(
@@ -306,7 +303,7 @@ class FossilMultiblockStructure (
     override fun onTriggerEvent(state: BlockState?, world: ServerLevel?, pos: BlockPos?, random: RandomSource?) {
         // instantiate the pokemon as a new entity and spawn it at the location of the machine
         if(this.protectionTime <= 0) {
-            val wildPokemon: Pokemon = if (hasCreatedPokemon) resultingFossil?.result?.create() ?: return else return
+            val wildPokemon: Pokemon = if (hasCreatedPokemon) resultingFossil?.result?.create()?.also(::rollShiny)?.also(::rollAlpha) ?: return else return
             val direction = state?.getValue(HorizontalDirectionalBlock.FACING)?.opposite
             if(pos != null && direction != null && world != null) {
                 val success = this.spawn(world, pos, direction, wildPokemon)
@@ -331,7 +328,7 @@ class FossilMultiblockStructure (
         val tankTopEntity = world.getBlockEntity(tankBasePos.above()) as? MultiblockEntity
         val tankBaseBlockState =  tankBaseEntity?.blockPos?.let { world.getBlockState(it) }
         val direction = if (tankBaseBlockState?.block == CobblemonBlocks.RESTORATION_TANK) tankBaseBlockState.getValue(HorizontalDirectionalBlock.FACING).opposite else Direction.UP
-        val wildPokemon: Pokemon? = if (hasCreatedPokemon) resultingFossil?.result?.create() else null
+        val wildPokemon: Pokemon? = if (hasCreatedPokemon) resultingFossil?.result?.create()?.also(::rollShiny)?.also(::rollAlpha) else null
 
         monitorEntity?.multiblockStructure = null
         analyzerEntity?.multiblockStructure = null
@@ -361,7 +358,7 @@ class FossilMultiblockStructure (
             //world.createExplosion(this.createdPokemon?.entity, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), 5F, World.ExplosionSourceType.TNT)
 
             // instantiate the pokemon as a new entity and spawn it at the location of the machine
-            //var wildPokemon = this.createdPokemon?.sendOut(world as ServerWorld, pos.toVec3d())
+            //var wildPokemon = this.createdPokemon?.sendOut(world as ServerLevel, pos.toVec3d())
 
             //world.spawnEntity(wildPokemon)
             this.spawn(world, pos, direction, wildPokemon)
@@ -377,6 +374,28 @@ class FossilMultiblockStructure (
     override fun setRemoved(world: Level) {
         if(world.isClientSide) {
             BlockEntitySoundTracker.stop(this.tankBasePos, runningSound.location)
+        }
+    }
+
+    fun rollAlpha(pokemon: Pokemon) {
+        if (pokemon.isAlpha) {
+            return
+        }
+        val chance = Cobblemon.config.fossilMachineAlphaChance
+        if (Random.nextInt(chance) == 0) {
+            pokemon.isAlpha = true
+            pokemon.initializeMovesetFromDefault()
+        }
+    }
+
+    fun rollShiny(pokemon: Pokemon) {
+        if (pokemon.shiny) {
+            return
+        }
+
+        val chance = Cobblemon.config.fossilMachineShinyChance
+        if (Random.nextInt(chance) == 0) {
+            pokemon.shiny = true
         }
     }
 
@@ -607,8 +626,7 @@ class FossilMultiblockStructure (
         result.put(DataKeys.TANK_BASE_POS, NbtUtils.writeBlockPos(tankBasePos))
         result.putInt(DataKeys.TIME_LEFT, timeRemaining)
         result.putInt(DataKeys.PROTECTED_TIME_LEFT, protectionTime)
-        if(fossilOwnerUUID != null)
-            result.putUUID(DataKeys.FOSSIL_OWNER, fossilOwnerUUID)
+        fossilOwnerUUID?.let { result.putUUID(DataKeys.FOSSIL_OWNER, it) }
         result.putInt(DataKeys.ORGANIC_MATERIAL, organicMaterialInside)
         val fossilInv = ListTag()
 

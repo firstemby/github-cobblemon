@@ -130,7 +130,8 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes"
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [
@@ -162,7 +163,40 @@
       },
       "baseExperienceYield": 563,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  },
+  "lightingData": {
+    "lightLevel": 13,
+    "liquidGlowMode": "BOTH"
+  }
 }

@@ -12,13 +12,17 @@ import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.net.NetworkPacket;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
+import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.mixin.accessor.ChunkMapAccessor;
 import com.cobblemon.mod.common.mixin.accessor.TrackedEntityAccessor;
+import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket;
 import com.cobblemon.mod.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket;
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClientboundSeatAssignmentPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -26,6 +30,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerPlayerConnection;
 import net.minecraft.world.entity.Entity;
 import org.joml.Matrix3f;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -50,22 +56,28 @@ public abstract class ServerEntityMixin {
     private Matrix3f cobblemon$lastSentOrientation;
     @Unique
     private boolean cobblemon$lastSentActive;
+    @Unique
+    private List<Entity> cobblemon$lastSeatPassengers = List.of();
 
     @Inject(method = "sendChanges", at = @At("TAIL"))
     private void cobblemon$sendChanges(CallbackInfo ci) {
         cobblemon$sendOrientationChanges();
         cobblemon$sendRidingStateChanges();
+        cobblemon$sendDriverInput();
+        cobblemon$sendOccupiedSeatsChange();
     }
 
     private void cobblemon$sendRidingStateChanges() {
         if (!(this.entity instanceof PokemonEntity pokemonEntity)) return;
-        if (pokemonEntity.getRidingState() == null) return;
-        if (pokemonEntity.getRiding() == null) return;
-        var ridingBehaviour = pokemonEntity.getRiding();
-        var ridingState = pokemonEntity.getRidingState();
+        if (pokemonEntity.getRidingController() == null) return;
+        var ridingController = pokemonEntity.getRidingController();
+        if (ridingController.getContext() == null) return;
+        var context = ridingController.getContext();
+        var ridingBehaviour = context.getBehaviour();
+        var ridingState = context.getState();
         var previousRidingState = pokemonEntity.getPreviousRidingState();
         if (previousRidingState != null && !ridingState.shouldSync(previousRidingState)) return;
-        cobblemon$broadcast(new ClientboundUpdateRidingStatePacket(pokemonEntity.getId(), ridingBehaviour.getKey(), pokemonEntity.getRidingState(), null));
+        cobblemon$broadcast(new ClientboundUpdateRidingStatePacket(pokemonEntity.getId(), ridingBehaviour, ridingState, null));
     }
 
     private void cobblemon$sendOrientationChanges() {
@@ -82,6 +94,37 @@ public abstract class ServerEntityMixin {
         cobblemon$broadcast(new ClientboundUpdateOrientationPacket(currOrientation, currActive, entity.getId()));
     }
 
+    private void cobblemon$sendDriverInput() {
+        if (!(this.entity instanceof ServerPlayer serverPlayer)) return;
+        if(!(serverPlayer.getVehicle() instanceof PokemonEntity)) return;
+        Vector3f driverInput = ((PlayerDuck)serverPlayer).getDriverInput();
+        if(driverInput == null) return;
+
+        // If no change in input is detected then don't send a new packet
+        Vector3f lastSentDriverInput = ((PlayerDuck)serverPlayer).getLastSentDriverInput();
+        if (driverInput.equals(lastSentDriverInput)) return;
+        ((PlayerDuck)serverPlayer).setLastSentDriverInput(driverInput);
+        cobblemon$broadcast(new ClientboundUpdateDriverInputPacket(driverInput, entity.getId()));
+    }
+
+    private void cobblemon$sendOccupiedSeatsChange() {
+        if (!(this.entity instanceof PokemonEntity pokemon)) return;
+
+        List<Entity> currentPassengers = pokemon.getPassengers();
+        if (currentPassengers.equals(cobblemon$lastSeatPassengers)) return;
+        cobblemon$lastSeatPassengers = List.copyOf(currentPassengers);
+
+        pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
+            if (seat.getLocator() == null) return;
+            if (passenger == null) return;
+            cobblemon$broadcast(new ClientboundSeatAssignmentPacket(
+                    passenger.getId(),
+                    pokemon.getId(),
+                    seat.getLocator()
+            ));
+        });
+    }
+
     private void cobblemon$broadcast(NetworkPacket<?> packet) {
         if (!(entity.level() instanceof ServerLevel level)) return;
         ChunkMap chunkMap = level.getChunkSource().chunkMap;
@@ -96,6 +139,4 @@ public abstract class ServerEntityMixin {
             CobblemonNetwork.INSTANCE.sendPacketToPlayer(player, packet);
         }
     }
-
-
 }

@@ -11,11 +11,11 @@ package com.cobblemon.mod.common.client.gui.pc
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.getPixelRGB
 import com.cobblemon.mod.common.api.storage.StorePosition
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration
 import com.cobblemon.mod.common.client.gui.pasture.PastureWidget
@@ -29,7 +29,11 @@ import com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPa
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
-import com.cobblemon.mod.common.net.messages.server.storage.pc.*
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket
+import com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -39,7 +43,6 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 
 class StorageWidget(
@@ -82,12 +85,12 @@ class StorageWidget(
 
     var box = 0
         set(value) {
-            // If value is within min and max
-            field = if (value > 0 && value < pc.boxes.size) value
-            // If value is less than zero, wrap around to end
-            else if (value < 0) pc.boxes.size - 1
-            // Else it's greater than max, wrap around to start
-            else 0
+            field =
+                if (value > 0 && value < pc.boxes.size) value // If value is within min and max
+                else if (value < 0) pc.boxes.size - 1 // If value is less than zero, wrap around to end
+                else 0 // Else it's greater than max, wrap around to start
+
+            CobblemonClient.lastPcBoxViewed = field
             this.setupStorageSlots()
         }
 
@@ -257,14 +260,15 @@ class StorageWidget(
         }
 
         val boxWallpaper = pc.boxes[box].wallpaper
-        val screenResource: Pair<ResourceLocation, ResourceLocation?> =
-            PCBoxWallpaperRepository.allWallpapers.find { it.first == boxWallpaper }
+        // Get wallpaper data by matching resource. If box wallpaper has no match, attempt matching alternate wallpaper resource
+        val wallpaperData = PCBoxWallpaperRepository.allWallpapers.find { it.first == boxWallpaper } ?: PCBoxWallpaperRepository.allWallpapers.find { it.second == boxWallpaper }
+        val screenResource = wallpaperData
             ?: PCBoxWallpaperRepository.allWallpapers.find { it.first == PCBoxWallpaperRepository.defaultWallpaper }
-            ?: Pair(PCBoxWallpaperRepository.defaultWallpaper, null)
+            ?: Triple(PCBoxWallpaperRepository.defaultWallpaper, null, null)
 
         blitk(
             matrixStack = matrices,
-            texture = screenResource.first,
+            texture = if (wallpaperData != null) boxWallpaper else screenResource.first,
             x = x,
             y = y,
             width = SCREEN_WIDTH,
@@ -272,28 +276,14 @@ class StorageWidget(
             alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
         )
 
-        if (screenResource.second !== null) {
+        if (screenResource.third !== null) {
             blitk(
                 matrixStack = matrices,
-                texture = screenResource.second,
+                texture = screenResource.third,
                 x = x - 17,
                 y = y - 17,
                 width = 208,
                 height = 189,
-                alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
-            )
-        } else {
-            val rgb = getPixelRGB(x + (SCREEN_WIDTH / 2), y + (SCREEN_HEIGHT / 2))
-            blitk(
-                matrixStack = matrices,
-                texture = screenGlowResource,
-                x = x - 17,
-                y = y - 17,
-                width = 208,
-                height = 189,
-                red = rgb.first / 255F,
-                green = rgb.second / 255F,
-                blue = rgb.third / 255F,
                 alpha = if (screenLoaded) 1F else ((pcGui.ticksElapsed).toFloat() / 10F).coerceIn(0F, 1F)
             )
         }
@@ -490,7 +480,7 @@ class StorageWidget(
         }
     }
 
-    private fun resetSelected() {
+    fun resetSelected() {
         selectedPosition = null
         grabbedSlot = null
         pcGui.setPreviewPokemon(null)

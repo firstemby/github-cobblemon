@@ -5,7 +5,7 @@
             "identifier": "cobblemon:hisuipuff",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/hisuipuff"
+                "texture": "textures/particles/balls/hisuipuff"
             }
         },
         "components": {

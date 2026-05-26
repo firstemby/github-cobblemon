@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 531,
   "name": "Audino",
   "primaryType": "normal",
@@ -41,12 +42,13 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 1.8,
     "fixed": false
   },
+  "standingEyeHeight": 0.82,
   "drops": {
     "amount": 2,
     "entries": [
@@ -212,10 +214,19 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:trick",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:present"
   ],
   "evolutions": [],
   "forms": [
@@ -251,7 +262,59 @@
       "baseExperienceYield": 425,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "3",
+          "toleratedLeaders": [
+            {
+              "pokemon": "audino mega",
+              "tier": 1
+            }
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "audino mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "audino mega",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

@@ -33,21 +33,18 @@ repositories {
 }
 
 dependencies {
-    neoForge(libs.neoforge)
-    //Because of the JEI mapping issues if we want
-    //a forge launch we gotta do some wacky stuff
-    //modImplementation(libs.jeiForge)
+    neoForge(libs.neoforge.api)
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
     //modImplementation(libs.flywheelForge)
     //include(libs.flywheelForge)
     modLocalRuntime(libs.neoforge.debugutils)
+    modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
+    modRuntimeOnly(libs.bundles.mongo)
+    forgeRuntimeLibrary(libs.bundles.mongo)
+
+    implementation(libs.neo.kotlin.forge)
+
     implementation(project(":common", configuration = "namedElements")) {
-        isTransitive = false
-    }
-    implementation(libs.neo.kotlin.forge) {
-        exclude(group = "net.neoforged.fancymodloader", module = "loader")
-    }
-    "developmentNeoForge"(project(":common", configuration = "namedElements")) {
         isTransitive = false
     }
     bundle(project(path = ":common", configuration = "transformProductionNeoForge")) {
@@ -56,12 +53,21 @@ dependencies {
     testImplementation(project(":common", configuration = "namedElements"))
 
     listOf(
-        libs.graal,
+        libs.bundles.mongo
+    ).forEach {
+        include(it)
+    }
+    modRuntimeOnly(libs.bundles.graal)
+    forgeRuntimeLibrary(libs.bundles.graal)
+
+    listOf(
+        libs.bundles.graal,
         libs.molang
     ).forEach {
         forgeRuntimeLibrary(it)
         bundle(it)
     }
+
 }
 
 tasks {
@@ -69,6 +75,7 @@ tasks {
         exclude("architectury-common.accessWidener")
         exclude("architectury.common.json")
 
+        relocate ("org.graalvm", "com.cobblemon.mod.relocations.graalvm")
         relocate ("com.ibm.icu", "com.cobblemon.mod.relocations.ibm.icu")
     }
 

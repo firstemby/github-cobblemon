@@ -42,9 +42,6 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "features": [
-    "milkable"
-  ],
   "baseScale": 0.75,
   "hitbox": {
     "width": 1.1,
@@ -54,7 +51,59 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "lightningHit": {
+      "rotateFeatures": [
+        {
+          "key": "mooshtank",
+          "chain": [
+            "red",
+            "brown"
+          ]
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "bouffalant",
+          "tier": 1
+        },
+        {
+          "pokemon": "tauros",
+          "tier": 2
+        },
+        {
+          "pokemon": "tauros bull_breed=combat",
+          "tier": 2
+        },
+        {
+          "pokemon": "tauros bull_breed=aqua",
+          "tier": 3
+        },
+        {
+          "pokemon": "tauros bull_breed=blaze",
+          "tier": 3
+        },
+        {
+          "pokemon": "miltank",
+          "tier": 4
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -202,7 +251,23 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:toxic",
+    "legacy:zapcannon"
   ],
   "evolutions": []
 }

@@ -21,7 +21,7 @@ import java.lang.reflect.Type
 
 /**
  * Type adapter for deserializing a [SpawningCondition]. If there is some context for where this is being
- * deserialized, the type of spawning context can be implied based on the default condition type registered
+ * deserialized, the type of spawnable position can be implied based on the default condition type registered
  * for the [SpawnDetail].
  *
  * If there isn't any context information, then there should be a "type" property to be used to look up the

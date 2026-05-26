@@ -194,7 +194,7 @@
 		},
 		"animation.gimmighoul_chest.ground_walk": {
 			"loop": true,
-			"animation_length": 1.45833,
+			"animation_length": 1.4583,
 			"bones": {
 				"gimmighoul_body": {
 					"rotation": [-52, 0, 0],
@@ -1223,13 +1223,16 @@
 				}
 			},
 			"sound_effects": {
+				"0.125": {
+					"effect": "pokemon.gimmighoul.cry"
+				},
 				"0.1667": {
 					"effect": "gilded_chest_open"
 				}
 			}
 		},
 		"animation.gimmighoul_chest.blink": {
-			"animation_length": 0.16667,
+			"animation_length": 0.1667,
 			"bones": {
 				"eyelid_left": {
 					"position": {
@@ -1744,6 +1747,7 @@
 			}
 		},
 		"animation.gimmighoul_chest.idle_quirk": {
+			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"belt_top2": {
@@ -2325,6 +2329,154 @@
 				},
 				"antenna_right2": {
 					"rotation": ["0.5*math.cos(q.anim_time*90*5-120)*10", 0, 0]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.shock": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"pupil_right": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_open": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.angry": {
+			"loop": true,
+			"bones": {
+				"eye_angry_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_angry_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.sad": {
+			"loop": true,
+			"bones": {
+				"eye_sad_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eye_sad_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.happy": {
+			"loop": true,
+			"bones": {
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_open": {
+					"position": [0, 0, -0.1]
+				},
+				"eyelid_happy_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eyelid_happy_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.hurt": {
+			"loop": true,
+			"bones": {
+				"eyelid_recoil_left": {
+					"position": [0, 0, -0.1]
+				},
+				"eyelid_recoil_right": {
+					"position": [0, 0, -0.1]
+				}
+			}
+		},
+		"animation.gimmighoul_chest.render": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [0, 22.5, 0]
+				},
+				"belt": {
+					"rotation": [-5, 0, 0]
+				},
+				"belt_top": {
+					"rotation": [0, 0, 5]
+				},
+				"belt_top2": {
+					"rotation": [-12.47548, 0.56531, 4.96802]
+				},
+				"lid": {
+					"rotation": [-15, 0, 0],
+					"position": [0, 4, 0]
+				},
+				"belt_top3": {
+					"rotation": [-15, 0, 0],
+					"position": [0, 4, 0]
+				},
+				"belt_bottom": {
+					"rotation": [10, 0, 0]
+				},
+				"belt_bottom3": {
+					"rotation": [80, 0, 0]
+				},
+				"belt_bottom4": {
+					"rotation": [-7.5, 0, 0]
+				},
+				"belt_bottom5": {
+					"rotation": [-22.5, 0, 0]
+				},
+				"torso": {
+					"rotation": [22.31498, -9.79601, 4.07345],
+					"position": [0, 0, -1]
+				},
+				"arm_left": {
+					"rotation": [-30.48811, 75.4534, -31.31066]
+				},
+				"arm_left2": {
+					"rotation": [0, 85, 0]
+				},
+				"arm_right": {
+					"rotation": [-28.24912, 16.7796, 28.24912]
+				},
+				"arm_right2": {
+					"rotation": [0, -12.5, 0]
+				},
+				"head": {
+					"rotation": [-17.65701, -3.86212, 13.49771]
+				},
+				"mouth_closed": {
+					"position": [0, 0, 0.1]
+				},
+				"mouth_open": {
+					"position": [0, 0, -0.1]
+				},
+				"antenna_left": {
+					"rotation": [0, -45, 0]
+				},
+				"antenna_left2": {
+					"rotation": [7.5, 0, 0]
+				},
+				"antenna_right": {
+					"rotation": [0, 35, 0]
+				},
+				"antenna_right2": {
+					"rotation": [10, 0, 0]
+				},
+				"tail": {
+					"rotation": [-40, 0, 0],
+					"position": [0, 0, -0.25]
+				},
+				"tail2": {
+					"rotation": [21.26765, 7.52076, -18.58597]
 				}
 			}
 		}

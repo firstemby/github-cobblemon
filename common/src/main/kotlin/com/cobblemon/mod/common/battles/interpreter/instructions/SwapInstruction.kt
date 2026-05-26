@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.net.messages.client.battle.BattleSwapPokemonPacket
@@ -38,18 +37,20 @@ class SwapInstruction(val message: BattleMessage, val instructionSet: Instructio
             if (activeBattlePokemonB != null) {
                 val pnxB = activeBattlePokemonB.getPNX()
                 val (actorB, activePokemonB) = battle.getActorAndActiveSlotFromPNX(pnxB)
-                // Swap references of the 2 pokemon
+                // update party positions
+                actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemonA), actor.activePokemon.indexOf(activeBattlePokemonB))
+                // swap active references
                 actor.activePokemon.swap((pnxA[2] - 'a'), (pnxB[2] - 'a'))
 
                 val posA = activePokemonA.getSendOutPosition() ?: activePokemonA.position?.second
                 if (posA != null && battlePokemonA.entity != null) {
-                    battlePokemonA.entity?.setPositionSafely(battlePokemonA.entity!!.getAjustedSendoutPosition(posA))
+                    battlePokemonA.entity?.setPositionSafely(battlePokemonA.entity!!.getAdjustedSendoutPosition(posA))
                 }
 
                 val posB = activePokemonB.getSendOutPosition() ?: activePokemonB.position?.second
                 val battlePokemonB = activePokemonB.battlePokemon
                 if (posB != null && battlePokemonB?.entity != null) {
-                    activePokemonB.battlePokemon?.entity?.setPositionSafely(battlePokemonB.entity!!.getAjustedSendoutPosition(posB))
+                    activePokemonB.battlePokemon?.entity?.setPositionSafely(battlePokemonB.entity!!.getAdjustedSendoutPosition(posB))
                 }
 
                 // Notify clients of the swap

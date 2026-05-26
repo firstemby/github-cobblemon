@@ -21,13 +21,10 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
-import com.cobblemon.mod.common.compat.LambDynamicLightsCompat
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import java.util.concurrent.CompletableFuture
 import java.util.function.Supplier
 import net.minecraft.client.Minecraft
@@ -95,7 +92,6 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     private fun onClientSetup(event: FMLClientSetupEvent) {
         event.enqueueWork {
             CobblemonClient.initialize(this)
-            this.attemptModCompat()
             CobblemonModelPredicateRegistry.registerPredicates()
         }
         NeoForgeClientPlatformEventHandler.register()
@@ -130,11 +126,10 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     }
 
     private fun onShaderRegistration(event: RegisterShadersEvent) {
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_add"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_BLEND = it
-        }
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_CUTOUT = it
+        CobblemonShaders.init()
+        CobblemonShaders.SHADERS_TO_REGISTER.forEach { (factory, callback) ->
+            val data = factory(event.resourceProvider)
+            event.registerShader(ShaderInstance(data.resourceFactory, data.shaderName, data.vertexFormat), callback)
         }
     }
 
@@ -241,14 +236,5 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
 
     internal fun registerResourceReloader(reloader: PreparableReloadListener) {
         (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)
-    }
-
-    private fun attemptModCompat() {
-        // They have no Maven nor are they published on Modrinth :(
-        // Good thing is they are a copy pasta adapted to Forge :D
-        if (Cobblemon.implementation.isModInstalled("dynamiclightsreforged") || Cobblemon.implementation.isModInstalled("sodiumdynamiclights")) {
-            LambDynamicLightsCompat.hookCompat()
-            Cobblemon.LOGGER.info("Dynamic Lights compatibility enabled")
-        }
     }
 }

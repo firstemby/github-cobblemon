@@ -1,0 +1,11 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/submerged_impact1",
+            "cobblemon:fossils/submerged_impact2",
+            "cobblemon:fossils/submerged_impact3"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_submerged_impact"
+    }
+}

@@ -15,14 +15,20 @@ import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
 import com.cobblemon.mod.common.api.ai.SleepDepth
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
+import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
+import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.MovesetBuilder
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
@@ -31,13 +37,14 @@ import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolutio
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
-import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
+import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
@@ -55,14 +62,19 @@ import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.HeldItemRequirement
 import com.cobblemon.mod.common.pokemon.transformation.requirements.MoveSetRequirement
+import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
+import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
+import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
+import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.util.adapters.*
-import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.ifClient
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.mojang.datafixers.util.Either
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
@@ -72,10 +84,14 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
+import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
+import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
 import java.util.NoSuchElementException
 
@@ -86,6 +102,16 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(Stat::class.java, Cobblemon.statProvider.typeAdapter)
+        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
+        .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(
+            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            ExpressionOrEntityVariableAdapter
+        )
+        .registerTypeAdapter(Activity::class.java, ActivityAdapter)
+        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
         .registerTypeAdapter(AbilityTemplate::class.java, AbilityTemplateAdapter)
         .registerTypeAdapter(ShoulderEffect::class.java, ShoulderEffectAdapter)
@@ -100,17 +126,19 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(TimeRange::class.java, TimeRange.adapter)
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
         .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(Component::class.java, TextAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Structure::class.java).type, StructureLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
         .registerTypeAdapter(EggGroup::class.java, EggGroupAdapter)
         .registerTypeAdapter(MobEffect::class.java, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
         .registerTypeAdapter(TransformationTrigger::class.java, CobblemonTriggerAdapter)
@@ -118,8 +146,9 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
         .registerTypeAdapter(FormData::class.java, FormAdapter)
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
-        .registerTypeAdapter(RidingStatDefinition::class.java, RidingStatDefinitionAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
+        .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
+        .registerTypeAdapter(MovesetBuilder::class.java, MovesetBuilderReferenceAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
@@ -132,9 +161,12 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     private val speciesByIdentifier = hashMapOf<ResourceLocation, Species>()
     private val speciesByDex = HashBasedTable.create<String, Int, Species>()
 
+    @JvmStatic
     val species: Collection<Species>
         get() = this.speciesByIdentifier.values
-    val implemented = mutableListOf<Species>()
+    @JvmStatic
+    val implemented: List<Species>
+        get() = this.species.filter { it.implemented }
 
     val forms: Collection<FormData>
         get() = this.species.flatMap { it.allForms }
@@ -142,17 +174,11 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     init {
         SpeciesAdditions.observable.subscribe {
             this.species.forEach(Species::initialize)
-            this.species.forEach {
-                if (it.implemented) {
-                    this.implemented.add(it)
-                }
-            }
             this.species.forEach(Species::resolveEvolutionMoves)
             Cobblemon.showdownThread.queue {
-                it.registerSpecies()
+                it.resetRegistryData("species")
+                it.sendRegistryData(allShowdownSpecies(), "species")
                 it.indicateSpeciesInitialized()
-                // Reload this with the mod
-                CobblemonHeldItemManager.load()
                 Cobblemon.LOGGER.info("Loaded {} Pokémon species", this.speciesByIdentifier.size)
                 this.observable.emit(this)
             }
@@ -167,6 +193,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param name The path of the species asset.
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByName(name: String) = this.getByIdentifier(cobblemonResource(name))
 
     /**
@@ -175,6 +202,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param ndex The [Species.nationalPokedexNumber].
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByPokedexNumber(ndex: Int, namespace: String = Cobblemon.MODID) = this.speciesByDex.get(namespace, ndex)
 
     /**
@@ -183,6 +211,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @param identifier The unique [Species.resourceIdentifier] of the [Species].
      * @return The [Species] if existing.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation) = this.speciesByIdentifier[identifier]
 
     /**
@@ -190,6 +219,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The loaded species amount.
      */
+    @JvmStatic
     fun count() = this.speciesByIdentifier.size
 
     /**
@@ -197,6 +227,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The dex numbers map to species.
      */
+    @JvmStatic
     fun getSpeciesInNamespace(namespace: String = Cobblemon.MODID): MutableMap<Int, Species> = speciesByDex.row(namespace)
 
     /**
@@ -204,6 +235,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return The list of loaded namespaces.
      */
+    @JvmStatic
     fun getNamespaces() = speciesByDex.rowKeySet().toList()
 
     /**
@@ -213,11 +245,11 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      *
      * @return A randomly selected [Species].
      */
+    @JvmStatic
     fun random(): Species = this.implemented.random()
 
     override fun reload(data: Map<ResourceLocation, Species>) {
         this.speciesByIdentifier.clear()
-        this.implemented.clear()
         this.speciesByDex.clear()
         data.forEach { (identifier, species) ->
             species.resourceIdentifier = identifier
@@ -225,11 +257,6 @@ object PokemonSpecies : JsonDataRegistry<Species> {
                 this.speciesByDex.remove(old.resourceIdentifier.namespace, old.nationalPokedexNumber)
             }
             this.speciesByDex.put(species.resourceIdentifier.namespace, species.nationalPokedexNumber, species)
-            ifClient {
-                if (species.implemented) {
-                    this.implemented.add(species)
-                }
-            }
         }
     }
 
@@ -247,7 +274,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     internal open class ShowdownSpecies(form: FormData) {
         val num = form.species.nationalPokedexNumber
         val name = form.showdownName()
-        val types = form.types.map { it.name.replaceFirstChar(Char::uppercase) }
+        val types = form.types.map { it.name }
         val eggGroups = form.eggGroups.map { it.showdownID }
         val gender: String? = when (form.maleRatio) {
             0F -> "F"
@@ -384,5 +411,22 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         hiddenAbility?.let { ability -> mapping("H", ability) }
         specialAbility?.let { ability -> mapping("S", ability) }
         return if (abilities.isEmpty()) null else abilities
+    }
+
+    internal fun allShowdownSpecies(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+        this.species.forEach { species ->
+            val baseSpecies = ShowdownSpecies(species, null)
+            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name.lowercase(), "")] = this.gson.toJson(baseSpecies)
+            species.permanentForms.forEach { form ->
+                val formSpecies = ShowdownSpecies(species, form)
+                result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
+            }
+            species.temporaryForms.forEach { form ->
+                val formSpecies = ShowdownSpecies(species, form)
+                result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
+            }
+        }
+        return result
     }
 }

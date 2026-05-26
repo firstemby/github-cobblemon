@@ -46,9 +46,60 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1.1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "15-45",
+          "JUMP": "0-5",
+          "SKILL": "25-35",
+          "SPEED": "1-5",
+          "STAMINA": "60-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      },
+      {
+        "locator": "seat_3"
+      },
+      {
+        "locator": "seat_4"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInWater": false
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,
@@ -153,7 +204,18 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "dwebble",
   "evolutions": []

@@ -50,19 +50,59 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walking": {
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.25,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "avoidsLand": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "goldeen",
+          "tier": 1
+        },
+        {
+          "pokemon": "remoraid",
+          "tier": 1
+        },
+        {
+          "pokemon": "alomomola",
+          "tier": 2
+        },
+        {
+          "pokemon": "seaking",
+          "tier": 3
+        },
+        {
+          "pokemon": "finneon",
+          "tier": 4
+        },
+        {
+          "pokemon": "lumineon",
+          "tier": 5
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 6
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -177,7 +217,20 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:aircutter",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -191,5 +244,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "BOTH"
+  }
 }

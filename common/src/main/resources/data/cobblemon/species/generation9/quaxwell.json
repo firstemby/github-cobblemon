@@ -52,9 +52,6 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       },
       "walk": {
@@ -63,7 +60,25 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quaxwell",
+          "tier": 1
+        },
+        {
+          "pokemon": "quaquaval",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

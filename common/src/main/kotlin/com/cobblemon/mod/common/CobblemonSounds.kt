@@ -44,7 +44,17 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val PC_WALLPAPER_UNLOCK = this.create("pc.wallpaper.unlock")
 
     @JvmField
+    val NPC_GIBBER_GENERIC = this.create("entity.npc.gibber.generic")
+    @JvmField
+    val NPC_GIBBER_SPEECH_TYPE_1_1 = this.create("entity.npc.gibber.speech_type_1_1")
+    @JvmField
+    val NPC_GIBBER_SPEECH_TYPE_1_2 = this.create("entity.npc.gibber.speech_type_1_2")
+    @JvmField
+    val NPC_GIBBER_SPEECH_TYPE_1_3 = this.create("entity.npc.gibber.speech_type_1_3")
+
+    @JvmField
     val VILLAGER_WORK_NURSE = this.create("entity.villager.work_nurse")
+
     @JvmField
     val HEALING_MACHINE_ACTIVE = this.create("block.healing_machine.active")
 
@@ -94,6 +104,14 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val EVOLUTION = this.create("evolution.full")
 
     @JvmField
+    val LEVELUP_START = this.create("gui.levelup_start")
+    @JvmField
+    val LEVELUP = this.create("gui.levelup")
+
+    @JvmField
+    val MOVE_LEARN = this.create("gui.move_learn")
+
+    @JvmField
     val PVN_BATTLE = this.create("battle.pvn.default")
     @JvmField
     val PVP_BATTLE = this.create("battle.pvp.default")
@@ -112,11 +130,23 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MEDICINE_SPRAY_USE = this.create("item.medicine.spray.use")
     @JvmField
     val MEDICINE_FEATHER_USE = this.create("item.medicine.feather.use")
+    @JvmField
+    val MOCHI_USE = this.create("item.medicine.feather.use")
+
 
     @JvmField
     val MULCH_PLACE = this.create("block.mulch.place")
     @JvmField
     val MULCH_REMOVE = this.create("block.mulch.remove")
+
+    @JvmField
+    val MONITOR_BREAK = this.create("block.monitor.break")
+    @JvmField
+    val MONITOR_INSERT = this.create("block.monitor.insert")
+    @JvmField
+    val MONITOR_LOADING = this.create("block.monitor.loading")
+    @JvmField
+    val MONITOR_GLITCHING = this.create("block.monitor.glitching")
 
     @JvmField
     val FOSSIL_MACHINE_ACTIVATE = this.create("block.fossil_machine.activate")
@@ -183,6 +213,28 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val TUMBLESTONE_STEP = this.create("block.tumblestone.step")
 
     @JvmField
+    val TM_USE = this.create("item.tm.use")
+    @JvmField
+    val TM_MACHINE_BURN_LOOP = this.create("block.tm_machine.burn_loop")
+    @JvmField
+    val TM_MACHINE_CRAFT = this.create("block.tm_machine.craft")
+    @JvmField
+    val TM_MACHINE_START = this.create("block.tm_machine.start")
+    @JvmField
+    val TM_MACHINE_OPEN = this.create("block.tm_machine.open")
+    @JvmField
+    val TM_MACHINE_CLOSE = this.create("block.tm_machine.close")
+    @JvmField
+    val TM_MACHINE_TM_INSERT = this.create("block.tm_machine.tm_insert")
+    @JvmField
+    val TM_MACHINE_TM_RETRIEVE = this.create("block.tm_machine.tm_retrieve")
+    @JvmField
+    val TM_MACHINE_ITEM_INSERT = this.create("block.tm_machine.item_insert")
+    @JvmField
+    val TM_MACHINE_ITEM_RETRIEVE = this.create("block.tm_machine.item_retrieve")
+
+
+    @JvmField
     val EVOLUTION_STONE_BLOCK_BREAK = this.create("block.evolution_stone_block.break")
     @JvmField
     val EVOLUTION_STONE_BLOCK_HIT = this.create("block.evolution_stone_block.hit")
@@ -190,6 +242,19 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val EVOLUTION_STONE_BLOCK_PLACE = this.create("block.evolution_stone_block.place")
     @JvmField
     val EVOLUTION_STONE_BLOCK_STEP = this.create("block.evolution_stone_block.step")
+
+    @JvmField
+    val TATAMI_BLOCK_BREAK = this.create("block.tatami.break")
+    @JvmField
+    val TATAMI_BLOCK_HIT = this.create("block.tatami.hit")
+    @JvmField
+    val TATAMI_BLOCK_PLACE = this.create("block.tatami.place")
+    @JvmField
+    val TATAMI_BLOCK_STEP = this.create("block.tatami.step")
+    @JvmField
+    val TATAMI_MAT_BREAK = this.create("block.tatami_mat.break")
+    @JvmField
+    val TATAMI_MAT_PLACE = this.create("block.tatami_mat.place")
 
     @JvmField
     val GIMMIGHOUL_GIVE_ITEM = this.create("pokemon.gimmighoul.give_item")
@@ -204,6 +269,11 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val BERRY_HARVEST = this.create("block.berry_bush.harvest")
     @JvmField
     val BERRY_EAT = this.create("item.berry.eat")
+    @JvmField
+    val BERRY_EAT_FULL = this.create("item.berry.eat.full")
+
+    @JvmField
+    val APRICORN_HARVEST = this.create("block.apricorn.harvest")
 
     @JvmField
     val BIG_ROOT_BREAK = this.create("block.big_root.break")
@@ -214,6 +284,24 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val VIVICHOKE_BREAK = this.create("block.vivichoke.break")
     @JvmField
     val VIVICHOKE_PLACE = this.create("block.vivichoke.place")
+
+    @JvmField
+    val HEARTY_GRAIN_BALE_BREAK = this.create("block.hearty_grain_bale.break")
+    @JvmField
+    val HEARTY_GRAIN_BALE_PLACE = this.create("block.hearty_grain_bale.place")
+    @JvmField
+    val HEARTY_GRAIN_BALE_HIT = this.create("block.hearty_grain_bale.hit")
+    @JvmField
+    val HEARTY_GRAIN_BALE_STEP = this.create("block.hearty_grain_bale.step")
+
+    @JvmField
+    val HEARTY_GRAINS_BREAK = this.create("block.hearty_grains.break")
+    @JvmField
+    val HEARTY_GRAINS_PLACE = this.create("block.hearty_grains.place")
+    @JvmField
+    val HEARTY_GRAINS_BREAK_WATER = this.create("block.hearty_grains.break_water")
+    @JvmField
+    val HEARTY_GRAINS_PLACE_WATER = this.create("block.hearty_grains.place_water")
 
     @JvmField
     val MINT_BREAK = this.create("block.mint.break")
@@ -261,6 +349,15 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     )
 
     @JvmField
+    val RIDE_LOOP_LEATHER_MONO = create("ride.loop.leather.mono")
+    @JvmField
+    val RIDE_LOOP_PLUMAGE_MONO = create("ride.loop.plumage.mono")
+    @JvmField
+    val RIDE_LOOP_LEATHER_STEREO = create("ride.loop.leather.stereo")
+    @JvmField
+    val RIDE_LOOP_PLUMAGE_STEREO = create("ride.loop.plumage.stereo")
+
+    @JvmField
     val MOVE_QUICKATTACK_TARGET = this.create("move.quickattack.target")
     @JvmField
     val MOVE_PURSUIT_TARGET = this.create("move.pursuit.target")
@@ -304,6 +401,8 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     @JvmField
     val IMPACT_WATER = this.create("impact.water")
 
+    // Note to self or whoever's peeking, block sounds have to be at 1.1f pitch
+    // For some reason, the game pitches them down and compensating for it here returns them to normal
     @JvmField
     val TUMBLESTONE_SOUNDS = SoundType(1f, 1.1f,
         TUMBLESTONE_BREAK,
@@ -321,6 +420,36 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         TUMBLESTONE_HIT,
         TUMBLESTONE_STEP
     )
+
+    @JvmField
+    val TYPE_GEM_BLOCK_BREAK = this.create("block.type_gem_block.break")
+    @JvmField
+    val TYPE_GEM_CLUSTER_BREAK = this.create("block.type_gem_cluster.break")
+    @JvmField
+    val TYPE_GEM_BLOCK_HIT = this.create("block.type_gem_block.hit")
+    @JvmField
+    val TYPE_GEM_BLOCK_PLACE = this.create("block.type_gem_block.place")
+    @JvmField
+    val TYPE_GEM_BLOCK_STEP = this.create("block.type_gem_block.step")
+
+    @JvmField
+    val TYPE_GEM_CLUSTER_SOUNDS = SoundType(1f, 1.1f,
+        TYPE_GEM_CLUSTER_BREAK,
+        TYPE_GEM_BLOCK_STEP,
+        TYPE_GEM_BLOCK_PLACE,
+        TYPE_GEM_BLOCK_HIT,
+        TYPE_GEM_BLOCK_STEP
+    )
+
+    @JvmField
+    val TYPE_GEM_BLOCK_SOUNDS = SoundType(1f, 1.1f,
+        TYPE_GEM_BLOCK_BREAK,
+        TYPE_GEM_BLOCK_STEP,
+        TYPE_GEM_BLOCK_PLACE,
+        TYPE_GEM_BLOCK_HIT,
+        TYPE_GEM_BLOCK_STEP
+    )
+
     @JvmField
     val EVOLUTION_STONE_BLOCK_SOUNDS = SoundType(1f, 1.1f,
         EVOLUTION_STONE_BLOCK_BREAK,
@@ -330,6 +459,23 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         EVOLUTION_STONE_BLOCK_STEP
     )
 
+    @JvmField
+    val TATAMI_BLOCK_SOUNDS = SoundType(1f, 1.1f,
+        TATAMI_BLOCK_BREAK,
+        TATAMI_BLOCK_STEP,
+        TATAMI_BLOCK_PLACE,
+        TATAMI_BLOCK_HIT,
+        TATAMI_BLOCK_STEP
+    )
+
+    @JvmField
+    val TATAMI_MAT_SOUNDS = SoundType(1f, 1.1f,
+        TATAMI_MAT_BREAK,
+        TATAMI_BLOCK_STEP,
+        TATAMI_MAT_PLACE,
+        TATAMI_BLOCK_HIT,
+        TATAMI_BLOCK_STEP
+    )
 
     @JvmField
     val BERRY_BUSH_SOUNDS = SoundType(0.8f, 1.1f,
@@ -377,6 +523,33 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     )
 
     @JvmField
+    val HEARTY_GRAIN_BALE_SOUNDS = SoundType(0.6f, 1.1f,
+        HEARTY_GRAIN_BALE_BREAK,
+        HEARTY_GRAIN_BALE_STEP,
+        HEARTY_GRAIN_BALE_PLACE,
+        HEARTY_GRAIN_BALE_HIT,
+        HEARTY_GRAIN_BALE_STEP
+    )
+
+    @JvmField
+    val HEARTY_GRAINS_SOUNDS = SoundType(0.6f, 1.1f,
+        HEARTY_GRAINS_BREAK,
+        HEARTY_GRAIN_BALE_STEP,
+        HEARTY_GRAINS_PLACE,
+        HEARTY_GRAIN_BALE_HIT,
+        HEARTY_GRAIN_BALE_STEP
+    )
+
+    @JvmField
+    val HEARTY_GRAINS_WATER_SOUNDS = SoundType(0.6f, 1.1f,
+        HEARTY_GRAINS_BREAK_WATER,
+        SoundEvents.GRASS_STEP,
+        HEARTY_GRAINS_PLACE_WATER,
+        SoundEvents.GRASS_HIT,
+        SoundEvents.GRASS_FALL
+    )
+
+    @JvmField
     val MINT_SOUNDS = SoundType(0.6f, 1.1f,
         MINT_BREAK,
         SoundEvents.GRASS_STEP,
@@ -415,7 +588,6 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val DISPLAY_CASE_PLACE = this.create("block.display_case.place")
     @JvmField
     val DISPLAY_CASE_STEP = this.create("block.display_case.step")
-
     @JvmField
     val DISPLAY_CASE_SOUNDS = SoundType(1f, 1f,
         DISPLAY_CASE_BREAK,
@@ -423,6 +595,66 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         DISPLAY_CASE_PLACE,
         DISPLAY_CASE_HIT,
         DISPLAY_CASE_STEP
+    )
+
+    @JvmField
+    val CAMPFIRE_POT_SET = this.create("block.campfire_pot.set")
+    @JvmField
+    val CAMPFIRE_POT_RETRIEVE = this.create("block.campfire_pot.retrieve")
+    @JvmField
+    val CAMPFIRE_POT_OPEN = this.create("block.campfire_pot.open")
+    @JvmField
+    val CAMPFIRE_POT_CLOSE = this.create("block.campfire_pot.close")
+    @JvmField
+    val CAMPFIRE_POT_TAKE_ITEM = this.create("block.campfire_pot.take_item")
+    @JvmField
+    val CAMPFIRE_POT_ACTIVE = this.create("block.campfire_pot.active")
+    @JvmField
+    val CAMPFIRE_POT_AMBIENT = this.create("block.campfire_pot.ambient")
+    @JvmField
+    val CAMPFIRE_POT_COOK = this.create("block.campfire_pot.cook")
+    @JvmField
+    val CAMPFIRE_POT_PLACE = this.create("block.campfire_pot.place")
+    @JvmField
+    val CAMPFIRE_POT_BREAK = this.create("block.campfire_pot.break")
+    @JvmField
+    val CAMPFIRE_POT_HIT = this.create("block.campfire_pot.hit")
+    @JvmField
+    val CAMPFIRE_POT_STEP = this.create("block.campfire_pot.step")
+
+    @JvmField
+    val CAMPFIRE_POT_SOUNDS = SoundType(1f, 1.1f,
+        CAMPFIRE_POT_BREAK,
+        CAMPFIRE_POT_STEP,
+        CAMPFIRE_POT_PLACE,
+        CAMPFIRE_POT_HIT,
+        CAMPFIRE_POT_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_PAPER_SMALL_PLACE = this.create("block.item_block.paper_small.place")
+    @JvmField
+    val ITEM_BLOCK_PAPER_SMALL_BREAK = this.create("block.item_block.paper_small.break")
+    @JvmField
+    val ITEM_BLOCK_PAPER_SMALL_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_PAPER_SMALL_BREAK,
+        SoundEvents.WOOL_STEP,
+        ITEM_BLOCK_PAPER_SMALL_PLACE,
+        SoundEvents.WOOL_HIT,
+        SoundEvents.WOOL_FALL
+    )
+
+    @JvmField
+    val ITEM_BLOCK_PAPER_LARGE_PLACE = this.create("block.item_block.paper_large.place")
+    @JvmField
+    val ITEM_BLOCK_PAPER_LARGE_BREAK = this.create("block.item_block.paper_large.break")
+    @JvmField
+    val ITEM_BLOCK_PAPER_LARGE_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_PAPER_LARGE_BREAK,
+        SoundEvents.WOOL_STEP,
+        ITEM_BLOCK_PAPER_LARGE_PLACE,
+        SoundEvents.WOOL_HIT,
+        SoundEvents.WOOL_FALL
     )
 
     private fun create(name: String): SoundEvent = this.create(name, SoundEvent.createVariableRangeEvent(cobblemonResource(name)))

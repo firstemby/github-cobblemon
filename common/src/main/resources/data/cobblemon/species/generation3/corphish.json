@@ -51,12 +51,26 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.15,
+        "avoidsLand": true
+      },
       "swim": {
-        "swimSpeed": 0.1,
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "swimSpeed": 0.03,
+        "canBreatheUnderwater": true
       }
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "moves": [
@@ -152,7 +166,27 @@
     "tutor:sludgebomb",
     "tutor:superpower",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:watersport"
   ],
   "evolutions": [
     {
@@ -166,7 +200,18 @@
           "variant": "level",
           "minLevel": 30
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

@@ -48,11 +48,50 @@
     "height": 1.35,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "weavile",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "cobblemon:razor_claw",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:grip_claw",
         "percentage": 5.0
       },
       {
@@ -216,7 +255,31 @@
     "tutor:throatchop",
     "tutor:tripleaxel",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:psychup",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:whirlpool"
   ],
   "preEvolution": "sneasel",
   "evolutions": []

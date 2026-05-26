@@ -54,13 +54,25 @@
         "walkSpeed": 0.175
       },
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -161,6 +173,8 @@
     "tm:willowisp",
     "tm:workup",
     "tutor:ancientpower",
+    "tutor:blastburn",
+    "tutor:block",
     "tutor:dragonpulse",
     "tutor:falseswipe",
     "tutor:firefang",
@@ -179,7 +193,42 @@
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:acrobatics",
+    "legacy:aerialace",
+    "legacy:aircutter",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:furyswipes",
+    "legacy:hiddenpower",
+    "legacy:leer",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:blastburn",
+    "special:block",
+    "special:celebrate",
+    "special:howl",
+    "special:quickattack"
   ],
   "preEvolution": "charmander",
   "evolutions": [
@@ -197,5 +246,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 12,
+    "liquidGlowMode": "LAND"
+  }
 }

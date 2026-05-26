@@ -29,15 +29,23 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.battleLang
 import java.util.UUID
-import net.minecraft.network.chat.MutableComponent
 import java.util.function.Function
+import net.minecraft.network.chat.MutableComponent
 
 open class BattlePokemon(
     val originalPokemon: Pokemon,
     val effectedPokemon: Pokemon = originalPokemon,
-    val postBattleEntityOperation: (PokemonEntity) -> Unit = {}
+    var postBattlePokemonOperations: MutableList<(BattlePokemon) -> Unit> = mutableListOf(),
+    var postBattleEntityOperations: MutableList<(PokemonEntity) -> Unit> = mutableListOf()
 ) {
     lateinit var actor: BattleActor
+
+    constructor(originalPokemon: Pokemon, effectedPokemon: Pokemon, postBattleEntityOperation: (PokemonEntity) -> Unit) : this(
+        originalPokemon = originalPokemon,
+        effectedPokemon = effectedPokemon,
+        postBattlePokemonOperations = mutableListOf<(BattlePokemon) -> Unit>(),
+        postBattleEntityOperations = mutableListOf(postBattleEntityOperation)
+    )
 
     companion object {
         fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
@@ -99,6 +107,9 @@ open class BattlePokemon(
 
     /** A set of all the BattlePokemon that they faced during the battle (for exp purposes) */
     val facedOpponents = mutableSetOf<BattlePokemon>()
+
+    /** The faint sequence number within the battle, or null if this pokemon has not fainted. */
+    var faintedAt: Int? = null
 
     /**
      * The [HeldItemManager] backing this [BattlePokemon].

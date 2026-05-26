@@ -10,8 +10,16 @@ package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.net.IntSize
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readItemStack
+import com.cobblemon.mod.common.util.readSizedInt
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeItemStack
+import com.cobblemon.mod.common.util.writeSizedInt
+import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.world.item.ItemStack
 
 /**
  * A Pokémon that can absolutely, under many circumstances, be rendered (or else!!!).
@@ -19,14 +27,23 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since August 1st, 2022
  */
-data class RenderablePokemon(var species: Species, var aspects: Set<String>) {
+data class RenderablePokemon(var species: Species, var aspects: Set<String>, var heldItem: ItemStack = ItemStack.EMPTY) {
     val form: FormData by lazy { species.getForm(aspects) }
 
     fun saveToBuffer(buffer: RegistryFriendlyByteBuf): RegistryFriendlyByteBuf {
         buffer.writeIdentifier(species.resourceIdentifier)
         buffer.writeSizedInt(IntSize.U_BYTE, aspects.size)
         aspects.forEach(buffer::writeString)
+        buffer.writeItemStack(heldItem)
         return buffer
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is RenderablePokemon) (
+            other.species.resourceIdentifier == this.species.resourceIdentifier &&
+            other.aspects == this.aspects &&
+            other.heldItem == this.heldItem
+        ) else false
     }
 
     companion object {
@@ -36,7 +53,8 @@ data class RenderablePokemon(var species: Species, var aspects: Set<String>) {
             repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
                 aspects.add(buffer.readString())
             }
-            return RenderablePokemon(species, aspects)
+            val heldItem = buffer.readItemStack()
+            return RenderablePokemon(species, aspects, heldItem)
         }
     }
 }

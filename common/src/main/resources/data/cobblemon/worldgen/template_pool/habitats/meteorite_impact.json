@@ -1,0 +1,86 @@
+{
+    "name": "cobblemon:habitats/meteorite_impact",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 5,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 5,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 4,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 4,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 4,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 5,
+            "element": {
+                "location": "cobblemon:habitats/meteorite_impact8",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/meteorite_impact",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

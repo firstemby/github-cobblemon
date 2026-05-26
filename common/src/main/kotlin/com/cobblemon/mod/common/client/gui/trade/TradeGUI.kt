@@ -26,13 +26,18 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
-import com.cobblemon.mod.common.net.messages.server.trade.*
+import com.cobblemon.mod.common.net.messages.server.trade.CancelTradePacket
+import com.cobblemon.mod.common.net.messages.server.trade.ChangeTradeAcceptancePacket
+import com.cobblemon.mod.common.net.messages.server.trade.PerformTradePacket
+import com.cobblemon.mod.common.net.messages.server.trade.UpdateTradeOfferPacket
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
+import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -40,7 +45,6 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
-import java.util.*
 
 /**
  * Notes for Village:
@@ -277,7 +281,7 @@ class TradeGUI(
 
         if (
             (tradeAnimationProgress in MODEL_SCALE_BUFFER_FRAMES until(TRADE_ANIMATION_FRAMES + MODEL_SCALE_BUFFER_FRAMES)) ||
-            (tradeAnimationProgress in (REVERSE_ANIMATION_TICK..(REVERSE_ANIMATION_TICK + TRADE_ANIMATION_FRAMES)).drop(1))
+            (tradeAnimationProgress in (REVERSE_ANIMATION_TICK..(REVERSE_ANIMATION_TICK + TRADE_ANIMATION_FRAMES)).asSequence().drop(1))
         ) {
             val frameOffset = (
                 if (tradeAnimationProgress > REVERSE_ANIMATION_TICK)
@@ -584,7 +588,7 @@ class TradeGUI(
 
             // Poké Ball
             val nameXOffset = if (isOpposing) 75 else 0
-            val ballResource = cobblemonResource("textures/item/poke_balls/" + pokemon.caughtBall.name.path + ".png")
+            val ballResource = pokemon.caughtBall.name.toAssetPath("textures/item/poke_balls/", ".png")
             blitk(
                 matrixStack = context.pose(),
                 texture = ballResource,

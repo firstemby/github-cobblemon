@@ -60,7 +60,27 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "arctozolt",
+          "tier": 1
+        },
+        {
+          "pokemon": "dracozolt",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "moves": [
@@ -151,7 +171,9 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

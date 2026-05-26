@@ -5,7 +5,7 @@
             "identifier": "cobblemon:confused_bird4",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/chirp"
+                "texture": "textures/particles/generic/status/confusion_bird"
             }
         },
         "curves": {

@@ -50,8 +50,16 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true
+        "avoidsWater": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -165,9 +173,27 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:thunderpunch",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:defensecurl",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "special:sing"
   ],
   "evolutions": [
     {

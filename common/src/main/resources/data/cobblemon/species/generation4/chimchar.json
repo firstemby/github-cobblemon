@@ -52,8 +52,45 @@
   "behaviour": {
     "resting": {
       "willSleepOnBed": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "pansear",
+          "tier": 1
+        },
+        {
+          "pokemon": "chimchar",
+          "tier": 2
+        },
+        {
+          "pokemon": "simisear",
+          "tier": 3
+        },
+        {
+          "pokemon": "monferno",
+          "tier": 4
+        },
+        {
+          "pokemon": "infernape",
+          "tier": 5
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -192,7 +229,21 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:vacuumwave",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:aerialace",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -208,5 +259,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 11,
+    "liquidGlowMode": "LAND"
+  }
 }

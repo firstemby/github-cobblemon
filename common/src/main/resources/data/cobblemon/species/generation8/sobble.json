@@ -43,6 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.5,
   "hitbox": {
     "width": 0.9,
@@ -53,15 +54,31 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sobble",
+          "tier": 1
+        },
+        {
+          "pokemon": "drizzile",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -133,7 +150,11 @@
     "tutor:suckerpunch",
     "tutor:swift",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:batonpass",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -145,7 +166,18 @@
           "variant": "level",
           "minLevel": 16
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

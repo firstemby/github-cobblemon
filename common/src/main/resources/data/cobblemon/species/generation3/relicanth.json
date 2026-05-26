@@ -46,22 +46,91 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.5,
     "height": 1.4,
-    "fixed": false
+    "fixed": false,
+    "width": 1.5
+  },
+  "riding": {
+    "behaviours": {
+      "LIQUID": {
+        "key": "cobblemon:liquid/submarine",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "hitboxBreachPercentage": 0.9,
+        "stats": {
+          "ACCELERATION": "25-40",
+          "JUMP": "50-75",
+          "SKILL": "40-80",
+          "SPEED": "15-35",
+          "STAMINA": "50-90"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "relicanth",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
+    },
     "moving": {
-      "canLook": false,
-      "walk": {
-        "avoidsLand": true
-      },
       "swim": {
-        "swimSpeed": 0.1,
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "swimSpeed": 0.1
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.25
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {
@@ -178,7 +247,20 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

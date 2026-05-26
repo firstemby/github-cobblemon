@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 928,
   "name": "Smoliv",
   "primaryType": "grass",
@@ -42,7 +43,7 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "standingEyeHeight": 0.275,
-  "baseScale": 1,
+  "baseScale": 0.45,
   "hitbox": {
     "width": 0.6,
     "height": 1.1,
@@ -50,7 +51,35 @@
   },
   "behaviour": {
     "resting": {
-      "canSleep": true
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "smoliv",
+          "tier": 1
+        },
+        {
+          "pokemon": "dolliv",
+          "tier": 2
+        },
+        {
+          "pokemon": "arboliva",
+          "tier": 3
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

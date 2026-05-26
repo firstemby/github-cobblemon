@@ -34,6 +34,9 @@ class DialogueTimerWidget(
     var ratio = 1F
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (!dialogueScreen.renderInput()) {
+            return
+        }
         if (ratio < 0 || ratio > 1 || dialogueScreen.waitingForServerUpdate || !dialogueScreen.dialogueDTO.dialogueInput.showTimer) {
             return
         }

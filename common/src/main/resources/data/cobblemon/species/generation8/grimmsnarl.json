@@ -53,7 +53,25 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "7"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -175,7 +193,11 @@
     "tutor:throatchop",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:uproar"
   ],
   "preEvolution": "morgrem",
   "evolutions": [],

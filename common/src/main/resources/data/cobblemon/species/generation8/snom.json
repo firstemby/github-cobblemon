@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 872,
   "name": "Snom",
   "primaryType": "ice",
@@ -41,17 +42,35 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.85,
+    "height": 0.55,
     "fixed": false
   },
+  "standingEyeHeight": 0.2,
   "behaviour": {
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "snom",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -95,7 +114,11 @@
     "tutor:icywind",
     "tutor:rest",
     "tutor:skittersmack",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:endure",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -113,7 +136,18 @@
           "variant": "time_range",
           "range": "night"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

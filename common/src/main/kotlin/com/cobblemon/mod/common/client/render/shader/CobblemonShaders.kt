@@ -11,9 +11,9 @@ package com.cobblemon.mod.common.client.render.shader
 import com.cobblemon.mod.common.util.ShaderRegistryData
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import java.util.function.Consumer
 import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.server.packs.resources.ResourceProvider
-import java.util.function.Consumer
 
 object CobblemonShaders {
     val SHADERS_TO_REGISTER = mutableListOf<Pair<(ResourceProvider) -> ShaderRegistryData, Consumer<ShaderInstance>>>()
@@ -25,10 +25,10 @@ object CobblemonShaders {
         SHADERS_TO_REGISTER.add(Pair(shader, callback))
     }
     fun init(){
-        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_add"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP) }) {
+        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_add"), DefaultVertexFormat.PARTICLE) }) {
             PARTICLE_BLEND = it
         }
-        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP) }) {
+        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("particle_cutout"), DefaultVertexFormat.PARTICLE) }) {
             PARTICLE_CUTOUT = it
         }
     }

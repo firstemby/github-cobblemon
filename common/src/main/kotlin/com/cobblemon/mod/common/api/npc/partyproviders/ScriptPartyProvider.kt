@@ -28,7 +28,7 @@ import net.minecraft.server.level.ServerPlayer
 
 class ScriptPartyProvider : NPCPartyProvider {
     companion object {
-        const val TYPE = "script"
+        val TYPE = cobblemonResource("script")
     }
 
     override val type = TYPE

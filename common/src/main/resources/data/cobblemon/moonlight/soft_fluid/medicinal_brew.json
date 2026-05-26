@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "moonlight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "moonlight"
+    }
+  ],
+  "id": "cobblemon:medicinal_brew",
+  "containers": [
+    {
+      "filled": [
+        "cobblemon:medicinal_brew"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:block/soft_fluids/potion_still",
+  "still_texture": "moonlight:block/soft_fluids/potion_still",
+  "color": "#2EBCA2",
+  "translation_key": "item.cobblemon.medicinal_brew"
+}

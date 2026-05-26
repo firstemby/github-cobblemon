@@ -43,20 +43,42 @@
   "eggCycles": 15,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.8,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.8,
+    "width": 0.7,
+    "height": 1,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spearow",
+          "tier": 1
+        },
+        {
+          "pokemon": "fearow",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -152,7 +174,28 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

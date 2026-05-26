@@ -51,16 +51,40 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "kricketune",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:metronome",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:coba_berry",
         "percentage": 5.0
@@ -155,8 +179,21 @@
     "tutor:sleeptalk",
     "tutor:stringshot",
     "tutor:throatchop",
-    "tutor:uproar",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "kricketot",
   "evolutions": []

@@ -32,5 +32,5 @@
       "rolls": 1.0
     }
   ],
-  "random_sequence": "minecraft:blocks/potted_pep_up_flower"
+  "random_sequence": "cobblemon:blocks/potted_pep_up_flower"
 }

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.dialogue.DialogueScreen
+import com.cobblemon.mod.common.client.render.TextClipping
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.dialogue.dto.DialogueInputDTO
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
@@ -20,6 +21,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 
@@ -35,7 +37,9 @@ class DialogueBox(
     val listY: Int = 0,
     val frameWidth: Int,
     height: Int,
-    messages: MutableList<MutableComponent>
+    val background: ResourceLocation?,
+    messages: MutableList<MutableComponent>,
+    textColor: String?
 ): ScrollingWidget<DialogueBox.DialogueLine>(
     left = listX,
     top = listY,
@@ -57,13 +61,14 @@ class DialogueBox(
     init {
         correctSize()
 
+        val lineColor = textColor?.toInt(16) ?: 0x4C4C4C
         val textRenderer = Minecraft.getInstance().font
 
         messages.flatMap { Language.getInstance().getVisualOrder(textRenderer.splitter.splitLines(it, LINE_WIDTH, it.style)) }
-            .forEach { addEntry(DialogueLine(it)) }
+            .forEach { addEntry(DialogueLine(it, lineColor)) }
 
         // Add empty line for bottom padding if text area height is larger than box height
-        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY))
+        if (maxPosition > (height - 2)) addEntry(DialogueLine(FormattedCharSequence.EMPTY, lineColor))
     }
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -79,7 +84,7 @@ class DialogueBox(
 
         // Scroll Track
         blitk(
-            texture = boxResource,
+            texture = background ?: boxResource,
             matrixStack = context.pose(),
             x = xLeft + 1,
             y = yStart,
@@ -92,7 +97,7 @@ class DialogueBox(
 
         // Scroll Bar
         blitk(
-            texture = boxResource,
+            texture = background ?: boxResource,
             matrixStack = context.pose(),
             x = xLeft,
             y = yTop,
@@ -127,18 +132,20 @@ class DialogueBox(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        val gibber = dialogueScreen.gibber
         correctSize()
         blitk(
             matrixStack = context.pose(),
-            texture = boxResource,
+            texture = background ?: boxResource,
             x = x,
             y = y,
             height = height,
             width = frameWidth,
             textureWidth = frameWidth + DialoguePortraitWidget.DIALOGUE_ARROW_WIDTH + SCROLL_BAR_WIDTH + SCROLL_TRACK_WIDTH
         )
-
-        super.renderWidget(context, mouseX, mouseY, partialTicks)
+        TextClipping.doWithMaxCharacters(if (gibber?.graduallyShowText == true && !dialogueScreen.gibberDone) dialogueScreen.gibberIndex else -1) {
+            super.renderWidget(context, mouseX, mouseY, partialTicks)
+        }
     }
 
     override fun enableScissor(context: GuiGraphics) {
@@ -158,6 +165,14 @@ class DialogueBox(
             mouseY > this.y && mouseY < this.bottom
         ) {
             if (dialogue.dialogueInput.allowSkip && dialogue.dialogueInput.inputType in listOf(DialogueInputDTO.InputType.NONE, DialogueInputDTO.InputType.AUTO_CONTINUE)) {
+                val gibber = dialogueScreen.gibber
+                if (gibber != null && gibber.graduallyShowText && !dialogueScreen.gibberDone) {
+                    if (gibber.allowSkip) {
+                        dialogueScreen.gibberDone = true
+                    }
+                    return true
+                }
+
                 dialogueScreen.sendToServer(InputToDialoguePacket(dialogue.dialogueInput.inputId, "skip!"))
                 return true
             }
@@ -166,7 +181,7 @@ class DialogueBox(
         return super.mouseClicked(mouseX, mouseY, button)
     }
 
-    class DialogueLine(val line: FormattedCharSequence) : Entry<DialogueLine>() {
+    class DialogueLine(val line: FormattedCharSequence, val lineColor: Int) : Entry<DialogueLine>() {
         override fun getNarration() = "".text()
 
         override fun renderBack(
@@ -199,7 +214,7 @@ class DialogueBox(
                 line,
                 rowLeft + 14,
                 rowTop + 7,
-                colour = 0x4C4C4C
+                colour = lineColor
             )
         }
     }

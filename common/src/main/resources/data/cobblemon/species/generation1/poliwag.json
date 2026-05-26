@@ -52,14 +52,54 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tympole",
+          "tier": 1
+        },
+        {
+          "pokemon": "poliwag",
+          "tier": 2
+        },
+        {
+          "pokemon": "palpitoad",
+          "tier": 3
+        },
+        {
+          "pokemon": "poliwhirl",
+          "tier": 4
+        },
+        {
+          "pokemon": "seismitoad",
+          "tier": 5
+        },
+        {
+          "pokemon": "poliwrath",
+          "tier": 6
+        },
+        {
+          "pokemon": "politoed",
+          "tier": 7
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -158,7 +198,29 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:sweetkiss"
   ],
   "evolutions": [
     {

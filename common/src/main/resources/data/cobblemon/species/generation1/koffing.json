@@ -56,7 +56,36 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "koffing",
+          "tier": 1
+        },
+        {
+          "pokemon": "weezing",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -154,9 +183,26 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:spite",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:uproar",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -169,16 +215,12 @@
         {
           "variant": "level",
           "minLevel": 35
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/koffing_galarbiome"
         }
       ]
     },
     {
       "id": "koffing_weezinggalar",
-      "result": "weezing",
+      "result": "weezing galarian",
       "learnableMoves": [
         "doublehit"
       ],
@@ -190,10 +232,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/koffing_galarbiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/koffing_kantobiome"
         }
       ]
     }
@@ -231,17 +269,13 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/koffing_galarbiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/koffing_kantobiome"
             }
           ]
         },
         {
           "id": "koffing_weezinggalar",
-          "result": "weezing",
+          "result": "weezing galarian",
           "learnableMoves": [
             "doublehit"
           ],
@@ -249,10 +283,6 @@
             {
               "variant": "level",
               "minLevel": 35
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/koffing_kantobiome"
             }
           ]
         }

@@ -13,5 +13,5 @@ import java.util.UUID
 
 interface MoLangDataStoreFactory {
     fun markDirty(uuid: UUID)
-    fun load(uuid: UUID) : VariableStruct
+    fun load(uuid: UUID, filePath: String? = null) : VariableStruct
 }

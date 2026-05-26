@@ -8,11 +8,22 @@
 
 package com.cobblemon.mod.common.pokemon.ai
 
-import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.util.asExpressionLike
+import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.createDuplicateRuntime
+import com.cobblemon.mod.common.util.resolveFloat
 
 class WalkBehaviour {
     val canWalk = true
     val avoidsLand = false
-    var walkSpeed: ExpressionLike = "0.35".asExpressionLike()
+    var walkSpeed: Expression = "0.35".asExpression()
+
+    @Transient
+    val struct = ObjectValue(this).also {
+        it.addFunction("can_walk") { DoubleValue(canWalk) }
+        it.addFunction("avoids_land") { DoubleValue(avoidsLand) }
+        it.addFunction("walk_speed") { it.environment.createDuplicateRuntime().resolveFloat(walkSpeed) }
+    }
 }

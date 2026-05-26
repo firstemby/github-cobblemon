@@ -1,0 +1,39 @@
+{
+  "name": "cobblemon.behaviour.chatter_npc.name",
+  "description": "cobblemon.behaviour.chatter_npc.desc",
+  "entityType": "cobblemon:npc",
+  "undo": [
+    "q.entity.unset_interaction();"
+  ],
+  "configurations": [
+    {
+      "type": "script",
+      "variables": [
+        {
+          "variableName": "chat_message",
+          "displayName": "cobblemon.entity.variable.chat_message.name",
+          "description": "cobblemon.entity.variable.chat_message.desc",
+          "type": "TEXT",
+          "defaultValue": "Hello!"
+        },
+        {
+          "variableName": "animation_name",
+          "displayName": "cobblemon.entity.variable.animation_name.name",
+          "description": "cobblemon.entity.variable.animation_name.desc",
+          "type": "TEXT",
+          "defaultValue": "wave"
+        },
+        {
+          "variableName": "play_animation",
+          "displayName": "cobblemon.entity.variable.play_animation.name",
+          "description": "cobblemon.entity.variable.play_animation.desc",
+          "type": "BOOLEAN",
+          "defaultValue": "false"
+        }
+      ],
+      "script": [
+        "q.entity.set_script_interaction('cobblemon:chatter-npc-interaction')"
+      ]
+    }
+  ]
+}

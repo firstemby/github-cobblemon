@@ -46,19 +46,27 @@
   "features": [
     "alolan"
   ],
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1.2,
+    "width": 1.25,
+    "height": 1.25,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canWalkOnWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true
+        "canWalkOnWater": true
       }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -183,7 +191,26 @@
     "tutor:sludgebomb",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -223,6 +250,7 @@
         "gluttony",
         "h:powerofalchemy"
       ],
+      "baseScale": 0.7,
       "moves": [
         "1:pound",
         "1:poisongas",
@@ -349,7 +377,18 @@
         "tutor:swift",
         "tutor:thunderbolt",
         "tutor:thunderpunch",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:megadrain",
+        "legacy:return",
+        "legacy:round",
+        "legacy:snore",
+        "legacy:swagger"
       ],
       "evolutions": [
         {

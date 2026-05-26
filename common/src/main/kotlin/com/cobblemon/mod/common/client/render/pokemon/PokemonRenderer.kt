@@ -36,7 +36,9 @@ import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.SPAWN_DIRECTION
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.effectiveName
+import com.cobblemon.mod.common.util.isLookingAt
+import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
@@ -45,8 +47,9 @@ import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font.DisplayMode
-import net.minecraft.client.player.RemotePlayer
-import net.minecraft.client.renderer.*
+import net.minecraft.client.renderer.LightTexture
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.entity.MobRenderer
@@ -79,8 +82,6 @@ class PokemonRenderer(
         private const val HIDDEN_NAME = "???"
 
         private const val SPACE = " "
-
-        private const val DISABLE_ROLLING_DEBUG = false
     }
 
     val ballContext = RenderContext().also {
@@ -102,7 +103,7 @@ class PokemonRenderer(
         packedLight: Int
     ) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
-        shadowRadius = (min((entity.boundingBox.maxX - entity.boundingBox.minX), (entity.boundingBox.maxZ) - (entity.boundingBox.minZ)).toFloat() / 1.5F * (entity.delegate as PokemonClientDelegate).entityScaleModifier)/entity.scale
+        shadowRadius = (min((entity.boundingBox.maxX - entity.boundingBox.minX), (entity.boundingBox.maxZ) - (entity.boundingBox.minZ)).toFloat() / 1.5F * (entity.delegate as PokemonClientDelegate).activeSendoutScale)/entity.scale
         model.posableModel = VaryingModelRepository.getPoser(entity.pokemon.species.resourceIdentifier, clientDelegate)
         model.posableModel.context = model.context
         model.setupEntityTypeContext(entity)
@@ -128,27 +129,34 @@ class PokemonRenderer(
                 clientDelegate
             )
         }
-        if(entity.platform != PlatformType.NONE) {
+        if (entity.platform != PlatformType.NONE) {
             drawPlatform(
                 poseMatrix,
                 entity,
-                (entity.delegate as PokemonClientDelegate).entityScaleModifier,
+                (entity.delegate as PokemonClientDelegate).activeSendoutScale,
                 buffer,
                 packedLight,
             )
             // keeps the pokemon's root on the raft
-            poseMatrix.translate(0.0, 0.25 * (entity.delegate as PokemonClientDelegate).entityScaleModifier, 0.0)
+            poseMatrix.translate(0.0, 0.25 * (entity.delegate as PokemonClientDelegate).activeSendoutScale, 0.0)
         }
 
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
 
 
         if (entity.passengers.isNotEmpty()) {
-            renderRiding(entity, partialTicks, poseMatrix, buffer, packedLight)
-        }
-        else {
+            renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+        } else {
             super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         }
+
+        // Call rendering for alpha eye trail
+        doAlphaEyeRendering(
+            entity = entity,
+            partialTicks = partialTicks,
+            poseStack = poseMatrix,
+            bufferSource = buffer
+        )
 
         modelNow.green = 1F
         modelNow.blue = 1F
@@ -161,7 +169,6 @@ class PokemonRenderer(
         //Render Held Item
         heldItemRenderer.renderOnModel(
             entity.shownItem,
-            modelNow,
             clientDelegate,
             poseMatrix,
             buffer,
@@ -173,17 +180,20 @@ class PokemonRenderer(
 
     fun renderRiding(
         entity: PokemonEntity,
+        entityYaw: Float,
         partialTicks: Float,
         poseMatrix: PoseStack,
         buffer: MultiBufferSource,
         packedLight: Int
     ) {
-        val driver = entity.firstPassenger ?: return
-        val rollable = driver as? OrientationControllable ?: return
+        val rollable = entity as? OrientationControllable ?: return
         val controller = rollable.orientationController
         poseMatrix.pushPose()
 
-        if(!DISABLE_ROLLING_DEBUG && controller.active){
+        if (controller.active) {
+            // Allow the ride controller to modify its rotations using partialTick
+            entity.delegate.applyRenderRotation(partialTicks)
+
             val matrix = poseMatrix.last().pose()
             val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
             val center = Vector3f(0f, entity.bbHeight/2, 0f)
@@ -200,7 +210,7 @@ class PokemonRenderer(
             matrix.mul(transformationMatrix)
         }
 
-        super.render(entity, 0f, partialTicks, poseMatrix, buffer, packedLight)
+        super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         poseMatrix.popPose()
     }
 
@@ -228,7 +238,7 @@ class PokemonRenderer(
         poseMatrix.pushPose()
         var beamSourcePosition = if (phaseTarget is NPCEntity) {
                 val npcDelegate = phaseTarget.delegate as NPCClientDelegate
-                val baseScale = phaseTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = phaseTarget.renderScale.toDouble()
 
                 (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
                     ?: phaseTarget.position().add(0.0, (phaseTarget.bbHeight / 2.0) * baseScale, 0.0)
@@ -277,7 +287,7 @@ class PokemonRenderer(
                 partialTicks = partialTicks,
                 buff = buffer,
                 packedLight = packedLight,
-                ball = CobblemonClient.storage.myParty.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
+                ball = CobblemonClient.storage.party.firstOrNull { it?.uuid == entity.pokemon.uuid }?.caughtBall
                     ?: clientDelegate.currentEntity.pokemon.caughtBall,
                 distance = ceil(beamSourcePosition.distanceTo(entity.position())/4f).toInt()
             )
@@ -289,7 +299,7 @@ class PokemonRenderer(
     }
 
     override fun scale(pEntity: PokemonEntity, pPoseStack: PoseStack, pPartialTickTime: Float) {
-        val scale = pEntity.pokemon.form.baseScale * pEntity.pokemon.scaleModifier * (pEntity.delegate as PokemonClientDelegate).entityScaleModifier
+        val scale = pEntity.pokemon.form.baseScale * pEntity.pokemon.effectiveScale * (pEntity.delegate as PokemonClientDelegate).activeSendoutScale
         pPoseStack.scale(scale, scale, scale)
     }
 
@@ -305,7 +315,7 @@ class PokemonRenderer(
      */
     fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
-        val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.entityScaleModifier.toDouble(), 0.0)
+        val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
         var beamSourcePosition = if (beamTarget is EmptyPokeBallEntity) {
             (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.getOrigin() ?: beamTarget.position()
         } else {
@@ -314,9 +324,9 @@ class PokemonRenderer(
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
             } else if (beamTarget is NPCEntity) {
                 val npcDelegate = beamTarget.delegate as NPCClientDelegate
-                val baseScale = beamTarget.baseScale?.toDouble() ?: 1.0
+                val baseScale = beamTarget.renderScale * beamTarget.hitboxScale
 
-                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale))
+                (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale.toDouble()))
                     ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
             } else {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
@@ -453,7 +463,7 @@ class PokemonRenderer(
     private fun resolveBaseLabel(entity: PokemonEntity): MutableComponent {
         return when {
             !ServerSettings.displayEntityNameLabel -> Component.empty()
-            Cobblemon.config.displayNameForUnknownPokemon || CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) != PokedexEntryProgress.NONE -> entity.getTitledName()
+            Cobblemon.config.displayNameForUnknownPokemon || CobblemonClient.clientPokedexData.getKnowledgeForSpecies(entity.pokemon.species.resourceIdentifier) != PokedexEntryProgress.UNREGISTERED -> entity.getTitledName()
             else -> Component.literal(HIDDEN_NAME)
         }
     }

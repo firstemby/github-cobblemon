@@ -1,0 +1,40 @@
+{
+  "portraitScale": 1.50,
+  "portraitTranslation": [-0.22, 0.94, 0],
+  "profileScale": 0.64,
+  "profileTranslation": [0.00, 0.80, 0],
+  "rootBone": "audino",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('audino', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('audino', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('audino', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('audino', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('audino', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('audino', 'blink')"
+      ]
+    }
+  }
+ }

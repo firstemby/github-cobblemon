@@ -94,11 +94,16 @@ interface CobblemonImplementation {
      */
     fun registerBlockEntityTypes()
 
+    fun registerPoiTypes()
     /**
      * TODO
      *
      */
     fun registerVillagers()
+
+    fun registerRecipeSerializers()
+    fun registerRecipeTypes()
+
 
     /**
      * TODO
@@ -108,7 +113,14 @@ interface CobblemonImplementation {
 
     fun registerParticles()
 
+    fun registerMenu()
+
     fun registerEntitySubPredicates()
+
+    /**
+     * TODO
+     */
+    fun registerMobEffects()
 
 
     /**

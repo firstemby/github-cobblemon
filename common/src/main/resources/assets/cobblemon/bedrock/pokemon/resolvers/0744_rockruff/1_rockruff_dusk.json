@@ -1,0 +1,18 @@
+{
+  "species": "cobblemon:rockruff",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": ["dusk-form"],
+      "poser": "cobblemon:rockruff",
+      "model": "cobblemon:rockruff.geo",
+      "texture": "cobblemon:textures/pokemon/0744_rockruff/rockruff.png",
+      "layers": []
+    },
+    {
+      "aspects": ["dusk-form", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0744_rockruff/rockruff_shiny.png",
+      "layers": []
+    }
+  ]
+}

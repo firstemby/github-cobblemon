@@ -51,17 +51,32 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "9"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 6,
+    "amount": 8,
     "entries": [
       {
         "item": "minecraft:honey_bottle",
@@ -69,7 +84,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 10.0
+        "quantityRange": "0-3"
       },
       {
         "item": "cobblemon:poison_barb",
@@ -175,7 +190,6 @@
     "tutor:aerialace",
     "tutor:bugbite",
     "tutor:defog",
-    "tutor:dualwingbeat",
     "tutor:endeavor",
     "tutor:furycutter",
     "tutor:gigaimpact",
@@ -184,7 +198,6 @@
     "tutor:laserfocus",
     "tutor:ominouswind",
     "tutor:powershift",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:roost",
     "tutor:signalbeam",
@@ -194,8 +207,21 @@
     "tutor:spikes",
     "tutor:spite",
     "tutor:stringshot",
-    "tutor:swift",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:aircutter",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:tailwind",
+    "legacy:uproar"
   ],
   "preEvolution": "combee",
   "evolutions": []

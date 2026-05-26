@@ -45,9 +45,75 @@
   "baseFriendship": 50,
   "baseScale": 1.2,
   "hitbox": {
-    "width": 2,
     "height": 1.5,
-    "fixed": false
+    "fixed": false,
+    "width": 2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "45-60",
+          "JUMP": "10-25",
+          "SKILL": "10-30",
+          "SPEED": "25-35",
+          "STAMINA": "50-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      },
+      {
+        "locator": "seat_3"
+      },
+      {
+        "locator": "seat_4"
+      },
+      {
+        "locator": "seat_5"
+      },
+      {
+        "locator": "seat_6"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "camerupt mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "camerupt mega",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 2,
@@ -190,7 +256,21 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "numel",
   "evolutions": [],
@@ -225,9 +305,36 @@
         "speed": 20
       },
       "baseExperienceYield": 196,
-      "dynamaxBlocked": true,
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "fireImmune": true,
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "camerupt mega",
+              "tier": 1
+            }
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInLava": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

@@ -17,9 +17,11 @@ import net.minecraft.resources.ResourceLocation
 class ElementalTypeTeraType(val type: ElementalType) : TeraType {
     override val legalAsStatic: Boolean = true
 
-    override val id: ResourceLocation = cobblemonResource(this.type.name)
+    override val name: String = this.type.name
+
+    override val id: ResourceLocation = cobblemonResource(this.type.showdownId)
 
     override val displayName: Component = this.type.displayName
 
-    override fun showdownId(): String = this.type.name
+    override fun showdownId(): String = this.type.showdownId()
 }

@@ -53,16 +53,25 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "canWalk": false
       },
       "swim": {
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "avoidsWater": true
       },
       "canLook": false
+    },
+    "herd": {
+      "maxSize": "9"
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {
@@ -89,7 +98,8 @@
     "tutor:bugbite",
     "tutor:electroweb",
     "tutor:irondefense",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "preEvolution": "caterpie",
   "evolutions": [
@@ -104,7 +114,18 @@
           "variant": "level",
           "minLevel": 10
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

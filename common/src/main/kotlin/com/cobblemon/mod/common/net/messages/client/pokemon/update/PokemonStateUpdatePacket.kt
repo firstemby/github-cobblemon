@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.pokemon.activestate.PokemonState
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class PokemonStateUpdatePacket(pokemon: () -> Pokemon, value: PokemonState): SingleUpdatePacket<PokemonState, PokemonStateUpdatePacket>(pokemon, value) {
+class PokemonStateUpdatePacket(pokemon: () -> Pokemon?, value: PokemonState): SingleUpdatePacket<PokemonState, PokemonStateUpdatePacket>(pokemon, value) {
 
     override val id = ID
 
@@ -21,7 +21,9 @@ class PokemonStateUpdatePacket(pokemon: () -> Pokemon, value: PokemonState): Sin
         value.writeToBuffer(buffer)
     }
 
-    override fun set(pokemon: Pokemon, value: PokemonState) { pokemon.state = value }
+    override fun set(pokemon: Pokemon, value: PokemonState) {
+        pokemon.state = value
+    }
 
     companion object {
         val ID = cobblemonResource("state_update")

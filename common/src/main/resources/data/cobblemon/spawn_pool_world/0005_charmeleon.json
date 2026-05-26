@@ -10,9 +10,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "16-40",
+            "level": "16-41",
             "weight": 3.6,
             "condition": {
                 "minSkyLight": 8,
@@ -31,9 +31,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "16-40",
+            "level": "16-41",
             "weight": 3.6,
             "condition": {
                 "biomes": [

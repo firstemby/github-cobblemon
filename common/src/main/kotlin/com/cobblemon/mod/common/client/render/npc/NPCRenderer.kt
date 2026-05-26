@@ -24,10 +24,14 @@ import kotlin.math.min
 
 class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEntityModel<NPCEntity>>(context, PosableNPCModel(), 0.5f) {
     override fun getTextureLocation(entity: NPCEntity): ResourceLocation {
-        return VaryingModelRepository.getTexture(entity.npc.resourceIdentifier, (entity.delegate as NPCClientDelegate))
+        return VaryingModelRepository.getTexture(entity.resourceIdentifier, (entity.delegate as NPCClientDelegate))
     }
 
     private val heldItemRenderer = HeldItemRenderer()
+
+    override fun scale(livingEntity: NPCEntity, poseStack: PoseStack, partialTickTime: Float) {
+        poseStack.scale(livingEntity.renderScale, livingEntity.renderScale, livingEntity.renderScale)
+    }
 
     override fun render(
         entity: NPCEntity,
@@ -41,14 +45,14 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
         val clientDelegate = entity.delegate as NPCClientDelegate
         clientDelegate.currentAspects = aspects
         shadowRadius = min((entity.boundingBox.maxX - entity.boundingBox.minX), (entity.boundingBox.maxZ) - (entity.boundingBox.minZ)).toFloat() / 1.5F
-        val model = VaryingModelRepository.getPoser(entity.npc.resourceIdentifier, clientDelegate)
+        val model = VaryingModelRepository.getPoser(entity.resourceIdentifier, clientDelegate)
         this.model.posableModel = model
         model.context = this.model.context
         this.model.setupEntityTypeContext(entity)
         this.model.context.put(RenderContext.TEXTURE, getTextureLocation(entity))
         clientDelegate.updatePartialTicks(partialTicks)
 
-        model.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.npc.resourceIdentifier, clientDelegate))
+        model.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.resourceIdentifier, clientDelegate))
 
         poseMatrix.pushPose()
         poseMatrix.scale(entity.npc.modelScale, entity.npc.modelScale, entity.npc.modelScale)
@@ -63,7 +67,6 @@ class NPCRenderer(context: Context) : LivingEntityRenderer<NPCEntity, PosableEnt
             //Render Held Item
             heldItemRenderer.renderOnModel(
                 entity.mainHandItem,
-                model,
                 clientDelegate,
                 poseMatrix,
                 buffer,

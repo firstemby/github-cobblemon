@@ -12,7 +12,7 @@ import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.ai.SleepDepth
-import com.cobblemon.mod.common.api.ai.config.BrainConfig
+import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.npc.NPCClasses.getByIdentifier
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.npc.variation.NPCVariationProvider
 import com.cobblemon.mod.common.api.npc.variation.WeightedAspect
@@ -40,6 +42,8 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
@@ -57,7 +61,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(TimeRange::class.java, TimeRange.adapter)
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
@@ -72,8 +76,14 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
         .registerTypeAdapter(Activity::class.java, ActivityAdapter)
         .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
         .registerTypeAdapter(WeightedAspect::class.java, WeightedAspectAdapter)
-        .registerTypeAdapter(BrainConfig::class.java, BrainConfigAdapter)
+        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
+        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(
+            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            ExpressionOrEntityVariableAdapter
+        )
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
@@ -87,16 +97,9 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
     override val observable = SimpleObservable<NPCClasses>()
     private val npcClassesByIdentifier = hashMapOf<ResourceLocation, NPCClass>()
 
+    @JvmStatic
     val classes: Collection<NPCClass>
         get() = this.npcClassesByIdentifier.values
-
-    init {
-        // NPC additions would be useful
-//        SpeciesAdditions.observable.subscribe {
-//            this.species.forEach(Species::initialize)
-//            this.species.forEach(Species::resolveEvolutionMoves)
-//        }
-    }
 
     /**
      * Finds an NPC class by the pathname of their [ResourceLocation].
@@ -114,6 +117,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      * @param identifier The unique [NPCClass.id] of the [NPCClass].
      * @return The [NPCClass] if existing.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation) = this.npcClassesByIdentifier[identifier]
 
     /**
@@ -121,6 +125,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      *
      * @return The loaded NPC class amount.
      */
+    @JvmStatic
     fun count() = this.npcClassesByIdentifier.size
 
     /**
@@ -130,6 +135,7 @@ object NPCClasses : JsonDataRegistry<NPCClass> {
      *
      * @return A randomly selected [Species].
      */
+    @JvmStatic
     fun random(): NPCClass = this.npcClassesByIdentifier.values.random()
 
     fun dummy(): NPCClass {

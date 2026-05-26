@@ -47,9 +47,52 @@
   "baseFriendship": 50,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.95,
     "height": 2.5,
-    "fixed": false
+    "fixed": false,
+    "width": 0.95
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "75-90",
+          "JUMP": "30-40",
+          "SKILL": "65-85",
+          "SPEED": "35-45",
+          "STAMINA": "10-20"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.35
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,
@@ -177,7 +220,6 @@
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:spite",
     "tutor:swift",
     "tutor:throatchop",

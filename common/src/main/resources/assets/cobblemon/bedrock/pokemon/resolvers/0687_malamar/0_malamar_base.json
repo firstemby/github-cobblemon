@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:malamar",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:malamar",
+      "model": "cobblemon:malamar.geo",
+      "texture": "cobblemon:textures/pokemon/0687_malamar/malamar.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0687_malamar/malamar_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0687_malamar/malamar_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

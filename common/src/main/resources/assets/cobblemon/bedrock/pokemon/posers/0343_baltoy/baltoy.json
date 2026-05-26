@@ -4,15 +4,38 @@
   "profileScale": 0.75,
   "profileTranslation": [0, 0.64, 0],
   "rootBone": "baltoy",
+  "animations": {
+    "faint": "q.bedrock_primary('baltoy', 'faint')",
+    "cry": "q.bedrock_stateful('baltoy', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
       "animations": ["q.bedrock('baltoy', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('baltoy', 'blink')"]
+      "quirks": [
+        "q.bedrock_quirk('baltoy', 'blink')",
+        "q.bedrock_quirk('baltoy', 'idle_quirk')"
+      ]
+    },
+    "battle_standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": ["q.bedrock('baltoy', 'battle_idle')"],
+      "quirks": [
+        "q.bedrock_quirk('baltoy', 'blink')"
+      ]
     },
     "walking": {
       "poseTypes": ["WALK"],
+      "condition": "!q.is_sprinting",
       "animations": ["q.bedrock('baltoy', 'ground_walk')"],
+      "quirks": ["q.bedrock_quirk('baltoy', 'blink')"]
+    },
+    "running": {
+      "poseTypes": ["WALK"],
+      "condition": "q.is_sprinting",
+      "animations": ["q.bedrock('baltoy', 'ground_run')"],
       "quirks": ["q.bedrock_quirk('baltoy', 'blink')"]
     },
     "hover": {
@@ -24,6 +47,13 @@
       "poseTypes": ["FLY"],
       "animations": ["q.bedrock('baltoy', 'air_fly')"],
       "quirks": ["q.bedrock_quirk('baltoy', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('baltoy', 'sleep')"]
     }
   }
 }

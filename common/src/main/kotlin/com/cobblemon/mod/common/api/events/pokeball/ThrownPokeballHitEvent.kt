@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.events.pokeball
 
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 
@@ -20,8 +21,9 @@ class ThrownPokeballHitEvent(
     val pokeBall : EmptyPokeBallEntity,
     val pokemon : PokemonEntity
 ) : Cancelable() {
-    val context = mutableMapOf(
-        "pokeball" to pokeBall.struct,
-        "pokemon" to pokemon.asMoLangValue()
+    val functions = moLangFunctionMap(
+        "pokeball" to { pokeBall.struct },
+        "pokemon" to { pokemon.asMoLangValue() },
+        cancelFunc
     )
 }

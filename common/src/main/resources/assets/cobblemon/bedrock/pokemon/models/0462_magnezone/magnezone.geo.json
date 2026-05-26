@@ -407,7 +407,7 @@
 					]
 				},
 				{
-					"name": "locator_seat_1",
+					"name": "locator_seat_2",
 					"parent": "body",
 					"pivot": [0, 0, 0],
 					"locators": {

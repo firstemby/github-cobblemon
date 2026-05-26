@@ -7,11 +7,40 @@
       "poser": "cobblemon:magmortar",
       "model": "cobblemon:magmortar.geo",
       "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar_emissive.png",
+          "translucent": true
+        }
+      ]
     },
     {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar_shiny.png"
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar_emissive_shiny.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0467_magmortar/magmortar_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

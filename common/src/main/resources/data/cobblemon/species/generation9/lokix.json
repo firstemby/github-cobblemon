@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 920,
   "name": "Lokix",
   "primaryType": "bug",
@@ -41,6 +42,12 @@
   "catchRate": 30,
   "eggCycles": 20,
   "baseFriendship": 0,
+  "baseScale": 0.65,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.75,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [
@@ -132,5 +139,22 @@
     "tutor:xscissor"
   ],
   "preEvolution": "nymble",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  }
 }

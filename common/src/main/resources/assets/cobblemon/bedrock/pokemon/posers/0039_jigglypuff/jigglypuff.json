@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.33, 0.0],
   "rootBone": "jigglypuff",
   "animations": {
+    "cry": "q.bedrock_stateful('jigglypuff', 'cry')",
     "faint": "q.bedrock_primary('jigglypuff', 'faint', q.curve('one'))"
   },
   "poses": {

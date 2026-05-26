@@ -53,13 +53,21 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
+        "canSwimInWater": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "drops": {
@@ -152,7 +160,18 @@
     "tutor:sleeptalk",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -164,7 +183,18 @@
           "variant": "level",
           "minLevel": 22
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

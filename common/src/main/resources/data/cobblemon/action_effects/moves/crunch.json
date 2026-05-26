@@ -6,7 +6,7 @@
     },
     {
       "type": "animation",
-      "animation": ["crunch", "bite", "physical"],
+      "animation": ["crunch", "bite", "fang", "physical"],
       "delay": 1.05
     },
     {

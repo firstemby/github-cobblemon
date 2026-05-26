@@ -14,6 +14,8 @@ import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -26,8 +28,10 @@ object DebugKeybindings {
         TranslateRightKeybinding(),
         TranslateUpKeybinding(),
         TranslateDownKeybinding(),
-        PrintModelSettingsKeybinding()
+        PrintModelSettingsKeybinding(),
+        ToggleRidingStatsDebugGUIKeybinding(),
     )
+
     class ScaleUpKeybinding: CobblemonKeyBinding(
         "key.cobblemon.scaleportraitup",
         InputConstants.Type.KEYSYM,
@@ -35,7 +39,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -51,7 +55,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -68,7 +72,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -84,7 +88,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -101,7 +105,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -118,7 +122,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -134,7 +138,7 @@ object DebugKeybindings {
         KeybindCategories.COBBLEMON_DEBUG_CATEGORY
     ) {
         override fun onPress() {
-            val currentlySelectedPokemon = CobblemonClient.storage.myParty.get(CobblemonClient.storage.selectedSlot)
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
             if (currentlySelectedPokemon != null) {
                 val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
                 val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
@@ -142,6 +146,20 @@ object DebugKeybindings {
                 Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Scale: ${model.portraitScale}"))
                 Cobblemon.LOGGER.info("override var portraitTranslation = Vec3d(${model.portraitTranslation.x}, ${model.portraitTranslation.y}, ${model.portraitTranslation.z})")
                 Cobblemon.LOGGER.info("override var portraitScale = ${model.portraitScale}F")
+            }
+        }
+    }
+
+    class ToggleRidingStatsDebugGUIKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.toggleridingstatsgui",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_SEMICOLON,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val vehicle = Minecraft.getInstance().player?.vehicle ?: return
+            if (vehicle is PokemonEntity) {
+                RequestOpenRidingStatsDebugGUIPacket().sendToServer()
             }
         }
     }

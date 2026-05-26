@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BenchedMovesUpdatePacket(pokemon: () -> Pokemon, value: BenchedMoves): SingleUpdatePacket<BenchedMoves, BenchedMovesUpdatePacket>(pokemon, value) {
+class BenchedMovesUpdatePacket(pokemon: () -> Pokemon?, value: BenchedMoves): SingleUpdatePacket<BenchedMoves, BenchedMovesUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         this.value.saveToBuffer(buffer)

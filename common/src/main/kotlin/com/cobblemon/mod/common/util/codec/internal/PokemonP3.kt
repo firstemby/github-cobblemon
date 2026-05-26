@@ -8,10 +8,9 @@
 
 package com.cobblemon.mod.common.util.codec.internal
 
-import com.cobblemon.mod.common.api.mark.Mark
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
-import com.cobblemon.mod.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
@@ -23,12 +22,12 @@ import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
@@ -37,11 +36,17 @@ internal data class PokemonP3(
     val features: List<CompoundTag>,
     val formController: Optional<ServerFormController.Intermediate>,
     val heldItemVisible: Optional<Boolean>,
+    val canDropHeldItem: Optional<Boolean>,
     val cosmeticItem: ItemStack,
     val activeMark: Optional<ResourceLocation>,
     val marks: Set<ResourceLocation>,
     val potentialMarks: Set<ResourceLocation>,
-    val markings: List<Int>
+    val markings: List<Int>,
+    val rideBoosts: Map<String, Float>,
+    val rideStamina: Float,
+    val currentFullness: Int,
+    val interactionCooldowns: Map<ResourceLocation, Int>,
+    val isAlpha: Boolean
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -55,7 +60,6 @@ internal data class PokemonP3(
                 return@forEach
             }
             val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(other.species)
-                .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
             val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
             if (
                 featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
@@ -70,6 +74,7 @@ internal data class PokemonP3(
             (other.formProxy as? FormProxy)?.overrideController(it.create(other))
         }
         this.heldItemVisible.ifPresent { other.heldItemVisible = it }
+        this.canDropHeldItem.ifPresent { other.canDropHeldItem = it }
         this.cosmeticItem.let { other.cosmeticItem = it }
         this.activeMark.ifPresent { other.activeMark = Marks.getByIdentifier(it) }
         other.marks.clear()
@@ -77,6 +82,13 @@ internal data class PokemonP3(
         other.potentialMarks.clear()
         other.potentialMarks += this.potentialMarks.map { Marks.getByIdentifier(it) }.filterNotNull().toMutableSet()
         other.markings = this.markings
+        this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
+        other.rideStamina = this.rideStamina
+        other.currentFullness = this.currentFullness
+        other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
+        other.isAlpha = isAlpha
+        other.recalculateCharacteristic()
+        other.updateAspects()
         return other
     }
 
@@ -89,12 +101,41 @@ internal data class PokemonP3(
                 Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
                 ServerFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP3::formController),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible),
+                Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_AI_DROPPABLE).forGetter(PokemonP3::canDropHeldItem),
                 ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter { Optional.ofNullable(it.cosmeticItem.takeIf { !it.isEmpty }) },
                 ResourceLocation.CODEC.optionalFieldOf(DataKeys.POKEMON_ACTIVE_MARK).forGetter(PokemonP3::activeMark),
                 Codec.list(ResourceLocation.CODEC).optionalFieldOf(DataKeys.POKEMON_MARKS, emptyList()).forGetter { it.marks.toMutableList() },
                 Codec.list(ResourceLocation.CODEC).optionalFieldOf(DataKeys.POKEMON_POTENTIAL_MARKS, emptyList()).forGetter { it.potentialMarks.toMutableList() },
-                Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(PokemonP3::markings)
-            ).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, formController, heldItemVisible, cosmeticItem, activeMark, marks, potentialMarks, markings -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, formController, heldItemVisible, cosmeticItem.orElse(ItemStack.EMPTY), activeMark, marks.toMutableSet(), potentialMarks.toMutableSet(), markings) }
+                Codec.list(Codec.INT).optionalFieldOf(DataKeys.POKEMON_MARKINGS, listOf(0, 0, 0, 0, 0, 0)).forGetter(PokemonP3::markings),
+                Codec.unboundedMap(Codec.STRING, Codec.FLOAT).optionalFieldOf(DataKeys.POKEMON_RIDE_BOOSTS, emptyMap<String, Float>()).forGetter(PokemonP3::rideBoosts),
+                Codec.FLOAT.optionalFieldOf(DataKeys.POKEMON_RIDE_STAMINA, 1F).forGetter(PokemonP3::rideStamina),
+                Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
+                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, formController, heldItemVisible,
+              canDropHeldItem,
+              cosmeticItem,
+              activeMark,
+              marks,
+              potentialMarks,
+              markings,
+              rideBoosts,
+              rideStamina,
+              currentFullness,
+              interactionCooldown,
+              isAlpha -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, formController, heldItemVisible,
+                canDropHeldItem,
+                cosmeticItem.orElse(ItemStack.EMPTY),
+                activeMark,
+                marks.toMutableSet(),
+                potentialMarks.toMutableSet(),
+                markings,
+                rideBoosts,
+                rideStamina,
+                currentFullness,
+                interactionCooldown,
+                isAlpha
+              )
+            }
         }
 
         internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
@@ -108,11 +149,17 @@ internal data class PokemonP3(
             },
             Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.asIntermediate()),
             Optional.ofNullable(pokemon.heldItemVisible),
+            Optional.ofNullable(pokemon.canDropHeldItem),
             pokemon.cosmeticItem,
             Optional.ofNullable(pokemon.activeMark?.identifier),
             pokemon.marks.map { it.identifier }.toSet(),
             pokemon.potentialMarks.map { it.identifier }.toSet(),
-            pokemon.markings
+            pokemon.markings,
+            pokemon.getRideBoosts().mapKeys { it.key.name },
+            pokemon.rideStamina,
+            pokemon.currentFullness,
+            pokemon.interactionCooldowns,
+            pokemon.isAlpha
         )
     }
 }

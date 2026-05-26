@@ -53,13 +53,59 @@
       "fly": {
         "canFly": true
       },
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
         "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": -1
+      "light": -1,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gastly",
+          "tier": 1
+        },
+        {
+          "pokemon": "misdreavus",
+          "tier": 1
+        },
+        {
+          "pokemon": "shuppet",
+          "tier": 1
+        },
+        {
+          "pokemon": "duskull",
+          "tier": 1
+        },
+        {
+          "pokemon": "haunter",
+          "tier": 2
+        },
+        {
+          "pokemon": "gengar mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "gengar mega",
+          "tier": 4
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -192,7 +238,28 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:trick",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:poisongas",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:uproar",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {

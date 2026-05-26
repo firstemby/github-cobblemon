@@ -49,11 +49,15 @@
     "fixed": false
   },
   "drops": {
-    "amount": 4,
+    "amount": 8,
     "entries": [
       {
         "item": "minecraft:snowball",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "minecraft:sweet_berries",
+        "quantityRange": "2-4"
       },
       {
         "item": "cobblemon:never_melt_ice",
@@ -186,7 +190,20 @@
     "tutor:stompingtantrum",
     "tutor:synthesis",
     "tutor:waterpulse",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:lightscreen",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:shadowball",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "snover",
   "evolutions": [],
@@ -223,7 +240,45 @@
       "baseExperienceYield": 208,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

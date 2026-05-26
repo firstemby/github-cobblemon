@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ShinyUpdatePacket(pokemon: () -> Pokemon, value: Boolean) : BooleanUpdatePacket<ShinyUpdatePacket>(pokemon, value) {
+class ShinyUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<ShinyUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun set(pokemon: Pokemon, value: Boolean) { pokemon.shiny = value }
     companion object {

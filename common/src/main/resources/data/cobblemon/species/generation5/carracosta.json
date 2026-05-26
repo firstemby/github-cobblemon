@@ -47,25 +47,43 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.1,
     "height": 1.9,
-    "fixed": false
+    "fixed": false,
+    "width": 1.1
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carracosta",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
+    },
     "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "swimSpeed": 0.2
+      },
       "walk": {
         "walkSpeed": 0.14
-      },
-      "swim": {
-        "swimSpeed": 0.2,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -186,7 +204,18 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "tirtouga",
   "evolutions": []

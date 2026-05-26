@@ -52,11 +52,19 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "avoidsWater": true,
+        "swimSpeed": "0.2",
+        "canSwimInWater": false
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -184,7 +192,19 @@
     "tutor:superpower",
     "tutor:swift",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:stoneedge",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "crabrawler",
   "evolutions": []

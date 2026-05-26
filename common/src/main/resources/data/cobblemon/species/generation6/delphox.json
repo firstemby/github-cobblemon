@@ -52,8 +52,28 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.4
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -223,7 +243,18 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "braixen",
   "evolutions": []

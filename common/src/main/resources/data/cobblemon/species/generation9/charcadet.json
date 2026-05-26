@@ -53,13 +53,45 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "charcadet",
+          "tier": 1
+        },
+        {
+          "pokemon": "armarouge",
+          "tier": 2
+        },
+        {
+          "pokemon": "ceruledge",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -119,7 +151,8 @@
     "tutor:helpinghand",
     "tutor:rest",
     "tutor:sleeptalk",
-    "tutor:spite"
+    "tutor:spite",
+    "special:celebrate"
   ],
   "evolutions": [
     {
@@ -146,5 +179,9 @@
         "requiredContext": "cobblemon:malicious_armor"
       }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
+  }
 }

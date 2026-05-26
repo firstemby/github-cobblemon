@@ -10,14 +10,20 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0903_sneasler/sneasler_shiny.png"
     },
     {
-      "aspects": ["cosmetic_item-composter"],
+      "aspects": [
+        "alpha_eyes"
+      ],
       "layers": [
         {
-          "texture": "cobblemon:textures/pokemon/0903_sneasler/sneasler_basket.png"
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0903_sneasler/sneasler_alpha.png",
+          "emissive": true
         }
       ]
     }

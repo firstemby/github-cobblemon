@@ -327,6 +327,13 @@
 					}
 				}
 			}
+		},
+		"animation.pansage.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.pansage.cry"
+				}
+			}
 		}
 	}
 }

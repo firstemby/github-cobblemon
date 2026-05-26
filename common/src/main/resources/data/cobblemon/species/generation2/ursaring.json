@@ -44,9 +44,53 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1,
     "height": 2.14,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "45-80",
+          "JUMP": "25-40",
+          "SKILL": "20-45",
+          "SPEED": "30-40",
+          "STAMINA": "30-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.3
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 7,
@@ -211,30 +255,52 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:thunderpunch",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:focusblast",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:roar",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:zapcannon",
+    "special:refresh"
   ],
   "preEvolution": "teddiursa",
   "evolutions": [
     {
       "id": "ursaring_ursaluna",
       "result": "ursaluna",
-      "learnableMoves": [
-        "headlongrush"
-      ],
-      "requirements": [
-        {
-          "variant": "moon_phase",
-          "moonPhase": "FULL_MOON"
-        },
-        {
-          "variant": "time_range",
-          "range": "night"
-        }
-      ],
       "trigger": {
         "variant": "item_interact",
         "requiredContext": "cobblemon:peat_block"
-      }
+      },
+      "learnableMoves": [
+        "headlongrush"
+      ],
+      "requiredContext": "cobblemon:peat_block",
+      "requirements": [
+        {
+          "moonPhase": "FULL_MOON",
+          "variant": "moon_phase"
+        },
+        {
+          "range": "night",
+          "variant": "time_range"
+        }
+      ]
     }
   ]
 }

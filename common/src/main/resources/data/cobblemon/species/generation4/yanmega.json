@@ -55,13 +55,29 @@
         "canFly": true
       },
       "swim": {
-        "canWalkOnWater": true
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
+      {
+        "item": "cobblemon:wide_lens",
+        "percentage": 5.0
+      },
       {
         "item": "cobblemon:charti_berry",
         "percentage": 5.0
@@ -172,7 +188,21 @@
     "tutor:stringshot",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "yanma",
   "evolutions": []

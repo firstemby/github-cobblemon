@@ -282,6 +282,13 @@
 					"position": [-0.1, 0, -0.1]
 				}
 			}
+		},
+		"animation.froslass.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.froslass.cry"
+				}
+			}
 		}
 	}
 }

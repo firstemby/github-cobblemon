@@ -52,12 +52,57 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "buneary",
+          "tier": 1
+        },
+        {
+          "pokemon": "bunnelby",
+          "tier": 1
+        },
+        {
+          "pokemon": "scorbunny",
+          "tier": 1
+        },
+        {
+          "pokemon": "raboot",
+          "tier": 2
+        },
+        {
+          "pokemon": "lopunny mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "cinderace",
+          "tier": 3
+        },
+        {
+          "pokemon": "lopunny mega",
+          "tier": 4
+        },
+        {
+          "pokemon": "diggersby",
+          "tier": 5
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -170,7 +215,18 @@
     "tutor:spikes",
     "tutor:stoneedge",
     "tutor:superfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

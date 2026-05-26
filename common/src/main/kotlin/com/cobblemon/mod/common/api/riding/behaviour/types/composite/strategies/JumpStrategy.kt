@@ -45,7 +45,7 @@ object JumpStrategy : CompositeRidingStrategy<CompositeSettings> {
     ): Boolean {
         if (state.activeBehaviour.get() == defaultSettings.key) return false
         if (!vehicle.onGround()) return false
-        if (state.lastTransition.get() + 20 >= vehicle.level().gameTime) return false
+        if (state.lastTransition.get() + 5 >= vehicle.level().gameTime) return false
         val defaultBehaviour = RidingBehaviours.get(defaultSettings.key)
         return defaultBehaviour.isActive(defaultSettings, state.defaultBehaviourState, vehicle)
     }
@@ -58,7 +58,7 @@ object JumpStrategy : CompositeRidingStrategy<CompositeSettings> {
     ): Boolean {
         if (state.activeBehaviour.get() == alternativeSettings.key) return false
         if (!driver.jumping) return false
-        if (state.lastTransition.get() + 20 >= vehicle.level().gameTime) return false
+        if (state.lastTransition.get() + 5 >= vehicle.level().gameTime) return false
         val alternativeBehaviour = RidingBehaviours.get(alternativeSettings.key)
         return alternativeBehaviour.isActive(alternativeSettings, state.alternateBehaviourState, vehicle)
     }

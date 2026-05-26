@@ -5,7 +5,7 @@
             "identifier": "cobblemon:sleep_actor",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/sleep_zzz"
+                "texture": "textures/particles/generic/status/sleep_zzz"
             }
         },
         "components": {

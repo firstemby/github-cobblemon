@@ -5,7 +5,7 @@
             "identifier": "cobblemon:fishing_bobber_ripple",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/water_ripple"
+                "texture": "textures/particles/generic/water/water_ripple"
             }
         },
         "curves": {

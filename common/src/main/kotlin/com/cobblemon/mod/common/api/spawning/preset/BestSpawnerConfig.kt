@@ -11,10 +11,10 @@ package com.cobblemon.mod.common.api.spawning.preset
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
-import com.cobblemon.mod.common.util.adapters.RegisteredSpawningContextAdapter
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
+import com.cobblemon.mod.common.util.adapters.RegisteredSpawnablePositionAdapter
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -29,25 +29,49 @@ import java.io.InputStreamReader
  */
 class BestSpawnerConfig {
     val version = 0
-    /** Whether or not an external config will be replaced by an internal one once [version] is higher on the internal. */
+    /** Whether an external config will be replaced by an internal one once [version] is higher on the internal. */
     val replaceWithNewVersion = true
-    val contextWeights = mutableMapOf(
+    @SerializedName("spawnablePositionTypeWeights", alternate = ["contextWeights"])
+    val spawnablePositionTypeWeights = mutableMapOf(
         "grounded" to 1F,
         "submerged" to 0.99F,
         "surface" to 0.01F,
         "seafloor" to 1F
     )
-    val buckets = mutableListOf(
-        SpawnBucket("common", 93.8F),
-        SpawnBucket("uncommon", 5F),
-        SpawnBucket("rare", 1.0F),
-        SpawnBucket("ultra-rare", 0.2F)
+
+    val worldBuckets = mutableMapOf(
+        "common" to 94F,
+        "uncommon" to 5F,
+        "rare" to 0.5F,
+        "ultra-rare" to 0.2F,
+        "boss" to 0.3F,
+    )
+
+    val fishingBuckets = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
+    )
+
+    val activatedHabitatBuckets: MutableMap<String, Float> = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
+    )
+
+    val pokeSnackBuckets = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
     )
 
     companion object {
         val GSON = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(RegisteredSpawningContext::class.java, RegisteredSpawningContextAdapter)
+            .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
             .setLenient()
             .disableHtmlEscaping()
             .create()

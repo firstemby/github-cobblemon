@@ -4,6 +4,9 @@
   "profileScale": 0.54,
   "profileTranslation": [0, 0.86, 0],
   "rootBone": "froslass",
+  "animations": {
+    "cry": "q.bedrock_stateful('froslass', 'cry')"
+  },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND", "HOVER"],

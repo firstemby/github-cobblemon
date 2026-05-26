@@ -42,20 +42,39 @@
   "catchRate": 90,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1.3,
+  "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1.4,
+    "width": 1.35,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "fearow",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -164,7 +183,28 @@
     "tutor:tailwind",
     "tutor:throatchop",
     "tutor:twister",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic"
   ],
   "preEvolution": "spearow",
   "evolutions": [],
@@ -203,7 +243,7 @@
     },
     "seats": [],
     "behaviour": {
-      "key": "cobblemon:land/generic"
+      "key": "cobblemon:land/horse"
     }
   }
 }

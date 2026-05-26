@@ -58,10 +58,32 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skrelp",
+          "tier": 1
+        },
+        {
+          "pokemon": "dragalge",
+          "tier": 2
+        },
+        {
+          "pokemon": "dhelmise",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -166,11 +188,20 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:spite",
     "tutor:thunderbolt",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {

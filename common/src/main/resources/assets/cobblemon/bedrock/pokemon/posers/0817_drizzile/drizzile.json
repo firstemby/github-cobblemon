@@ -1,8 +1,8 @@
 {
-    "portraitScale": 2.3,
-    "portraitTranslation": [-0.5, -0.2, 0],
-    "profileScale": 0.8,
-    "profileTranslation": [0, 0.56, 0],
+    "portraitScale": 1.98,
+    "portraitTranslation": [-0.59, 0.38, 0],
+    "profileScale": 0.65,
+    "profileTranslation": [0, 0.73, 0],
     "rootBone": "drizzile",
     "animations": {
       "cry": "q.bedrock_stateful('drizzile', 'cry')"

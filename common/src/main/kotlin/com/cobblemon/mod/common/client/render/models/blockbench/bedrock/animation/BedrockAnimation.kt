@@ -18,6 +18,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.sound.instances.AlphaCrySoundInstance
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.getString
@@ -85,7 +87,7 @@ class BedrockParticleKeyframe(
         val storm = ParticleStorm(
             effect = effect,
             emitterSpaceMatrix = particleMatrix,
-            locatorSpaceMatrix = locatorMatrix,
+            attachedMatrix = locatorMatrix,
             world = world,
             runtime = particleRuntime,
             sourceVelocity = { entity.deltaMovement },
@@ -109,7 +111,15 @@ class BedrockSoundKeyframe(
         val soundEvent = SoundEvent.createVariableRangeEvent(sound) // Means we don't need to setup a sound registry entry for every single thing
         if (soundEvent != null) {
             if (entity != null) {
-                entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                if (!entity.isSilent) {
+                    // If this entity is an alpha then play their cry as such
+                    if (entity is PokemonEntity && entity.pokemon.isAlpha) {
+                        Minecraft.getInstance().soundManager.play(
+                            AlphaCrySoundInstance(soundEvent, entity.soundSource, 1.5f, 0.92f, entity, entity.level().random.nextLong()))
+                    } else {
+                        entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                    }
+                }
             } else {
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
             }
@@ -229,8 +239,8 @@ data class BedrockAnimation(
 
                 if (!timeline.scale.isEmpty()) {
                     var scale = timeline.scale.resolve(animationSeconds.toDouble(), runtime)
-                    // If the goal is to make the invisible then kick that into gear after 0.5. Maybe could work better somehow else.
-                    if (scale == Vec3.ZERO && intensity > 0.5) {
+                    // If the goal is to make the invisible then kick that into gear after or on 0.5. Maybe could work better somehow else.
+                    if (scale == Vec3.ZERO && intensity >= 0.5) {
                         part.xScale *= scale.x.toFloat()
                         part.yScale *= scale.y.toFloat()
                         part.zScale *= scale.z.toFloat()

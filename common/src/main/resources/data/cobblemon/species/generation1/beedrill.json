@@ -51,25 +51,50 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       },
       "swim": {
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "beedrill mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "beedrill mega",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:poison_barb",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {
@@ -178,11 +203,36 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:stringshot",
     "tutor:tailwind",
     "tutor:throatchop",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:headbutt",
+    "legacy:hiddenpower",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:peck",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:swift",
+    "legacy:takedown",
+    "legacy:toxic"
   ],
   "preEvolution": "kakuna",
   "evolutions": [],

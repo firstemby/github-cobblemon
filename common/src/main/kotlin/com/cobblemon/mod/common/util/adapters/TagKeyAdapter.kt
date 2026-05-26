@@ -8,12 +8,17 @@
 
 package com.cobblemon.mod.common.util.adapters
 
-import com.google.gson.*
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import java.lang.reflect.Type
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
-import java.lang.reflect.Type
 
 /**
  * An adapter for [TagKey]s.
@@ -28,7 +33,7 @@ import java.lang.reflect.Type
 class TagKeyAdapter<T>(private val key: ResourceKey<Registry<T>>) : JsonDeserializer<TagKey<T>>, JsonSerializer<TagKey<T>> {
 
     override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): TagKey<T> {
-        val identifier = ResourceLocation.parse(element.asString)
+        val identifier = ResourceLocation.parse(element.asString.replace("#", ""))
         return TagKey.create(this.key, identifier)
     }
 

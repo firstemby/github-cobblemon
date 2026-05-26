@@ -55,7 +55,17 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -164,7 +174,6 @@
     "tutor:leechlife",
     "tutor:mudslap",
     "tutor:poisonjab",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:scaleshot",
@@ -174,9 +183,29 @@
     "tutor:sludgebomb",
     "tutor:snarl",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:spite",
-    "tutor:suckerpunch"
+    "tutor:suckerpunch",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bodyslam",
+    "legacy:bulldoze",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -190,7 +219,18 @@
           "variant": "level",
           "minLevel": 22
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

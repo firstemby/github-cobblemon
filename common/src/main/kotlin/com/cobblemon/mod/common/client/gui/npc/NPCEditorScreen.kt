@@ -9,15 +9,12 @@
 package com.cobblemon.mod.common.client.gui.npc
 
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.api.gui.drawText
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.behaviour.BehaviourEditorScreen
 import com.cobblemon.mod.common.client.gui.npc.widgets.ConfigVariableList
 import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget
-import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget.Companion.HEIGHT
-import com.cobblemon.mod.common.client.gui.npc.widgets.NPCRenderWidget.Companion.WIDTH
 import com.cobblemon.mod.common.client.gui.npc.widgets.SimpleNPCTextInputWidget
-import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.net.messages.client.npc.dto.NPCConfigurationDTO
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
@@ -25,9 +22,8 @@ import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
-import java.util.UUID
+import net.minecraft.world.entity.LivingEntity
 
 class NPCEditorScreen(
     val npcId: Int,
@@ -52,7 +48,7 @@ class NPCEditorScreen(
 
     override fun init() {
         super.init()
-        addRenderableOnly(NPCRenderWidget(leftX + 12, topY + 35, dto.npcClass, dto.aspects))
+        addRenderableOnly(NPCRenderWidget(leftX + 12, topY + 35, dto.npcUUID, dto.resourceIdentifier, dto.aspects))
         addRenderableWidget(SimpleNPCTextInputWidget(
             getter = { dto.npcName.string },
             setter = { dto.npcName = it.text() },
@@ -86,6 +82,17 @@ class NPCEditorScreen(
             ) {
                 SaveNPCPacket(npcId, dto).sendToServer()
                 this.minecraft!!.setScreen(null)
+            }
+        )
+
+        addRenderableWidget(
+            NPCEditorButton(
+                buttonX = leftX + 12F,
+                buttonY = topY + 201F,
+                label = lang("ui.entity.behaviour_editor"),
+            ) {
+                val entity = this.minecraft!!.level!!.getEntity(npcId) as? LivingEntity ?: return@NPCEditorButton // Unlikely
+                minecraft!!.setScreen(BehaviourEditorScreen(entity = entity, appliedBehaviours = dto.behaviours))
             }
         )
 

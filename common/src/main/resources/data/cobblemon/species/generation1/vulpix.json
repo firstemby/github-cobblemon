@@ -47,7 +47,7 @@
   ],
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.9,
+    "width": 0.7,
     "height": 1.1,
     "fixed": false
   },
@@ -55,9 +55,56 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
+    },
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "_comment": "Drop it",
+          "item": "minecraft:glass_bottle",
+          "pickupPriority": -1
+        },
+        {
+          "item": "minecraft:potion",
+          "pickupPriority": 1,
+          "returnItem": "minecraft:glass_bottle",
+          "fullnessValue": 10
+        }
+      ]
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ninetales",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_fox"
+      ]
+    }
+  ],
   "drops": {
     "amount": 5,
     "entries": [
@@ -178,7 +225,25 @@
     "tutor:snarl",
     "tutor:spite",
     "tutor:swift",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -199,6 +264,12 @@
       "maleRatio": 0.25,
       "height": 6,
       "weight": 99,
+      "baseScale": 0.6,
+      "hitbox": {
+        "width": 0.7,
+        "height": 1.1,
+        "fixed": false
+      },
       "pokedex": [
         "cobblemon.species.vulpix-alola.desc"
       ],
@@ -333,7 +404,22 @@
         "tutor:sleeptalk",
         "tutor:spite",
         "tutor:swift",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:aquatail",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:reflect",
+        "legacy:return",
+        "legacy:round",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:tackle",
+        "legacy:toxic",
+        "special:celebrate"
       ],
       "evolutions": [
         {
@@ -349,7 +435,34 @@
           }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "2",
+          "toleratedLeaders": [
+            {
+              "pokemon": "ninetales",
+              "tier": 1
+            }
+          ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "167-11833,13702-22299"
+          ],
+          "drowsyChance": 0.0021,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
+      }
     }
   ]
 }

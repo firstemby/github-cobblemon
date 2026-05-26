@@ -43,17 +43,30 @@
   "catchRate": 3,
   "eggCycles": 120,
   "baseFriendship": 0,
-  "baseScale": 1.2,
+  "baseScale": 1,
   "hitbox": {
-    "width": 0.75,
-    "height": 1.7,
+    "width": 1.25,
+    "height": 2.75,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -267,7 +280,37 @@
     "tutor:thunderpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:aerialace",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:watergun",
+    "legacy:waterpulse",
+    "legacy:zapcannon",
+    "special:healpulse"
   ],
   "evolutions": [],
   "forms": [
@@ -361,7 +404,11 @@
         "ranges": "45-90"
       }
     },
-    "seats": [],
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ],
     "behaviour": null
   }
 }

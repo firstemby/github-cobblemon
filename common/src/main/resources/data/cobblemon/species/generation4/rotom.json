@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 479,
   "name": "Rotom",
   "primaryType": "electric",
@@ -134,7 +135,21 @@
     "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:confide",
+    "legacy:defog",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:disarmingvoice"
   ],
   "evolutions": [],
   "forms": [
@@ -255,7 +270,39 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInLava": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "4"
+        },
+        "fireImmune": true
+      },
+      "lightingData": {
+        "lightLevel": 8,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Wash",
@@ -374,7 +421,37 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "4"
+        }
+      },
+      "lightingData": {
+        "lightLevel": 8,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Frost",
@@ -493,7 +570,37 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "4"
+        }
+      },
+      "lightingData": {
+        "lightLevel": 8,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Fan",
@@ -612,7 +719,37 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "4"
+        }
+      },
+      "lightingData": {
+        "lightLevel": 8,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Mow",
@@ -731,7 +868,68 @@
         "tutor:uproar"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "4"
+        }
+      },
+      "lightingData": {
+        "lightLevel": 8,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4"
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  },
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

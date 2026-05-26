@@ -165,7 +165,9 @@
     "tutor:superpower",
     "tutor:swift",
     "tutor:synthesis",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [
@@ -189,5 +191,30 @@
       "evolutions": [],
       "battleOnly": false
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "zarude",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

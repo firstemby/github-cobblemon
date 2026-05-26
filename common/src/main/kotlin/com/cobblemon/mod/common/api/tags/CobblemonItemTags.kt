@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.tags
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags.COOKED_MEAT
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey
@@ -28,6 +29,7 @@ object CobblemonItemTags {
     @JvmField val APRICORN_POKE_BALLS = create("apricorn_poke_balls")
     @JvmField val APRICORN_SPROUTS = create("apricorn_sprouts")
     @JvmField val APRICORNS = create("apricorns")
+    @JvmField val APRIJUICES = create("aprijuices")
     /** This tag is only used for a Torterra aspect based easter egg evolution at the moment.
      * It simply includes the 'minecraft:azalea' and 'minecraft:flowering_azalea' items by default. */
     @JvmField val AZALEA_TREE = create("azalea_tree")
@@ -41,6 +43,7 @@ object CobblemonItemTags {
     @JvmField val DAWN_STONE_ORES = create("dawn_stone_ores")
     @JvmField val POTTERY_SHERDS = create("decorated_pot_sherds")
     @JvmField val DEEP_SEAS = create("deep_seas")
+    @JvmField val DISPLAY_CASE_ITEMS = create("display_case_items")
     @JvmField val DUSK_STONE_ORES = create("dusk_stone_ores")
     @JvmField val ETHERS = create("ethers")
     @JvmField val EVOLUTION_ITEMS = create("evolution_items")
@@ -51,22 +54,27 @@ object CobblemonItemTags {
     @JvmField val FIRE_STONE_ORES = create("fire_stone_ores")
     @JvmField val FOSSIL_MACHINE_PARTS = create("fossil_machine_parts")
     @JvmField val FOSSILS = create("fossils")
+    @JvmField val FULL_HEAL_INGREDIENTS = create("full_heal_ingredients")
     @JvmField val GILDED_CHESTS = create("gilded_chests")
     @JvmField val HANGING_SIGNS = create("hanging_signs")
     @JvmField val HERBS = create("herbs")
     @JvmField val ICE_STONE_ORES = create("ice_stone_ores")
+    @JvmField val ITEM_BLOCKS = create("item_blocks")
     @JvmField val LEAF_STONE_ORES = create("leaf_stone_ores")
     @JvmField val MACHINES = create("machines")
     @JvmField val MINT_LEAF = create("mint_leaf")
     @JvmField val MINT_SEEDS = create("mint_seeds")
     @JvmField val MINTS = create("mints")
+    @JvmField val MOCHIS = create("mochis")
     @JvmField val MOON_STONE_ORES = create("moon_stone_ores")
     @JvmField val MUTATED_BERRIES = create("mutated_berries")
+    @JvmField val PLAQUES = create("plaques")
     @JvmField val PLANTS = create("plants")
     @JvmField val POKE_BALLS = create("poke_balls")
     @JvmField val POKE_RODS = create("poke_rods")
     @JvmField val POKEDEX = create("pokedex")
     @JvmField val POKEDEX_SCREEN = create("pokedex_screen")
+    @JvmField val POKE_FOOD = create("poke_food")
     @JvmField val POTIONS = create("potions")
     @JvmField val PROTEIN_INGREDIENTS = create("protein_ingredients")
     /** See [COOKED_MEAT] */
@@ -74,14 +82,18 @@ object CobblemonItemTags {
     @JvmField val RED_TUMBLESTONE_BRICKS = create("red_tumblestone_bricks")
     @JvmField val RED_TUMBLESTONES = create("red_tumblestones")
     @JvmField val REMEDIES = create("remedies")
+    @JvmField val REMEDY_BERRIES = create("remedy_berries")
     @JvmField val RESTORES = create("restores")
     @JvmField val REVIVES = create("revives")
+    @JvmField val SANDWICH_VEGGIE = create("sandwich_veggies")
     @JvmField val SEEDS = create("seeds")
     @JvmField val SHINY_STONE_ORES = create("shiny_stone_ores")
     @JvmField val SIGNS = create("signs")
     @JvmField val SKY_TUMBLESTONE_BRICKS = create("sky_tumblestone_bricks")
     @JvmField val SKY_TUMBLESTONES = create("sky_tumblestones")
     @JvmField val SUN_STONE_ORES = create("sun_stone_ores")
+    @JvmField val SUPER_POTION_INGREDIENTS = create("super_potion_ingredients")
+    @JvmField val FULL_HEAL_BOTTLES = create("full_heal_bottles")
     @JvmField val SWEETS = create("sweets")
     @JvmField val TEACUPS = create("teacups")
     @JvmField val TEAPOTS = create("teapots")
@@ -128,6 +140,9 @@ object CobblemonItemTags {
     @JvmField val WEARABLE_FACE_ITEMS = create("held/visibility/face")
     @JvmField val WEARABLE_HAT_ITEMS = create("held/visibility/hat")
     @JvmField val HIDDEN_ITEMS = create("held/visibility/hidden")
+
+    //Empty Tag
+    @JvmField val EMPTY = create("empty")
 
 
     private fun create(path: String) = TagKey.create(Registries.ITEM, cobblemonResource(path))

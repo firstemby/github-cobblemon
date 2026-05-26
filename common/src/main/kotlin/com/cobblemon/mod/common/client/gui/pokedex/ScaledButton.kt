@@ -31,6 +31,7 @@ class ScaledButton(
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
 
     var isWidgetActive = false
+    var isVisible = true
 
     override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
@@ -38,8 +39,7 @@ class ScaledButton(
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
-
-        if (resource != null) {
+        if (isVisible && resource != null) {
             blitk(
                 matrixStack = matrices,
                 texture = resource,
@@ -55,14 +55,14 @@ class ScaledButton(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (active && isButtonHovered(mouseX, mouseY)) {
+        if (isVisible && active && isButtonHovered(mouseX, mouseY)) {
             super.mouseClicked(mouseX, mouseY, button)
         }
         return false
     }
 
     override fun playDownSound(soundManager: SoundManager) {
-        if (active && !this.silent) {
+        if (isVisible && active && !this.silent) {
             soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.POKEDEX_CLICK_SHORT, 1.0F))
         }
     }

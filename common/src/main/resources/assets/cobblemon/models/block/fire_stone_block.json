@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "cobblemon:block/fire_stone_block"
+    "all": "cobblemon:block/evolution/fire_stone_block"
   }
 }
 

@@ -65,7 +65,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     override fun init() {
         this.buttons.clear()
         // Pokemon Button
-        this.insertButton(pokemon, this::onPressPokemon, lang("ui.pokemon")) { CobblemonClient.storage.myParty.slots.filterNotNull().isNotEmpty() }
+        this.insertButton(pokemon, this::onPressPokemon, lang("ui.pokemon")) { CobblemonClient.storage.party.slots.filterNotNull().isNotEmpty() }
 
         // EXIT Button
         this.insertButton(exit, this::onPressExit, lang("ui.exit"))
@@ -336,7 +336,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
 
     private fun onPressPokemon(button: Button) {
         try {
-            Summary.open(CobblemonClient.storage.myParty.slots, true, CobblemonClient.storage.selectedSlot)
+            Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
         } catch (e: Exception) {
             Minecraft.getInstance().setScreen(null)
             Cobblemon.LOGGER.debug("Failed to open the summary from the PokeNav screen", e)

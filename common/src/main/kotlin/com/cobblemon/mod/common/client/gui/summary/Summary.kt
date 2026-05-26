@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.summary
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendToServer
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
@@ -23,7 +24,10 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.ExitButton
 import com.cobblemon.mod.common.client.gui.TypeIcon
-import com.cobblemon.mod.common.client.gui.summary.widgets.*
+import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget
@@ -32,10 +36,11 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWi
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.EvolutionTestSelectScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.FormSelectScreen
+import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
-import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -43,6 +48,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.toAssetPath
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -123,7 +129,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
 
     override val schedulingTracker = SchedulingTracker()
 
-    internal lateinit var selectedPokemon: Pokemon
+    private val party = ArrayList(party)
+    internal var selectedPokemon: Pokemon = this.party[selection] ?: this.party.first { it != null }!!
     private lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
     private lateinit var modelWidget: ModelWidget
@@ -134,7 +141,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     private lateinit var heldItemVisibilityButton: SummaryButton
     private var mainScreenIndex = INFO
     var sideScreenIndex = PARTY
-    private val party = ArrayList(party)
 
     override fun renderBlurredBackground(delta: Float) { }
 
@@ -148,12 +154,6 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
         if (this.party.size > 6) {
             throw IllegalArgumentException("Summary UI cannot display more than six Pokemon")
-        }
-        val idealSelected = this.party[selection]
-        if (idealSelected == null) {
-            this.selectedPokemon = this.party.first { it != null }!!
-        } else {
-            this.selectedPokemon = idealSelected
         }
         this.listenToMoveSet()
 
@@ -220,8 +220,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                     }
                 },
                 resource = revertButtonResource,
-                renderRequirement = { selectedPokemon.formProxy.client().canRevert() },
-                clickRequirement = { selectedPokemon.formProxy.client().canRevert() }
+                renderRequirement = { selectedPokemon.formProxy.client().canRevert() && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE },
+                clickRequirement = { selectedPokemon.formProxy.client().canRevert() && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE }
             )
         )
 
@@ -237,7 +237,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             clickAction = {
                 selectedPokemon.heldItemVisible = !selectedPokemon.heldItemVisible
                 heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
-                modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
+                updatePokemonInfo()
                 // Send item visibility update to server
                 sendToServer(SetItemHiddenPacket(selectedPokemon.uuid, selectedPokemon.heldItemVisible))
             },
@@ -331,10 +331,12 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             baseScale = 2F,
             rotationY = 325F,
             offsetY = -10.0,
+            playCryOnClick = true,
             shouldFollowCursor = true,
-            heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
         )
-        addRenderableOnly(this.modelWidget)
+        addRenderableWidget(this.modelWidget)
+
+        updatePokemonInfo()
     }
 
     fun swapPartySlot(sourceIndex: Int, targetIndex: Int) {
@@ -368,20 +370,23 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     fun switchSelection(newSelection: Int) {
         saveMarkings()
         this.selectedPokemon.moveSet.changeFunction = {}
-        this.party.getOrNull(newSelection)?.let { this.selectedPokemon = it }
+        this.party.getOrNull(newSelection)?.let { newPokemon ->
+            this.selectedPokemon = newPokemon
+        }
+        updatePokemonInfo()
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
-        children().find { it is EvolutionTestSelectScreen }?.let(this::removeWidget)
-
-        if (::modelWidget.isInitialized) {
-            modelWidget.pokemon = selectedPokemon.asRenderablePokemon()
-            modelWidget.heldItem = if (selectedPokemon.heldItemVisible) selectedPokemon.heldItem else null
-            heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
-        }
-
-        if (::nicknameEntryWidget.isInitialized) nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
-
         if (::markingsWidget.isInitialized) markingsWidget.setActivePokemon(selectedPokemon)
+        children().find { it is EvolutionTestSelectScreen }?.let(this::removeWidget)
+    }
+
+    fun updatePokemonInfo() {
+        val pokemon = selectedPokemon.asRenderablePokemon()
+        if (::modelWidget.isInitialized) {
+            modelWidget.pokemon = pokemon
+            heldItemVisibilityButton.buttonActive = !selectedPokemon.heldItemVisible
+            if (::nicknameEntryWidget.isInitialized) nicknameEntryWidget.setSelectedPokemon(selectedPokemon)
+        }
     }
 
     /**
@@ -481,7 +486,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 sideScreen = PartyWidget(
                         pX = x + 216,
                         pY = y + 24,
-                        isParty = selectedPokemon in CobblemonClient.storage.myParty,
+                        isParty = selectedPokemon in CobblemonClient.storage.party,
                         summary = this,
                         partyList = this.party
                 )
@@ -601,7 +606,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
 
         // Poké Ball
-        val ballResource = cobblemonResource("textures/item/poke_balls/" + selectedPokemon.caughtBall.name.path + ".png")
+        val ballResource = selectedPokemon.caughtBall.name.toAssetPath("textures/item/poke_balls/", ".png")
         blitk(
             matrixStack = matrices,
             texture = ballResource,
@@ -742,7 +747,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
 
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !nicknameSelected) {
+        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, keyCode, scanCode) || SummaryBinding.matches(keyCode, scanCode)) ){
             saveActiveMark()
             saveMarkings()
             Minecraft.getInstance().setScreen(null)

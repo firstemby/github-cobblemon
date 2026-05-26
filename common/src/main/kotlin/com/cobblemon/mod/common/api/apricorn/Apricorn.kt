@@ -28,7 +28,6 @@ import net.minecraft.world.level.material.MapColor
  * @since October 29th, 2022
  */
 enum class Apricorn : StringRepresentable {
-
     BLACK,
     BLUE,
     GREEN,
@@ -102,5 +101,4 @@ enum class Apricorn : StringRepresentable {
     companion object {
         val CODEC: Codec<Apricorn> = StringRepresentable.fromValues(::values)
     }
-
 }

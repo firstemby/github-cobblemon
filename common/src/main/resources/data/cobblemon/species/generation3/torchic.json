@@ -42,9 +42,12 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "baseScale": 0.6,
   "hitbox": {
-    "width": 0.8,
+    "width": 0.7,
     "height": 1.1,
     "fixed": false
   },
@@ -157,7 +160,23 @@
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:uproar"
+    "tutor:uproar",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defog",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -173,5 +192,47 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "torchic",
+          "tier": 1
+        },
+        {
+          "pokemon": "combusken",
+          "tier": 2
+        },
+        {
+          "pokemon": "blaziken mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "blaziken mega",
+          "tier": 4
+        }
+      ]
+    },
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.14
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
+  }
 }

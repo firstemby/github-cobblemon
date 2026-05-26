@@ -43,6 +43,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 1,
   "hitbox": {
     "width": 0.45,
@@ -52,7 +53,38 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tinkatink",
+          "tier": 1
+        },
+        {
+          "pokemon": "tinkatuff",
+          "tier": 2
+        },
+        {
+          "pokemon": "tinkaton",
+          "tier": 3
+        }
+      ]
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.14
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

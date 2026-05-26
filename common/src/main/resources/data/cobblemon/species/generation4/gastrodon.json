@@ -46,20 +46,50 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.75,
+  "baseScale": 0.62,
   "hitbox": {
-    "width": 1.8,
     "height": 1.95,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "70-90",
+          "JUMP": "0-10",
+          "SKILL": "0-15",
+          "SPEED": "5-10",
+          "STAMINA": "10-20"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "canBreatheUnderwater": true,
+        "canSwimInWater": false,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": "0.2"
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -185,7 +215,21 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:stringshot",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "shellos",
   "evolutions": [],
@@ -206,6 +250,26 @@
       "aspects": [
         "east-sea"
       ],
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true
+        },
+        "moving": {
+          "walk": {
+            "avoidsLand": true,
+            "walkSpeed": "0.2"
+          },
+          "swim": {
+            "canSwimInWater": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      },
       "preEvolution": "shellos",
       "evolutions": [],
       "battleOnly": false

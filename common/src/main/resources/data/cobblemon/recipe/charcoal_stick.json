@@ -2,22 +2,17 @@
     "type": "minecraft:crafting_shaped",
     "group": "charcoal_stick",
     "pattern": [
-        "C",
-        "S",
-        "C"
+        " C",
+        " S",
+        " C"
     ],
     "key": {
         "C": {
             "item": "minecraft:charcoal"
         },
-        "S": [
-            {
-                "item": "cobblemon:fire_stone"
-            },
-            {
-                "item": "cobblemon:fire_gem"
-            }
-        ]
+        "S": {
+            "item": "cobblemon:fire_gem"
+        }
     },
     "result": {
         "id": "cobblemon:charcoal_stick"

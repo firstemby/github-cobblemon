@@ -5,7 +5,7 @@
             "identifier": "cobblemon:crunch_targetspark",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/critical_hit"
+                "texture": "textures/particles/vanilla/critical_hit"
             }
         },
         "curves": {

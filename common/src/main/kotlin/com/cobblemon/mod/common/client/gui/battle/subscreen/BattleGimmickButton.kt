@@ -12,8 +12,11 @@ import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
-import com.cobblemon.mod.common.battles.*
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGimmickButton.GimmickTile
+import com.cobblemon.mod.common.battles.InBattleGimmickMove
+import com.cobblemon.mod.common.battles.InBattleMove
+import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
+import com.cobblemon.mod.common.battles.Targetable
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.toRGB
 import com.mojang.blaze3d.vertex.PoseStack
@@ -140,7 +143,7 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
                 priority = gimmickTemplate?.priority ?: moveTemplate.priority,
                 critRatio = gimmickTemplate?.critRatio ?: moveTemplate.critRatio,
                 effectChances = gimmickTemplate?.effectChances ?: moveTemplate.effectChances,
-                actionEffect = null
+                weight = gimmickTemplate?.weight ?: moveTemplate.weight
             )
         }
     }

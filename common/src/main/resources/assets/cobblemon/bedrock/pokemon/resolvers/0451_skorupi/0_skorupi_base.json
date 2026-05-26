@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:skorupi",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:skorupi",
+      "model": "cobblemon:skorupi.geo",
+      "texture": "cobblemon:textures/pokemon/0451_skorupi/skorupi.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0451_skorupi/skorupi_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0451_skorupi/skorupi_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

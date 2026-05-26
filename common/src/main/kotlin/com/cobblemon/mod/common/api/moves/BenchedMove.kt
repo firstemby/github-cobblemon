@@ -24,6 +24,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 
 class BenchedMoves : Iterable<BenchedMove> {
     var changeFunction: ((BenchedMoves) -> Unit) = {}
+//    var moveAddedFunction: (BenchedMove) -> Unit = {}
     private var emit = true
     private val benchedMoves = mutableListOf<BenchedMove>()
 
@@ -58,6 +59,9 @@ class BenchedMoves : Iterable<BenchedMove> {
             return false
         }
 
+        /*if (emit) {
+            moveAddedFunction(benchedMove)
+        }*/
         doThenEmit { benchedMoves.add(benchedMove) }
         return true
     }
@@ -117,7 +121,7 @@ class BenchedMoves : Iterable<BenchedMove> {
             .xmap(
                 { moveList ->
                     val benchedMoves = BenchedMoves()
-                    benchedMoves.addAll(moveList)
+                    benchedMoves.addAll(moveList.filter { it.moveTemplate !is MoveTemplate.Dummy })
                     return@xmap benchedMoves
                 },
                 BenchedMoves::toList

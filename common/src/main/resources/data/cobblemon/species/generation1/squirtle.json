@@ -44,9 +44,12 @@
   "eggCycles": 20,
   "baseFriendship": 50,
   "shoulderMountable": true,
+  "standingEyeHeight": 0.76,
+  "swimmingEyeHeight": 0.76,
+  "flyingEyeHeight": 0.76,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 0.6,
+    "width": 0.7,
     "height": 1.2,
     "fixed": false
   },
@@ -54,7 +57,9 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -62,10 +67,32 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "wartortle",
+          "tier": 1
+        },
+        {
+          "pokemon": "drednaw",
+          "tier": 1
+        },
+        {
+          "pokemon": "blastoise mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "blastoise mega",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -160,10 +187,12 @@
     "tm:workup",
     "tm:zenheadbutt",
     "tutor:aquatail",
+    "tutor:block",
     "tutor:dive",
     "tutor:flipturn",
     "tutor:focuspunch",
     "tutor:helpinghand",
+    "tutor:hydrocannon",
     "tutor:icebeam",
     "tutor:icepunch",
     "tutor:icywind",
@@ -176,7 +205,45 @@
     "tutor:sleeptalk",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:aurasphere",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:confusion",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dragonpulse",
+    "legacy:dynamicpunch",
+    "legacy:falseswipe",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:rockslide",
+    "legacy:rocktomb",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterfall",
+    "special:block",
+    "special:celebrate",
+    "special:followme",
+    "special:hydrocannon"
   ],
   "evolutions": [
     {
@@ -188,7 +255,18 @@
           "variant": "level",
           "minLevel": 16
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

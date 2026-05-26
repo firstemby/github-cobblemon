@@ -5,7 +5,7 @@
             "identifier": "cobblemon:withdraw_actorbubbles",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/small_bubble"
+                "texture": "textures/particles/generic/bubble/smallbubble"
             }
         },
         "components": {

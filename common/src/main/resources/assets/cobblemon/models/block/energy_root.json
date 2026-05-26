@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cobblemon:block/energy_root",
-		"particle": "cobblemon:block/energy_root"
+		"0": "cobblemon:block/crops/energy_root",
+		"particle": "cobblemon:block/crops/energy_root"
 	},
 	"elements": [
 		{

@@ -16,12 +16,24 @@ import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companio
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companion.SLOT_HEIGHT
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen.Companion.SLOT_WIDTH
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigVariableList.CobblemonConfigVariableListEntry
-import com.cobblemon.mod.common.client.gui.config.variable.*
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigBooleanVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigDoubleVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigEnumVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigFloatVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigIntVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigStringVariable
+import com.cobblemon.mod.common.client.gui.config.variable.CobblemonConfigVariable
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.config.Category
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.config.CobblemonConfigField
+import com.cobblemon.mod.common.config.CobblemonConfigField.CobblemonConfigSide.SERVER
 import com.cobblemon.mod.common.util.asTranslated
+import kotlin.math.min
+import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.javaField
 import net.minecraft.SharedConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -29,11 +41,6 @@ import net.minecraft.client.gui.components.ContainerObjectSelectionList
 import net.minecraft.client.gui.components.Tooltip
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
-import kotlin.math.min
-import kotlin.reflect.KClass
-import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.javaField
 
 class CobblemonConfigVariableList(
     val parent: CobblemonConfigScreen,
@@ -59,6 +66,11 @@ class CobblemonConfigVariableList(
     private fun addEntries() {
         parent.clonedConfig::class.memberProperties.map { property ->
             if (!property.javaField!!.isAnnotationPresent(CobblemonConfigField::class.java)) {
+                return@map null
+            }
+
+            val fieldAnnotation = property.javaField!!.getAnnotation(CobblemonConfigField::class.java)
+            if (parent.hideServerConfigs && fieldAnnotation.side == SERVER) {
                 return@map null
             }
 

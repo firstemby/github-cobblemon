@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.client.gui.battle.subscreen
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownPokemon
 import com.cobblemon.mod.common.battles.SwitchActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import com.cobblemon.mod.common.util.toAssetPath
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.narration.NarratableEntry
@@ -231,7 +232,7 @@ class BattleSwitchPokemonSelection(
                     textureHeight = SELECT_HEIGHT * 2,
                 )
 
-                val ballIcon = cobblemonResource("textures/gui/ball/" + pokemon.caughtBall.name.path + ".png")
+                val ballIcon = pokemon.caughtBall.name.toAssetPath("textures/gui/ball/", ".png")
                 val ballHeight = 22
                 blitk(
                     matrixStack = matrixStack,

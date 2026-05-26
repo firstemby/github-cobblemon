@@ -50,16 +50,44 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
+        "walkSpeed": 0.2,
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "carvanha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sharpedo mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "sharpedo mega",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -157,7 +185,6 @@
     "tutor:icywind",
     "tutor:liquidation",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
@@ -167,7 +194,21 @@
     "tutor:swift",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:refresh"
   ],
   "evolutions": [
     {

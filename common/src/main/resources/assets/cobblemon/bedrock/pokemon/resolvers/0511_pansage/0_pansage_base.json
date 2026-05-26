@@ -1,16 +1,30 @@
 {
-    "species": "cobblemon:pansage",
-    "order": 0,
-    "variations": [
-      {
-        "aspects": [],
-        "poser": "cobblemon:pansage",
-        "model": "cobblemon:pansage.geo",
-        "texture": "cobblemon:textures/pokemon/0511_pansage/pansage.png"
-        },
-      {
-        "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0511_pansage/pansage_shiny.png"  
-      }
-    ]
-  }
+  "species": "cobblemon:pansage",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:pansage",
+      "model": "cobblemon:pansage.geo",
+      "texture": "cobblemon:textures/pokemon/0511_pansage/pansage.png"
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0511_pansage/pansage_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0511_pansage/pansage_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

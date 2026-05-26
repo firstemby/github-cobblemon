@@ -5,7 +5,7 @@
             "identifier": "cobblemon:watersport_target",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/splash"
+                "texture": "textures/particles/generic/water/splash"
             }
         },
         "curves": {

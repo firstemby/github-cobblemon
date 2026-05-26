@@ -9,30 +9,30 @@
 package com.cobblemon.mod.common.api.spawning.condition
 
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.spawning.context.SurfaceSpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SurfaceSpawnablePosition
 import com.cobblemon.mod.common.util.Merger
 import net.minecraft.world.level.material.Fluid
 
 /**
- * Base type for a spawning condition that applies to some kind of [SurfaceSpawningContext]. This
- * can be extended for subclasses of [SurfaceSpawningContext].
+ * Base type for a spawning condition that applies to some kind of [SurfaceSpawnablePosition]. This
+ * can be extended for subclasses of [SurfaceSpawnablePosition].
  *
  * @author Hiroku
  * @since December 15th, 2022
  */
-abstract class SurfaceTypeSpawningCondition<T : SurfaceSpawningContext> : AreaTypeSpawningCondition<T>() {
+abstract class SurfaceTypeSpawningCondition<T : SurfaceSpawnablePosition> : AreaTypeSpawningCondition<T>() {
     var minDepth: Int? = null
     var maxDepth: Int? = null
     var fluid: RegistryLikeCondition<Fluid>? = null
 
-    override fun fits(ctx: T): Boolean {
-        return if (!super.fits(ctx)) {
+    override fun fits(spawnablePosition: T): Boolean {
+        return if (!super.fits(spawnablePosition)) {
             false
-        } else if (minDepth != null && ctx.depth < minDepth!!) {
+        } else if (minDepth != null && spawnablePosition.depth < minDepth!!) {
             false
-        } else if (maxDepth != null && ctx.depth > maxDepth!!) {
+        } else if (maxDepth != null && spawnablePosition.depth > maxDepth!!) {
             false
-        } else !(ctx.baseBlock.fluidState.isEmpty || (fluid != null && !fluid!!.fits(ctx.baseBlock.fluidState.type, ctx.fluidRegistry)))
+        } else !(spawnablePosition.baseBlock.fluidState.isEmpty || (fluid != null && !fluid!!.fits(spawnablePosition.baseBlock.fluidState.type, spawnablePosition.fluidRegistry)))
     }
 
     override fun copyFrom(other: SpawningCondition<*>, merger: Merger) {
@@ -46,13 +46,13 @@ abstract class SurfaceTypeSpawningCondition<T : SurfaceSpawningContext> : AreaTy
 }
 
 /**
- * A spawning condition for a [SurfaceSpawningContext].
+ * A spawning condition for a [SurfaceSpawnablePosition].
  *
  * @author Hiroku
  * @since December 15th, 2022
  */
-open class SurfaceSpawningCondition : SurfaceTypeSpawningCondition<SurfaceSpawningContext>() {
-    override fun contextClass() = SurfaceSpawningContext::class.java
+open class SurfaceSpawningCondition : SurfaceTypeSpawningCondition<SurfaceSpawnablePosition>() {
+    override fun spawnablePositionClass() = SurfaceSpawnablePosition::class.java
     companion object {
         const val NAME = "surface"
     }

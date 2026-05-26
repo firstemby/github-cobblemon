@@ -44,23 +44,17 @@ object PcCommand {
         val box = try {
             IntegerArgumentType.getInteger(context, "box")
         } catch (e: IllegalArgumentException) {
-            1
+            null
         }
         val pc = player.pc()
         if (player.isInBattle()) {
             throw IN_BATTLE_EXCEPTION.create()
         }
-        if (pc.boxes.size < box) {
+        if (box != null && pc.boxes.size < box) {
             throw SimpleCommandExceptionType(lang("command.pc.invalid-box", box, pc.boxes.size).red()).create()
         }
         PCLinkManager.addLink(PermissiblePcLink(pc, player, CobblemonPermissions.PC))
-        OpenPCPacket(pc, box = box - 1).sendToPlayer(player)
-        context.source.level.playSoundServer(
-            position = context.source.player!!.position(),
-            sound = CobblemonSounds.PC_ON,
-            volume = 0.5F,
-            pitch = 1F
-        )
+        OpenPCPacket(pc, box = if (box != null) (box - 1) else null).sendToPlayer(player)
         return Command.SINGLE_SUCCESS
     }
 

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 336,
   "name": "Seviper",
   "primaryType": "poison",
@@ -41,14 +42,48 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.15,
+    "height": 1.5,
     "fixed": false
   },
+  "behaviour": {
+    "combat": {
+      "fightsMelee": true,
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    }
+  },
+  "ai": [
+    {
+      "type": "cobblemon:add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "7": [
+          {
+            "type": "cobblemon:hate_entity",
+            "entityCondition": "q.entity.is_pokemon && q.entity.species.identifier == 'cobblemon:zangoose'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "cobblemon:razor_fang",
@@ -56,6 +91,10 @@
       },
       {
         "item": "cobblemon:poison_barb",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {
@@ -188,7 +227,6 @@
     "tutor:knockoff",
     "tutor:lashout",
     "tutor:poisonjab",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:seedbomb",
@@ -201,7 +239,22 @@
     "tutor:throatchop",
     "tutor:thunderfang",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dragontail",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swift"
   ],
   "evolutions": []
 }

@@ -42,11 +42,62 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1.6,
+  "baseScale": 1,
   "hitbox": {
-    "width": 1.3,
-    "height": 1.5,
-    "fixed": false
+    "height": 2.5,
+    "fixed": false,
+    "width": 2.3
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "50-75",
+          "JUMP": "20-30",
+          "SKILL": "15-30",
+          "SPEED": "45-65",
+          "STAMINA": "55-70"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tauros",
+          "tier": 1
+        },
+        {
+          "pokemon": "bouffalant",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 8,
@@ -165,7 +216,19 @@
     "tutor:throatchop",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "standingEyeHeight": 0.45
 }

@@ -21,11 +21,11 @@ import com.cobblemon.mod.common.util.battleLang
  * @since December 30th, 2022
  */
 class HitCountInstruction(val message: BattleMessage): InterpreterInstruction {
-
+    val hitCount = message.argumentAt(1)?.toIntOrNull()
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo {
             val battlePokemon = message.battlePokemon(0, battle) ?: return@dispatchGo
-            val hitCount = message.argumentAt(1)?.toIntOrNull() ?: return@dispatchGo
+            val hitCount = hitCount ?: return@dispatchGo
             val lang = if (hitCount == 1) battleLang("hit_count_singular") else battleLang("hit_count", hitCount)
             battle.minorBattleActions[battlePokemon.uuid] = message
             battle.broadcastChatMessage(lang)

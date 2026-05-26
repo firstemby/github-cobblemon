@@ -44,83 +44,75 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.3,
     "height": 2.6,
-    "fixed": false
-  },
-  "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    },
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.27
-      }
-    }
+    "fixed": false,
+    "width": 1.3
   },
   "riding": {
-    "stats": {
-      "SPEED": {
-        "displayName": "Speed",
-        "description": "Its top speed",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "ACCELERATION": {
-        "displayName": "Acceleration",
-        "description": "How fast it can speed up",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "SKILL": {
-        "displayName": "Handling",
-        "description": "How fast it can turn",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "JUMP": {
-        "displayName": "Altitude",
-        "description": "How high it can jump",
-        "ranges": {
-          "LAND": "100-101"
-        }
-      },
-      "STAMINA": {
-        "displayName": "Fuel/Stamina",
-        "description": "How long it can sprint",
-        "ranges": {
-          "LAND": "100-101"
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "50-70",
+          "JUMP": "30-40",
+          "SKILL": "30-60",
+          "SPEED": "30-40",
+          "STAMINA": "70-100"
         }
       }
-    },
-    "behaviour": {
-      "key": "cobblemon:land/generic"
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.0,
-              "z": 0
-            }
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rapidash",
+          "tier": 1
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 2
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 3
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 3
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.27
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 6,
@@ -232,7 +224,17 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "mudbray",
   "evolutions": []

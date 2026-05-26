@@ -148,7 +148,16 @@
     "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -169,10 +178,37 @@
         "pom_pom-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
-      "name": "Pa\u00e2\u20ac\u2122u",
+      "name": "Pa'u",
       "primaryType": "psychic",
       "secondaryType": "flying",
       "maleRatio": 0.25,
@@ -188,7 +224,34 @@
         "pa'u-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Sensu",
@@ -207,7 +270,63 @@
         "sensu-style"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "oricorio",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "oricorio",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
+  }
 }

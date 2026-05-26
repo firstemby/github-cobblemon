@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:haxorus",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:haxorus",
+      "model": "cobblemon:haxorus.geo",
+      "texture": "cobblemon:textures/pokemon/0612_haxorus/haxorus.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0612_haxorus/haxorus_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0612_haxorus/haxorus_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

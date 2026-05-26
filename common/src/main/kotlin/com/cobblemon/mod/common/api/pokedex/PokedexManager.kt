@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.api.pokedex
 
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.scheduling.ScheduledTask
+import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.storage.player.InstancedPlayerData
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
@@ -39,13 +41,53 @@ class PokedexManager(
         getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(pokedexEntityData)
     }
 
+    // Java interop isn't great lol
+    @Deprecated("Use encounter(PokedexEntityData) instead")
     fun catch(pokemon: Pokemon) {
-        val speciesId = pokemon.species.resourceIdentifier
-        val formName = pokemon.form.name
-        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).caught(PokedexEntityData(pokemon = pokemon, disguise = null))
+        obtain(pokemon)
     }
 
-    override fun markDirty() {
+    fun obtain(pokemon: Pokemon) {
+        val speciesId = pokemon.species.resourceIdentifier
+        val formName = pokemon.form.name
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).obtained(PokedexEntityData(pokemon = pokemon, disguise = null))
+    }
+
+    fun scheduleFullSyncFromStores(
+        party: Iterable<Pokemon?>,
+        pc: Iterable<Pokemon?>,
+        batchSize: Int = 50
+    ) {
+        val iterator = sequence {
+            for (pokemon in party) {
+                if (pokemon != null) yield(pokemon)
+            }
+            for (pokemon in pc) {
+                if (pokemon != null) yield(pokemon)
+            }
+        }.iterator()
+
+        if (!iterator.hasNext()) {
+            return
+        }
+
+        ScheduledTask.Builder()
+            .tracker(ServerTaskTracker)
+            .interval(0F)
+            .infiniteIterations()
+            .execute { task ->
+                var processed = 0
+                while (processed < batchSize && iterator.hasNext()) {
+                    val pokemon = iterator.next()
+                    obtain(pokemon)
+                    processed++
+                }
+
+                if (!iterator.hasNext()) {
+                    task.expire()
+                }
+            }
+            .build()
     }
 
     override fun initialize() {

@@ -55,9 +55,32 @@
         "walkSpeed": 0.16
       },
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shieldon",
+          "tier": 1
+        },
+        {
+          "pokemon": "bastiodon",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -171,7 +194,19 @@
     "tutor:steelroller",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

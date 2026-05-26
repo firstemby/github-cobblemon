@@ -44,27 +44,64 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.4,
     "height": 2.6,
-    "fixed": false
+    "fixed": false,
+    "width": 1.4
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-15",
+          "JUMP": "40-60",
+          "SKILL": "0-5",
+          "SPEED": "10-25",
+          "STAMINA": "20-40"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
         "walkSpeed": 0.2
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 4,
     "entries": [
       {
         "item": "minecraft:slime_ball",
         "quantityRange": "0-2"
+      },
+      {
+        "item": "cobblemon:lagging_tail",
+        "percentage": 5.0
       },
       {
         "item": "cobblemon:oran_berry",
@@ -187,6 +224,7 @@
     "tutor:flamethrower",
     "tutor:focuspunch",
     "tutor:gigaimpact",
+    "tutor:healbell",
     "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:iceball",
@@ -210,7 +248,36 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:acid",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:takedown",
+    "legacy:toxic",
+    "legacy:watergun",
+    "special:healbell",
+    "special:wish"
   ],
   "preEvolution": "lickitung",
   "evolutions": []

@@ -142,8 +142,46 @@
     "tutor:sleeptalk",
     "tutor:stringshot",
     "tutor:tailwind",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic"
   ],
   "preEvolution": "burmy",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  }
 }

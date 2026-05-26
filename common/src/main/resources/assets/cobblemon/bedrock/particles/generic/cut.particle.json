@@ -5,7 +5,7 @@
             "identifier": "cobblemon:cut",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/cut"
+                "texture": "textures/particles/generic/cut"
             }
         },
         "components": {

@@ -48,6 +48,28 @@
     "height": 1.9,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  },
   "drops": {
     "amount": 5,
     "entries": [
@@ -144,7 +166,6 @@
     "tutor:outrage",
     "tutor:painsplit",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",

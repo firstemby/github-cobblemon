@@ -52,16 +52,12 @@ class CosmeticItemAssignment(
 
 class CosmeticItemDefinition(
     val consumedItem: RegistryLikeCondition<Item> = RegistryLikeIdentifierCondition(cobblemonResource("poke_ball")),
-    val displayName: String = "Poke Ball",
-    val displayItem: ResourceLocation = cobblemonResource("poke_ball"),
     val aspects: List<String> = listOf()
 ) {
     companion object {
         val CODEC: Codec<CosmeticItemDefinition> = RecordCodecBuilder.create {
             it.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("item").forGetter { it.consumedItem },
-                PrimitiveCodec.STRING.fieldOf("displayName").forGetter { it.displayName },
-                ResourceLocation.CODEC.fieldOf("displayItem").forGetter { it.displayItem },
                 PrimitiveCodec.STRING.listOf().fieldOf("aspects").forGetter { it.aspects }
             ).apply(it, ::CosmeticItemDefinition)
         }

@@ -8,17 +8,17 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1
 
-import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.createTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.HeadedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.CobblemonPose
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.PoseType.Companion.UI_POSES
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
-import com.cobblemon.mod.common.util.isUnderWater
 import com.cobblemon.mod.common.util.isInWater
+import com.cobblemon.mod.common.util.isUnderWater
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
@@ -27,7 +27,7 @@ class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val head = getPart("head_ai")
 
     override var portraitScale = 1.57F
-    override var portraitTranslation = Vec3(-0.05, 0.54, 0.0)
+    override var portraitTranslation = Vec3(-0.17, 0.54, 0.0)
 
     override var profileScale = 0.69F
     override var profileTranslation = Vec3(-0.04, 0.69, 0.0)

@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.api.spawning
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.condition.BiomePrecalculation
 import com.cobblemon.mod.common.api.spawning.condition.BucketPrecalculation
-import com.cobblemon.mod.common.api.spawning.condition.ContextPrecalculation
+import com.cobblemon.mod.common.api.spawning.condition.SpawnablePositionTypePrecalculation
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.data.CobblemonDataProvider
 import net.minecraft.server.MinecraftServer
@@ -31,16 +31,15 @@ object CobblemonSpawnPools {
     fun load() {
         WORLD_SPAWN_POOL = CobblemonDataProvider.register(SpawnPool("world")
             .addPrecalculators(
-                ContextPrecalculation,
+                SpawnablePositionTypePrecalculation,
                 BucketPrecalculation,
                 BiomePrecalculation
-            )
+            ), reloadable = true
         )
     }
 
     fun onServerLoad(server: MinecraftServer) {
         Cobblemon.LOGGER.info("Optimizing spawn pools...")
-        WORLD_SPAWN_POOL.forEach { it.onServerLoad(server) }
-        WORLD_SPAWN_POOL.precalculate()
+        WORLD_SPAWN_POOL.onServerLoad(server)
     }
 }

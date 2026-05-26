@@ -51,7 +51,32 @@
   },
   "behaviour": {
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "nidorino",
+          "tier": 1
+        },
+        {
+          "pokemon": "nidoking",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -155,12 +180,34 @@
     "tutor:shockwave",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
     "tutor:stompingtantrum",
     "tutor:suckerpunch",
     "tutor:superfang",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:tackle",
+    "legacy:watergun"
   ],
   "preEvolution": "nidoranm",
   "evolutions": [

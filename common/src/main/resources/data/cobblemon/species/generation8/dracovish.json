@@ -52,17 +52,35 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "swimSpeed": 0.3,
-        "canBreatheUnderwater": true
+        "swimSpeed": 0.3
       },
       "walk": {
-        "walkSpeed": 0.2,
-        "avoidsLand": true
+        "walkSpeed": 0.2
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "arctovish",
+          "tier": 1
+        },
+        {
+          "pokemon": "dracovish",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "moves": [
@@ -136,14 +154,15 @@
     "tutor:lowkick",
     "tutor:meteorbeam",
     "tutor:outrage",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "drops": {

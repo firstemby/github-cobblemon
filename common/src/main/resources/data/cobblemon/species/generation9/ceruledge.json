@@ -54,8 +54,28 @@
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    }
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -169,8 +189,13 @@
     "tutor:spite",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "LAND"
+  }
 }

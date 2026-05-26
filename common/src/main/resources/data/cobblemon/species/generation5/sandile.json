@@ -52,12 +52,40 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": "q.is_standing_on_blocks(2, 'minecraft:sand', 'minecraft:red_sand') ? 0.30 : 0.15"
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sandile",
+          "tier": 1
+        },
+        {
+          "pokemon": "krokorok",
+          "tier": 2
+        },
+        {
+          "pokemon": "krookodile",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -180,7 +208,18 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

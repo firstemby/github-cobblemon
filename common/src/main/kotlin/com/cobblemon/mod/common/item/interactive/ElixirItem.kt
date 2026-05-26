@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.giveOrDropItemStack
@@ -25,8 +24,10 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
 
 /**
  * Items for recovering PP in all moves at once.
@@ -34,19 +35,17 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since June 30th, 2023
  */
-class ElixirItem(
-    val max: Boolean
-) : CobblemonItem(Properties().apply {
+class ElixirItem(val max: Boolean, block: Block) : ItemNameBlockItem(block, Properties().apply {
     if (max) rarity(Rarity.UNCOMMON)
 }), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_elixir" else "elixir" }"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun canUse(battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
         override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "elixir".let { if (!max) "$it 10" else it }
     }
 
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
         var changed = false
         pokemon.moveSet.doWithoutEmitting {
@@ -64,7 +63,7 @@ class ElixirItem(
 
         return if (changed) {
             pokemon.moveSet.update()
-            if (!player.isCreative) {
+            if (!player.hasInfiniteMaterials()) {
                 stack.shrink(1)
                 player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
             }

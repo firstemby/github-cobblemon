@@ -52,13 +52,27 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -136,7 +150,6 @@
     "tm:thunderwave",
     "tm:torment",
     "tm:trickroom",
-    "tutor:block",
     "tutor:calmmind",
     "tutor:covet",
     "tutor:dazzlinggleam",
@@ -159,7 +172,17 @@
     "tutor:spikes",
     "tutor:steelbeam",
     "tutor:swift",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

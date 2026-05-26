@@ -62,6 +62,7 @@ object PokemonEditCommand {
         val pokemon = PartySlotArgumentType.getPokemonOf(context, SLOT, player)
         val oldName = pokemon.species.translatedName
         val properties = PokemonPropertiesArgumentType.getPokemonProperties(context, PROPERTIES)
+        
         properties.apply(pokemon)
         context.source.sendSuccess({ commandLang(NAME, oldName, player.name) }, true)
         return Command.SINGLE_SUCCESS

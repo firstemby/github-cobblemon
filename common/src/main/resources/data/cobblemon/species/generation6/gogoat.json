@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 673,
   "name": "Gogoat",
   "primaryType": "grass",
@@ -42,9 +43,57 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
+    "height": 2.35,
+    "fixed": false,
+    "width": 1.65
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "65-75",
+          "JUMP": "40-60",
+          "SKILL": "40-60",
+          "SPEED": "45-65",
+          "STAMINA": "45-65"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "gogoat",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.4
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 4,
@@ -165,7 +214,19 @@
     "tutor:throatchop",
     "tutor:wildcharge",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bounce",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "skiddo",
   "evolutions": []

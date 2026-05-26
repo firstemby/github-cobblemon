@@ -53,14 +53,22 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
         "canBreatheUnderlava": true,
+        "avoidsWater": true,
         "canSwimInLava": true
       }
-    }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -126,7 +134,10 @@
     "tutor:rollout",
     "tutor:scorchingsands",
     "tutor:skittersmack",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -138,7 +149,22 @@
           "variant": "level",
           "minLevel": 28
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

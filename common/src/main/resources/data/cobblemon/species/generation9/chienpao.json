@@ -42,6 +42,29 @@
   "catchRate": 6,
   "eggCycles": 50,
   "baseFriendship": 0,
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  },
   "moves": [
     "1:spite",
     "1:powdersnow",
@@ -105,7 +128,6 @@
     "tutor:icefang",
     "tutor:icywind",
     "tutor:lashout",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",

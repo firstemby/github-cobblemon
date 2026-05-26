@@ -146,5 +146,45 @@
     "tutor:tailwind",
     "tutor:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "okidogi",
+          "tier": 1
+        },
+        {
+          "pokemon": "munkidori",
+          "tier": 1
+        },
+        {
+          "pokemon": "fezandipiti",
+          "tier": 2
+        },
+        {
+          "pokemon": "pecharunt",
+          "tier": 3
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

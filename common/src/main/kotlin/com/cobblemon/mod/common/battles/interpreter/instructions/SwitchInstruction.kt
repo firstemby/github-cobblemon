@@ -17,9 +17,14 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
-import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
-import com.cobblemon.mod.common.battles.dispatch.*
+import com.cobblemon.mod.common.battles.dispatch.BattleDispatch
+import com.cobblemon.mod.common.battles.dispatch.DispatchResult
+import com.cobblemon.mod.common.battles.dispatch.GO
+import com.cobblemon.mod.common.battles.dispatch.InstructionSet
+import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
+import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
+import com.cobblemon.mod.common.battles.dispatch.WaitDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.battle.BattleSwitchPokemonPacket
@@ -166,6 +171,11 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             // If we can't find the entity for some reason then we're going to skip the recall animation
             val sendOutFuture = CompletableFuture<Unit>()
             (pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)).thenApply {
+                if (battle.ended) {
+                    sendOutFuture.complete(Unit)
+                    return@thenApply
+                }
+
                 // Queue actual swap and send-in after the animation has ended
                 actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
                 activePokemon.battlePokemon = newPokemon

@@ -52,12 +52,50 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
-        "canSwimInLava": true
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvitar",
+          "tier": 1
+        },
+        {
+          "pokemon": "axew",
+          "tier": 1
+        },
+        {
+          "pokemon": "fraxure",
+          "tier": 2
+        },
+        {
+          "pokemon": "haxorus",
+          "tier": 3
+        },
+        {
+          "pokemon": "tyranitar mega=false",
+          "tier": 4
+        },
+        {
+          "pokemon": "tyranitar mega",
+          "tier": 5
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -178,7 +216,24 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:superpower"
+    "tutor:superpower",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:muddywater",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [
     {

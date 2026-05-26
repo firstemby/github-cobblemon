@@ -10,15 +10,15 @@ package com.cobblemon.mod.common.client.render.models.blockbench
 
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.entity.PosableEntity
-import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.client.renderer.RenderType
-import com.mojang.blaze3d.vertex.VertexConsumer
-import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.model.EntityModel
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.client.renderer.entity.LivingEntityRenderer
+import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.resources.ResourceLocation
 
 /**
  * A wrapping around a [PosableModel] that presents as an [EntityModel]. This is used to continue using
@@ -50,6 +50,7 @@ abstract class PosableEntityModel<T : Entity>(
             stack.translate(0.0, 1.5, 0.0)
         }
         posableModel.render(context, stack, buffer, packedLight, overlay, color)
+        posableModel.setDefault()
     }
 
     open fun getOverlayTexture(entity: Entity?): Int? {

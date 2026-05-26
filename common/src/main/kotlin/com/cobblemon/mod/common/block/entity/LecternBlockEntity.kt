@@ -9,13 +9,14 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.block.LecternBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
 class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : ViewerCountBlockEntity(CobblemonBlockEntities.LECTERN, blockPos, blockState) {
@@ -35,21 +36,25 @@ class LecternBlockEntity(blockPos: BlockPos, blockState: BlockState) : ViewerCou
         return this.saveWithoutMetadata(registryLookup)
     }
 
+    override fun updateBlock(level: Level, state: BlockState) {
+        super.updateBlock(level, state.setValue(LecternBlock.EMIT_LIGHT, hasViewer()))
+    }
+
     fun isEmpty(): Boolean = getItemStack().isEmpty
 
     fun getItemStack(): ItemStack = inventory[0]
 
     fun setItemStack(itemStack: ItemStack) {
-        if (level != null) {
+        level?.let {
             inventory[0] = itemStack
-            updateBlock(level!!)
+            updateBlock(it, blockState)
         }
     }
 
     fun removeItemStack(): ItemStack {
-        if (level != null) {
+        level?.let {
             val itemStack = ContainerHelper.removeItem(inventory, 0, 1)
-            updateBlock(level!!)
+            updateBlock(it, blockState)
             return itemStack
         }
         return ItemStack.EMPTY

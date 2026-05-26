@@ -56,15 +56,38 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "exeggutor alolan=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "exeggutor alolan",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 5,
+    "amount": 6,
     "entries": [
       {
         "item": "minecraft:egg",
@@ -72,6 +95,10 @@
       },
       {
         "item": "cobblemon:oval_stone",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:psychic_seed",
         "percentage": 5.0
       },
       {
@@ -191,7 +218,6 @@
     "tutor:gigadrain",
     "tutor:gigaimpact",
     "tutor:grassyglide",
-    "tutor:gravity",
     "tutor:helpinghand",
     "tutor:hyperbeam",
     "tutor:lowkick",
@@ -211,7 +237,30 @@
     "tutor:trick",
     "tutor:uproar",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:eggbomb",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:nightmare",
+    "legacy:powerwhip",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "special:refresh",
+    "special:sweetscent",
+    "special:wish"
   ],
   "preEvolution": "exeggcute",
   "evolutions": [],
@@ -372,7 +421,6 @@
         "tutor:gigadrain",
         "tutor:gigaimpact",
         "tutor:grassyglide",
-        "tutor:gravity",
         "tutor:helpinghand",
         "tutor:hyperbeam",
         "tutor:ironhead",
@@ -395,11 +443,76 @@
         "tutor:trick",
         "tutor:uproar",
         "tutor:worryseed",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:bide",
+        "legacy:captivate",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:eggbomb",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:mimic",
+        "legacy:nightmare",
+        "legacy:psywave",
+        "legacy:rage",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:teleport",
+        "legacy:toxic",
+        "special:celebrate",
+        "special:sweetscent",
+        "special:wish"
       ],
       "preEvolution": "exeggcute",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "exeggutor alolan",
+              "tier": 1
+            }
+          ]
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      },
+      "drops": {
+        "amount": 5,
+        "entries": [
+          {
+            "item": "minecraft:egg",
+            "quantityRange": "0-3"
+          },
+          {
+            "item": "cobblemon:oval_stone",
+            "percentage": 5.0
+          },
+          {
+            "item": "cobblemon:tanga_berry",
+            "percentage": 5.0
+          }
+        ]
+      }
     }
   ],
   "riding": {
@@ -422,7 +535,7 @@
     },
     "seats": [],
     "behaviour": {
-      "key": "cobblemon:land/generic"
+      "key": "cobblemon:land/horse"
     }
   }
 }

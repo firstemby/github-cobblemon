@@ -53,18 +53,38 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.15
       },
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "prinplup",
+          "tier": 1
+        },
+        {
+          "pokemon": "eiscue",
+          "tier": 2
+        },
+        {
+          "pokemon": "empoleon",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -165,7 +185,10 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [],
   "forms": [
@@ -218,6 +241,41 @@
             "percentage": 5.0
           }
         ]
+      },
+      "behaviour": {
+        "moving": {
+          "walk": {
+            "walkSpeed": 0.15
+          },
+          "swim": {
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        },
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "prinplup",
+              "tier": 1
+            },
+            {
+              "pokemon": "eiscue",
+              "tier": 2
+            },
+            {
+              "pokemon": "empoleon",
+              "tier": 3
+            }
+          ]
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       }
     }
   ]

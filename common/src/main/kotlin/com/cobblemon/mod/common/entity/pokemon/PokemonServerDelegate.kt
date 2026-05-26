@@ -12,25 +12,26 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause.Companion.DROPS_REROLL_ASPECT
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.asUUID
-import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import com.cobblemon.mod.common.util.playSoundServer
-import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -41,14 +42,17 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import org.joml.Vector3f
 import java.util.*
+import kotlin.math.*
 
 /** Handles purely server logic for a Pokémon */
 class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
-    var acknowledgedHPStat = -1
+    var acknowledgedHPValue = -1
+    val passengerOffsets = mutableMapOf<Int, Vec3>()
 
     /** Mocked properties exposed to the client [PokemonEntity]. */
     private val mock: PokemonProperties?
@@ -56,20 +60,25 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
     override fun changePokemon(pokemon: Pokemon) {
         updatePathfindingPenalties(pokemon)
-        entity.registerGoals()
-        updateMaxHealth()
+//        entity.registerGoals()
+        updateAttributes(pokemon)
+        updateHealth(pokemon)
+        entity.struct.addPokemonFunctions(pokemon)
+        entity.struct.addPokemonEntityFunctions(entity)
     }
 
     fun updatePathfindingPenalties(pokemon: Pokemon) {
         val moving = pokemon.form.behaviour.moving
         entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 12F else -1F)
         entity.setPathfindingMalus(PathType.WATER, if (moving.swim.canSwimInWater) 12F else -1F)
-        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater) 6F else -1F)
+        entity.setPathfindingMalus(PathType.WATER_BORDER, if (moving.swim.canSwimInWater || moving.walk.avoidsLand || moving.swim.canBreatheUnderwater) 6F else -1F)
         if (moving.swim.canBreatheUnderwater) {
-            entity.setPathfindingMalus(PathType.WATER, if (moving.walk.avoidsLand) 0F else 4F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.WATER, 0F)
         }
         if (moving.swim.canBreatheUnderlava) {
-            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 4F else -1F)
+            // Must have a malus of zero to be a valid wander target
+            entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 0F else -1F)
         }
         if (moving.walk.avoidsLand) {
             entity.setPathfindingMalus(PathType.WALKABLE, 12F)
@@ -82,21 +91,103 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.navigation.setCanPathThroughFire(entity.fireImmune())
     }
 
-    fun updateMaxHealth() {
-        val currentHealthRatio = entity.health.toDouble() / entity.maxHealth
-        // Why you would remove HP is beyond me but protects us from obscure crash due to crappy addon
-        acknowledgedHPStat = entity.form.baseStats[Stats.HP] ?: return
+    fun updateAttributes(pokemon: Pokemon) {
+        entity.removeAllEffects()
 
-        val minStat = 50 // Metapod's base HP
-        val maxStat = 150 // Slaking's base HP
-        val baseStat = acknowledgedHPStat.coerceIn(minStat..maxStat)
-        val r = (baseStat - minStat) / (maxStat - minStat).toDouble()
-        val minPossibleHP = 10.0 // half of a player's HP
-        val maxPossibleHP = 100.0 // Iron Golem HP
-        val maxHealth = minPossibleHP + r * (maxPossibleHP - minPossibleHP)
+        if (pokemon.ability.name == "levitate") {
+            entity.getAttribute(Attributes.GRAVITY)?.baseValue = 0.04
+        }
 
+        val maxHealth: Double = this.maxHpToMaxHealthCurve(pokemon.maxHealth).toDouble()
         entity.getAttribute(Attributes.MAX_HEALTH)?.baseValue = maxHealth
-        entity.health = currentHealthRatio.toFloat() * maxHealth.toFloat()
+
+        val (armour, toughness) = this.defenceToArmourCurve(pokemon.defence)
+        entity.getAttribute(Attributes.ARMOR)?.baseValue = armour
+        entity.getAttribute(Attributes.ARMOR_TOUGHNESS)?.baseValue = toughness
+
+        val attackDamage = this.attackToDamageCurve(pokemon.attack).toDouble()
+        entity.getAttribute(Attributes.ATTACK_DAMAGE)?.baseValue = attackDamage
+    }
+
+    /**
+     * Apply inverse scaling to the given HP value so that bulky Pokémon don't end up with 100 Hearts while starters all have half a heart.
+     */
+    fun maxHpToMaxHealthCurve(max_hp: Int): Int {
+        return when {
+            // Escape hatch niche situations such as Shedinja which should have a fixed half-a-heart too
+            max_hp <= 1 -> 1;
+            // Really squishy Pokémon should still have *some* health so they don't die instantly. 6 Health is as much as a bat.
+            // There are extremely few Pokémon that have less than 12 HP even at level 1, so this is a rare edgecase.
+            max_hp < 12 -> 6;
+            else -> {
+                val max_hp_d: Double = max_hp.toDouble();
+                // This will give a 30-HP starter 5½ hearts and a max bulk Blissey of 714 HP a round 50 hearts.
+                sqrt(max_hp_d.pow(1.402)).roundToInt()
+            }
+        }
+    }
+
+    /**
+     * Apply inverse scaling to the given Defence value, returning a touple of (Armour, Armour Toughness) that the given Pokémon should have.
+     */
+    fun defenceToArmourCurve(defense: Int): Pair<Double, Double> {
+        val armour = when {
+            defense < 200 -> 0.0;
+            else -> {
+                min(30.0, round((defense - 200) / 10.0))
+            }
+        }
+        val toughness = when {
+            defense < 300 -> 0.0;
+            else -> {
+                min(20.0, round((defense - 300) / 7.5))
+            }
+        }
+        return armour to toughness
+    }
+
+    /**
+     * Applies inverse scaling so weaker and starter Pokémon can more easily catch up in damage,
+     * while preventing high-Attack Pokémon from scaling out of control.
+     *
+     * A graph of this formula can be seen here: https://www.desmos.com/calculator/vcrpdcrbhd
+     *
+     * Examples:
+     *  - Lv. 1 Happiny (5 Attack) → 0.5 hearts
+     *  - Lv. 10 Charmander (16 Attack) → 1.5 hearts
+     *  - Lv. 20 Mankey (35 Attack) → 2.5 hearts
+     *  - Lv. 40 Vespiquen (79 Attack) → 3.5 hearts
+     *  - Lv. 60 Rhydon (176 Attack) → 5 hearts
+     *  - Lv. 100 Adamant Slaking with full Attack IVs/EVs (460 Attack)
+     *      → 7.5 hearts (same as an Iron Golem)
+     */
+    fun attackToDamageCurve(attack: Int): Int {
+        val damage = when {
+            attack < 10 -> 1
+            else -> ceil(sqrt((attack - 10).toDouble().pow(0.875))).toInt()
+        }
+
+        return damage.coerceAtLeast(1)
+    }
+
+    /**
+     * Update Minecraft-side Health (i.e. hearts) based on the Pokémon's current HP value
+     */
+    fun updateHealth(pokemon: Pokemon) {
+        if (acknowledgedHPValue != pokemon.currentHealth) {
+            acknowledgedHPValue = pokemon.currentHealth
+
+            if (pokemon.currentHealth <= 0) {
+                entity.health = 0.0f
+            } else {
+                val currentHPRatio: Float = pokemon.currentHealth / pokemon.maxHealth.toFloat()
+
+                if (currentHPRatio.isFinite()) {
+                    // Entity Health is stored as float but only ever in-/decreased by whole numbers.
+                    entity.health = ceil(entity.maxHealth * currentHPRatio)
+                }
+            }
+        }
     }
 
     override fun initialize(entity: PokemonEntity) {
@@ -104,6 +195,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         with(entity) {
             speed = 0.1F
             entity.despawner.beginTracking(this)
+
+            initializeScripting()
         }
         updateTrackedValues()
     }
@@ -139,18 +232,18 @@ class PokemonServerDelegate : PokemonSideDelegate {
     fun updateTrackedValues() {
         val trackedSpecies = mock?.species ?: entity.pokemon.species.resourceIdentifier.toString()
         val trackedNickname =  mock?.nickname ?: entity.pokemon.nickname ?: Component.empty()
-        val trackedMark = entity.pokemon.activeMark?.identifier.toString()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
         val trackedForm = mock?.form ?: entity.pokemon.form.formOnlyShowdownId()
+        val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.effectiveScale
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
         }
-        if (entity.entityData.get(PokemonEntity.MARK) !=trackedMark) {
-            entity.entityData.set(PokemonEntity.MARK, trackedMark)
+        if (entity.entityData.get(PokemonEntity.IS_ALPHA) != entity.pokemon.isAlpha) {
+            entity.entityData.set(PokemonEntity.IS_ALPHA, entity.pokemon.isAlpha)
         }
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
@@ -166,6 +259,21 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
         entity.entityData.set(PokemonEntity.FORM, trackedForm) // have this get form from aspects...?
         entity.entityData.set(PokemonEntity.BUSY_LOCKED, entity.busyLocks.isNotEmpty())
+        entity.entityData.set(PokemonEntity.SCALE_MODIFIER, trackedScaleModifier)
+        if (entity.pokemon.rideStamina != entity.entityData.get(PokemonEntity.RIDE_STAMINA) && entity.passengers.isEmpty()) {
+            entity.entityData.set(PokemonEntity.RIDE_STAMINA, entity.pokemon.rideStamina)
+        }
+
+        val currentRideBoosts = entity.entityData.get(PokemonEntity.RIDE_BOOSTS)
+        val newRideBoosts = entity.pokemon.getRideBoosts()
+        if (currentRideBoosts.size != newRideBoosts.size || currentRideBoosts.any { (key, value) -> newRideBoosts[key] != value }) {
+            entity.entityData.set(PokemonEntity.RIDE_BOOSTS, newRideBoosts)
+        }
+
+        val trackedMark = entity.pokemon.activeMark?.identifier.toString()
+        if (entity.entityData.get(PokemonEntity.MARK) != trackedMark) {
+            entity.entityData.set(PokemonEntity.MARK, trackedMark)
+        }
 
         updateShownItem()
         updatePoseType()
@@ -176,6 +284,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (this::entity.isInitialized) {
             when (data) {
                 PokemonEntity.BEHAVIOUR_FLAGS -> updatePoseType()
+                PokemonEntity.SPECIES -> entity.refreshRiding()
             }
         }
     }
@@ -190,10 +299,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.pokemon.storeCoordinates.get() == null) {
             return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.owner?.isAlive != true) {
-            return entity.discard()
-        } else if (entity.pokemon.isNPCOwned() && entity.ownerUUID == null) {
-            entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        } else if (entity.pokemon.isNPCOwned()) {
+            if (entity.owner?.isAlive != true && entity.battleId == null) return entity.discard()
+            if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }
 
         val tethering = entity.tethering
@@ -231,10 +339,9 @@ class PokemonServerDelegate : PokemonSideDelegate {
             }
         }
 
-        if (entity.form.baseStats[Stats.HP] != acknowledgedHPStat) {
-            updateMaxHealth()
-        }
+        updateHealth(entity.pokemon)
 
+        // TODO: updateTrackedValues does the same check and set again, refactor.
         if (entity.ownerUUID != entity.pokemon.getOwnerUUID()) {
             entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }
@@ -245,6 +352,14 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.ownerUUID != null && entity.owner == null && entity.tethering == null) {
             entity.remove(Entity.RemovalReason.DISCARDED)
+        }
+
+        if (entity.level().gameTime % 20 == 0L) {
+            for (feature in entity.pokemon.features) {
+                if (feature is TickingSpeciesFeature) {
+                    feature.onSecondPassed(entity.level() as ServerLevel, entity.pokemon, entity)
+                }
+            }
         }
 
         updateTrackedValues()
@@ -270,7 +385,11 @@ class PokemonServerDelegate : PokemonSideDelegate {
             return
         }
 
-        val isSleeping = entity.pokemon.status?.status == Statuses.SLEEP && entity.behaviour.resting.canSleep
+        val isSleeping = if (entity.battle != null) {
+            entity.pokemon.status?.status == Statuses.SLEEP
+        } else {
+            (entity.brain.getMemorySafely(CobblemonMemories.POKEMON_SLEEPING).orElse(false) || entity.pokemon.status?.status == Statuses.SLEEP) && entity.behaviour.resting.canSleep
+        }
         val isMoving = entity.entityData.get(PokemonEntity.MOVING)
         val isPassenger = entity.isPassenger
         val isUnderwater = entity.getIsSubmerged()
@@ -301,7 +420,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (entity.ownerUUID == null && entity.owner == null && entity.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
             val heldItem = (entity as PokemonEntity?)?.pokemon?.heldItemNoCopy() ?: ItemStack.EMPTY
             if (!heldItem.isEmpty) entity.spawnAtLocation(heldItem.item)
-            (entity.drops ?: entity.pokemon.form.drops).drop(entity, entity.level() as ServerLevel, entity.position(), entity.killer)
+
+            val dropTable = (entity.drops ?: entity.pokemon.form.drops)
+            val drops = dropTable.getDrops().toMutableList()
+            if (entity.pokemon.forcedAspects.contains(DROPS_REROLL_ASPECT)) {
+                val dropsReroll = dropTable.getDrops()
+                drops.addAll(dropsReroll)
+            }
+
+            dropTable.postLootDroppedEvent(drops, entity, entity.level() as ServerLevel, entity.position(), entity.killer)
         }
     }
 
@@ -309,6 +436,13 @@ class PokemonServerDelegate : PokemonSideDelegate {
         // clear active effects before proceeding
         val owner = entity.owner
         if (!entity.entityData.get(PokemonEntity.DYING_EFFECTS_STARTED)) {
+            if (entity.isPassenger) {
+                entity.stopRiding()
+            }
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.entityData.set(PokemonEntity.DYING_EFFECTS_STARTED, true)
             if (owner is PokemonSender && entity.beamMode == -1) {
                 entity.recallWithAnimation()
@@ -335,33 +469,34 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         if (entity.deathTime == 60) {
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
             if (Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             entity.remove(Entity.RemovalReason.KILLED)
         }
     }
 
+    fun updatePassengerPosition(passengerId: Int, offset: Vec3) {
+        // TODO: ensure this is a loose enough check
+        val maxDim = (entity.bbWidth + entity.bbHeight) * entity.pokemon.form.baseScale * entity.pokemon.effectiveScale
+        val maxOffset = maxDim * 2.0
+        if (offset.length() > maxOffset) return
+        passengerOffsets[passengerId] = offset
+    }
+
     override fun positionRider(
         passenger: Entity,
         positionUpdater: Entity.MoveFunction
     ) {
-        val index =
-            this.entity.passengers.indexOf(passenger).takeIf { it >= 0 && it < this.entity.seats.size } ?: return
-        val seat = this.entity.seats[index]
-        val seatOffset = seat.getOffset(this.entity.getCurrentPoseType()).toVector3f()
-        val center = Vector3f(0f, this.entity.bbHeight / 2, 0f)
-
-        val seatToCenter = center.sub(seatOffset, Vector3f())
-        val matrix = (this.entity.passengers.first() as? OrientationControllable)?.orientationController?.orientation
-            ?: Matrix3f().rotate((180f - passenger.yRot).toRadians(), Vector3f(0f, 1f, 0f))
-        val offset =
-            matrix.transform(seatToCenter, Vector3f()).add(center).sub(Vector3f(0f, passenger.bbHeight / 2, 0f))
-
+        val offset = passengerOffsets[passenger.id] ?: Vec3.ZERO
         positionUpdater.accept(
             passenger,
-            this.entity.x + offset.x,
-            this.entity.y + offset.y,
-            this.entity.z + offset.z
+            entity.x + offset.x,
+            entity.y + offset.y,
+            entity.z + offset.z
         )
     }
 }

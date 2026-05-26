@@ -43,14 +43,57 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "features": [
-    "hisuian"
-  ],
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.2,
     "height": 1.7,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "70-90",
+          "JUMP": "45-65",
+          "SKILL": "40-80",
+          "SPEED": "45-70",
+          "STAMINA": "35-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "fireImmune": true,
+    "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      },
+      "walk": {
+        "walkSpeed": "0.25"
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 3,
@@ -152,7 +195,6 @@
     "tm:thunderfang",
     "tm:wildcharge",
     "tm:willowisp",
-    "tutor:aerialace",
     "tutor:bulldoze",
     "tutor:covet",
     "tutor:dragonpulse",
@@ -168,7 +210,6 @@
     "tutor:laserfocus",
     "tutor:outrage",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:scorchingsands",
@@ -176,7 +217,30 @@
     "tutor:snarl",
     "tutor:swift",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dragonbreath",
+    "legacy:dragonrage",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:superpower",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic"
   ],
   "preEvolution": "growlithe",
   "evolutions": [],
@@ -210,6 +274,50 @@
         "special_attack": 95,
         "special_defence": 80,
         "speed": 90
+      },
+      "riding": {
+        "behaviour": {
+          "key": "cobblemon:land/horse"
+        },
+        "seats": [],
+        "stats": {
+          "ACCELERATION": {
+            "ranges": "30-60"
+          },
+          "JUMP": {
+            "ranges": "25-50"
+          },
+          "SKILL": {
+            "ranges": "35-70"
+          },
+          "SPEED": {
+            "ranges": "35-65"
+          },
+          "STAMINA": {
+            "ranges": "40-80"
+          }
+        }
+      },
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "entityInteract": {
+          "avoidedBySkeleton": true
+        },
+        "fireImmune": true,
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInLava": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
       },
       "moves": [
         "1:rockslide",
@@ -309,7 +417,6 @@
         "tutor:ironhead",
         "tutor:irontail",
         "tutor:outrage",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:rockslide",
         "tutor:rocksmash",
@@ -323,53 +430,10 @@
       ],
       "preEvolution": "growlithe hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "riding": {
-        "stats": {
-          "SPEED": {
-            "ranges": "35-65"
-          },
-          "ACCELERATION": {
-            "ranges": "30-60"
-          },
-          "SKILL": {
-            "ranges": "35-70"
-          },
-          "JUMP": {
-            "ranges": "25-50"
-          },
-          "STAMINA": {
-            "ranges": "40-80"
-          }
-        },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/generic"
-        }
-      }
+      "battleOnly": false
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "35-70"
-      },
-      "ACCELERATION": {
-        "ranges": "30-60"
-      },
-      "SKILL": {
-        "ranges": "35-70"
-      },
-      "JUMP": {
-        "ranges": "25-50"
-      },
-      "STAMINA": {
-        "ranges": "40-80"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/generic"
-    }
-  }
+  "features": [
+    "hisuian"
+  ]
 }

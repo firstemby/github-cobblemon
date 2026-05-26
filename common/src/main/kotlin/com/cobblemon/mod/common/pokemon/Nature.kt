@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon
 
-import com.cobblemon.mod.common.api.berry.Flavor
+import com.cobblemon.mod.common.api.cooking.Flavour
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.util.codec.CodecUtils
@@ -21,8 +21,8 @@ class Nature(
     val displayName: String,
     val increasedStat: Stat?,
     val decreasedStat: Stat?,
-    val favoriteFlavor: Flavor?,
-    val dislikedFlavor: Flavor?
+    val favouriteFlavour: Flavour?,
+    val dislikedFlavour: Flavour?
 ) {
     fun modifyStat(stat: Stat, value: Int): Int {
         return when (stat) {

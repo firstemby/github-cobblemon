@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 451,
   "name": "Skorupi",
   "primaryType": "poison",
@@ -43,20 +44,39 @@
   "catchRate": 120,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 1.2,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "drapion",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -167,8 +187,19 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
-    "tutor:spikes",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -180,7 +211,18 @@
           "variant": "level",
           "minLevel": 40
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

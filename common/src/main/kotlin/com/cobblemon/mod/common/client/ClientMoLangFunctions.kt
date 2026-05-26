@@ -19,7 +19,15 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.render.models.blockbench.ExcludedLabels
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
-import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.BimanualSwingAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.BipedWalkAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PitchTiltAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PunchAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.QuadrupedWalkAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.WingFlapIdleAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.sineFunction
@@ -34,27 +42,28 @@ import net.minecraft.sounds.SoundEvent
 
 object ClientMoLangFunctions {
     val clientFunctions = hashMapOf<String, Function<MoParams, Any>>(
-        "sound" to java.util.function.Function { params ->
+        "sound" to Function { params ->
             if (params.get<MoValue>(0) !is StringValue) {
                 return@Function Unit
             }
             val soundEvent = SoundEvent.createVariableRangeEvent(params.getString(0).asIdentifierDefaultingNamespace())
             if (soundEvent != null) {
+                val volume = if (params.contains(1)) params.getDouble(1).toFloat() else 1F
                 val pitch = if (params.contains(2)) params.getDouble(2).toFloat() else 1F
-                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch))
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch, volume))
             }
         },
-        "is_time" to java.util.function.Function { params ->
+        "is_time" to Function { params ->
             val time = (Minecraft.getInstance().level?.dayTime() ?: 0) % 24000
             val min = params.getInt(0)
             val max = params.getInt(1)
             time in min..max
         },
-        "say" to java.util.function.Function { params -> Minecraft.getInstance().player?.sendSystemMessage(params.getString(0).text()) ?: Unit },
+        "say" to Function { params -> Minecraft.getInstance().player?.sendSystemMessage(params.getString(0).text()) ?: Unit },
     )
 
     val animationFunctions = hashMapOf<String, Function<PosableModel, Function<MoParams, Any>>>(
-        "exclude_labels" to Function { model -> Function { params ->
+        "exclude_labels" to Function { _ -> Function { params ->
                 val labels = params.params.map { it.asString() }
                 ObjectValue(ExcludedLabels(labels))
             }
@@ -115,6 +124,22 @@ object ClientMoLangFunctions {
                 val animation = params.getString(1)
                 val anim = model.bedrock(group, animation)
                 ObjectValue(anim)
+            }
+        },
+        "pitch_tilt" to Function {
+            model -> Function { params ->
+                val bone = params.getStringOrNull(0) ?: "root"
+                val maxChangePerTick = params.getDoubleOrNull(1) ?: 1.5F
+                val minPitch = params.getDoubleOrNull(2) ?: -45F
+                val maxPitch = params.getDoubleOrNull(3) ?: 45F
+                ObjectValue(
+                    PitchTiltAnimation(
+                        bone = model.getPart(bone),
+                        minPitch = minPitch.toFloat(),
+                        maxPitch = maxPitch.toFloat(),
+                        maxChangePerTick = maxChangePerTick.toFloat()
+                    )
+                )
             }
         },
         "look" to Function {

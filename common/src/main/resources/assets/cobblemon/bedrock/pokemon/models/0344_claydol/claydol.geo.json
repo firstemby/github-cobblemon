@@ -79,6 +79,14 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "head",
+					"pivot": [0, 32, 5.75],
+					"locators": {
+						"seat_1": [0, 32, 5.75]
+					}
+				},
+				{
 					"name": "eyes",
 					"parent": "head",
 					"pivot": [0, 15, 0]

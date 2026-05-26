@@ -54,7 +54,54 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hoppip",
+          "tier": 1
+        },
+        {
+          "pokemon": "cottonee",
+          "tier": 1
+        },
+        {
+          "pokemon": "gossifleur",
+          "tier": 1
+        },
+        {
+          "pokemon": "skiploom",
+          "tier": 2
+        },
+        {
+          "pokemon": "jumpluff",
+          "tier": 3
+        },
+        {
+          "pokemon": "whimsicott",
+          "tier": 3
+        },
+        {
+          "pokemon": "eldegoss",
+          "tier": 3
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -145,7 +192,20 @@
     "tutor:seedbomb",
     "tutor:sleeptalk",
     "tutor:swift",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:tailwind",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

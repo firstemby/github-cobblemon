@@ -24,6 +24,7 @@ sealed interface DialogueFaceProvider {
 
     companion object {
         val types = mutableMapOf(
+            "artificial" to ArtificialDialogueFaceProvider::class.java,
             "player" to PlayerDialogueFaceProvider::class.java,
             "standard" to ArtificialDialogueFaceProvider::class.java,
             "expression" to ExpressionLikeDialogueFaceProvider::class.java

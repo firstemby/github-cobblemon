@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "cobblemon:block/sun_stone_ore"
+    "all": "cobblemon:block/evolution/sun_stone_ore"
   }
 }

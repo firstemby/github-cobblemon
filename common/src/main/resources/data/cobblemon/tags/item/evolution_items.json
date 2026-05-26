@@ -28,15 +28,19 @@
     "#cobblemon:teacups",
     "cobblemon:sweet_apple",
     "cobblemon:tart_apple",
+    "cobblemon:syrupy_apple",
     "cobblemon:galarica_cuff",
     "cobblemon:galarica_wreath",
     "cobblemon:black_augurite",
     "cobblemon:peat_block",
     "#cobblemon:evolution_stones",
-	"cobblemon:razor_claw",
-	"cobblemon:razor_fang",
-	"cobblemon:auspicious_armor",
-	"cobblemon:malicious_armor",
-	"cobblemon:shell_helmet"
+    "cobblemon:razor_claw",
+    "cobblemon:razor_fang",
+    "cobblemon:auspicious_armor",
+    "cobblemon:malicious_armor",
+    "cobblemon:shell_helmet",
+    "cobblemon:metal_alloy",
+    "cobblemon:scroll_of_darkness",
+    "cobblemon:scroll_of_waters"
   ]
 }

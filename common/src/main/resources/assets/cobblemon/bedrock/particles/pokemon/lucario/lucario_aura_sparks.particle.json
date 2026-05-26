@@ -5,7 +5,7 @@
             "identifier": "cobblemon:lucario_aura_sparks",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/electricity"
+                "texture": "textures/particles/generic/electricity/electricity_white"
             }
         },
         "components": {

@@ -147,7 +147,17 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:swift",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -278,10 +288,38 @@
         "tutor:stoneedge",
         "tutor:superpower",
         "tutor:swift",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:rocksmash",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:strength",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     },
     {
       "name": "10%-C",
@@ -684,5 +722,24 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

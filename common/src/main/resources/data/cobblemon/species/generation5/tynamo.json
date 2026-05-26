@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 602,
   "name": "Tynamo",
   "primaryType": "electric",
@@ -40,21 +41,64 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "shoulderMountable": true,
+  "baseScale": 0.55,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.6,
+    "height": 0.75,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true
+        "canBreatheUnderwater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tynamo",
+          "tier": 1
+        },
+        {
+          "pokemon": "huntail",
+          "tier": 2
+        },
+        {
+          "pokemon": "gorebyss",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektrik",
+          "tier": 2
+        },
+        {
+          "pokemon": "eelektross",
+          "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

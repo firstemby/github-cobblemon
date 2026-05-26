@@ -52,11 +52,35 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInWater": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ampharos mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "ampharos mega",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -203,10 +227,30 @@
     "tutor:signalbeam",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
-    "tutor:swift",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:zapcannon",
+    "special:holdback"
   ],
   "preEvolution": "flaaffy",
   "evolutions": [],
@@ -248,16 +292,35 @@
             "walkSpeed": 0.2
           },
           "swim": {
-            "canSwimInLava": true
+            "avoidsWater": true,
+            "canSwimInWater": false
           }
         },
         "resting": {
           "canSleep": true,
-          "light": "0-4"
+          "light": "0-4",
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "herd": {
+          "maxSize": "9"
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 13,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 12,
+    "liquidGlowMode": "BOTH"
+  }
 }

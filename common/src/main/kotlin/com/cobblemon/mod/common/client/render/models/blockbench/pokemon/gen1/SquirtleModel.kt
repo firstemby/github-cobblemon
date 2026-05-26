@@ -14,11 +14,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonP
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.CobblemonPose
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.entity.PoseType
-import com.cobblemon.mod.common.entity.PoseType.Companion.STATIONARY_POSES
 import com.cobblemon.mod.common.entity.PoseType.Companion.UI_POSES
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
-import com.cobblemon.mod.common.util.isUnderWater
 import com.cobblemon.mod.common.util.isInWater
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
@@ -29,10 +27,10 @@ class SquirtleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
 
 
     override var portraitScale = 2.02F
-    override var portraitTranslation = Vec3(-0.12, -0.21, 0.0)
+    override var portraitTranslation = Vec3(-0.26, -0.21, 0.0)
 
     override var profileScale = 0.78F
-    override var profileTranslation = Vec3(-0.04, 0.57, 0.0)
+    override var profileTranslation = Vec3(0.0, 0.57, 0.0)
 
     lateinit var sleep: CobblemonPose
     lateinit var standing: CobblemonPose

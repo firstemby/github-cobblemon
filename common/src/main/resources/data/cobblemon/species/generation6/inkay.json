@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 686,
   "name": "Inkay",
   "primaryType": "dark",
@@ -43,20 +44,48 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 0.9,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "inkay",
+          "tier": 1
+        },
+        {
+          "pokemon": "malamar",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -181,7 +210,18 @@
     "tutor:swift",
     "tutor:telekinesis",
     "tutor:thunderbolt",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:happyhour"
   ],
   "evolutions": [
     {

@@ -45,7 +45,7 @@
   "shoulderMountable": true,
   "baseScale": 0.75,
   "hitbox": {
-    "width": 0.4,
+    "width": 0.6,
     "height": 0.8,
     "fixed": false
   },
@@ -55,13 +55,47 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "beldum",
+          "tier": 1
+        },
+        {
+          "pokemon": "metang",
+          "tier": 2
+        },
+        {
+          "pokemon": "metagross mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "metagross mega",
+          "tier": 4
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -89,7 +123,8 @@
     "tutor:irondefense",
     "tutor:ironhead",
     "tutor:steelbeam",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "special:holdback"
   ],
   "evolutions": [
     {

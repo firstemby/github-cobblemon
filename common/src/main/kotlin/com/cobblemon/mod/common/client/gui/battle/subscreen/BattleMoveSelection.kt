@@ -15,7 +15,10 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.gold
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.InBattleMove
+import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.ShiftActionResponse
+import com.cobblemon.mod.common.battles.Targetable
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
@@ -68,7 +71,7 @@ class BattleMoveSelection(
     var moveTiles = baseTiles
 
     val backButton = BattleBackButton(x - 11F, Minecraft.getInstance().window.guiScaledHeight - 22F)
-    val gimmickButtons = moveSet.getGimmicks().mapIndexed { index, gimmick ->
+    val gimmickButtons = moveSet.getGimmicks().filter { it !in moveSet.pendingGimmickUsedThisTurn }.mapIndexed { index, gimmick ->
         val initOff = BattleBackButton.WIDTH * 0.65F
         val xOff = initOff + BattleGimmickButton.SPACING * index
         BattleGimmickButton.create(gimmick, this, backButton.x + xOff, backButton.y)
@@ -201,10 +204,10 @@ class BattleMoveSelection(
         val move = moveTiles.find { it.isHovered(mouseX, mouseY) }
         val gimmick = gimmickButtons.find { it.isHovered(mouseX, mouseY) }
         if (move != null) {
-            if(this.request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
+            if(request.activePokemon.getFormat().battleType.pokemonPerSide == 1) {
                 move.onClick()
             } else {
-                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move))
+                battleGUI.changeActionSelection(BattleTargetSelection(battleGUI, request, move.move, move.response.gimmickID, move.move.gimmickMove))
                 playDownSound(Minecraft.getInstance().soundManager)
             }
             return true

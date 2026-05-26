@@ -52,8 +52,22 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "11-15"
+      "light": "11-15",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -138,7 +152,17 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:spikes",
-    "tutor:steelroller"
+    "tutor:steelroller",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 452,
   "name": "Drapion",
   "primaryType": "poison",
@@ -43,20 +44,33 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 2.25,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -201,11 +215,22 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snarl",
-    "tutor:spikes",
     "tutor:stompingtantrum",
     "tutor:throatchop",
     "tutor:thunderfang",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "skorupi",
   "evolutions": []

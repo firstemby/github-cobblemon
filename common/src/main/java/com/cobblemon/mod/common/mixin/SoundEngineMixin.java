@@ -8,23 +8,35 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.api.riding.sound.RideAttenuationModel;
+import com.cobblemon.mod.common.api.riding.sound.RideLoopSound;
 import com.cobblemon.mod.common.client.sound.BattleMusicController;
+import com.cobblemon.mod.common.duck.ChannelDuck;
 import com.cobblemon.mod.common.duck.SoundEngineDuck;
 import com.google.common.collect.Multimap;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.audio.Channel;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(SoundEngine.class)
@@ -95,6 +107,17 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
         if (id == null && category != null) {
             this.instanceBySource.get(category).forEach(this::stop);
             cb.cancel();
+        }
+    }
+
+    /**
+     * TM Shelf can intentionally push note-block pitches above vanilla's 2.0f ceiling for octave-up playback.
+     * Keep vanilla clamping for all other sounds.
+     */
+    @Inject(method = "calculatePitch", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$allowExtendedNoteblockPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
+        if (sound.getLocation().getPath().startsWith("block.note_block.")) {
+            cir.setReturnValue(Mth.clamp(sound.getPitch(), 0.5F, 4.0F));
         }
     }
 

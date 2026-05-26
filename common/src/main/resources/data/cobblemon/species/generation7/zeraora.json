@@ -47,6 +47,26 @@
     "height": 1,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  },
   "moves": [
     "1:scratch",
     "1:spark",
@@ -165,7 +185,15 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "evolutions": []
 }

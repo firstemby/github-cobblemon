@@ -8,12 +8,15 @@
 
 package com.cobblemon.mod.common.api.npc.configuration.interaction
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.NPCInteractConfiguration
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.withQueryValue
 import com.cobblemon.mod.common.util.writeIdentifier
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -27,6 +30,10 @@ import net.minecraft.server.level.ServerPlayer
  * @since July 5th, 2024
  */
 class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
+    companion object {
+        val runtime = MoLangRuntime().setup()
+    }
+
     override val type: String = "script"
     var script: ResourceLocation = ResourceLocation.fromNamespaceAndPath("cobblemon", "scripts/test.molang")
 
@@ -40,11 +47,14 @@ class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
 
     override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
         val script = CobblemonScripts.scripts[script] ?: return false
+        runtime.withQueryValue("npc", npc.struct)
+        runtime.withQueryValue("player", player.asMoLangValue())
+        // Context being here is just backwards compatibility
         val context = mapOf(
             "npc" to npc.struct,
             "player" to player.asMoLangValue()
         )
-        script.resolve(npc.runtime, context)
+        script.resolve(runtime, context)
         return true
     }
 

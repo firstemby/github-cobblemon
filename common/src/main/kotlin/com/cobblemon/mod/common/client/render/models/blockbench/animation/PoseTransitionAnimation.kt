@@ -66,6 +66,7 @@ class PoseTransitionAnimation(
         val oldIntensity = 1 - newIntensity
 
         model.setDefault()
+        model.transformedParts.forEach { it.apply(state) }
 
         model.applyPose(state, beforePose, oldIntensity)
         beforePose.animations.forEach {

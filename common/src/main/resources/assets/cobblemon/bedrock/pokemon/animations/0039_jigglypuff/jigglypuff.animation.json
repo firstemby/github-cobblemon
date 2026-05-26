@@ -574,6 +574,14 @@
 					}
 				}
 			}
+		},
+		"animation.jigglypuff.cry": {
+			"sound_effects": {
+				"animation_length": 1.25,
+				"0.0417": {
+					"effect": "pokemon.jigglypuff.cry"
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 839,
   "name": "Coalossal",
   "primaryType": "rock",
@@ -42,19 +43,36 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.25,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "7"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -157,7 +175,6 @@
     "tutor:flamethrower",
     "tutor:gigaimpact",
     "tutor:heatwave",
-    "tutor:highhorsepower",
     "tutor:hyperbeam",
     "tutor:irondefense",
     "tutor:ironhead",
@@ -169,7 +186,10 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stealthrock",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "carkol",
   "evolutions": [],
@@ -195,5 +215,9 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "LAND"
+  }
 }

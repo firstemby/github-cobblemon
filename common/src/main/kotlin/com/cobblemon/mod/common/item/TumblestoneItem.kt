@@ -28,7 +28,7 @@ class TumblestoneItem(settings: Properties, val block: Block) : Item(settings) {
 
         if (state.isFaceSturdy(world, pos, direction)) { // todo (techdaan): ensure this is the right mapping
             if (!world.getBlockState(pos.relative(direction)).isAir) return InteractionResult.FAIL
-            if (!context.player!!.isCreative) context.itemInHand.shrink(1)
+            context.itemInHand.consume(1, context.player)
             world.setBlockAndUpdate(pos.relative(direction), block.defaultBlockState().setValue(DirectionalBlock.FACING, direction))
             world.playSound(null, pos, CobblemonSounds.TUMBLESTONE_PLACE, SoundSource.BLOCKS)
             return InteractionResult.SUCCESS

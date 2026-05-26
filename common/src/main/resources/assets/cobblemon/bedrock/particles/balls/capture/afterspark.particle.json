@@ -5,7 +5,7 @@
             "identifier": "cobblemon:afterspark",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/afterspark"
+                "texture": "textures/particles/balls/afterspark"
             }
         },
         "components": {

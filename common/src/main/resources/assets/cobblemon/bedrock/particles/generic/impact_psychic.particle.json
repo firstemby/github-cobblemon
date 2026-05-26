@@ -5,7 +5,7 @@
             "identifier": "cobblemon:impact_psychic",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/impact-psychic"
+                "texture": "textures/particles/generic/impact/impact_psychic"
             }
         },
         "curves": {

@@ -52,27 +52,29 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.4,
+        "canWalk": false
       },
       "swim": {
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
       }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 3,
+    "amount": 2,
     "entries": [
-      {
-        "item": "minecraft:honey_bottle",
-        "percentage": 2.5
-      },
       {
         "item": "cobblemon:silver_powder",
         "percentage": 5.0
@@ -200,10 +202,27 @@
     "tutor:skittersmack",
     "tutor:sleeptalk",
     "tutor:stringshot",
-    "tutor:swift",
     "tutor:tailwind",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:mudsport"
   ],
   "preEvolution": "surskit",
   "evolutions": []

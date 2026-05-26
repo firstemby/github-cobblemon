@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 268,
   "name": "Cascoon",
   "primaryType": "bug",
@@ -44,10 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.85,
+    "height": 0.65,
     "fixed": false
   },
+  "standingEyeHeight": 0.35,
   "behaviour": {
     "moving": {
       "walk": {
@@ -55,9 +57,19 @@
       },
       "swim": {
         "canSwimInWater": false,
-        "canSwimInLava": false
+        "avoidsWater": true
       },
       "canLook": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {
@@ -87,7 +99,8 @@
     "tutor:electroweb",
     "tutor:irondefense",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "preEvolution": "wurmple",
   "evolutions": [
@@ -102,7 +115,18 @@
           "variant": "level",
           "minLevel": 10
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

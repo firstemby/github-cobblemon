@@ -189,6 +189,8 @@
           "expression": "v.reaction == 'parry' ? 'You parry his attack and kill him.' : (v.reaction == 'stand still' ? 'He kills you.' : 'You drop your sword and he kills you.')"
         }
       ],
+      "textColor": "FFFFFF",
+      "background": "cobblemon:textures/gui/dialogue/dialogue_box_info.png",
       "input": {
         "type": "auto-continue",
         "delay": 3,

@@ -8,25 +8,23 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.entity.PosableEntity
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
 class AllOfTaskConfig : TaskConfig {
-    val condition = "true".asExpressionLike()
+    val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasks: List<TaskConfig> = emptyList()
 
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasks.flatMap { it.getVariables(entity, behaviourConfigurationContext) }
     override fun createTasks(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<BehaviorControl<in LivingEntity>> {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition)) return emptyList()
-        return tasks.flatMap { it.createTasks(entity, brainConfigurationContext) }
+        if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return emptyList()
+        return tasks.flatMap { it.createTasks(entity, behaviourConfigurationContext) }
     }
 }

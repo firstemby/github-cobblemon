@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 954,
   "name": "Rabsca",
   "primaryType": "bug",
@@ -41,6 +42,12 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.4,
+  "hitbox": {
+    "width": 1.35,
+    "height": 3,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [
@@ -163,5 +170,31 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "rellor",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  },
+  "lightingData": {
+    "lightLevel": 8,
+    "liquidGlowMode": "BOTH"
+  }
 }

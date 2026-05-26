@@ -51,10 +51,12 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
-    },
-    "idle": {
-      "pointsAtSpawn": true
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
@@ -62,10 +64,30 @@
       },
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInWater": false,
+        "canSwimInLava": true
+      },
+      "canLook": false
+    },
+    "herd": {
+      "maxSize": "2"
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
+  },
+  "ai": [
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "idle",
+      "tasksByPriority": {
+        "2": [
+          "point_to_spawn"
+        ]
       }
     }
-  },
+  ],
   "drops": {
     "amount": 4,
     "entries": [
@@ -195,7 +217,24 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:thunderbolt",
-    "tutor:thunderpunch"
+    "tutor:thunderpunch",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

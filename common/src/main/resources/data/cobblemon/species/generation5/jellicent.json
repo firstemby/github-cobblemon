@@ -56,12 +56,43 @@
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canBreatheUnderwater": true
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true
+      },
+      "fly": {
+        "canFly": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "tentacruel",
+          "tier": 1
+        },
+        {
+          "pokemon": "jellicent",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -177,7 +208,18 @@
     "tutor:sludgebomb",
     "tutor:spite",
     "tutor:trick",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "frillish",
   "evolutions": []

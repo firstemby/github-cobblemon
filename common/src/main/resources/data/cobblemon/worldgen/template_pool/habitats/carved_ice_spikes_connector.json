@@ -1,0 +1,172 @@
+{
+  "name": "cobblemon:habitats/carved_ice_spikes_connector",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector1",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector2",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector3",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector4",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector5",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector6",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector7",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector8",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector9",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector10",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector11",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector12",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector13",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector14",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector15",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "terrain_matching",
+        "location": "cobblemon:habitats/carved_ice_spikes_connector16",
+        "processors": "minecraft:empty",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+        {
+            "weight": 32,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+  ]
+}

@@ -8,11 +8,10 @@
 
 package com.cobblemon.mod.common.battles
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
-import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
+import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
+import com.cobblemon.mod.common.api.moves.HiddenPowerUtil
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
@@ -48,7 +47,7 @@ object BattleRegistry {
      *
      * @return a string of the packed team
      */
-    fun List<BattlePokemon>.packTeam() : String {
+    fun List<BattlePokemon>.packTeam(): String {
         val team = mutableListOf<String>()
         for (pokemon in this) {
             val pk = pokemon.effectedPokemon
@@ -84,7 +83,8 @@ object BattleRegistry {
             // Additional move info
             packedTeamBuilder.append(
                 "${
-                    pk.moveSet.getMoves().joinToString(",") { move -> move.currentPp.toString() + "/" + move.maxPp.toString() }
+                    pk.moveSet.getMoves()
+                        .joinToString(",") { move -> move.currentPp.toString() + "/" + move.maxPp.toString() }
                 }|"
             )
             // Nature
@@ -96,7 +96,7 @@ object BattleRegistry {
             // Gender
             packedTeamBuilder.append("${pk.gender.showdownName}|")
             // IVs
-            val ivsInOrder = Stats.PERMANENT.map { pk.ivs.getOrDefault(it) }.joinToString(separator = ",")
+            val ivsInOrder = Stats.PERMANENT.map { pk.ivs.getEffectiveBattleIV(it) }.joinToString(separator = ",")
             packedTeamBuilder.append("$ivsInOrder|")
             // Shiny
             packedTeamBuilder.append("${if (pk.shiny) "S" else ""}|")
@@ -111,14 +111,16 @@ object BattleRegistry {
             val pokeball = pokemon.effectedPokemon.caughtBall.name.path.replace("_", "")
             packedTeamBuilder.append("$pokeball,")
             // Hidden Power Type
-            packedTeamBuilder.append(",")
+            // This is empty if the pokemon is not Hyper Trained, and the provided type corresponds to base IVs and not battle IVs.
+            val hiddenPowerType = if (pk.ivs.hyperTrainedIVs.any()) HiddenPowerUtil.getHiddenPowerType(pk).name else ""
+            packedTeamBuilder.append("$hiddenPowerType,")
             // Gigantamax
             packedTeamBuilder.append("${if (pk.gmaxFactor) "G" else ""},")
             // DynamaxLevel
             // 0 - 9, empty == 10
             packedTeamBuilder.append("${if (pk.dmaxLevel < 10) pk.dmaxLevel else ""},")
             // Teratype
-            packedTeamBuilder.append("${pokemon.effectedPokemon.teraType.showdownId()},")
+            packedTeamBuilder.append("${pokemon.effectedPokemon.teraType.name},")
 
             team.add(packedTeamBuilder.toString())
         }
@@ -137,7 +139,7 @@ object BattleRegistry {
          * "But why are these showdown IDs so weird"
          *
          * I'll tell you, Jimmy.
-         * https://gitlab.com/cable-mc/pokemon-Cobblemon-showdown/-/blob/master/sim/SIM-PROTOCOL.md#user-content-identifying-pok%C3%A9mon
+         * https://gitlab.com/cable-mc/cobblemon-showdown/-/blob/master/sim/SIM-PROTOCOL.md#user-content-identifying-pok%C3%A9mon
          *
          * See the lines about multi battles and free for alls. The same side of the battle will share 'parity' (even or odd) across
          * all participants. So side 1 will be 1, 3, 5, ... while side 2 will be 2, 4, 6, ...
@@ -191,6 +193,7 @@ object BattleRegistry {
      * This creates the battle and hands it off to Showdown - YOU WILL GET ISSUES IF THE BATTLE IS INVALID!
      * See [BattleBuilder] functions for how the various types of battles are built and validated.
      */
+    @JvmStatic
     fun startBattle(
         battleFormat: BattleFormat,
         side1: BattleSide,
@@ -205,28 +208,33 @@ object BattleRegistry {
 
         if (!canPreempt) start().also { return SuccessfulBattleStart(battle) }
 
-        val preBattleEvent = BattleStartedPreEvent(battle)
+        val preBattleEvent = BattleStartedEvent.Pre(battle)
         CobblemonEvents.BATTLE_STARTED_PRE.postThen(preBattleEvent) {
             start()
-            CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedPostEvent(battle))
+            CobblemonEvents.BATTLE_STARTED_POST.post(BattleStartedEvent.Post(battle))
             return SuccessfulBattleStart(battle)
         }
         return ErroredBattleStart(mutableSetOf(BattleStartError.canceledByEvent(preBattleEvent.reason)))
     }
 
+    @JvmStatic
     fun closeBattle(battle: PokemonBattle) {
         battle.onEndHandlers.forEach { it(battle) }
         battleMap.remove(battle.battleId)
+        ShowdownService.service.endBattle(battle)
     }
 
-    fun getBattle(id: UUID) : PokemonBattle? {
+    @JvmStatic
+    fun getBattle(id: UUID): PokemonBattle? {
         return battleMap[id]
     }
 
-    fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer) : PokemonBattle? {
+    @JvmStatic
+    fun getBattleByParticipatingPlayer(serverPlayer: ServerPlayer): PokemonBattle? {
         return battleMap.values.find { it.getActor(serverPlayer) != null }
     }
 
+    @JvmStatic
     fun getBattleByParticipatingPlayerId(playerId: UUID): PokemonBattle? {
         return battleMap.values.find { playerId in it.playerUUIDs }
     }

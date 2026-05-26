@@ -15,9 +15,9 @@ import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataStoreBacken
 import com.cobblemon.mod.common.net.messages.client.SetClientPlayerDataPacket
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.removeIf
+import java.util.UUID
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-import java.util.UUID
 
 /**
  * A type of data store that keeps a cache, entries are evicted when the cached player disconnects from the server
@@ -39,8 +39,6 @@ class CachedPlayerDataStoreFactory<T : InstancedPlayerData>(val backend: PlayerD
             data
         }
     }
-
-
 
     override fun saveAll() {
         cache.forEach { (_, pd) -> backend.save(pd) }

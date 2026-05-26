@@ -6,7 +6,7 @@
     },
     {
       "type": "animation",
-      "animation": ["hyperfang", "bite", "physical"],
+      "animation": ["hyperfang", "bite", "fang", "physical"],
       "delay": 1.05
     },
     {

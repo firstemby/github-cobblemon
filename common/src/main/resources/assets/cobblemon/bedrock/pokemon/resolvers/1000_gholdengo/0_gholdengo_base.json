@@ -10,11 +10,15 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_shiny.png"
     },
     {
-      "aspects": ["netherite-coating-stage1"],
+      "aspects": [
+        "netherite-coating-stage1"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -23,7 +27,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage2"],
+      "aspects": [
+        "netherite-coating-stage2"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -32,7 +38,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage3"],
+      "aspects": [
+        "netherite-coating-stage3"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -41,7 +49,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage4"],
+      "aspects": [
+        "netherite-coating-stage4"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -50,7 +60,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage5"],
+      "aspects": [
+        "netherite-coating-stage5"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -59,7 +71,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage6"],
+      "aspects": [
+        "netherite-coating-stage6"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -68,7 +82,9 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-stage7"],
+      "aspects": [
+        "netherite-coating-stage7"
+      ],
       "layers": [
         {
           "name": "netherite",
@@ -77,11 +93,102 @@
       ]
     },
     {
-      "aspects": ["netherite-coating-full"],
+      "aspects": [
+        "netherite-coating-full"
+      ],
       "layers": [
         {
           "name": "netherite",
           "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_netherite.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "red-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_red.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "yellow-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_yellow.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "green-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_green.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "blue-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_blue.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "pink-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_pink.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "black-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_black.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "white-gilded-chest"
+      ],
+      "layers": [
+        {
+          "name": "chest",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_chest_white.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/1000_gholdengo/gholdengo_alpha.png",
+          "emissive": true
         }
       ]
     }

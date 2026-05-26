@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.scheduling.after
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.entity.pokemon.ai.PokemonNavigation
 import com.cobblemon.mod.common.util.asExpressionLike
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
@@ -42,7 +42,7 @@ class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
         val timeoutEffect = timeoutActionEffect?.let { ActionEffects.actionEffects[it] } ?: ActionEffectTimeline.NONE
 
         val nav = user.navigation
-        val navContext = PokemonNavigation.NavigationContext(
+        val navContext = NavigationContext(
             onArrival = {
                 if (!future.isDone && !timedOut) {
                     future.complete(Unit)

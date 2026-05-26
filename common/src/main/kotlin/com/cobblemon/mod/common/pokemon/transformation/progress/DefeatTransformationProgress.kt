@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.requirements.DefeatRequirement
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.DefeatRequirement
 import com.cobblemon.mod.common.util.cobblemonResource

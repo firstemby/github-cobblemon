@@ -52,9 +52,26 @@
   "behaviour": {
     "moving": {
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -180,7 +197,22 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:uproar",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "aron",
   "evolutions": [

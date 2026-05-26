@@ -57,14 +57,27 @@
       },
       "swim": {
         "swimSpeed": 0.17,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true
+        "canWalkOnWater": true
       },
       "fly": {
         "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "swanna",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -177,7 +190,20 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "preEvolution": "ducklett",
   "evolutions": []

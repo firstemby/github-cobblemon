@@ -29,20 +29,4 @@ interface EntityInteraction<T : Entity> {
      * @return true if the interaction was successful and no further interactions should be processed
      */
     fun onInteraction(player: ServerPlayer, entity: T, stack: ItemStack): Boolean
-
-    /**
-     * Decreases the stack size by a given amount.
-     * The stack size should be validated beforehand.
-     * If the [player] is in creative mode the decrement won't be performed.
-     *
-     * @param player The [ServerPlayer] that caused the interaction, this is used to check for creative mode.
-     * @param stack The [ItemStack] being mutated.
-     * @param amount The amount to deduct from the stack, default is 1.
-     */
-    fun consumeItem(player: ServerPlayer, stack: ItemStack, amount: Int = 1) {
-        if (!player.isCreative) {
-            stack.shrink(amount)
-        }
-    }
-
 }

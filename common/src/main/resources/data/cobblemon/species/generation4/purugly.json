@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 432,
   "name": "Purugly",
   "primaryType": "normal",
@@ -43,9 +44,32 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 1.2,
     "fixed": false
+  },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "resting": {
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
   },
   "drops": {
     "amount": 1,
@@ -159,7 +183,19 @@
     "tutor:suckerpunch",
     "tutor:superfang",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swift",
+    "legacy:throatchop",
+    "legacy:toxic"
   ],
   "preEvolution": "glameow",
   "evolutions": []

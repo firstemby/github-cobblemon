@@ -8,10 +8,16 @@
 
 package com.cobblemon.mod.common.api.events.drops
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.drop.DropEntry
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
+import com.cobblemon.mod.common.util.asArrayValue
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 
@@ -38,4 +44,14 @@ class LootDroppedEvent(
     val player: ServerPlayer?,
     val entity: LivingEntity?,
     val drops: MutableList<DropEntry>
-) : Cancelable()
+) : Cancelable() {
+    val context = mapOf<String, MoValue>(
+        "player" to (player?.asMoLangValue() ?: DoubleValue.ZERO),
+        "entity" to (entity?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO),
+        "drops" to drops.asArrayValue { it.asMoLangValue() }
+    )
+
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
+}

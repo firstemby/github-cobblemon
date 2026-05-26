@@ -48,6 +48,35 @@
     "height": 0.8,
     "fixed": false
   },
+  "behaviour": {
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mabosstiff",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -129,7 +158,6 @@
     "tutor:icefang",
     "tutor:lashout",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",

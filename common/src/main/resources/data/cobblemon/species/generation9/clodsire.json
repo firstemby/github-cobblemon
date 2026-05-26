@@ -46,7 +46,7 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.15,
   "hitbox": {
     "width": 1.4,
     "height": 1,
@@ -56,10 +56,33 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quagsire",
+          "tier": 1
+        },
+        {
+          "pokemon": "clodsire",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {

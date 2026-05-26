@@ -52,7 +52,28 @@
       "stepHeight": 1,
       "walk": {
         "walkSpeed": 0.12
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "hippowdon",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -167,7 +188,22 @@
     "tutor:stompingtantrum",
     "tutor:stoneedge",
     "tutor:superpower",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterpulse",
+    "legacy:weatherball"
   ],
   "preEvolution": "hippopotas",
   "evolutions": []

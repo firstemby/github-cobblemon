@@ -52,9 +52,35 @@
   "behaviour": {
     "moving": {
       "swim": {
+        "avoidsWater": true,
         "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "salandit",
+          "tier": 1
+        },
+        {
+          "pokemon": "salazzle",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,
@@ -172,8 +198,16 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snatch",
-    "tutor:spikes",
-    "tutor:swift"
+    "tutor:swift",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -192,7 +226,18 @@
           "variant": "properties",
           "target": "gender=female"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

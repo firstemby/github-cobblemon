@@ -1,8 +1,8 @@
 {
-    "portraitScale": 2.8,
-    "portraitTranslation": [-0.25, 3.0, 0],
-    "profileScale": 0.6,
-    "profileTranslation": [0, 0.89, 0],
+    "portraitScale": 2.3,
+    "portraitTranslation": [-0.43, 3.56, 0],
+    "profileScale": 0.5,
+    "profileTranslation": [0, 1, 0],
     "rootBone": "inteleon",
     "animations": {
       "cry": "q.bedrock_stateful('inteleon', 'cry')"

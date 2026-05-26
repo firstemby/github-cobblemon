@@ -43,24 +43,57 @@
   "baseFriendship": 50,
   "baseScale": 1.25,
   "hitbox": {
-    "width": 1.2,
     "height": 2.75,
-    "fixed": false
+    "fixed": false,
+    "width": 1.2
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "0-20",
+          "JUMP": "25-40",
+          "SKILL": "0-20",
+          "SPEED": "25-65",
+          "STAMINA": "60-100"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "8"
+    },
     "moving": {
-      "wanderChance": "750",
-      "walk": {
-        "walkSpeed": 0.3
-      },
       "swim": {
-        "avoidsWater": true
-      }
+        "avoidsWater": true,
+        "canSwimInWater": false
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      },
+      "wanderChance": "750"
     },
     "resting": {
       "canSleep": true,
+      "depth": "comatose",
+      "drowsyChance": 0.0028,
+      "light": "0-14",
+      "rouseChance": 0.0028,
       "sleepChance": "0.0023",
-      "light": "0-14"
+      "times": [
+        "any"
+      ]
     }
   },
   "drops": {
@@ -250,7 +283,22 @@
     "tutor:uproar",
     "tutor:wildcharge",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:toxic",
+    "legacy:waterpulse"
   ],
   "preEvolution": "vigoroth",
   "evolutions": []

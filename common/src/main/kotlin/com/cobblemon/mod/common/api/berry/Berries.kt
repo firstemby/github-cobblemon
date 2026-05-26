@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.awt.Color
 import net.minecraft.advancements.critereon.MinMaxBounds
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -30,7 +31,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.awt.Color
 
 /**
  * The data registry for [Berry].
@@ -85,6 +85,7 @@ object Berries : JsonDataRegistry<Berry> {
         BerryRegistrySyncPacket(this.all()).sendToPlayer(player)
     }
 
+    @JvmStatic
     fun all() = this.berries.values.toList()
 
     /**
@@ -93,6 +94,7 @@ object Berries : JsonDataRegistry<Berry> {
      * @param identifier The identifier of the berry.
      * @return The [Berry] if loaded otherwise null.
      */
+    @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation): Berry? = this.berries[identifier]
 
     /**
@@ -101,6 +103,7 @@ object Berries : JsonDataRegistry<Berry> {
      * @param name The path of the identifier of the berry under the [Cobblemon.MODID] namespace.
      * @return The [Berry] if loaded otherwise null.
      */
+    @JvmStatic
     fun getByName(name: String): Berry? = this.getByIdentifier(cobblemonResource(name))
 
 }

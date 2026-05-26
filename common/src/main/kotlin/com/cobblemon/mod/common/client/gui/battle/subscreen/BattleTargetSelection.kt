@@ -14,15 +14,16 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
+import com.cobblemon.mod.common.battles.InBattleGimmickMove
 import com.cobblemon.mod.common.battles.InBattleMove
 import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection.Companion
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -31,19 +32,21 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import kotlin.math.floor
+import kotlin.math.sin
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import kotlin.math.floor
-import kotlin.math.sin
 
 class BattleTargetSelection(
         battleGUI: BattleGUI,
         request: SingleActionRequest,
-        val move: InBattleMove
+        val move: InBattleMove,
+        val gimmickID: String?,
+        gimmickMove: InBattleGimmickMove?
 ) : BattleActionSelection(
     battleGUI = battleGUI,
     request = request,
@@ -81,9 +84,10 @@ class BattleTargetSelection(
 
     val targets = request.activePokemon.getAllActivePokemon()
 
+    val targetType = if (gimmickID != null && gimmickMove != null) gimmickMove.target else move.target
     val backButton = BattleBackButton(x + 9F, Minecraft.getInstance().window.guiScaledHeight - 22F)
-    val selectableTargetList = move.target.targetList(request.activePokemon)
-    val multiTargetList = if(selectableTargetList == null) request.activePokemon.getMultiTargetList(move.target) else null
+    val selectableTargetList = targetType.targetList(request.activePokemon)
+    val multiTargetList = if(selectableTargetList == null) request.activePokemon.getMultiTargetList(targetType) else null
 
     val baseTiles = targets.mapIndexed { index, target ->
         val isAlly = target.isAllied(request.activePokemon)
@@ -123,7 +127,7 @@ class BattleTargetSelection(
         private val isMultiTarget = multiTargetList?.firstOrNull { it.getPNX() == target.getPNX() } != null
         private val isCurrentPokemon = request.activePokemon.battlePokemon?.uuid == target.battlePokemon!!.uuid
 
-        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget)
+        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget, gimmickID)
         val state = FloatingState()
 
         open val selectable: Boolean get() = isMultiTarget || (responseTarget != null)
@@ -307,6 +311,13 @@ class BattleTargetSelection(
         fun onClick() {
             if (!selectable) return
             targetSelection.playDownSound(Minecraft.getInstance().soundManager)
+            // If a gimmick is used, remove the ability to use it on any pending action requests ahead of it
+            if (response.gimmickID != null) {
+                val gimmick = ShowdownMoveset.Gimmick.entries.first { it.id == response.gimmickID }
+                CobblemonClient.battle?.pendingActionRequests?.forEach {
+                    it.moveSet?.pendingGimmickUsedThisTurn?.add(gimmick)
+                }
+            }
             targetSelection.battleGUI.selectAction(targetSelection.request, response)
         }
     }

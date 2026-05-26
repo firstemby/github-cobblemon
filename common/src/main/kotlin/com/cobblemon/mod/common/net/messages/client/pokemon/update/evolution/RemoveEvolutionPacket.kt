@@ -8,14 +8,14 @@
 
 package com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution
 
-import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.SingleUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RemoveEvolutionPacket(pokemon: () -> Pokemon, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
+class RemoveEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 

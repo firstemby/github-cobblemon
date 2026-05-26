@@ -27,14 +27,14 @@ interface ShowdownService {
     fun openConnection()
     fun closeConnection()
     fun startBattle(battle: PokemonBattle, messages: Array<String>)
+    fun endBattle(battle: PokemonBattle)
     fun send(battleId: UUID, messages: Array<String>)
-    fun getAbilityIds(): JsonArray
-    fun getMoves(): JsonArray
-    fun getItemIds(): JsonArray
-    fun registerSpecies()
-    fun registerBagItems()
+    fun getRegistryData(type: String): JsonArray
+    fun sendRegistryData(data: Map<String, String>, type: String)
+    fun sendRegistryEntry(data: String, type: String)
+    fun resetRegistryData(type: String)
+    fun resetAllRegistries()
     fun indicateSpeciesInitialized() {}
-
 
     companion object {
         val service: ShowdownService by lazy { GraalShowdownService() }

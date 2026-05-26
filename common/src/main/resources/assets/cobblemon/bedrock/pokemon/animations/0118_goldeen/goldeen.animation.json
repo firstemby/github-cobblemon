@@ -4641,6 +4641,13 @@
 					"position": [0, 0, "20-q.anim_time*20"]
 				}
 			}
+		},
+		"animation.goldeen.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.goldeen.cry"
+				}
+			}
 		}
 	}
 }

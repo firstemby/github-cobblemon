@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:gothita",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:gothita",
+      "model": "cobblemon:gothita.geo",
+      "texture": "cobblemon:textures/pokemon/0574_gothita/gothita.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0574_gothita/gothita_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0574_gothita/gothita_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

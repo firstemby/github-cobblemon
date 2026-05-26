@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 884,
   "name": "Duraludon",
   "primaryType": "steel",
@@ -147,7 +148,11 @@
     "tutor:steelbeam",
     "tutor:steelroller",
     "tutor:stoneedge",
-    "tutor:thunderbolt"
+    "tutor:thunderbolt",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:stompingtantrum"
   ],
   "evolutions": [
     {
@@ -159,7 +164,7 @@
       "requirements": [],
       "trigger": {
         "variant": "item_interact",
-        "requiredContext": "cobblemon:metal_coat"
+        "requiredContext": "cobblemon:metal_alloy"
       }
     }
   ],
@@ -185,5 +190,24 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  }
 }

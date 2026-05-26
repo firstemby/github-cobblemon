@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.util
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.PlayerSpawnerAccessor
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.dialogue.ActiveDialogue
@@ -17,6 +18,7 @@ import com.cobblemon.mod.common.api.dialogue.Dialogue
 import com.cobblemon.mod.common.api.dialogue.DialogueManager
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.filter
 import com.cobblemon.mod.common.api.reactive.Observable.Companion.takeFirst
+import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.TeamManager
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
@@ -29,7 +31,6 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -59,6 +60,7 @@ import kotlin.math.sin
 fun ServerPlayer.party() = Cobblemon.storage.getParty(this)
 fun ServerPlayer.pc() = Cobblemon.storage.getPC(this)
 fun ServerPlayer.pokedex() = Cobblemon.playerDataManager.getPokedexData(this)
+fun ServerPlayer.tmList() = Cobblemon.playerDataManager.getTMData(this)
 val ServerPlayer.activeDialogue: ActiveDialogue?
     get() = DialogueManager.activeDialogues[uuid]
 val ServerPlayer.isInDialogue: Boolean
@@ -99,6 +101,9 @@ fun ServerPlayer.didSleep(): Boolean {
 }
 
 fun ServerPlayer.isInBattle() = BattleRegistry.getBattleByParticipatingPlayer(this) != null
+var ServerPlayer.spawner: PlayerSpawner
+    get() = (this as PlayerSpawnerAccessor).getPlayerSpawner()
+    set(value) = (this as PlayerSpawnerAccessor).setPlayerSpawner(value)
 fun ServerPlayer.getBattleState(): Pair<PokemonBattle, BattleActor>? {
     val battle = BattleRegistry.getBattleByParticipatingPlayer(this)
     if (battle != null) {
@@ -149,7 +154,7 @@ class EntityTraceResult<T : Entity>(
     val entities: Iterable<T>
 )
 
-fun <T : Entity> Player.traceFirstEntityCollision(
+fun <T : Entity> LivingEntity.traceFirstEntityCollision(
         maxDistance: Float = 10F,
         stepDistance: Float = 0.05F,
         entityClass: Class<T>,
@@ -165,22 +170,40 @@ fun <T : Entity> Player.traceFirstEntityCollision(
     )?.let { it.entities.minByOrNull { it.distanceTo(this) } }
 }
 
-fun <T : Entity> Player.traceEntityCollision(
+fun <T : Entity> LivingEntity.traceEntityCollision(
     maxDistance: Float = 10F,
     stepDistance: Float = 0.05F,
     entityClass: Class<T>,
     ignoreEntity: T? = null,
     collideBlock: ClipContext.Fluid?
 ): EntityTraceResult<T>? {
+    val direction = lookAngle
+    return traceEntityCollision(
+        maxDistance = maxDistance,
+        stepDistance = stepDistance,
+        entityClass = entityClass,
+        ignoreEntity = ignoreEntity,
+        collideBlock = collideBlock,
+        direction = direction
+    )
+}
+
+fun <T : Entity> LivingEntity.traceEntityCollision(
+    maxDistance: Float = 10F,
+    stepDistance: Float = 0.05F,
+    entityClass: Class<T>,
+    ignoreEntity: T? = null,
+    collideBlock: ClipContext.Fluid?,
+    direction: Vec3
+): EntityTraceResult<T>? {
     var step = stepDistance
     val startPos = eyePosition
-    val direction = lookAngle
     val maxDistanceVector = Vec3(1.0, 1.0, 1.0).scale(maxDistance.toDouble())
 
     val entities = level().getEntities(
         null,
         AABB(startPos.subtract(maxDistanceVector), startPos.add(maxDistanceVector)),
-        { entityClass.isInstance(it) }
+        { entityClass.isAssignableFrom(it::class.java) }
     )
 
     while (step <= maxDistance) {
@@ -188,11 +211,11 @@ fun <T : Entity> Player.traceEntityCollision(
         step += stepDistance
 
         val collided = entities.filter {
-            ignoreEntity != it && location in it.boundingBox && entityClass.isInstance(it) && !it.isSpectator
+            ignoreEntity != it && location in it.boundingBox && entityClass.isAssignableFrom(it::class.java) && !it.isSpectator
         }
 
         if (collided.isNotEmpty()) {
-            if(collideBlock != null && level().clip(ClipContext(startPos, location, ClipContext.Block.COLLIDER, collideBlock, this)).type == HitResult.Type.BLOCK) {
+            if (collideBlock != null && level().clip(ClipContext(startPos, location, ClipContext.Block.COLLIDER, collideBlock, this)).type == HitResult.Type.BLOCK) {
                 // Collided with block on the way to the entity
                 return null
             }
@@ -454,7 +477,7 @@ fun ServerPlayer.isBusy() = this.isInBattle() || this.isTrading()
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
     if (this.level().isClientSide)
-        CobblemonClient.storage.myParty.find { it?.entity?.isBusy == true } != null
+        CobblemonClient.storage.party.find { it?.entity?.isBusy == true } != null
     else
         Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it.entity?.isBusy == true } != null
 
@@ -469,6 +492,6 @@ fun ServerPlayer.updateShoulderNbt(pokemon: Pokemon) {
     nbt.putString(DataKeys.SHOULDER_SPECIES, pokemon.species.resourceIdentifier.toString())
     nbt.putString(DataKeys.SHOULDER_FORM, pokemon.form.name)
     nbt.put(DataKeys.SHOULDER_ASPECTS, pokemon.aspects.map(StringTag::valueOf).toNbtList())
-    nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.scaleModifier)
+    nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, pokemon.effectiveScale)
     if ((pokemon.state as ShoulderedState).isLeftShoulder) shoulderEntityLeft = nbt else shoulderEntityRight = nbt
 }

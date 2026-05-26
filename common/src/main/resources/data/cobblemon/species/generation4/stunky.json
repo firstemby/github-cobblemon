@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 434,
   "name": "Stunky",
   "primaryType": "poison",
@@ -42,7 +43,7 @@
   "catchRate": 225,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -169,10 +170,22 @@
     "tutor:sludgebomb",
     "tutor:snarl",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:suckerpunch",
     "tutor:swift",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": [
     {
@@ -188,5 +201,28 @@
         }
       ]
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "skuntank",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

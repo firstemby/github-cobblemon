@@ -13,14 +13,14 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ClearEvolutionsPacket(pokemon: () -> Pokemon) : PokemonUpdatePacket<ClearEvolutionsPacket>(pokemon) {
+class ClearEvolutionsPacket(pokemon: () -> Pokemon?) : PokemonUpdatePacket<ClearEvolutionsPacket>(pokemon) {
 
     override val id = ID
 
     override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {}
 
     override fun applyToPokemon() {
-        this.pokemon().evolutionProxy.client().clear()
+        this.pokemon()?.evolutionProxy?.client()?.clear()
     }
 
     companion object {

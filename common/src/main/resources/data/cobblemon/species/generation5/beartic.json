@@ -51,12 +51,23 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "swimSpeed": 0.3
+        "swimSpeed": 0.3,
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -207,7 +218,17 @@
     "tutor:superpower",
     "tutor:throatchop",
     "tutor:waterpulse",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "cubchoo",
   "evolutions": []

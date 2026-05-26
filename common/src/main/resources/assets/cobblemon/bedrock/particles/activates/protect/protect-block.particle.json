@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:protect-block",
 			"basic_render_parameters": {
 				"material": "particles_add",
-				"texture": "textures/particles/protect-block"
+				"texture": "textures/particles/moves/protect_block"
 			}
 		},
 		"events": {

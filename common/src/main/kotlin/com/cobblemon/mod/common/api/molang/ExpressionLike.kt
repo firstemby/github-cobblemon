@@ -15,7 +15,8 @@ import com.mojang.serialization.Codec
 
 /**
  * An object that can be given a [MoLangRuntime] to produce a single [MoValue]. This abstracts
- * the use of simple and complex [Expression]s as MoLang can be a single line or multiple.
+ * the use of simple and complex [com.bedrockk.molang.Expression]s as MoLang can be a single line or multiple or
+ * a script reference etc.
  *
  * @author Hiroku
  * @since October 22nd, 2023

@@ -45,19 +45,52 @@
   "baseFriendship": 50,
   "baseScale": 1.2,
   "hitbox": {
-    "width": 1,
     "height": 2.15,
-    "fixed": false
+    "fixed": false,
+    "width": 1
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "amaura",
+          "tier": 1
+        },
+        {
+          "pokemon": "bayleef",
+          "tier": 2
+        },
+        {
+          "pokemon": "meganium",
+          "tier": 3
+        },
+        {
+          "pokemon": "tropius",
+          "tier": 4
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 5
+        }
+      ]
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.12
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -180,23 +213,35 @@
     "tutor:stoneedge",
     "tutor:thunderbolt",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
+      "consumeHeldItem": false,
       "id": "amaura_aurorus",
       "result": "aurorus",
+      "variant": "level_up",
       "learnableMoves": [
         "freezedry"
       ],
       "requirements": [
         {
-          "variant": "level",
-          "minLevel": 39
+          "minLevel": 39,
+          "variant": "level"
         },
         {
-          "variant": "time_range",
-          "range": "night"
+          "range": "night",
+          "variant": "time_range"
         }
       ]
     }

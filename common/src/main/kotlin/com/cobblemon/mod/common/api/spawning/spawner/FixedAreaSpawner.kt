@@ -8,34 +8,39 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 
 /**
- * A spawner that works within a fixed area, and ticks on its own. The location
- * and size of the area is necessary for construction, but after that this spawner
- * can be registered in a [SpawnerManager] and left to its own devices.
+ * A spawner that works within a fixed area. Instances provide the center point and the radii and then the spawner
+ * can be told to [run] and it will spawn Pokémon within that area.
  *
  * @author Hiroku
  * @since February 5th, 2022
  */
 open class FixedAreaSpawner(
     name: String,
-    spawns: SpawnPool,
-    manager: SpawnerManager,
+    spawnPool: SpawnPool,
+    buckets: Map<String, Float>,
     val world: ServerLevel,
     val position: BlockPos,
     val horizontalRadius: Int,
     val verticalRadius: Int,
-    override var ticksBetweenSpawns: Float = 20F
-) : AreaSpawner(name, spawns, manager) {
-    override fun getArea(cause: SpawnCause): SpawningArea? {
-        val basePos = position.offset(-horizontalRadius, -verticalRadius, -horizontalRadius)
+    maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk
+) : BasicSpawner(name, spawnPool, maxPokemonPerChunk, buckets) {
+    fun run(cause: SpawnCause, maxSpawns: Int? = null): List<Any> {
+        return runForArea(
+            zoneInput = getZoneInput(cause),
+            maxSpawns = maxSpawns
+        )
+    }
 
-        return SpawningArea(
+    fun getZoneInput(cause: SpawnCause): SpawningZoneInput {
+        val basePos = position.offset(-horizontalRadius, -verticalRadius, -horizontalRadius)
+        return SpawningZoneInput(
             cause = cause,
             world = world,
             baseX = basePos.x,

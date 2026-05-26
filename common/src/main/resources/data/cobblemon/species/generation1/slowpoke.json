@@ -58,25 +58,36 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.08,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       },
       "walk": {
         "walkSpeed": 0.125
-      }
+      },
+      "canLook": false
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true,
-      "light": "0-16"
+      "light": "0-16",
+      "depth": "comatose",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0028,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:kings_rock",
+        "percentage": 2.5
+      },
+      {
+        "item": "cobblemon:lagging_tail",
         "percentage": 2.5
       },
       {
@@ -212,7 +223,34 @@
     "tutor:trick",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:futuresight",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:swagger",
+    "legacy:teleport",
+    "legacy:toxic",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -273,29 +311,23 @@
           },
           "swim": {
             "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
-          }
+            "canBreatheUnderwater": true
+          },
+          "canLook": false
         },
         "resting": {
           "canSleep": true,
-          "willSleepOnBed": true,
-          "light": "0-16"
+          "light": "0-16",
+          "depth": "comatose",
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0028,
+          "rouseChance": 0.0042
+        },
+        "combat": {
+          "willFlee": false
         }
-      },
-      "drops": {
-        "amount": 2,
-        "entries": [
-          {
-            "item": "cobblemon:galarica_nuts",
-            "quantityRange": "0-1"
-          },
-          {
-            "item": "cobblemon:chesto_berry",
-            "percentage": 2.5
-          }
-        ]
       },
       "moves": [
         "1:tackle",
@@ -402,7 +434,12 @@
         "tutor:trick",
         "tutor:waterpulse",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:futuresight",
+        "legacy:round",
+        "legacy:scald",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -430,7 +467,24 @@
           }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "drops": {
+        "amount": 3,
+        "entries": [
+          {
+            "item": "cobblemon:galarica_nuts",
+            "quantityRange": "0-1"
+          },
+          {
+            "item": "cobblemon:lagging_tail",
+            "percentage": 2.5
+          },
+          {
+            "item": "cobblemon:chesto_berry",
+            "percentage": 2.5
+          }
+        ]
+      }
     }
   ]
 }

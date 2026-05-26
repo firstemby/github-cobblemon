@@ -10,9 +10,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "weightMultiplier": {
                 "multiplier": 1.5,
@@ -35,9 +35,9 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "canSeeSky": true,
@@ -53,9 +53,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -79,9 +79,9 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -102,9 +102,9 @@
             "id": "swampert-5",
             "pokemon": "swampert",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
@@ -122,9 +122,9 @@
             "id": "swampert-6",
             "pokemon": "swampert",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -148,9 +148,9 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "canSeeSky": false,
@@ -165,9 +165,9 @@
             "id": "swampert-8",
             "pokemon": "swampert",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 6.0,
             "condition": {
                 "canSeeSky": false,
@@ -190,9 +190,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -219,9 +219,9 @@
                 "water"
             ],
             "type": "pokemon",
-            "context": "submerged",
+            "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
@@ -245,9 +245,9 @@
             "id": "swampert-11",
             "pokemon": "swampert",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
-            "level": "36-53",
+            "level": "36-54",
             "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,

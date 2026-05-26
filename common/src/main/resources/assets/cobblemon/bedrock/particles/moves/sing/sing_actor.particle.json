@@ -5,7 +5,7 @@
             "identifier": "cobblemon:sing_actor",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/note"
+                "texture": "textures/particles/generic/note"
             }
         },
         "curves": {
@@ -47,7 +47,7 @@
                 "offset": [
                     0,
                     0,
-                    -0.15
+                    -0.25
                 ],
                 "direction": [
                     "math.sin(v.emitter_age*400)*2",

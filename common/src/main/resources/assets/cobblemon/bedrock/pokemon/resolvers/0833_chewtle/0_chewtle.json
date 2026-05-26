@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:chewtle",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:chewtle",
+      "model": "cobblemon:chewtle.geo",
+      "texture": "cobblemon:textures/pokemon/0833_chewtle/chewtle.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0833_chewtle/chewtle_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0833_chewtle/chewtle_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

@@ -94,7 +94,8 @@ enum class ShowdownActionResponseType(val loader: (RegistryFriendlyByteBuf) -> S
     PASS({ PassActionResponse }),
     SHIFT({ ShiftActionResponse()}),
     HEAL_ITEM({ HealItemActionResponse("potion") }),
-    FORFEIT({ ForfeitActionResponse() });
+    FORFEIT({ ForfeitActionResponse() }),
+    FLEE_ATTEMPT({ FleeAttemptActionResponse() }),
 }
 
 abstract class ShowdownActionResponse(val type: ShowdownActionResponseType) {
@@ -127,7 +128,8 @@ data class MoveActionResponse(var moveName: String, var targetPnx: String? = nul
             // No PP or disabled or something
             return false
         }
-        val availableTargets = (gimmickMove?.target ?: move.target).targetList(activeBattlePokemon)?.takeIf { it.isNotEmpty() } ?: return true
+        val availableTargets = (if (gimmickID != null && validGimmickMove) gimmickMove.target else move.target)
+            .targetList(activeBattlePokemon)?.takeIf { it.isNotEmpty() } ?: return true
 
         val pnx = targetPnx ?: return false // If the targets list is non-null then they need to have specified a target
         val (_, targetPokemon) = activeBattlePokemon.actor.battle.getActorAndActiveSlotFromPNX(pnx)
@@ -279,6 +281,11 @@ class ForfeitActionResponse : ShowdownActionResponse(ShowdownActionResponseType.
     override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "forfeit"
 }
 
+class FleeAttemptActionResponse : ShowdownActionResponse(ShowdownActionResponseType.FLEE_ATTEMPT) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "flee-attempt"
+}
+
 class ShowdownMoveset {
     lateinit var moves: List<InBattleMove>
     var trapped = false
@@ -288,6 +295,8 @@ class ShowdownMoveset {
     var canDynamax = false
     var maxMoves: List<InBattleGimmickMove?>? = null
     var canTerastallize: String? = null
+    /** This stores a list of gimmicks that have already been used this turn by a previous Pokemon, but the full turn has not been processed (ie. double battles). */
+    val pendingGimmickUsedThisTurn = mutableListOf<Gimmick>()
 
     fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
         buffer.writeSizedInt(IntSize.U_BYTE, moves.size)

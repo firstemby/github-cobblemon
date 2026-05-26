@@ -51,7 +51,32 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "3",
+      "toleratedLeaders": [
+        {
+          "pokemon": "sceptile mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "sceptile mega",
+          "tier": 2
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -175,7 +200,6 @@
     "tutor:endeavor",
     "tutor:energyball",
     "tutor:falseswipe",
-    "tutor:focuspunch",
     "tutor:furycutter",
     "tutor:gigadrain",
     "tutor:grasspledge",
@@ -194,7 +218,26 @@
     "tutor:thunderpunch",
     "tutor:vacuumwave",
     "tutor:worryseed",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:bodyslam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:solarblade",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "treecko",
   "evolutions": [
@@ -210,7 +253,18 @@
           "variant": "level",
           "minLevel": 36
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

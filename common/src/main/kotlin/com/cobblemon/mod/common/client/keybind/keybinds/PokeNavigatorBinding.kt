@@ -25,7 +25,7 @@ object PokeNavigatorBinding : CobblemonPartyLockedKeyBinding(
     override fun onPress() {
         // Minecraft.getInstance().setScreen(PokeNav())
         try {
-            Summary.open(CobblemonClient.storage.myParty.slots, true, CobblemonClient.storage.selectedSlot)
+            Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
         } catch (e: Exception) {
             Cobblemon.LOGGER.debug("Failed to open the summary from the PokeNav keybind", e)
         }

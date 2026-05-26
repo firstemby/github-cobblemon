@@ -55,19 +55,32 @@
         "walkSpeed": 0.2
       },
       "swim": {
-        "canBreatheUnderwater": true
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:berry_juice"
+      },
+      {
+        "item": "cobblemon:luminous_moss",
+        "percentage": 5.0
       }
     ]
   },
@@ -175,7 +188,21 @@
     "tutor:steelroller",
     "tutor:stoneedge",
     "tutor:stringshot",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "evolutions": []
 }

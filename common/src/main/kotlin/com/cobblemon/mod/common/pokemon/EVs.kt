@@ -15,6 +15,9 @@ import com.cobblemon.mod.common.api.pokemon.stats.EvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import kotlin.math.min
 
 class EVs : PokemonStats() {
@@ -111,5 +114,8 @@ class EVs : PokemonStats() {
                     return@comapFlatMap map
                 }
             )
+
+        @JvmStatic
+        val STREAM_CODEC: StreamCodec<ByteBuf, EVs> = ByteBufCodecs.fromCodec(CODEC)
     }
 }

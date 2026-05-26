@@ -16,9 +16,9 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.util.DataKeys
+import java.util.concurrent.CompletableFuture
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import java.util.concurrent.CompletableFuture
 
 /**
  * A [BattleEffect] that alters a [PokemonEntity] to look like a target [Pokemon].
@@ -36,7 +36,7 @@ class TransformEffect(
 
     constructor(mimic: Pokemon, doCry: Boolean = true) : this(
         mock = mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM),
-        scale = mimic.form.baseScale * mimic.scaleModifier,
+        scale = mimic.form.baseScale * mimic.effectiveScale,
         doCry = doCry
     )
 

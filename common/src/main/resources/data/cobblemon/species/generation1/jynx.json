@@ -43,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1.3,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 0.9,
-    "height": 1.2,
+    "width": 1.5,
+    "height": 2,
     "fixed": false
   },
   "drops": {
@@ -197,8 +197,58 @@
     "tutor:uproar",
     "tutor:waterpulse",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:dynamicpunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:screech",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:sweetscent",
+    "legacy:takedown",
+    "legacy:teleport",
+    "legacy:thrash",
+    "legacy:toxic",
+    "legacy:watergun"
   ],
   "preEvolution": "smoochum",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "3"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

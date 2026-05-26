@@ -1,0 +1,64 @@
+{
+  "portraitScale": 2.19,
+  "portraitTranslation": [-0.08, -1.06, 0],
+  "profileScale": 0.91,
+  "profileTranslation": [0.00, 0.34, 0],
+  "rootBone": "applin",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('applin', 'ground_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('applin', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('applin', 'ground_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('applin', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('applin', 'ground_walk_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('applin', 'blink')"
+      ]
+    },
+    "surfacewater-float": {
+      "poseTypes": ["FLOAT"],
+      "isTouchingWater": true,
+      "isUnderWater": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('applin', 'surfacewater_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('applin', 'blink')"
+      ]
+    },
+    "float": {
+      "poseTypes": ["FLOAT"],
+      "isTouchingWater": true,
+      "isUnderWater": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('applin', 'surfacewater_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('applin', 'blink')"
+      ]
+    }
+  }
+ }

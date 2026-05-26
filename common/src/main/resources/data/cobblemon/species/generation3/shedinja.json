@@ -54,13 +54,32 @@
         "canFly": true
       },
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "shedinja",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "moves": [
@@ -135,7 +154,6 @@
     "tm:xscissor",
     "tutor:aerialace",
     "tutor:allyswitch",
-    "tutor:block",
     "tutor:bugbite",
     "tutor:falseswipe",
     "tutor:furycutter",
@@ -155,8 +173,35 @@
     "tutor:suckerpunch",
     "tutor:telekinesis",
     "tutor:trick",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:batonpass",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:screech",
+    "legacy:secretpower",
+    "legacy:slash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swordsdance",
+    "legacy:toxic"
   ],
   "preEvolution": "nincada",
-  "evolutions": []
+  "evolutions": [],
+  "drops": {
+    "amount": 1,
+    "entries": [
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 5.0
+      }
+    ]
+  }
 }

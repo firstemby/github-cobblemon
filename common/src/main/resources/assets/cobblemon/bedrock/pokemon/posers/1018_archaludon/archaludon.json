@@ -1,0 +1,38 @@
+{
+  "portraitScale": 2.68,
+  "portraitTranslation": [-0.61, 2.59, 0],
+  "profileScale": 0.53,
+  "profileTranslation": [ 0, 0.96, 0],
+  "rootBone": "archaludon",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('archaludon', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('archaludon', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.bedrock('archaludon', 'ground_idle')",
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('archaludon', 'blink')"
+      ]
+    }
+  }
+}

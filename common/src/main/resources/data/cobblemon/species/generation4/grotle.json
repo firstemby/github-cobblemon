@@ -51,17 +51,42 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grotle",
+          "tier": 1
+        },
+        {
+          "pokemon": "torterra",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 5,
     "entries": [
+      {
+        "item": "minecraft:sweet_berries",
+        "quantityRange": "2-4"
+      },
       {
         "item": "cobblemon:miracle_seed",
         "percentage": 10.0
@@ -164,7 +189,20 @@
     "tutor:superpower",
     "tutor:synthesis",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "turtwig",
   "evolutions": [
@@ -179,7 +217,18 @@
           "variant": "level",
           "minLevel": 32
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraoak",
@@ -198,7 +247,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraswamp",
@@ -221,6 +281,17 @@
           "consumeHeldItem": true
         }
       ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      },
       "reevaluate": false
     },
     {
@@ -240,6 +311,17 @@
           "consumeHeldItem": true
         }
       ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      },
       "reevaluate": false
     },
     {
@@ -259,7 +341,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraacacia",
@@ -278,7 +371,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraazalea",
@@ -297,7 +401,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterrajungle",
@@ -316,7 +431,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraspruce",
@@ -335,7 +461,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterramangrove",
@@ -354,7 +491,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterracherry",
@@ -373,7 +521,18 @@
           "consumeHeldItem": true
         }
       ],
-      "reevaluate": false
+      "reevaluate": false,
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

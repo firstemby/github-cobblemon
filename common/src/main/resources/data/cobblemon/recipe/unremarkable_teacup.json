@@ -1,8 +1,16 @@
 {
-    "type": "minecraft:stonecutting",
-    "count": 1,
-    "ingredient": {
-        "item": "cobblemon:masterpiece_teacup"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "C C",
+        "QCQ"
+    ],
+    "key": {
+        "Q": {
+            "tag": "c:gems/quartz"
+        },
+        "C": {
+            "item": "minecraft:clay_ball"
+        }
     },
     "result": {
         "id": "cobblemon:unremarkable_teacup"

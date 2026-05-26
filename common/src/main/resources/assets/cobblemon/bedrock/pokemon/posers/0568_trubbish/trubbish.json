@@ -4,6 +4,9 @@
   "profileScale": 0.56,
   "profileTranslation": [0.02, 0.93, 0],
   "rootBone": "trubbish",
+  "animations": {
+    "cry": "q.bedrock_stateful('trubbish', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

@@ -8,8 +8,12 @@
 
 package com.cobblemon.mod.common.api.events.storage
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.storage.PokemonStore
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
@@ -39,6 +43,17 @@ interface ReleasePokemonEvent {
     val storage: PokemonStore<*>
 
     /**
+     * Returns a context map that can be used in MoLang functions.
+     * Contains the player, and the Pokémon being released.
+     */
+    fun getContext(): MutableMap<String, MoValue> {
+        return mutableMapOf(
+            "player" to (player.asMoLangValue() ?: DoubleValue.ZERO),
+            "pokemon" to pokemon.struct
+        )
+    }
+
+    /**
      * Fired when a player attempts to release a Pokémon from their pc or party.
      * Canceling this event will prevent the Pokémon from being released.
      * Users of this event are advised to send the player a message to let them know that they can't release that Pokémon and why.
@@ -48,7 +63,9 @@ interface ReleasePokemonEvent {
         override val player: ServerPlayer,
         override val pokemon: Pokemon,
         override val storage: PokemonStore<*>
-    ) : ReleasePokemonEvent, Cancelable()
+    ) : ReleasePokemonEvent, Cancelable() {
+        val functions = moLangFunctionMap(cancelFunc)
+    }
 
     /**
      * Fired after a player released a Pokémon from their pc or party.

@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
+class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(this.value.name)
     }

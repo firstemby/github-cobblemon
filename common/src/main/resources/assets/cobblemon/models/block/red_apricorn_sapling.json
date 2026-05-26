@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:block/cross",
     "textures": {
-      "cross": "cobblemon:block/red_apricorn_sapling"
+      "cross": "cobblemon:block/crops/red_apricorn_sapling"
     }
 }

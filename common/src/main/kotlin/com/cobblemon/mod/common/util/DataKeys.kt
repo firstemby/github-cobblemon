@@ -18,8 +18,13 @@ object DataKeys {
     const val POKEMON_GENDER = "Gender"
     const val POKEMON_EXPERIENCE = "Experience"
     const val POKEMON_FRIENDSHIP = "Friendship"
+    const val POKEMON_FULLNESS = "Fullness"
+    const val POKEMON_INTERACTION_COOLDOWN = "InteractionCooldown"
+    const val POKEMON_ALPHA = "Alpha"
 
     const val POKEMON_IVS = "IVs"
+    const val POKEMON_IVS_BASE = "Base"
+    const val POKEMON_IVS_HYPERTRAINED = "HyperTrained"
     const val POKEMON_EVS = "EVs"
     const val POKEMON_HEALTH = "Health"
     const val POKEMON_SCALE_MODIFIER = "ScaleModifier"
@@ -44,6 +49,7 @@ object DataKeys {
     const val POKEMON_MINTED_NATURE = "MintedNature"
     const val HELD_ITEM = "HeldItem"
     const val HELD_ITEM_VISIBLE = "HeldItemVisible"
+    const val HELD_ITEM_AI_DROPPABLE = "HeldItemDroppableByAI"
     const val POKEMON_TERA_TYPE = "TeraType"
     const val POKEMON_DMAX_LEVEL = "DmaxLevel"
     const val POKEMON_GMAX_FACTOR = "GmaxFactor"
@@ -54,6 +60,9 @@ object DataKeys {
     const val POKEMON_MARKS = "Marks"
     const val POKEMON_POTENTIAL_MARKS = "Potential Marks"
     const val POKEMON_MARKINGS = "Markings"
+    const val POKEMON_RIDE_BOOSTS = "RideBoosts"
+    const val POKEMON_RIDE_STAMINA = "RideStamina"
+    const val POKEMON_MIN_PERFECT_IVS = "MinPerfectIVs"
 
     const val POKEMON_STATE = "State"
     const val POKEMON_STATE_TYPE = "StateType"
@@ -76,9 +85,11 @@ object DataKeys {
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
     const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
+    const val POKEMON_ORIGINAL_TRAINER_FRIENDSHIP = "PokemonOriginalTrainerFriendship"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
     const val POKEMON_PROPERTIES_HELDITEM = "HeldItem"
+    const val POKEMON_PROPERTIES_MOVESET_BUILDERS = "MovesetBuilders"
 
     // Entity effects
     const val ENTITY_EFFECTS = "EntityEffects"
@@ -124,6 +135,7 @@ object DataKeys {
     const val TETHERING_POS = "Pos"
     const val TETHERING_PLAYER_ID = "PlayerId"
     const val TETHERING_ENTITY_ID = "EntityId"
+    const val TETHER_PASTURE_POS = "TetherPasturePos"
 
     // Form stuff
     const val ALOLAN = "alolan"
@@ -137,12 +149,22 @@ object DataKeys {
     const val POKEMON_PROPERTIES_ORIGINAL_TEXT = "OriginalText"
     const val POKEMON_SPECIES_TEXT = "SpeciesText"
 
-    // Healer  Block
+    // Healer Block
     const val HEALER_MACHINE_USER = "MachineUser"
     const val HEALER_MACHINE_POKEBALLS = "MachinePokeBalls"
     const val HEALER_MACHINE_TIME_LEFT = "MachineTimeLeft"
     const val HEALER_MACHINE_CHARGE = "MachineCharge"
     const val HEALER_MACHINE_INFINITE = "MachineInfinite"
+
+    // Cooking
+    const val AMOUNT_SPAWNED = "AmountSpawned"
+    const val FOOD_COLOUR = "FoodColour"
+    const val BAIT_EFFECTS = "BaitEffects"
+    const val INGREDIENTS = "Ingredients"
+
+    const val PLACED_BY = "PlacedBy"
+
+    const val TICKS_UNTIL_NEXT_SPAWN = "TicksUntilNextSpawn"
 
     // Pokémon Item
     const val POKEMON_ITEM_SPECIES = "species"
@@ -153,9 +175,9 @@ object DataKeys {
     const val POKEMON_ITEM_TINT_ALPHA = "TintAlpha"
 
     // Features
-    const val CAN_BE_MILKED = "milkable"
     const val HAS_BEEN_SHEARED = "sheared"
     const val CAN_BE_COLORED = "color"
+    const val TAIL_REGROWTH_SECONDS = "TailRegrowthSeconds"
 
     // Variants
     const val IS_MOOSHTANK = "mooshtank"
@@ -194,6 +216,7 @@ object DataKeys {
     const val HAS_CREATED_POKEMON = "HasCreatedPokemon"
     const val FOSSIL_OWNER = "FossilOwner"
     const val FOSSIL_STATE = "FossilState"
+    const val MONITOR_DISK = "MonitorDisk"
 
     // Generic Block Entity
     const val BLOCK_ENTITY_USER_AMOUNT = "userAmount"
@@ -217,8 +240,6 @@ object DataKeys {
     const val NPC_PARTY_TYPE = "PartyType"
     const val NPC_ASPECTS = "AppliedAspects"
     const val NPC_VARIATION_ASPECTS = "VariationAspects"
-    const val NPC_DATA = "Data"
-    const val NPC_CONFIG = "Config"
     const val NPC_INTERACTION = "Interaction"
     const val NPC_INTERACT_TYPE = "Type"
     const val NPC_INTERACT_SCRIPT = "Script"
@@ -228,18 +249,64 @@ object DataKeys {
     const val NPC_PLAYER_TEXTURE_MODEL = "Model"
     const val NPC_PLAYER_TEXTURE_TEXTURE = "Texture"
     const val NPC_LEVEL = "Level"
+    const val NPC_FORCED_RESOURCE_IDENTIFIER = "ForcedResourceIdentifier"
     const val NPC_IS_MOVABLE = "IsMovable"
     const val NPC_SKILL = "Skill"
     const val NPC_IS_INVULNERABLE = "IsInvulnerable"
     const val NPC_IS_LEASHABLE = "IsLeashable"
     const val NPC_ALLOW_PROJECTILE_HITS = "AllowProjectileHits"
+    @Deprecated("Divided into RENDER_SCALE and BOX_SCALE")
     const val NPC_BASE_SCALE = "BaseScale"
+    const val NPC_BOX_SCALE = "BoxScale"
+    const val NPC_RENDER_SCALE = "RenderScale"
     const val NPC_HITBOX = "Hitbox"
     const val NPC_HITBOX_WIDTH = "Width"
     const val NPC_HITBOX_HEIGHT = "Height"
     const val NPC_HITBOX_FIXED = "Fixed"
     const val NPC_HIDE_NAME_TAG = "HideNPCNameTag"
 
+    const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
+    const val SCRIPTED_BEHAVIOURS = "Behaviours"
+    const val SCRIPTED_DATA = "ScriptingData"
+    const val SCRIPTED_CONFIG = "ScriptingConfig"
+
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"
+
+    // Habitat Blocks
+    const val HABITAT_SPAWNING_STYLE = "SpawningStyle"
+    const val HABITAT_MIMIC = "MimicId"
+    const val HABITAT_PHASE_COUNT = "PhaseCount"
+    const val HABITAT_PHASE_ORDER = "PhaseOrder"
+    const val HABITAT_LEVEL_RANGE = "LevelRange"
+    const val HABITAT_MODIFIERS = "Modifiers"
+    const val HABITAT_POOL = "Pool"
+
+    // --- Pools
+    const val HABITAT_POOL_ID = "PoolId"
+    const val HABITAT_POOL_NAME = "Name"
+    const val HABITAT_POOL_SPAWNS = "Spawns"
+    const val HABITAT_POOL_SPAWN_SPECIES = "Species"
+    const val HABITAT_POOL_SPAWN_MODIFIERS = "Modifiers"
+    const val HABITAT_POOL_SPAWN_LEVEL_RANGE = "LevelRange"
+    const val HABITAT_POOL_SPAWN_WEIGHT = "Weight"
+    const val HABITAT_POOL_SPAWN_POSITION_TYPE = "PositionType"
+    const val HABITAT_POOL_SPAWN_TIMES = "Times"
+    const val HABITAT_POOL_SPAWN_PHASES = "Phases"
+    const val HABITAT_POOL_SPAWN_MIN_LIGHT = "MinLight"
+    const val HABITAT_POOL_SPAWN_MAX_LIGHT = "MaxLight"
+    const val HABITAT_POOL_SPAWN_BUCKET = "Bucket"
+
+
+    // --- Activated
+    const val HABITAT_ACTIVATED_TRIGGER = "Trigger"
+    const val HABITAT_ACTIVATED_CHANCE = "Chance"
+    const val HABITAT_ACTIVATED_MAX_SPAWNS = "MaxSpawns"
+    const val HABITAT_ACTIVATED_MAX_SPAWNS_PER_ACTIVATION = "MaxSpawnsPerActivation"
+    const val HABITAT_ACTIVATED_SPAWN_RANGE = "SpawnRange"
+    const val HABITAT_ACTIVATED_CANCEL_RANGE = "CancelRange"
+
+    // --- Natural
+    const val HABITAT_NATURAL_REPLACE_SPAWNS = "ReplaceSpawns"
+    const val HABITAT_NATURAL_RANGE_OF_INFLUENCE = "RangeOfInfluence"
 }

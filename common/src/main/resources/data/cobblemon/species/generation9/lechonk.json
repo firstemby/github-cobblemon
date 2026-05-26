@@ -52,12 +52,53 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.12
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "6",
+      "toleratedLeaders": [
+        {
+          "pokemon": "spoink",
+          "tier": 1
+        },
+        {
+          "pokemon": "tepig",
+          "tier": 1
+        },
+        {
+          "pokemon": "lechonk",
+          "tier": 1
+        },
+        {
+          "pokemon": "grumpig",
+          "tier": 2
+        },
+        {
+          "pokemon": "pignite",
+          "tier": 2
+        },
+        {
+          "pokemon": "oinkologne",
+          "tier": 2
+        },
+        {
+          "pokemon": "emboar",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

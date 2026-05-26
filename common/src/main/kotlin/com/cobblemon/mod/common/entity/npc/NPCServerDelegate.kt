@@ -22,9 +22,14 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.BattleBuilder
+import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asUUID
+import com.cobblemon.mod.common.util.getBooleanOrNull
+import com.cobblemon.mod.common.util.getIntOrNull
+import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.getStringOrNull
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -40,9 +45,8 @@ class NPCServerDelegate : NPCSideDelegate {
 
     override fun addToStruct(struct: QueryStruct) {
         super.addToStruct(struct)
+        entity.registerFunctionsForScripting(struct)
         struct
-            .addFunction("data") { entity.data }
-            .addFunction("config") { entity.config }
             .addFunction("save_data") { entity.data } // Handled as part of NBT saving
             .addFunction("is_in_dialogue") { entity.brain.hasMemoryValue(CobblemonMemories.DIALOGUES) }
             .addFunction("is_in_battle") { params ->
@@ -78,9 +82,33 @@ class NPCServerDelegate : NPCSideDelegate {
                         entity.server!!.playerList.getPlayerByName(paramString) ?: return@addFunction DoubleValue.ZERO
                     }
                 }
+
+                val format = (params.getStringOrNull(1)
+                    ?.let(BattleFormat::fromFormatIdentifier)
+                    ?: BattleFormat.GEN_9_SINGLES)
+
+                val setLevel = params.getIntOrNull(2) ?: -1
+                format.adjustLevel = setLevel
+
+                val rules = params.getStringOrNull(5)
+                    ?.split(",")
+                    ?.toSet()
+                    ?: emptySet()
+
+                val modifiedBattleFormat = BattleFormat.setBattleRules(
+                    battleFormat = format,
+                    rules = rules
+                )
+
+                val cloneParties = (setLevel != -1) || (params.getBooleanOrNull(3) ?: false)
+                val healFirst = params.getBooleanOrNull(4) ?: false
+
                 val battleStartResult = BattleBuilder.pvn(
                     player = opponent,
-                    npcEntity = entity
+                    npcEntity = entity,
+                    battleFormat = modifiedBattleFormat,
+                    cloneParties = cloneParties,
+                    healFirst = healFirst
                 )
 
                 var returnValue: MoValue = DoubleValue.ZERO
@@ -119,7 +147,7 @@ class NPCServerDelegate : NPCSideDelegate {
             }
             .addFunction("was_hurt_by") { params ->
                 val entity = params.get<ObjectValue<LivingEntity>>(0).obj
-                val hurtByEntity = this.entity.brain.getMemory(MemoryModuleType.HURT_BY_ENTITY).orElse(null)
+                val hurtByEntity = this.entity.brain.getMemorySafely(MemoryModuleType.HURT_BY_ENTITY).orElse(null)
                 return@addFunction DoubleValue(hurtByEntity == entity)
             }
     }

@@ -44,25 +44,123 @@
   "baseFriendship": 50,
   "baseScale": 0.9,
   "hitbox": {
-    "width": 1.8,
     "height": 3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/rocket",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "5-40",
+          "JUMP": "10-20",
+          "SKILL": "30-60",
+          "SPEED": "5-15",
+          "STAMINA": "2-20"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "30-50",
+          "JUMP": "15-30",
+          "SKILL": "10-35",
+          "SPEED": "30-65",
+          "STAMINA": "15-35"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/submarine",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "hitboxBreachPercentage": 0.75,
+        "stats": {
+          "ACCELERATION": "45-65",
+          "JUMP": "30-50",
+          "SKILL": "50-75",
+          "SPEED": "35-65",
+          "STAMINA": "35-70"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      }
+    ]
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "5"
     },
     "moving": {
-      "walk": {
-        "walkSpeed": 0.17
-      },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "walkSpeed": 0.17
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -179,9 +277,9 @@
     "tm:workup",
     "tm:zenheadbutt",
     "tutor:aquatail",
+    "tutor:block",
     "tutor:darkpulse",
     "tutor:dive",
-    "tutor:dragonpulse",
     "tutor:flashcannon",
     "tutor:flipturn",
     "tutor:focuspunch",
@@ -196,7 +294,6 @@
     "tutor:irontail",
     "tutor:liquidation",
     "tutor:rest",
-    "tutor:rockslide",
     "tutor:rocksmash",
     "tutor:rollout",
     "tutor:signalbeam",
@@ -204,7 +301,44 @@
     "tutor:terrainpulse",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:bulldoze",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:confusion",
+    "legacy:counter",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:dragontail",
+    "legacy:dynamicpunch",
+    "legacy:falseswipe",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:waterfall",
+    "special:block",
+    "special:celebrate",
+    "special:followme",
+    "special:hydrocannon"
   ],
   "preEvolution": "wartortle",
   "evolutions": [],
@@ -238,27 +372,16 @@
         "speed": 78
       },
       "baseExperienceYield": 315,
-      "dynamaxBlocked": true,
-      "evolutions": [],
-      "battleOnly": true,
       "riding": {
+        "behaviour": {
+          "key": "cobblemon:land/horse"
+        },
+        "seats": [],
         "stats": {
-          "SPEED": {
-            "ranges": {
-              "LAND": "10-20",
-              "LIQUID": "35-70"
-            }
-          },
           "ACCELERATION": {
             "ranges": {
               "LAND": "5-100",
               "LIQUID": "15-35"
-            }
-          },
-          "SKILL": {
-            "ranges": {
-              "LAND": "15-40",
-              "LIQUID": "30-65"
             }
           },
           "JUMP": {
@@ -267,18 +390,48 @@
               "LIQUID": "10-20"
             }
           },
+          "SKILL": {
+            "ranges": {
+              "LAND": "15-40",
+              "LIQUID": "30-65"
+            }
+          },
+          "SPEED": {
+            "ranges": {
+              "LAND": "10-20",
+              "LIQUID": "35-70"
+            }
+          },
           "STAMINA": {
             "ranges": {
               "LAND": "20-50",
               "LIQUID": "45-95"
             }
           }
-        },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/generic"
         }
-      }
+      },
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "6"
+        },
+        "moving": {
+          "swim": {
+            "canBreatheUnderwater": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      },
+      "evolutions": [],
+      "battleOnly": true,
+      "dynamaxBlocked": true
     },
     {
       "name": "Gmax",
@@ -296,47 +449,9 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "10-20",
-          "LIQUID": "35-70"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "5-100",
-          "LIQUID": "15-30"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "15-30",
-          "LIQUID": "30-60"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "5-10",
-          "LIQUID": "10-20"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "20-40",
-          "LIQUID": "45-90"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/generic"
-    }
-  }
+  ]
 }

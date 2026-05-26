@@ -1,0 +1,30 @@
+{
+  "species": "cobblemon:duraludon",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:duraludon",
+      "model": "cobblemon:duraludon.geo",
+      "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon_emissive.png"
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon_emissive_shiny.png"
+        }
+      ]
+    }
+  ]
+}

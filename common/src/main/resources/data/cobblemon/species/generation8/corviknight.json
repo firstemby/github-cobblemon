@@ -45,19 +45,108 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 2,
     "height": 4.4,
-    "fixed": false
+    "fixed": false,
+    "width": 2
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.plumage.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.plumage.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "35-55",
+          "JUMP": "80-100",
+          "SKILL": "20-35",
+          "SPEED": "25-40",
+          "STAMINA": "80-100"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "60-80",
+          "JUMP": "30-45",
+          "SKILL": "30-50",
+          "SPEED": "15-30",
+          "STAMINA": "60-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "corviknight",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.18
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -181,7 +270,10 @@
     "tutor:spite",
     "tutor:steelbeam",
     "tutor:swift",
-    "tutor:tailwind"
+    "tutor:tailwind",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "preEvolution": "corvisquire",
   "evolutions": [],
@@ -203,47 +295,9 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
-  ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": {
-          "LAND": "5-15",
-          "AIR": "35-65"
-        }
-      },
-      "ACCELERATION": {
-        "ranges": {
-          "LAND": "10-100",
-          "AIR": "20-50"
-        }
-      },
-      "SKILL": {
-        "ranges": {
-          "LAND": "40-85",
-          "AIR": "25-50"
-        }
-      },
-      "JUMP": {
-        "ranges": {
-          "LAND": "20-55",
-          "AIR": "30-60"
-        }
-      },
-      "STAMINA": {
-        "ranges": {
-          "LAND": "55-85",
-          "AIR": "55-85"
-        }
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/generic"
-    }
-  }
+  ]
 }

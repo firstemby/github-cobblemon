@@ -50,16 +50,18 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "canWalk": false
+        "walkSpeed": 0.13
       },
       "swim": {
-        "canSwimInWater": false
-      },
-      "canLook": false
+        "avoidsWater": true
+      }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -94,7 +96,8 @@
     "tm:strugglebug",
     "tm:terablast",
     "tutor:bugbite",
-    "tutor:irondefense"
+    "tutor:irondefense",
+    "legacy:electroweb"
   ],
   "preEvolution": "scatterbug",
   "evolutions": [
@@ -121,7 +124,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivilloncontinental",
@@ -146,7 +160,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonelegant",
@@ -171,7 +196,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonfancy",
@@ -192,7 +228,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillongarden",
@@ -217,7 +264,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonhighplains",
@@ -238,7 +296,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonicysnow",
@@ -263,7 +332,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonjungle",
@@ -288,7 +368,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonmarine",
@@ -313,7 +404,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonmeadow",
@@ -338,7 +440,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonmodern",
@@ -355,7 +468,18 @@
           "variant": "structure",
           "structureCondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonmonsoon",
@@ -380,7 +504,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonocean",
@@ -405,7 +540,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonpolar",
@@ -426,7 +572,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonriver",
@@ -451,7 +608,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonsandstorm",
@@ -476,7 +644,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonsavanna",
@@ -501,7 +680,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonsun",
@@ -522,7 +712,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillontundra",
@@ -547,7 +748,18 @@
           "variant": "structure",
           "structureAnticondition": "#minecraft:village"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivilloninferno",
@@ -564,7 +776,18 @@
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/vivillon/inferno"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonvoid",
@@ -581,7 +804,18 @@
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/vivillon/void"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonforsaken",
@@ -598,7 +832,18 @@
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/vivillon/forsaken"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "spewpa_vivillonpokeball",
@@ -613,9 +858,20 @@
         },
         {
           "variant": "advancement",
-          "requiredAdvancement": "cobblemon:catch_all_vivillon"
+          "requiredAdvancement": "cobblemon:catching/collect_all_vivillon"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

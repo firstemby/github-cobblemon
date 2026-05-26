@@ -1,0 +1,19 @@
+{
+  "moveName": "worryseed",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 1
+    },
+    {
+      "tag": "minecraft:chicken_food",
+      "count": 1
+    }
+  ]
+}

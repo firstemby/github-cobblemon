@@ -13,9 +13,10 @@ import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
 import com.cobblemon.mod.common.api.starter.StarterHandler
-import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreType
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.config.starter.StarterCategory
+import com.cobblemon.mod.common.data.StarterDataLoader
 import com.cobblemon.mod.common.net.messages.client.starter.OpenStarterUIPacket
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -23,7 +24,10 @@ import net.minecraft.server.level.ServerPlayer
 
 open class CobblemonStarterHandler : StarterHandler {
 
-    override fun getStarterList(player: ServerPlayer) = Cobblemon.starterConfig.starters
+    override fun getStarterList(player: ServerPlayer): List<StarterCategory> {
+        val fromPacks = StarterDataLoader.getAllCategories().toList()
+        return fromPacks.ifEmpty { Cobblemon.starterConfig.starters }
+    }
 
     override fun handleJoin(player: ServerPlayer) {}
 
@@ -51,7 +55,7 @@ open class CobblemonStarterHandler : StarterHandler {
 
         val category = getStarterList(player).find { it.name == categoryName } ?: return
 
-        if (index > category.pokemon.size) {
+        if (index < 0 || index >= category.pokemon.size) {
             return
         }
 

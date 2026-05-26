@@ -51,12 +51,33 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.19
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
     },
     "resting": {
       "canSleep": true,
-      "willSleepOnBed": true
-    }
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
+    },
+    "entityInteract": {
+      "avoidedByCreeper": true,
+      "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": "3"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -147,7 +168,16 @@
     "tutor:outrage",
     "tutor:rest",
     "tutor:shadowclaw",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:toxic"
   ],
   "preEvolution": "litten",
   "evolutions": [
@@ -164,5 +194,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 10,
+    "liquidGlowMode": "LAND"
+  }
 }

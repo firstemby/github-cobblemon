@@ -42,7 +42,7 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 0.75,
+  "baseScale": 0.6,
   "hitbox": {
     "width": 1.05,
     "height": 1.25,
@@ -55,20 +55,56 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewgong",
+          "tier": 1
+        },
+        {
+          "pokemon": "sealeo",
+          "tier": 1
+        },
+        {
+          "pokemon": "brionne",
+          "tier": 2
+        },
+        {
+          "pokemon": "walrein",
+          "tier": 3
+        },
+        {
+          "pokemon": "primarina",
+          "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:mystic_water",
+        "percentage": 10.0
+      },
+      {
+        "item": "cobblemon:throat_spray",
         "percentage": 10.0
       }
     ]
@@ -159,7 +195,18 @@
     "tutor:uproar",
     "tutor:waterpledge",
     "tutor:waterpulse",
-    "tutor:wonderroom"
+    "tutor:wonderroom",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "popplio",
   "evolutions": [

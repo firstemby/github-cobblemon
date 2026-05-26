@@ -56,11 +56,22 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.33
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "7"
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -172,7 +183,6 @@
     "tutor:laserfocus",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:shadowball",
@@ -186,7 +196,30 @@
     "tutor:thunderbolt",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swift",
+    "legacy:toxic",
+    "legacy:uturn",
+    "legacy:watergun",
+    "special:refresh"
   ],
   "preEvolution": "rattata",
   "evolutions": [],
@@ -336,7 +369,6 @@
         "tutor:knockoff",
         "tutor:lashout",
         "tutor:lastresort",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:shadowball",
         "tutor:shockwave",
@@ -350,11 +382,44 @@
         "tutor:throatchop",
         "tutor:thunderbolt",
         "tutor:uproar",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:headbutt",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:shadowclaw",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic",
+        "legacy:uturn"
       ],
       "preEvolution": "rattata alolan",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "7"
+        },
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
+      }
     }
   ]
 }

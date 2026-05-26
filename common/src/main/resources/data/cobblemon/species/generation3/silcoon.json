@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 266,
   "name": "Silcoon",
   "primaryType": "bug",
@@ -44,10 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 0.6,
     "fixed": false
   },
+  "standingEyeHeight": 0.4,
   "behaviour": {
     "moving": {
       "walk": {
@@ -55,9 +57,16 @@
       },
       "swim": {
         "canSwimInWater": false,
-        "canSwimInLava": false
+        "avoidsWater": true
       },
       "canLook": false
+    },
+    "combat": {
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -87,7 +96,8 @@
     "tutor:electroweb",
     "tutor:irondefense",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:snore"
   ],
   "preEvolution": "wurmple",
   "evolutions": [
@@ -102,7 +112,18 @@
           "variant": "level",
           "minLevel": 10
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

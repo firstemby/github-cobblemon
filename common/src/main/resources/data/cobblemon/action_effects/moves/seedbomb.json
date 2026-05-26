@@ -1,0 +1,41 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["seedbomb", "grass", "special"],
+      "delay": 1.25
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:seedbomb_actor",
+      "locators": ["special", "target"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.seedbomb.actor');"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.72
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.seedbomb.target');"]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.8
+    }
+  ]
+}

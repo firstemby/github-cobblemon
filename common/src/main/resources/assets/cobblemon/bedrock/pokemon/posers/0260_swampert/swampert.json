@@ -1,12 +1,11 @@
 {
-  "portraitScale": 1.17,
-  "portraitTranslation": [-0.69, 0.99, 0],
+  "portraitScale": 1.39,
+  "portraitTranslation": [-0.84, 1.25, 0],
   "profileScale": 0.48,
   "profileTranslation": [0, 0.96, 0],
   "rootBone": "swampert",
   "animations": {
-    "cry": "q.bedrock_stateful('swampert', 'cry')",
-    "recoil": "q.bedrock_stateful('swampert', 'recoil')"
+    "cry": "q.bedrock_stateful('swampert', 'cry')"
   },
   "poses": {
     "standing": {

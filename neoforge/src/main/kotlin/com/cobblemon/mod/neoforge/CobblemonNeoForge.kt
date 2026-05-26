@@ -9,12 +9,18 @@
 package com.cobblemon.mod.neoforge
 
 import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_COMPLEX_DISHES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_FOODS
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MEDICINES
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_MISC
+import com.cobblemon.mod.common.CobblemonRecipeCategories.COOKING_POT_SEARCH
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
 import com.cobblemon.mod.common.api.net.serializers.IdentifierDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.NPCPlayerTextureSerializer
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
+import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.UUIDSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
@@ -30,7 +36,6 @@ import com.cobblemon.mod.common.world.placementmodifier.CobblemonPlacementModifi
 import com.cobblemon.mod.common.world.predicate.CobblemonBlockPredicates
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonProcessorTypes
 import com.cobblemon.mod.common.world.structureprocessors.CobblemonStructureProcessorListOverrides
-import com.cobblemon.mod.neoforge.brewing.CobblemonNeoForgeBrewingRegistry
 import com.cobblemon.mod.neoforge.client.CobblemonNeoForgeClient
 import com.cobblemon.mod.neoforge.event.NeoForgePlatformEventHandler
 import com.cobblemon.mod.neoforge.net.CobblemonNeoForgeNetworkManager
@@ -57,6 +62,7 @@ import net.minecraft.server.packs.repository.Pack
 import net.minecraft.server.packs.repository.Pack.Position
 import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.server.packs.resources.PreparableReloadListener
+import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.TabVisibility
@@ -73,6 +79,7 @@ import net.neoforged.fml.ModList
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.fml.loading.FMLEnvironment
+import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent
 import net.neoforged.neoforge.common.ItemAbilities
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.common.NeoForgeMod
@@ -82,7 +89,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 import net.neoforged.neoforge.event.LootTableLoadEvent
 import net.neoforged.neoforge.event.OnDatapackSyncEvent
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent
@@ -117,6 +123,7 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(networkManager::registerMessages)
             addListener(EventPriority.HIGH, ::onBuildContents)
             addListener(::onAddPackFindersEvent)
+            addListener(::loadRecipeCategory)
         }
         with(NeoForge.EVENT_BUS) {
             addListener(::onDataPackSync)
@@ -130,7 +137,6 @@ class CobblemonNeoForge : CobblemonImplementation {
             addListener(::onVillagerTradesRegistry)
             addListener(::onWanderingTraderRegistry)
             addListener(::onLootTableLoad)
-            addListener(::onRegisterBrewingRecipes)
         }
         NeoForgePlatformEventHandler.register()
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -218,6 +224,15 @@ class CobblemonNeoForge : CobblemonImplementation {
                 registry.register(cobblemonResource(key), memoryModuleType)
             }
         }
+
+        event.register(Registries.CUSTOM_STAT) { registry ->
+            Cobblemon.statistics.registerStats()
+            Cobblemon.statistics.stats.forEach { entry ->
+                val cobblemonStat = entry.value
+                registry.register(cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
+                Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
+            }
+        }
     }
 
     fun onDataPackSync(event: OnDatapackSyncEvent) {
@@ -264,6 +279,7 @@ class CobblemonNeoForge : CobblemonImplementation {
                 helper.register(Vec3DataSerializer.ID, Vec3DataSerializer)
                 helper.register(StringSetDataSerializer.ID, StringSetDataSerializer)
                 helper.register(PoseTypeDataSerializer.ID, PoseTypeDataSerializer)
+                helper.register(RideBoostsDataSerializer.ID, RideBoostsDataSerializer)
                 helper.register(PlatformTypeDataSerializer.ID, PlatformTypeDataSerializer)
                 helper.register(IdentifierDataSerializer.ID, IdentifierDataSerializer)
                 helper.register(UUIDSetDataSerializer.ID, UUIDSetDataSerializer)
@@ -288,11 +304,31 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+    override fun registerMenu() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonMenuType.resourceKey) { helper ->
+                    CobblemonMenuType.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
+        }
+    }
+
     private fun handleBlockStripping(e: BlockEvent.BlockToolModificationEvent) {
         if (e.itemAbility == ItemAbilities.AXE_STRIP) {
             val start = e.state.block
             val result = CobblemonBlocks.strippedBlocks()[start] ?: return
             e.setFinalState(result.withPropertiesOf(e.state))
+        }
+    }
+
+    override fun registerRecipeTypes() {
+        with(MOD_BUS) {
+            addListener<RegisterEvent> { event ->
+                event.register(CobblemonRecipeTypes.resourceKey) { helper ->
+                    CobblemonRecipeTypes.register { identifier, item -> helper.register(identifier, item) }
+                }
+            }
         }
     }
 
@@ -346,16 +382,26 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    override fun registerVillagers() {
+    override fun registerPoiTypes() {
         MOD_BUS.addListener<RegisterEvent> { event ->
-            event.register(CobblemonVillagerPoiTypes.resourceKey) { helper ->
-                CobblemonVillagerPoiTypes.register { identifier, type -> helper.register(identifier, type) }
+            event.register(CobblemonPoiTypes.resourceKey) { helper ->
+                CobblemonPoiTypes.register { identifier, type -> helper.register(identifier, type) }
             }
         }
+    }
 
+    override fun registerVillagers() {
         MOD_BUS.addListener<RegisterEvent> { event ->
             event.register(CobblemonVillagerProfessions.resourceKey) { helper ->
                 CobblemonVillagerProfessions.register { identifier, profession -> helper.register(identifier, profession) }
+            }
+        }
+    }
+
+    override fun registerRecipeSerializers() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonRecipeSerializers.resourceKey) { helper ->
+                CobblemonRecipeSerializers.register { identifier, feature -> helper.register(identifier, feature) }
             }
         }
     }
@@ -423,6 +469,19 @@ class CobblemonNeoForge : CobblemonImplementation {
         // NeoForge uses data-driven files to determine compostable, vanilla code is ignored
         // eventually we probaly want to datagen the output file maybe?
         // check neoforged/resources/data/neoforge/data_maps/item/compostables.json for all considered entries
+        // you can easily update this by running the game, putting a breakpoint anywhere that gets triggered in world and then run that in the debugger
+        // ComposterBlock.COMPOSTABLES.entries.filter { it.key.toString().contains("cobblemon") }.sortedBy { it.key.toString() }.map { "\"${it.key}\": {\"chance\": ${it.value}}"}.joinToString(",")
+        // returns one single json setup that you can paste in the compostables.json values block and done
+    }
+
+    override fun registerMobEffects() {
+        MOD_BUS.addListener<RegisterEvent> { event ->
+            event.register(CobblemonMobEffects.resourceKey) { helper ->
+                CobblemonMobEffects.register { identifier, effect ->
+                    helper.register(identifier, effect)
+                }
+            }
+        }
     }
 
     private fun onVillagerTradesRegistry(e: VillagerTradesEvent) {
@@ -438,12 +497,21 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    private fun onLootTableLoad(e: LootTableLoadEvent) {
-        LootInjector.attemptInjection(e.name) { builder -> e.table.addPool(builder.build()) }
+    private fun loadRecipeCategory(e: RegisterRecipeBookCategoriesEvent) {
+        e.registerBookCategories(CobblemonRecipeBookTypes.COOKING_POT, listOf(
+            COOKING_POT_SEARCH.toVanillaCategory(),
+            COOKING_POT_FOODS.toVanillaCategory(),
+            COOKING_POT_MISC.toVanillaCategory(),
+            COOKING_POT_MEDICINES.toVanillaCategory(),
+            COOKING_POT_COMPLEX_DISHES.toVanillaCategory()
+        ))
+        CobblemonRecipeCategories.customAggregateCategories.forEach { bookType ->
+            e.registerAggregateCategory(bookType.key, bookType.value)
+        }
     }
 
-    private fun onRegisterBrewingRecipes(e: RegisterBrewingRecipesEvent) {
-        CobblemonNeoForgeBrewingRegistry.register(e)
+    private fun onLootTableLoad(e: LootTableLoadEvent) {
+        LootInjector.attemptInjection(e.name) { builder -> e.table.addPool(builder.build()) }
     }
 
     private fun onBuildContents(e: BuildCreativeModeTabContentsEvent) {

@@ -441,6 +441,15 @@
 					]
 				},
 				{
+					"name": "seat_1_locator",
+					"parent": "torso",
+					"pivot": [0, 29, 3],
+					"rotation": [-30, 0, 0],
+					"locators": {
+						"seat_1": [0, 29, 3]
+					}
+				},
+				{
 					"name": "tail",
 					"parent": "body",
 					"pivot": [0, 16.5, 2.8],
@@ -469,7 +478,7 @@
 					"parent": "tail3",
 					"pivot": [0.5, -1.5, 1.7],
 					"cubes": [
-						{"origin": [-2.5, -11.5, -8.3], "size": [5, 10, 10], "inflate": 0.01, "pivot": [0, -6.5, -3.3], "rotation": [0, 0, 0], "uv": [0, 38]}
+						{"origin": [-2.5, -11.5, -8.3], "size": [5, 10, 10], "inflate": 0.01, "uv": [0, 38]}
 					]
 				}
 			]

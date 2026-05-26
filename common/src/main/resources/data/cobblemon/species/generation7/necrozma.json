@@ -171,8 +171,18 @@
     "tutor:stoneedge",
     "tutor:swift",
     "tutor:telekinesis",
-    "tutor:trick",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:breakingswipe",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:thunderwave",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -336,11 +346,36 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      },
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        }
+      }
     },
     {
       "name": "Dawn-Wings",
@@ -502,11 +537,14 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:telekinesis",
-        "tutor:trick",
         "tutor:xscissor"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     },
     {
       "name": "Ultra",
@@ -551,7 +589,36 @@
       "catchRate": 255,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "lightingData": {
+        "lightLevel": 15,
+        "liquidGlowMode": "BOTH"
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  }
 }

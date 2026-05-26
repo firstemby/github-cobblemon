@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:pyroar",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:pyroar_male",
+      "model": "cobblemon:pyroar_male.geo",
+      "texture": "cobblemon:textures/pokemon/0668_pyroar/pyroar_male.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0668_pyroar/pyroar_male_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0668_pyroar/pyroar_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

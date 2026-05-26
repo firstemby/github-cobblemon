@@ -12,10 +12,8 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.status.Status
 import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause
-import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreManager
 import com.cobblemon.mod.common.api.tags.CobblemonBiomeTags
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.battles.BattleRegistry
@@ -162,7 +160,7 @@ object CatchRateModifiers {
         val speciesId = pokemon.pokemon.species.resourceIdentifier
         val knowledge = playerDexData.getKnowledgeForSpecies(speciesId)
         when (knowledge) {
-            PokedexEntryProgress.CAUGHT -> 3.5F
+            PokedexEntryProgress.OWNED -> 3.5F
             else -> 1F
         }
     }

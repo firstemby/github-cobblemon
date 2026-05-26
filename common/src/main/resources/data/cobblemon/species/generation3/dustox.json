@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 269,
   "name": "Dustox",
   "primaryType": "bug",
@@ -41,17 +42,22 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.65,
+    "height": 1.5,
     "fixed": false
   },
+  "standingEyeHeight": 0.65,
   "drops": {
-    "amount": 2,
+    "amount": 3,
     "entries": [
       {
         "item": "cobblemon:silver_powder",
+        "percentage": 5.0
+      },
+      {
+        "item": "cobblemon:shed_shell",
         "percentage": 5.0
       },
       {
@@ -145,8 +151,47 @@
     "tutor:sludgebomb",
     "tutor:stringshot",
     "tutor:tailwind",
-    "tutor:twister"
+    "tutor:twister",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift"
   ],
   "preEvolution": "cascoon",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "canWalk": false
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  }
 }

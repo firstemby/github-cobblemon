@@ -45,15 +45,33 @@
   "baseScale": 0.7,
   "hitbox": {
     "width": 0.85,
-    "height": 1.6,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "avoidsWater": true,
-        "canSwimInWater": false
+        "avoidsWater": true
+      },
+      "fly": {
+        "canFly": true
+      },
+      "walk": {
+        "walkSpeed": 0.4,
+        "canWalk": false
       }
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -148,7 +166,17 @@
     "tutor:sleeptalk",
     "tutor:spite",
     "tutor:steelbeam",
-    "tutor:trick"
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

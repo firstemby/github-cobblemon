@@ -33,12 +33,12 @@
       "position": {
         "x": 8.75,
         "y": 6.5,
-        "z": 6.0
+        "z": 6
       },
       "rotation": {
         "x": 77.5,
         "y": 22.5,
-        "z": -170.0
+        "z": -170
       }
     },
     {
@@ -48,9 +48,9 @@
         "z": 8.25
       },
       "rotation": {
-        "x": -15.0,
-        "y": 45.0,
-        "z": -120.0
+        "x": -15,
+        "y": 45,
+        "z": -120
       }
     },
     {
@@ -60,8 +60,8 @@
         "z": 9.5
       },
       "rotation": {
-        "x": -55.0,
-        "y": -30.0,
+        "x": -55,
+        "y": -30,
         "z": 152.5
       }
     },
@@ -69,11 +69,11 @@
       "position": {
         "x": 7.75,
         "y": 8.25,
-        "z": 9.0
+        "z": 9
       },
       "rotation": {
-        "x": -130.0,
-        "y": -50.0,
+        "x": -130,
+        "y": -50,
         "z": -32.5
       }
     },
@@ -85,8 +85,8 @@
       },
       "rotation": {
         "x": 157.5,
-        "y": 10.0,
-        "z": 20.0
+        "y": 10,
+        "z": 20
       }
     },
     {
@@ -96,9 +96,9 @@
         "z": 7.75
       },
       "rotation": {
-        "x": 165.0,
-        "y": 65.0,
-        "z": -45.0
+        "x": 165,
+        "y": 65,
+        "z": -45
       }
     }
   ],
@@ -109,26 +109,65 @@
       "z": 8.1
     },
     "rotation": {
-      "x": 5.0,
-      "y": -10.0,
+      "x": 5,
+      "y": -10,
       "z": -7.5
     }
   },
+  "pokeSnackPositionings": [
+    {
+      "position": {
+        "x": 8,
+        "y": 11.55,
+        "z": 4.2
+      },
+      "rotation": {
+        "x": 155,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "position": {
+        "x": 11.7,
+        "y": 11.55,
+        "z": 10.55
+      },
+      "rotation": {
+        "x": -25,
+        "y": -60,
+        "z": 180
+      }
+    },
+    {
+      "position": {
+        "x": 4.3,
+        "y": 11.55,
+        "z": 10.55
+      },
+      "rotation": {
+        "x": -25,
+        "y": 60,
+        "z": 180
+      }
+    }
+  ],
   "mutations": {},
   "sproutShape": "short-sprout",
   "matureShape": "short-mature",
-  "flavors": {
-    "SPICY": 30,
-    "DRY": 30,
-    "SWEET": 30,
-    "BITTER": 30,
-    "SOUR": 30
-  },
-  "weight": 1.0,
+  "weight": 1,
   "tintIndexes": [],
   "flowerModel": "cobblemon:flower.geo",
   "flowerTexture": "cobblemon:flower",
   "fruitModel": "cobblemon:starf_berry.geo",
   "fruitTexture": "cobblemon:starf",
-  "boneMealChance": 0.24
+  "boneMealChance": 0.24,
+  "colour": "GREEN",
+  "flavours": {
+    "SPICY": 30,
+    "DRY": 10,
+    "SWEET": 30,
+    "BITTER": 10,
+    "SOUR": 30
+  }
 }

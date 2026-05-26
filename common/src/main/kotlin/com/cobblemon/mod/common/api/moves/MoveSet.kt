@@ -54,6 +54,7 @@ class MoveSet : Iterable<Move> {
      */
     fun getMoves() = moves.filterNotNull()
     fun getMovesWithNulls() = moves.toList()
+    fun getMoveTemplates() = getMoves().map { move -> move.template }
     fun hasSpace() = moves.any { it == null }
 
     /**
@@ -213,7 +214,10 @@ class MoveSet : Iterable<Move> {
             .xmap(
                 { moveList ->
                     val moveSet = MoveSet()
-                    moveList.forEach(moveSet::add)
+                    moveList.filter { it.template !is MoveTemplate.Dummy }.forEach(moveSet::add)
+                    if (moveSet.moves.all { it == null }) {
+                        moveSet.add(Moves.getExceptional().create())
+                    }
                     return@xmap moveSet
                 },
                 { moveSet -> moveSet.toList() }

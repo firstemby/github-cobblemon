@@ -8,12 +8,17 @@
 
 package com.cobblemon.mod.common.client.render.models.blockbench
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.client.util.adapters.LocatorBoneAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.model.geom.PartPose
-import net.minecraft.client.model.geom.builders.*
+import net.minecraft.client.model.geom.builders.CubeDeformation
+import net.minecraft.client.model.geom.builders.CubeListBuilder
+import net.minecraft.client.model.geom.builders.LayerDefinition
+import net.minecraft.client.model.geom.builders.MeshDefinition
+import net.minecraft.client.model.geom.builders.PartDefinition
 
 /**
  * Bedrock's GEO format.
@@ -266,7 +271,7 @@ class TexturedModel {
                 var counter = 0
                 subParts.forEachIndexed { index, part ->
                     parts[bone.name]!!.addOrReplaceChild(
-                        bone.name + counter++.toString(),
+                        "%" + bone.name + "%" + counter++.toString(),
                         part,
                         modelTransforms[index]
                     )
@@ -293,11 +298,12 @@ class TexturedModel {
             .registerTypeAdapter(LocatorBone::class.java, LocatorBoneAdapter)
             .create()
 
-        fun from(json: String) : TexturedModel {
-            try {
-                return GSON.fromJson(json, TexturedModel::class.java)
+        fun from(json: String) : TexturedModel? {
+            return try {
+                GSON.fromJson(json, TexturedModel::class.java)
             } catch (exception: Exception) {
-                throw IllegalStateException("Issue loading pokemon geo: $json", exception)
+                LOGGER.warn(exception)
+                null
             }
         }
     }

@@ -43,7 +43,7 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.95,
   "hitbox": {
     "width": 2.5,
     "height": 3,
@@ -52,12 +52,25 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.24
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "11-15"
+      "light": "11-15",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -70,6 +83,25 @@
       {
         "item": "cobblemon:pecha_berry",
         "percentage": 10.0
+      }
+    ]
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "stats": {
+          "SPEED": "45-75",
+          "ACCELERATION": "20-25",
+          "SKILL": "25-35",
+          "JUMP": "25-35",
+          "STAMINA": "50-70"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
       }
     ]
   },
@@ -180,7 +212,17 @@
     "tutor:stompingtantrum",
     "tutor:superpower",
     "tutor:throatchop",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger"
   ],
   "preEvolution": "whirlipede",
   "evolutions": []

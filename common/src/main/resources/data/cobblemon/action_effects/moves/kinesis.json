@@ -12,7 +12,7 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:kinesis_actor",
-      "locator": "target",
+      "locator": "root",
       "delay": 0.1
     },
     {

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 522,
   "name": "Blitzle",
   "primaryType": "electric",
@@ -41,11 +42,67 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1,
     "height": 1.5,
     "fixed": false
+  },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "ponyta",
+          "tier": 1
+        },
+        {
+          "pokemon": "mudbray",
+          "tier": 1
+        },
+        {
+          "pokemon": "blitzle",
+          "tier": 2
+        },
+        {
+          "pokemon": "mudsdale",
+          "tier": 3
+        },
+        {
+          "pokemon": "rapidash",
+          "tier": 3
+        },
+        {
+          "pokemon": "zebstrika",
+          "tier": 4
+        },
+        {
+          "pokemon": "glastrier",
+          "tier": 5
+        },
+        {
+          "pokemon": "spectrier",
+          "tier": 5
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
   },
   "drops": {
     "amount": 2,
@@ -139,7 +196,18 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

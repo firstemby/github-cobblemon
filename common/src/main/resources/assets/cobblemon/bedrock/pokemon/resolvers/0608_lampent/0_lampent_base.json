@@ -9,19 +9,35 @@
       "texture": "cobblemon:textures/pokemon/0608_lampent/lampent.png",
       "layers": [
         {
-          "name": "color",
+          "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_emissive.png",
-          "emissive": true
+          "emissive": true,
+          "translucent": true
         }
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_shiny.png",
       "layers": [
         {
-          "name": "color",
-          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_shiny_emissive.png",
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_alpha.png",
           "emissive": true
         }
       ]

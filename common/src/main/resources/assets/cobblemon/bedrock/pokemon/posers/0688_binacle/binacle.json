@@ -4,6 +4,9 @@
   "profileScale": 0.64,
   "profileTranslation": [-0.01,0.8,0],
   "rootBone": "binacle",
+  "animations": {
+    "cry": "q.bedrock_stateful('binacle', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

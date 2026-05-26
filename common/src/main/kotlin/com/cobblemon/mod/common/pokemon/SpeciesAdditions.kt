@@ -14,16 +14,19 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.google.gson.*
+import com.google.gson.Gson
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.javaType
 import kotlin.reflect.jvm.isAccessible
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
 
 internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionParameter> {
 
@@ -44,14 +47,11 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
             parameter.additions.forEach { addition ->
                 try {
                     var value = addition.value
-                    if (value is MutableCollection<*>) {
+                    // Catch collection properties that append
+                    val appendKeywordsCollection = listOf("forms", "evolutions")
+                    if ((appendKeywordsCollection.any { it == addition.property.name }) && (value is MutableCollection<*>)) {
                         val existing = addition.property.getter.call(species) as MutableCollection<Any>
                         existing.addAll(value.filterNotNull())
-                        value = existing
-                    }
-                    else if (value is MutableMap<*, *>) {
-                        val existing = addition.property.getter.call(species) as MutableMap<Any, Any>
-                        existing.putAll(value as MutableMap<Any, Any>)
                         value = existing
                     }
                     addition.property.setter.call(species, value)

@@ -173,8 +173,6 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
     override fun onClose() {
         super.onClose()
         CobblemonClient.battle?.minimised = true
-        PartySendBinding.canApplyChange = false
-        PartySendBinding.wasDown = true
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {

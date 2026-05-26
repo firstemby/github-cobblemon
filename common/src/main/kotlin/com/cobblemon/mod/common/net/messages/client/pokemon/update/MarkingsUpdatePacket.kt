@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MarkingsUpdatePacket(pokemon: () -> Pokemon, value: List<Int>): SingleUpdatePacket<List<Int>, MarkingsUpdatePacket>(pokemon, value) {
+class MarkingsUpdatePacket(pokemon: () -> Pokemon?, value: List<Int>): SingleUpdatePacket<List<Int>, MarkingsUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
         buffer.writeCollection(this.value) { pb, value -> pb.writeInt(value) }

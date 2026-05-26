@@ -10,21 +10,35 @@
       "layers": [
         {
           "name": "glow",
-          "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_gem_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_emissive.png",
           "emissive": true,
           "translucent": true
         }
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_shiny.png",
       "layers": [
         {
           "name": "glow",
-          "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_gem_shiny_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_shiny_emissive.png",
           "emissive": true,
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0120_staryu/staryu_alpha.png",
+          "emissive": true
         }
       ]
     }

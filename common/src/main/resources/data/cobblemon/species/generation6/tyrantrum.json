@@ -46,22 +46,57 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 3.05,
     "height": 4.65,
-    "fixed": false
+    "fixed": false,
+    "width": 3.05
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "50-70",
+          "JUMP": "40-55",
+          "SKILL": "40-60",
+          "SPEED": "20-30",
+          "STAMINA": "70-100"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      },
+      {
+        "locator": "seat_2"
+      }
+    ]
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
+    "herd": {
+      "maxSize": "7"
     },
     "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      },
       "walk": {
         "walkSpeed": 0.27
-      },
-      "swim": {
-        "canSwimInLava": true
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -177,7 +212,6 @@
     "tutor:meteorbeam",
     "tutor:outrage",
     "tutor:playrough",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -188,7 +222,18 @@
     "tutor:stoneedge",
     "tutor:superpower",
     "tutor:thunderfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "tyrunt",
   "evolutions": []

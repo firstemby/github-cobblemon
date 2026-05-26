@@ -9,12 +9,7 @@
 package com.cobblemon.mod.common.util.adapters
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.api.molang.ListExpression
-import com.cobblemon.mod.common.api.molang.SingleExpression
-import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.asExpressions
-import com.cobblemon.mod.common.util.endWith
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement

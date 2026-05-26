@@ -43,17 +43,47 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.65,
+  "standingEyeHeight": 0.8,
+  "swimmingEyeHeight": 0.8,
+  "flyingEyeHeight": 0.8,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 0.6,
-    "height": 1.4,
+    "width": 0.72,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "grovyle",
+          "tier": 1
+        },
+        {
+          "pokemon": "sceptile mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "sceptile mega",
+          "tier": 3
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -180,7 +210,26 @@
     "tutor:swift",
     "tutor:synthesis",
     "tutor:thunderpunch",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:bodyslam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleedge",
+    "legacy:dynamicpunch",
+    "legacy:focuspunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:seismictoss",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -194,7 +243,18 @@
           "variant": "level",
           "minLevel": 16
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

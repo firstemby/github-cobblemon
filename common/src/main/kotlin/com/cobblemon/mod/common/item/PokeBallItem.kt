@@ -39,9 +39,7 @@ class PokeBallItem(
         if (world.isServerSide()) {
             throwPokeBall(world, player as ServerPlayer)
         }
-        if (!player.abilities.instabuild) {
-            itemStack.shrink(1)
-        }
+        itemStack.consume(1, player)
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 

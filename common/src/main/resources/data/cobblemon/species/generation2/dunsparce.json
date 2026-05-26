@@ -37,12 +37,34 @@
     "special_defence": 0,
     "speed": 0
   },
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    }
+  },
   "baseExperienceYield": 145,
   "experienceGroup": "medium_fast",
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.25,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -213,7 +235,25 @@
     "tutor:thunderbolt",
     "tutor:uproar",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:chargebeam",
+    "legacy:confide",
+    "legacy:counter",
+    "legacy:doubleteam",
+    "legacy:dualwingbeat",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:nightmare",
+    "legacy:return",
+    "legacy:round",
+    "legacy:swagger",
+    "legacy:thunderwave",
+    "legacy:waterpulse",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -225,7 +265,18 @@
           "variant": "has_move",
           "move": "hyperdrill"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

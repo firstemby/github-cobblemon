@@ -13,5 +13,6 @@ import net.minecraft.network.chat.MutableComponent
 
 class DialogueSpeakerDTO(
     val name: MutableComponent? = null,
-    val face: DialogueFaceProvider?
+    val face: DialogueFaceProvider?,
+    val gibber: DialogueGibberDTO? = null
 )

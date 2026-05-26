@@ -45,7 +45,7 @@
   "catchRate": 190,
   "eggCycles": 40,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1.18,
     "height": 0.95,
@@ -53,16 +53,35 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.1,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "basculin striped=red",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -161,14 +180,26 @@
     "tutor:icefang",
     "tutor:icywind",
     "tutor:liquidation",
-    "tutor:psychic",
     "tutor:rest",
     "tutor:scaleshot",
     "tutor:sleeptalk",
     "tutor:superpower",
     "tutor:swift",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:uproar"
   ],
   "evolutions": [],
   "forms": [
@@ -193,7 +224,39 @@
         "h:moldbreaker"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=blue",
+              "tier": 1
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 2
+            }
+          ]
+        },
+        "moving": {
+          "walk": {
+            "avoidsLand": true
+          },
+          "swim": {
+            "canBreatheUnderwater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     },
     {
       "name": "White-Striped",
@@ -278,7 +341,6 @@
         "tutor:icefang",
         "tutor:icywind",
         "tutor:liquidation",
-        "tutor:psychic",
         "tutor:rest",
         "tutor:scaleshot",
         "tutor:sleeptalk",
@@ -300,7 +362,43 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "9",
+          "toleratedLeaders": [
+            {
+              "pokemon": "basculin striped=white",
+              "tier": 1
+            },
+            {
+              "pokemon": "basculegion",
+              "tier": 2
+            },
+            {
+              "pokemon": "manaphy",
+              "tier": 3
+            }
+          ]
+        },
+        "moving": {
+          "walk": {
+            "avoidsLand": true
+          },
+          "swim": {
+            "canBreatheUnderwater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        }
+      }
     }
   ]
 }

@@ -14,6 +14,9 @@
     "gen4"
   ],
   "aspects": [],
+  "features": [
+    "has_nectar"
+  ],
   "abilities": [
     "honeygather",
     "h:hustle"
@@ -52,15 +55,53 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.6
+        "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "vespiquen",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true,
+      "willFlee": false,
+      "willDefendSelf": true
     }
   },
+  "ai": [
+    {
+      "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_bee",
+        "cobblemon:fights_melee"
+      ]
+    },
+    {
+      "type": "cobblemon:set_variables",
+      "variableValues": {
+        "hover_wander_minimum_height": 1,
+        "hover_wander_maximum_height": 3
+      }
+    }
+  ],
   "drops": {
     "amount": 4,
     "entries": [
@@ -70,7 +111,7 @@
       },
       {
         "item": "minecraft:honeycomb",
-        "percentage": 2.5
+        "quantityRange": "0-1"
       },
       {
         "item": "cobblemon:poison_barb",
@@ -102,7 +143,13 @@
     "tutor:ominouswind",
     "tutor:skittersmack",
     "tutor:sleeptalk",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:aircutter",
+    "legacy:dualwingbeat",
+    "legacy:mudslap",
+    "legacy:snore",
+    "legacy:swift",
+    "legacy:tailwind"
   ],
   "evolutions": [
     {
@@ -120,7 +167,18 @@
           "variant": "properties",
           "target": "gender=female"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

@@ -208,6 +208,13 @@
 					"rotation": [10, 0, -10]
 				}
 			}
+		},
+		"animation.munna.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.munna.cry"
+				}
+			}
 		}
 	}
 }

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:mudsport_actor",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/mud_splash"
+                "texture": "textures/particles/generic/mud/mudsplash"
             }
         },
         "curves": {
@@ -93,7 +93,7 @@
                             8
                         ],
                         "frames_per_second": 12,
-                        "max_frame": 10
+                        "max_frame": 7
                     }
                 }
             },

@@ -10,23 +10,24 @@ package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.CobblemonActivities
 import com.cobblemon.mod.common.CobblemonMemories
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class SwitchToChattingTaskConfig : SingleTaskConfig {
+    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
+        behaviourConfigurationContext: BehaviourConfigurationContext
     ) = BehaviorBuilder.create {
         it.group(
-            it.present(CobblemonMemories.DIALOGUES),
-            it.registered(MemoryModuleType.WALK_TARGET)
-        ).apply(it) { _, walkTarget ->
+            it.present(CobblemonMemories.DIALOGUES)
+        ).apply(it) { _ ->
             Trigger { world, entity, _ ->
-                walkTarget.erase()
+                entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET) // it may not even have this memory but clear it if it got it
                 entity.brain.setActiveActivityIfPossible(CobblemonActivities.NPC_CHATTING)
                 return@Trigger true
             }

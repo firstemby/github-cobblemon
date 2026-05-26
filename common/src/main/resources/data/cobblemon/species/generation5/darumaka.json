@@ -54,13 +54,37 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "darumaka",
+          "tier": 1
+        },
+        {
+          "pokemon": "darmanitan",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -156,7 +180,18 @@
     "tutor:snatch",
     "tutor:superpower",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -286,7 +321,10 @@
         "tutor:sleeptalk",
         "tutor:superpower",
         "tutor:uproar",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -302,7 +340,35 @@
           }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "4",
+          "toleratedLeaders": [
+            {
+              "pokemon": "darumaka",
+              "tier": 1
+            },
+            {
+              "pokemon": "darmanitan",
+              "tier": 2
+            }
+          ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
+      }
     }
   ]
 }

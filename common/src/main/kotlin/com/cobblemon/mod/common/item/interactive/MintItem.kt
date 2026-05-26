@@ -24,16 +24,14 @@ import net.minecraft.world.level.Level
 class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelectingItem {
 
     override val bagItem = null
-    override fun canUseOnPokemon(pokemon: Pokemon) = pokemon.effectiveNature != nature
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.effectiveNature != nature
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack> {
         return if (pokemon.effectiveNature != nature) {
-            if (!player.isCreative) {
-                stack.shrink(1)
-            }
+            stack.consume(1, player)
             pokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
             pokemon.mintedNature = nature
             player.sendSystemMessage(lang("mint.interact", pokemon.getDisplayName(), stack.hoverName), true)

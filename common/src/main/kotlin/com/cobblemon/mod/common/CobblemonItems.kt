@@ -8,10 +8,12 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.text.blue
@@ -19,6 +21,7 @@ import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
+import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
@@ -26,12 +29,18 @@ import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
 import com.cobblemon.mod.common.item.battle.DireHitItem
 import com.cobblemon.mod.common.item.battle.GuardSpecItem
 import com.cobblemon.mod.common.item.battle.XStatItem
-import com.cobblemon.mod.common.item.berry.*
+import com.cobblemon.mod.common.item.berry.BerryItem
+import com.cobblemon.mod.common.item.berry.FriendshipRaisingBerryItem
+import com.cobblemon.mod.common.item.berry.HealingBerryItem
+import com.cobblemon.mod.common.item.berry.PPRestoringBerryItem
+import com.cobblemon.mod.common.item.berry.PortionHealingBerryItem
+import com.cobblemon.mod.common.item.berry.StatusCuringBerryItem
+import com.cobblemon.mod.common.item.food.SinisterTeaItem
 import com.cobblemon.mod.common.item.interactive.*
-import com.cobblemon.mod.common.item.interactive.PotionItem
 import com.cobblemon.mod.common.item.interactive.ability.AbilityChangeItem
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.pokeball.PokeBall
+import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
@@ -44,7 +53,16 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.food.FoodProperties
-import net.minecraft.world.item.*
+import net.minecraft.world.item.BlockItem
+import net.minecraft.world.item.HangingSignItem
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Item.Properties
+import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.Rarity
+import net.minecraft.world.item.SignItem
+import net.minecraft.world.item.SmithingTemplateItem
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 
@@ -171,11 +189,37 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val POKEDEX_WHITE = pokedexItem(PokedexType.WHITE)
 
+    val campfire_pots = mutableListOf<CampfirePotItem>()
     @JvmField
-    val VIVICHOKE = compostableItem("vivichoke")
+    val CAMPFIRE_POT_RED = campfirePotItem(CobblemonBlocks.RED_CAMPFIRE_POT, CampfirePotColor.RED)
+    @JvmField
+    val CAMPFIRE_POT_YELLOW = campfirePotItem(CobblemonBlocks.YELLOW_CAMPFIRE_POT, CampfirePotColor.YELLOW)
+    @JvmField
+    val CAMPFIRE_POT_GREEN = campfirePotItem(CobblemonBlocks.GREEN_CAMPFIRE_POT, CampfirePotColor.GREEN)
+    @JvmField
+    val CAMPFIRE_POT_BLUE = campfirePotItem(CobblemonBlocks.BLUE_CAMPFIRE_POT, CampfirePotColor.BLUE)
+    @JvmField
+    val CAMPFIRE_POT_PINK = campfirePotItem(CobblemonBlocks.PINK_CAMPFIRE_POT, CampfirePotColor.PINK)
+    @JvmField
+    val CAMPFIRE_POT_BLACK = campfirePotItem(CobblemonBlocks.BLACK_CAMPFIRE_POT, CampfirePotColor.BLACK)
+    @JvmField
+    val CAMPFIRE_POT_WHITE = campfirePotItem(CobblemonBlocks.WHITE_CAMPFIRE_POT, CampfirePotColor.WHITE)
 
     @JvmField
-    val VIVICHOKE_SEEDS = compostableItem("vivichoke_seeds", VivichokeItem(CobblemonBlocks.VIVICHOKE_SEEDS))
+    val HEARTY_GRAINS = compostableItem("hearty_grains", ItemNameBlockItem(CobblemonBlocks.HEARTY_GRAINS, Properties().rarity(Rarity.COMMON)))
+    @JvmField
+    val HEARTY_GRAIN_BALE = compostableBlockItem("hearty_grain_bale", CobblemonBlocks.HEARTY_GRAIN_BALE, 0.85f)
+
+    @JvmField
+    val TATAMI_BLOCK = blockItem("tatami_block", CobblemonBlocks.TATAMI_BLOCK)
+    @JvmField
+    val TATAMI_MAT = blockItem("tatami_mat", CobblemonBlocks.TATAMI_MAT)
+
+    @JvmField
+    val VIVICHOKE = compostableItem("vivichoke", CobblemonItem(Item.Properties()), 0.80f)
+
+    @JvmField
+    val VIVICHOKE_SEEDS = compostableItem("vivichoke_seeds", VivichokeItem(CobblemonBlocks.VIVICHOKE_SEEDS), 0.30f)
 
     @JvmField
     val RED_APRICORN = apricornItem("red", ApricornItem(CobblemonBlocks.RED_APRICORN))
@@ -218,7 +262,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val APRICORN_PLANKS = blockItem("apricorn_planks", CobblemonBlocks.APRICORN_PLANKS)
     @JvmField
-    val APRICORN_LEAVES = compostableBlockItem("apricorn_leaves", CobblemonBlocks.APRICORN_LEAVES)
+    val APRICORN_LEAVES = compostableBlockItem("apricorn_leaves", CobblemonBlocks.APRICORN_LEAVES, 0.30f)
     @JvmField
     val APRICORN_BOAT = create("apricorn_boat", CobblemonBoatItem(CobblemonBoatType.APRICORN, false, Item.Properties().stacksTo(1)))
     @JvmField
@@ -261,6 +305,146 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val GIMMIGHOUL_CHEST = this.create("gimmighoul_chest", BlockItem(CobblemonBlocks.GIMMIGHOUL_CHEST, Item.Properties()))
 
+    // Saccharines
+    @JvmField
+    val SACCHARINE_LOG = blockItem("saccharine_log", CobblemonBlocks.SACCHARINE_LOG)
+    @JvmField
+    val SACCHARINE_LOG_SLATHERED = blockItem("saccharine_log_slathered", CobblemonBlocks.SACCHARINE_LOG_SLATHERED)
+    @JvmField
+    val STRIPPED_SACCHARINE_LOG = blockItem("stripped_saccharine_log", CobblemonBlocks.STRIPPED_SACCHARINE_LOG)
+    @JvmField
+    val SACCHARINE_WOOD = blockItem("saccharine_wood", CobblemonBlocks.SACCHARINE_WOOD)
+    @JvmField
+    val STRIPPED_SACCHARINE_WOOD = blockItem("stripped_saccharine_wood", CobblemonBlocks.STRIPPED_SACCHARINE_WOOD)
+    @JvmField
+    val SACCHARINE_PLANKS = blockItem("saccharine_planks", CobblemonBlocks.SACCHARINE_PLANKS)
+    @JvmField
+    val SACCHARINE_LEAVES = compostableBlockItem("saccharine_leaves", CobblemonBlocks.SACCHARINE_LEAVES, 0.35f)
+    @JvmField
+    val SACCHARINE_BOAT = create("saccharine_boat", CobblemonBoatItem(CobblemonBoatType.SACCHARINE, false, Item.Properties().stacksTo(1)))
+    @JvmField
+    val SACCHARINE_CHEST_BOAT = create("saccharine_chest_boat", CobblemonBoatItem(CobblemonBoatType.SACCHARINE, true, Item.Properties().stacksTo(1)))
+
+    @JvmField
+    val SACCHARINE_DOOR = blockItem("saccharine_door", CobblemonBlocks.SACCHARINE_DOOR)
+    @JvmField
+    val SACCHARINE_TRAPDOOR = blockItem("saccharine_trapdoor", CobblemonBlocks.SACCHARINE_TRAPDOOR)
+    @JvmField
+    val SACCHARINE_FENCE = blockItem("saccharine_fence", CobblemonBlocks.SACCHARINE_FENCE)
+    @JvmField
+    val SACCHARINE_FENCE_GATE = blockItem("saccharine_fence_gate", CobblemonBlocks.SACCHARINE_FENCE_GATE)
+    @JvmField
+    val SACCHARINE_BUTTON = blockItem("saccharine_button", CobblemonBlocks.SACCHARINE_BUTTON)
+    @JvmField
+    val SACCHARINE_PRESSURE_PLATE = blockItem("saccharine_pressure_plate", CobblemonBlocks.SACCHARINE_PRESSURE_PLATE)
+    @JvmField
+    val SACCHARINE_SLAB = blockItem("saccharine_slab", CobblemonBlocks.SACCHARINE_SLAB)
+    @JvmField
+    val SACCHARINE_STAIRS = blockItem("saccharine_stairs", CobblemonBlocks.SACCHARINE_STAIRS)
+    @JvmField
+    val SACCHARINE_SIGN = this.create("saccharine_sign", SignItem(Item.Properties().stacksTo(16), CobblemonBlocks.SACCHARINE_SIGN, CobblemonBlocks.SACCHARINE_WALL_SIGN))
+    @JvmField
+    val SACCHARINE_HANGING_SIGN = this.create("saccharine_hanging_sign", HangingSignItem(CobblemonBlocks.SACCHARINE_HANGING_SIGN, CobblemonBlocks.SACCHARINE_WALL_HANGING_SIGN, Item.Properties().stacksTo(16)))
+    @JvmField
+    val SACCHARINE_SAPLING = compostableBlockItem("saccharine_sapling", CobblemonBlocks.SACCHARINE_SAPLING, 0.30f)
+
+//    @JvmField
+//    val BUGWORT = compostableBlockItem("bugwort", CobblemonBlocks.BUGWORT) // TODO after 1.7
+    @JvmField
+    val POKE_BAIT = noSettingsItem("poke_bait")
+
+    @JvmField
+    val POKE_CAKE = this.create("poke_cake", BlockItem(CobblemonBlocks.POKE_CAKE, Item.Properties().stacksTo(1)))
+    @JvmField
+    val POKE_SNACK = this.create("poke_snack", BlockItem(CobblemonBlocks.POKE_SNACK, Item.Properties().stacksTo(16)))
+
+    val aprijuices = mutableListOf<AprijuiceItem>()
+    @JvmField
+    val APRIJUICE_RED = aprijuiceItem(Apricorn.RED)
+    @JvmField
+    val APRIJUICE_YELLOW = aprijuiceItem(Apricorn.YELLOW)
+    @JvmField
+    val APRIJUICE_GREEN = aprijuiceItem(Apricorn.GREEN)
+    @JvmField
+    val APRIJUICE_BLUE = aprijuiceItem(Apricorn.BLUE)
+    @JvmField
+    val APRIJUICE_PINK = aprijuiceItem(Apricorn.PINK)
+    @JvmField
+    val APRIJUICE_BLACK = aprijuiceItem(Apricorn.BLACK)
+    @JvmField
+    val APRIJUICE_WHITE = aprijuiceItem(Apricorn.WHITE)
+
+    @JvmField
+    val PONIGIRI = create("ponigiri", PonigiriItem())
+
+    @JvmField
+    val SINISTER_TEA = create("sinister_tea", SinisterTeaItem())
+
+    // @JvmField
+    // val POKE_PUFF = pokepuffItem("poke_puff")
+
+    // FOODS
+    @JvmField
+    val SWEET_HEART = noSettingsItem("sweet_heart") // TODO make a SweetHeartItem class for breeding purposes
+
+    @JvmField
+    val TASTY_TAIL = create("tasty_tail", foodItem(3, 0.3f))
+
+    @JvmField
+    val PEWTER_CRUNCHIES = regionalFoodItem("pewter_crunchies", 64, 7, 0.3f, false)
+    @JvmField
+    val RAGE_CANDY_BAR = regionalFoodItem("rage_candy_bar", 64, 8, 0.2f, false)
+    @JvmField
+    val LAVA_COOKIE = regionalFoodItem("lava_cookie", 64, 2, 0.3f, false)
+    @JvmField
+    val OLD_GATEAU = regionalFoodItem("old_gateau", 64, 9, 0.1f, false)
+    @JvmField
+    val CASTELIACONE = regionalFoodItem("casteliacone", 64, 5, 0.3f, false)
+    @JvmField
+    val LUMIOSE_GALETTE = regionalFoodItem("lumiose_galette", 64, 4, 0.4f, false)
+    @JvmField
+    val BIG_MALASADA = regionalFoodItem("big_malasada", 64, 7, 0.3f, false)
+    @JvmField
+    val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 64, 10, 0.6f, false, ItemStack(Items.BOWL, 1))
+    @JvmField
+    val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 64, 7, 0.3f, false)
+    @JvmField
+    val OPEN_FACED_SANDWICH = regionalFoodItem("open_faced_sandwich", 64, 13, 0.5f, false)
+
+    // todo we might need to wait on these for later? These impact battles and may be harder to do
+    /*@JvmField
+    val CHOICE_DUMPLING = noSettingsItem("choice_dumpling") // todo make a ChoiceDumpingItem class for battle purposes
+    @JvmField
+    val SWAP_SNACK = noSettingsItem("swap_snack") // todo make a SwapSnackItem class for battle purposes
+    @JvmField
+    val TWICE_SPICED_BEETROOT = noSettingsItem("twice_spiced_beetroot") // todo make a TwiceSpiceBeetrootItem class for battle purposes
+*/
+    @JvmField
+    val POTATO_MOCHI = create("potato_mochi", CobblemonItem(Properties().stacksTo(64)
+        .food(FoodProperties.Builder()
+            .nutrition(4)
+            .saturationModifier(0.4F)
+            .build())))
+    @JvmField
+    val CANDIED_APPLE = create("candied_apple",  CobblemonItem(Properties().stacksTo(64)
+        .food(FoodProperties.Builder()
+            .nutrition(6)
+            .saturationModifier(0.2F)
+            .usingConvertsTo(Items.STICK)
+            .build())))
+    @JvmField
+    val CANDIED_BERRY = create("candied_berry",  CobblemonItem(Properties().stacksTo(64)
+        .food(FoodProperties.Builder()
+            .nutrition(5)
+            .saturationModifier(0.22F)
+            .usingConvertsTo(Items.STICK)
+            .build())))
+
+    //@JvmField
+    //val SCATTER_BANG = this.create("scatter_bang", ScatterBangItem(Item.Settings()))
+    //@JvmField
+    //val STICKY_GLOB = this.create("sticky_glob", StickyGlobItem(Item.Settings()))
+
     @JvmField
     val RESTORATION_TANK = blockItem("restoration_tank", CobblemonBlocks.RESTORATION_TANK)
     @JvmField
@@ -268,15 +452,22 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MONITOR = blockItem("monitor", CobblemonBlocks.MONITOR)
     @JvmField
+    val DAMAGED_MONITOR = blockItem("damaged_monitor", CobblemonBlocks.DAMAGED_MONITOR)
+    @JvmField
     val HEALING_MACHINE = blockItem("healing_machine", CobblemonBlocks.HEALING_MACHINE, Rarity.UNCOMMON)
     @JvmField
     val PC = blockItem("pc", CobblemonBlocks.PC)
     @JvmField
+    val TM_MACHINE = blockItem("tm_machine", CobblemonBlocks.TM_MACHINE)
+    @JvmField
+    val DISC_SHELF = blockItem("disc_shelf", CobblemonBlocks.DISC_SHELF)
+    @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)
     @JvmField
     val DISPLAY_CASE = blockItem("display_case", CobblemonBlocks.DISPLAY_CASE)
-    @JvmField
-    val LECTERN = blockItem("lectern", CobblemonBlocks.LECTERN)
+//    @JvmField
+//    val INCENSE_SWEET = blockItem("incense_sweet", CobblemonBlocks.INCENSE_SWEET) // TODO after 1.7
+
 
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
@@ -305,9 +496,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val CRACKED_POT = noSettingsItem("cracked_pot")
     @JvmField val MASTERPIECE_TEACUP = noSettingsItem("masterpiece_teacup")
     @JvmField val UNREMARKABLE_TEACUP = noSettingsItem("unremarkable_teacup")
-    @JvmField val SWEET_APPLE = create("sweet_apple", foodItem(4, 0.3f))
-    @JvmField val TART_APPLE = create("tart_apple", foodItem(4, 0.3f))
-    @JvmField val SYRUPY_APPLE = create("syrupy_apple", foodItem(4, 0.3f))
+    @JvmField val SWEET_APPLE = compostableItem("sweet_apple", foodItem(4, 0.3f), 0.65f)
+    @JvmField val TART_APPLE = compostableItem("tart_apple", foodItem(4, 0.3f), 0.65f)
+    @JvmField val SYRUPY_APPLE = compostableItem("syrupy_apple", foodItem(4, 0.3f), 0.65f)
     @JvmField val GALARICA_CUFF = noSettingsItem("galarica_cuff")
     @JvmField val GALARICA_WREATH = noSettingsItem("galarica_wreath")
     @JvmField val BLACK_AUGURITE = noSettingsItem("black_augurite")
@@ -317,21 +508,66 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
     @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
     @JvmField val SHELL_HELMET = heldItem("shell_helmet")
+    @JvmField val METAL_ALLOY = noSettingsItem("metal_alloy")
+    @JvmField val SCROLL_OF_DARKNESS = noSettingsItem("scroll_of_darkness")
+    @JvmField val SCROLL_OF_WATERS = noSettingsItem("scroll_of_waters")
+
+    @JvmField val WHITE_PLAQUE = blockItem("white_plaque", CobblemonBlocks.WHITE_PLAQUE)
+    @JvmField val LIGHT_GRAY_PLAQUE = blockItem("light_gray_plaque", CobblemonBlocks.LIGHT_GRAY_PLAQUE)
+    @JvmField val GRAY_PLAQUE = blockItem("gray_plaque", CobblemonBlocks.GRAY_PLAQUE)
+    @JvmField val BLACK_PLAQUE = blockItem("black_plaque", CobblemonBlocks.BLACK_PLAQUE)
+    @JvmField val BROWN_PLAQUE = blockItem("brown_plaque", CobblemonBlocks.BROWN_PLAQUE)
+    @JvmField val RED_PLAQUE = blockItem("red_plaque", CobblemonBlocks.RED_PLAQUE)
+    @JvmField val ORANGE_PLAQUE = blockItem("orange_plaque", CobblemonBlocks.ORANGE_PLAQUE)
+    @JvmField val YELLOW_PLAQUE = blockItem("yellow_plaque", CobblemonBlocks.YELLOW_PLAQUE)
+    @JvmField val LIME_PLAQUE = blockItem("lime_plaque", CobblemonBlocks.LIME_PLAQUE)
+    @JvmField val GREEN_PLAQUE = blockItem("green_plaque", CobblemonBlocks.GREEN_PLAQUE)
+    @JvmField val CYAN_PLAQUE = blockItem("cyan_plaque", CobblemonBlocks.CYAN_PLAQUE)
+    @JvmField val LIGHT_BLUE_PLAQUE = blockItem("light_blue_plaque", CobblemonBlocks.LIGHT_BLUE_PLAQUE)
+    @JvmField val BLUE_PLAQUE = blockItem("blue_plaque", CobblemonBlocks.BLUE_PLAQUE)
+    @JvmField val PURPLE_PLAQUE = blockItem("purple_plaque", CobblemonBlocks.PURPLE_PLAQUE)
+    @JvmField val MAGENTA_PLAQUE = blockItem("magenta_plaque", CobblemonBlocks.MAGENTA_PLAQUE)
+    @JvmField val PINK_PLAQUE = blockItem("pink_plaque", CobblemonBlocks.PINK_PLAQUE)
 
     private val berries = mutableMapOf<ResourceLocation, BerryItem>()
     // Plants
-    @JvmField val ORAN_BERRY = berryItem("oran", HealingBerryItem(CobblemonBlocks.ORAN_BERRY) { CobblemonMechanics.berries.oranRestoreAmount })
     @JvmField val CHERI_BERRY = berryItem("cheri", StatusCuringBerryItem(CobblemonBlocks.CHERI_BERRY, Statuses.PARALYSIS))
     @JvmField val CHESTO_BERRY = berryItem("chesto", StatusCuringBerryItem(CobblemonBlocks.CHESTO_BERRY, Statuses.SLEEP))
     @JvmField val PECHA_BERRY = berryItem("pecha", StatusCuringBerryItem(CobblemonBlocks.PECHA_BERRY, Statuses.POISON, Statuses.POISON_BADLY))
     @JvmField val RAWST_BERRY = berryItem("rawst", StatusCuringBerryItem(CobblemonBlocks.RAWST_BERRY, Statuses.BURN))
     @JvmField val ASPEAR_BERRY = berryItem("aspear", StatusCuringBerryItem(CobblemonBlocks.ASPEAR_BERRY, Statuses.FROZEN))
-    @JvmField val PERSIM_BERRY = berryItem("persim", VolatileCuringBerryItem(CobblemonBlocks.PERSIM_BERRY, "confusion"))
+    @JvmField val LEPPA_BERRY = berryItem("leppa", PPRestoringBerryItem(CobblemonBlocks.LEPPA_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
+    @JvmField val ORAN_BERRY = berryItem("oran", HealingBerryItem(CobblemonBlocks.ORAN_BERRY) { CobblemonMechanics.berries.oranRestoreAmount })
+    @JvmField val PERSIM_BERRY = berryItem("persim", StatusCuringBerryItem(CobblemonBlocks.PERSIM_BERRY, Statuses.CONFUSE))
+    @JvmField val LUM_BERRY = berryItem("lum", StatusCuringBerryItem(CobblemonBlocks.LUM_BERRY, *(Statuses.getPersistentStatuses().toTypedArray() + Statuses.CONFUSE)))
+    @JvmField val SITRUS_BERRY = berryItem("sitrus", HealingBerryItem(CobblemonBlocks.SITRUS_BERRY) { CobblemonMechanics.berries.sitrusHealAmount })
+    @JvmField val EGGANT_BERRY = berryItem("eggant", StatusCuringBerryItem(CobblemonBlocks.EGGANT_BERRY, Statuses.ATTRACT))
+    @JvmField val FIGY_BERRY = berryItem("figy", PortionHealingBerryItem(CobblemonBlocks.FIGY_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val WIKI_BERRY = berryItem("wiki", PortionHealingBerryItem(CobblemonBlocks.WIKI_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val MAGO_BERRY = berryItem("mago", PortionHealingBerryItem(CobblemonBlocks.MAGO_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val AGUAV_BERRY = berryItem("aguav", PortionHealingBerryItem(CobblemonBlocks.AGUAV_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
+    @JvmField val IAPAPA_BERRY = berryItem("iapapa", PortionHealingBerryItem(CobblemonBlocks.IAPAPA_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
     @JvmField val RAZZ_BERRY = berryItem("razz", CobblemonBlocks.RAZZ_BERRY)
     @JvmField val BLUK_BERRY = berryItem("bluk", CobblemonBlocks.BLUK_BERRY)
     @JvmField val NANAB_BERRY = berryItem("nanab", CobblemonBlocks.NANAB_BERRY)
     @JvmField val WEPEAR_BERRY = berryItem("wepear", CobblemonBlocks.WEPEAR_BERRY)
     @JvmField val PINAP_BERRY = berryItem("pinap", CobblemonBlocks.PINAP_BERRY)
+    @JvmField val POMEG_BERRY = berryItem("pomeg", FriendshipRaisingBerryItem(CobblemonBlocks.POMEG_BERRY, Stats.HP))
+    @JvmField val KELPSY_BERRY = berryItem("kelpsy", FriendshipRaisingBerryItem(CobblemonBlocks.KELPSY_BERRY, Stats.ATTACK))
+    @JvmField val QUALOT_BERRY = berryItem("qualot", FriendshipRaisingBerryItem(CobblemonBlocks.QUALOT_BERRY, Stats.DEFENCE))
+    @JvmField val HONDEW_BERRY = berryItem("hondew", FriendshipRaisingBerryItem(CobblemonBlocks.HONDEW_BERRY, Stats.SPECIAL_ATTACK))
+    @JvmField val GREPA_BERRY = berryItem("grepa", FriendshipRaisingBerryItem(CobblemonBlocks.GREPA_BERRY, Stats.SPECIAL_DEFENCE))
+    @JvmField val TAMATO_BERRY = berryItem("tamato", FriendshipRaisingBerryItem(CobblemonBlocks.TAMATO_BERRY, Stats.SPEED))
+    @JvmField val TOUGA_BERRY = berryItem("touga", CobblemonBlocks.TOUGA_BERRY)
+    @JvmField val CORNN_BERRY = berryItem("cornn", CobblemonBlocks.CORNN_BERRY)
+    @JvmField val MAGOST_BERRY = berryItem("magost", CobblemonBlocks.MAGOST_BERRY)
+    @JvmField val RABUTA_BERRY = berryItem("rabuta", CobblemonBlocks.RABUTA_BERRY)
+    @JvmField val NOMEL_BERRY = berryItem("nomel", CobblemonBlocks.NOMEL_BERRY)
+    @JvmField val SPELON_BERRY = berryItem("spelon", CobblemonBlocks.SPELON_BERRY)
+    @JvmField val PAMTRE_BERRY = berryItem("pamtre", CobblemonBlocks.PAMTRE_BERRY)
+    @JvmField val WATMEL_BERRY = berryItem("watmel", CobblemonBlocks.WATMEL_BERRY)
+    @JvmField val DURIN_BERRY = berryItem("durin", CobblemonBlocks.DURIN_BERRY)
+    @JvmField val BELUE_BERRY = berryItem("belue", CobblemonBlocks.BELUE_BERRY)
     @JvmField val OCCA_BERRY = berryItem("occa", CobblemonBlocks.OCCA_BERRY)
     @JvmField val PASSHO_BERRY = berryItem("passho", CobblemonBlocks.PASSHO_BERRY)
     @JvmField val WACAN_BERRY = berryItem("wacan", CobblemonBlocks.WACAN_BERRY)
@@ -349,35 +585,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val COLBUR_BERRY = berryItem("colbur", CobblemonBlocks.COLBUR_BERRY)
     @JvmField val BABIRI_BERRY = berryItem("babiri", CobblemonBlocks.BABIRI_BERRY)
     @JvmField val CHILAN_BERRY = berryItem("chilan", CobblemonBlocks.CHILAN_BERRY)
-    @JvmField val ROSELI_BERRY = berryItem("roseli", CobblemonBlocks.ROSELI_BERRY)
-    @JvmField val LEPPA_BERRY = berryItem("leppa", PPRestoringBerryItem(CobblemonBlocks.LEPPA_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
-    @JvmField val LUM_BERRY = berryItem("lum", StatusCuringBerryItem(CobblemonBlocks.LUM_BERRY))
-    @JvmField val FIGY_BERRY = berryItem("figy", PortionHealingBerryItem(CobblemonBlocks.FIGY_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val WIKI_BERRY = berryItem("wiki", PortionHealingBerryItem(CobblemonBlocks.WIKI_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val MAGO_BERRY = berryItem("mago", PortionHealingBerryItem(CobblemonBlocks.MAGO_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val AGUAV_BERRY = berryItem("aguav", PortionHealingBerryItem(CobblemonBlocks.AGUAV_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val IAPAPA_BERRY = berryItem("iapapa", PortionHealingBerryItem(CobblemonBlocks.IAPAPA_BERRY, true) { CobblemonMechanics.berries.portionHealRatio })
-    @JvmField val SITRUS_BERRY = berryItem("sitrus", HealingBerryItem(CobblemonBlocks.SITRUS_BERRY) { CobblemonMechanics.berries.sitrusHealAmount })
-    @JvmField val TOUGA_BERRY = berryItem("touga", CobblemonBlocks.TOUGA_BERRY)
-    @JvmField val CORNN_BERRY = berryItem("cornn", CobblemonBlocks.CORNN_BERRY)
-    @JvmField val MAGOST_BERRY = berryItem("magost", CobblemonBlocks.MAGOST_BERRY)
-    @JvmField val RABUTA_BERRY = berryItem("rabuta", CobblemonBlocks.RABUTA_BERRY)
-    @JvmField val NOMEL_BERRY = berryItem("nomel", CobblemonBlocks.NOMEL_BERRY)
-    @JvmField val ENIGMA_BERRY = berryItem("enigma", CobblemonBlocks.ENIGMA_BERRY)
-    @JvmField val POMEG_BERRY = berryItem("pomeg", FriendshipRaisingBerryItem(CobblemonBlocks.POMEG_BERRY, Stats.HP))
-    @JvmField val KELPSY_BERRY = berryItem("kelpsy", FriendshipRaisingBerryItem(CobblemonBlocks.KELPSY_BERRY, Stats.ATTACK))
-    @JvmField val QUALOT_BERRY = berryItem("qualot", FriendshipRaisingBerryItem(CobblemonBlocks.QUALOT_BERRY, Stats.DEFENCE))
-    @JvmField val HONDEW_BERRY = berryItem("hondew", FriendshipRaisingBerryItem(CobblemonBlocks.HONDEW_BERRY, Stats.SPECIAL_ATTACK))
-    @JvmField val GREPA_BERRY = berryItem("grepa", FriendshipRaisingBerryItem(CobblemonBlocks.GREPA_BERRY, Stats.SPECIAL_DEFENCE))
-    @JvmField val TAMATO_BERRY = berryItem("tamato", FriendshipRaisingBerryItem(CobblemonBlocks.TAMATO_BERRY, Stats.SPEED))
-    @JvmField val SPELON_BERRY = berryItem("spelon", CobblemonBlocks.SPELON_BERRY)
-    @JvmField val PAMTRE_BERRY = berryItem("pamtre", CobblemonBlocks.PAMTRE_BERRY)
-    @JvmField val WATMEL_BERRY = berryItem("watmel", CobblemonBlocks.WATMEL_BERRY)
-    @JvmField val DURIN_BERRY = berryItem("durin", CobblemonBlocks.DURIN_BERRY)
-    @JvmField val BELUE_BERRY = berryItem("belue", CobblemonBlocks.BELUE_BERRY)
-    @JvmField val KEE_BERRY = berryItem("kee", CobblemonBlocks.KEE_BERRY)
-    @JvmField val MARANGA_BERRY = berryItem("maranga", CobblemonBlocks.MARANGA_BERRY)
-    @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
     @JvmField val LIECHI_BERRY = berryItem("liechi", CobblemonBlocks.LIECHI_BERRY)
     @JvmField val GANLON_BERRY = berryItem("ganlon", CobblemonBlocks.GANLON_BERRY)
     @JvmField val SALAC_BERRY = berryItem("salac", CobblemonBlocks.SALAC_BERRY)
@@ -385,15 +592,50 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val APICOT_BERRY = berryItem("apicot", CobblemonBlocks.APICOT_BERRY)
     @JvmField val LANSAT_BERRY = berryItem("lansat", CobblemonBlocks.LANSAT_BERRY)
     @JvmField val STARF_BERRY = berryItem("starf", CobblemonBlocks.STARF_BERRY)
+    @JvmField val ENIGMA_BERRY = berryItem("enigma", CobblemonBlocks.ENIGMA_BERRY)
     @JvmField val MICLE_BERRY = berryItem("micle", CobblemonBlocks.MICLE_BERRY)
     @JvmField val CUSTAP_BERRY = berryItem("custap", CobblemonBlocks.CUSTAP_BERRY)
     @JvmField val JABOCA_BERRY = berryItem("jaboca", CobblemonBlocks.JABOCA_BERRY)
     @JvmField val ROWAP_BERRY = berryItem("rowap", CobblemonBlocks.ROWAP_BERRY)
+    @JvmField val ROSELI_BERRY = berryItem("roseli", CobblemonBlocks.ROSELI_BERRY)
+    @JvmField val KEE_BERRY = berryItem("kee", CobblemonBlocks.KEE_BERRY)
+    @JvmField val MARANGA_BERRY = berryItem("maranga", CobblemonBlocks.MARANGA_BERRY)
+    @JvmField val HOPO_BERRY = berryItem("hopo", PPRestoringBerryItem(CobblemonBlocks.HOPO_BERRY) { CobblemonMechanics.berries.ppRestoreAmount })
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
     @JvmField
-    val GALARICA_NUTS = create("galarica_nuts", GalaricaNutItem())
+    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
+
+    @JvmField
+    val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
+
+    // Hyper Training Items
+    val hyperTrainingItems = mutableListOf<HyperTrainingItem>()
+    @JvmField
+    val HEALTH_CANDY = hyperTrainingItem("health_candy", 1, setOf(Stats.HP), 0..IVs.MAX_VALUE)
+    @JvmField
+    val MIGHTY_CANDY = hyperTrainingItem("mighty_candy", 1, setOf(Stats.ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val TOUGH_CANDY = hyperTrainingItem("tough_candy", 1, setOf(Stats.DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SMART_CANDY = hyperTrainingItem("smart_candy", 1, setOf(Stats.SPECIAL_ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val COURAGE_CANDY = hyperTrainingItem("courage_candy", 1, setOf(Stats.SPECIAL_DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val QUICK_CANDY = hyperTrainingItem("quick_candy", 1, setOf(Stats.SPEED), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SICKLY_CANDY = hyperTrainingItem("sickly_candy", -1, setOf(Stats.HP), 0..IVs.MAX_VALUE)
+    @JvmField
+    val WEAK_CANDY = hyperTrainingItem("weak_candy", -1, setOf(Stats.ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val BRITTLE_CANDY = hyperTrainingItem("brittle_candy", -1, setOf(Stats.DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val NUMB_CANDY = hyperTrainingItem("numb_candy", -1, setOf(Stats.SPECIAL_ATTACK), 0..IVs.MAX_VALUE)
+    @JvmField
+    val COWARD_CANDY = hyperTrainingItem("coward_candy", -1, setOf(Stats.SPECIAL_DEFENCE), 0..IVs.MAX_VALUE)
+    @JvmField
+    val SLOW_CANDY = hyperTrainingItem("slow_candy", -1, setOf(Stats.SPEED), 0..IVs.MAX_VALUE)
 
     // Medicine
     @JvmField
@@ -421,6 +663,20 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ZINC = create("zinc", VitaminItem(Stats.SPECIAL_DEFENCE))
     @JvmField
+    val HEALTH_MOCHI = create("health_mochi", MochiItem(Stats.HP))
+    @JvmField
+    val MUSCLE_MOCHI = create("muscle_mochi", MochiItem(Stats.ATTACK))
+    @JvmField
+    val RESIST_MOCHI = create("resist_mochi", MochiItem(Stats.DEFENCE))
+    @JvmField
+    val GENIUS_MOCHI = create("genius_mochi", MochiItem(Stats.SPECIAL_ATTACK))
+    @JvmField
+    val CLEVER_MOCHI = create("clever_mochi", MochiItem(Stats.SPECIAL_DEFENCE))
+    @JvmField
+    val SWIFT_MOCHI = create("swift_mochi", MochiItem(Stats.SPEED))
+    @JvmField
+    val FRESH_START_MOCHI = create("fresh_start_mochi", FreshStartMochiItem())
+    @JvmField
     val GENIUS_FEATHER = create("genius_feather", FeatherItem(Stats.SPECIAL_ATTACK))
     @JvmField
     val SWIFT_FEATHER = create("swift_feather", FeatherItem(Stats.SPEED))
@@ -435,14 +691,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MEDICINAL_LEEK = heldItem("medicinal_leek", MedicinalLeekItem(CobblemonBlocks.MEDICINAL_LEEK, Item.Properties().food(FoodProperties.Builder().fast().nutrition(1).saturationModifier(0.2f).build())), "leek")
     @JvmField
-    val ROASTED_LEEK = create("roasted_leek", Item(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.3f).build())))
+    val ROASTED_LEEK = compostableItem("roasted_leek", CobblemonItem(Item.Properties().food(FoodProperties.Builder().fast().nutrition(3).saturationModifier(0.2f).build())), 0.85f)
     @JvmField
-    val BRAISED_VIVICHOKE = create("braised_vivichoke", Item(Item.Properties().food(FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).build())))
-    @JvmField
-    val VIVICHOKE_DIP = create("vivichoke_dip", object : Item(Properties().stacksTo(1)
+    val VIVICHOKE_DIP = create("vivichoke_dip", object : CobblemonItem(Properties().stacksTo(1)
         .food(FoodProperties.Builder()
             .nutrition(10)
-            .saturationModifier(1.2F)
+            .saturationModifier(0.6F)
             .effect(MobEffectInstance(MobEffects.ABSORPTION, 900, 0), 1F)
             .alwaysEdible()
             .usingConvertsTo(Items.BOWL)
@@ -453,35 +707,37 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         }
     })
     @JvmField
-    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Item.Properties().food(FoodProperties.Builder().nutrition(1).fast().saturationModifier(0.2f).build())))
+    val ENERGY_ROOT = compostableItem("energy_root", EnergyRootItem(CobblemonBlocks.ENERGY_ROOT, Properties()), 0.65f)
     @JvmField
     val REVIVAL_HERB = compostableItem("revival_herb", RevivalHerbItem(CobblemonBlocks.REVIVAL_HERB))
     @JvmField
     val PEP_UP_FLOWER = compostableBlockItem("pep_up_flower", CobblemonBlocks.PEP_UP_FLOWER)
     @JvmField
-    val MEDICINAL_BREW = create("medicinal_brew", Item(Item.Properties()))
+    val MEDICINAL_BREW = noSettingsItem("medicinal_brew")
     @JvmField
-    val REMEDY = create("remedy", RemedyItem(RemedyItem.NORMAL))
+    val REMEDY = compostableItem("remedy", RemedyItem(RemedyItem.NORMAL), 0.65f)
     @JvmField
-    val FINE_REMEDY = create("fine_remedy", RemedyItem(RemedyItem.FINE))
+    val FINE_REMEDY = compostableItem("fine_remedy", RemedyItem(RemedyItem.FINE), 0.85f)
     @JvmField
-    val SUPERB_REMEDY = create("superb_remedy", RemedyItem(RemedyItem.SUPERB))
+    val SUPERB_REMEDY = compostableItem("superb_remedy", RemedyItem(RemedyItem.SUPERB), 1f)
+    @JvmField
+    val MOOMOO_MILK = create("moomoo_milk", MoomooMilk(Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo((16))))
 
     @JvmField
-    val POTION = create("potion", PotionItem(PotionType.POTION))
+    val POTION = create("potion", PotionItem(PotionType.POTION, CobblemonBlocks.POTION))
     @JvmField
-    val SUPER_POTION = create("super_potion", PotionItem(PotionType.SUPER_POTION))
+    val SUPER_POTION = create("super_potion", PotionItem(PotionType.SUPER_POTION, CobblemonBlocks.SUPER_POTION))
     @JvmField
-    val HYPER_POTION = create("hyper_potion", PotionItem(PotionType.HYPER_POTION))
+    val HYPER_POTION = create("hyper_potion", PotionItem(PotionType.HYPER_POTION, CobblemonBlocks.HYPER_POTION))
     @JvmField
-    val MAX_POTION = create("max_potion", PotionItem(PotionType.MAX_POTION))
+    val MAX_POTION = create("max_potion", PotionItem(PotionType.MAX_POTION, CobblemonBlocks.MAX_POTION))
     @JvmField
-    val FULL_RESTORE = create("full_restore", PotionItem(PotionType.FULL_RESTORE))
+    val FULL_RESTORE = create("full_restore", PotionItem(PotionType.FULL_RESTORE, CobblemonBlocks.FULL_RESTORE))
 
     @JvmField
     val HEAL_POWDER = create("heal_powder", HealPowderItem())
     @JvmField
-    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", Item(Item.Properties().food(FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
+    val LEEK_AND_POTATO_STEW = create("leek_and_potato_stew", CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(6).saturationModifier(0.6f).usingConvertsTo(Items.BOWL).build()).stacksTo(1)))
     @JvmField
     val REVIVE = create("revive", ReviveItem(max = false))
     @JvmField
@@ -561,28 +817,27 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SERIOUS_MINT = mintItem("serious_mint", MintItem(Natures.SERIOUS))
 
-    @JvmField val X_ACCURACY = create("x_${Stats.ACCURACY.identifier.path}", XStatItem(Stats.ACCURACY))
-    @JvmField val X_ATTACK = create("x_${Stats.ATTACK.identifier.path}", XStatItem(Stats.ATTACK))
-    @JvmField val X_DEFENSE = create("x_${Stats.DEFENCE.identifier.path}", XStatItem(Stats.DEFENCE))
-    @JvmField val X_SP_ATK = create("x_${Stats.SPECIAL_ATTACK.identifier.path}", XStatItem(Stats.SPECIAL_ATTACK))
-    @JvmField val X_SP_DEF = create("x_${Stats.SPECIAL_DEFENCE.identifier.path}", XStatItem(Stats.SPECIAL_DEFENCE))
-    @JvmField val X_SPEED = create("x_${Stats.SPEED.identifier.path}", XStatItem(Stats.SPEED))
+    @JvmField val X_ACCURACY = create("x_${Stats.ACCURACY.identifier.path}", XStatItem(Stats.ACCURACY, block = CobblemonBlocks.X_ACCURACY))
+    @JvmField val X_ATTACK = create("x_${Stats.ATTACK.identifier.path}", XStatItem(Stats.ATTACK, block = CobblemonBlocks.X_ATTACK))
+    @JvmField val X_DEFENSE = create("x_${Stats.DEFENCE.identifier.path}", XStatItem(Stats.DEFENCE, block = CobblemonBlocks.X_DEFENSE))
+    @JvmField val X_SP_ATK = create("x_${Stats.SPECIAL_ATTACK.identifier.path}", XStatItem(Stats.SPECIAL_ATTACK, block = CobblemonBlocks.X_SP_ATK))
+    @JvmField val X_SP_DEF = create("x_${Stats.SPECIAL_DEFENCE.identifier.path}", XStatItem(Stats.SPECIAL_DEFENCE, block = CobblemonBlocks.X_SP_DEF))
+    @JvmField val X_SPEED = create("x_${Stats.SPEED.identifier.path}", XStatItem(Stats.SPEED, block = CobblemonBlocks.X_SPEED))
 
-    @JvmField val DIRE_HIT = create("dire_hit", DireHitItem())
-    @JvmField val GUARD_SPEC = create("guard_spec", GuardSpecItem())
+    @JvmField val DIRE_HIT = create("dire_hit", DireHitItem(CobblemonBlocks.DIRE_HIT))
+    @JvmField val GUARD_SPEC = create("guard_spec", GuardSpecItem(CobblemonBlocks.GUARD_SPEC))
 
-    @JvmField val BURN_HEAL = create("burn_heal", StatusCureItem("item.cobblemon.burn_heal", Statuses.BURN))
-    @JvmField val PARALYZE_HEAL = create("paralyze_heal", StatusCureItem("item.cobblemon.paralyze_heal", Statuses.PARALYSIS))
-    @JvmField val ICE_HEAL = create("ice_heal", StatusCureItem("item.cobblemon.ice_heal", Statuses.FROZEN))
-    @JvmField val ANTIDOTE = create("antidote", StatusCureItem("item.cobblemon.antidote", Statuses.POISON, Statuses.POISON_BADLY))
-    @JvmField val AWAKENING = create("awakening", StatusCureItem("item.cobblemon.awakening", Statuses.SLEEP))
+    @JvmField val FULL_HEAL = create("full_heal", StatusCureItem("item.cobblemon.full_heal", *Statuses.getPersistentStatuses().toTypedArray(), block = CobblemonBlocks.FULL_HEAL))
+    @JvmField val ANTIDOTE = create("antidote", StatusCureItem("item.cobblemon.antidote", Statuses.POISON, Statuses.POISON_BADLY, block = CobblemonBlocks.ANTIDOTE))
+    @JvmField val AWAKENING = create("awakening", StatusCureItem("item.cobblemon.awakening", Statuses.SLEEP, block = CobblemonBlocks.AWAKENING))
+    @JvmField val BURN_HEAL = create("burn_heal", StatusCureItem("item.cobblemon.burn_heal", Statuses.BURN, block = CobblemonBlocks.BURN_HEAL))
+    @JvmField val ICE_HEAL = create("ice_heal", StatusCureItem("item.cobblemon.ice_heal", Statuses.FROZEN, block = CobblemonBlocks.ICE_HEAL))
+    @JvmField val PARALYZE_HEAL = create("paralyze_heal", StatusCureItem("item.cobblemon.paralyze_heal", Statuses.PARALYSIS, block = CobblemonBlocks.PARALYZE_HEAL))
 
-    @JvmField val FULL_HEAL = create("full_heal", StatusCureItem("item.cobblemon.full_heal"))
-
-    @JvmField val ETHER = create("ether", EtherItem(max = false))
-    @JvmField val MAX_ETHER = create("max_ether", EtherItem(max = true))
-    @JvmField val ELIXIR = create("elixir", ElixirItem(max = false))
-    @JvmField val MAX_ELIXIR = create("max_elixir", ElixirItem(max = true))
+    @JvmField val ETHER = create("ether", EtherItem(max = false, CobblemonBlocks.ETHER))
+    @JvmField val MAX_ETHER = create("max_ether", EtherItem(max = true, CobblemonBlocks.MAX_ETHER))
+    @JvmField val ELIXIR = create("elixir", ElixirItem(max = false, CobblemonBlocks.ELIXIR))
+    @JvmField val MAX_ELIXIR = create("max_elixir", ElixirItem(max = true, CobblemonBlocks.MAX_ELIXIR))
 
     @JvmField
     val ABILITY_CAPSULE = this.create("ability_capsule", AbilityChangeItem(AbilityChanger.COMMON_ABILITY))
@@ -683,7 +938,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ASSAULT_VEST = heldItem("assault_vest")
     @JvmField
-    val BIG_ROOT = blockItem("big_root", CobblemonBlocks.BIG_ROOT)
+    val BIG_ROOT = compostableBlockItem("big_root", CobblemonBlocks.BIG_ROOT, 0.30f)
     @JvmField
     val BINDING_BAND = heldItem("binding_band")
     @JvmField
@@ -691,7 +946,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
-    val BLUNDER_POLICY = heldItem("blunder_policy")
+    val BLUNDER_POLICY = itemNameBlockItem("blunder_policy", CobblemonBlocks.BLUNDER_POLICY)
     @JvmField
     val CELL_BATTERY = heldItem("cell_battery")
     @JvmField
@@ -699,9 +954,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
     @JvmField
-    val CLEANSE_TAG = heldItem("cleanse_tag")
-   // @JvmField
-   // val CLEAR_AMULET = heldItem("clear_amulet")
+    val CLEANSE_TAG = itemNameBlockItem("cleanse_tag", CobblemonBlocks.CLEANSE_TAG)
+    @JvmField
+    val CLEAR_AMULET = heldItem("clear_amulet")
     @JvmField
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
@@ -730,18 +985,18 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val FOCUS_SASH = heldItem("focus_sash")
     @JvmField
     val GRASSY_SEED = heldItem("grassy_seed")
-   // @JvmField
-   // val GRIP_CLAW = heldItem("grip_claw")
+    @JvmField
+    val GRIP_CLAW = heldItem("grip_claw")
     @JvmField
     val HARD_STONE = heldItem("hard_stone")
     @JvmField
     val HEAVY_DUTY_BOOTS = heldItem("heavy_duty_boots")
     @JvmField
     val IRON_BALL = heldItem("iron_ball")
-   // @JvmField
-   // val LAGGING_TAIL = heldItem("lagging_tail")
     @JvmField
-    val LEFTOVERS = heldItem("leftovers")
+    val LAGGING_TAIL = heldItem("lagging_tail")
+    @JvmField
+    val LEFTOVERS = compostableHeldItem("leftovers", null, 0.50f)
     @JvmField
     val LIFE_ORB = heldItem("life_orb")
     @JvmField
@@ -752,8 +1007,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val LOADED_DICE = heldItem("loaded_dice")
     @JvmField
     val LUCKY_EGG = heldItem("lucky_egg")
-   // @JvmField
-   // val LUMINOUS_MOSS = heldItem("luminous_moss")
+    @JvmField
+    val LUMINOUS_MOSS = heldItem("luminous_moss")
     @JvmField
     val MAGNET = heldItem("magnet")
     @JvmField
@@ -807,7 +1062,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SOFT_SAND = heldItem("soft_sand")
     @JvmField
-    val SPELL_TAG = heldItem("spell_tag")
+    val SPELL_TAG = itemNameBlockItem("spell_tag", CobblemonBlocks.SPELL_TAG)
     @JvmField
     val SMOKE_BALL = heldItem("smoke_ball")
     @JvmField
@@ -825,21 +1080,21 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val UTILITY_UMBRELLA = heldItem("utility_umbrella")
     @JvmField
-    val WEAKNESS_POLICY = heldItem("weakness_policy")
+    val WEAKNESS_POLICY = itemNameBlockItem("weakness_policy", CobblemonBlocks.WEAKNESS_POLICY)
     @JvmField
     val WIDE_LENS = heldItem("wide_lens")
     @JvmField
     val ZOOM_LENS = heldItem("zoom_lens")
     @JvmField
-    val MENTAL_HERB = compostableHeldItem("mental_herb", null, 1F)
+    val MENTAL_HERB = compostableHeldItem("mental_herb", null, 0.85F)
     @JvmField
-    val MIRROR_HERB = compostableHeldItem("mirror_herb", null, 1F)
+    val MIRROR_HERB = compostableHeldItem("mirror_herb", null, 0.85F)
     @JvmField
     val MISTY_SEED = heldItem("misty_seed")
     @JvmField
-    val POWER_HERB = compostableHeldItem("power_herb", null, 1F)
+    val POWER_HERB = compostableHeldItem("power_herb", null, 0.85F)
     @JvmField
-    val WHITE_HERB = compostableHeldItem("white_herb", null, 1F)
+    val WHITE_HERB = compostableHeldItem("white_herb", null, 0.85F)
     @JvmField
     val BRIGHT_POWDER = heldItem("bright_powder")
     @JvmField
@@ -960,6 +1215,83 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val SKY_TUMBLESTONE_BLOCK = blockItem("sky_tumblestone_block", CobblemonBlocks.SKY_TUMBLESTONE_BLOCK)
     @JvmField
     val BLACK_TUMBLESTONE_BLOCK = blockItem("black_tumblestone_block", CobblemonBlocks.BLACK_TUMBLESTONE_BLOCK)
+
+    @JvmField
+    val TYPE_GEM_CORE = blockItem("deepslate_crystal_core", CobblemonBlocks.TYPE_GEM_CORE)
+
+    @JvmField
+    val TYPE_GEM_CLUSTER_NORMAL = blockItem("normal_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FIRE = blockItem("fire_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE)
+    @JvmField
+    val TYPE_GEM_CLUSTER_WATER = blockItem("water_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_WATER)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ELECTRIC = blockItem("electric_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GRASS = blockItem("grass_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ICE = blockItem("ice_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ICE)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FIGHTING = blockItem("fighting_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING)
+    @JvmField
+    val TYPE_GEM_CLUSTER_POISON = blockItem("poison_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_POISON)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GROUND = blockItem("ground_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FLYING = blockItem("flying_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING)
+    @JvmField
+    val TYPE_GEM_CLUSTER_PSYCHIC = blockItem("psychic_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC)
+    @JvmField
+    val TYPE_GEM_CLUSTER_BUG = blockItem("bug_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_BUG)
+    @JvmField
+    val TYPE_GEM_CLUSTER_ROCK = blockItem("rock_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK)
+    @JvmField
+    val TYPE_GEM_CLUSTER_GHOST = blockItem("ghost_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST)
+    @JvmField
+    val TYPE_GEM_CLUSTER_DRAGON = blockItem("dragon_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON)
+    @JvmField
+    val TYPE_GEM_CLUSTER_DARK = blockItem("dark_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_DARK)
+    @JvmField
+    val TYPE_GEM_CLUSTER_STEEL = blockItem("steel_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL)
+    @JvmField
+    val TYPE_GEM_CLUSTER_FAIRY = blockItem("fairy_gem_cluster", CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY)
+
+    @JvmField
+    val TYPE_GEM_BLOCK_NORMAL = blockItem("normal_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_NORMAL)
+    @JvmField
+    val TYPE_GEM_BLOCK_FIRE = blockItem("fire_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FIRE)
+    @JvmField
+    val TYPE_GEM_BLOCK_WATER = blockItem("water_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_WATER)
+    @JvmField
+    val TYPE_GEM_BLOCK_ELECTRIC = blockItem("electric_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ELECTRIC)
+    @JvmField
+    val TYPE_GEM_BLOCK_GRASS = blockItem("grass_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GRASS)
+    @JvmField
+    val TYPE_GEM_BLOCK_ICE = blockItem("ice_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ICE)
+    @JvmField
+    val TYPE_GEM_BLOCK_FIGHTING = blockItem("fighting_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FIGHTING)
+    @JvmField
+    val TYPE_GEM_BLOCK_POISON = blockItem("poison_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_POISON)
+    @JvmField
+    val TYPE_GEM_BLOCK_GROUND = blockItem("ground_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GROUND)
+    @JvmField
+    val TYPE_GEM_BLOCK_FLYING = blockItem("flying_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FLYING)
+    @JvmField
+    val TYPE_GEM_BLOCK_PSYCHIC = blockItem("psychic_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_PSYCHIC)
+    @JvmField
+    val TYPE_GEM_BLOCK_BUG = blockItem("bug_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_BUG)
+    @JvmField
+    val TYPE_GEM_BLOCK_ROCK = blockItem("rock_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_ROCK)
+    @JvmField
+    val TYPE_GEM_BLOCK_GHOST = blockItem("ghost_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_GHOST)
+    @JvmField
+    val TYPE_GEM_BLOCK_DRAGON = blockItem("dragon_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_DRAGON)
+    @JvmField
+    val TYPE_GEM_BLOCK_DARK = blockItem("dark_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_DARK)
+    @JvmField
+    val TYPE_GEM_BLOCK_STEEL = blockItem("steel_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_STEEL)
+    @JvmField
+    val TYPE_GEM_BLOCK_FAIRY = blockItem("fairy_gem_block", CobblemonBlocks.TYPE_GEM_BLOCK_FAIRY)
 
     @JvmField
     val POKEROD_SMITHING_TEMPLATE = create("pokerod_smithing_template", SmithingTemplateItem(
@@ -1185,48 +1517,55 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val RELIC_COIN_POUCH = blockItem("relic_coin_pouch", CobblemonBlocks.RELIC_COIN_POUCH)
     @JvmField
     val RELIC_COIN_SACK = blockItem("relic_coin_sack", CobblemonBlocks.RELIC_COIN_SACK)
+    @JvmField
+    val TECHNICAL_MACHINE = this.create("technical_machine", TechnicalMachineItem(Properties()))
+    @JvmField
+    val BLANK_TM = this.create("blank_tm", CobblemonItem(Item.Properties()))
 
     // Type Gems
     @JvmField
-    val NORMAL_GEM = noSettingsItem("normal_gem")
+    val NORMAL_GEM = this.create("normal_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL))
     @JvmField
-    val FIRE_GEM = noSettingsItem("fire_gem")
+    val FIRE_GEM = this.create("fire_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE))
     @JvmField
-    val WATER_GEM = noSettingsItem("water_gem")
+    val WATER_GEM = this.create("water_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_WATER))
     @JvmField
-    val GRASS_GEM = noSettingsItem("grass_gem")
+    val GRASS_GEM = this.create("grass_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS))
     @JvmField
-    val ELECTRIC_GEM = noSettingsItem("electric_gem")
+    val ELECTRIC_GEM = this.create("electric_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC))
     @JvmField
-    val ICE_GEM = noSettingsItem("ice_gem")
+    val ICE_GEM = this.create("ice_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_ICE))
     @JvmField
-    val FIGHTING_GEM = noSettingsItem("fighting_gem")
+    val FIGHTING_GEM = this.create("fighting_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING))
     @JvmField
-    val POISON_GEM = noSettingsItem("poison_gem")
+    val POISON_GEM = this.create("poison_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_POISON))
     @JvmField
-    val GROUND_GEM = noSettingsItem("ground_gem")
+    val GROUND_GEM = this.create("ground_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND))
     @JvmField
-    val FLYING_GEM = noSettingsItem("flying_gem")
+    val FLYING_GEM = this.create("flying_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING))
     @JvmField
-    val PSYCHIC_GEM = noSettingsItem("psychic_gem")
+    val PSYCHIC_GEM = this.create("psychic_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC))
     @JvmField
-    val BUG_GEM = noSettingsItem("bug_gem")
+    val BUG_GEM = this.create("bug_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_BUG))
     @JvmField
-    val ROCK_GEM = noSettingsItem("rock_gem")
+    val ROCK_GEM = this.create("rock_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK))
     @JvmField
-    val GHOST_GEM = noSettingsItem("ghost_gem")
+    val GHOST_GEM = this.create("ghost_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST))
     @JvmField
-    val DRAGON_GEM = noSettingsItem("dragon_gem")
+    val DRAGON_GEM = this.create("dragon_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON))
     @JvmField
-    val DARK_GEM = noSettingsItem("dark_gem")
+    val DARK_GEM = this.create("dark_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_DARK))
     @JvmField
-    val STEEL_GEM = noSettingsItem("steel_gem")
+    val STEEL_GEM = this.create("steel_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL))
     @JvmField
-    val FAIRY_GEM = noSettingsItem("fairy_gem")
+    val FAIRY_GEM = this.create("fairy_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY))
+
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
+
+    private fun itemNameBlockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): ItemNameBlockItem = this.create(name, ItemNameBlockItem(block, Item.Properties().rarity(rarity)))
 
     private fun noSettingsItem(name: String): CobblemonItem = this.create(name, CobblemonItem(Item.Properties()))
 
@@ -1268,6 +1607,50 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         }
     )
 
+    private fun campfirePotItem(block: Block, color: CampfirePotColor): CampfirePotItem {
+        val item = create("campfire_pot_${color.suffix}", CampfirePotItem(block, color))
+        campfire_pots.add(item)
+        return item
+    }
+
+    private fun aprijuiceItem(type: Apricorn): AprijuiceItem {
+        val item = create("aprijuice_${type.name.lowercase()}", AprijuiceItem(type))
+        aprijuices.add(item)
+        return item
+    }
+
+    private fun pokepuffItem(name: String): PokePuffItem {
+        val item = create("poke_puff", PokePuffItem())
+        return item
+    }
+
+    private fun regionalFoodItem(
+        name: String,
+        stacksTo: Int,
+        nutrition: Int,
+        saturationModifier: Float,
+        alwaysEdible: Boolean = false,
+        convertsToOnUse: ItemStack? = null
+    ): RegionalFoodItem {
+        val foodPropertiesBuilder = FoodProperties.Builder()
+            .nutrition(nutrition)
+            .saturationModifier(saturationModifier)
+
+        if (alwaysEdible == true) {
+            foodPropertiesBuilder.alwaysEdible()
+        }
+
+        if (convertsToOnUse != null && !convertsToOnUse.isEmpty) {
+            foodPropertiesBuilder.usingConvertsTo(convertsToOnUse.item)
+        }
+
+        val properties = Item.Properties()
+            .stacksTo(stacksTo)
+            .food(foodPropertiesBuilder.build())
+
+        return create(name, RegionalFoodItem(properties))
+    }
+
     private fun heldItem(name: String, remappedName: String? = null): CobblemonItem = create(
         name,
         CobblemonItem(Item.Properties()).also {
@@ -1276,14 +1659,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
             }
         }
     )
+
     private fun heldItem(name: String, item: Item, remappedName: String? = null) = create(
         name = name,
         entry = item.also {
-            if (remappedName != null) {
+            remappedName?.let { remappedName ->
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
-                CobblemonHeldItemManager.registerRemap(Items.BONE, "thickclub")
-                CobblemonHeldItemManager.registerRemap(Items.SNOWBALL, "snowball")
-                CobblemonHeldItemManager.registerRemap(Items.GOLD_BLOCK, "bignugget")
             }
         }
     )
@@ -1309,7 +1690,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     private fun mintItem(name: String, mintItem: MintItem): MintItem {
         val item = this.create(name, mintItem)
         mints[item.nature.displayName] = item
-        compostable(item, .65f)
+        compostable(item, .95f)
+        return item
+    }
+
+    private fun hyperTrainingItem(name: String, increaseAmount: Int, targetStats: Set<Stat>, validRange: IntRange): HyperTrainingItem {
+        val item = this.create(name, HyperTrainingItem(increaseAmount, targetStats, validRange))
+        hyperTrainingItems.add(item)
         return item
     }
 
@@ -1323,26 +1710,27 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     private fun apricornSeedItem(name: String, apricornSeedItem: ApricornSeedItem): ApricornSeedItem {
         val finalName = "${name}_apricorn_seed"
         val item = this.create(finalName, apricornSeedItem)
-        compostable(item, .65f)
+        compostable(item, .30f)
         return item
     }
+
 
     private fun mintSeed(name: String, mintBlock: MintBlock): Item {
         val finalName = "${name}_mint_seeds"
         val item = this.blockItem(finalName, mintBlock)
-        compostable(item, .65f)
+        compostable(item, .30f)
         return item
     }
 
     private fun mintLeaf(name: String, mintLeafItem: MintLeafItem): MintLeafItem {
         val finalName = "${name}_mint_leaf"
         val item = this.create(finalName, mintLeafItem)
-        compostable(item, .65f)
+        compostable(item, .50f)
         return item
     }
 
     private fun compostableItem(name: String, item: Item? = null, increaseLevelChance: Float = .65f): Item {
-        val createdItem = this.create(name, item ?: Item(Item.Properties()))
+        val createdItem = this.create(name, item ?: CobblemonItem(Item.Properties()))
         compostable(createdItem, increaseLevelChance)
         return createdItem
     }
@@ -1353,13 +1741,19 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return createdItem
     }
 
-    private fun compostableBlockItem(name: String, block: Block, increaseLevelChance: Float = .65f): Item {
+    private fun compostableBlockItem(name: String, block: Block, increaseLevelChance: Float = .85f): Item {
         val createdItem = this.blockItem(name, block)
         compostable(createdItem, increaseLevelChance)
         return createdItem
     }
 
+    private fun compostableItemNameBlockItem(name: String, block: Block, increaseLevelChance: Float = .30f): Item {
+        val createdItem = this.itemNameBlockItem(name, block)
+        compostable(createdItem, increaseLevelChance)
+        return createdItem
+    }
+
     private fun foodItem(nutrition: Int, saturationModifier: Float): Item {
-        return Item(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
+        return CobblemonItem(Item.Properties().food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturationModifier).build()))
     }
 }

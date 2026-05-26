@@ -43,17 +43,29 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 0.8,
+  "baseScale": 0.72,
   "hitbox": {
-    "width": 0.9,
-    "height": 2,
+    "width": 1.2,
+    "height": 2.35,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -165,12 +177,36 @@
     "tutor:swift",
     "tutor:tailwind",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:morningsun"
   ],
   "evolutions": [
     {
       "id": "scyther_scizor",
       "result": "scizor",
+      "trigger": {
+        "variant": "trade"
+      },
       "learnableMoves": [
         "bulletpunch"
       ],
@@ -181,8 +217,16 @@
           "consumeHeldItem": true
         }
       ],
-      "trigger": {
-        "variant": "trade"
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
       }
     },
     {
@@ -195,6 +239,17 @@
       "trigger": {
         "variant": "item_interact",
         "requiredContext": "cobblemon:black_augurite"
+      },
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
       }
     }
   ]

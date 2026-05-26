@@ -24,11 +24,14 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
+import com.cobblemon.mod.common.util.toAssetPath
+import com.google.common.collect.Lists
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.components.Button.CreateNarration
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.FormattedCharSequence
 import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
@@ -41,6 +44,7 @@ class PartySlotButton(
     val maxHealth: Int,
     val heldItem: ItemStack,
     val enabled: Boolean = true,
+    val hoverText: List<Component>,
     val parent: PartySelectGUI,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Pokemon"), onPress, CreateNarration { "".text() }), CobblemonRenderable {
@@ -109,7 +113,7 @@ class PartySlotButton(
         )
         context.pose().popPose()
 
-        val ballIcon = cobblemonResource("textures/gui/ball/" + pokemon.pokeball!!.asIdentifierDefaultingNamespace().path + ".png")
+        val ballIcon = pokemon.pokeball!!.asIdentifierDefaultingNamespace().toAssetPath("textures/gui/ball/", ".png")
         val ballHeight = 22
         blitk(
             matrixStack = matrices,
@@ -198,6 +202,12 @@ class PartySlotButton(
                 matrixStack = matrices
             )
         }
+
+        // Hover Text
+        if (isHovered && hoverText.isNotEmpty()) {
+            this.parent.setTooltipForNextRenderPass(Lists.transform<Component, FormattedCharSequence>(hoverText) { it.visualOrderText })
+        }
+
         matrices.popPose()
     }
 

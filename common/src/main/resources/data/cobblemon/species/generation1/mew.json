@@ -46,14 +46,28 @@
   "baseScale": 0.5,
   "hitbox": {
     "width": 0.6,
-    "height": 1,
+    "height": 1.6,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "moves": [
@@ -557,7 +571,40 @@
     "tutor:wonderroom",
     "tutor:worryseed",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:confusion",
+    "legacy:counter",
+    "legacy:defensecurl",
+    "legacy:detect",
+    "legacy:dragonbreath",
+    "legacy:dragonrage",
+    "legacy:dynamicpunch",
+    "legacy:eggbomb",
+    "legacy:fissure",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:horndrill",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:nightmare",
+    "legacy:psywave",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:return",
+    "legacy:seismictoss",
+    "legacy:skullbash",
+    "legacy:softboiled",
+    "legacy:submission",
+    "legacy:sweetscent",
+    "legacy:teleport",
+    "legacy:watergun",
+    "legacy:whirlwind",
+    "legacy:zapcannon",
+    "special:fakeout",
+    "special:feintattack",
+    "special:hypnosis"
   ],
   "evolutions": [],
   "riding": {

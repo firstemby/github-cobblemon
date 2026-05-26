@@ -5,7 +5,7 @@
             "identifier": "cobblemon:sing_actorwave",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/large-ring"
+                "texture": "textures/particles/generic/ring/largering"
             }
         },
         "components": {

@@ -45,6 +45,7 @@
   "catchRate": 75,
   "eggCycles": 10,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.5,
   "hitbox": {
     "width": 1.25,
@@ -54,7 +55,26 @@
   "behaviour": {
     "resting": {
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "maushold",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -154,7 +174,8 @@
     "tutor:sleeptalk",
     "tutor:superfang",
     "tutor:swift",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "special:celebrate"
   ],
   "preEvolution": "tandemaus",
   "evolutions": [],

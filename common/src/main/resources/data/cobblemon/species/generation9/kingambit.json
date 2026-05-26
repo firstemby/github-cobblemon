@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 983,
   "name": "Kingambit",
   "primaryType": "dark",
@@ -42,6 +43,12 @@
   "catchRate": 25,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.65,
+  "hitbox": {
+    "width": 1.75,
+    "height": 2.65,
+    "fixed": false
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -157,8 +164,39 @@
     "tutor:suckerpunch",
     "tutor:throatchop",
     "tutor:xscissor",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:knockoff",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "bisharp",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "herd": {
+      "maxSize": "9"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    }
+  }
 }

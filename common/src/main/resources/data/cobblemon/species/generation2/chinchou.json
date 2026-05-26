@@ -51,21 +51,44 @@
   },
   "behaviour": {
     "moving": {
-      "canLook": false,
       "walk": {
         "walkSpeed": 0.3,
         "avoidsLand": true
       },
       "swim": {
         "swimSpeed": 0.15,
-        "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canBreatheUnderwater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "chinchou",
+          "tier": 1
+        },
+        {
+          "pokemon": "lanturn",
+          "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -175,7 +198,22 @@
     "tutor:suckerpunch",
     "tutor:thunderbolt",
     "tutor:waterpulse",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:zapcannon"
   ],
   "evolutions": [
     {
@@ -193,5 +231,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 14,
+    "liquidGlowMode": "BOTH"
+  }
 }

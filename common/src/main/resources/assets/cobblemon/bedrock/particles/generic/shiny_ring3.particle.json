@@ -5,7 +5,7 @@
             "identifier": "cobblemon:shiny_ring3",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/shine_sparkle_rainbow"
+                "texture": "textures/particles/generic/sparkle/shinesparkle_rainbow"
             }
         },
         "curves": {

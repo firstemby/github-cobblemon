@@ -44,23 +44,41 @@
   "baseFriendship": 50,
   "baseScale": 0.9,
   "hitbox": {
-    "width": 1.6,
     "height": 2.5,
-    "fixed": false
+    "fixed": false,
+    "width": 1.6
   },
   "behaviour": {
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "rampardos",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      },
       "walk": {
         "walkSpeed": 0.19
-      },
-      "swim": {
-        "canSwimInLava": true
       }
-    }
+    },
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -201,7 +219,23 @@
     "tutor:thunderbolt",
     "tutor:thunderpunch",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:naturalgift",
+    "legacy:painsplit",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:spite",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:whirlpool"
   ],
   "preEvolution": "cranidos",
   "evolutions": []

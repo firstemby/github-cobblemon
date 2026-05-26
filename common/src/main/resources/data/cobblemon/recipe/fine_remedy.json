@@ -5,13 +5,7 @@
             "item": "cobblemon:remedy"
         },
         {
-            "item": "minecraft:sweet_berries"
-        },
-        {
-            "item": "minecraft:sweet_berries"
-        },
-        {
-            "item": "cobblemon:pep_up_flower"
+            "tag": "cobblemon:remedy_berries"
         }
     ],
     "result": {

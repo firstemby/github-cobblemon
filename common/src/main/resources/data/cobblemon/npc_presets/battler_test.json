@@ -9,8 +9,8 @@
   "skill": 5,
   "party": {
     "type": "pool",
-    "minPokemon": 1,
-    "maxPokemon": 3,
+    "minPokemon": 4,
+    "maxPokemon": 6,
     "isStatic": true,
     "pool": [
       {

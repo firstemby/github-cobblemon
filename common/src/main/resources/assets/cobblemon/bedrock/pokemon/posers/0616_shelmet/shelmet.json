@@ -12,9 +12,8 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": false,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('head_ai', 0.5, 0.4)",
         "q.bedrock('shelmet', 'ground_idle')"
       ],
       "quirks": [
@@ -26,9 +25,9 @@
         "WALK","SWIM"
       ],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('head_ai', 0.5, 0.4)",
         "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bedrock('karrablast', 'ground_idle')"
+        "q.bedrock('shelmet', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('shelmet', 'blink')"

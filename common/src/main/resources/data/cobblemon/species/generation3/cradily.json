@@ -53,17 +53,24 @@
     "moving": {
       "swim": {
         "swimSpeed": 0.12,
-        "canSwimInWater": true,
-        "canBreatheUnderwater": true,
-        "canSwimInLava": false
+        "canSwimInWater": false,
+        "canBreatheUnderwater": true
       },
       "walk": {
+        "avoidsLand": true,
         "walkSpeed": 0.12
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
@@ -178,7 +185,23 @@
     "tutor:stoneedge",
     "tutor:stringshot",
     "tutor:synthesis",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:psychup",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "lileep",
   "evolutions": []

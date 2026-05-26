@@ -2393,7 +2393,7 @@
 			}
 		},
 		"animation.rampardos.blink": {
-			"animation_length": 0.16667,
+			"animation_length": 0.1667,
 			"bones": {
 				"eyelid_right": {
 					"position": {

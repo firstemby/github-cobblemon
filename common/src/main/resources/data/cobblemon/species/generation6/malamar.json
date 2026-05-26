@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 687,
   "name": "Malamar",
   "primaryType": "dark",
@@ -45,18 +46,40 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.2,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
+      },
+      "fly": {
+        "canFly": true
       }
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "malamar",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -197,7 +220,18 @@
     "tutor:telekinesis",
     "tutor:throatchop",
     "tutor:thunderbolt",
-    "tutor:trick"
+    "tutor:trick",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:toxic",
+    "special:happyhour"
   ],
   "preEvolution": "inkay",
   "evolutions": []

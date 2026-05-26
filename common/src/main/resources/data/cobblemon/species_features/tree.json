@@ -5,6 +5,7 @@
   ],
   "default": "none",
   "choices": [
+    "none",
     "oak",
     "birch",
     "darkoak",
@@ -17,7 +18,9 @@
     "cherry",
     "apricorn",
     "crimson",
-    "warped"
+    "warped",
+    "apricorn",
+    "saccharine"
   ],
   "isAspect": true,
   "aspectFormat": "tree-{{choice}}"

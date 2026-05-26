@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "PIP",
-        "IBI",
-        "MIM"
+        "CIC",
+        "IMI",
+        "CIC"
     ],
     "key": {
         "M": {
@@ -12,11 +12,8 @@
         "I": {
             "tag": "c:ingots/iron"
         },
-        "B": {
-            "item": "minecraft:iron_bars"
-        },
-        "P": {
-            "item": "minecraft:blaze_powder"
+        "C": {
+            "tag": "c:ingots/copper"
         }
     },
     "result": {

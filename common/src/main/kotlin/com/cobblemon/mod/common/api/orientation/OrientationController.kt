@@ -10,13 +10,15 @@ package com.cobblemon.mod.common.api.orientation
 
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
+import kotlin.math.abs
 import kotlin.math.asin
+import kotlin.math.sign
 
 open class OrientationController(val entity: LivingEntity) {
 
@@ -62,7 +64,12 @@ open class OrientationController(val entity: LivingEntity) {
     }
 
     fun getRenderOrientation(delta: Float): Quaternionf {
-        val old = renderOrientationO ?: renderOrientation ?: orientation
+        // Return direct orientation if this is the player that drives this entities orientation.
+        //TODO: Why does this break the render orientation.
+//        if(entity.level().isClientSide && entity.controllingPassenger == Minecraft.getInstance().player) {
+//            return Quaternionf().setFromUnnormalized(orientation)
+//        }
+        val old = renderOrientationO ?: renderOrientation ?: orientation ?: Matrix3f()
         val new = renderOrientation ?: old
         val oldQuat = Quaternionf().setFromUnnormalized(old)
         val newQuat  = Quaternionf().setFromUnnormalized(new)
@@ -77,7 +84,7 @@ open class OrientationController(val entity: LivingEntity) {
         val renderMatrix = this.renderOrientation ?: current
         val renderQuat = Quaternionf().setFromUnnormalized(renderMatrix)
         val targetQuat  = Quaternionf().setFromUnnormalized(current)
-        val dampingFactor = 0.66f // We can change this factor for faster transitions
+        val dampingFactor = 0.66f // Smooth interpolation to reduce jitter of orientations recieved from the server.
         renderQuat.slerp(targetQuat, dampingFactor)
 
         val newRenderOrientation = Matrix3f()
@@ -108,21 +115,18 @@ open class OrientationController(val entity: LivingEntity) {
         get() = Mth.wrapDegrees(-upVector.angleSigned(UP, forwardVector).toDegrees())
 
     fun applyGlobalYaw(deltaYawDegrees: Float) = updateOrientation { original ->
-        val euler = Vector3f()
-        original.getEulerAnglesXYZ(euler)
-        val pitch0 = euler.x
-        val roll0 = euler.z
+        return@updateOrientation original.rotateLocalY(-deltaYawDegrees.toRadians())
+    }
 
-        val unroll = Matrix3f().rotateZ(-roll0)
-        val unpitch = Matrix3f().rotateX(-pitch0)
-        val flattened = Matrix3f(original).mul(unroll).mul(unpitch)
+    fun applyGlobalPitch(deltaPitchDegrees: Float) = updateOrientation { original ->
+        val currQuat = Quaternionf().setFromUnnormalized(original)
+        val horzLeftVector = Vector3f(0.0f, -abs(this.upVector.y.sign), 0.0f).cross(this.forwardVector)
+        // Avoid NaN issue when normalizing and the forwardVector and upVector are equal
+        val pitchAxis = if (horzLeftVector.lengthSquared() < 0.01) this.leftVector else horzLeftVector
 
-        //Flip to reflect current acceptance of what direction is pos for yaw
-        val globalYaw = Matrix3f().rotationY(-1.0f * deltaYawDegrees.toRadians())
-        val rePitch = Matrix3f().rotateX(pitch0)
-        val reRoll = Matrix3f().rotateZ(roll0)
-
-        return@updateOrientation Matrix3f(globalYaw).mul(flattened).mul(rePitch).mul(reRoll)
+        val globalPitch = Quaternionf().fromAxisAngleRad(pitchAxis.normalize(), -deltaPitchDegrees.toRadians())
+        val resultQuat = globalPitch.mul(currQuat)
+        return@updateOrientation Matrix3f().set(resultQuat)
     }
 
 }

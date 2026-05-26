@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.net.messages.client.storage.pc.SetPCPokemonPacke
 import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toJsonArray
@@ -72,7 +73,7 @@ open class PCStore(
     val unlockedWallpapers = mutableSetOf<ResourceLocation>()
     val unseenWallpapers = mutableSetOf<ResourceLocation>()
 
-    override fun iterator() = boxes.flatMap { it.toList() }.iterator()
+    override fun iterator() = boxes.asSequence().flatten().iterator()
     override fun getObservingPlayers() = observingUUIDs.mapNotNull { it.getPlayer() }
 
     val struct = asMoLangValue()
@@ -179,8 +180,12 @@ open class PCStore(
 
         removeDuplicates()
 
-        unlockedWallpapers.addAll(nbt.getList(DataKeys.STORE_UNLOCKED_WALLPAPERS, Tag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
-        unseenWallpapers.addAll(nbt.getList(DataKeys.STORE_UNSEEN_WALLPAPERS, Tag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
+        if (nbt.contains(DataKeys.STORE_UNLOCKED_WALLPAPERS)) {
+            unlockedWallpapers.addAll(nbt.getList(DataKeys.STORE_UNLOCKED_WALLPAPERS, Tag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
+        }
+        if (nbt.contains(DataKeys.STORE_UNSEEN_WALLPAPERS)) {
+            unseenWallpapers.addAll(nbt.getList(DataKeys.STORE_UNSEEN_WALLPAPERS, Tag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
+        }
         return this
     }
 
@@ -225,8 +230,12 @@ open class PCStore(
 
         removeDuplicates()
 
-        unlockedWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNLOCKED_WALLPAPERS).map { ResourceLocation.parse(it.asString) })
-        unseenWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNSEEN_WALLPAPERS).map { ResourceLocation.parse(it.asString) })
+        if (json.has(DataKeys.STORE_UNLOCKED_WALLPAPERS)) {
+            unlockedWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNLOCKED_WALLPAPERS).map { ResourceLocation.parse(it.asString) })
+        }
+        if (json.has(DataKeys.STORE_UNSEEN_WALLPAPERS)) {
+            unseenWallpapers.addAll(json.getAsJsonArray(DataKeys.STORE_UNSEEN_WALLPAPERS).map { ResourceLocation.parse(it.asString) })
+        }
 
         return this
     }
@@ -284,6 +293,10 @@ open class PCStore(
         }
     }
 
+    override fun onPokemonChanged(pokemon: Pokemon) {
+        pcChangeObservable.emit(Unit)
+    }
+
     fun clearPC() {
         boxes.forEach { box ->
             box.getNonEmptySlots().forEach{
@@ -318,8 +331,8 @@ open class PCStore(
                             if (event.shouldNotify) {
                                 val toast = Toast(
                                     title = lang("wallpaper_unlocked"),
-                                    description = unlockableWallpaper.displayName?.let { "\"".text().add(it).add("\"") } ?: lang("unknown_wallpaper") ,
-                                    icon = ItemStack(CobblemonItems.PC)
+                                    description = unlockableWallpaper.displayName?.let { "\"".text().add(it.asTranslated()).add("\"") } ?: lang("unknown_wallpaper") ,
+                                    icons = listOf(ItemStack(CobblemonItems.PC))
                                 )
                                 toast.addListeners(player)
                                 toast.expireAfter(5F)

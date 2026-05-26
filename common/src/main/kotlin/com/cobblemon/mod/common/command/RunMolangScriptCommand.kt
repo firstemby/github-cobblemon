@@ -10,20 +10,20 @@ package com.cobblemon.mod.common.command
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.entity
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.player
 import com.cobblemon.mod.common.util.resourceLocation
-import com.cobblemon.mod.common.util.uuid
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
-import java.util.UUID
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
@@ -31,6 +31,7 @@ import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.Entity
 
 object RunMolangScriptCommand {
     private const val NAME = "runmolangscript"
@@ -47,38 +48,38 @@ object RunMolangScriptCommand {
                 .executes { execute(it, it.resourceLocation(SCRIPT), null, null, null) }
                 .then(argument(PLAYER, EntityArgument.player())
                     .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), null, null) }
-                    .then(argument(NPC, StringArgumentType.string())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.uuid(NPC), null) }
-                        .then(argument(POKEMON, StringArgumentType.string())
-                            .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.uuid(NPC), it.uuid(POKEMON)) }
+                    .then(argument(NPC, EntityArgument.entity())
+                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.entity(NPC), null) }
+                        .then(argument(POKEMON, EntityArgument.entity())
+                            .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), it.entity(NPC), it.entity(POKEMON)) }
                         )
                     )
-                    .then(argument(POKEMON, StringArgumentType.string())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), null, it.uuid(POKEMON)) }
+                    .then(argument(POKEMON, EntityArgument.entity())
+                        .executes { execute(it, it.resourceLocation(SCRIPT), it.player(PLAYER), null, it.entity(POKEMON)) }
                     )
                 )
-                .then(argument(NPC, StringArgumentType.string())
-                    .executes { execute(it, it.resourceLocation(SCRIPT), null, it.uuid(NPC), null) }
-                    .then(argument(POKEMON, StringArgumentType.string())
-                        .executes { execute(it, it.resourceLocation(SCRIPT), null, it.uuid(NPC), it.uuid(POKEMON)) }
+                .then(argument(NPC, EntityArgument.entity())
+                    .executes { execute(it, it.resourceLocation(SCRIPT), null, it.entity(NPC), null) }
+                    .then(argument(POKEMON, EntityArgument.entity())
+                        .executes { execute(it, it.resourceLocation(SCRIPT), null, it.entity(NPC), it.entity(POKEMON)) }
                     )
                 )
-                .then(argument(POKEMON, StringArgumentType.string())
-                    .executes { execute(it, it.resourceLocation(SCRIPT), null, null, it.uuid(POKEMON)) }
+                .then(argument(POKEMON, EntityArgument.entity())
+                    .executes { execute(it, it.resourceLocation(SCRIPT), null, null, it.entity(POKEMON)) }
                 )
             )
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, scriptId: ResourceLocation, player: ServerPlayer?, npcId: UUID?, pokemonId: UUID? = null): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, scriptId: ResourceLocation, player: ServerPlayer?, npc: Entity?, pokemon: Entity? = null): Int {
         try {
             val runtime = MoLangRuntime().setup()
-            val npc = npcId?.let { context.source.level.getEntity(it) as? NPCEntity }
-            val pokemon = pokemonId?.let { context.source.level.getEntity(it) as? NPCEntity }
+            val entity = context.source.entity
 
-            npc?.let { runtime.withQueryValue("npc", npc.struct) }
-            pokemon?.let { runtime.withQueryValue("pokemon", pokemon.struct) }
+            (npc as? NPCEntity)?.let { runtime.withQueryValue("npc", npc.struct) }
+            (pokemon as? PokemonEntity)?.let { runtime.withQueryValue("pokemon", pokemon.struct) }
             player?.let { runtime.withQueryValue("player", player.asMoLangValue()) }
+            entity?.let { runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue()) }
 
             CobblemonScripts.run(scriptId, runtime)
         } catch (e: Exception) {

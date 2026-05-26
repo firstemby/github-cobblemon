@@ -45,21 +45,61 @@
   "baseFriendship": 50,
   "baseScale": 1.2,
   "hitbox": {
-    "width": 2.2,
     "height": 2,
-    "fixed": false
+    "fixed": false,
+    "width": 2.2
   },
-  "standingEyeHeight": 0.4,
-  "swimmingEyeHeight": 0.4,
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "40-75",
+          "JUMP": "40-60",
+          "SKILL": "10-40",
+          "SPEED": "30-55",
+          "STAMINA": "45-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "7",
+      "toleratedLeaders": [
+        {
+          "pokemon": "venusaur mega",
+          "tier": 1
+        }
+      ]
+    },
     "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
         "walkSpeed": 0.135
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "night, noon"
+      ]
     }
   },
   "drops": {
@@ -190,7 +230,32 @@
     "tutor:stringshot",
     "tutor:synthesis",
     "tutor:terrainpulse",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:lightscreen",
+    "legacy:megadrain",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:outrage",
+    "legacy:rage",
+    "legacy:razorwind",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "special:block",
+    "special:celebrate",
+    "special:frenzyplant"
   ],
   "preEvolution": "ivysaur",
   "evolutions": [],
@@ -225,32 +290,54 @@
         "speed": 80
       },
       "baseExperienceYield": 313,
-      "dynamaxBlocked": true,
-      "evolutions": [],
-      "battleOnly": true,
       "riding": {
+        "behaviour": {
+          "key": "cobblemon:land/horse"
+        },
+        "seats": [],
         "stats": {
-          "SPEED": {
-            "ranges": "20-50"
-          },
           "ACCELERATION": {
             "ranges": "10-65"
-          },
-          "SKILL": {
-            "ranges": "40-85"
           },
           "JUMP": {
             "ranges": "20-40"
           },
+          "SKILL": {
+            "ranges": "40-85"
+          },
+          "SPEED": {
+            "ranges": "20-50"
+          },
           "STAMINA": {
             "ranges": "40-85"
           }
-        },
-        "seats": [],
-        "behaviour": {
-          "key": "cobblemon:land/generic"
         }
-      }
+      },
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": "8"
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042,
+          "times": [
+            "night, noon"
+          ]
+        }
+      },
+      "evolutions": [],
+      "battleOnly": true,
+      "dynamaxBlocked": true
     },
     {
       "name": "Gmax",
@@ -269,32 +356,11 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ],
-  "riding": {
-    "stats": {
-      "SPEED": {
-        "ranges": "20-40"
-      },
-      "ACCELERATION": {
-        "ranges": "10-60"
-      },
-      "SKILL": {
-        "ranges": "40-80"
-      },
-      "JUMP": {
-        "ranges": "20-40"
-      },
-      "STAMINA": {
-        "ranges": "40-80"
-      }
-    },
-    "seats": [],
-    "behaviour": {
-      "key": "cobblemon:land/generic"
-    }
-  }
+  "standingEyeHeight": 0.4,
+  "swimmingEyeHeight": 0.4
 }

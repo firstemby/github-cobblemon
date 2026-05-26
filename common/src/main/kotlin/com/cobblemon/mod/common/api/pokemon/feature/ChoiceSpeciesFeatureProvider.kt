@@ -9,15 +9,10 @@
 package com.cobblemon.mod.common.api.pokemon.feature
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.aspect.FeatureAspectProvider
-import com.cobblemon.mod.common.api.properties.CustomPokemonPropertyType
-import com.cobblemon.mod.common.client.gui.summary.featurerenderers.SummarySpeciesFeatureRenderer
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.substitute
 import com.cobblemon.mod.common.util.writeString
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**
@@ -27,16 +22,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 30th, 2022
  */
-open class ChoiceSpeciesFeatureProvider(
-    override var keys: List<String>,
-    override var default: String? = null,
-    var choices: List<String> = listOf(),
-    override var isAspect: Boolean = true,
-    var aspectFormat: String = "{{choice}}"
-) : SynchronizedSpeciesFeatureProvider<StringSpeciesFeature>, CustomPokemonPropertyType<StringSpeciesFeature>, FeatureAspectProvider {
+class ChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<List<String>>(emptyList(), emptyList()) {
     override var needsKey = true
     override var visible = false
-    fun getAspect(feature: StringSpeciesFeature) = aspectFormat.substitute("choice", feature.value)
+
+    override fun examples() = choices
 
     override fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean) {
         buffer.writeCollection(keys) { _, value -> buffer.writeString(value) }
@@ -56,16 +46,13 @@ open class ChoiceSpeciesFeatureProvider(
         needsKey = buffer.readBoolean()
     }
 
-    override fun getRenderer(pokemon: Pokemon): SummarySpeciesFeatureRenderer<StringSpeciesFeature>? {
-        return null
-    }
-
-    override fun invoke(buffer: RegistryFriendlyByteBuf, name: String): StringSpeciesFeature? {
-        return if (name in keys) {
-            StringSpeciesFeature(name, "").also { it.loadFromBuffer(buffer) }
-        } else {
-            null
+    override fun fromString(value: String?): StringSpeciesFeature? {
+        val lower = value?.lowercase()
+        if (lower == null || lower !in choices) {
+            return null
         }
+
+        return StringSpeciesFeature(keys.first(), lower)
     }
 
     fun getAllAspects(): MutableList<String> {
@@ -113,7 +100,8 @@ open class ChoiceSpeciesFeatureProvider(
                 default!!
             } else if (default == "random") {
                 // If it's mandatory, but they provided no value and no default, give it a random value.
-                choices.randomOrNull() ?: throw IllegalStateException("The 'choices' list is empty for species feature provider: ${keys.joinToString()}")
+                choices.randomOrNull()
+                    ?: throw IllegalStateException("The 'choices' list is empty for species feature provider: ${keys.joinToString()}")
             } else {
                 return null
             }
@@ -122,26 +110,14 @@ open class ChoiceSpeciesFeatureProvider(
         }
     }
 
-    override fun invoke(nbt: CompoundTag): StringSpeciesFeature? {
-        return if (nbt.contains(keys.first())) {
-            StringSpeciesFeature(keys.first(), "").also { it.loadFromNBT(nbt) }
-        } else null
-    }
-
-    override fun invoke(json: JsonObject): StringSpeciesFeature? {
-        return if (json.has(keys.first())) {
-            StringSpeciesFeature(keys.first(), "").also { it.loadFromJSON(json) }
-        } else null
-    }
-
-    override fun fromString(value: String?): StringSpeciesFeature? {
-        val lower = value?.lowercase()
-        if (lower == null || lower !in choices) {
-            return null
+    override fun getAllAspects(): MutableList<String> {
+        val aspects = choices.toMutableList()
+        choices.forEach {
+            aspects[choices.indexOf(it)] = (aspectFormat.substitute("choice", it))
         }
-
-        return StringSpeciesFeature(keys.first(), lower)
+        return aspects
     }
+}
 
     override fun provide(pokemon: Pokemon): Set<String> {
         return if (isAspect) {

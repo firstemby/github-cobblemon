@@ -51,11 +51,36 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "entityInteract": {
+      "avoidedBySkeleton": true
+    },
+    "characteristicRainbow": true,
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "moves": [
-    "1:sketch"
+    "1:sketch",
+    "tutor:falseswipe",
+    "tutor:flamethrower",
+    "legacy:captivate",
+    "legacy:sleeptalk",
+    "special:falseswipe",
+    "special:flamethrower",
+    "special:furyswipes",
+    "special:meanlook",
+    "special:odorsleuth",
+    "special:seismictoss",
+    "special:spore"
   ],
   "evolutions": []
 }

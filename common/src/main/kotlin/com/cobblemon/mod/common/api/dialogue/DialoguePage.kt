@@ -29,8 +29,10 @@ class DialoguePage(
     var id: String = "",
     var speaker: String? = null,
     var lines: MutableList<DialogueText> = mutableListOf(),
+    var textColor: String? = null,
     var input: DialogueInput = DialogueNoInput(),
     var background: ResourceLocation? = null,
+    var gibber: DialogueGibber? = null,
     var clientActions: MutableList<Expression> = mutableListOf(),
     var escapeAction: DialogueAction? = null,
 ) {
@@ -41,7 +43,9 @@ class DialoguePage(
             id: String = "",
             speaker: String? = null,
             lines: Iterable<MutableComponent>,
+            textColor: String? = null,
             input: DialogueInput = DialogueNoInput(),
+            gibber: DialogueGibber? = null,
             background: ResourceLocation? = null,
             clientActions: Iterable<Expression> = emptyList(),
             /** The thing to do when the player presses ESC while on this page. If null, falls back to the same property on [Dialogue]. */
@@ -51,7 +55,9 @@ class DialoguePage(
                 id = id,
                 speaker = speaker,
                 lines = lines.map { WrappedDialogueText(it) }.toMutableList(),
+                textColor = textColor,
                 input = input,
+                gibber = gibber,
                 background = background,
                 clientActions = clientActions.toMutableList(),
                 escapeAction = escapeAction?.let { func -> FunctionDialogueAction { activeDialogue, _ -> func(activeDialogue) } }

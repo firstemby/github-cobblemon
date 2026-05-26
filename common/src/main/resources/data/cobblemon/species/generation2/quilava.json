@@ -54,13 +54,39 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "quilava",
+          "tier": 1
+        },
+        {
+          "pokemon": "typhlosion",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 1,
@@ -146,6 +172,7 @@
     "tm:workup",
     "tm:zenheadbutt",
     "tutor:aerialace",
+    "tutor:blastburn",
     "tutor:burningjealousy",
     "tutor:covet",
     "tutor:endeavor",
@@ -162,7 +189,27 @@
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:wildcharge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:detect",
+    "legacy:doubleteam",
+    "legacy:focuspunch",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:irontail",
+    "legacy:mimic",
+    "legacy:mudslap",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:submission",
+    "legacy:swagger",
+    "legacy:toxic",
+    "special:blastburn"
   ],
   "preEvolution": "cyndaquil",
   "evolutions": [
@@ -174,10 +221,6 @@
         {
           "variant": "level",
           "minLevel": 36
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
         }
       ]
     },
@@ -195,10 +238,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
-        },
-        {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/quilava_johtobiome"
         }
       ]
     }
@@ -235,10 +274,6 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/quilava_johtobiome"
             }
           ]
@@ -253,10 +288,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/quilava_johtobiome"
             }
           ]
         }

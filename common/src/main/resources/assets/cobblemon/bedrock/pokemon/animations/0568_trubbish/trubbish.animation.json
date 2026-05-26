@@ -139,6 +139,13 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.trubbish.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.trubbish.cry"
+				}
+			}
 		}
 	}
 }

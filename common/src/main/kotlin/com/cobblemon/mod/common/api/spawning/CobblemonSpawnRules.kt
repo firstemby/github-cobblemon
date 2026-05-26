@@ -19,8 +19,18 @@ import com.cobblemon.mod.common.api.spawning.rules.component.FilterRuleComponent
 import com.cobblemon.mod.common.api.spawning.rules.component.LocationRuleCalculator
 import com.cobblemon.mod.common.api.spawning.rules.component.SpawnRuleComponent
 import com.cobblemon.mod.common.api.spawning.rules.component.WeightTweakRuleComponent
-import com.cobblemon.mod.common.api.spawning.rules.selector.*
-import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.api.spawning.rules.selector.ConditionalSpawnablePositionSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.ExpressionSpawnDetailSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.ExpressionSpawnablePositionSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.SpawnDetailSelector
+import com.cobblemon.mod.common.api.spawning.rules.selector.SpawnablePositionSelector
+import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
+import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
+import com.cobblemon.mod.common.util.adapters.SpawnDetailSelectorAdapter
+import com.cobblemon.mod.common.util.adapters.SpawnRuleComponentAdapter
+import com.cobblemon.mod.common.util.adapters.SpawnablePositionSelectorAdapter
+import com.cobblemon.mod.common.util.adapters.SpawningConditionAdapter
+import com.cobblemon.mod.common.util.adapters.TextAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -39,7 +49,7 @@ object CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
     override val gson = GsonBuilder()
         .registerTypeAdapter(SpawnRuleComponent::class.java, SpawnRuleComponentAdapter)
         .registerTypeAdapter(SpawnDetailSelector::class.java, SpawnDetailSelectorAdapter)
-        .registerTypeAdapter(SpawningContextSelector::class.java, SpawningContextSelectorAdapter)
+        .registerTypeAdapter(SpawnablePositionSelector::class.java, SpawnablePositionSelectorAdapter)
         .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
@@ -56,8 +66,8 @@ object CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
 
         SpawnDetailSelector.register<ExpressionSpawnDetailSelector>("expression")
 
-        SpawningContextSelector.register<ExpressionSpawningContextSelector>("expression")
-        SpawningContextSelector.register<ConditionalSpawningContextSelector>("conditional")
+        SpawnablePositionSelector.register<ExpressionSpawnablePositionSelector>("expression")
+        SpawnablePositionSelector.register<ConditionalSpawnablePositionSelector>("conditional")
     }
 
     val rules = mutableMapOf<ResourceLocation, SpawnRule>()

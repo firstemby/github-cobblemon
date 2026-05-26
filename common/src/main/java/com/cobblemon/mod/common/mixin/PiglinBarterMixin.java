@@ -22,9 +22,9 @@ public class PiglinBarterMixin {
 
     @Inject(method = "isBarterCurrency", at = @At(value = "RETURN"), cancellable = true)
     private static void cobblemon$acceptsForBarter(ItemStack stack, CallbackInfoReturnable<Boolean> ci) {
-        if(!ci.getReturnValue()) {
+        if (!ci.getReturnValue()) {
             //TODO: Make a tag?
-            if(stack.is(CobblemonItems.RELIC_COIN_POUCH))
+            if (stack.is(CobblemonItems.RELIC_COIN_POUCH))
                 ci.setReturnValue(true);
         }
     }

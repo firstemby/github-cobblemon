@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 917,
   "name": "Tarountula",
   "primaryType": "bug",
@@ -40,6 +41,36 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
+  "baseScale": 0.33,
+  "hitbox": {
+    "width": 0.95,
+    "height": 1.5,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.5,
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "willSleepOnBed": true,
+      "light": "0-4",
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
+    }
+  },
   "drops": {
     "amount": 2,
     "entries": [
@@ -139,7 +170,18 @@
           "variant": "level",
           "minLevel": 15
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

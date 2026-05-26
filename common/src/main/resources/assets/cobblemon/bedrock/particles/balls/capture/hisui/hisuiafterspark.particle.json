@@ -5,7 +5,7 @@
             "identifier": "cobblemon:hisuiafterspark",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/hisuiafterspark"
+                "texture": "textures/particles/balls/hisuiafterspark"
             }
         },
         "components": {

@@ -8,37 +8,37 @@
 
 package com.cobblemon.mod.common.api.ai.config.task
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.api.ai.BrainConfigurationContext
-import com.cobblemon.mod.common.api.ai.WrapperLivingEntityTask
-import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.entity.ai.FleeFromAttackerTask
 import com.cobblemon.mod.common.util.asExpression
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveFloat
-import com.cobblemon.mod.common.util.resolveInt
-import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.sensing.SensorType
 
 class FleeAttackerTaskConfig : SingleTaskConfig {
-    var condition = "true".asExpression()
-    var speedMultiplier = "0.5".asExpression()
-    var desiredDistance = "9".asExpression()
+    val avoidDurationTicks: ExpressionOrEntityVariable = Either.left("600".asExpression())
+
+    override fun getVariables(
+        entity: LivingEntity,
+        behaviourConfigurationContext: BehaviourConfigurationContext
+    ): List<MoLangConfigVariable> {
+        return listOf(avoidDurationTicks).asVariables()
+    }
 
     override fun createTask(
         entity: LivingEntity,
-        brainConfigurationContext: BrainConfigurationContext
-    ): BehaviorControl<in LivingEntity>? {
-        runtime.withQueryValue("entity", (entity as? PosableEntity)?.struct ?: QueryStruct(hashMapOf()))
-        if (!runtime.resolveBoolean(condition) || entity !is PathfinderMob) return null
-        val speedMultiplier = runtime.resolveFloat(speedMultiplier)
-        val desiredDistance = runtime.resolveInt(desiredDistance)
-        return WrapperLivingEntityTask(
-            SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, speedMultiplier, desiredDistance, false),
-            PathfinderMob::class.java
+        behaviourConfigurationContext: BehaviourConfigurationContext
+    ): BehaviorControl<in LivingEntity> {
+        behaviourConfigurationContext.addMemories(
+            MemoryModuleType.HURT_BY_ENTITY,
+            MemoryModuleType.AVOID_TARGET
         )
+        behaviourConfigurationContext.addSensors(SensorType.HURT_BY)
+        return FleeFromAttackerTask.create(avoidDurationTicks.asExpression())
     }
 }

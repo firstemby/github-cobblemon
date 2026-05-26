@@ -1,0 +1,20 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.mixin.accessor;
+
+import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
+
+@Mixin(RecipeBookComponent.class)
+public interface RecipeBookComponentAccessor {
+    @Accessor("filterButton")
+    StateSwitchingButton getFilterButton();
+}

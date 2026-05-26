@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 952,
   "name": "Scovillain",
   "primaryType": "grass",
@@ -42,6 +43,12 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 1.5,
+    "height": 2,
+    "fixed": false
+  },
   "drops": {
     "amount": 3,
     "entries": [
@@ -142,5 +149,35 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "capsakid",
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "resting": {
+      "canSleep": true,
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.17
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "scovillain",
+          "tier": 1
+        }
+      ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  }
 }

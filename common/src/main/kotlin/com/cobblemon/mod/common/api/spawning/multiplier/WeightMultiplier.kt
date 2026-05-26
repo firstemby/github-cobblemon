@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.api.spawning.multiplier
 
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 
 /**
  * A weight multiplying [SpawningInfluence] that applies only under specific conditions. The
@@ -30,9 +30,9 @@ class WeightMultiplier : SpawningInfluence {
     var anticonditions = mutableListOf<SpawningCondition<*>>()
     var multiplier = 1F
 
-    override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
-        val meetsConditions = (conditions.isEmpty() || conditions.any { it.isSatisfiedBy(ctx) })
-                && (anticonditions.isEmpty() || anticonditions.none { it.isSatisfiedBy(ctx) })
+    override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {
+        val meetsConditions = (conditions.isEmpty() || conditions.any { it.isSatisfiedBy(spawnablePosition) })
+                && (anticonditions.isEmpty() || anticonditions.none { it.isSatisfiedBy(spawnablePosition) })
         return if (meetsConditions) multiplier * weight else weight
     }
 }

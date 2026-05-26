@@ -9,5 +9,5 @@
 package com.cobblemon.mod.common.client.gui.interact.wheel
 
 enum class Orientation {
-    TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
+    NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 }

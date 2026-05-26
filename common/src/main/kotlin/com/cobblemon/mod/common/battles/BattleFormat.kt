@@ -29,19 +29,44 @@ data class BattleFormat(
     var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
 ) {
     companion object {
+        fun setBattleRules(
+            battleFormat: BattleFormat,
+            rules: Set<String>? = null
+        ): BattleFormat {
+            val filteredRules = rules?.filter { it.isNotBlank() }?.toSet()
+            val ruleValues = filteredRules?.mapNotNull { ruleName ->
+                BattleRules::class.members
+                    .filterIsInstance<kotlin.reflect.KProperty1<BattleRules, String>>()
+                    .find { it.name == ruleName }
+                    ?.getter
+                    ?.call()
+            }.orEmpty()
+
+            return battleFormat.copy(
+                ruleSet = filteredRules ?: (battleFormat.ruleSet + ruleValues)
+            )
+        }
+
+        fun fromFormatIdentifier(id: String): BattleFormat = when (id) {
+            "single_battle", "single", "singles" -> BattleFormat.GEN_9_SINGLES
+            "double_battle", "double", "doubles" -> BattleFormat.GEN_9_DOUBLES
+            "triple_battle", "triple", "triples" -> BattleFormat.GEN_9_TRIPLES
+            else ->  BattleFormat.GEN_9_SINGLES
+        }
+
         val GEN_9_SINGLES = BattleFormat(
             battleType = BattleTypes.SINGLES,
-            ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_DOUBLES = BattleFormat(
             battleType = BattleTypes.DOUBLES,
-            ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_TRIPLES = BattleFormat(
                 battleType = BattleTypes.TRIPLES,
-                ruleSet = setOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+                ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
         val GEN_9_MULTI = BattleFormat(
@@ -79,12 +104,18 @@ data class BattleFormat(
     }
 
     fun toFormatJSON(): String {
+        /*
+          Bag clause does not exist in showdown as a rule because showdown simply has no concept of a 'bag'.
+          If we try sending it, the battle will error. So this simply omits that from ever getting sent.
+          If we ever find a case where we are doing this for more than just bag clause, we should make a proper abstraction.
+         */
+        val rulesToSendToShowdown = ruleSet.filter { it != BattleRules.BAG_CLAUSE }
         return """
             {
                 "mod": "$mod",
                 "gameType": "${battleType.name}",
                 "gen": $gen,
-                "ruleset": [${ruleSet.joinToString { "\"$it\"" }}],
+                "ruleset": [${rulesToSendToShowdown.joinToString { "\"$it\"" }}],
                 "effectType": "Format"
             }
         """.trimIndent().replace("\n", "")

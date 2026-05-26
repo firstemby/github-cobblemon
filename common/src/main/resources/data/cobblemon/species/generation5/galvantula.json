@@ -52,8 +52,30 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.4
+        "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "resting": {
+      "canSleep": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "drops": {
@@ -182,7 +204,17 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:wildcharge",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "joltik",
   "evolutions": []

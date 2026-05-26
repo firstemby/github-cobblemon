@@ -46,22 +46,37 @@
   "features": [
     "galarian"
   ],
-  "baseScale": 0.5,
+  "baseScale": 0.75,
   "hitbox": {
     "width": 1,
     "height": 1.4,
     "fixed": false
   },
+  "standingEyeHeight": 0.6,
   "behaviour": {
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -162,12 +177,22 @@
     "tutor:skillswap",
     "tutor:sleeptalk",
     "tutor:snatch",
-    "tutor:spikes",
     "tutor:spite",
     "tutor:telekinesis",
     "tutor:trick",
     "tutor:wonderroom",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {
@@ -294,10 +319,12 @@
         "tutor:shadowball",
         "tutor:skillswap",
         "tutor:sleeptalk",
-        "tutor:spikes",
         "tutor:trick",
         "tutor:wonderroom",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:snore"
       ],
       "evolutions": [
         {
@@ -322,7 +349,28 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        }
+      }
     }
   ]
 }

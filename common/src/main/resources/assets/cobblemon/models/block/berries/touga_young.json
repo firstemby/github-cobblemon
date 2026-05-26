@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cobblemon:block/touga_tree",
-		"particle": "cobblemon:block/touga_tree"
+		"0": "cobblemon:block/berries/touga_tree",
+		"particle": "cobblemon:block/berries/touga_tree"
 	},
 	"elements": [
 		{

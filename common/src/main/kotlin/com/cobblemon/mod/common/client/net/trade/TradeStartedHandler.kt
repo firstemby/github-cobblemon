@@ -29,7 +29,7 @@ object TradeStartedHandler : ClientNetworkPacketHandler<TradeStartedPacket> {
                 packet.traderId,
                 packet.traderName,
                 packet.traderParty.toMutableList(),
-                CobblemonClient.storage.myParty.map { it?.let(::TradeablePokemon) }.toMutableList()
+                CobblemonClient.storage.party.map { it?.let(::TradeablePokemon) }.toMutableList()
             )
         )
         CobblemonClient.requests.tradeOffers.remove(packet.traderId)

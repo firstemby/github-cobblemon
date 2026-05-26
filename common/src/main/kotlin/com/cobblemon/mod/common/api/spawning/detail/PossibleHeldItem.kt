@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.spawning.detail
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import net.minecraft.core.component.DataComponentMap
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.registries.Registries
@@ -23,15 +23,15 @@ class PossibleHeldItem(
     val componentMap: DataComponentMap? = null,
     val percentage: Double = 100.0
 ) {
-    fun createStack(ctx: SpawningContext): ItemStack? {
-        val itemRegistry = ctx.world.registryAccess().registryOrThrow(Registries.ITEM)
+    fun createStack(spawnablePosition: SpawnablePosition): ItemStack? {
+        val itemRegistry = spawnablePosition.world.registryAccess().registryOrThrow(Registries.ITEM)
         val item = if (item.startsWith("#")) {
             val tag = TagKey.create(Registries.ITEM, ResourceLocation.parse(item.substring(1)))
 
             val opt = itemRegistry.getTag(tag)
             if (opt.isPresent && opt.get().size() > 0) {
                 val entryList = opt.get()
-                entryList.getRandomElement(ctx.world.random).get().value()
+                entryList.getRandomElement(spawnablePosition.world.random).get().value()
             } else {
                 LOGGER.error("Unable to find matching spawn held items for tag: $item")
                 null

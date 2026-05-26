@@ -45,8 +45,8 @@ object CobblemonInfoCommand {
                         .append(this.INDENT)
                         .append(Component.literal("Is Snapshot:").withStyle { it.withColor(ChatFormatting.GRAY) })
                         .append(this.SPACE)
-                        .append(Component.literal(if(CobblemonBuildDetails.SNAPSHOT) "Yes" else "No").withStyle {
-                            it.withColor(if(CobblemonBuildDetails.SNAPSHOT) this.GREEN else this.RED)
+                        .append(Component.literal(if (CobblemonBuildDetails.SNAPSHOT) "Yes" else "No").withStyle {
+                            it.withColor(if (CobblemonBuildDetails.SNAPSHOT) this.GREEN else this.RED)
                         })
 
                     message.append(this.NEW_LINE)

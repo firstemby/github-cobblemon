@@ -54,6 +54,19 @@
                     "output_state": {
                         "Name": "minecraft:andesite"
                     }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:water",
+                        "predicate_type": "minecraft:block_match"
+                    },
+                    "location_predicate": {
+                        "block": "minecraft:air",
+                        "predicate_type": "minecraft:block_match"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:air"
+                    }
                 }
             ]
         },

@@ -57,15 +57,38 @@
       },
       "swim": {
         "swimSpeed": 0.3,
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
+        "canWalkOnWater": true
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "day"
+      ],
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "lotad",
+          "tier": 1
+        },
+        {
+          "pokemon": "lombre",
+          "tier": 2
+        },
+        {
+          "pokemon": "ludicolo",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -162,7 +185,21 @@
     "tutor:synthesis",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

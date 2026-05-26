@@ -46,6 +46,8 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
     abstract fun getObservingPlayers(): Iterable<ServerPlayer>
     /** Sends the contents of this store to a player as if they've never seen it before. This initializes the store then sends each contained Pokémon. */
     abstract fun sendTo(player: ServerPlayer)
+    /** Notifies the store that the provided Pokémon has changed in some way that would require persisting. */
+    abstract fun onPokemonChanged(pokemon: Pokemon)
 
     /**
      * Runs initialization logic for this store, knowing that it has just been constructed in a [PokemonStoreFactory].
@@ -75,6 +77,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         remove(pokemon)
         val position = getFirstAvailablePosition() ?: return false // Couldn't fit, shrug emoji
         set(position, pokemon)
+        Cobblemon.playerDataManager.getTMData(uuid)?.syncTMsFromPokemon(pokemon)
         return true
     }
 
@@ -147,7 +150,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         return true
     }
 
-    operator fun get(uuid: UUID) = find { it.uuid == uuid }
+    operator fun get(uuid: UUID) = find { it.uuid.equals(uuid) }
 
     open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")

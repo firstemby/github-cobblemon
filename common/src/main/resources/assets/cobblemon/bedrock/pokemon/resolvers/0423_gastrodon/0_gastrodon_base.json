@@ -10,19 +10,38 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_west_shiny.png"
     },
     {
-      "aspects": ["west-sea"],
+      "aspects": [
+        "west-sea"
+      ],
       "poser": "cobblemon:gastrodon_west",
       "model": "cobblemon:gastrodon_west.geo",
       "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_west.png",
       "layers": []
     },
     {
-      "aspects": ["shiny", "west-sea"],
+      "aspects": [
+        "shiny",
+        "west-sea"
+      ],
       "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_west_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

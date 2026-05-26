@@ -1,7 +1,7 @@
 # Task Configuration
 
 A task configuration is responsible for producing one or multiple tasks as part of a
-[BrainConfiguration](../README.md). Tasks are the smallest unit of behaviour in a brain and are executed
+[Behaviour Configuration](../README.md). Tasks are the smallest unit of behaviour in a brain and are executed
 as part of an activity.
 
 A task configuration can be a simple string that represents the type of task to create, or a JSON object
@@ -162,11 +162,11 @@ on the entity type and this piggy-backs off the Minecraft list of aggressive mob
 The 'calm_down' type creates a task that will make the entity calm down when it is no longer being hurt and is far from hostiles and its attacker.
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
 
-### flee_attacker
-The 'flee_attacker' type creates a task that will make the entity flee from its attacker when it is hurt.
+### walk_away_from_avoid_target
+The 'flee_attacker' type creates a task that will make the entity flee from its avoid target.
 - `condition`: A MoLang expression (with `q.entity` as the entity) that determines if this entire task should exist on the entity or not. This runs at the time of entity creation, not on tick.
-- `speedMultiplier`: A MoLang expression that determines the speed multiplier for fleeing from the attacker. Defaults to 0.5 which is an elevated speed to usual.
-- `desiredDistance`: A MoLang expression that determines the distance from the attacker that the entity should try to maintain. Defaults to 9.
+- `speedMultiplier`: A MoLang expression that determines the speed multiplier for fleeing from the avoid target. Defaults to 0.5 which is an elevated speed to usual.
+- `desiredDistance`: A MoLang expression that determines the distance from the target that the entity should try to maintain. Defaults to 9.
 
 ### flee_nearest_hostile
 The 'flee_nearest_hostile' type creates a task that will make the entity flee from the nearest hostile entity when it is hurt.
@@ -184,3 +184,16 @@ the script to avoid lagging the game.
 The 'look_in_direction' type creates a task that will make the entity look in a specific direction at all times where they aren't being told to look elsewhere.
 - `yaw`: A MoLang expression that determines the yaw angle (degrees) of the entity. Defaults to `0`.
 - `pitch`: A MoLang expression that determines the pitch angle (degrees) of the entity. Defaults to `0`.
+
+### move_to_owner
+The 'move_to_owner' type creates a task that will make the entity move to its owner. This will only work for entities that
+can be owned, like Pokémon.
+- `condition`: A MoLang expression (with `q.entity` as the entity) that determines if the entity should move to its owner this tick. Defaults to true.
+- `completionRange`: A MoLang expression that determines the distance from the owner that the entity needs to be for the path to be considered complete. Defaults to 4.
+- `speedMultiplier`: A MoLang expression that determines the speed multiplier for moving to the owner. Defaults to 0.4 which is slightly above the normal walk speed.
+- `teleportDistance`: A MoLang expression that determines the distance from the owner the entity must be before it resorts to teleporting. A value of -1 will cause it to never teleport. Defaults to 24.
+- `maxDistance`: A MoLang expression that determines the maximum distance from the owner that the entity can be to move to them. Defaults to 14.
+
+### point_to_spawn
+The 'point_to_spawn' type creates a task that will make the entity point to the spawn point of the world whenever they
+are not moving and are idling. This is basically only here for Nosepass.

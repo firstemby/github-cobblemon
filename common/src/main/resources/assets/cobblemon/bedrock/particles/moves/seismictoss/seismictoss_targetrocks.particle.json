@@ -5,7 +5,7 @@
             "identifier": "cobblemon:seismictoss_targetrocks",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/impact-rock"
+                "texture": "textures/particles/generic/impact/impact_rock"
             }
         },
         "curves": {
@@ -25,6 +25,13 @@
                 ]
             }
         },
+        "events": {
+            "event_sound": {
+                "sound_effect": {
+                    "event_name": "cobblemon:move.seismictoss.target2"
+                }
+            }
+        },
         "components": {
             "minecraft:emitter_rate_steady": {
                 "spawn_rate": 500,
@@ -32,6 +39,9 @@
             },
             "minecraft:emitter_lifetime_once": {
                 "active_time": 0.25
+            },
+            "minecraft:emitter_lifetime_events": {
+                "creation_event": "event_sound"
             },
             "minecraft:emitter_shape_disc": {
                 "offset": [

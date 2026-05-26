@@ -6,15 +6,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/DefeatRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+========
+package com.cobblemon.mod.common.pokemon.requirements
+
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+>>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/DefeatRequirement.kt
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.progress.DefeatTransformationProgress
 
 /**
+<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/DefeatRequirement.kt
  * A [TransformationRequirement] which requires a specific [amount] of [target]s defeated to pass.
+========
+ * An [Requirement] which requires a specific [amount] of [target]s defeated to pass.
+>>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/DefeatRequirement.kt
  *
  * @property target The [PokemonProperties] of the target Pokémon.
  * @property amount The amount of [target]s to faint.
@@ -22,7 +33,16 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.DefeatTransforma
  * @author Licious
  * @since January 28th, 2022
  */
+<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/DefeatRequirement.kt
 class DefeatRequirement(val target: PokemonProperties = PokemonProperties(), val amount: Int = 0) : TransformationRequirement {
+========
+class DefeatRequirement(target: PokemonProperties, amount: Int) : Requirement {
+
+    constructor() : this(PokemonProperties(), 0)
+
+    val target: PokemonProperties = target
+    val amount: Int = amount
+>>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/DefeatRequirement.kt
 
     override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:evo_smokeburst",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/glowing_smoke_cyan"
+                "texture": "textures/particles/generic/smoke/glowingsmoke_cyan"
             }
         },
         "components": {

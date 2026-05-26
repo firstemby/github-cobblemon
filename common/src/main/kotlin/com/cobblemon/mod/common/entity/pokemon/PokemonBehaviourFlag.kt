@@ -21,7 +21,8 @@ package com.cobblemon.mod.common.entity.pokemon
 enum class PokemonBehaviourFlag {
     LOOKING,
     EXCITED,
-    FLYING;
+    FLYING,
+    PASTURE_CONFLICT;
 
     val bit: Int = ordinal + 1
 }

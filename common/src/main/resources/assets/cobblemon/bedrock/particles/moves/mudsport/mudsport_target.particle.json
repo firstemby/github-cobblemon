@@ -5,7 +5,7 @@
             "identifier": "cobblemon:mudsport_target",
             "basic_render_parameters": {
                 "material": "particles_alpha",
-                "texture": "textures/particles/mud_splash"
+                "texture": "textures/particles/generic/mud/mudsplash"
             }
         },
         "curves": {

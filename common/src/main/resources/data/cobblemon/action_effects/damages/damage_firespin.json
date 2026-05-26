@@ -1,0 +1,27 @@
+
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+        "type": "entity_particles",
+        "effect": "cobblemon:firespin_target",
+        "locators": ["root"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false",
+      "expressions": ["q.sound('move.firespin.target');"]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.5
+    }
+  ]
+}

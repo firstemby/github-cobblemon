@@ -450,6 +450,11 @@
 						"0.5833": [0, 0, 0]
 					}
 				}
+			},
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.venonat.cry"
+				}
 			}
 		},
 		"animation.venonat.quirk1": {

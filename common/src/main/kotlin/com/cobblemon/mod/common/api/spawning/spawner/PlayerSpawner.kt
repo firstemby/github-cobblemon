@@ -8,21 +8,21 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.SpawnerManager
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.nextBetween
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.util.Mth.PI
-import net.minecraft.util.Mth.ceil
-import java.util.*
+import java.util.UUID
 import kotlin.math.atan
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.Mth.PI
+import net.minecraft.util.Mth.ceil
 
 /**
  * A spawner that works around a single player. It will do basic tracking of a player's speed
@@ -31,20 +31,26 @@ import kotlin.random.Random
  * @author Hiroku
  * @since February 14th, 2022
  */
-class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerManager) : AreaSpawner(player.name.string, spawns, manager) {
+open class PlayerSpawner(
+    player: ServerPlayer,
+    spawnPool: SpawnPool
+) : BasicSpawner(
+    name = player.name.string,
+    spawnPool = spawnPool,
+    buckets = Cobblemon.bestSpawner.config.worldBuckets
+) {
     val uuid: UUID = player.uuid
-    override var ticksBetweenSpawns = config.ticksBetweenSpawnAttempts
-    override fun getCauseEntity() = uuid.getPlayer()
-    override fun getArea(cause: SpawnCause): SpawningArea? {
+
+    fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
         val player = uuid.getPlayer() ?: return null
-        val sliceDiameter = config.worldSliceDiameter
-        val sliceHeight = config.worldSliceHeight
+        val zoneDiameter = config.spawningZoneDiameter
+        val zoneHeight = config.spawningZoneHeight
 
         val rand = Random.Default
 
         val center = player.position()
 
-        val r = rand.nextBetween(config.minimumSliceDistanceFromPlayer, config.maximumSliceDistanceFromPlayer)
+        val r = rand.nextBetween(config.minimumSpawningZoneDistanceFromPlayer, config.maximumSpawningZoneDistanceFromPlayer)
         val thetatemp = atan(player.deltaMovement.z / player.deltaMovement.x) + rand.nextBetween(-PI/2, PI/2 )
         val theta = if (player.deltaMovement.horizontalDistance() < 0.1) {
             rand.nextDouble() * 2 * PI
@@ -53,18 +59,37 @@ class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerMan
         } else {
             thetatemp
         }
+
         val x = center.x + r * cos(theta)
         val z = center.z + r * sin(theta)
 
-        return SpawningArea(
+        return SpawningZoneInput(
             cause = cause,
             world = player.level() as ServerLevel,
-            baseX = ceil(x - sliceDiameter / 2F),
-            baseY = ceil(center.y - sliceHeight / 2F),
-            baseZ = ceil(z - sliceDiameter / 2F),
-            length = sliceDiameter,
-            height = sliceHeight,
-            width = sliceDiameter
+            baseX = ceil(x - zoneDiameter / 2F),
+            baseY = ceil(center.y - zoneHeight / 2F),
+            baseZ = ceil(z - zoneDiameter / 2F),
+            length = zoneDiameter,
+            height = zoneHeight,
+            width = zoneDiameter
         )
+    }
+
+    var active = true
+    var ticksUntilNextSpawn = 100F
+    var ticksBetweenSpawns: Float = config.ticksBetweenSpawnAttempts
+    var tickTimerMultiplier = 1F
+
+    fun tick() {
+        if (!active) {
+            return
+        }
+
+        ticksUntilNextSpawn -= tickTimerMultiplier
+        if (ticksUntilNextSpawn <= 0) {
+            val zoneInput = getZoneInput(cause = SpawnCause(spawner = this, entity = uuid.getPlayer()))
+            zoneInput?.let(::runForArea)
+            ticksUntilNextSpawn = ticksBetweenSpawns
+        }
     }
 }

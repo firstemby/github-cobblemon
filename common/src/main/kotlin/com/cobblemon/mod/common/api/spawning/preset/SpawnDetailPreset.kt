@@ -8,16 +8,16 @@
 
 package com.cobblemon.mod.common.api.spawning.preset
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.context.RegisteredSpawningContext
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.util.MergeMode
 import com.cobblemon.mod.common.util.adapters.SpawnDetailAdapter
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 
 /**
  * Base class for spawn detail presets. Presets are a spawn loading mechanism that allows various properties to be
@@ -40,9 +40,10 @@ import com.google.gson.JsonObject
  * @since July 8th, 2022
  */
 abstract class SpawnDetailPreset {
-    var bucket: SpawnBucket? = null
+    var bucket: String? = null
     var spawnDetailType: String? = null
-    var context: RegisteredSpawningContext<*>? = null
+    @SerializedName("spawnablePositionType", alternate = ["context"])
+    var spawnablePositionType: SpawnablePositionType<*>? = null
     var condition: JsonObject? = null
     var anticondition: JsonObject? = null
     var weightMultipliers: MutableList<WeightMultiplier>? = null
@@ -52,7 +53,7 @@ abstract class SpawnDetailPreset {
 
     open fun apply(spawnDetail: SpawnDetail) {
         bucket?.let { spawnDetail.bucket = it }
-        context?.let { spawnDetail.context = it }
+        spawnablePositionType?.let { spawnDetail.spawnablePositionType = it }
         weight?.let { spawnDetail.weight = it }
         percentage?.let { spawnDetail.percentage = it }
         mergeMode.merge(spawnDetail.weightMultipliers, weightMultipliers)
@@ -70,7 +71,7 @@ abstract class SpawnDetailPreset {
     }
 
     fun resolveCondition(spawnDetail: SpawnDetail, conditionJson: JsonObject): SpawningCondition<*> {
-        SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(spawnDetail.context.defaultCondition)
+        SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(spawnDetail.spawnablePositionType.defaultCondition)
         return SpawnLoader.gson.fromJson(conditionJson, SpawningCondition::class.java)
     }
 }

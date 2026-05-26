@@ -1346,8 +1346,8 @@
 				}
 			},
 			"sound_effects": {
-				"1.25": {
-					"effect": "pokemon.ceruledge.cry"
+				"0.125": {
+					"effect": "pokemon.ceruledge.battle_cry"
 				}
 			}
 		},
@@ -3637,6 +3637,12 @@
 			"sound_effects": {
 				"1.25": {
 					"effect": "pokemon.ceruledge.cry"
+				},
+				"1.2917": {
+					"effect": "pokemon.ceruledge.quirk1"
+				},
+				"2.0833": {
+					"effect": "pokemon.ceruledge.quirk2"
 				}
 			}
 		},

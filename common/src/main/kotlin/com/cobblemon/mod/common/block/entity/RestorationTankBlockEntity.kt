@@ -118,17 +118,17 @@ class RestorationTankBlockEntity(
         }
 
         override fun getSlotsForFace(side: Direction): IntArray {
-            return if (side == Direction.DOWN) intArrayOf(0, 1, 2, 3, 4, 5, 6, 7) else intArrayOf()
+            return intArrayOf(0, 1, 2, 3, 4, 5, 6, 7)
         }
 
         override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, direction: Direction?): Boolean {
             if (tankEntity.multiblockStructure is FossilMultiblockStructure) {
                 if (direction != Direction.DOWN) {
                     val structure = tankEntity.multiblockStructure as FossilMultiblockStructure
-                    val canUtilize = stack?.let { NaturalMaterials.isNaturalMaterial(it) } == true
+                    val canUtilize = stack.let { NaturalMaterials.isNaturalMaterial(it) }
                             && structure.organicMaterialInside < FossilMultiblockStructure.MATERIAL_TO_START
-                            && structure.hasCreatedPokemon
-                    val returnItem = NaturalMaterials.getReturnItem(stack!!) ?: return canUtilize
+                            && !structure.hasCreatedPokemon
+                    val returnItem = NaturalMaterials.getReturnItem(stack) ?: return canUtilize
                     if (canUtilize) {
                         // See if there's room
                         for (i in items.indices) {

@@ -53,11 +53,44 @@
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "canWalk": false
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "5",
+      "toleratedLeaders": [
+        {
+          "pokemon": "floette eternal=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "comfey",
+          "tier": 1
+        },
+        {
+          "pokemon": "floette eternal",
+          "tier": 2
+        },
+        {
+          "pokemon": "florges",
+          "tier": 3
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -162,7 +195,18 @@
     "tutor:swift",
     "tutor:synthesis",
     "tutor:trick",
-    "tutor:worryseed"
+    "tutor:worryseed",
+    "legacy:attract",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "preEvolution": "flabebe",
   "evolutions": [
@@ -428,10 +472,50 @@
         "tutor:swift",
         "tutor:synthesis",
         "tutor:trick",
-        "tutor:worryseed"
+        "tutor:worryseed",
+        "legacy:attract",
+        "legacy:confide",
+        "legacy:doubleteam",
+        "legacy:frustration",
+        "legacy:hiddenpower",
+        "legacy:return",
+        "legacy:round",
+        "legacy:secretpower",
+        "legacy:snore",
+        "legacy:swagger",
+        "legacy:toxic"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "herd": {
+          "maxSize": "6",
+          "toleratedLeaders": [
+            {
+              "pokemon": "floette eternal",
+              "tier": 1
+            }
+          ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        }
+      }
     }
   ]
 }

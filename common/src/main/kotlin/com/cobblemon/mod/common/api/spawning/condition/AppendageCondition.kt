@@ -8,8 +8,7 @@
 
 package com.cobblemon.mod.common.api.spawning.condition
 
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.util.adapters.SpawningConditionAdapter
 
 /**
@@ -17,7 +16,7 @@ import com.cobblemon.mod.common.util.adapters.SpawningConditionAdapter
  * and is then stowed in [SpawningCondition.appendages].
  *
  * As an example, you could add an appendage which has a single field called 'weather'. The [fits]
- * implementation would check the [SpawningContext] using your own logic. Inside the JSON, you
+ * implementation would check the [SpawnablePosition] using your own logic. Inside the JSON, you
  * would specify the 'weather' property as if it was a built-in field inside [SpawningCondition]. During
  * loading, it will deserialize the [SpawningCondition]'s JSON several times targeting the various
  * appendage classes, and then add those appendages to [SpawningCondition.appendages] so that when
@@ -55,5 +54,5 @@ interface AppendageCondition {
 
         fun getAppendages(spawningCondition: SpawningCondition<*>) = appendages.filter { it.spawningConditionFits(spawningCondition) }.map { it.clazz }
     }
-    fun fits(ctx: SpawningContext): Boolean
+    fun fits(spawnablePosition: SpawnablePosition): Boolean
 }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
@@ -133,7 +134,10 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
     override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
 
     override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
-        world.setBlock(pos, state.setValue(AGE, state.getValue(AGE) + 1), 2)
+        val curAge = state.getValue(AGE)
+        val newAge = curAge + 1
+        if (newAge > MAX_AGE) return
+        world.setBlock(pos, state.setValue(AGE, newAge), UPDATE_CLIENTS)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -173,7 +177,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
         world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, resetState))
 
         if (!world.isClientSide) {
-            world.playSoundServer(position = pos.toVec3d(), sound = SoundEvents.ITEM_PICKUP, volume = 0.7F, pitch = 1.4F)
+            world.playSoundServer(position = pos.toVec3d(), sound = CobblemonSounds.APRICORN_HARVEST, volume = 1.0F, pitch = 1.0F)
 
             if (world is ServerLevel && player is ServerPlayer) {
                 CobblemonEvents.APRICORN_HARVESTED.post(ApricornHarvestEvent(player, apricorn, world, pos))
@@ -186,17 +190,17 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
      * This uses [Block.dropResources] to handle the drops.
      * It will also reset the [BlockState] of this block at the given location to the start of growth.
      *
-     * @param world The [World] the apricorn is in.
+     * @param world The [Level] the apricorn is in.
      * @param state The [BlockState] of the apricorn.
      * @param pos The [BlockPos] of the apricorn.
      * @return The [BlockState] after harvest.
      */
     fun harvest(world: Level, state: BlockState, pos: BlockPos): BlockState {
         // Uses loot tables, to change the drops use 'data/cobblemon/loot_tables/blocks/<color>_apricorn.json'
-        Block.dropResources(state, world, pos)
+        dropResources(state, world, pos)
         // Don't use default as we want to keep the facing
         val resetState = state.setValue(AGE, MIN_AGE)
-        world.setBlock(pos, resetState, Block.UPDATE_CLIENTS)
+        world.setBlock(pos, resetState, UPDATE_CLIENTS)
         return resetState
     }
 
@@ -226,115 +230,99 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
         const val MIN_AGE = 0
 
         // North
+        // Stage 0
+        private val NORTH_STAGE_0 = Shapes.box(0.40625, 0.5, 0.0, 0.59375, 0.6875, 0.1875)
+        private val NORTH_CAP_STAGE_0 = Shapes.box(0.4375, 0.65625, 0.03125, 0.5625, 0.71875, 0.15625)
+
         // Stage 1
-        private val NORTH_TOP_STAGE_1 = Block.box(7.0, 11.0, 0.5, 9.0, 11.5, 2.5)
-        private val NORTH_BODY_STAGE_1 = Block.box(6.5, 9.0, 0.0, 9.5, 11.0, 3.0)
-        private val NORTH_BOTTOM_STAGE_1 = Block.box(7.0, 8.5, 0.5, 9.0, 9.0, 2.5)
+        private val NORTH_STAGE_1 = Shapes.box(0.375, 0.40625, 0.0, 0.625, 0.65625, 0.25)
+        private val NORTH_CAP_STAGE_1 = Shapes.box(0.40625, 0.625, 0.03125, 0.59375, 0.6875, 0.21875)
 
         // Stage 2
-        private val NORTH_TOP_STAGE_2 = Block.box(6.5, 10.5, 0.5, 9.5, 11.0, 3.5)
-        private val NORTH_BODY_STAGE_2 = Block.box(6.0, 7.5, 0.0, 10.0, 10.5, 4.0)
-        private val NORTH_BOTTOM_STAGE_2 = Block.box(6.5, 7.0, 0.5, 9.5, 7.5, 3.5)
+        private val NORTH_STAGE_2 = Shapes.box(0.34375, 0.296875, 0.0, 0.65625, 0.609375, 0.3125)
+        private val NORTH_CAP_STAGE_2 = Shapes.box(0.375, 0.59375, 0.03125, 0.625, 0.65625, 0.28125)
 
-        // Stage 3
-        private val NORTH_TOP_STAGE_3 = Block.box(6.0, 9.75, 0.5, 10.0, 10.5, 4.5)
-        private val NORTH_BODY_STAGE_3 = Block.box(5.5, 5.75, 0.0, 10.5, 9.75, 5.0)
-        private val NORTH_BOTTOM_STAGE_3 = Block.box(6.0, 5.0, 0.5, 10.0, 5.75, 4.5)
-
-        // Full fruit
-        private val NORTH_TOP_FRUIT = Block.box(6.0, 9.0, 1.0, 10.0, 10.0, 5.0)
-        private val NORTH_BODY_FRUIT = Block.box(5.0, 4.0, 0.0, 11.0, 9.0, 6.0)
-        private val NORTH_BOTTOM_FRUIT = Block.box(5.5, 3.0, 0.5, 10.5, 4.0, 5.5)
+        // Stage 3 - Full Fruit
+        private val NORTH_STAGE_3 = Shapes.box(0.3125, 0.1875, 0.0, 0.6875, 0.5625, 0.375)
+        private val NORTH_CAP_STAGE_3 = Shapes.box(0.375, 0.5625, 0.0625, 0.625, 0.625, 0.3125)
 
         private val NORTH_AABB = arrayOf(
-            Shapes.or(NORTH_BODY_STAGE_1, NORTH_TOP_STAGE_1, NORTH_BOTTOM_STAGE_1),
-            Shapes.or(NORTH_BODY_STAGE_2, NORTH_TOP_STAGE_2, NORTH_BOTTOM_STAGE_2),
-            Shapes.or(NORTH_BODY_STAGE_3, NORTH_TOP_STAGE_3, NORTH_BOTTOM_STAGE_3),
-            Shapes.or(NORTH_BODY_FRUIT, NORTH_TOP_FRUIT, NORTH_BOTTOM_FRUIT)
+            Shapes.or(NORTH_STAGE_0, NORTH_CAP_STAGE_0),
+            Shapes.or(NORTH_STAGE_1, NORTH_CAP_STAGE_1),
+            Shapes.or(NORTH_STAGE_2, NORTH_CAP_STAGE_2),
+            Shapes.or(NORTH_STAGE_3, NORTH_CAP_STAGE_3)
         )
 
         // South
+        // Stage 0
+        private val SOUTH_STAGE_0 = Shapes.box(0.40625, 0.5, 0.8125, 0.59375, 0.6875, 1.0)
+        private val SOUTH_CAP_STAGE_0 = Shapes.box(0.4375, 0.65625, 0.84375, 0.5625, 0.71875, 0.96875)
+
         // Stage 1
-        private val SOUTH_TOP_STAGE_1 = Block.box(7.0, 11.0, 13.5, 9.0, 11.5, 15.5)
-        private val SOUTH_BODY_STAGE_1 = Block.box(6.5, 9.0, 13.0, 9.5, 11.0, 16.0)
-        private val SOUTH_BOTTOM_STAGE_1 = Block.box(7.0, 8.5, 13.5, 9.0, 9.0, 15.5)
+        private val SOUTH_STAGE_1 = Shapes.box(0.375, 0.40625, 0.75, 0.625, 0.65625, 1.0)
+        private val SOUTH_CAP_STAGE_1 = Shapes.box(0.40625, 0.625, 0.78125, 0.59375, 0.6875, 0.96875)
 
         // Stage 2
-        private val SOUTH_TOP_STAGE_2 = Block.box(6.5, 10.5, 12.5, 9.5, 11.0, 15.5)
-        private val SOUTH_BODY_STAGE_2 = Block.box(6.0, 7.5, 12.0, 10.0, 10.5, 16.0)
-        private val SOUTH_BOTTOM_STAGE_2 = Block.box(6.5, 7.0, 12.5, 9.5, 7.5, 15.5)
+        private val SOUTH_STAGE_2 = Shapes.box(0.34375, 0.296875, 0.6875, 0.65625, 0.609375, 1.0)
+        private val SOUTH_CAP_STAGE_2 = Shapes.box(0.375, 0.59375, 0.71875, 0.625, 0.65625, 0.96875)
 
-        // Stage 3
-        private val SOUTH_TOP_STAGE_3 = Block.box(6.0, 9.75, 11.5, 10.0, 10.5, 15.5)
-        private val SOUTH_BODY_STAGE_3 = Block.box(5.5, 5.75, 11.0, 10.5, 9.75, 16.0)
-        private val SOUTH_BOTTOM_STAGE_3 = Block.box(6.0, 5.0, 11.5, 10.0, 5.75, 15.5)
-
-        // Full fruit
-        private val SOUTH_TOP_FRUIT = Block.box(6.0, 9.0, 11.0, 10.0, 10.0, 15.0)
-        private val SOUTH_BODY_FRUIT = Block.box(5.0, 4.0, 10.0, 11.0, 9.0, 16.0)
-        private val SOUTH_BOTTOM_FRUIT = Block.box(5.5, 3.0, 10.5, 10.5, 4.0, 15.5)
+        // Stage 3 - Full Fruit
+        private val SOUTH_STAGE_3 = Shapes.box(0.3125, 0.1875, 0.625, 0.6875, 0.5625, 1.0)
+        private val SOUTH_CAP_STAGE_3 = Shapes.box(0.375, 0.5625, 0.6875, 0.625, 0.625, 0.9375)
 
         private val SOUTH_AABB = arrayOf(
-            Shapes.or(SOUTH_BODY_STAGE_1, SOUTH_TOP_STAGE_1, SOUTH_BOTTOM_STAGE_1),
-            Shapes.or(SOUTH_BODY_STAGE_2, SOUTH_TOP_STAGE_2, SOUTH_BOTTOM_STAGE_2),
-            Shapes.or(SOUTH_BODY_STAGE_3, SOUTH_TOP_STAGE_3, SOUTH_BOTTOM_STAGE_3),
-            Shapes.or(SOUTH_BODY_FRUIT, SOUTH_TOP_FRUIT, SOUTH_BOTTOM_FRUIT)
+            Shapes.or(SOUTH_STAGE_0, SOUTH_CAP_STAGE_0),
+            Shapes.or(SOUTH_STAGE_1, SOUTH_CAP_STAGE_1),
+            Shapes.or(SOUTH_STAGE_2, SOUTH_CAP_STAGE_2),
+            Shapes.or(SOUTH_STAGE_3, SOUTH_CAP_STAGE_3)
         )
 
         // East
+        // Stage 0
+        private val EAST_STAGE_0 = Shapes.box(0.8125, 0.5, 0.40625, 1.0, 0.6875, 0.59375)
+        private val EAST_CAP_STAGE_0 = Shapes.box(0.84375, 0.65625, 0.4375, 0.96875, 0.71875, 0.5625)
+
         // Stage 1
-        private val EAST_TOP_STAGE_1 = Block.box(13.5, 11.0, 7.0, 15.5, 11.5, 9.0)
-        private val EAST_BODY_STAGE_1 = Block.box(13.0, 9.0, 6.5, 16.0, 11.0, 9.5)
-        private val EAST_BOTTOM_STAGE_1 = Block.box(13.5, 8.5, 7.0, 15.5, 9.0, 9.0)
+        private val EAST_STAGE_1 = Shapes.box(0.75, 0.40625, 0.375, 1.0, 0.65625, 0.625)
+        private val EAST_CAP_STAGE_1 = Shapes.box(0.78125, 0.625, 0.40625, 0.96875, 0.6875, 0.59375)
 
         // Stage 2
-        private val EAST_TOP_STAGE_2 = Block.box(12.5, 10.5, 6.5, 15.5, 11.0, 9.5)
-        private val EAST_BODY_STAGE_2 = Block.box(12.0, 7.5, 6.0, 16.0, 10.5, 10.0)
-        private val EAST_BOTTOM_STAGE_2 = Block.box(12.5, 7.0, 6.5, 15.5, 7.5, 9.5)
+        private val EAST_STAGE_2 = Shapes.box(0.6875, 0.296875, 0.34375, 1.0, 0.609375, 0.65625)
+        private val EAST_CAP_STAGE_2 = Shapes.box(0.71875, 0.59375, 0.375, 0.96875, 0.65625, 0.625)
 
-        // Stage 3
-        private val EAST_TOP_STAGE_3 = Block.box(11.5, 9.75, 6.0, 15.5, 10.5, 10.0)
-        private val EAST_BODY_STAGE_3 = Block.box(11.0, 5.75, 5.5, 16.0, 9.75, 10.5)
-        private val EAST_BOTTOM_STAGE_3 = Block.box(11.5, 5.0, 6.0, 15.5, 5.75, 10.0)
-
-        // Full fruit
-        private val EAST_TOP_FRUIT = Block.box(11.0, 9.0, 6.0, 15.0, 10.0, 10.0)
-        private val EAST_BODY_FRUIT = Block.box(10.0, 4.0, 5.0, 16.0, 9.0, 11.0)
-        private val EAST_BOTTOM_FRUIT = Block.box(10.5, 3.0, 5.5, 15.5, 4.0, 10.5)
+        // Stage 3 - Full Fruit
+        private val EAST_STAGE_3 = Shapes.box(0.625, 0.1875, 0.3125, 1.0, 0.5625, 0.6875)
+        private val EAST_CAP_STAGE_3 = Shapes.box(0.6875, 0.5625, 0.375, 0.9375, 0.625, 0.625)
 
         private val EAST_AABB = arrayOf(
-            Shapes.or(EAST_BODY_STAGE_1, EAST_TOP_STAGE_1, EAST_BOTTOM_STAGE_1),
-            Shapes.or(EAST_BODY_STAGE_2, EAST_TOP_STAGE_2, EAST_BOTTOM_STAGE_2),
-            Shapes.or(EAST_BODY_STAGE_3, EAST_TOP_STAGE_3, EAST_BOTTOM_STAGE_3),
-            Shapes.or(EAST_BODY_FRUIT, EAST_TOP_FRUIT, EAST_BOTTOM_FRUIT)
+            Shapes.or(EAST_STAGE_0, EAST_CAP_STAGE_0),
+            Shapes.or(EAST_STAGE_1, EAST_CAP_STAGE_1),
+            Shapes.or(EAST_STAGE_2, EAST_CAP_STAGE_2),
+            Shapes.or(EAST_STAGE_3, EAST_CAP_STAGE_3)
         )
 
         // West
+        // Stage 0
+        private val WEST_STAGE_0 = Shapes.box(0.0, 0.5, 0.40625, 0.1875, 0.6875, 0.59375)
+        private val WEST_CAP_STAGE_0 = Shapes.box(0.03125, 0.65625, 0.4375, 0.15625, 0.71875, 0.5625)
+
         // Stage 1
-        private val WEST_TOP_STAGE_1 = Block.box(0.5, 11.0, 7.0, 2.5, 11.5, 9.0)
-        private val WEST_BODY_STAGE_1 = Block.box(0.0, 9.0, 6.5, 3.0, 11.0, 9.5)
-        private val WEST_BOTTOM_STAGE_1 = Block.box(0.5, 8.5, 7.0, 2.5, 9.0, 9.0)
+        private val WEST_STAGE_1 = Shapes.box(0.0, 0.40625, 0.375, 0.25, 0.65625, 0.625)
+        private val WEST_CAP_STAGE_1 = Shapes.box(0.03125, 0.625, 0.40625, 0.21875, 0.6875, 0.59375)
 
         // Stage 2
-        private val WEST_TOP_STAGE_2 = Block.box(0.5, 10.5, 6.5, 3.5, 11.0, 9.5)
-        private val WEST_BODY_STAGE_2 = Block.box(0.0, 7.5, 6.0, 4.0, 10.5, 10.0)
-        private val WEST_BOTTOM_STAGE_2 = Block.box(0.5, 7.0, 6.5, 3.5, 7.5, 9.5)
+        private val WEST_STAGE_2 = Shapes.box(0.0, 0.296875, 0.34375, 0.3125, 0.609375, 0.65625)
+        private val WEST_CAP_STAGE_2 = Shapes.box(0.03125, 0.59375, 0.375, 0.28125, 0.65625, 0.625)
 
-        // Stage 3
-        private val WEST_TOP_STAGE_3 = Block.box(0.5, 9.75, 6.0, 4.5, 10.5, 10.0)
-        private val WEST_BODY_STAGE_3 = Block.box(0.0, 5.75, 5.5, 5.0, 9.75, 10.5)
-        private val WEST_BOTTOM_STAGE_3 = Block.box(0.5, 5.0, 6.0, 4.5, 5.75, 10.0)
-
-        // Full fruit
-        private val WEST_TOP_FRUIT = Block.box(1.0, 9.0, 6.0, 5.0, 10.0, 10.0)
-        private val WEST_BODY_FRUIT = Block.box(0.0, 4.0, 5.0, 6.0, 9.0, 11.0)
-        private val WEST_BOTTOM_FRUIT = Block.box(0.5, 3.0, 5.5, 5.5, 4.0, 10.5)
+        // Stage 3 - Full Fruit
+        private val WEST_STAGE_3 = Shapes.box(0.0, 0.1875, 0.3125, 0.375, 0.5625, 0.6875)
+        private val WEST_CAP_STAGE_3 = Shapes.box(0.0625, 0.5625, 0.375, 0.3125, 0.625, 0.625)
 
         private val WEST_AABB = arrayOf(
-            Shapes.or(WEST_BODY_STAGE_1, WEST_TOP_STAGE_1, WEST_BOTTOM_STAGE_1),
-            Shapes.or(WEST_BODY_STAGE_2, WEST_TOP_STAGE_2, WEST_BOTTOM_STAGE_2),
-            Shapes.or(WEST_BODY_STAGE_3, WEST_TOP_STAGE_3, WEST_BOTTOM_STAGE_3),
-            Shapes.or(WEST_BODY_FRUIT, WEST_TOP_FRUIT, WEST_BOTTOM_FRUIT)
+            Shapes.or(WEST_STAGE_0, WEST_CAP_STAGE_0),
+            Shapes.or(WEST_STAGE_1, WEST_CAP_STAGE_1),
+            Shapes.or(WEST_STAGE_2, WEST_CAP_STAGE_2),
+            Shapes.or(WEST_STAGE_3, WEST_CAP_STAGE_3)
         )
 
     }

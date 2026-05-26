@@ -21,6 +21,8 @@ import com.google.gson.JsonPrimitive
 import com.mojang.serialization.JsonOps
 import net.minecraft.resources.ResourceLocation
 import org.joml.Vector4f
+import java.util.Locale
+import java.util.Locale.getDefault
 
 object SnowstormParticleReader {
     fun loadEffect(json: JsonObject): BedrockParticleOptions {
@@ -182,21 +184,36 @@ object SnowstormParticleReader {
             }
         }
 
+        val space = spaceJson?.let {
+            val spaceRotation = it.get("rotation")?.asBoolean ?: false
+            ParticleSpace(
+                localPosition = if (spaceRotation) true else it.get("position")?.asBoolean ?: false,
+                localRotation = spaceRotation,
+                localVelocity = it.get("velocity")?.asBoolean ?: false
+            )
+        } ?: ParticleSpace()
+
         val shape = if (emitterShapePointJson != null) {
             val arr = emitterShapePointJson.get("offset")?.asJsonArray?.map { it.asString.asExpression() } ?: listOf(0.0.asExpression(), 0.0.asExpression(), 0.0.asExpression())
+            val map = emitterShapePointJson.get("attachment_options")?.asJsonObject?.let { parseAttachment(it) } ?: mutableMapOf()
+            if (space.localRotation && map[AttachedType.ROTATION] == null) map[AttachedType.ROTATION] = true
             resolveDirection(emitterShapePointJson)
-            PointParticleEmitterShape(offset = Triple(arr[0], arr[1], arr[2]))
+            PointParticleEmitterShape(offset = Triple(arr[0], arr[1], arr[2]), pAttachmentOptions = map)
         } else if (emitterShapeSphereJson != null) {
             val arr = emitterShapeSphereJson.get("offset")?.asJsonArray?.map { it.asString.asExpression() } ?: listOf(0.0.asExpression(), 0.0.asExpression(), 0.0.asExpression())
+            val map = emitterShapeSphereJson.get("attachment_options")?.asJsonObject?.let { parseAttachment(it) }
             resolveDirection(emitterShapeSphereJson)
             SphereParticleEmitterShape(
                 offset = Triple(arr[0], arr[1], arr[2]),
                 radius = emitterShapeSphereJson.get("radius")?.asString?.asExpression() ?: 0.0.asExpression(),
-                surfaceOnly = emitterShapeSphereJson.get("surface_only")?.asBoolean ?: false
+                surfaceOnly = emitterShapeSphereJson.get("surface_only")?.asBoolean ?: false,
+                pAttachmentOptions = map
             )
         } else if (emitterShapeDiscJson != null) {
             resolveDirection(emitterShapeDiscJson)
             val offsetExpressions = emitterShapeDiscJson.get("offset")?.asJsonArray?.map { it.asString.asExpression() } ?: listOf(0.0.asExpression(), 0.0.asExpression(), 0.0.asExpression())
+            val map = emitterShapeDiscJson.get("attachment_options")?.asJsonObject?.let { parseAttachment(it) } ?: mutableMapOf()
+            if (space.localRotation && map[AttachedType.ROTATION] == null) map[AttachedType.ROTATION] = true
             val normalJson = emitterShapeDiscJson.get("plane_normal") ?: JsonPrimitive("y")
             val normal: Triple<Expression, Expression, Expression> = if (normalJson.isJsonArray) {
                 val normalArr = normalJson.asJsonArray.map { it.asString.asExpression() }
@@ -214,7 +231,8 @@ object SnowstormParticleReader {
                 offset = Triple(offsetExpressions[0], offsetExpressions[1], offsetExpressions[2]),
                 radius = emitterShapeDiscJson.get("radius")?.asString?.asExpression() ?: 0.0.asExpression(),
                 surfaceOnly = emitterShapeDiscJson.get("surface_only")?.asBoolean ?: false,
-                normal = normal
+                normal = normal,
+                pAttachmentOptions = map
             )
         } else if (emitterShapeBoxJson != null) {
             resolveDirection(emitterShapeBoxJson)
@@ -222,10 +240,13 @@ object SnowstormParticleReader {
                 ?: listOf(0.0.asExpression(), 0.0.asExpression(), 0.0.asExpression())
             val boxSizeExpressions = emitterShapeBoxJson.get("half_dimensions")?.asJsonArray?.map { it.asString.asExpression() }
                 ?: listOf(0.0.asExpression(), 0.0.asExpression(), 0.0.asExpression())
+            val map = emitterShapeBoxJson.get("attachment_options")?.asJsonObject?.let { parseAttachment(it) } ?: mutableMapOf()
+            if (space.localRotation && map[AttachedType.ROTATION] == null) map[AttachedType.ROTATION] = true
             BoxParticleEmitterShape(
                 offset = Triple(offsetExpressions[0], offsetExpressions[1], offsetExpressions[2]),
                 boxSize = Triple(boxSizeExpressions[0], boxSizeExpressions[1], boxSizeExpressions[2]),
-                surfaceOnly = emitterShapeBoxJson.get("surface_only")?.asBoolean ?: false
+                surfaceOnly = emitterShapeBoxJson.get("surface_only")?.asBoolean ?: false,
+                pAttachmentOptions = map
             )
         } else if (emitterShapeEntityBoundingBoxJson != null) {
             resolveDirection(emitterShapeEntityBoundingBoxJson)
@@ -356,14 +377,6 @@ object SnowstormParticleReader {
                 expiresOnContact = it.get("expire_on_contact")?.asBoolean ?: false
             )
         } ?: ParticleCollision()
-        val space = spaceJson?.let {
-            val spaceRotation = it.get("rotation")?.asBoolean ?: false
-            ParticleSpace(
-                localPosition = if (spaceRotation) true else it.get("position")?.asBoolean ?: false,
-                localRotation = spaceRotation,
-                localVelocity = it.get("velocity")?.asBoolean ?: false
-            )
-        } ?: ParticleSpace()
 
         val particleEventSet = particleLifetimeEventsJson?.let {
             val creationEvents = it.get("creation_event")?.normalizeToArray()?.map { SimpleEventTrigger(it.asString) }?.toMutableList() ?: mutableListOf()
@@ -449,5 +462,21 @@ object SnowstormParticleReader {
             blueHex.toInt(16) / 255F,
             alphaHex.toInt(16) / 255F
         )
+    }
+
+    private fun parseAttachment(jsonObject: JsonObject): MutableMap<AttachedType, Boolean> {
+        return jsonObject
+            .asMap()
+            .filter{ (key, _) -> safeValueOf<AttachedType>(key.uppercase()) != null }
+            .map { (key, value) -> enumValueOf<AttachedType>(key.uppercase()) to value.asBoolean }.toMap().toMutableMap()
+    }
+
+    // https://stackoverflow.com/questions/35666815/enum-valueof-in-kotlin
+    inline fun <reified T : Enum<T>> safeValueOf(string: String): T? {
+        return try {
+            enumValueOf<T>(string)
+        } catch (e: IllegalArgumentException) {
+            null
+        }
     }
 }

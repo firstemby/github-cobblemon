@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 848,
   "name": "Toxel",
   "primaryType": "electric",
@@ -43,10 +44,10 @@
   "catchRate": 75,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.9,
     "fixed": false
   },
   "drops": {
@@ -81,7 +82,10 @@
     "tm:terablast",
     "tutor:endeavor",
     "tutor:rest",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:attract",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -97,7 +101,18 @@
           "variant": "properties",
           "target": "toxel nature=hardy"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelbrave_toxtricity",
@@ -112,7 +127,18 @@
           "variant": "properties",
           "target": "toxel nature=brave"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxeladamant_toxtricity",
@@ -127,7 +153,18 @@
           "variant": "properties",
           "target": "toxel nature=adamant"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelnaughty_toxtricity",
@@ -142,7 +179,18 @@
           "variant": "properties",
           "target": "toxel nature=naughty"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxeldocile_toxtricity",
@@ -157,7 +205,18 @@
           "variant": "properties",
           "target": "toxel nature=docile"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelimpish_toxtricity",
@@ -172,7 +231,18 @@
           "variant": "properties",
           "target": "toxel nature=impish"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxellax_toxtricity",
@@ -187,7 +257,18 @@
           "variant": "properties",
           "target": "toxel nature=lax"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelhasty_toxtricity",
@@ -202,7 +283,18 @@
           "variant": "properties",
           "target": "toxel nature=hasty"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxeljolly_toxtricity",
@@ -217,7 +309,18 @@
           "variant": "properties",
           "target": "toxel nature=jolly"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelnaive_toxtricity",
@@ -232,7 +335,18 @@
           "variant": "properties",
           "target": "toxel nature=naive"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelrash_toxtricity",
@@ -262,7 +376,18 @@
           "variant": "properties",
           "target": "toxel nature=sassy"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "toxelquirky_toxtricity",
@@ -279,10 +404,21 @@
           "variant": "properties",
           "target": "toxel nature=quirky"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxellonely_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -294,10 +430,21 @@
           "variant": "properties",
           "target": "toxel nature=lonely"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbold_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -312,7 +459,7 @@
       ]
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelrelaxed_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -324,10 +471,21 @@
           "variant": "properties",
           "target": "toxel nature=relaxed"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxeltimid_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -339,10 +497,21 @@
           "variant": "properties",
           "target": "toxel nature=timid"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelserious_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -354,10 +523,21 @@
           "variant": "properties",
           "target": "toxel nature=serious"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmodest_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -369,10 +549,21 @@
           "variant": "properties",
           "target": "toxel nature=modest"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelmild_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -384,10 +575,21 @@
           "variant": "properties",
           "target": "toxel nature=mild"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelquiet_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -399,10 +601,21 @@
           "variant": "properties",
           "target": "toxel nature=quiet"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelbashful_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -414,10 +627,21 @@
           "variant": "properties",
           "target": "toxel nature=bashful"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcalm_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -429,10 +653,21 @@
           "variant": "properties",
           "target": "toxel nature=calm"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelgentle_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [],
       "requirements": [
@@ -444,10 +679,21 @@
           "variant": "properties",
           "target": "toxel nature=gentle"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
-      "id": "toxel_toxtricitylowkey",
+      "id": "toxelcareful_toxtricitylowkey",
       "result": "toxtricity punk_form=low_key",
       "learnableMoves": [
         "spark"
@@ -461,7 +707,47 @@
           "variant": "properties",
           "target": "toxel nature=careful"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "toxel",
+          "tier": 1
+        },
+        {
+          "pokemon": "toxtricity",
+          "tier": 2
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    }
+  },
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

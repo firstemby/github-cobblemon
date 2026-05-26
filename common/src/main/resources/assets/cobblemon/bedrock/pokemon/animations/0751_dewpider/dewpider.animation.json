@@ -385,6 +385,13 @@
 					"position": [0.5, 0, -0.5]
 				}
 			}
+		},
+		"animation.dewpider.cry": {
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.dewpider.cry"
+				}
+			}
 		}
 	}
 }

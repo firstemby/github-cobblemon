@@ -44,6 +44,9 @@ class DialogueTextInputWidget(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!dialogueScreen.renderInput()) {
+            return false
+        }
         if (dialogueScreen.dialogueDTO.dialogueInput.inputType != DialogueInputDTO.InputType.TEXT || dialogueScreen.waitingForServerUpdate) {
             return false
         }
@@ -57,6 +60,9 @@ class DialogueTextInputWidget(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (!dialogueScreen.renderInput()) {
+            return
+        }
         if (dialogueScreen.dialogueDTO.dialogueInput.inputType != DialogueInputDTO.InputType.TEXT || dialogueScreen.waitingForServerUpdate) {
             return
         }

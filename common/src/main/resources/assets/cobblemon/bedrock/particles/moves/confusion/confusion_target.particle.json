@@ -5,7 +5,7 @@
             "identifier": "cobblemon:confusion_target",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/psyswirl"
+                "texture": "textures/particles/generic/psychic/psyswirl"
             }
         },
         "events": {

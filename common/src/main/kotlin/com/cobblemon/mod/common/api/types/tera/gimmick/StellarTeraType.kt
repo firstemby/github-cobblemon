@@ -17,6 +17,8 @@ import net.minecraft.resources.ResourceLocation
 class StellarTeraType : TeraType {
     override val id: ResourceLocation = ID
 
+    override val name: String = "Stellar"
+
     override val legalAsStatic: Boolean = false
 
     override val displayName: Component = LANG

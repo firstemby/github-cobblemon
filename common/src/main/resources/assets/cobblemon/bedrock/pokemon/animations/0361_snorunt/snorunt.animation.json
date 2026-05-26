@@ -108,6 +108,13 @@
 					"position": [0, 0, -0.1]
 				}
 			}
+		},
+		"animation.snorunt.cry": {
+			"sound_effects": {
+				"0.0417": {
+					"effect": "pokemon.snorunt.cry"
+				}
+			}
 		}
 	}
 }

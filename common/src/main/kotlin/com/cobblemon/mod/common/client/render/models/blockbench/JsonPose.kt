@@ -60,6 +60,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
             ?: throw IllegalArgumentException("Unknown pose type ${name.asString}")
     } ?: emptyList()) + if (json.get("allPoseTypes")?.asBoolean == true) PoseType.values().toList() else emptyList()
     val transformTicks = json.get("transformTicks")?.asInt ?: 10
+    val transformToTicks = json.get("transformToTicks")?.asInt
     val transformedParts = json.get("transformedParts")?.asJsonArray?.map {
         it as JsonObject
         val partName = it.get("part").asString

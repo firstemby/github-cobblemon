@@ -43,6 +43,9 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "baseScale": 0.7,
   "hitbox": {
     "width": 0.9,
@@ -53,10 +56,37 @@
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
+    },
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "mudkip",
+          "tier": 1
+        },
+        {
+          "pokemon": "marshtomp",
+          "tier": 2
+        },
+        {
+          "pokemon": "swampert mega=false",
+          "tier": 3
+        },
+        {
+          "pokemon": "swampert mega",
+          "tier": 4
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -176,7 +206,23 @@
     "tutor:superpower",
     "tutor:uproar",
     "tutor:waterpledge",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:scald",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
   "evolutions": [
     {

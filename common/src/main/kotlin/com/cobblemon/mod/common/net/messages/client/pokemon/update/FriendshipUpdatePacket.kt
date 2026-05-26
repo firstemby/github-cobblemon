@@ -14,7 +14,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readSizedInt
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class FriendshipUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket<FriendshipUpdatePacket>(pokemon, value) {
+class FriendshipUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<FriendshipUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_BYTE
     override fun set(pokemon: Pokemon, value: Int) {

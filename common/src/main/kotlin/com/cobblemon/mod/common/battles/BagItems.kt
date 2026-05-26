@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.battles
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.PrioritizedList
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -17,12 +16,12 @@ import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.item.battle.BagItemLike
 import com.cobblemon.mod.common.util.cobblemonResource
+import java.io.File
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.item.ItemStack
-import java.io.File
 
 /**
  * A registry for [BagItem]s that could be parsed from [ItemStack]s. This registry is used as the resource loading
@@ -40,17 +39,14 @@ object BagItems : DataRegistry {
     val bagItems = PrioritizedList<BagItemLike>()
     internal val bagItemsScripts = mutableMapOf<String, String>() // itemId to JavaScript
 
-    init {
-        observable.subscribe {
-            Cobblemon.showdownThread.queue(ShowdownService::registerBagItems)
-        }
-    }
-
+    @JvmStatic
     fun getConvertibleForStack(stack: ItemStack): BagItemLike? {
         return bagItems.firstOrNull { it.getBagItem(stack) != null }
     }
 
     override fun reload(manager: ResourceManager) {
+        this.bagItemsScripts.clear()
+        ShowdownService.service.resetRegistryData("bagItem")
         manager.listResources("bag_items") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
@@ -60,6 +56,8 @@ object BagItems : DataRegistry {
                 }
             }
         }
+        ShowdownService.service.sendRegistryData(bagItemsScripts, "bagItem")
+
         this.observable.emit(this)
     }
 }

@@ -5,7 +5,7 @@
             "identifier": "cobblemon:seismictoss_actorgrab",
             "basic_render_parameters": {
                 "material": "particles_blend",
-                "texture": "textures/particles/grab"
+                "texture": "textures/particles/generic/grab"
             }
         },
         "curves": {

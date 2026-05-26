@@ -1,0 +1,30 @@
+{
+  "species": "cobblemon:mienshao",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:mienshao",
+      "model": "cobblemon:mienshao.geo",
+      "texture": "cobblemon:textures/pokemon/0620_mienshao/mienshao.png"
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0620_mienshao/mienshao_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0620_mienshao/mienshao_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

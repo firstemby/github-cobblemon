@@ -52,11 +52,22 @@
   "behaviour": {
     "moving": {
       "swim": {
-        "canSwimInWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
+      },
+      "walk": {
+        "canWalk": false
       }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -143,7 +154,25 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:thunderbolt",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:defensecurl",
+    "legacy:defog",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:swift",
+    "legacy:toxic"
   ],
   "evolutions": [],
   "forms": [
@@ -172,7 +201,30 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true,
+            "canSwimInLava": true
+          },
+          "fly": {
+            "canFly": true
+          },
+          "walk": {
+            "canWalk": false
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "fireImmune": true
+      }
     },
     {
       "name": "Rainy",

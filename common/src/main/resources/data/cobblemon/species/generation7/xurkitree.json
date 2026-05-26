@@ -134,7 +134,39 @@
     "tutor:sleeptalk",
     "tutor:thunderbolt",
     "tutor:thunderpunch",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:confide",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:return",
+    "legacy:round",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "behaviour": {
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    }
+  },
+  "lightingData": {
+    "lightLevel": 15,
+    "liquidGlowMode": "BOTH"
+  }
 }

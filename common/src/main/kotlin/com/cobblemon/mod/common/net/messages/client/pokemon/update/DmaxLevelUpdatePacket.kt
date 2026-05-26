@@ -20,7 +20,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since July 27, 2023
  */
-class DmaxLevelUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket<DmaxLevelUpdatePacket>(pokemon, value) {
+class DmaxLevelUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<DmaxLevelUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_BYTE
 

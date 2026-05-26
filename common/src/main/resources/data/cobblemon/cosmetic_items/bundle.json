@@ -3,8 +3,6 @@
   "cosmeticItems": [
     {
       "consumedItem": "minecraft:bundle",
-      "displayName": "cobblemon.cosmetic.bundle",
-      "displayItem": "minecraft:bundle",
       "aspects": ["cosmetic_item-bundle"]
     }
   ]

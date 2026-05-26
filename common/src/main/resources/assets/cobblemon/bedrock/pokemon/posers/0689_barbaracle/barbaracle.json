@@ -4,6 +4,9 @@
   "profileScale": 0.5,
   "profileTranslation": [-0.04,1,0],
   "rootBone": "barbaracle",
+  "animations": {
+    "cry": "q.bedrock_stateful('barbaracle', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

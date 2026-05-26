@@ -45,17 +45,15 @@
   "baseScale": 0.9,
   "hitbox": {
     "width": 1.1,
-    "height": 2,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
         "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
-        "swimSpeed": "0.2"
+        "swimSpeed": "0.2",
+        "canWalkOnWater": true
       },
       "fly": {
         "canFly": true
@@ -63,6 +61,38 @@
       "walk": {
         "walkSpeed": 0.3
       }
+    },
+    "resting": {
+      "canSleep": true,
+      "times": [
+        "any"
+      ],
+      "light": "0-4",
+      "fluids": [
+        "#minecraft:water"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": "9",
+      "toleratedLeaders": [
+        {
+          "pokemon": "dragonair",
+          "tier": 1
+        },
+        {
+          "pokemon": "milotic",
+          "tier": 1
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 2
+        }
+      ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -179,7 +209,33 @@
     "tutor:swift",
     "tutor:thunderbolt",
     "tutor:twister",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:attract",
+    "legacy:bide",
+    "legacy:bubblebeam",
+    "legacy:captivate",
+    "legacy:confide",
+    "legacy:curse",
+    "legacy:detect",
+    "legacy:doubleedge",
+    "legacy:doubleteam",
+    "legacy:frustration",
+    "legacy:hiddenpower",
+    "legacy:horndrill",
+    "legacy:mimic",
+    "legacy:naturalgift",
+    "legacy:rage",
+    "legacy:reflect",
+    "legacy:return",
+    "legacy:round",
+    "legacy:secretpower",
+    "legacy:skullbash",
+    "legacy:snore",
+    "legacy:swagger",
+    "legacy:toxic",
+    "legacy:watergun",
+    "legacy:whirlpool",
+    "legacy:zapcannon"
   ],
   "preEvolution": "dratini",
   "evolutions": [
@@ -195,7 +251,18 @@
           "variant": "level",
           "minLevel": 55
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "riding": {

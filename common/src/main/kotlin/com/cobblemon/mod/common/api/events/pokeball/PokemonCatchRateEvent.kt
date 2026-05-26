@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.api.events.pokeball
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
@@ -27,4 +30,17 @@ class PokemonCatchRateEvent(
     val pokeBallEntity: EmptyPokeBallEntity,
     val pokemonEntity: PokemonEntity,
     var catchRate: Float
-)
+) {
+    val context = mutableMapOf(
+        "thrower" to thrower.asMostSpecificMoLangValue(),
+        "poke_ball_entity" to pokeBallEntity.struct,
+        "pokemon_entity" to pokemonEntity.struct,
+        "catch_rate" to DoubleValue(catchRate.toDouble())
+    )
+    val functions = moLangFunctionMap(
+        "set_catch_rate" to {
+            catchRate = it.getDouble(0).toFloat()
+            DoubleValue.ONE
+        }
+    )
+}

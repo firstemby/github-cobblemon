@@ -51,13 +51,31 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.23
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
       }
-    }
+    },
+    "herd": {
+      "maxSize": "9"
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 5,
@@ -172,8 +190,13 @@
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:spite",
-    "tutor:trick"
+    "tutor:trick",
+    "special:celebrate"
   ],
   "preEvolution": "charcadet",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 10,
+    "liquidGlowMode": "LAND"
+  }
 }

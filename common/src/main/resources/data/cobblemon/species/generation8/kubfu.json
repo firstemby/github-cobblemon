@@ -117,7 +117,11 @@
     "tutor:sleeptalk",
     "tutor:superpower",
     "tutor:thunderpunch",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:attract",
+    "legacy:coaching",
+    "legacy:round",
+    "legacy:snore"
   ],
   "evolutions": [
     {
@@ -129,7 +133,7 @@
       "requirements": [],
       "trigger": {
         "variant": "item_interact",
-        "requiredContext": "cobblemon:dusk_stone"
+        "requiredContext": "cobblemon:scroll_of_darkness"
       }
     },
     {
@@ -141,8 +145,34 @@
       "requirements": [],
       "trigger": {
         "variant": "item_interact",
-        "requiredContext": "cobblemon:water_stone"
+        "requiredContext": "cobblemon:scroll_of_waters"
       }
     }
-  ]
+  ],
+  "behaviour": {
+    "herd": {
+      "maxSize": "2",
+      "toleratedLeaders": [
+        {
+          "pokemon": "urshifu",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    }
+  }
 }
