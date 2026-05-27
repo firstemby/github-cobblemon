@@ -1,4 +1,4 @@
-t.pitch = math.random(0.8, 1.0);
+t.pitch = math.random(0.9, 1.05);
 t.volume = 1.0;
 t.depth = 2;
 
