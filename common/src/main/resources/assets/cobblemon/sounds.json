@@ -1704,10 +1704,10 @@
   },
   "particle.shiny_ambient_chime": {
     "sounds": [
-      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.8 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.8 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.8 },
-      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.8 }
+      { "name": "cobblemon:shiny/shiny_ambient_chime_1", "volume": 0.05 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_2", "volume": 0.05 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_3", "volume": 0.05 },
+      { "name": "cobblemon:shiny/shiny_ambient_chime_4", "volume": 0.05 }
     ]
   },
   "particle.wild_shiny_ambient_chime": {
