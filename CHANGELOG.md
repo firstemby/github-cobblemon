@@ -372,7 +372,8 @@
 - Ride sounds no longer play when submerged unless specified with a new setting
 - NPC Trainers can now call a `command` animation when issuing a command in battle.
 - Added a q.failed function to move action effects.
-- Herd spawned Pokémon have their levels controlled differently. The `levelRange` property now acts as a clamp instead of a filter, with a new `herdLevelRange` property to do the filter behaviour. 
+- Herd spawned Pokémon have their levels controlled differently. The `levelRange` property now acts as a clamp instead of a filter, with a new `herdLevelRange` property to do the filter behaviour.
+- `q.sound` now accepts three parameters (sound event, volume and pitch) instead of just the sound event and pitch.
 
 ### Particles
 
