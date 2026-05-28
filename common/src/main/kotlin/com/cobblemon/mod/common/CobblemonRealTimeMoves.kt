@@ -12,6 +12,8 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
+import com.cobblemon.mod.common.api.types.ElementalType
+import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
 import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
@@ -37,6 +39,7 @@ object CobblemonRealTimeMoves : JsonDataRegistry<RealTimeMove> {
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(RealTimeMove::class.java, RealTimeMoveConfigAdapter)
+        .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
         .create()
 
     val realTimeMoves = mutableMapOf<ResourceLocation, RealTimeMove>()
