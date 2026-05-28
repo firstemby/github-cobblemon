@@ -26,7 +26,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
-import net.minecraft.world.entity.projectile.GenericHurtingProjectile
+import com.cobblemon.mod.common.entity.GenericHurtingProjectile
 
 object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
 

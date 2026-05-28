@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.entity.projectile.GenericHurtingProjectile
+import com.cobblemon.mod.common.entity.GenericHurtingProjectile
 
 class GenericHurtingProjectileEntityRenderer(context: EntityRendererProvider.Context) : EntityRenderer<GenericHurtingProjectile>(context) {
     override fun getBlockLightLevel(entity: GenericHurtingProjectile, pos: BlockPos): Int {

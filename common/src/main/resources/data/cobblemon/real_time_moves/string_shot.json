@@ -4,6 +4,7 @@
   "priority": 2,
   "power": 0,
   "cooldownTicks": 100,
+  "recoverTicks": 20,
   "minRange": 0,
   "maxRange": 10,
   "effect": "q.target.add_effect('minecraft:slowness', 100, 3, true)"

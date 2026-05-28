@@ -115,7 +115,7 @@ class AttackFixation(
             if (selectedMoveIndex != -1) {
                 val selectedMove = availableMoves[selectedMoveIndex]
                 activeMoveInstance = selectedMove.createInstance(entity, targetedEntity)
-
+                activeMoveInstance?.start(entity, targetedEntity)
                 // Reset cooldowns
                 entity.pokemon.realTimeMoveCooldowns[selectedMove.id] = selectedMove.cooldownTicks
                 brain.setMemory(MemoryModuleType.ATTACK_COOLING_DOWN, true, globalAttackCooldownTicks.toLong())

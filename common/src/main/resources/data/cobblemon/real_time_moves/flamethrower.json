@@ -1,8 +1,9 @@
 {
   "name": "Flamethrower",
   "type": "projectile",
+  "elementalType": "Fire",
   "priority": 2,
-  "power": 2,
+  "power": 1,
   "cooldownTicks": 100,
   "salvoCount": 20,
   "salvoDelayTicks": 3,

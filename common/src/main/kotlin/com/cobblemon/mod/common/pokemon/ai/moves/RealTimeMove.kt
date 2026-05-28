@@ -17,12 +17,13 @@ import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.google.gson.annotations.SerializedName
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
-open abstract class RealTimeMove(
+abstract class RealTimeMove(
     val name: String = "",
-    val elementalType: ElementalType = ElementalTypes.NORMAL,
+    val elementalType: ElementalType = ElementalTypes.NORMAL, // Not deserializing
     val power: Float = 1f,
     val cooldownTicks: Int = 20,
     val minRange: Float = 0f,

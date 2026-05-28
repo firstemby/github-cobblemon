@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.projectile.GenericHurtingProjectile
+import com.cobblemon.mod.common.entity.GenericHurtingProjectile
 
 class ProjectileMoveInstance(val projectileMove: ProjectileMove, pokemonEntity: PokemonEntity, targetEntity: LivingEntity) :
     RealTimeMoveInstance(move = projectileMove, pokemonEntity = pokemonEntity, targetEntity) {
@@ -23,10 +23,11 @@ class ProjectileMoveInstance(val projectileMove: ProjectileMove, pokemonEntity: 
         pokemonEntity: PokemonEntity,
         targetEntity: LivingEntity
     ) {
-        TODO("Not yet implemented")
+        pokemonEntity.navigation.stop()
     }
 
     override fun tick(pokemonEntity: PokemonEntity, targetEntity: LivingEntity) : Boolean {
+        pokemonEntity.navigation.stop()
 
         if (delayTicks > 0) {
             delayTicks--
@@ -84,7 +85,8 @@ class ProjectileMoveInstance(val projectileMove: ProjectileMove, pokemonEntity: 
                 damage = move.power * 1.0f,
                 isPiercing = projectileMove.piercing,
                 piercingMultiplier = projectileMove.piercingMultiplier,
-                onHitEffect = projectileMove.effect
+                onHitEffect = projectileMove.effect,
+                elementalType = projectileMove.elementalType,
             )
             projectile.setPos(pokemonEntity.eyePosition)
             pokemonEntity.level().addFreshEntity(projectile)

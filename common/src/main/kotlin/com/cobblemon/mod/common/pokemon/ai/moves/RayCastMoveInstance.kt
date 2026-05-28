@@ -31,7 +31,7 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
         pokemonEntity: PokemonEntity,
         targetEntity: LivingEntity
     ) {
-        TODO("Not yet implemented")
+        pokemonEntity.navigation.stop()
     }
 
 
@@ -82,8 +82,12 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
 
                 if (collisionResult.type != HitResult.Type.BLOCK && pokemonEntity.doHurtTarget(targetEntity)) {
                     // Dish out the damage
-                    // TODO: Do damage calculation based on the Pokemon's stats * power of the attack
-                    //      Probably override doHurtTarget in PokemonEntity
+                    // TODO: Respect minecraft status effect modifiers
+                    val damage = getDamageMultiplier(pokemonEntity, targetEntity, move.elementalType) * rayCastMove.power
+                    targetEntity.hurt(
+                        pokemonEntity.damageSources().mobAttack(pokemonEntity),
+                        damage
+                    )
                     pokemonEntity.swing(InteractionHand.MAIN_HAND)
                     // if hit succeeded, apply additional effect
                     val runtime = mainThreadRuntime.withQueryValue("entity", pokemonEntity.asMostSpecificMoLangValue())
