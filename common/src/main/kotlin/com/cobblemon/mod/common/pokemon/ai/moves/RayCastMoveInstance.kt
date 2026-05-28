@@ -106,6 +106,7 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
                     hitCount++
                 }
             }
+            return true
         }
 
 
