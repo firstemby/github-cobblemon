@@ -1037,6 +1037,10 @@ open class Pokemon : ShowdownIdentifiable {
         return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
 
+    fun isFreezeImmune(): Boolean {
+        return ElementalTypes.ICE in types || form.behaviour.freezeImmune
+    }
+
     fun dampensVibrations(): Boolean = form.behaviour.dampensVibrations
 
     // function to return the max hunger for the pokemon

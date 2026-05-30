@@ -56,6 +56,7 @@
 - Pressing the inventory key now closes the Pokémon interact wheel GUI
 - Pokémon cries now play when clicking Pokémon in the summary screen.
 - Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
+- Ice type Pokémon are now immune to Packed Snow
 
 ### New rideable Pokémon
 - Drampa
