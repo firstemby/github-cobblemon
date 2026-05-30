@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
-import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readString
@@ -16,25 +15,25 @@ import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
+class FormUpdatePacket(pokemon: () -> Pokemon?, formName: String) : SingleUpdatePacket<String, FormUpdatePacket>(pokemon, formName) {
     override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeString(this.value.name)
+        buffer.writeString(this.value)
     }
 
-    override fun set(pokemon: Pokemon, value: FormData) {
-        pokemon.form = value
+    override fun set(pokemon: Pokemon, value: String) {
+        val form = pokemon.species.forms.find { it.name == value } ?: pokemon.species.standardForm
+        pokemon.form = form
     }
 
-    override val id: ResourceLocation = ID
+    override val id = ID
 
     companion object {
-        val ID: ResourceLocation = cobblemonResource("packets/form-update")
+        val ID: ResourceLocation = cobblemonResource("form_update")
+
         fun decode(buffer: RegistryFriendlyByteBuf): FormUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val formName = buffer.readString()
-            val species = pokemon().species
-            val form = species.forms.find { it.name == formName } ?: species.standardForm
-            return FormUpdatePacket(pokemon, form)
+            return FormUpdatePacket(pokemon, formName)
         }
     }
 }

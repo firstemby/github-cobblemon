@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.api.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationLike
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonClientTransformationController
 import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonServerTransformationController
@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonServe
  * @author Licious
  * @since April 28th, 2022
  */
-interface TransformationController<T : TransformationLike, out I : PreProcessor> : MutableSet<T> {
+interface TransformationController<T : TransformationLike, out I : PokemonTransformationControllerPreProcessor> : MutableSet<T> {
 
     /**
      * Resolves the [Pokemon] attached to this controller.

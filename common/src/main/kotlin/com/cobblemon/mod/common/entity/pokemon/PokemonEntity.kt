@@ -11,8 +11,15 @@ package com.cobblemon.mod.common.entity.pokemon
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonCosmeticItems
+import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -71,12 +78,19 @@ import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
-import com.cobblemon.mod.common.entity.*
+import com.cobblemon.mod.common.entity.BehaviourEditingTracker
+import com.cobblemon.mod.common.entity.EntityCallbacks
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.entity.OmniPathingEntity
+import com.cobblemon.mod.common.entity.PlatformType
+import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.PoseType.Companion.NO_GRAV_POSES
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.BUSY_LOCKED
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -100,8 +114,11 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
-import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
+import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
+import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatureProvider
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
+import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
@@ -109,6 +126,13 @@ import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.google.common.collect.UnmodifiableIterator
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -172,12 +196,6 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.min
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -2108,7 +2126,7 @@ open class PokemonEntity(
 
     override fun shear(shearedSoundCategory: SoundSource) {
         val slowpokeTailFeature = SlowpokeTailRegrowthSpeciesFeatureProvider.getFromPokemon(pokemon)
-        if (slowpokeTailFeature != null && slowpokeTailFeature.regrowthSeconds <= 0) {
+        if (slowpokeTailFeature != null && slowpokeTailFeature.value <= 0) {
             this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F)
             slowpokeTailFeature.onShear(this)
             return
@@ -2150,12 +2168,12 @@ open class PokemonEntity(
             return false
         }
         val slowpokeRegrowthFeature = SlowpokeTailRegrowthSpeciesFeatureProvider.getFromPokemon(pokemon)
-        return if (slowpokeRegrowthFeature != null && slowpokeRegrowthFeature.regrowthSeconds > 0) {
+        return if (slowpokeRegrowthFeature != null && slowpokeRegrowthFeature.value > 0) {
             false
         } else if (slowpokeRegrowthFeature != null) {
             true
         } else {
-            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled == false
+            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.value == false
         }
     }
 

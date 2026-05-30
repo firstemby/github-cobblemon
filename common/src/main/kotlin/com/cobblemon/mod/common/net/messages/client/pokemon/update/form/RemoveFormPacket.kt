@@ -7,7 +7,7 @@ import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RemoveFormPacket(pokemon: () -> Pokemon, value: FormDisplay) : SingleUpdatePacket<FormDisplay, RemoveFormPacket>(pokemon, value) {
+class RemoveFormPacket(pokemon: () -> Pokemon?, value: FormDisplay) : SingleUpdatePacket<FormDisplay, RemoveFormPacket>(pokemon, value) {
 
     override val id = ID
 

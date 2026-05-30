@@ -213,7 +213,11 @@ import com.cobblemon.mod.common.net.messages.server.trade.ChangeTradeAcceptanceP
 import com.cobblemon.mod.common.net.messages.server.trade.OfferTradePacket
 import com.cobblemon.mod.common.net.messages.server.trade.PerformTradePacket
 import com.cobblemon.mod.common.net.messages.server.trade.UpdateTradeOfferPacket
-import com.cobblemon.mod.common.net.serverhandling.*
+import com.cobblemon.mod.common.net.serverhandling.AcceptFormHandler
+import com.cobblemon.mod.common.net.serverhandling.ChallengeHandler
+import com.cobblemon.mod.common.net.serverhandling.ChallengeResponseHandler
+import com.cobblemon.mod.common.net.serverhandling.RequestInteractionsHandler
+import com.cobblemon.mod.common.net.serverhandling.RevertFormHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.BattleSelectActionsHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.RemoveSpectatorHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.SpectateBattleHandler
@@ -508,9 +512,6 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(AddFormPacket.ID, AddFormPacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(ClearFormsPacket.ID, ClearFormsPacket::decode, PokemonUpdatePacketHandler()))
         list.add(PacketRegisterInfo(RemoveFormPacket.ID, RemoveFormPacket::decode, PokemonUpdatePacketHandler()))
-
-        // Debug / cheats
-        list.add(PacketRegisterInfo(CalculateSeatPositionsPacket.ID, CalculateSeatPositionsPacket::decode, CalculateSeatPositionsHandler))
 
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))

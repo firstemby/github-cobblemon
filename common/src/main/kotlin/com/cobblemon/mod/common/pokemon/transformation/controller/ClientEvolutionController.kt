@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -39,7 +39,7 @@ class ClientEvolutionController(
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations)
 
-    data class Intermediate(val evolutions: Set<EvolutionDisplay>): PreProcessor {
+    data class Intermediate(val evolutions: Set<EvolutionDisplay>): PokemonTransformationControllerPreProcessor {
         override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
     }
 

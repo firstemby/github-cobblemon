@@ -55,42 +55,6 @@ class ChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<List<S
         return StringSpeciesFeature(keys.first(), lower)
     }
 
-    fun getAllAspects(): MutableList<String> {
-        val aspects = choices.toMutableList()
-        choices.forEach {
-            aspects[choices.indexOf(it)] = (aspectFormat.substitute("choice", it))
-        }
-        return aspects
-    }
-
-    fun parseValue(aspect: String): String? {
-        if (!matches(aspect)) return null
-        val head = aspectFormat.substringBefore("{{choice}}")
-        val tail = aspectFormat.substringAfter("{{choice}}").takeIf { it.isNotBlank() }
-
-        var value = aspect.substringAfter(head)
-        tail?.let { value = value.substringBefore(it) }
-        return value
-    }
-
-    override fun matches(aspect: String): Boolean = this.isAspect && this.getAllAspects().contains(aspect)
-
-    override fun from(aspect: String): SpeciesFeature<*>? {
-        val value = parseValue(aspect)
-        return if (value != null && choices.contains(value)) this.fromString(value) else null
-    }
-
-    override fun set(pokemon: Pokemon, aspect: String) {
-        val value = parseValue(aspect)
-        if (value != null && choices.contains(value)) this.get(pokemon)?.value = value
-    }
-
-    override fun examples() = choices
-
-    internal constructor(): this(emptyList())
-
-    override fun get(pokemon: Pokemon) = pokemon.getFeature<StringSpeciesFeature>(keys.first())
-
     override fun invoke(pokemon: Pokemon): StringSpeciesFeature? {
         val existing = get(pokemon)
         return if (existing != null && existing.value in choices) {
@@ -117,7 +81,6 @@ class ChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<List<S
         }
         return aspects
     }
-}
 
     override fun provide(pokemon: Pokemon): Set<String> {
         return if (isAspect) {
@@ -128,6 +91,8 @@ class ChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<List<S
             emptySet()
         }
     }
+
+    override fun get(pokemon: Pokemon) = pokemon.getFeature<StringSpeciesFeature>(keys.first())
 
     override fun provide(properties: PokemonProperties): Set<String> {
         return if (isAspect) {

@@ -5,14 +5,14 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ClearFormsPacket(pokemon: () -> Pokemon) : PokemonUpdatePacket<ClearFormsPacket>(pokemon) {
+class ClearFormsPacket(pokemon: () -> Pokemon?) : PokemonUpdatePacket<ClearFormsPacket>(pokemon) {
 
     override val id = ID
 
     override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {}
 
     override fun applyToPokemon() {
-        this.pokemon().formProxy.client().clear()
+        (this.pokemon() ?: return).formProxy.client().clear()
     }
 
     companion object {

@@ -32,14 +32,12 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.effect.adapter.ShoulderEffectAdapter
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
-import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroupAdapter
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
@@ -54,20 +52,19 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.abilities.SpecialAbility
-import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
-import com.cobblemon.mod.common.pokemon.transformation.adapters.*
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
+import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonPreEvolutionAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonTriggerAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.LegacyItemConditionWrapperAdapter
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.GigantamaxForm
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.HeldItemRequirement
 import com.cobblemon.mod.common.pokemon.transformation.requirements.MoveSetRequirement
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
-import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
-import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.HashBasedTable
@@ -93,7 +90,6 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
-import java.util.NoSuchElementException
 
 object PokemonSpecies : JsonDataRegistry<Species> {
 
@@ -416,14 +412,12 @@ object PokemonSpecies : JsonDataRegistry<Species> {
     internal fun allShowdownSpecies(): Map<String, String> {
         val result = mutableMapOf<String, String>()
         this.species.forEach { species ->
-            val baseSpecies = ShowdownSpecies(species, null)
-            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name.lowercase(), "")] = this.gson.toJson(baseSpecies)
             species.permanentForms.forEach { form ->
-                val formSpecies = ShowdownSpecies(species, form)
+                val formSpecies = ShowdownSpecies(form)
                 result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
             }
             species.temporaryForms.forEach { form ->
-                val formSpecies = ShowdownSpecies(species, form)
+                val formSpecies = ShowdownSpecies(form)
                 result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
             }
         }

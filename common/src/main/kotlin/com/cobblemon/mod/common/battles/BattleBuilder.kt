@@ -93,8 +93,9 @@ object BattleBuilder {
                 errors.participantErrors[actor] += BattleStartError.alreadyInBattle(player)
             }
         }
-        player1Actor.battleTheme = player2.getBattleTheme()
-        player2Actor.battleTheme = player1.getBattleTheme()
+
+        player1Actor.battleTheme = player2.getBattleTheme().location
+        player2Actor.battleTheme = player1.getBattleTheme().location
 
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
@@ -189,11 +190,12 @@ object BattleBuilder {
 
         val side1Actors = listOf(playerActors[0], playerActors[1])
         val side2Actors = listOf(playerActors[2], playerActors[3])
+
         val side1Theme = players[0].getBattleTheme()
         val side2Theme = players[2].getBattleTheme()
 
-        side1Actors.forEach { it.battleTheme = side2Theme }
-        side2Actors.forEach { it.battleTheme = side1Theme }
+        side1Actors.forEach { it.battleTheme = side2Theme.location }
+        side2Actors.forEach { it.battleTheme = side1Theme.location }
 
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(

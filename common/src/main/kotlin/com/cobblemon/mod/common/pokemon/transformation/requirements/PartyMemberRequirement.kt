@@ -6,27 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/PartyMemberRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
-========
-package com.cobblemon.mod.common.pokemon.requirements
-
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/PartyMemberRequirement.kt
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/PartyMemberRequirement.kt
  * A [TransformationRequirement] for when the party needs to either contain or not a specific match for [target] based on the [contains] property.
-========
- * An [Requirement] for when the party needs to either contain or not a specific match for [target] based on the [contains] property.
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/PartyMemberRequirement.kt
  *
  * @property target The matcher for the party members.
  * @property contains If this requirement will need the [target] to be present or not.
@@ -35,15 +24,11 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious
  * @since March 21st, 2022
  */
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/PartyMemberRequirement.kt
 class PartyMemberRequirement(
     val target: PokemonProperties = PokemonProperties(),
     val contains: Boolean = true,
     val fuse: Boolean = false
 ) : TransformationRequirement {
-========
-class PartyMemberRequirement : Requirement {
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/PartyMemberRequirement.kt
     companion object {
         const val ADAPTER_VARIANT = "party_member"
     }

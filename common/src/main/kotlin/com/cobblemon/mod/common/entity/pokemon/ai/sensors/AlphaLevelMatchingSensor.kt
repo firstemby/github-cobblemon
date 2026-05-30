@@ -11,7 +11,7 @@ package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.requirements.LevelRequirement
+import com.cobblemon.mod.common.pokemon.transformation.requirements.LevelRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.party

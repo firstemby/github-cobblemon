@@ -1,5 +1,3 @@
-import com.cobblemon.mod.common.api.spawning.TimeRange
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -8,7 +6,6 @@ import com.cobblemon.mod.common.api.spawning.TimeRange
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/TimeRangeRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
@@ -21,17 +18,6 @@ import net.minecraft.world.entity.LivingEntity
  * A [TransformationRequirement] for when the current time must be in the provided [TimeRange].
  *
  * @property range The required [TimeRange].
-========
-package com.cobblemon.mod.common.pokemon.requirements
-
-import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
-import com.cobblemon.mod.common.api.spawning.TimeRange
-import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.world.entity.LivingEntity
-
-/**
- * An [com.cobblemon.mod.common.api.pokemon.requirement.Requirement] for when the current time must be in the provided [TimeRange].
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/TimeRangeRequirement.kt
  *
  * @author Licious
  * @since March 26th, 2022

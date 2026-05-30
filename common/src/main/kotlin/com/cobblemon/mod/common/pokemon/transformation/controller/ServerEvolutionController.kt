@@ -10,14 +10,14 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
-import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 
@@ -69,7 +69,7 @@ class ServerEvolutionController(
     data class Intermediate(
         val evolutionIds: Set<String>,
         val progress: Set<TransformationProgress<*>>,
-    ): PreProcessor {
+    ): PokemonTransformationControllerPreProcessor {
         override fun create(pokemon: Pokemon): ServerEvolutionController = ServerEvolutionController(
             pokemon,
             this.evolutionIds,

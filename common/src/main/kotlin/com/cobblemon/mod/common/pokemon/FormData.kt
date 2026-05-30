@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.abilities.PotentialAbility
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
+import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.net.Decodable
 import com.cobblemon.mod.common.api.net.Encodable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -42,11 +43,17 @@ import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.readEntityDimensions
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readSizedInt
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeSizedInt
+import com.cobblemon.mod.common.util.writeString
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EntityDimensions
 
 /**
  * Represents an alternate form of a [Pokemon].

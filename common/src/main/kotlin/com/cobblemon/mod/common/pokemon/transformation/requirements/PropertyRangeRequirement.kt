@@ -1,6 +1,3 @@
-import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
-import com.cobblemon.mod.common.pokemon.Pokemon
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -9,7 +6,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/PropertyRangeRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
@@ -17,15 +13,6 @@ import com.cobblemon.mod.common.api.pokemon.transformation.requirement.Transform
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 class PropertyRangeRequirement : TransformationRequirement {
-========
-package com.cobblemon.mod.common.pokemon.requirements
-
-import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
-import com.cobblemon.mod.common.pokemon.Pokemon
-
-class PropertyRangeRequirement : Requirement {
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/PropertyRangeRequirement.kt
     val range = IntRange(0, 256)
     val feature: String = ""
 

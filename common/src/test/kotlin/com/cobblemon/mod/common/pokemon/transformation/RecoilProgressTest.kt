@@ -23,8 +23,8 @@ internal class RecoilProgressTest {
         assert(newHealth == 150)
         val difference = 200 - newHealth
         val progress = RecoilTransformationProgress()
-        progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().recoil + difference))
-        assert(progress.currentProgress().recoil == 50)
+        progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().amount + difference))
+        assert(progress.currentProgress().amount == 50)
     }
 
 }

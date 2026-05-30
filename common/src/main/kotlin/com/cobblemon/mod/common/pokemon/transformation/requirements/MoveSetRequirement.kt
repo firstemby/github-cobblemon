@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/MoveSetRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.moves.MoveTemplate
@@ -16,29 +15,13 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 
 /**
  * A [TransformationRequirement] for when a certain [MoveTemplate] is expected in the [Pokemon.moveSet].
-========
-package com.cobblemon.mod.common.pokemon.requirements
-
-import com.cobblemon.mod.common.api.moves.MoveTemplate
-import com.cobblemon.mod.common.api.moves.Moves
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
-import com.cobblemon.mod.common.pokemon.Pokemon
-
-/**
- * An [Requirement] for when a certain [MoveTemplate] is expected in the [Pokemon.moveSet].
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/MoveSetRequirement.kt
  *
  * @property move The required [MoveTemplate].
  *
  * @author Licious
  * @since March 21st, 2022
  */
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/MoveSetRequirement.kt
 class MoveSetRequirement(val move: MoveTemplate = Moves.getByNameOrDummy("tackle")) : TransformationRequirement {
-========
-class MoveSetRequirement : Requirement {
-    val move: MoveTemplate = Moves.getByNameOrDummy("tackle")
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/MoveSetRequirement.kt
     override fun check(pokemon: Pokemon) = pokemon.moveSet.getMoves().any { move -> move.name.equals(this.move.name, true) }
     companion object {
         const val ADAPTER_VARIANT = "has_move"

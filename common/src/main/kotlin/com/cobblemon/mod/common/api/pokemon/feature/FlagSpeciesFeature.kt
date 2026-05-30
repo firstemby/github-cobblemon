@@ -17,9 +17,9 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeString
 import com.google.gson.JsonObject
+import kotlin.random.Random
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
-import kotlin.random.Random
 
 /**
  * A simple [SpeciesFeature] that is a true/false flag value. It implements [CustomPokemonProperty] for use in
@@ -183,7 +183,7 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
     override fun provide(pokemon: Pokemon): Set<String> {
         return if (isAspect) {
             val feature = pokemon.features.filterIsInstance<FlagSpeciesFeature>().find { it.name in keys }
-            if (feature != null && feature.enabled) {
+            if (feature != null && feature.value) {
                 setOf(keys.first())
             } else {
                 emptySet()
@@ -196,7 +196,7 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
     override fun provide(properties: PokemonProperties): Set<String> {
         return if (isAspect) {
             val feature = properties.customProperties.filterIsInstance<FlagSpeciesFeature>().find { it.name in keys }
-            if (feature != null && feature.enabled) {
+            if (feature != null && feature.value) {
                 setOf(keys.first())
             } else {
                 emptySet()

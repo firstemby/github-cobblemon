@@ -1,8 +1,8 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.AddFormPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.ClearFormsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.RemoveFormPacket
@@ -50,7 +50,7 @@ class ServerFormController(
     data class Intermediate(
         val formIds: Set<String>,
         val progress: Set<TransformationProgress<*>>,
-    ): PreProcessor {
+    ): PokemonTransformationControllerPreProcessor {
         override fun create(pokemon: Pokemon): ServerFormController = ServerFormController(
             pokemon,
             this.formIds,

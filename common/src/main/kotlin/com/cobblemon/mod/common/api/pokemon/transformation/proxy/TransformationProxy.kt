@@ -19,13 +19,13 @@ import com.cobblemon.mod.common.api.pokemon.transformation.controller.Transforma
  *
  * @param C The type of [TransformationDisplay] on the client side.
  * @param S The type of [Transformation] on the server side.
- * @param CI The type of [PreProcessor] on the client side.
- * @param SI The type of [PreProcessor] on the server side.
+ * @param CI The type of [PokemonTransformationControllerPreProcessor] on the client side.
+ * @param SI The type of [PokemonTransformationControllerPreProcessor] on the server side.
  *
  * @author Licious, Segfault Guy
  * @since January 19th, 2025
  */
-interface TransformationProxy<C : TransformationDisplay, S : Transformation, CI : PreProcessor, SI : PreProcessor> {
+interface TransformationProxy<C : TransformationDisplay, S : Transformation, CI : PokemonTransformationControllerPreProcessor, SI : PokemonTransformationControllerPreProcessor> {
 
     /**
      * Checks if the current logical side is the client.

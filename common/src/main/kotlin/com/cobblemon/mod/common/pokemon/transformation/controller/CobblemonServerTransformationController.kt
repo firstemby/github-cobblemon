@@ -2,8 +2,8 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isBusy
@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.util.isBusy
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
-abstract class CobblemonServerTransformationController<T : Transformation, I : PreProcessor>(
+abstract class CobblemonServerTransformationController<T : Transformation, I : PokemonTransformationControllerPreProcessor>(
     private val pokemon: Pokemon,
     transformationIds: Set<String>,
     progress: Set<TransformationProgress<*>>,

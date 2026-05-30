@@ -3,7 +3,7 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
@@ -46,7 +46,7 @@ class ClientFormController(
             CobblemonNetwork.sendToServer(RevertFormPacket(this.pokemon.uuid))
     }
 
-    data class Intermediate(val forms: Set<FormDisplay>): PreProcessor {
+    data class Intermediate(val forms: Set<FormDisplay>): PokemonTransformationControllerPreProcessor {
         override fun create(pokemon: Pokemon): ClientFormController = ClientFormController(pokemon, this.forms)
     }
 

@@ -11,7 +11,8 @@ package com.cobblemon.mod.common.util.codec.internal
 import com.cobblemon.mod.common.api.types.tera.TeraType
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokeball.PokeBall
-import com.cobblemon.mod.common.pokemon.*
+import com.cobblemon.mod.common.pokemon.Nature
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
@@ -21,7 +22,8 @@ import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 import net.minecraft.core.UUIDUtil
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
@@ -62,7 +64,7 @@ internal data class ClientPokemonP2(
         other.gmaxFactor = this.gmaxFactor
         other.tradeable = this.tradeable
         this.evolutionController.ifPresent {
-            (other.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(it.create(other))
+            other.evolutionProxy.overrideController(it.create(other))
         }
         return other
     }
@@ -109,8 +111,7 @@ internal data class ClientPokemonP2(
             pokemon.gmaxFactor,
             pokemon.tradeable,
             Optional.ofNullable((pokemon.evolutionProxy.current() as? ServerEvolutionController)?.let {
-                //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
-                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon, registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available")) }.toSet())
+                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon) }.toSet())
             })
         )
     }

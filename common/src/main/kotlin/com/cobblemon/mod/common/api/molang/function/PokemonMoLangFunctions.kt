@@ -444,7 +444,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         map["force_evolve"] = forceEvolve@{ params ->
             val idx = params.getInt(0)
             val evolution = if (idx >= 0) pokemon.evolutions.elementAtOrNull(idx) else return@forceEvolve DoubleValue.ZERO
-            evolution?.forceEvolve(pokemon)
+            evolution?.forceStart(pokemon)
             StringValue(evolution.toString())
         }
 

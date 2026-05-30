@@ -1,5 +1,3 @@
-import com.cobblemon.mod.common.pokemon.Pokemon
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -8,7 +6,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/AttackDefenceRatioRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
 
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
@@ -19,21 +16,14 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  *
  * @property ratio The [AttackDefenceRatio] a pokemon's stats currently have.
  *
- * @author Paul
+ * @author Hiroku
  * @since August 13th, 2022
  */
 class AttackDefenceRatioRequirement(val ratio: AttackDefenceRatio = AttackDefenceRatio.ATTACK_HIGHER) : TransformationRequirement {
-========
-package com.cobblemon.mod.common.pokemon.requirements
-
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
-import com.cobblemon.mod.common.pokemon.Pokemon
-
-class AttackDefenceRatioRequirement : Requirement {
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/AttackDefenceRatioRequirement.kt
     companion object {
         const val ADAPTER_VARIANT = "attack_defence_ratio"
     }
+
     enum class AttackDefenceRatio {
         ATTACK_HIGHER,
         DEFENCE_HIGHER,

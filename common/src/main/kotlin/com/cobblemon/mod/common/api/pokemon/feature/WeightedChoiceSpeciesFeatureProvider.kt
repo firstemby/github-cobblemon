@@ -22,8 +22,7 @@ import net.minecraft.world.entity.ai.behavior.ShufflingList
  * @author Gito
  * @since April 5th, 2026
  */
-class WeightedChoiceSpeciesFeatureProvider :
-    AbstractChoiceSpeciesFeatureProvider<Map<String, Int>>(emptyList(), mutableMapOf()) {
+class WeightedChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<Map<String, Int>>(emptyList(), mutableMapOf()) {
     override var needsKey = true
     override var visible = false
 

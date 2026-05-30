@@ -32,13 +32,11 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.transformation.progress.UseMoveTransformationProgress
-import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
-import net.minecraft.world.entity.LivingEntity
 
 /**
  * Format: |move|POKEMON|MOVE|TARGET

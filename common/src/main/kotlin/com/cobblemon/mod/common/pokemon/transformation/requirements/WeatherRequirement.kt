@@ -1,7 +1,3 @@
-import EntityQueryRequirement.EntityQueryRequirement
-import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.world.entity.LivingEntity
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -10,18 +6,10 @@ import net.minecraft.world.entity.LivingEntity
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/WeatherRequirement.kt
 package com.cobblemon.mod.common.pokemon.transformation.requirements
-========
-package com.cobblemon.mod.common.pokemon.requirements
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/WeatherRequirement.kt
 
-import com.cobblemon.mod.common.api.pokemon.requirement.EntityQueryRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/WeatherRequirement.kt
 import com.cobblemon.mod.common.pokemon.transformation.requirements.template.EntityQueryRequirement
-========
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/WeatherRequirement.kt
 import net.minecraft.world.entity.LivingEntity
 
 /**

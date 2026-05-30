@@ -42,10 +42,6 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
-import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
-import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
@@ -59,6 +55,9 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
@@ -96,18 +95,19 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.PokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
-import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
-import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
 import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
+import com.cobblemon.mod.common.pokemon.transformation.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -169,8 +169,6 @@ import net.minecraft.world.level.block.MagmaBlock
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.WitherRoseBlock
 import net.minecraft.world.phys.Vec3
-import kotlin.math.*
-import kotlin.jvm.Throws
 
 enum class OriginalTrainerType : StringRepresentable {
     NONE, PLAYER, NPC;
@@ -242,7 +240,7 @@ open class Pokemon : ShowdownIdentifiable {
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
-            onChange(FormUpdatePacket({ this }, value))
+            onChange(FormUpdatePacket({ this }, value.name))
         }
 
     // Need to happen before currentHealth init due to the calc

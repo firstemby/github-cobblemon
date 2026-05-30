@@ -8,15 +8,34 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.adapters
 
+import com.cobblemon.mod.common.api.interaction.InteractionEffect
+import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.transformation.adapters.RequirementAdapter
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
+import com.cobblemon.mod.common.pokemon.requirements.ChanceRequirement
+import com.cobblemon.mod.common.pokemon.requirements.OwnerHoldsItemRequirement
 import com.cobblemon.mod.common.pokemon.transformation.requirements.*
+import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.adapters.InteractionEffectAdapter
+import com.cobblemon.mod.common.util.adapters.pokemonPropertiesShortAdapter
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeString
 import com.google.common.collect.HashBiMap
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
 
 /**
  * The default implementation of [RequirementAdapter].
@@ -58,6 +77,23 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         this.registerType(PropertyRangeRequirement.ADAPTER_VARIANT, PropertyRangeRequirement::class)
         this.registerType(PlayerHasAdvancementRequirement.ADAPTER_VARIANT, PlayerHasAdvancementRequirement::class)
         this.registerType(HealthRequirement.ADAPTER_VARIANT, HealthRequirement::class)
+        this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
+        this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
+        this.registerType(ChanceRequirement.ADAPTER_VARIANT, ChanceRequirement::class)
+    }
+
+    val gson: Gson by lazy {
+        GsonBuilder()
+            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+            .registerTypeAdapter(TransformationRequirement::class.java, CobblemonRequirementAdapter)
+            .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
+            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+            .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
+            .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
+            .setPrettyPrinting()
+            .create()
     }
 
     override fun <T : TransformationRequirement> registerType(id: String, type: KClass<T>) {
@@ -75,6 +111,14 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         val variant = this.types.inverse()[src::class] ?: throw IllegalArgumentException("Cannot resolve transformation requirement for type ${src::class.qualifiedName}")
         json.addProperty(VARIANT, variant)
         return json
+    }
+
+    fun encode(requirement: TransformationRequirement, buffer: FriendlyByteBuf) {
+        buffer.writeString(gson.toJson(requirement, TransformationRequirement::class.java))
+    }
+
+    fun decode(buffer: FriendlyByteBuf): TransformationRequirement {
+        return gson.fromJson(buffer.readString(), TransformationRequirement::class.java)
     }
 
 }

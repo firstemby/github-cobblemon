@@ -12,7 +12,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationLike
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonClientTransformationController
@@ -24,7 +24,7 @@ import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonServe
  * @author Licious, Segfault Guy
  * @since January 19th, 2025
  */
-abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Transformation, CI : PreProcessor, SI : PreProcessor>(
+abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Transformation, CI : PokemonTransformationControllerPreProcessor, SI : PokemonTransformationControllerPreProcessor>(
     private val pokemon: Pokemon,
 ) : TransformationProxy<C, S, CI, SI> {
 
@@ -56,10 +56,10 @@ abstract class CobblemonTransformationProxy<C : TransformationDisplay, S : Trans
     /**
      * Replaces the existing [CobblemonServerTransformationController] or [CobblemonClientTransformationController].
      *
-     * NOTE: the [TransformationLike] and [PreProcessor] generic types of [newInstance] are not checked against the types
+     * NOTE: the [TransformationLike] and [PokemonTransformationControllerPreProcessor] generic types of [newInstance] are not checked against the types
      * of the existing controller. They are casted to the types of this proxy. YOU HAVE BEEN WARNED!
      */
-    internal fun overrideController(newInstance: TransformationController<out TransformationLike, PreProcessor>) {
+    internal fun overrideController(newInstance: TransformationController<out TransformationLike, PokemonTransformationControllerPreProcessor>) {
         when (newInstance) {
             is CobblemonClientTransformationController -> {
                 this.clientController = newInstance as CobblemonClientTransformationController<C, CI>

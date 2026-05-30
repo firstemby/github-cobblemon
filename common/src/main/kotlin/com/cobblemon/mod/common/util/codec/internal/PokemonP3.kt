@@ -13,8 +13,6 @@ import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
-import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURES
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURE_ID
@@ -22,19 +20,18 @@ import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import java.util.*
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
     val originalTrainer: Optional<String>,
     val forcedAspects: Set<String>,
     val features: List<CompoundTag>,
-    val formController: Optional<ServerFormController.Intermediate>,
     val heldItemVisible: Optional<Boolean>,
     val canDropHeldItem: Optional<Boolean>,
     val cosmeticItem: ItemStack,
@@ -70,9 +67,6 @@ internal data class PokemonP3(
             other.features.removeIf { it.name == feature.name }
             other.features.add(feature)
         }
-        this.formController.ifPresent {
-            (other.formProxy as? FormProxy)?.overrideController(it.create(other))
-        }
         this.heldItemVisible.ifPresent { other.heldItemVisible = it }
         this.canDropHeldItem.ifPresent { other.canDropHeldItem = it }
         this.cosmeticItem.let { other.cosmeticItem = it }
@@ -99,7 +93,6 @@ internal data class PokemonP3(
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(PokemonP3::originalTrainer),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).forGetter { it.forcedAspects.toMutableList() },
                 Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
-                ServerFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP3::formController),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_AI_DROPPABLE).forGetter(PokemonP3::canDropHeldItem),
                 ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter { Optional.ofNullable(it.cosmeticItem.takeIf { !it.isEmpty }) },
@@ -111,7 +104,7 @@ internal data class PokemonP3(
                 Codec.FLOAT.optionalFieldOf(DataKeys.POKEMON_RIDE_STAMINA, 1F).forGetter(PokemonP3::rideStamina),
                 Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
-                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, formController, heldItemVisible,
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible,
               canDropHeldItem,
               cosmeticItem,
               activeMark,
@@ -122,7 +115,7 @@ internal data class PokemonP3(
               rideStamina,
               currentFullness,
               interactionCooldown,
-              isAlpha -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, formController, heldItemVisible,
+              isAlpha -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible,
                 canDropHeldItem,
                 cosmeticItem.orElse(ItemStack.EMPTY),
                 activeMark,
@@ -147,7 +140,6 @@ internal data class PokemonP3(
                 nbt.putString(FEATURE_ID, feature.name)
                 feature.saveToNBT(nbt)
             },
-            Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.asIntermediate()),
             Optional.ofNullable(pokemon.heldItemVisible),
             Optional.ofNullable(pokemon.canDropHeldItem),
             pokemon.cosmeticItem,

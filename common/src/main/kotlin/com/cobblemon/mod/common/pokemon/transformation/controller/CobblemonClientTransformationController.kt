@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PreProcessor
-import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
+import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.Pokemon
 
@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
-abstract class CobblemonClientTransformationController<T : TransformationDisplay, I : PreProcessor>(
+abstract class CobblemonClientTransformationController<T : TransformationDisplay, I : PokemonTransformationControllerPreProcessor>(
     protected val pokemon: Pokemon,
     transformations: Set<T>,
 ) : TransformationController<T, I> {
