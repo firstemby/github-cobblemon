@@ -1,17 +1,17 @@
 {
     "portraitScale": 1.5,
     "portraitTranslation": [-0.13, 2.74, 0],
-    "profileScale": 0.40,
-    "profileTranslation": [0, 1.16, 0],
+    "profileScale": 0.37,
+    "profileTranslation": [0, 1.22, 0],
     "rootBone": "cinderace",
     "animations": {
       "faint": "q.bedrock_primary('cinderace', math.random(0, 1) < 0.25 ? 'faint2' : 'faint', q.curve('one'))",
       "cry": "q.bedrock_stateful('cinderace', 'cry')",
       "recoil": "q.bedrock_stateful('cinderace', 'recoil')",
+      "pyroball": "q.bedrock_primary('cinderace', 'pyroball', q.curve('symmetrical_wide'))",
       "physical": "q.bedrock_primary('cinderace', 'physical', q.curve('symmetrical'))",
       "special": "q.bedrock_primary('cinderace', 'special', q.curve('symmetrical'))",
-      "status": "q.bedrock_primary('cinderace', 'status', q.curve('symmetrical'))",
-      "pyroball": "q.bedrock_primary('cinderace', 'signature', q.curve('symmetrical'))"
+      "status": "q.bedrock_primary('cinderace', 'status', q.curve('symmetrical'))"
     },
     "poses": {
       "battle-standing": {
@@ -37,7 +37,7 @@
           "q.bedrock_quirk('cinderace', 'blink')"
         ],
         "transitions": {
-          "battle-standing": "q.bedrock_primary('cinderace', 'battle_intro'), q.curve('symmetrical'))"
+          "battle-standing": "q.bedrock_primary('cinderace', 'battle_intro'), q.curve('symmetrical_wide'))"
         }
       },
       "walking": {

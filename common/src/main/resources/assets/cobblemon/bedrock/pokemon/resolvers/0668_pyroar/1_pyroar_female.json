@@ -11,6 +11,19 @@
     {
       "aspects": ["shiny", "female"],
       "texture": "cobblemon:textures/pokemon/0668_pyroar/pyroar_female_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes",
+        "female"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0668_pyroar/pyroar_female_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

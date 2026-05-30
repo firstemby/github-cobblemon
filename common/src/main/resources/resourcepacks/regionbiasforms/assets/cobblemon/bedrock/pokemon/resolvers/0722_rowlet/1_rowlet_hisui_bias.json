@@ -11,6 +11,16 @@
     {
       "aspects": ["region-bias-hisui", "shiny"],
       "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_shiny.png"
+    },
+    {
+      "aspects": ["region-bias-hisui", "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

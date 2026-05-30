@@ -5300,10 +5300,10 @@
   "pokemon.rapidash.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_cry", "volume": 0.8 } ]
   },
-  "pokemon.ponyta_galar.cry": {
+  "pokemon.ponyta_galarian.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/ponyta/ponyta_galarian_cry", "volume": 0.8 } ]
   },
-  "pokemon.rapidash_galar.cry": {
+  "pokemon.rapidash_galarian.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rapidash/rapidash_galarian_cry", "volume": 0.8 } ]
   },
   "pokemon.slowpoke.cry": {

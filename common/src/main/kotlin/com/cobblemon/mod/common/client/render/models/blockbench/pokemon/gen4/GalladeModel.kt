@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3
 
 class GalladeModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("gallade")
-    override val head = getPart("head")
+    override val head = getPart("Head")
 
     override var portraitScale = 2.6F
     override var portraitTranslation = Vec3(-0.15, 2.1, 0.0)

@@ -97,8 +97,10 @@
 - Carkol
 - Coalossal
 
+- Runerigus
 - Snom
 - Frosmoth
+- Indeedee
 
 - Duraludon
 - Archaludon
@@ -115,6 +117,7 @@
 #### Regional Forms
 - Sandshrew (Alolan)
 - Sandslash (Alolan)
+- Yamask (Galarian)
 - Avalugg (Hisuian)
 
 ### Model updates for the following Pokémon
@@ -160,6 +163,12 @@
 - Naclstack
 - Garganacl
 
+- Bidoof
+- Cranidos
+- Chatot
+- Yamask
+- Cofagrigus
+
 #### Model changes to the regional bias resource pack:
 
 - Added Mime Jr. (Galar Bias)
@@ -192,6 +201,11 @@
 - Shedinja
 - Skwovet
 - Greedent
+- Bidoof
+- Cranidos
+- Chatot
+- Yamask
+- Cofagrigus
 
 #### Added sounds to the following moves
 - Absorb
@@ -289,6 +303,7 @@
 - Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 - Resolved Z-Fighting on Pokédex Models
+- Restored Ninjask's ability to do barrel rolls
 
 ### Fixes
 - Fixed Croagunk's walkspeed

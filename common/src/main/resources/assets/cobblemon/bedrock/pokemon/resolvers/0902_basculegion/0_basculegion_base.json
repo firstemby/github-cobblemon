@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0902_basculegion/basculegion_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0902_basculegion/basculegion_male_alpha.png",
           "emissive": true
         }
       ]

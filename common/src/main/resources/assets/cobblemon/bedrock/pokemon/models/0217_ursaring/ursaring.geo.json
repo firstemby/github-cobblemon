@@ -12,13 +12,6 @@
 			},
 			"bones": [
 				{
-					"name": "bb_main",
-					"pivot": [0, 0, 0],
-					"locators": {
-						"locator": [0, 0, 0]
-					}
-				},
-				{
 					"name": "ursaring",
 					"pivot": [0, 0, 0]
 				},
@@ -527,9 +520,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "chest",
-					"pivot": [0, 37, 6.75],
+					"pivot": [0, 39, 5.75],
 					"locators": {
-						"seat_1": [0, 37, 6.75]
+						"seat_1": [0, 39, 5.75]
 					}
 				},
 				{

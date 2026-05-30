@@ -12,6 +12,16 @@
     {
       "aspects": ["shiny", "east-sea"],
       "texture": "cobblemon:textures/pokemon/0422_shellos/shellos_east_shiny.png"
+    },
+    {
+      "aspects": ["alpha_eyes", "tree-birch"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0422_shellos/shellos_east_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

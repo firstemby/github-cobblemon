@@ -1,17 +1,21 @@
 import os
 import json
 import re
-try: import msvcrt
-except: print("Could not import msvcrt")
+try:
+    import msvcrt
+    _has_msvcrt = True
+except ImportError:
+    _has_msvcrt = False
+    print("Could not import msvcrt")
 import pandas as pd
 import soundfile as sf
 
 # Quick class to make getch work on all systems
 class Getch:
     def __init__(self):
-        try:
+        if _has_msvcrt:
             self.impl = self._getch_windows
-        except ImportError:
+        else:
             self.impl = self._getch_unix
 
     def _getch_windows(self):
@@ -26,7 +30,7 @@ class Getch:
             ch = sys.stdin.read(1)
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
+        return ch.encode()
 
     def __call__(self): return self.impl()
 getch = Getch()
@@ -1003,6 +1007,3 @@ while True:
     input = getch()
     if input == b'\x1b':
         quit()
-
-
-

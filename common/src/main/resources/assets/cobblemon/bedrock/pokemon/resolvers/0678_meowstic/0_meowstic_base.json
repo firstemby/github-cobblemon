@@ -35,7 +35,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0678_meowstic/meowstic_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0678_meowstic/meowstic_male_alpha.png",
           "emissive": true
         }
       ]

@@ -49,7 +49,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0849_toxtricity/toxtricity_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0849_toxtricity/toxtricity_amped_alpha.png",
           "emissive": true
         }
       ]
