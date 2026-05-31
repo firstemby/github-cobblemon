@@ -17,5 +17,23 @@ c.pokemon.actor.is_wild ? {
     };
 
     t.world.spawn_loot_table_items(t.loot_table, t.pokemon_entity.x, t.pokemon_entity.y, t.pokemon_entity.z);
+
+    t.pokemon_types = t.pokemon.types;
+    t.types[0] = t.pokemon_types[0];
+    t.type_tier = (t.pokemon.level >= 51) ? 2 : 1;
+    q.length(t.types) == 1 ? {
+      t.types[1] = t.types[0];
+    } : {
+      t.types[1] = t.pokemon_types[1];
+    };
+
+    (math.random_integer(1, 2) == 1) ? {
+      t.type_name = t.types[0];
+      t.world.spawn_loot_table_items('cobblemon:alpha/types/' + t.type_name + '_rewards_tier' + t.type_tier, t.pokemon_entity.x, t.pokemon_entity.y, t.pokemon_entity.z);
+    };
+    (math.random_integer(1, 2) == 1) ? {
+      t.type_name = t.types[1];
+      t.world.spawn_loot_table_items('cobblemon:alpha/types/' + t.type_name + '_rewards_tier' + t.type_tier, t.pokemon_entity.x, t.pokemon_entity.y, t.pokemon_entity.z);
+    };
   };
 };

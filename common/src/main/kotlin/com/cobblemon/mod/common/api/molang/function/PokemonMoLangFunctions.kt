@@ -109,7 +109,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
             DoubleValue(pokemon.species.nationalPokedexNumber.toDouble())
         }
         map["types"] = {
-            pokemon.form.types.map { it.toString() }.asArrayValue(::StringValue)
+            pokemon.form.types.map { it.showdownId }.asArrayValue(::StringValue)
         }
         map["gender_ratio"] = {
             DoubleValue(pokemon.form.maleRatio.toDouble())
