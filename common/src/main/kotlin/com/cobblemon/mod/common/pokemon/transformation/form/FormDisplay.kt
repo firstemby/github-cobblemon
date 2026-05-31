@@ -25,8 +25,6 @@ data class FormDisplay(
     override val aspects: Set<String>
 ) : TransformationDisplay {
 
-    constructor(id: String, pokemon: Pokemon) : this(id, pokemon.species, pokemon.aspects)
-
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(this.id)
         buffer.writeIdentifier(this.species.resourceIdentifier)
