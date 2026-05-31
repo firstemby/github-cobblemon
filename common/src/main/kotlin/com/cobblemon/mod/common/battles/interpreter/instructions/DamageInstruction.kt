@@ -84,8 +84,7 @@ class DamageInstruction(
                 val difference = pokemon.currentHealth - newHealth
                 if (difference > 0) {
                     // TODO refactor and apply to forms
-                    val progress = pokemon.evolutionProxy.current()
-                        .progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
+                    val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
                     progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().amount + difference))
                 }
             }
@@ -189,7 +188,7 @@ class DamageInstruction(
                         battlePokemon.effectedPokemon.let { pokemon ->
                             if (DamageTakenTransformationProgress.supports(pokemon)) {
                                 // TODO refactor and apply to forms
-                                val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DamageTakenTransformationProgress }) { DamageTakenTransformationProgress() }
+                                val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is DamageTakenTransformationProgress }) { DamageTakenTransformationProgress() }
                                 progress.updateProgress(DamageTakenTransformationProgress.Progress(progress.currentProgress().amount + difference))
                             }
                         }

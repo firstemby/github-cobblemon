@@ -11,9 +11,9 @@ package com.cobblemon.mod.common.pokemon.transformation.proxies
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonClientTransformationController
-import com.cobblemon.mod.common.pokemon.transformation.controller.CobblemonServerTransformationController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientTransformationController
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerTransformationController
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 
@@ -25,11 +25,10 @@ import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDispla
  */
 class EvolutionProxy(
     private val pokemon: Pokemon,
-) : CobblemonTransformationProxy<EvolutionDisplay, Evolution, ClientEvolutionController.Intermediate, ServerEvolutionController.Intermediate>(pokemon) {
+) : TransformationProxy<EvolutionDisplay, Evolution, ServerEvolutionController.Intermediate>(pokemon) {
 
-    override var clientController: CobblemonClientTransformationController<EvolutionDisplay, ClientEvolutionController.Intermediate> =
+    override var clientController: ClientTransformationController<EvolutionDisplay> =
         ClientEvolutionController(this.pokemon, emptySet())
-
-    override var serverController: CobblemonServerTransformationController<Evolution, ServerEvolutionController.Intermediate> =
+    override var serverController: ServerTransformationController<Evolution, ServerEvolutionController.Intermediate> =
         ServerEvolutionController(this.pokemon, emptySet(), emptySet())
 }

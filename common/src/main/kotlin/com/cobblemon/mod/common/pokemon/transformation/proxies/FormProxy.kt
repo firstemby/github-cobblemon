@@ -2,7 +2,10 @@ package com.cobblemon.mod.common.pokemon.transformation.proxies
 
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.controller.*
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientFormController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientTransformationController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerTransformationController
 import com.cobblemon.mod.common.pokemon.transformation.form.FormDisplay
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 
@@ -14,11 +17,11 @@ import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
  */
 class FormProxy(
     private val pokemon: Pokemon,
-) : CobblemonTransformationProxy<FormDisplay, TemporaryForm, ClientFormController.Intermediate, ServerFormController.Intermediate>(pokemon) {
+) : TransformationProxy<FormDisplay, TemporaryForm, ServerFormController.Intermediate>(pokemon) {
 
-    override var clientController: CobblemonClientTransformationController<FormDisplay, ClientFormController.Intermediate> =
+    override var clientController: ClientTransformationController<FormDisplay> =
         ClientFormController(this.pokemon, emptySet())
 
-    override var serverController: CobblemonServerTransformationController<TemporaryForm, ServerFormController.Intermediate> =
+    override var serverController: ServerTransformationController<TemporaryForm, ServerFormController.Intermediate> =
         ServerFormController(this.pokemon, emptySet(), emptySet())
 }

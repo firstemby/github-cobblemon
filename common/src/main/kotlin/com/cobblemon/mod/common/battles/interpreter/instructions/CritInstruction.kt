@@ -11,9 +11,9 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.text.yellow
-import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
+import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.pokemon.transformation.progress.LastBattleCriticalHitsTransformationProgress
 import com.cobblemon.mod.common.util.battleLang
 
@@ -24,8 +24,7 @@ import com.cobblemon.mod.common.util.battleLang
  * @author Hunter
  * @since August 18th, 2022
  */
-class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet,
-): InterpreterInstruction {
+class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val lastCauser  = instructionSet.getMostRecentCauser(comparedTo = this)
@@ -41,7 +40,7 @@ class CritInstruction(val message: BattleMessage, val instructionSet: Instructio
                 }
                 if (LastBattleCriticalHitsTransformationProgress.supports(battlePokemon.effectedPokemon)) {
                     // TODO refactor and apply to forms
-                    val progress = battlePokemon.effectedPokemon.evolutionProxy.current().progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }) { LastBattleCriticalHitsTransformationProgress() }
+                    val progress = battlePokemon.effectedPokemon.evolutionProxy.server().progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }) { LastBattleCriticalHitsTransformationProgress() }
                     progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
                 }
             }

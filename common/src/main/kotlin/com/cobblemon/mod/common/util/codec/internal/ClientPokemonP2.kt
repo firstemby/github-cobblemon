@@ -16,7 +16,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
@@ -44,7 +44,7 @@ internal data class ClientPokemonP2(
     val dmaxLevel: Int,
     val gmaxFactor: Boolean,
     val tradeable: Boolean,
-    val evolutionController: Optional<ClientEvolutionController.Intermediate>
+    val evolutionDisplays: List<EvolutionDisplay>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -63,9 +63,7 @@ internal data class ClientPokemonP2(
         other.dmaxLevel = this.dmaxLevel
         other.gmaxFactor = this.gmaxFactor
         other.tradeable = this.tradeable
-        this.evolutionController.ifPresent {
-            other.evolutionProxy.overrideController(it.create(other))
-        }
+        other.evolutionProxy.overrideController(ClientEvolutionController(other, evolutionDisplays.toSet()))
         return other
     }
 
@@ -90,7 +88,7 @@ internal data class ClientPokemonP2(
                 CodecUtils.dynamicIntRange(0) { ServerSettings.maxDynamaxLevel }.fieldOf(DataKeys.POKEMON_DMAX_LEVEL).forGetter(ClientPokemonP2::dmaxLevel),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_GMAX_FACTOR).forGetter(ClientPokemonP2::gmaxFactor),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_TRADEABLE).forGetter(ClientPokemonP2::tradeable),
-                ClientEvolutionController.CODEC.optionalFieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(ClientPokemonP2::evolutionController),
+                EvolutionDisplay.CODEC.listOf().fieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(ClientPokemonP2::evolutionDisplays),
             ).apply(instance, ::ClientPokemonP2)
         }
 
@@ -110,9 +108,7 @@ internal data class ClientPokemonP2(
             pokemon.dmaxLevel,
             pokemon.gmaxFactor,
             pokemon.tradeable,
-            Optional.ofNullable((pokemon.evolutionProxy.current() as? ServerEvolutionController)?.let {
-                ClientEvolutionController.Intermediate(it.map { it.convertToDisplay(pokemon) }.toSet())
-            })
+            pokemon.evolutionProxy.server().map { it.convertToDisplay(pokemon) }
         )
     }
 

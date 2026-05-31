@@ -18,15 +18,13 @@ import java.util.Optional
 
 internal data class PokemonP4(
     val originalTrainerFriendship: Optional<Int>,
-    val formController: Optional<ServerFormController.Intermediate>,
+    val formController: ServerFormController.Intermediate,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
         this.originalTrainerFriendship.ifPresent { other.originalTrainerFriendship = it }
         other.refreshOriginalTrainer()
-        this.formController.ifPresent {
-            other.formProxy.overrideController(it.create(other))
-        }
+        other.formProxy.overrideController(formController.create(other))
         return other
     }
 
@@ -34,7 +32,7 @@ internal data class PokemonP4(
         internal val CODEC: MapCodec<PokemonP4> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 Codec.INT.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER_FRIENDSHIP).forGetter(PokemonP4::originalTrainerFriendship),
-                ServerFormController.CODEC.optionalFieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP4::formController)
+                ServerFormController.CODEC.fieldOf(DataKeys.POKEMON_FORMS).forGetter(PokemonP4::formController)
             ).apply(instance) {
               originalTrainerFriendship, formController -> PokemonP4(
                 originalTrainerFriendship,
@@ -45,7 +43,7 @@ internal data class PokemonP4(
 
         internal fun from(pokemon: Pokemon): PokemonP4 = PokemonP4(
             Optional.ofNullable(pokemon.originalTrainerFriendship),
-            Optional.ofNullable((pokemon.formProxy.current() as? ServerFormController)?.asIntermediate()),
+            pokemon.formProxy.server().asIntermediate(),
         )
     }
 }

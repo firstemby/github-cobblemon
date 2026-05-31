@@ -8,12 +8,9 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
-import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
-import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.Pokemon
 
@@ -23,10 +20,10 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
-abstract class CobblemonClientTransformationController<T : TransformationDisplay, I : PokemonTransformationControllerPreProcessor>(
+abstract class ClientTransformationController<T : TransformationDisplay>(
     protected val pokemon: Pokemon,
     transformations: Set<T>,
-) : TransformationController<T, I> {
+) : TransformationController<T> {
 
     protected val transformations = transformations.toMutableSet()
 
@@ -39,8 +36,6 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
     override val size: Int
         get() = this.transformations.size
 
-    override fun pokemon(): Pokemon = this.pokemon
-
     override fun canStart() = this.isNotEmpty() &&
         !CobblemonClient.isBusy() &&
         !pokemon.isBusy()
@@ -48,26 +43,6 @@ abstract class CobblemonClientTransformationController<T : TransformationDisplay
     override fun canStart(transformation: T): Boolean =
         this.canStart() &&
         this.any { it === transformation }
-
-    override fun start(transformation: T) {
-        if (this.canStart(transformation))
-            CobblemonNetwork.sendToServer(acceptPacket(this.pokemon, transformation))
-    }
-
-    override fun progress(): Collection<TransformationProgress<*>> {
-        // Nothing is done on the client
-        return emptyList()
-    }
-
-    override fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
-        // Nothing is done on the client
-        return progress
-    }
-
-    override fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
-        // Nothing is done on the client
-        return progressFactory()
-    }
 
     // FROM MutableSet ------------------------------------------------------------------------------------------------
 

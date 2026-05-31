@@ -57,7 +57,6 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
@@ -107,6 +106,7 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTrans
 import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
 import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
 import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.TransformationProxy
 import com.cobblemon.mod.common.pokemon.transformation.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
@@ -199,8 +199,8 @@ open class Pokemon : ShowdownIdentifiable {
                 features.clear()
                 features.addAll(newFeatures)
                 if (oldValue != value) {
-                    evolutionProxy.current().clear()
-                    formProxy.current().clear()
+                    evolutionProxy.server().clear()
+                    formProxy.server().clear()
                 }
             }
             updateAspects()
@@ -226,8 +226,8 @@ open class Pokemon : ShowdownIdentifiable {
             if (!isClient) {
                 // if old and new are not interchangeable, wipe unlocked evolutions and forms
                 if (!old.isInterchangeableWith(value)) {
-                    this.evolutionProxy.current().clear()
-                    this.formProxy.current().clear()
+                    this.evolutionProxy.server().clear()
+                    this.formProxy.server().clear()
                 }
                 // if old is interchangeable with new, toggleable, and still valid - keep it in the controller
                 else if (old is TemporaryForm && (!old.toggleable || !old.reevaluate(this))) {
@@ -367,6 +367,10 @@ open class Pokemon : ShowdownIdentifiable {
             field = max(min(maxHealth, value), 0)
             onChange(HealthUpdatePacket({ this }, field))
 
+            if (isClient) {
+                return
+            }
+
             // If the Pokémon is fainted, give it a timer for it to wake back up
             if (this.isFainted()) {
                 decrementFriendship(1)
@@ -375,7 +379,7 @@ open class Pokemon : ShowdownIdentifiable {
                     this.faintedTimer = it.faintedTimer
                 }
                 // These are meant to reset on faint
-                this.evolutionProxy.current().progress()
+                this.evolutionProxy.server().progress()
                     .filter { it is RecoilTransformationProgress || it is DamageTakenTransformationProgress }
                     .forEach { it.reset() }
             }
@@ -1529,7 +1533,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.caughtBall = other.caughtBall
         this.faintedTimer = other.faintedTimer
         this.healTimer = other.healTimer
-        this.evolutionProxy.overrideController(other.evolutionProxy.current().asIntermediate().create(this))
+        this.evolutionProxy.overrideController(other.evolutionProxy.server().asIntermediate().create(this))
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
@@ -1546,7 +1550,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
-        this.formProxy.overrideController(other.formProxy.current().asIntermediate().create(this))
+        this.formProxy.overrideController(other.formProxy.server().asIntermediate().create(this))
         this.features = other.features
         this.cosmeticItem = other.cosmeticItem
         this.activeMark = other.activeMark

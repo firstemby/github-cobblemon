@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations
 
+import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.TransformationProxy
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.TypeIcon
@@ -23,6 +23,8 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.controller.ClientTransformationController
+import com.cobblemon.mod.common.pokemon.transformation.proxies.TransformationProxy
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
 import net.minecraft.client.Minecraft
@@ -85,7 +87,10 @@ abstract class EvolutionSelectScreen<C : TransformationDisplay, S : Transformati
             clickAction = {
                 Minecraft.getInstance().player?.clientSideCloseContainer()
                 playSound(CobblemonSounds.GUI_CLICK)
-                getProxy(pokemon).client().start(this.display)
+                val controller = getProxy(pokemon).client() as ClientTransformationController
+                if (controller.canStart(this.display)) {
+                    CobblemonNetwork.sendToServer(controller.acceptPacket(this.pokemon, this.display))
+                }
             },
             text = text,
             resource = buttonResource,
@@ -94,7 +99,7 @@ abstract class EvolutionSelectScreen<C : TransformationDisplay, S : Transformati
             textScale = 0.5F
         )
 
-        abstract fun getProxy(pokemon: Pokemon): TransformationProxy<C, S, *, *>
+        abstract fun getProxy(pokemon: Pokemon): TransformationProxy<C, S, *>
 
         fun playSound(soundEvent: SoundEvent) {
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))

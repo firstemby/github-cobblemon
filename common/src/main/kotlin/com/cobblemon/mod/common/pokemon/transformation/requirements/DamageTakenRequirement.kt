@@ -22,7 +22,7 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTrans
  * @since January 27th, 2022
  */
 class DamageTakenRequirement(val amount: Int = 0) : TransformationRequirement {
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
         .progress()
         .filterIsInstance<DamageTakenTransformationProgress>()
         .any { progress -> progress.currentProgress().amount >= this.amount }

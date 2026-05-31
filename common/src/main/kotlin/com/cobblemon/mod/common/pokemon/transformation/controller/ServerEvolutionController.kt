@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
@@ -31,7 +30,7 @@ class ServerEvolutionController(
     private val pokemon: Pokemon,
     evolutionIds: Set<String>,
     progress: Set<TransformationProgress<*>>,
-) : CobblemonServerTransformationController<Evolution, ServerEvolutionController.Intermediate>(pokemon, evolutionIds, progress) {
+) : ServerTransformationController<Evolution, ServerEvolutionController.Intermediate>(pokemon, evolutionIds, progress) {
 
     init {
         val potentialEvolutions = this.pokemon.evolutions.map { it.id }.toSet()
@@ -67,8 +66,8 @@ class ServerEvolutionController(
     data class Intermediate(
         val evolutionIds: Set<String>,
         val progress: Set<TransformationProgress<*>>,
-    ): PokemonTransformationControllerPreProcessor {
-        override fun create(pokemon: Pokemon): ServerEvolutionController = ServerEvolutionController(
+    ) {
+        fun create(pokemon: Pokemon) = ServerEvolutionController(
             pokemon,
             this.evolutionIds,
             this.progress

@@ -1,9 +1,9 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isBusy
@@ -18,11 +18,13 @@ import com.cobblemon.mod.common.util.isBusy
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
-abstract class CobblemonServerTransformationController<T : Transformation, I : PokemonTransformationControllerPreProcessor>(
+abstract class ServerTransformationController<T : Transformation, I>(
     private val pokemon: Pokemon,
     transformationIds: Set<String>,
     progress: Set<TransformationProgress<*>>,
-) : TransformationController<T, I> {
+) : TransformationController<T> {
+
+    abstract fun asIntermediate(): I
 
     protected val transformations = hashSetOf<T>()
     protected val progress = progress.toMutableSet()
@@ -64,8 +66,6 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
 
     // FROM TransformationController ----------------------------------------------------------------------------------
 
-    override fun pokemon(): Pokemon = this.pokemon
-
     override fun canStart(transformation: T): Boolean =
         this.canStart() &&
         this.any { it === transformation }
@@ -75,16 +75,24 @@ abstract class CobblemonServerTransformationController<T : Transformation, I : P
         this.pokemon.getOwnerPlayer()?.isBusy() == false &&
         this.isNotEmpty()
 
-    override fun start(transformation: T) { if (this.canStart(transformation)) transformation.forceStart(this.pokemon) }
+    open fun start(transformation: T) { if (this.canStart(transformation)) transformation.forceStart(this.pokemon) }
 
-    override fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
+    open fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
 
-    override fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
+    open fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
         this.progress.add(progress)
         return progress
     }
 
-    override fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
+    /**
+     * Attempts to find an [TransformationProgress] in [progress] or creates and tracks using [trackProgress].
+     *
+     * @param P The type of [TransformationProgress].
+     * @param predicate The lambda attempting to find specific progress. This needs to ensure the [TransformationProgress] is of type [P] or the cast will fail.
+     * @param progressFactory The lambda creating a new instance of type [P] if [predicate] can't find an element.
+     * @return The found match in [progress] or the created and now tracked with [trackProgress].
+     */
+    open fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
         val existing = this.progress.firstOrNull(predicate)
         if (existing == null) {
             val created = progressFactory()

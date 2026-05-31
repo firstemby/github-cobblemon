@@ -97,7 +97,7 @@ open class PokemonBattle(
         this.actors.forEach { actor ->
             actor.battle = this
             actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.effectedPokemon.evolutionProxy.current().progress()
+                battlePokemon.effectedPokemon.evolutionProxy.server().progress()
                     .filterIsInstance<LastBattleCriticalHitsTransformationProgress>()
                     .forEach { it.reset() }
             }
@@ -275,7 +275,7 @@ open class PokemonBattle(
                             pokemon.lockedEvolutions.forEach { evolution ->
                                 evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
                                     if (defeatRequirement.target.matches(faintedPokemon.effectedPokemon)) {
-                                        val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DefeatTransformationProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatTransformationProgress() }
+                                        val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is DefeatTransformationProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatTransformationProgress() }
                                         progress.updateProgress(DefeatTransformationProgress.Progress(defeatRequirement.target, progress.currentProgress().amount + 1))
                                     }
                                 }

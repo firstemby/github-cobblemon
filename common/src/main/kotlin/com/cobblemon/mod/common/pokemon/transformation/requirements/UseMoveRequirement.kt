@@ -24,7 +24,7 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.UseMoveTransform
  * @since January 25th, 2023
  */
 class UseMoveRequirement(val move: MoveTemplate = Moves.getByNameOrDummy(""), val amount: Int = 1) : TransformationRequirement {
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
         .progress()
         .filterIsInstance<UseMoveTransformationProgress>()
         .any { progress -> progress.currentProgress().move == this.move && progress.currentProgress().amount >= this.amount }

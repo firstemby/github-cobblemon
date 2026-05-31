@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransforma
  */
 class RecoilRequirement(val amount: Int = 0) : TransformationRequirement {
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
         .progress()
         .filterIsInstance<RecoilTransformationProgress>()
         .any { progress -> progress.currentProgress().amount >= this.amount }

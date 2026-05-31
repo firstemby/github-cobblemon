@@ -2,7 +2,6 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
@@ -10,7 +9,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.form.FormDisplay
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.asTranslated
-import com.mojang.serialization.Codec
 import net.minecraft.client.Minecraft
 
 /**
@@ -23,7 +21,7 @@ import net.minecraft.client.Minecraft
 class ClientFormController(
     pokemon: Pokemon,
     forms: Set<FormDisplay>,
-) : CobblemonClientTransformationController<FormDisplay, ClientFormController.Intermediate>(pokemon, forms) {
+) : ClientTransformationController<FormDisplay>(pokemon, forms) {
 
     override fun notification() {
         Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.forms.hint".asTranslated(this.pokemon.getDisplayName()).green())
@@ -32,23 +30,8 @@ class ClientFormController(
 
     override fun acceptPacket(pokemon: Pokemon, transformation: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, transformation)
 
-    override fun asIntermediate(): Intermediate = Intermediate(this.transformations)
-
     override fun canRevert(): Boolean = pokemon.form is TemporaryForm &&
         (pokemon.form as TemporaryForm).toggleable &&
         !CobblemonClient.isBusy() &&
         !pokemon.isBusy()
-
-    data class Intermediate(val forms: Set<FormDisplay>): PokemonTransformationControllerPreProcessor {
-        override fun create(pokemon: Pokemon): ClientFormController = ClientFormController(pokemon, this.forms)
-    }
-
-    companion object {
-        @JvmStatic
-        val CODEC: Codec<Intermediate> = FormDisplay.CODEC.listOf()
-            .xmap(
-                { displays -> Intermediate(displays.toSet()) },
-                { controller -> controller.forms.toMutableList() }
-            )
-    }
 }

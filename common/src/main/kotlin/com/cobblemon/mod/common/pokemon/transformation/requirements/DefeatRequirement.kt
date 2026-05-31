@@ -27,7 +27,7 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.DefeatTransforma
  * @since January 28th, 2022
  */
 class DefeatRequirement(val target: PokemonProperties = PokemonProperties(), val amount: Int = 0) : TransformationRequirement {
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
         .progress()
         .filterIsInstance<DefeatTransformationProgress>()
         .any { progress -> progress.currentProgress().target.originalString.equals(this.target.originalString, true) && progress.currentProgress().amount >= this.amount }

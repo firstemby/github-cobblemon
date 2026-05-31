@@ -9,13 +9,11 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDisplay
 import com.cobblemon.mod.common.util.asTranslated
-import com.mojang.serialization.Codec
 import net.minecraft.client.Minecraft
 
 /**
@@ -28,7 +26,7 @@ import net.minecraft.client.Minecraft
 class ClientEvolutionController(
     pokemon: Pokemon,
     evolutions: Set<EvolutionDisplay>,
-) : CobblemonClientTransformationController<EvolutionDisplay, ClientEvolutionController.Intermediate>(pokemon, evolutions) {
+) : ClientTransformationController<EvolutionDisplay>(pokemon, evolutions) {
 
     override fun notification() {
         Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.evolve.hint".asTranslated(this.pokemon.getDisplayName()).green())
@@ -37,20 +35,5 @@ class ClientEvolutionController(
 
     override fun acceptPacket(pokemon: Pokemon, transformation: EvolutionDisplay) = AcceptEvolutionPacket(pokemon, transformation)
 
-    override fun asIntermediate(): Intermediate = Intermediate(this.transformations)
-
-    data class Intermediate(val evolutions: Set<EvolutionDisplay>): PokemonTransformationControllerPreProcessor {
-        override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
-    }
-
     override fun canRevert(): Boolean = false
-
-    companion object {
-        @JvmStatic
-        val CODEC: Codec<Intermediate> = EvolutionDisplay.CODEC.listOf()
-            .xmap(
-                { displays -> Intermediate(displays.toSet()) },
-                { controller -> controller.evolutions.toMutableList() }
-            )
-    }
 }
