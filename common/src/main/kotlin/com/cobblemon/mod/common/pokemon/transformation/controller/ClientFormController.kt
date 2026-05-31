@@ -1,13 +1,11 @@
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
-import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.transformation.proxy.PokemonTransformationControllerPreProcessor
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
-import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.form.FormDisplay
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
@@ -32,7 +30,7 @@ class ClientFormController(
         Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F) // TODO replace with unique notificaiton
     }
 
-    override fun acceptPacket(pokemon: Pokemon, form: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, form)
+    override fun acceptPacket(pokemon: Pokemon, transformation: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, transformation)
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations)
 
@@ -40,11 +38,6 @@ class ClientFormController(
         (pokemon.form as TemporaryForm).toggleable &&
         !CobblemonClient.isBusy() &&
         !pokemon.isBusy()
-
-    override fun revert() {
-        if (this.canRevert())
-            CobblemonNetwork.sendToServer(RevertFormPacket(this.pokemon.uuid))
-    }
 
     data class Intermediate(val forms: Set<FormDisplay>): PokemonTransformationControllerPreProcessor {
         override fun create(pokemon: Pokemon): ClientFormController = ClientFormController(pokemon, this.forms)

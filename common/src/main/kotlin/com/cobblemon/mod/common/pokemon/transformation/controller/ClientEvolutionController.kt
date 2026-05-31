@@ -35,7 +35,7 @@ class ClientEvolutionController(
         Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F)
     }
 
-    override fun acceptPacket(pokemon: Pokemon, evolution: EvolutionDisplay) = AcceptEvolutionPacket(pokemon, evolution)
+    override fun acceptPacket(pokemon: Pokemon, transformation: EvolutionDisplay) = AcceptEvolutionPacket(pokemon, transformation)
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations)
 
@@ -44,10 +44,6 @@ class ClientEvolutionController(
     }
 
     override fun canRevert(): Boolean = false
-
-    override fun revert() {
-        TODO("Not yet implemented")
-    }
 
     companion object {
         @JvmStatic

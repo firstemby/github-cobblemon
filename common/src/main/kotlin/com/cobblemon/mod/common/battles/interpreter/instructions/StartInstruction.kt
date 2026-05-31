@@ -35,7 +35,7 @@ import net.minecraft.network.chat.Component
  */
 class StartInstruction(val message: BattleMessage): ActionEffectInstruction, InterpreterInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("start")
 
     override fun preActionEffect(battle: PokemonBattle)
@@ -70,8 +70,7 @@ class StartInstruction(val message: BattleMessage): ActionEffectInstruction, Int
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }

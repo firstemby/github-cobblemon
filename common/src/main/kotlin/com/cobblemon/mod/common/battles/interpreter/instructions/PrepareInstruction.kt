@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture
  */
 class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("prepare")
 
     override fun addMolangQueries(runtime: MoLangRuntime) {
@@ -70,8 +70,7 @@ class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }

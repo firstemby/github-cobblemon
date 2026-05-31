@@ -50,7 +50,7 @@ class DamageInstruction(
 ) : ActionEffectInstruction {
     val expectedTarget = publicMessage.battlePokemon(0, actor.battle)
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("damage")
 
     override fun preActionEffect(battle: PokemonBattle) {
@@ -126,8 +126,7 @@ class DamageInstruction(
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }

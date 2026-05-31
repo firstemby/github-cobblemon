@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture
  */
 class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("cant")
 
     override fun addMolangQueries(runtime: MoLangRuntime) {
@@ -50,7 +50,6 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
         battle.dispatch {
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
             val effectID = message.effectAt(1)?.id ?: return@dispatch GO
-            val name = pokemon.getName()
             val status = Statuses.getStatus(effectID)
             val actionEffect = status?.getActionEffect() ?: return@dispatch GO
             val providers = mutableListOf<Any>(battle)
@@ -63,8 +62,7 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             GO
         }
     }
@@ -91,8 +89,5 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
             battle.minorBattleActions[pokemon.uuid] = message
             UntilDispatch { "effects" !in holds }
         }
-
     }
-
-
 }

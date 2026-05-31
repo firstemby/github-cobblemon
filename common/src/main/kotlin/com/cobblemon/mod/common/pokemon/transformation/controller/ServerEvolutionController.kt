@@ -41,26 +41,24 @@ class ServerEvolutionController(
 
     private fun findEvolutionFromId(id: String): Evolution? = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
 
-    override fun addPacket(evolution: Evolution) = AddEvolutionPacket(this.pokemon, evolution)
+    override fun addPacket(transformation: Evolution) = AddEvolutionPacket(this.pokemon, transformation)
 
     override fun clearPacket() = ClearEvolutionsPacket { this.pokemon }
 
-    override fun removePacket(evolution: Evolution) = RemoveEvolutionPacket(this.pokemon, evolution)
+    override fun removePacket(transformation: Evolution) = RemoveEvolutionPacket(this.pokemon, transformation)
 
-    override fun start(evolution: Evolution) {
-        if (!canStart(evolution)) return
+    override fun start(transformation: Evolution) {
+        if (!canStart(transformation)) return
         CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
-            event = EvolutionAcceptedEvent(this.pokemon, evolution),
+            event = EvolutionAcceptedEvent(this.pokemon, transformation),
             ifSucceeded = {
                 // Evolution will clear the pending stuff after if successful
-                super.start(evolution)
+                super.start(transformation)
             }
         )
     }
 
     override fun canRevert() = false  // TODO evolutions are currently one-way, but modders may appreciate reversion support
-
-    override fun revert() { TODO("Not yet implemented") }  // This is blocked by canRevert
 
     override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
 

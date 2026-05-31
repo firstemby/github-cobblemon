@@ -40,9 +40,6 @@ interface TransformationController<T : TransformationLike, out I : PokemonTransf
      */
     fun start(transformation: T)
 
-    /** Reverts the active [TransformationLike] for this controller's [pokemon]. */
-    fun revert() // TODO dunno if i like this
-
     /**
      * Returns an immutable collection of [TransformationProgress]es attached to this controller.
      *

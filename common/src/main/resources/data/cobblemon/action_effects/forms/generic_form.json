@@ -2,7 +2,7 @@
   "timeline": [
     {
       "type": "add_holds",
-      "holds": ["effects"]
+      "holds": ["transformation"]
     },
     {
       "type": "entity_particles",
@@ -16,7 +16,7 @@
     },
     {
       "type": "remove_holds",
-      "holds": ["effects"]
+      "holds": ["transformation"]
     },
     {
       "type": "pause",

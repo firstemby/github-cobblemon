@@ -1,13 +1,11 @@
 package com.cobblemon.mod.common.pokemon.transformation.form
 
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
-import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
@@ -18,9 +16,9 @@ import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 
 /**
@@ -41,8 +39,6 @@ open class TemporaryForm (
     val battleOnly: Boolean = false,
     /** Whether this form can be freely toggled after requirements are initially met. */
     val toggleable: Boolean = false,
-    /** */
-    val formChangeEffect: ResourceLocation? = null,
     /** The [TransformationTrigger] to change to this form OUTSIDE of battle. */
     override val trigger: TransformationTrigger = LevelUpTrigger(),
     /** The [TransformationRequirement]s that need to be satisfied for this form OUTSIDE of battle. */
@@ -54,6 +50,13 @@ open class TemporaryForm (
 ) : FormData(), Transformation {
 
     override val id: String get() = this.formOnlyShowdownId()
+
+    var actionEffectIdentifier: ResourceLocation? = null
+
+    val actionEffect: ActionEffectTimeline
+        get() = ActionEffects.actionEffects[actionEffectIdentifier ?: cobblemonResource("form_${name.lowercase()}")]
+            ?: ActionEffects.actionEffects["generic_form".asIdentifierDefaultingNamespace()]
+            ?: throw Exception()
 
     /* Temporary forms DO NOT have their own preevo/evolutions/forms and have to fallback on the parent. Because parentForm
        is not initialized until AFTER species registration, none of these properties are safe to access until [PokemonSpecies.observable] */
@@ -93,9 +96,6 @@ open class TemporaryForm (
         return false
     }
 
-    val actionEffect = ActionEffects.actionEffects[name.asIdentifierDefaultingNamespace()]
-        ?: ActionEffects.actionEffects["generic_form".asIdentifierDefaultingNamespace()] ?: throw Exception()
-
     // TODO FORM_COMPLETE event
     override fun forceStart(pokemon: Pokemon) {
         val pokemonEntity = pokemon.entity
@@ -119,18 +119,31 @@ open class TemporaryForm (
 
     fun forceStart(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
         pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
+        val finishTransformation: () -> Unit = {
+            if (pokemonEntity.isTransforming) {
+                pokemonEntity.pokemon.form = this
+                pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, false)
+                super.forceStart(pokemonEntity.pokemon)
+            }
+        }
+        context.holdRemovalCallbacks["transformation"] = finishTransformation
         val future = actionEffect.run(context)
-        future.thenApply {
-            pokemonEntity.pokemon.form = this
-            pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, false)
-            super.forceStart(pokemonEntity.pokemon)
+        future.thenRun(finishTransformation)
+    }
+
+    fun revert(pokemon: Pokemon) {
+        if (toggleable) {
+            pokemon.form = parentForm
         }
     }
 
     // TODO FORM_DISPLAY event
     override fun convertToDisplay(pokemon: Pokemon): FormDisplay {
-        val result = pokemon.clone(newUUID = false).also { it.form = this } // TODO is this copy necessary? cant we just expose only aspects/species in the event???
-        val expectedDisplay = FormDisplay(this.id, result)
+        val species = pokemon.species
+        val aspects = pokemon.aspects.toMutableSet()
+        aspects.removeAll(pokemon.form.aspects.toSet())
+        aspects.addAll(this.aspects)
+        val expectedDisplay = FormDisplay(this.id, species, aspects)
         return expectedDisplay
     }
 }

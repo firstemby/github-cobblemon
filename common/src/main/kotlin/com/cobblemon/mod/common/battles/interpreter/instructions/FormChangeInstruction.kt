@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
+import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.battle.BattleTransformPokemonPacket
 import com.cobblemon.mod.common.pokemon.FormData
@@ -35,7 +36,7 @@ import java.util.concurrent.CompletableFuture
  */
 class FormChangeInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("formchange")
 
     lateinit var battlePokemon: BattlePokemon
@@ -75,9 +76,12 @@ class FormChangeInstruction(val message: BattleMessage): ActionEffectInstruction
                     level = battle.players.firstOrNull()?.level()
                 )
                 (form as TemporaryForm).forceStart(battlePokemon.effectedPokemon.entity!!, context)
-            }
-            else {
-                battlePokemon.effectedPokemon.formProxy.server().revert()
+                UntilDispatch { context.future.isDone }
+            } else {
+                val form = battlePokemon.effectedPokemon.form
+                if (form is TemporaryForm) {
+                    form.revert(battlePokemon.effectedPokemon)
+                }
             }
             return@dispatch GO
         }

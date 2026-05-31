@@ -12,8 +12,8 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
+import net.minecraft.resources.ResourceLocation
 
 /**
  * An [InterpreterInstruction] that triggers an [ActionEffectTimeline]
@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture
  */
 interface ActionEffectInstruction : InterpreterInstruction {
     var future: CompletableFuture<*>
-    var holds: MutableSet<String>
+    var holds: Set<String>
     //To expose via molang, so action effects can do different stuff in different instructions
     //e.g. "x is confused" vs "x hit itself in confusion"
     val id: ResourceLocation

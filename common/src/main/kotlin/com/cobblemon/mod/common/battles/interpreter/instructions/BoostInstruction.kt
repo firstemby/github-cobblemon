@@ -36,7 +36,7 @@ import java.util.concurrent.CompletableFuture
  */
 class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val isBoost: Boolean = true): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("boost")
 
     val pokemon = message.battlePokemon(0, battle) ?: throw InvalidInstructionException(message)
@@ -66,8 +66,7 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }

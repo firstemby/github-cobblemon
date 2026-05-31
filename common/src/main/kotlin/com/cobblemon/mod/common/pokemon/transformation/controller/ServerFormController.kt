@@ -31,19 +31,17 @@ class ServerFormController(
 
     private fun findFormFromId(id: String): TemporaryForm? = this.pokemon.changeableForms.firstOrNull { form -> form.id.equals(id, true) }
 
-    override fun addPacket(form: TemporaryForm) = AddFormPacket(this.pokemon, form)
+    override fun addPacket(transformation: TemporaryForm) = AddFormPacket(this.pokemon, transformation)
 
     override fun clearPacket() = ClearFormsPacket { this.pokemon }
 
-    override fun removePacket(form: TemporaryForm) = RemoveFormPacket(this.pokemon, form)
+    override fun removePacket(transformation: TemporaryForm) = RemoveFormPacket(this.pokemon, transformation)
 
     // TODO form events
 
     override fun isDuplicate(element: TemporaryForm) = this.find { it.name == element.name } != null
 
     override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
-
-    override fun revert() { if (this.canRevert()) this.pokemon.form = (this.pokemon.form as TemporaryForm).parentForm } // assignment already handles this
 
     override fun canRevert(): Boolean = pokemon.form is TemporaryForm && (pokemon.form as TemporaryForm).toggleable
 

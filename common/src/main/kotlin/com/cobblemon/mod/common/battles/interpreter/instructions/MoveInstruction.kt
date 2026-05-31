@@ -55,7 +55,7 @@ class MoveInstruction(
     val spreadTargets = message.optionalArgument("spread")?.split(",") ?: emptyList()
 
     var future = CompletableFuture.completedFuture(Unit)
-    var holds = mutableSetOf<String>()
+    var holds = setOf<String>()
 
     lateinit var userPokemon: BattlePokemon
     var targetPokemon: BattlePokemon? = null
@@ -177,8 +177,7 @@ class MoveInstruction(
             runtime.environment.query.addFunction("instruction_id") { StringValue(cobblemonResource("move").toString()) }
 
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch UntilDispatch { "effects" !in holds }.andThen {
                 val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
                 val targets = hurtTargets.mapNotNull { it.entity }
