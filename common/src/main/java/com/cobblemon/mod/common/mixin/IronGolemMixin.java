@@ -28,7 +28,10 @@ public abstract class IronGolemMixin extends AbstractGolem {
         super(entityType, level);
     }
 
-    @Inject(method = "thunderHit", at = @At("TAIL"))
+    @Inject(
+            method = "thunderHit(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LightningBolt;)V",
+            at = @At("TAIL")
+    )
     private void cobblemon$dropMetalAlloyOnLightningKill(ServerLevel level, LightningBolt lightningBolt, CallbackInfo ci) {
         if (this.isAlive() || !level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
             return;
