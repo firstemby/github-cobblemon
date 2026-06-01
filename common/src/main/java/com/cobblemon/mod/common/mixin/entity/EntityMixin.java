@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.entity;
 
+import com.cobblemon.mod.common.CobblemonItems;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
@@ -21,9 +22,13 @@ import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -150,5 +155,20 @@ public abstract class EntityMixin {
         }
 
         original.call(pusher, d * pusheeReceivedForce.get(), 0.0, e * pusheeReceivedForce.get());
+    }
+
+    @Inject(
+            method = "thunderHit(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LightningBolt;)V",
+            at = @At("TAIL")
+    )
+    private void cobblemon$dropMetalAlloyOnLightningKill(ServerLevel level, LightningBolt lightningBolt, CallbackInfo ci) {
+        var entity = (Entity) (Object) this;
+        if (!(entity instanceof IronGolem) || entity.isAlive()) {
+            return;
+        }
+
+        if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            entity.spawnAtLocation(CobblemonItems.METAL_ALLOY);
+        }
     }
 }
