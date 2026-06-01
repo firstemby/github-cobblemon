@@ -81,7 +81,8 @@ class PokedexUsageContext {
 
     var infoGuiOpen: Boolean = false
     var scanningGuiOpen: Boolean = false
-    var scannerMode: ScannerMode = ScannerMode.SCANNING
+    var previousScanningMode: ScannerMode = ScannerMode.SCANNING
+    var scannerMode: ScannerMode = previousScanningMode
     var isPokemonInFocusOwned: Boolean = false
     var registerCompleted: Boolean = false
     var scannedSpecies: ResourceLocation? = null
@@ -195,6 +196,7 @@ class PokedexUsageContext {
 
     fun tryOpenScanGui(ticksInUse: Int, inUse: Boolean) {
         if (inUse && ticksInUse == OPEN_SCANNER_BUFFER_TICKS) {
+            scannerMode = previousScanningMode
             scanningGuiOpen = true
             playSound(CobblemonSounds.POKEDEX_SCAN_OPEN)
         }
@@ -246,6 +248,7 @@ class PokedexUsageContext {
         } else {
             ScannerMode.SCANNING
         }
+        previousScanningMode = scannerMode
 
         playSound(CobblemonSounds.POKEDEX_SCAN_MODE_SWAP)
         Minecraft.getInstance().player?.displayClientMessage(
@@ -345,7 +348,7 @@ class PokedexUsageContext {
 
     fun resetState(resetAnimationStates: Boolean = true) {
         scanningGuiOpen = false
-        scannerMode = ScannerMode.SCANNING
+        scannerMode = previousScanningMode
         zoomLevel = 0F
         zoomModifier = 1F
         focusIntervals = 0F
