@@ -45,6 +45,7 @@ import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
 import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
 import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
 import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
+import com.cobblemon.mod.common.client.render.block.PhotoPrinterBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.PrintedPhotoDisplayBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
@@ -462,6 +463,7 @@ object CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.TM_SHELF, ::TMShelfBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.PHOTO_PRINTER, ::PhotoPrinterBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(
             CobblemonBlockEntities.PRINTED_PHOTO_DISPLAY,
             ::PrintedPhotoDisplayBlockEntityRenderer

@@ -68,6 +68,10 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         private const val PRINT_BUTTON_Y = CONTROL_ROW_Y - 1
         private const val PRINT_BUTTON_WIDTH = 124
         private const val PRINT_BUTTON_HEIGHT = 20
+        private const val PROGRESS_BAR_X = PRINT_BUTTON_X
+        private const val PROGRESS_BAR_Y = PRINT_BUTTON_Y - 8
+        private const val PROGRESS_BAR_WIDTH = PRINT_BUTTON_WIDTH
+        private const val PROGRESS_BAR_HEIGHT = 5
         private const val MAX_THUMBS = GRID_COLUMNS * GRID_ROWS
     }
 
@@ -150,9 +154,14 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         val outputStack = menu.getSlot(PhotoPrinterBlockEntity.RESULT_SLOT).item
         val paperCount = if (inputStack.`is`(Items.PAPER)) inputStack.count else 0
         val canAfford = paperCount >= selectedPrintSize.paperCost
+        val isPrinting = menu.isPrinting()
 
-        printButton?.active = selectedPhotoId != null && outputStack.isEmpty && canAfford
-        printButton?.message = Component.literal("Print ${selectedPrintSize.label} (${selectedPrintSize.paperCost} paper)")
+        printButton?.active = selectedPhotoId != null && outputStack.isEmpty && canAfford && !isPrinting
+        printButton?.message = if (isPrinting) {
+            Component.translatable("cobblemon.ui.photo_printer.printing")
+        } else {
+            Component.literal("Print ${selectedPrintSize.label} (${selectedPrintSize.paperCost} paper)")
+        }
     }
 
     override fun removed() {
@@ -198,6 +207,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
 
         drawSlotOutline(guiGraphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y)
         drawSlotOutline(guiGraphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y)
+        renderProgressBar(guiGraphics)
         drawPanel(
             guiGraphics = guiGraphics,
             x = leftPos + PREVIEW_LEFT,
@@ -337,6 +347,21 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             width = PREVIEW_SIZE,
             height = PREVIEW_SIZE
         )
+    }
+
+    private fun renderProgressBar(guiGraphics: GuiGraphics) {
+        val x = leftPos + PROGRESS_BAR_X
+        val y = topPos + PROGRESS_BAR_Y
+        val width = PROGRESS_BAR_WIDTH
+        val height = PROGRESS_BAR_HEIGHT
+
+        guiGraphics.fill(x, y, x + width, y + height, -12698050)
+        guiGraphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, -986896)
+
+        if (!menu.isPrinting()) return
+
+        val fillWidth = ((width - 2) * menu.printProgressFraction()).toInt().coerceIn(0, width - 2)
+        guiGraphics.fill(x + 1, y + 1, x + 1 + fillWidth, y + height - 1, -8704)
     }
 
     private fun photoAt(mouseX: Double, mouseY: Double, visiblePhotos: List<PokedexPhotoMetadata>): PokedexPhotoMetadata? {

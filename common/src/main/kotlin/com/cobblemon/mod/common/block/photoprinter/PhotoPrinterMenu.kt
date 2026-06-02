@@ -41,7 +41,7 @@ class PhotoPrinterMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMe
     constructor(syncId: Int, playerInventory: Inventory) : this(CobblemonMenuType.PHOTO_PRINTER, syncId) {
         this.playerInventory = playerInventory
         this.inventory = SimpleContainer(PhotoPrinterBlockEntity.SLOT_COUNT)
-        this.containerData = SimpleContainerData(3)
+        this.containerData = SimpleContainerData(6)
         this.blockEntity = inventory as? PhotoPrinterBlockEntity
         setupSlots(playerInventory)
     }
@@ -77,7 +77,22 @@ class PhotoPrinterMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMe
 
     fun blockPos(): BlockPos {
         val data = containerData ?: return BlockPos.ZERO
-        return BlockPos(data.get(0), data.get(1), data.get(2))
+        return BlockPos(
+            data.get(PhotoPrinterBlockEntity.POSITION_X_INDEX),
+            data.get(PhotoPrinterBlockEntity.POSITION_Y_INDEX),
+            data.get(PhotoPrinterBlockEntity.POSITION_Z_INDEX)
+        )
+    }
+
+    fun printProgress(): Int = containerData?.get(PhotoPrinterBlockEntity.PRINT_PROGRESS_INDEX) ?: 0
+
+    fun printProgressMax(): Int = containerData?.get(PhotoPrinterBlockEntity.PRINT_PROGRESS_MAX_INDEX) ?: PhotoPrinterBlockEntity.PRINT_DURATION_TICKS
+
+    fun isPrinting(): Boolean = containerData?.get(PhotoPrinterBlockEntity.PRINTING_INDEX) == 1
+
+    fun printProgressFraction(): Float {
+        val max = printProgressMax().coerceAtLeast(1)
+        return (printProgress().toFloat() / max.toFloat()).coerceIn(0F, 1F)
     }
 
     override fun quickMoveStack(player: Player, index: Int): ItemStack {

@@ -35,6 +35,11 @@ object CraftPrintedPhotoPacketHandler : ServerNetworkPacketHandler<CraftPrintedP
             return
         }
 
+        if (blockEntity.isPrinting) {
+            PokedexPhotoUploadResultPacket(false, "The photo printer is already printing.").sendToPlayer(player)
+            return
+        }
+
         val metadata = PokedexPhotoRepository.getMetadata(player.uuid, selectedId)
         val imageData = PokedexPhotoRepository.getPhoto(player.uuid, selectedId)
         if (metadata == null || imageData == null) {
@@ -69,8 +74,11 @@ object CraftPrintedPhotoPacketHandler : ServerNetworkPacketHandler<CraftPrintedP
         }
 
         input.shrink(paperCost)
-        blockEntity.setItem(PhotoPrinterBlockEntity.RESULT_SLOT, printedStack)
-        blockEntity.setChanged()
+        if (!blockEntity.startPrinting(printedStack)) {
+            input.grow(paperCost)
+            PokedexPhotoUploadResultPacket(false, "The photo printer could not start printing.").sendToPlayer(player)
+            return
+        }
         menu.broadcastChanges()
 
         if (Cobblemon.config.pokedexDeletePhotoAfterPrint) {
@@ -79,7 +87,7 @@ object CraftPrintedPhotoPacketHandler : ServerNetworkPacketHandler<CraftPrintedP
             PokedexPhotoNetworkUtil.sendGallery(player)
         }
 
-        PokedexPhotoUploadResultPacket(true, "Printed photo ready.").sendToPlayer(player)
+        PokedexPhotoUploadResultPacket(true, "Printing photo...").sendToPlayer(player)
     }
 }
 
