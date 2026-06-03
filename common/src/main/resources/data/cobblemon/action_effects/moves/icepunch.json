@@ -11,7 +11,7 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:icepunch_hand",
-      "locators": ["hand", "physical"]
+      "locators": ["hand_primary", "hand", "physical"]
     },
     {
       "type": "pause",

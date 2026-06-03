@@ -251,7 +251,6 @@ object VaryingModelRepository {
         inbuilt("arbok", ::ArbokModel)
         inbuilt("chansey", ::ChanseyModel)
         inbuilt("cubone", ::CuboneModel)
-        inbuilt("ditto", ::DittoModel)
         inbuilt("dodrio", ::DodrioModel)
         inbuilt("doduo", ::DoduoModel)
         inbuilt("electabuzz", ::ElectabuzzModel)
