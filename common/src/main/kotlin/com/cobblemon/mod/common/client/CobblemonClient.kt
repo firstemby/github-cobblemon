@@ -409,7 +409,8 @@ object CobblemonClient {
             CobblemonBlocks.X_SP_ATK,
             CobblemonBlocks.X_SP_DEF,
             CobblemonBlocks.X_SPEED,
-            CobblemonBlocks.TM_MACHINE
+            CobblemonBlocks.TM_MACHINE,
+            CobblemonBlocks.PHOTO_PRINTER
         )
 
         this.createBoatModelLayers()
