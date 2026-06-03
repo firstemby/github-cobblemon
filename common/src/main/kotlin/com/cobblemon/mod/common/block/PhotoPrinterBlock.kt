@@ -49,7 +49,8 @@ class PhotoPrinterBlock(properties: Properties) : BaseEntityBlock(properties) {
         val FACING = BlockStateProperties.HORIZONTAL_FACING
         val PART: EnumProperty<PrinterPart> = EnumProperty.create("part", PrinterPart::class.java)
         val STATE: EnumProperty<PrinterState> = EnumProperty.create("state", PrinterState::class.java)
-        private val SHAPE: VoxelShape = Shapes.block()
+        private val BOTTOM_SHAPE: VoxelShape = Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 1.0, 15.0 / 16.0)
+        private val TOP_SHAPE: VoxelShape = Shapes.box(1.0 / 16.0, 0.0, 1.0 / 16.0, 15.0 / 16.0, 15.0 / 16.0, 15.0 / 16.0)
 
         val CODEC: MapCodec<PhotoPrinterBlock> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
@@ -167,7 +168,9 @@ class PhotoPrinterBlock(properties: Properties) : BaseEntityBlock(properties) {
         return state
     }
 
-    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape = SHAPE
+    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+        return if (state.getValue(PART) == PrinterPart.BOTTOM) BOTTOM_SHAPE else TOP_SHAPE
+    }
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 

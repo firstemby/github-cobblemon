@@ -7,7 +7,7 @@
       "model": "cobblemon:block/photo_printer_on"
     },
     "facing=north,part=bottom,state=printing": {
-      "model": "cobblemon:block/photo_printer_on"
+      "model": "cobblemon:block/photo_printer_printing"
     },
     "facing=north,part=top,state=off": {
       "model": "cobblemon:block/photo_printer_top"
@@ -27,7 +27,7 @@
       "y": 90
     },
     "facing=east,part=bottom,state=printing": {
-      "model": "cobblemon:block/photo_printer_on",
+      "model": "cobblemon:block/photo_printer_printing",
       "y": 90
     },
     "facing=east,part=top,state=off": {
@@ -51,7 +51,7 @@
       "y": 180
     },
     "facing=south,part=bottom,state=printing": {
-      "model": "cobblemon:block/photo_printer_on",
+      "model": "cobblemon:block/photo_printer_printing",
       "y": 180
     },
     "facing=south,part=top,state=off": {
@@ -75,7 +75,7 @@
       "y": 270
     },
     "facing=west,part=bottom,state=printing": {
-      "model": "cobblemon:block/photo_printer_on",
+      "model": "cobblemon:block/photo_printer_printing",
       "y": 270
     },
     "facing=west,part=top,state=off": {

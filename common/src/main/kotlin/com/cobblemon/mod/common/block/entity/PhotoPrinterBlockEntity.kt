@@ -81,6 +81,7 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
     var printProgress: Int = 0
     var printProgressMax: Int = PRINT_DURATION_TICKS
     var printingStack: ItemStack = ItemStack.EMPTY
+    private var openCount: Int = 0
     val isPrinting: Boolean
         get() = !printingStack.isEmpty
 
@@ -136,6 +137,22 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
     override fun getContainerSize(): Int = SLOT_COUNT
 
     override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean = slot == INPUT_SLOT
+
+    override fun startOpen(player: Player) {
+        super.startOpen(player)
+        if (remove || player.isSpectator) return
+
+        openCount++
+        updatePrinterBlockState()
+    }
+
+    override fun stopOpen(player: Player) {
+        super.stopOpen(player)
+        if (remove || player.isSpectator) return
+
+        openCount = (openCount - 1).coerceAtLeast(0)
+        updatePrinterBlockState()
+    }
 
     override fun setItem(slot: Int, stack: ItemStack) {
         super.setItem(slot, stack)
@@ -207,13 +224,15 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
 
     private fun updatePrinterBlockState() {
         val currentLevel = level ?: return
+        if (currentLevel.isClientSide) return
+
         val state = blockState
         if (state.block !is PhotoPrinterBlock || !state.hasProperty(PhotoPrinterBlock.STATE)) return
 
-        val visualState = if (isPrinting || !getItem(RESULT_SLOT).isEmpty) {
-            PhotoPrinterBlock.PrinterState.ON
-        } else {
-            PhotoPrinterBlock.PrinterState.OFF
+        val visualState = when {
+            isPrinting -> PhotoPrinterBlock.PrinterState.PRINTING
+            openCount > 0 -> PhotoPrinterBlock.PrinterState.ON
+            else -> PhotoPrinterBlock.PrinterState.OFF
         }
         if (state.getValue(PhotoPrinterBlock.STATE) != visualState) {
             currentLevel.setBlock(blockPos, state.setValue(PhotoPrinterBlock.STATE, visualState), Block.UPDATE_CLIENTS)

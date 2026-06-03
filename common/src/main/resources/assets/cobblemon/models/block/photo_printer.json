@@ -4,6 +4,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "cobblemon:block/printer",
+		"screen": "cobblemon:block/printer_screen_off",
 		"particle": "cobblemon:block/printer"
 	},
 	"elements": [
@@ -38,7 +39,7 @@
 			"to": [13, 30, 3],
 			"rotation": {"angle": 0, "axis": "y", "origin": [1, 35, -11]},
 			"faces": {
-				"north": {"uv": [13, 6, 15.5, 7.75], "texture": "#0"},
+				"north": {"uv": [0, 0, 16, 16], "texture": "#screen"},
 				"east": {"uv": [0, 0, 0, 1.75], "texture": "#0"},
 				"west": {"uv": [0, 0, 0, 1.75], "texture": "#0"},
 				"up": {"uv": [2.5, 0, 0, 0], "texture": "#0"},
