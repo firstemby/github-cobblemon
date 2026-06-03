@@ -49,18 +49,18 @@ class PhotoPrinterBlockEntityRenderer(
         }
         val easedProgress = progress * progress * (3F - (2F * progress))
         val facing = blockEntity.blockState.getValue(PhotoPrinterBlock.FACING)
-        val slide = -0.12F + (easedProgress * 0.70F)
+        val slide = -0.12F + (easedProgress * 0.55F)
         val packedLight = resolvePhotoLight(blockEntity, facing, light)
 
         matrices.pushPose()
         matrices.translate(
             0.5F + (facing.stepX * slide),
-            0.35F, // we can change this to alter the height of where the photo slides out
+            1.05F, // we can change this to alter the height of where the photo slides out
             0.5F + (facing.stepZ * slide)
         )
         matrices.mulPose(Axis.YP.rotationDegrees(rotationFor(facing)))
         matrices.mulPose(Axis.XP.rotationDegrees(90F))
-        matrices.scale(0.85F, 0.85F, 0.85F)
+        matrices.scale(0.55F, 0.55F, 0.55F) //  we can use this to change the scale of the animated photo
 
         Minecraft.getInstance().itemRenderer.renderStatic(
             printingStack,

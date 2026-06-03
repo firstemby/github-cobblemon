@@ -1,20 +1,94 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,part=bottom,state=off": {
       "model": "cobblemon:block/photo_printer"
     },
-    "facing=east": {
+    "facing=north,part=bottom,state=on": {
+      "model": "cobblemon:block/photo_printer_on"
+    },
+    "facing=north,part=bottom,state=printing": {
+      "model": "cobblemon:block/photo_printer_on"
+    },
+    "facing=north,part=top,state=off": {
+      "model": "cobblemon:block/photo_printer_top"
+    },
+    "facing=north,part=top,state=on": {
+      "model": "cobblemon:block/photo_printer_top"
+    },
+    "facing=north,part=top,state=printing": {
+      "model": "cobblemon:block/photo_printer_top"
+    },
+    "facing=east,part=bottom,state=off": {
       "model": "cobblemon:block/photo_printer",
       "y": 90
     },
-    "facing=south": {
+    "facing=east,part=bottom,state=on": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 90
+    },
+    "facing=east,part=bottom,state=printing": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 90
+    },
+    "facing=east,part=top,state=off": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 90
+    },
+    "facing=east,part=top,state=on": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 90
+    },
+    "facing=east,part=top,state=printing": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 90
+    },
+    "facing=south,part=bottom,state=off": {
       "model": "cobblemon:block/photo_printer",
       "y": 180
     },
-    "facing=west": {
+    "facing=south,part=bottom,state=on": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 180
+    },
+    "facing=south,part=bottom,state=printing": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 180
+    },
+    "facing=south,part=top,state=off": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 180
+    },
+    "facing=south,part=top,state=on": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 180
+    },
+    "facing=south,part=top,state=printing": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 180
+    },
+    "facing=west,part=bottom,state=off": {
       "model": "cobblemon:block/photo_printer",
+      "y": 270
+    },
+    "facing=west,part=bottom,state=on": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 270
+    },
+    "facing=west,part=bottom,state=printing": {
+      "model": "cobblemon:block/photo_printer_on",
+      "y": 270
+    },
+    "facing=west,part=top,state=off": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 270
+    },
+    "facing=west,part=top,state=on": {
+      "model": "cobblemon:block/photo_printer_top",
+      "y": 270
+    },
+    "facing=west,part=top,state=printing": {
+      "model": "cobblemon:block/photo_printer_top",
       "y": 270
     }
   }
 }
-

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.block.PhotoPrinterBlock
 import com.cobblemon.mod.common.block.photoprinter.PhotoPrinterMenu
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -69,6 +70,7 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
             blockEntity.setItem(RESULT_SLOT, blockEntity.printingStack.copy())
             blockEntity.printingStack = ItemStack.EMPTY
             blockEntity.printProgress = 0
+            blockEntity.updatePrinterBlockState()
             blockEntity.setChanged()
             blockEntity.syncToClient()
         }
@@ -111,6 +113,7 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
         printingStack = stack.copy()
         printProgress = 0
         printProgressMax = durationTicks.coerceAtLeast(1)
+        updatePrinterBlockState()
         setChanged()
         syncToClient()
         return true
@@ -136,18 +139,27 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
 
     override fun setItem(slot: Int, stack: ItemStack) {
         super.setItem(slot, stack)
-        if (slot == RESULT_SLOT) syncToClient()
+        if (slot == RESULT_SLOT) {
+            updatePrinterBlockState()
+            syncToClient()
+        }
     }
 
     override fun removeItem(slot: Int, amount: Int): ItemStack {
         val stack = super.removeItem(slot, amount)
-        if (slot == RESULT_SLOT && !stack.isEmpty) syncToClient()
+        if (slot == RESULT_SLOT && !stack.isEmpty) {
+            updatePrinterBlockState()
+            syncToClient()
+        }
         return stack
     }
 
     override fun removeItemNoUpdate(slot: Int): ItemStack {
         val stack = super.removeItemNoUpdate(slot)
-        if (slot == RESULT_SLOT && !stack.isEmpty) syncToClient()
+        if (slot == RESULT_SLOT && !stack.isEmpty) {
+            updatePrinterBlockState()
+            syncToClient()
+        }
         return stack
     }
 
@@ -191,5 +203,32 @@ class PhotoPrinterBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerB
     private fun syncToClient() {
         val currentLevel = level ?: return
         currentLevel.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS)
+    }
+
+    private fun updatePrinterBlockState() {
+        val currentLevel = level ?: return
+        val state = blockState
+        if (state.block !is PhotoPrinterBlock || !state.hasProperty(PhotoPrinterBlock.STATE)) return
+
+        val visualState = if (isPrinting || !getItem(RESULT_SLOT).isEmpty) {
+            PhotoPrinterBlock.PrinterState.ON
+        } else {
+            PhotoPrinterBlock.PrinterState.OFF
+        }
+        if (state.getValue(PhotoPrinterBlock.STATE) != visualState) {
+            currentLevel.setBlock(blockPos, state.setValue(PhotoPrinterBlock.STATE, visualState), Block.UPDATE_CLIENTS)
+        }
+
+        val topPos = blockPos.above()
+        val topState = currentLevel.getBlockState(topPos)
+        if (
+            topState.block is PhotoPrinterBlock &&
+            topState.hasProperty(PhotoPrinterBlock.PART) &&
+            topState.hasProperty(PhotoPrinterBlock.STATE) &&
+            topState.getValue(PhotoPrinterBlock.PART) == PhotoPrinterBlock.PrinterPart.TOP &&
+            topState.getValue(PhotoPrinterBlock.STATE) != visualState
+        ) {
+            currentLevel.setBlock(topPos, topState.setValue(PhotoPrinterBlock.STATE, visualState), Block.UPDATE_CLIENTS)
+        }
     }
 }
