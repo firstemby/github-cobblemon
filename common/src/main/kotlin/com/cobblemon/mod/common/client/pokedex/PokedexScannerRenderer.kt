@@ -77,6 +77,9 @@ class PokedexScannerRenderer {
         val SCAN_RING_MIDDLE = cobblemonResource("textures/gui/pokedex/scan/scan_ring_middle.png")
         val SCAN_RING_INNER = cobblemonResource("textures/gui/pokedex/scan/scan_ring_inner.png")
         val CAMERA_FRAME = cobblemonResource("textures/gui/pokedex/scan/camera_frame.png")
+        private const val BLINK_SHUTTER_RGB = 0x001F1D1B
+        private const val BLINK_SHUTTER_MAX_ALPHA = 245
+        private const val BLINK_SHUTTER_CENTER_OVERLAP = 2
 
         val CENTER_INFO_FRAME = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame.png")
         val UNKNOWN_MARK = cobblemonResource("textures/gui/pokedex/scan/scan_unknown.png")
@@ -477,15 +480,24 @@ class PokedexScannerRenderer {
             )
         }
 
-        val shutterOpacity = usageContext.getShutterOverlayOpacity()
-        if (shutterOpacity > 0F) {
-            val alpha = (shutterOpacity * 250F).toInt().coerceIn(0, 255)
-            val shutterTint = 0x001F1D1B
-            graphics.fill(0, 0, screenWidth, screenHeight, (alpha shl 24) or shutterTint)
+        val shutterClosure = usageContext.getShutterBlinkClosure()
+        if (shutterClosure > 0F) {
+            renderBlinkShutter(graphics, screenWidth, screenHeight, shutterClosure)
             usageContext.onShutterRendered()
         }
 
         RenderSystem.disableBlend()
+    }
+
+    private fun renderBlinkShutter(graphics: GuiGraphics, screenWidth: Int, screenHeight: Int, closure: Float) {
+        val clampedClosure = closure.coerceIn(0F, 1F)
+        val alpha = (BLINK_SHUTTER_MAX_ALPHA * clampedClosure).toInt().coerceIn(0, BLINK_SHUTTER_MAX_ALPHA)
+        val color = (alpha shl 24) or BLINK_SHUTTER_RGB
+        val halfClosedHeight = ((screenHeight / 2F) * clampedClosure).roundToInt()
+        val centerOverlap = BLINK_SHUTTER_CENTER_OVERLAP
+
+        graphics.fill(0, 0, screenWidth, halfClosedHeight + centerOverlap, color)
+        graphics.fill(0, screenHeight - halfClosedHeight - centerOverlap, screenWidth, screenHeight, color)
     }
 
     fun onRenderOverlay(graphics: GuiGraphics, tickCounter: DeltaTracker) {

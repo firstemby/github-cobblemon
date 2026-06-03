@@ -104,7 +104,8 @@ class PokedexUsageContext {
     private var previousModeToggleInput = false
     private var pictureBuffer: RenderTarget? = null
     private var shutterForceDrawNextFrame = false
-    private var shutterForceDrawUntil = 0L
+    private var shutterAnimationStartedAt = 0L
+    private var shutterAnimationDurationMs = 0L
     private var capturedDebugRays: List<Pair<Vec3, Vec3>> = emptyList()
     private var capturedDebugRaysExpireAt: Long = 0L
 
@@ -355,7 +356,8 @@ class PokedexUsageContext {
         previousAttackInput = false
         previousModeToggleInput = false
         shutterForceDrawNextFrame = false
-        shutterForceDrawUntil = 0L
+        shutterAnimationStartedAt = 0L
+        shutterAnimationDurationMs = 0L
         capturedDebugRays = emptyList()
         capturedDebugRaysExpireAt = 0L
         resetFocusedPokemonState()
@@ -389,26 +391,42 @@ class PokedexUsageContext {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 
-    fun startShutterPulse(durationMs: Long = 100L) {
+    fun startShutterPulse(durationMs: Long = 180L) {
         shutterForceDrawNextFrame = true
-        shutterForceDrawUntil = System.currentTimeMillis() + durationMs
+        shutterAnimationStartedAt = System.currentTimeMillis()
+        shutterAnimationDurationMs = durationMs.coerceAtLeast(1L)
     }
 
-    fun getShutterOverlayOpacity(): Float {
+    fun getShutterBlinkClosure(): Float {
         if (shutterForceDrawNextFrame) {
-            return 0.98F
+            return 0.35F
         }
 
-        val remaining = shutterForceDrawUntil - System.currentTimeMillis()
-        if (remaining <= 0L) {
+        if (shutterAnimationStartedAt == 0L || shutterAnimationDurationMs == 0L) {
             return 0F
         }
 
-        return 0.98F
+        val progress = ((System.currentTimeMillis() - shutterAnimationStartedAt).toFloat() / shutterAnimationDurationMs.toFloat()).coerceIn(0F, 1F)
+        return when {
+            progress < 0.35F -> easeOutCubic(progress / 0.35F)
+            progress < 0.52F -> 1F
+            progress < 1F -> 1F - easeInCubic((progress - 0.52F) / 0.48F)
+            else -> 0F
+        }
     }
 
     fun onShutterRendered() {
         shutterForceDrawNextFrame = false
+    }
+
+    private fun easeOutCubic(value: Float): Float {
+        val inverse = 1F - value.coerceIn(0F, 1F)
+        return 1F - (inverse * inverse * inverse)
+    }
+
+    private fun easeInCubic(value: Float): Float {
+        val clamped = value.coerceIn(0F, 1F)
+        return clamped * clamped * clamped
     }
 
     private fun ensurePictureBuffer(width: Int, height: Int): RenderTarget {
