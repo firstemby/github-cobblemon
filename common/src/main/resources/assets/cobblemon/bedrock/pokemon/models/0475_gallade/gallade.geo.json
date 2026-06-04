@@ -192,7 +192,7 @@
 					]
 				},
 				{
-					"name": "Head",
+					"name": "head",
 					"parent": "neck",
 					"pivot": [0, 28.5, 0],
 					"cubes": [
@@ -201,7 +201,7 @@
 				},
 				{
 					"name": "mouth_open",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [0, 28.6, 1.6],
 					"cubes": [
 						{"origin": [3.2, 28.6, -2.6], "size": [1, 1, 1], "inflate": 0.01, "pivot": [0, 28.6, 1.6], "rotation": [0, 45, 0], "uv": [44, 28]}
@@ -209,7 +209,7 @@
 				},
 				{
 					"name": "hair",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [0, 32.25, -0.7],
 					"rotation": [7.5, 0, 0],
 					"cubes": [
@@ -218,7 +218,7 @@
 				},
 				{
 					"name": "eyes",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [0, 31.5, 3.5]
 				},
 				{
@@ -319,7 +319,7 @@
 				},
 				{
 					"name": "hair_blade",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [0, 35.15, -1.15],
 					"cubes": [
 						{"origin": [0, 29.65, -1.15], "size": [0, 12, 7], "uv": [0, 8]},
@@ -328,7 +328,7 @@
 				},
 				{
 					"name": "head_side_left",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [3.5, 29.2, -1],
 					"rotation": [7.5, 47.5, 0],
 					"cubes": [
@@ -338,7 +338,7 @@
 				},
 				{
 					"name": "head_side_right",
-					"parent": "Head",
+					"parent": "head",
 					"pivot": [-3.5, 29.2, -1],
 					"rotation": [7.5, -47.5, 0],
 					"cubes": [
