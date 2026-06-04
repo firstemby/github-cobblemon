@@ -147,6 +147,8 @@ accessible method net/minecraft/world/level/block/AbstractCandleBlock addParticl
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$IngredientsSlot
 transitive-accessible class net/minecraft/world/inventory/BrewingStandMenu$FuelSlot
 
+transitive-accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool templates Lit/unimi/dsi/fastutil/objects/ObjectArrayList;
+
 transitive-accessible method net/minecraft/world/level/block/Block spawnDestroyParticles (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V
 
 transitive-accessible method net/minecraft/world/food/FoodData add (IF)V

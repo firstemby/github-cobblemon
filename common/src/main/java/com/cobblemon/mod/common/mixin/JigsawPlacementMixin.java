@@ -10,16 +10,14 @@ package com.cobblemon.mod.common.mixin;
 
 import com.cobblemon.mod.common.mixin.accessor.SinglePoolElementAccessor;
 import com.cobblemon.mod.common.world.structureprocessors.HeightRangeStructureProcessor;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.util.RandomSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
-import net.minecraft.world.level.levelgen.structure.pools.LegacySinglePoolElement;
-import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.*;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,24 +26,38 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Optional;
 
 @Mixin(JigsawPlacement.class)
 public class JigsawPlacementMixin {
 
 	@Inject(
-			method = "addPieces*",
-			at = @At("HEAD"),
+			method = "addPieces(Lnet/minecraft/world/level/levelgen/structure/Structure$GenerationContext;Lnet/minecraft/core/Holder;Ljava/util/Optional;ILnet/minecraft/core/BlockPos;ZLjava/util/Optional;ILnet/minecraft/world/level/levelgen/structure/pools/alias/PoolAliasLookup;Lnet/minecraft/world/level/levelgen/structure/pools/DimensionPadding;Lnet/minecraft/world/level/levelgen/structure/templatesystem/LiquidSettings;)Ljava/util/Optional;",
+			at = @At("RETURN"),
 			cancellable = true
 	)
-	private static void cobblemon$cancelInvalidHeightRangeStart(
-			CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir,
-			@Local(argsOnly = true, ordinal = 0) Structure.GenerationContext generationContext,
-			@Local(argsOnly = true, ordinal = 0) Holder<StructureTemplatePool> startPool,
-			@Local(argsOnly = true, ordinal = 0) BlockPos startPos
+	private static void onAddPieces(
+			Structure.GenerationContext context,
+			Holder<StructureTemplatePool> startPool,
+			Optional<ResourceLocation> startJigsawName,
+			int maxDepth,
+			BlockPos pos,
+			boolean useExpansionHack,
+			Optional<Heightmap.Types> projectStartToHeightmap,
+			int maxDistanceFromCenter,
+			PoolAliasLookup aliasLookup,
+			DimensionPadding dimensionPadding,
+			LiquidSettings liquidSettings,
+			CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir
 	) {
-		if (cobblemon$canAnyStartElementPlace(generationContext, startPool, startPos)) {
+		Optional<Structure.GenerationStub> result = cir.getReturnValue();
+		if (result.isEmpty()) {
+			return;
+		}
+		BlockPos spawnPos = result.get().position();
+		boolean canPlace = cobblemon$canAnyStartElementPlace(context, startPool, spawnPos);
+
+		if (canPlace) {
 			return;
 		}
 
@@ -58,19 +70,22 @@ public class JigsawPlacementMixin {
 			Holder<StructureTemplatePool> startPool,
 			BlockPos startPos
 	) {
-		List<StructurePoolElement> elements = startPool.value().getShuffledTemplates(RandomSource.create(0L));
-		for (StructurePoolElement element : elements) {
+		for (StructurePoolElement element : startPool.value().templates) {
 			Optional<HeightRangeStructureProcessor> heightRangeProcessor = cobblemon$getHeightRangeProcessor(element);
+
 			if (heightRangeProcessor.isEmpty()) {
 				return true;
 			}
 
-			if (heightRangeProcessor.get().isValidPlacement(
+			HeightRangeStructureProcessor processor = heightRangeProcessor.get();
+			boolean valid = processor.isValidPlacement(
 					generationContext.chunkGenerator(),
 					generationContext.heightAccessor(),
 					generationContext.randomState(),
 					startPos
-			)) {
+			);
+
+			if (valid) {
 				return true;
 			}
 		}
@@ -94,4 +109,3 @@ public class JigsawPlacementMixin {
 		return Optional.empty();
 	}
 }
-
