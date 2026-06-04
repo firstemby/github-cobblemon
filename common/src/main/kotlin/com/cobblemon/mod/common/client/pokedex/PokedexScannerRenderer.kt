@@ -78,10 +78,6 @@ class PokedexScannerRenderer {
         val SCAN_RING_INNER = cobblemonResource("textures/gui/pokedex/scan/scan_ring_inner.png")
         val CAMERA_FRAME = cobblemonResource("textures/gui/pokedex/scan/camera_frame.png")
         const val PHOTO_CAPTURE_DEBUG_FRAME_ENABLED = true
-        const val PHOTO_CAPTURE_DEBUG_FRAME_WIDTH = CAMERA_FRAME_DIAMETER
-        const val PHOTO_CAPTURE_DEBUG_FRAME_HEIGHT = CAMERA_FRAME_DIAMETER
-        const val PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_X = 0
-        const val PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_Y = 0
         private val PHOTO_CAPTURE_DEBUG_FRAME_COLOR = 0xCC40FF80.toInt()
         private val PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR = 0xCCFFFFFF.toInt()
         private const val BLINK_SHUTTER_RGB = 0x001F1D1B
@@ -476,7 +472,7 @@ class PokedexScannerRenderer {
                 height = CAMERA_FRAME_DIAMETER,
                 alpha = opacity
             )
-            renderPhotoCaptureDebugFrame(graphics, centerX, centerY)
+            renderPhotoCaptureDebugFrame(graphics, screenWidth, screenHeight)
             drawScaledText(
                 context = graphics,
                 text = lang("ui.pokedex.scan.mode.capture_hint"),
@@ -497,22 +493,17 @@ class PokedexScannerRenderer {
         RenderSystem.disableBlend()
     }
 
-    private fun renderPhotoCaptureDebugFrame(graphics: GuiGraphics, centerX: Int, centerY: Int) {
+    private fun renderPhotoCaptureDebugFrame(graphics: GuiGraphics, screenWidth: Int, screenHeight: Int) {
         if (!PHOTO_CAPTURE_DEBUG_FRAME_ENABLED) return
 
-        val width = PHOTO_CAPTURE_DEBUG_FRAME_WIDTH.coerceAtLeast(2)
-        val height = PHOTO_CAPTURE_DEBUG_FRAME_HEIGHT.coerceAtLeast(2)
-        val frameCenterX = centerX + PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_X
-        val frameCenterY = centerY + PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_Y
-        val left = frameCenterX - (width / 2)
-        val top = frameCenterY - (height / 2)
-        val right = left + width
-        val bottom = top + height
+        val bounds = PokedexUsageContext.photoCaptureBoundsForGui(screenWidth, screenHeight)
+        val frameCenterX = bounds.centerX
+        val frameCenterY = bounds.centerY
 
-        graphics.fill(left, top, right, top + 1, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
-        graphics.fill(left, bottom - 1, right, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
-        graphics.fill(left, top, left + 1, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
-        graphics.fill(right - 1, top, right, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(bounds.left, bounds.top, bounds.right, bounds.top + 1, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(bounds.left, bounds.bottom - 1, bounds.right, bounds.bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(bounds.left, bounds.top, bounds.left + 1, bounds.bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(bounds.right - 1, bounds.top, bounds.right, bounds.bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
         graphics.fill(frameCenterX - 3, frameCenterY, frameCenterX + 4, frameCenterY + 1, PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR)
         graphics.fill(frameCenterX, frameCenterY - 3, frameCenterX + 1, frameCenterY + 4, PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR)
     }

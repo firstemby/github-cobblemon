@@ -66,6 +66,18 @@ import kotlin.math.sqrt
 import kotlin.math.tan
 
 class PokedexUsageContext {
+    data class PhotoCaptureBounds(
+        val left: Int,
+        val top: Int,
+        val width: Int,
+        val height: Int
+    ) {
+        val right: Int = left + width
+        val bottom: Int = top + height
+        val centerX: Int = left + (width / 2)
+        val centerY: Int = top + (height / 2)
+    }
+
     companion object {
         const val ZOOM_MAX_STEP = 9F
         const val ZOOM_TARGET_FOV = 10F // the FOV we get at max zoom (probably somewhat inaccurate, but irrelevant)
@@ -84,6 +96,20 @@ class PokedexUsageContext {
         private const val PHOTO_DEBUG_RAY_DURATION_MS = 10_000L
         private const val PHOTO_SCORE_MAX_SUBJECTS = 5
         private const val PHOTO_PERIMETER_OFFSET = 1.01
+        const val PHOTO_CAPTURE_FRAME_WIDTH = 158
+        const val PHOTO_CAPTURE_FRAME_HEIGHT = 158
+        const val PHOTO_CAPTURE_FRAME_OFFSET_X = 0
+        const val PHOTO_CAPTURE_FRAME_OFFSET_Y = 0
+
+        fun photoCaptureBoundsForGui(screenWidth: Int, screenHeight: Int): PhotoCaptureBounds {
+            val width = PHOTO_CAPTURE_FRAME_WIDTH.coerceIn(2, screenWidth.coerceAtLeast(2))
+            val height = PHOTO_CAPTURE_FRAME_HEIGHT.coerceIn(2, screenHeight.coerceAtLeast(2))
+            val centeredLeft = (screenWidth / 2) + PHOTO_CAPTURE_FRAME_OFFSET_X - (width / 2)
+            val centeredTop = (screenHeight / 2) + PHOTO_CAPTURE_FRAME_OFFSET_Y - (height / 2)
+            val left = centeredLeft.coerceIn(0, (screenWidth - width).coerceAtLeast(0))
+            val top = centeredTop.coerceIn(0, (screenHeight - height).coerceAtLeast(0))
+            return PhotoCaptureBounds(left, top, width, height)
+        }
     }
 
     enum class ScannerMode {
@@ -168,8 +194,10 @@ class PokedexUsageContext {
         val up: Vec3,
         val tanHalfHorizontal: Double,
         val tanHalfVertical: Double,
-        val squareScaleX: Double,
-        val squareScaleY: Double
+        val captureCenterX: Double,
+        val captureCenterY: Double,
+        val captureScaleX: Double,
+        val captureScaleY: Double
     )
 
     private data class PhotoRayHit(
@@ -526,7 +554,7 @@ class PokedexUsageContext {
 
         try {
             val targetSize = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
-            resized = resizeToSquare(image, targetSize)
+            resized = resizeToCaptureArea(image, targetSize)
             val player = Minecraft.getInstance().player
             if (player != null) {
                 captureDebugRays(player)
@@ -772,8 +800,8 @@ class PokedexUsageContext {
             val sampleX = sample.first.first
             val sampleY = sample.first.second
             val perimeter = sample.second
-            val boundedSampleX = sampleX * projection.squareScaleX
-            val boundedSampleY = sampleY * projection.squareScaleY
+            val boundedSampleX = projection.captureCenterX + (sampleX * projection.captureScaleX)
+            val boundedSampleY = projection.captureCenterY + (sampleY * projection.captureScaleY)
             val direction = projection.forward
                 .add(projection.right.scale(projection.tanHalfHorizontal * boundedSampleX))
                 .add(projection.up.scale(projection.tanHalfVertical * boundedSampleY))
@@ -790,8 +818,11 @@ class PokedexUsageContext {
     private fun buildPhotoProjection(player: LocalPlayer): PhotoProjection {
         val renderTarget = Minecraft.getInstance().mainRenderTarget
         val aspectRatio = (renderTarget.width.toDouble() / max(1, renderTarget.height).toDouble()).coerceIn(0.5, 4.0)
-        val squareScaleX = if (aspectRatio >= 1.0) 1.0 / aspectRatio else 1.0
-        val squareScaleY = if (aspectRatio >= 1.0) 1.0 else aspectRatio
+        val captureBounds = photoCaptureBoundsForImage(renderTarget.width, renderTarget.height)
+        val captureCenterX = (((captureBounds.left + (captureBounds.width / 2.0)) / renderTarget.width.toDouble()) * 2.0) - 1.0
+        val captureCenterY = 1.0 - (((captureBounds.top + (captureBounds.height / 2.0)) / renderTarget.height.toDouble()) * 2.0)
+        val captureScaleX = captureBounds.width.toDouble() / renderTarget.width.toDouble()
+        val captureScaleY = captureBounds.height.toDouble() / renderTarget.height.toDouble()
         val baseFov = Minecraft.getInstance().options.fov().get().toFloat().coerceIn(30F, 110F)
         val verticalFovRadians = Math.toRadians((baseFov * zoomModifier).coerceIn(10F, 170F).toDouble())
         val halfVerticalFov = verticalFovRadians * 0.5
@@ -813,8 +844,10 @@ class PokedexUsageContext {
             up = right.cross(forward).normalize(),
             tanHalfHorizontal = tan(halfHorizontalFov),
             tanHalfVertical = tan(halfVerticalFov),
-            squareScaleX = squareScaleX,
-            squareScaleY = squareScaleY
+            captureCenterX = captureCenterX,
+            captureCenterY = captureCenterY,
+            captureScaleX = captureScaleX,
+            captureScaleY = captureScaleY
         )
     }
 
@@ -1098,8 +1131,8 @@ class PokedexUsageContext {
 
             val projectedX = toCorner.dot(projection.right) / (depth * projection.tanHalfHorizontal)
             val projectedY = toCorner.dot(projection.up) / (depth * projection.tanHalfVertical)
-            val photoX = projectedX / projection.squareScaleX
-            val photoY = projectedY / projection.squareScaleY
+            val photoX = (projectedX - projection.captureCenterX) / projection.captureScaleX
+            val photoY = (projectedY - projection.captureCenterY) / projection.captureScaleY
             if (photoX < -1.0 || photoX > 1.0 || photoY < -1.0 || photoY > 1.0) {
                 return false
             }
@@ -1169,18 +1202,32 @@ class PokedexUsageContext {
         return name.lowercase(Locale.ROOT).substringAfterLast('.')
     }
 
-    private fun resizeToSquare(image: NativeImage, size: Int): NativeImage {
+    private fun photoCaptureBoundsForImage(sourceWidth: Int, sourceHeight: Int): PhotoCaptureBounds {
+        val window = Minecraft.getInstance().window
+        val guiWidth = window.guiScaledWidth.coerceAtLeast(1)
+        val guiHeight = window.guiScaledHeight.coerceAtLeast(1)
+        val guiBounds = photoCaptureBoundsForGui(guiWidth, guiHeight)
+        val scaleX = sourceWidth.toDouble() / guiWidth.toDouble()
+        val scaleY = sourceHeight.toDouble() / guiHeight.toDouble()
+        val width = (guiBounds.width * scaleX).roundToInt().coerceIn(1, sourceWidth.coerceAtLeast(1))
+        val height = (guiBounds.height * scaleY).roundToInt().coerceIn(1, sourceHeight.coerceAtLeast(1))
+        val centerX = (sourceWidth / 2.0) + (PHOTO_CAPTURE_FRAME_OFFSET_X * scaleX)
+        val centerY = (sourceHeight / 2.0) + (PHOTO_CAPTURE_FRAME_OFFSET_Y * scaleY)
+        val left = (centerX - (width / 2.0)).roundToInt().coerceIn(0, (sourceWidth - width).coerceAtLeast(0))
+        val top = (centerY - (height / 2.0)).roundToInt().coerceIn(0, (sourceHeight - height).coerceAtLeast(0))
+        return PhotoCaptureBounds(left, top, width, height)
+    }
+
+    private fun resizeToCaptureArea(image: NativeImage, size: Int): NativeImage {
         val sourceWidth = image.width
         val sourceHeight = image.height
-        val side = min(sourceWidth, sourceHeight)
-        val startX = (sourceWidth - side) / 2
-        val startY = (sourceHeight - side) / 2
+        val bounds = photoCaptureBoundsForImage(sourceWidth, sourceHeight)
 
         val resized = NativeImage(size, size, false)
         for (y in 0 until size) {
-            val sourceY = startY + ((y * side) / size)
+            val sourceY = bounds.top + ((y * bounds.height) / size)
             for (x in 0 until size) {
-                val sourceX = startX + ((x * side) / size)
+                val sourceX = bounds.left + ((x * bounds.width) / size)
                 resized.setPixelRGBA(x, y, image.getPixelRGBA(sourceX, sourceY))
             }
         }
