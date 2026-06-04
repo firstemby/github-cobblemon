@@ -43,7 +43,8 @@ object PokedexPrintedPhotoFactory {
                 detectedSpecies = metadata.detectedSpecies,
                 biome = metadata.biome,
                 dimension = metadata.dimension,
-                timeOfDayTicks = metadata.timeOfDayTicks
+                timeOfDayTicks = metadata.timeOfDayTicks,
+                qualityScore = metadata.qualityScore
             )
         )
         stack.set(DataComponents.CUSTOM_NAME, Component.translatable("item.cobblemon.printed_photo.named", metadata.index))

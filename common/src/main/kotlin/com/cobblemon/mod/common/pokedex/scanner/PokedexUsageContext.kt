@@ -14,15 +14,23 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
+import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoAnimationTypes
 import com.cobblemon.mod.common.client.pokedex.PokedexScannerRenderer
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.DeferredRenderer
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -49,9 +57,11 @@ import net.minecraft.world.phys.Vec3
 import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL40
 import java.util.LinkedHashSet
+import java.util.Locale
 import kotlin.math.exp
 import kotlin.math.atan
 import kotlin.math.ln
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlin.math.tan
 
@@ -72,6 +82,8 @@ class PokedexUsageContext {
         const val RENDER_UPDATES_PER_SECOND = (1/0.0175).toFloat() // How many times the render should update in a second
         private const val BASE_PHOTO_RAYCAST_COUNT = 6
         private const val PHOTO_DEBUG_RAY_DURATION_MS = 10_000L
+        private const val PHOTO_SCORE_MAX_SUBJECTS = 5
+        private const val PHOTO_PERIMETER_OFFSET = 1.01
     }
 
     enum class ScannerMode {
@@ -106,35 +118,96 @@ class PokedexUsageContext {
     private var shutterForceDrawNextFrame = false
     private var shutterAnimationStartedAt = 0L
     private var shutterAnimationDurationMs = 0L
-    private var capturedDebugRays: List<Pair<Vec3, Vec3>> = emptyList()
+    private var capturedDebugRays: List<CapturedDebugRay> = emptyList()
     private var capturedDebugRaysExpireAt: Long = 0L
 
     private data class PhotoCaptureMetadata(
         val detectedSpecies: List<String>,
         val biome: String,
         val dimension: String,
-        val timeOfDayTicks: Long
+        val timeOfDayTicks: Long,
+        val qualityScore: Int,
+        val qualitySubjects: List<PokedexPhotoSubjectQuality>
     ) {
         companion object {
             val EMPTY = PhotoCaptureMetadata(
                 detectedSpecies = emptyList(),
                 biome = "minecraft:unknown",
                 dimension = "minecraft:overworld",
-                timeOfDayTicks = 0L
+                timeOfDayTicks = 0L,
+                qualityScore = 0,
+                qualitySubjects = emptyList()
             )
         }
     }
 
     private data class RaycastCandidate(
+        val entity: Entity,
         val scannable: ScannableEntity,
+        val entityBox: AABB,
         val inflatedBox: AABB
     )
 
+    private data class PhotoRaySample(
+        val screenX: Double,
+        val screenY: Double,
+        val direction: Vec3,
+        val perimeter: Boolean = false
+    )
+
+    private data class CapturedDebugRay(
+        val start: Vec3,
+        val end: Vec3,
+        val perimeter: Boolean
+    )
+
+    private data class PhotoProjection(
+        val eyePos: Vec3,
+        val forward: Vec3,
+        val right: Vec3,
+        val up: Vec3,
+        val tanHalfHorizontal: Double,
+        val tanHalfVertical: Double,
+        val squareScaleX: Double,
+        val squareScaleY: Double
+    )
+
     private data class PhotoRayHit(
+        val entity: Entity,
         val scannable: ScannableEntity,
         val point: Vec3,
         val distance: Double
     )
+
+    private data class PhotoDetectedHit(
+        val entity: Entity,
+        val species: ResourceLocation,
+        val distance: Double
+    )
+
+    private class PhotoSubjectAccumulator(
+        val entity: Entity,
+        val species: ResourceLocation,
+        val poseScore: Int,
+        val animationMultiplier: Float,
+        val activeAnimations: List<String>,
+        val shiny: Boolean,
+        val shinyMultiplier: Float
+    ) {
+        var rayHits = 0
+        var perimeterHits = 0
+        var projectedInsidePhotoBounds = true
+        var sampleXSum = 0.0
+        var sampleYSum = 0.0
+        var distanceValueSum = 0.0
+
+        fun addInFrameHit(sample: PhotoRaySample, distanceValue: Double) {
+            rayHits += 1
+            sampleXSum += sample.screenX
+            sampleYSum += sample.screenY
+            distanceValueSum += distanceValue
+        }
+    }
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -467,6 +540,8 @@ class PokedexUsageContext {
                 biome = metadata.biome,
                 dimension = metadata.dimension,
                 timeOfDayTicks = metadata.timeOfDayTicks,
+                qualityScore = metadata.qualityScore,
+                qualitySubjects = metadata.qualitySubjects,
                 pngData = resized.asByteArray()
             ).sendToServer()
         } catch (e: Exception) {
@@ -485,7 +560,8 @@ class PokedexUsageContext {
         val player = Minecraft.getInstance().player ?: return
 
         if (metadata.detectedSpecies.isEmpty()) {
-            player.displayClientMessage(Component.literal("Photo scan detected: none"), false)
+            player.displayClientMessage(Component.literal("Photo scan detected: none (score ${metadata.qualityScore})"), false)
+            showPhotoScoringDebug(player, metadata)
             return
         }
 
@@ -500,22 +576,104 @@ class PokedexUsageContext {
         val overflow = speciesNames.size - shown.size
         val suffix = if (overflow > 0) ", +$overflow more" else ""
         player.displayClientMessage(
-            Component.literal("Photo scan detected (${speciesNames.size}): ${shown.joinToString(", ")}$suffix"),
+            Component.literal("Photo scan detected (${speciesNames.size}, score ${metadata.qualityScore}): ${shown.joinToString(", ")}$suffix"),
             false
         )
+        showPhotoScoringDebug(player, metadata)
+    }
+
+    private fun showPhotoScoringDebug(player: LocalPlayer, metadata: PhotoCaptureMetadata) {
+        player.displayClientMessage(Component.literal("[Photo Score Debug] client base score: ${metadata.qualityScore}/5000"), false)
+        if (metadata.qualitySubjects.isEmpty()) {
+            player.displayClientMessage(Component.literal("[Photo Score Debug] no in-frame Pokemon ray hits."), false)
+            return
+        }
+
+        metadata.qualitySubjects.forEachIndexed { index, subject ->
+            val role = if (subject.primarySubject) "PRIMARY" else "other #${index + 1}"
+            val rawCategoryScore = subject.sizeScore + subject.placementScore + subject.directionScore + subject.poseScore + subject.fullBodyScore
+            val animationText = if (subject.activeAnimations.isEmpty()) "none" else subject.activeAnimations.joinToString(", ")
+            val clippingText = if (subject.wholeBodyInFrame) {
+                "full body +${subject.fullBodyScore}"
+            } else {
+                "OUT OF FRAME: x${formatMultiplier(subject.clippingMultiplier)} (${subject.perimeterHits} perimeter hits)"
+            }
+            val boostText = listOfNotNull(
+                "animation x${formatMultiplier(subject.animationMultiplier)}",
+                if (subject.shiny) "shiny x${formatMultiplier(subject.shinyMultiplier)}" else null,
+                if (subject.otherPokemonScore > 0) "other Pokemon +${subject.otherPokemonScore}" else null
+            ).joinToString(", ")
+
+            player.displayClientMessage(
+                Component.literal(
+                    "[Photo Score Debug] $role ${subject.species}: score=${subject.subjectScore}, raw=$rawCategoryScore, " +
+                        "size=${subject.sizeScore}, placement=${subject.placementScore}, direction=${subject.directionScore}, " +
+                        "pose=${subject.poseScore}, center=${formatPercent(1F - subject.centerDistance)}, distance=${subject.distanceScore}, " +
+                        "$clippingText"
+                ),
+                false
+            )
+            player.displayClientMessage(
+                Component.literal(
+                    "[Photo Score Debug]   rays=${subject.rayHits}, coverage=${formatPercent(subject.rayCoverage)}, " +
+                        "boosts=[$boostText], animations=[$animationText]"
+                ),
+                false
+            )
+        }
+    }
+
+    private fun formatMultiplier(value: Float): String {
+        return String.format(Locale.ROOT, "%.2f", value)
+    }
+
+    private fun formatPercent(value: Float): String {
+        return String.format(Locale.ROOT, "%.1f%%", value * 100F)
     }
 
     private fun collectPhotoMetadata(player: LocalPlayer): PhotoCaptureMetadata {
         val level = player.level()
         val eyePos = player.getEyePosition(1.0F)
         val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
-        val rayDirections = computePhotoRayDirections(player)
+        val projection = buildPhotoProjection(player)
+        val raySamples = computePhotoRaySamples(player, projection)
+        val inFrameRayCount = raySamples.count { !it.perimeter }.coerceAtLeast(1)
         val candidates = collectRaycastCandidates(player, raycastDistance)
         val seenSpecies = LinkedHashSet<String>()
+        val subjectsByEntity = linkedMapOf<Int, PhotoSubjectAccumulator>()
 
-        rayDirections.forEach { direction ->
-            detectSpeciesAlongRay(player, eyePos, direction, raycastDistance, candidates)?.let { seenSpecies.add(it.toString()) }
+        raySamples.forEach { sample ->
+            val hit = detectPhotoHitAlongRay(player, eyePos, sample, raycastDistance, candidates) ?: return@forEach
+            val subject = subjectsByEntity.getOrPut(hit.entity.id) {
+                val activeAnimations = getActiveAnimationNames(hit.entity).toList()
+                val animationType = PokedexPhotoAnimationTypes.bestMatchFor(activeAnimations)
+                val shiny = (hit.entity as? PokemonEntity)?.pokemon?.shiny == true
+                PhotoSubjectAccumulator(
+                    entity = hit.entity,
+                    species = hit.species,
+                    poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 250,
+                    animationMultiplier = animationType?.multiplier?.coerceIn(1F, 1.5F) ?: 1F,
+                    activeAnimations = activeAnimations,
+                    shiny = shiny,
+                    shinyMultiplier = if (shiny) 1.15F else 1F
+                )
+            }.also { subject ->
+                subject.projectedInsidePhotoBounds = subject.projectedInsidePhotoBounds && isEntityInsidePhotoBounds(hit.entity, projection)
+            }
+
+            if (sample.perimeter) {
+                subject.perimeterHits += 1
+                return@forEach
+            }
+
+            seenSpecies.add(hit.species.toString())
+            subject.addInFrameHit(
+                sample = sample,
+                distanceValue = (1.0 - (hit.distance / raycastDistance).coerceIn(0.0, 1.0))
+            )
         }
+
+        val qualitySubjects = buildQualitySubjects(subjectsByEntity.values, inFrameRayCount)
 
         val biome = level.getBiome(player.blockPosition()).unwrapKey()
             .map { it.location().toString() }
@@ -525,25 +683,61 @@ class PokedexUsageContext {
             detectedSpecies = seenSpecies.toList(),
             biome = biome,
             dimension = level.dimension().location().toString(),
-            timeOfDayTicks = ((level.dayTime % 24000L) + 24000L) % 24000L
+            timeOfDayTicks = ((level.dayTime % 24000L) + 24000L) % 24000L,
+            qualityScore = calculatePhotoQualityScore(qualitySubjects),
+            qualitySubjects = qualitySubjects
         )
     }
 
     private fun buildPhotoRaySamples(): List<Pair<Double, Double>> {
         val density = Cobblemon.config.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
         val rayCount = BASE_PHOTO_RAYCAST_COUNT * (1 shl (density - 1))
-        val samples = ArrayList<Pair<Double, Double>>(rayCount)
+        val samples = ArrayList<Pair<Double, Double>>(rayCount * 2)
+        val baseSamples = ArrayList<Pair<Double, Double>>(rayCount)
+        val horizontalStep = 2.0 / rayCount.toDouble()
 
         repeat(rayCount) { index ->
             val horizontal = (((index + 0.5) / rayCount.toDouble()) * 2.0) - 1.0
             val vertical = (radicalInverseBase2(index + 1) * 2.0) - 1.0
-            samples += horizontal.coerceIn(-1.0, 1.0) to vertical.coerceIn(-1.0, 1.0)
+            baseSamples += horizontal.coerceIn(-1.0, 1.0) to vertical.coerceIn(-1.0, 1.0)
+        }
+
+        samples += baseSamples
+        baseSamples.forEachIndexed { index, (sampleX, sampleY) ->
+            val nextY = baseSamples[(index + 1) % baseSamples.size].second
+            val interstitialX = wrapPhotoSample(sampleX + (horizontalStep * 0.5))
+            val interstitialY = ((sampleY + nextY) * 0.5).coerceIn(-1.0, 1.0)
+            samples += interstitialX to interstitialY
         }
 
         if (samples.isNotEmpty()) {
             samples[0] = 0.0 to 0.0
         }
         return samples
+    }
+
+    private fun buildPhotoPerimeterRaySamples(): List<Pair<Double, Double>> {
+        val density = Cobblemon.config.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
+        val edgeSamples = (density * 10).coerceAtLeast(16)
+        val samples = ArrayList<Pair<Double, Double>>(edgeSamples * 4)
+
+        repeat(edgeSamples) { index ->
+            val position = if (edgeSamples == 1) 0.0 else -1.0 + (2.0 * index / (edgeSamples - 1).toDouble())
+            samples += position to -PHOTO_PERIMETER_OFFSET
+            samples += position to PHOTO_PERIMETER_OFFSET
+            samples += -PHOTO_PERIMETER_OFFSET to position
+            samples += PHOTO_PERIMETER_OFFSET to position
+        }
+
+        return samples.distinct()
+    }
+
+    private fun wrapPhotoSample(value: Double): Double {
+        return when {
+            value > 1.0 -> value - 2.0
+            value < -1.0 -> value + 2.0
+            else -> value
+        }.coerceIn(-1.0, 1.0)
     }
 
     private fun radicalInverseBase2(value: Int): Double {
@@ -563,16 +757,45 @@ class PokedexUsageContext {
     }
 
     private fun computePhotoRayDirections(player: LocalPlayer): List<Vec3> {
-        val samples = buildPhotoRaySamples()
+        return computePhotoRaySamples(player).map { it.direction }
+    }
+
+    private fun computePhotoRaySamples(player: LocalPlayer): List<PhotoRaySample> {
+        return computePhotoRaySamples(player, buildPhotoProjection(player))
+    }
+
+    private fun computePhotoRaySamples(player: LocalPlayer, projection: PhotoProjection): List<PhotoRaySample> {
+        val samples = buildPhotoRaySamples().map { (sampleX, sampleY) -> sampleX to sampleY to false } +
+            buildPhotoPerimeterRaySamples().map { (sampleX, sampleY) -> sampleX to sampleY to true }
+
+        return samples.map { sample ->
+            val sampleX = sample.first.first
+            val sampleY = sample.first.second
+            val perimeter = sample.second
+            val boundedSampleX = sampleX * projection.squareScaleX
+            val boundedSampleY = sampleY * projection.squareScaleY
+            val direction = projection.forward
+                .add(projection.right.scale(projection.tanHalfHorizontal * boundedSampleX))
+                .add(projection.up.scale(projection.tanHalfVertical * boundedSampleY))
+                .normalize()
+            PhotoRaySample(
+                screenX = sampleX,
+                screenY = sampleY,
+                direction = direction,
+                perimeter = perimeter
+            )
+        }
+    }
+
+    private fun buildPhotoProjection(player: LocalPlayer): PhotoProjection {
         val renderTarget = Minecraft.getInstance().mainRenderTarget
         val aspectRatio = (renderTarget.width.toDouble() / max(1, renderTarget.height).toDouble()).coerceIn(0.5, 4.0)
         val squareScaleX = if (aspectRatio >= 1.0) 1.0 / aspectRatio else 1.0
         val squareScaleY = if (aspectRatio >= 1.0) 1.0 else aspectRatio
-        val verticalFovRadians = Math.toRadians((ZOOM_BASE_FOV * zoomModifier).coerceIn(10F, 170F).toDouble())
+        val baseFov = Minecraft.getInstance().options.fov().get().toFloat().coerceIn(30F, 110F)
+        val verticalFovRadians = Math.toRadians((baseFov * zoomModifier).coerceIn(10F, 170F).toDouble())
         val halfVerticalFov = verticalFovRadians * 0.5
         val halfHorizontalFov = atan(tan(halfVerticalFov) * aspectRatio)
-        val tanHalfVertical = tan(halfVerticalFov)
-        val tanHalfHorizontal = tan(halfHorizontalFov)
 
         val forward = player.getViewVector(1.0F).normalize()
         val worldUp = Vec3(0.0, 1.0, 0.0)
@@ -582,23 +805,28 @@ class PokedexUsageContext {
             right = forward.cross(fallbackUp)
         }
         right = right.normalize()
-        val up = right.cross(forward).normalize()
 
-        return samples.map { (sampleX, sampleY) ->
-            val boundedSampleX = sampleX * squareScaleX
-            val boundedSampleY = sampleY * squareScaleY
-            forward
-                .add(right.scale(tanHalfHorizontal * boundedSampleX))
-                .add(up.scale(tanHalfVertical * boundedSampleY))
-                .normalize()
-        }
+        return PhotoProjection(
+            eyePos = player.getEyePosition(1.0F),
+            forward = forward,
+            right = right,
+            up = right.cross(forward).normalize(),
+            tanHalfHorizontal = tan(halfHorizontalFov),
+            tanHalfVertical = tan(halfVerticalFov),
+            squareScaleX = squareScaleX,
+            squareScaleY = squareScaleY
+        )
     }
 
     private fun captureDebugRays(player: LocalPlayer) {
         val eyePos = player.getEyePosition(1.0F)
         val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
-        capturedDebugRays = computePhotoRayDirections(player).map { direction ->
-            eyePos to eyePos.add(direction.scale(raycastDistance))
+        capturedDebugRays = computePhotoRaySamples(player).map { sample ->
+            CapturedDebugRay(
+                start = eyePos,
+                end = eyePos.add(sample.direction.scale(raycastDistance)),
+                perimeter = sample.perimeter
+            )
         }
         capturedDebugRaysExpireAt = System.currentTimeMillis() + PHOTO_DEBUG_RAY_DURATION_MS
     }
@@ -622,22 +850,24 @@ class PokedexUsageContext {
             val entry = poseStack.last()
             val pose = entry.pose()
 
-            debugRays.forEach { (start, end) ->
-                val dx = (end.x - start.x).toFloat()
-                val dy = (end.y - start.y).toFloat()
-                val dz = (end.z - start.z).toFloat()
+            debugRays.forEach { ray ->
+                val dx = (ray.end.x - ray.start.x).toFloat()
+                val dy = (ray.end.y - ray.start.y).toFloat()
+                val dz = (ray.end.z - ray.start.z).toFloat()
                 val length = sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat().coerceAtLeast(0.0001F)
                 val nx = dx / length
                 val ny = dy / length
                 val nz = dz / length
+                val startColor = if (ray.perimeter) intArrayOf(255, 235, 70, 220) else intArrayOf(70, 210, 255, 190)
+                val endColor = if (ray.perimeter) intArrayOf(255, 155, 35, 220) else intArrayOf(255, 110, 110, 190)
 
                 vertexBuffer
-                    .addVertex(pose, start.x.toFloat(), start.y.toFloat(), start.z.toFloat())
-                    .setColor(70, 210, 255, 190)
+                    .addVertex(pose, ray.start.x.toFloat(), ray.start.y.toFloat(), ray.start.z.toFloat())
+                    .setColor(startColor[0], startColor[1], startColor[2], startColor[3])
                     .setNormal(entry, nx, ny, nz)
                 vertexBuffer
-                    .addVertex(pose, end.x.toFloat(), end.y.toFloat(), end.z.toFloat())
-                    .setColor(255, 110, 110, 190)
+                    .addVertex(pose, ray.end.x.toFloat(), ray.end.y.toFloat(), ray.end.z.toFloat())
+                    .setColor(endColor[0], endColor[1], endColor[2], endColor[3])
                     .setNormal(entry, nx, ny, nz)
             }
 
@@ -660,7 +890,7 @@ class PokedexUsageContext {
         return player.level().getEntitiesOfClass(Entity::class.java, boundingBox) { it !== player && !it.isSpectator && it is ScannableEntity }
             .mapNotNull { entity ->
                 val scannable = entity as? ScannableEntity ?: return@mapNotNull null
-                RaycastCandidate(scannable = scannable, inflatedBox = inflateScannerHitbox(entity.boundingBox))
+                RaycastCandidate(entity = entity, scannable = scannable, entityBox = entity.boundingBox, inflatedBox = inflateScannerHitbox(entity.boundingBox))
             }
     }
 
@@ -686,24 +916,25 @@ class PokedexUsageContext {
         )
     }
 
-    private fun detectSpeciesAlongRay(
+    private fun detectPhotoHitAlongRay(
         player: LocalPlayer,
         eyePos: Vec3,
-        direction: Vec3,
+        sample: PhotoRaySample,
         maxDistance: Double,
         candidates: List<RaycastCandidate>
-    ): ResourceLocation? {
+    ): PhotoDetectedHit? {
         if (candidates.isEmpty()) return null
 
-        val rayEnd = eyePos.add(direction.scale(maxDistance))
+        val rayEnd = eyePos.add(sample.direction.scale(maxDistance))
         val hits = candidates.asSequence().mapNotNull { candidate ->
-            val intersection = candidate.inflatedBox.clip(eyePos, rayEnd)
+            val hitBox = if (sample.perimeter) candidate.entityBox else candidate.inflatedBox
+            val intersection = hitBox.clip(eyePos, rayEnd)
             if (intersection.isEmpty) {
                 return@mapNotNull null
             }
 
             val point = intersection.get()
-            PhotoRayHit(candidate.scannable, point, eyePos.distanceTo(point))
+            PhotoRayHit(candidate.entity, candidate.scannable, point, eyePos.distanceTo(point))
         }.sortedBy { it.distance }
 
         for (hit in hits) {
@@ -727,11 +958,215 @@ class PokedexUsageContext {
 
             val species = hit.scannable.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier
             if (species != null) {
-                return species
+                return PhotoDetectedHit(hit.entity, species, hit.distance)
             }
         }
 
         return null
+    }
+
+    private fun buildQualitySubjects(
+        subjects: Collection<PhotoSubjectAccumulator>,
+        inFrameRayCount: Int
+    ): List<PokedexPhotoSubjectQuality> {
+        val scoredSubjects = subjects
+            .asSequence()
+            .filter { it.rayHits > 0 }
+            .map { subject -> buildSubjectQuality(subject, inFrameRayCount) }
+            .toList()
+        val primary = scoredSubjects.minWithOrNull(
+            compareBy<PokedexPhotoSubjectQuality> { it.centerDistance }
+                .thenByDescending { it.distanceScore }
+                .thenByDescending { it.subjectScore }
+        ) ?: return emptyList()
+        val otherPokemonBonus = calculateOtherPokemonBonus(primary, scoredSubjects)
+        val primaryScore = ((primary.subjectScore + otherPokemonBonus) *
+            primary.shinyMultiplier *
+            primary.animationMultiplier
+        ).roundToInt().coerceIn(0, 5000)
+
+        return scoredSubjects.map { subject ->
+            if (subject === primary) {
+                subject.copy(
+                    primarySubject = true,
+                    subjectScore = primaryScore,
+                    otherPokemonScore = otherPokemonBonus
+                )
+            } else {
+                subject.copy(
+                    primarySubject = false,
+                    subjectScore = calculateSecondaryPokemonBonus(subject)
+                )
+            }
+        }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
+    }
+
+    private fun buildSubjectQuality(subject: PhotoSubjectAccumulator, inFrameRayCount: Int): PokedexPhotoSubjectQuality {
+        val rayCoverage = (subject.rayHits.toDouble() / inFrameRayCount.toDouble()).coerceIn(0.0, 1.0)
+        val centroidX = subject.sampleXSum / subject.rayHits
+        val centroidY = subject.sampleYSum / subject.rayHits
+        val centerDistance = calculateCenterDistance(centroidX, centroidY)
+        val distanceScore = calculateDistanceScore(subject.distanceValueSum / subject.rayHits)
+        val wholeBodyInFrame = subject.perimeterHits == 0
+        val sizeScore = calculateSizeScore(rayCoverage, wholeBodyInFrame)
+        val placementScore = calculatePlacementScore(centerDistance)
+        val directionScore = calculateDirectionScore(subject.entity)
+        val fullBodyScore = if (wholeBodyInFrame) 200 else 0
+        val clippingMultiplier = if (wholeBodyInFrame) 1.0 else 0.55
+        val subjectScore = ((sizeScore + placementScore + directionScore + subject.poseScore + fullBodyScore) * clippingMultiplier)
+            .roundToInt()
+            .coerceIn(0, 5000)
+
+        return PokedexPhotoSubjectQuality(
+            species = subject.species.toString(),
+            subjectScore = subjectScore,
+            sizeScore = sizeScore,
+            placementScore = placementScore,
+            centerDistance = centerDistance.toFloat(),
+            distanceScore = distanceScore,
+            directionScore = directionScore,
+            poseScore = subject.poseScore,
+            fullBodyScore = fullBodyScore,
+            rayHits = subject.rayHits,
+            rayCoverage = rayCoverage.toFloat(),
+            perimeterHits = subject.perimeterHits,
+            wholeBodyInFrame = wholeBodyInFrame,
+            clippingMultiplier = clippingMultiplier.toFloat(),
+            activeAnimations = subject.activeAnimations,
+            shiny = subject.shiny,
+            shinyMultiplier = subject.shinyMultiplier,
+            animationMultiplier = subject.animationMultiplier
+        )
+    }
+
+    private fun calculatePhotoQualityScore(subjects: List<PokedexPhotoSubjectQuality>): Int {
+        return subjects.firstOrNull { it.primarySubject }?.subjectScore ?: 0
+    }
+
+    private fun calculateSizeScore(rayCoverage: Double, wholeBodyInFrame: Boolean): Int {
+        val normalizedCoverage = (rayCoverage / 0.5).coerceIn(0.0, 1.0)
+        val coverageFactor = Math.pow(normalizedCoverage, 2.4)
+        val tooLargeFactor = if (rayCoverage <= 0.55 || wholeBodyInFrame) {
+            1.0
+        } else {
+            (1.0 - ((rayCoverage - 0.55) / 0.35 * 0.2)).coerceIn(0.8, 1.0)
+        }
+        return (3000.0 * coverageFactor * tooLargeFactor)
+            .roundToInt()
+            .coerceIn(0, 3000)
+    }
+
+    private fun calculateCenterDistance(centroidX: Double, centroidY: Double): Double {
+        return (sqrt((centroidX * centroidX) + (centroidY * centroidY)) / sqrt(2.0)).coerceIn(0.0, 1.0)
+    }
+
+    private fun calculatePlacementScore(centerDistance: Double): Int {
+        val placement = (1.0 - centerDistance).coerceIn(0.0, 1.0)
+        return (1000.0 * Math.pow(placement, 2.2)).roundToInt().coerceIn(0, 1000)
+    }
+
+    private fun calculateDistanceScore(distanceValue: Double): Int {
+        return (1000.0 * distanceValue.coerceIn(0.0, 1.0)).roundToInt().coerceIn(0, 1000)
+    }
+
+    private fun calculateDirectionScore(entity: Entity): Int {
+        val player = Minecraft.getInstance().player ?: return 0
+        val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
+        val look = entity.lookAngle.normalize()
+        if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return 0
+        val facing = ((look.dot(toPlayer) + 0.2) / 1.2).coerceIn(0.0, 1.0)
+        return (900.0 * facing * facing).roundToInt().coerceIn(0, 900)
+    }
+
+    private fun isEntityInsidePhotoBounds(entity: Entity, projection: PhotoProjection): Boolean {
+        val box = entity.boundingBox.inflate(0.01)
+        val corners = arrayOf(
+            Vec3(box.minX, box.minY, box.minZ),
+            Vec3(box.minX, box.minY, box.maxZ),
+            Vec3(box.minX, box.maxY, box.minZ),
+            Vec3(box.minX, box.maxY, box.maxZ),
+            Vec3(box.maxX, box.minY, box.minZ),
+            Vec3(box.maxX, box.minY, box.maxZ),
+            Vec3(box.maxX, box.maxY, box.minZ),
+            Vec3(box.maxX, box.maxY, box.maxZ)
+        )
+
+        for (corner in corners) {
+            val toCorner = corner.subtract(projection.eyePos)
+            val depth = toCorner.dot(projection.forward)
+            if (depth <= 0.05) return false
+
+            val projectedX = toCorner.dot(projection.right) / (depth * projection.tanHalfHorizontal)
+            val projectedY = toCorner.dot(projection.up) / (depth * projection.tanHalfVertical)
+            val photoX = projectedX / projection.squareScaleX
+            val photoY = projectedY / projection.squareScaleY
+            if (photoX < -1.0 || photoX > 1.0 || photoY < -1.0 || photoY > 1.0) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun calculateOtherPokemonBonus(
+        primary: PokedexPhotoSubjectQuality,
+        subjects: List<PokedexPhotoSubjectQuality>
+    ): Int {
+        val rawBonus = subjects
+            .asSequence()
+            .filter { it !== primary }
+            .sumOf(::calculateSecondaryPokemonBonus)
+        val cap = min(500, (primary.subjectScore * 0.1).roundToInt())
+        return rawBonus.coerceIn(0, cap)
+    }
+
+    private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
+        val visibility = (subject.rayCoverage / 0.12F).coerceIn(0F, 1F)
+        val placement = (subject.placementScore / 1000F).coerceIn(0F, 1F)
+        val body = if (subject.wholeBodyInFrame) 1F else 0.5F
+        return (150F * visibility * placement * body).roundToInt().coerceIn(0, 150)
+    }
+
+    private fun isLookingAtPlayer(entity: Entity, player: LocalPlayer): Boolean {
+        val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
+        val look = entity.lookAngle.normalize()
+        if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return false
+        return look.dot(toPlayer) >= 0.85
+    }
+
+    private fun getActiveAnimationNames(entity: Entity): Set<String> {
+        val delegate = (entity as? PokemonEntity)?.delegate as? PokemonClientDelegate ?: return emptySet()
+        val names = linkedSetOf<String>()
+        val currentPose = delegate.currentPose
+        if (currentPose != null) {
+            names += normalizeAnimationName(currentPose)
+            delegate.currentModel
+                ?.poses
+                ?.get(currentPose)
+                ?.animations
+                ?.filterIsInstance<BedrockPoseAnimation>()
+                ?.map { it.animation.name }
+                ?.mapTo(names, ::normalizeAnimationName)
+        }
+
+        (listOfNotNull(delegate.primaryAnimation) + delegate.allActiveAnimations)
+            .mapNotNull(::getBedrockAnimationName)
+            .map(::normalizeAnimationName)
+            .filterTo(names) { it.isNotBlank() }
+
+        return names
+    }
+
+    private fun getBedrockAnimationName(animation: ActiveAnimation): String? {
+        return when (animation) {
+            is PrimaryAnimation -> getBedrockAnimationName(animation.animation)
+            is BedrockActiveAnimation -> animation.animation.name
+            else -> null
+        }
+    }
+
+    private fun normalizeAnimationName(name: String): String {
+        return name.lowercase(Locale.ROOT).substringAfterLast('.')
     }
 
     private fun resizeToSquare(image: NativeImage, size: Int): NativeImage {

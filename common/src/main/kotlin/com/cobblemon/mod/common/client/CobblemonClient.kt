@@ -34,6 +34,7 @@ import com.cobblemon.mod.common.client.gui.photoprinter.PhotoPrinterScreen
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
+import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoAnimationTypes
 import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoClientStore
 import com.cobblemon.mod.common.client.pokedex.photo.PrintedPhotoAssetClientStore
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
@@ -161,6 +162,7 @@ object CobblemonClient {
         LOGGER.info("Initializing Cobblemon client")
         this.implementation = implementation
         Cobblemon.dataProvider.register(PokedexPages, reloadable = true)
+        Cobblemon.dataProvider.register(PokedexPhotoAnimationTypes, reloadable = true)
 
         PlatformEvents.CLIENT_PLAYER_LOGIN.subscribe { onLogin() }
         PlatformEvents.CLIENT_PLAYER_LOGOUT.subscribe { onLogout() }

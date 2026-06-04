@@ -194,6 +194,7 @@ class PhotoGalleryPokedexPage(
         }
 
         selectedPhotoId?.let { selectedId ->
+            val selectedPhoto = photos.find { it.id == selectedId }
             val texture = photoStore.getTexture(selectedId)
             if (texture != null) {
                 val previewX = x + PREVIEW_OFFSET_X
@@ -206,6 +207,17 @@ class PhotoGalleryPokedexPage(
                     y = previewY,
                     width = PREVIEW_SIZE,
                     height = PREVIEW_SIZE
+                )
+            }
+            if (selectedPhoto != null) {
+                drawScaledText(
+                    context = context,
+                    font = CobblemonResources.DEFAULT_LARGE,
+                    text = lang("ui.pokedex.gallery.quality_score", selectedPhoto.qualityScore),
+                    x = x + PREVIEW_OFFSET_X + (PREVIEW_SIZE / 2),
+                    y = y + PREVIEW_OFFSET_Y + PREVIEW_SIZE + 8,
+                    shadow = true,
+                    centered = true
                 )
             }
         }

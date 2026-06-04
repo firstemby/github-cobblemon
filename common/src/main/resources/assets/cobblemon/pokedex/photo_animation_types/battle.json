@@ -1,0 +1,19 @@
+{
+  "priority": 80,
+  "poseScore": 750,
+  "multiplier": 1.35,
+  "match": {
+    "contains_any": [
+      "physical",
+      "special",
+      "status",
+      "battle_quirk",
+      "quirk_battle"
+    ],
+    "not_contains": [
+      "sleep",
+      "cry",
+      "faint"
+    ]
+  }
+}

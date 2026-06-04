@@ -27,7 +27,8 @@ data class PrintedPhotoComponent(
     val detectedSpecies: List<String> = emptyList(),
     val biome: String = "minecraft:unknown",
     val dimension: String = "minecraft:overworld",
-    val timeOfDayTicks: Long = 0L
+    val timeOfDayTicks: Long = 0L,
+    val qualityScore: Int = 0
 ) {
     companion object {
         private val UUID_CODEC: Codec<UUID> = Codec.STRING.xmap(UUID::fromString, UUID::toString)
@@ -43,7 +44,8 @@ data class PrintedPhotoComponent(
                 Codec.list(Codec.STRING).optionalFieldOf("detected_species", emptyList()).forGetter { it.detectedSpecies },
                 Codec.STRING.optionalFieldOf("biome", "minecraft:unknown").forGetter { it.biome },
                 Codec.STRING.optionalFieldOf("dimension", "minecraft:overworld").forGetter { it.dimension },
-                Codec.LONG.optionalFieldOf("time_of_day_ticks", 0L).forGetter { it.timeOfDayTicks }
+                Codec.LONG.optionalFieldOf("time_of_day_ticks", 0L).forGetter { it.timeOfDayTicks },
+                Codec.intRange(0, 5000).fieldOf("quality_score").forGetter { it.qualityScore }
             ).apply(instance, ::PrintedPhotoComponent)
         }
 

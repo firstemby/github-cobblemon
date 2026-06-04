@@ -1,0 +1,13 @@
+{
+  "priority": 70,
+  "poseScore": 700,
+  "multiplier": 1.15,
+  "match": {
+    "contains_any": [
+      "cry"
+    ],
+    "not_contains": [
+      "sleep"
+    ]
+  }
+}

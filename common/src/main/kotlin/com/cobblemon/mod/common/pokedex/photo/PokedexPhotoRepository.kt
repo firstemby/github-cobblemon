@@ -100,7 +100,11 @@ object PokedexPhotoRepository {
         detectedSpecies: List<String> = emptyList(),
         biome: String = "minecraft:unknown",
         dimension: String = "minecraft:overworld",
-        timeOfDayTicks: Long = 0L
+        timeOfDayTicks: Long = 0L,
+        qualityScore: Int = 0,
+        qualityBaseScore: Int = qualityScore,
+        qualitySpeciesMultiplier: Float = 1F,
+        qualitySubjects: List<PokedexPhotoSubjectQuality> = emptyList()
     ): SaveResult {
         synchronized(lock) {
             val root = rootPath ?: return SaveResult(success = false, errorMessage = "Photo storage is unavailable.")
@@ -150,7 +154,11 @@ object PokedexPhotoRepository {
                 detectedSpecies = detectedSpecies.distinct(),
                 biome = biome,
                 dimension = dimension,
-                timeOfDayTicks = timeOfDayTicks.coerceIn(0L, 23999L)
+                timeOfDayTicks = timeOfDayTicks.coerceIn(0L, 23999L),
+                qualityScore = qualityScore.coerceIn(0, 5000),
+                qualityBaseScore = qualityBaseScore.coerceIn(0, 5000),
+                qualitySpeciesMultiplier = qualitySpeciesMultiplier.coerceAtLeast(0F),
+                qualitySubjects = qualitySubjects
             )
 
             nextIndexByOwner[owner] = nextIndex + 1
@@ -315,10 +323,14 @@ object PokedexPhotoRepository {
                     height = it.height,
                     createdAt = it.createdAt,
                     dataSize = it.dataSize,
-                    detectedSpecies = it.detectedSpecies,
+                    detectedSpecies = it.detectedSpecies.orEmpty(),
                     biome = it.biome,
                     dimension = it.dimension,
                     timeOfDayTicks = it.timeOfDayTicks,
+                    qualityScore = it.qualityScore,
+                    qualityBaseScore = it.qualityBaseScore,
+                    qualitySpeciesMultiplier = it.qualitySpeciesMultiplier,
+                    qualitySubjects = sanitizeQualitySubjects(it.qualitySubjects),
                     blobHash = photoToBlobHash[it.id] ?: ""
                 )
             },
@@ -414,7 +426,11 @@ object PokedexPhotoRepository {
                 detectedSpecies = record.detectedSpecies ?: emptyList(),
                 biome = record.biome ?: "minecraft:unknown",
                 dimension = record.dimension ?: "minecraft:overworld",
-                timeOfDayTicks = record.timeOfDayTicks ?: 0L
+                timeOfDayTicks = record.timeOfDayTicks ?: 0L,
+                qualityScore = record.qualityScore,
+                qualityBaseScore = record.qualityBaseScore,
+                qualitySpeciesMultiplier = record.qualitySpeciesMultiplier,
+                qualitySubjects = sanitizeQualitySubjects(record.qualitySubjects)
             )
             photosById[metadata.id] = metadata
             photosByOwner.getOrPut(ownerUuid) { mutableListOf() }.add(metadata)
@@ -441,6 +457,12 @@ object PokedexPhotoRepository {
         }
     }
 
+    private fun sanitizeQualitySubjects(subjects: List<PokedexPhotoSubjectQuality>?): List<PokedexPhotoSubjectQuality> {
+        return subjects.orEmpty().map { subject ->
+            subject.copy(activeAnimations = subject.activeAnimations.orEmpty())
+        }
+    }
+
     // Fields are nullable because Gson's reflection-based deserialization bypasses Kotlin default values
     // — an older index.json written without blob storage won't have the "blobs" key at all.
     private data class IndexFile(
@@ -461,6 +483,10 @@ object PokedexPhotoRepository {
         @SerializedName("biome") val biome: String? = null,
         @SerializedName("dimension") val dimension: String? = null,
         @SerializedName("time_of_day_ticks") val timeOfDayTicks: Long? = null,
+        @SerializedName("quality_score") val qualityScore: Int,
+        @SerializedName("quality_base_score") val qualityBaseScore: Int,
+        @SerializedName("quality_species_multiplier") val qualitySpeciesMultiplier: Float,
+        @SerializedName("quality_subjects") val qualitySubjects: List<PokedexPhotoSubjectQuality>,
         // Nullable because Gson's reflection-based deserialization bypasses Kotlin default values;
         // older indexes written before blob storage simply lack this field.
         @SerializedName("blob_hash") val blobHash: String? = null

@@ -61,7 +61,7 @@ class PokedexScannerRenderer {
 
         val SCAN_RING_OUTER_DIAMETER = 116
         val SCAN_RING_INNER_DIAMETER = 84
-        val CAMERA_FRAME_DIAMETER = 158
+        const val CAMERA_FRAME_DIAMETER = 158
 
         val SCAN_SCREEN = cobblemonResource("textures/gui/pokedex/pokedex_screen_scan.png")
         val CAMERA_SCREEN = cobblemonResource("textures/gui/pokedex/pokedex_screen_search_overlay.png")
@@ -77,6 +77,13 @@ class PokedexScannerRenderer {
         val SCAN_RING_MIDDLE = cobblemonResource("textures/gui/pokedex/scan/scan_ring_middle.png")
         val SCAN_RING_INNER = cobblemonResource("textures/gui/pokedex/scan/scan_ring_inner.png")
         val CAMERA_FRAME = cobblemonResource("textures/gui/pokedex/scan/camera_frame.png")
+        const val PHOTO_CAPTURE_DEBUG_FRAME_ENABLED = true
+        const val PHOTO_CAPTURE_DEBUG_FRAME_WIDTH = CAMERA_FRAME_DIAMETER
+        const val PHOTO_CAPTURE_DEBUG_FRAME_HEIGHT = CAMERA_FRAME_DIAMETER
+        const val PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_X = 0
+        const val PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_Y = 0
+        private val PHOTO_CAPTURE_DEBUG_FRAME_COLOR = 0xCC40FF80.toInt()
+        private val PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR = 0xCCFFFFFF.toInt()
         private const val BLINK_SHUTTER_RGB = 0x001F1D1B
         private const val BLINK_SHUTTER_MAX_ALPHA = 245
         private const val BLINK_SHUTTER_CENTER_OVERLAP = 2
@@ -469,6 +476,7 @@ class PokedexScannerRenderer {
                 height = CAMERA_FRAME_DIAMETER,
                 alpha = opacity
             )
+            renderPhotoCaptureDebugFrame(graphics, centerX, centerY)
             drawScaledText(
                 context = graphics,
                 text = lang("ui.pokedex.scan.mode.capture_hint"),
@@ -487,6 +495,26 @@ class PokedexScannerRenderer {
         }
 
         RenderSystem.disableBlend()
+    }
+
+    private fun renderPhotoCaptureDebugFrame(graphics: GuiGraphics, centerX: Int, centerY: Int) {
+        if (!PHOTO_CAPTURE_DEBUG_FRAME_ENABLED) return
+
+        val width = PHOTO_CAPTURE_DEBUG_FRAME_WIDTH.coerceAtLeast(2)
+        val height = PHOTO_CAPTURE_DEBUG_FRAME_HEIGHT.coerceAtLeast(2)
+        val frameCenterX = centerX + PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_X
+        val frameCenterY = centerY + PHOTO_CAPTURE_DEBUG_FRAME_OFFSET_Y
+        val left = frameCenterX - (width / 2)
+        val top = frameCenterY - (height / 2)
+        val right = left + width
+        val bottom = top + height
+
+        graphics.fill(left, top, right, top + 1, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(left, bottom - 1, right, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(left, top, left + 1, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(right - 1, top, right, bottom, PHOTO_CAPTURE_DEBUG_FRAME_COLOR)
+        graphics.fill(frameCenterX - 3, frameCenterY, frameCenterX + 4, frameCenterY + 1, PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR)
+        graphics.fill(frameCenterX, frameCenterY - 3, frameCenterX + 1, frameCenterY + 4, PHOTO_CAPTURE_DEBUG_FRAME_CENTER_COLOR)
     }
 
     private fun renderBlinkShutter(graphics: GuiGraphics, screenWidth: Int, screenHeight: Int, closure: Float) {

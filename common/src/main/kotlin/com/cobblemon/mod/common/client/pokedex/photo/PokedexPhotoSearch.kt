@@ -40,6 +40,8 @@ object PokedexPhotoSearch {
 
         haystacks += normalize(photo.id)
         haystacks += normalize(photo.index.toString())
+        haystacks += normalize(photo.qualityScore.toString())
+        haystacks += normalize("quality ${photo.qualityScore}")
 
         addResourceIdTerms(haystacks, photo.biome)
         addResourceIdTerms(haystacks, photo.dimension)

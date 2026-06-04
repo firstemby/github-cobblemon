@@ -58,6 +58,7 @@ class PrintedPhotoItem(properties: Item.Properties) : Item(properties) {
 
         val printedPhoto = PrintedPhotoComponent.get(stack) ?: return
         tooltipComponents.add(Component.translatable("item.cobblemon.printed_photo.photo_id", printedPhoto.photoId))
+        tooltipComponents.add(Component.translatable("item.cobblemon.printed_photo.quality_score", printedPhoto.qualityScore))
         tooltipComponents.add(Component.literal("Size: ${printedPhoto.printSize}x${printedPhoto.printSize}"))
     }
 

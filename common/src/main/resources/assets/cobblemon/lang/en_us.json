@@ -95,6 +95,7 @@
   "item.cobblemon.pokedex_yellow": "Pokédex",
   "item.cobblemon.printed_photo": "Printed Photo",
   "item.cobblemon.printed_photo.photo_id": "Photo ID: %s",
+  "item.cobblemon.printed_photo.quality_score": "Quality: %s",
   "item.cobblemon.printed_photo.named": "Printed Photo #%s",
 
   "item.cobblemon.npc_editor": "NPC's Trainer Card",
@@ -9581,6 +9582,7 @@
   "cobblemon.ui.pokedex.gallery.empty": "No Pokedex photos yet.",
   "cobblemon.ui.pokedex.gallery.empty_hint": "Use scan mode and click to snap.",
   "cobblemon.ui.pokedex.gallery.no_match": "No photos match that filter.",
+  "cobblemon.ui.pokedex.gallery.quality_score": "Quality: %s",
   "cobblemon.ui.pokedex.gallery.filter_hint": "Use commas to combine filters (species, biome, dimension, time).",
   "cobblemon.ui.pokedex.gallery.select_hint": "Left-click a thumbnail to select and preview.",
   "cobblemon.ui.pokedex.gallery.delete_hint": "Right-click a thumbnail to delete it from server storage.",

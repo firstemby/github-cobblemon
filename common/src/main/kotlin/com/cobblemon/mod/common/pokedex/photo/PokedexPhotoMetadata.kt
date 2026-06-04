@@ -21,6 +21,34 @@ data class PokedexPhotoMetadata(
     val detectedSpecies: List<String> = emptyList(),
     val biome: String = "minecraft:unknown",
     val dimension: String = "minecraft:overworld",
-    val timeOfDayTicks: Long = 0L
+    val timeOfDayTicks: Long = 0L,
+    val qualityScore: Int = 0,
+    val qualityBaseScore: Int = 0,
+    val qualitySpeciesMultiplier: Float = 1F,
+    val qualitySubjects: List<PokedexPhotoSubjectQuality> = emptyList()
+)
+
+data class PokedexPhotoSubjectQuality(
+    val species: String,
+    val primarySubject: Boolean = false,
+    val subjectScore: Int = 0,
+    val sizeScore: Int = 0,
+    val placementScore: Int = 0,
+    val centerDistance: Float = 1F,
+    val distanceScore: Int = 0,
+    val directionScore: Int = 0,
+    val poseScore: Int = 0,
+    val fullBodyScore: Int = 0,
+    val otherPokemonScore: Int = 0,
+    val rayHits: Int = 0,
+    val rayCoverage: Float = 0F,
+    val perimeterHits: Int = 0,
+    val wholeBodyInFrame: Boolean = true,
+    val clippingMultiplier: Float = 1F,
+    val activeAnimations: List<String> = emptyList(),
+    val shiny: Boolean = false,
+    val shinyMultiplier: Float = 1F,
+    val animationMultiplier: Float = 1F,
+    val rarityMultiplier: Float = 1F
 )
 

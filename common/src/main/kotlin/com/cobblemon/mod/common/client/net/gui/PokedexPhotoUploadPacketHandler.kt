@@ -13,7 +13,9 @@ import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadResultPacket
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoQuality
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -51,6 +53,39 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         val safeBiome = ResourceLocation.tryParse(packet.biome)?.toString() ?: "minecraft:unknown"
         val safeDimension = ResourceLocation.tryParse(packet.dimension)?.toString() ?: "minecraft:overworld"
         val safeTimeOfDayTicks = packet.timeOfDayTicks.coerceIn(0L, 23999L)
+        val safeQuality = PokedexPhotoQuality.applySpeciesMultiplier(packet.qualityScore, detectedSpecies)
+        val safeSubjects = packet.qualitySubjects
+            .asSequence()
+            .mapNotNull { subject ->
+                val speciesId = ResourceLocation.tryParse(subject.species) ?: return@mapNotNull null
+                val species = speciesId.toString()
+                if (species !in detectedSpecies) return@mapNotNull null
+                PokedexPhotoSubjectQuality(
+                    species = species,
+                    primarySubject = subject.primarySubject,
+                    subjectScore = subject.subjectScore.coerceIn(0, 5000),
+                    sizeScore = subject.sizeScore.coerceIn(0, 3000),
+                    placementScore = subject.placementScore.coerceIn(0, 1000),
+                    centerDistance = subject.centerDistance.coerceIn(0F, 1F),
+                    distanceScore = subject.distanceScore.coerceIn(0, 1000),
+                    directionScore = subject.directionScore.coerceIn(0, 900),
+                    poseScore = subject.poseScore.coerceIn(0, 800),
+                    fullBodyScore = subject.fullBodyScore.coerceIn(0, 200),
+                    otherPokemonScore = subject.otherPokemonScore.coerceIn(0, 500),
+                    rayHits = subject.rayHits.coerceIn(0, 4096),
+                    rayCoverage = subject.rayCoverage.coerceIn(0F, 1F),
+                    perimeterHits = subject.perimeterHits.coerceIn(0, 4096),
+                    wholeBodyInFrame = subject.wholeBodyInFrame,
+                    clippingMultiplier = subject.clippingMultiplier.coerceIn(0F, 1F),
+                    activeAnimations = subject.activeAnimations.take(16),
+                    shiny = subject.shiny,
+                    shinyMultiplier = subject.shinyMultiplier.coerceIn(1F, 1.25F),
+                    animationMultiplier = subject.animationMultiplier.coerceIn(1F, 1.5F),
+                    rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(speciesId)
+                )
+            }
+            .take(64)
+            .toList()
 
         val result = PokedexPhotoRepository.saveFromPng(
             owner = player.uuid,
@@ -58,11 +93,18 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             detectedSpecies = detectedSpecies,
             biome = safeBiome,
             dimension = safeDimension,
-            timeOfDayTicks = safeTimeOfDayTicks
+            timeOfDayTicks = safeTimeOfDayTicks,
+            qualityScore = safeQuality.score,
+            qualityBaseScore = safeQuality.baseScore,
+            qualitySpeciesMultiplier = safeQuality.speciesMultiplier,
+            qualitySubjects = safeSubjects
         )
         if (result.success && result.photo != null) {
             val photoId = result.photo.id
-            PokedexPhotoUploadResultPacket(true, "Saved Pokedex scan photo: $photoId").sendToPlayer(player)
+            PokedexPhotoUploadResultPacket(
+                true,
+                "Saved Pokedex scan photo: $photoId | Score ${result.photo.qualityScore}/5000 (base ${result.photo.qualityBaseScore}, rarity x${"%.2f".format(result.photo.qualitySpeciesMultiplier)})"
+            ).sendToPlayer(player)
             PokedexPhotoNetworkUtil.sendGallery(player)
         } else {
             val message = result.errorMessage ?: "Unknown save error."

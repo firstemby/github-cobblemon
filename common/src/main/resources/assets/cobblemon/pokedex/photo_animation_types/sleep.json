@@ -1,0 +1,10 @@
+{
+  "priority": 90,
+  "poseScore": 500,
+  "multiplier": 1.1,
+  "match": {
+    "contains_any": [
+      "sleep"
+    ]
+  }
+}
