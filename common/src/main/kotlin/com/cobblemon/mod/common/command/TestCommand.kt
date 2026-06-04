@@ -354,7 +354,7 @@ object TestCommand {
         // Skip Dratini cause same HA irrelevant for this test
         val pokemon = PokemonProperties.parse("dragonair level=${Cobblemon.config.maxPokemonLevel} hiddenability=true").create()
         val dragonite = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Dragonair » Dragonite evolution").red()
-        dragonite.evolutionMethod(pokemon)
+        dragonite.fulfill(pokemon)
         val failed = pokemon.ability.index != 0 || pokemon.ability.priority != Priority.LOW || pokemon.ability.forced
         val symbol = if (failed) "✖" else "✔"
         val result = Component.literal(" $symbol Dratini line final Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
@@ -364,9 +364,9 @@ object TestCommand {
     private fun testMiddleStageSingleAbility(): Component {
         val pokemon = PokemonProperties.parse("scatterbug level=${Cobblemon.config.maxPokemonLevel} ability=compoundeyes").create()
         val spewpa = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Scatterbug » Spewpa evolution").red()
-        spewpa.evolutionMethod(pokemon)
+        spewpa.fulfill(pokemon)
         val vivillon = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Spewpa » Vivillon evolution").red()
-        vivillon.evolutionMethod(pokemon)
+        vivillon.fulfill(pokemon)
         val failed = pokemon.ability.index != 1 || pokemon.ability.priority != Priority.LOWEST || pokemon.ability.forced
         val symbol = if (failed) "✖" else "✔"
         val result = Component.literal(" $symbol Scatterbug line final Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
@@ -376,7 +376,7 @@ object TestCommand {
     private fun testForcedAbility(): Component {
         val pokemon = PokemonProperties.parse("magikarp level=${Cobblemon.config.maxPokemonLevel} ability=adaptability").create()
         val gyarados = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Magikarp » Gyarados evolution").red()
-        gyarados.evolutionMethod(pokemon)
+        gyarados.fulfill(pokemon)
         val failed = !pokemon.ability.forced || pokemon.ability.template.name != "adaptability"
         val symbol = if (failed) "✖" else "✔"
         val result = Component.literal(" $symbol Magikarp line forced Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
