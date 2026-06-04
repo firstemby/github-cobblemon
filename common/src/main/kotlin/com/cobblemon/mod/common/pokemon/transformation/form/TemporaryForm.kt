@@ -160,7 +160,6 @@ open class TemporaryForm (
         }
     }
 
-    // TODO FORM_DISPLAY event
     override fun convertToDisplay(pokemon: Pokemon): FormDisplay {
         val species = pokemon.species
         val aspects = pokemon.aspects.toMutableSet()
