@@ -39,6 +39,20 @@ object PokedexPhotoQuality {
     }
 
     fun speciesRarityMultiplier(species: ResourceLocation): Float {
+        return speciesRarityMultiplier(
+            species = species,
+            uncommonMultiplier = Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier,
+            rareMultiplier = Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier,
+            ultraRareMultiplier = Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier
+        )
+    }
+
+    fun speciesRarityMultiplier(
+        species: ResourceLocation,
+        uncommonMultiplier: Float,
+        rareMultiplier: Float,
+        ultraRareMultiplier: Float
+    ): Float {
         val bucketRank = runCatching {
             CobblemonSpawnPools.WORLD_SPAWN_POOL
                 .asSequence()
@@ -49,9 +63,9 @@ object PokedexPhotoQuality {
         }.getOrNull() ?: 0
 
         return when (bucketRank) {
-            4 -> Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier.coerceAtLeast(1F)
-            3 -> Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier.coerceAtLeast(1F)
-            2 -> Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier.coerceAtLeast(1F)
+            4 -> ultraRareMultiplier.coerceAtLeast(1F)
+            3 -> rareMultiplier.coerceAtLeast(1F)
+            2 -> uncommonMultiplier.coerceAtLeast(1F)
             else -> 1F
         }
     }

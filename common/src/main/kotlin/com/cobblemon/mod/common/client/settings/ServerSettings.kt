@@ -35,7 +35,6 @@ object ServerSettings {
     var pokedexScannerPhotoCoverageScoreCapAtPercent = Cobblemon.config.pokedexScannerPhotoCoverageScoreCapAtPercent
     var pokedexScannerPhotoCenteredScoreCap = Cobblemon.config.pokedexScannerPhotoCenteredScoreCap
     var pokedexScannerPhotoFacingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus
-    var pokedexScannerPhotoLookTargetBonus = Cobblemon.config.pokedexScannerPhotoLookTargetBonus
     var pokedexScannerPhotoFullBodyBonus = Cobblemon.config.pokedexScannerPhotoFullBodyBonus
     var pokedexScannerPhotoOutOfFrameMultiplier = Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier
     var pokedexScannerPhotoShinyMultiplier = Cobblemon.config.pokedexScannerPhotoShinyMultiplier

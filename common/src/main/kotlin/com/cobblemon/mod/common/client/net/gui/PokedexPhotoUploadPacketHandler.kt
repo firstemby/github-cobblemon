@@ -68,11 +68,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     placementScore = subject.placementScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoCenteredScoreCap.coerceIn(0, 5000)),
                     centerDistance = subject.centerDistance.coerceIn(0F, 1F),
                     distanceScore = subject.distanceScore.coerceIn(0, 1000),
-                    directionScore = subject.directionScore.coerceIn(
-                        0,
-                        Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000) +
-                            Cobblemon.config.pokedexScannerPhotoLookTargetBonus.coerceAtLeast(0)
-                    ),
+                    directionScore = subject.directionScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)),
                     poseScore = subject.poseScore.coerceIn(0, 800),
                     fullBodyScore = subject.fullBodyScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0)),
                     otherPokemonScore = subject.otherPokemonScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)),

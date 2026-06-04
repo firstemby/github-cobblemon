@@ -29,7 +29,6 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.pokedexScannerPhotoCoverageScoreCapAtPercent = packet.pokedexScannerPhotoCoverageScoreCapAtPercent
         ServerSettings.pokedexScannerPhotoCenteredScoreCap = packet.pokedexScannerPhotoCenteredScoreCap
         ServerSettings.pokedexScannerPhotoFacingBonus = packet.pokedexScannerPhotoFacingBonus
-        ServerSettings.pokedexScannerPhotoLookTargetBonus = packet.pokedexScannerPhotoLookTargetBonus
         ServerSettings.pokedexScannerPhotoFullBodyBonus = packet.pokedexScannerPhotoFullBodyBonus
         ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier = packet.pokedexScannerPhotoOutOfFrameMultiplier
         ServerSettings.pokedexScannerPhotoShinyMultiplier = packet.pokedexScannerPhotoShinyMultiplier

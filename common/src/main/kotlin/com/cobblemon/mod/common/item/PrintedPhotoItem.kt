@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.block.PrintedPhotoDisplayBlock
 import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
 import com.cobblemon.mod.common.item.components.PrintedPhotoComponent
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -59,6 +60,7 @@ class PrintedPhotoItem(properties: Item.Properties) : Item(properties) {
         val printedPhoto = PrintedPhotoComponent.get(stack) ?: return
         tooltipComponents.add(Component.translatable("item.cobblemon.printed_photo.photo_id", printedPhoto.photoId))
         tooltipComponents.add(Component.translatable("item.cobblemon.printed_photo.quality_score", printedPhoto.qualityScore))
+        tooltipComponents.add(Component.translatable("item.cobblemon.printed_photo.rating", PokedexPhotoRatings.ratingText(printedPhoto.qualityScore)))
         tooltipComponents.add(Component.literal("Size: ${printedPhoto.printSize}x${printedPhoto.printSize}"))
     }
 

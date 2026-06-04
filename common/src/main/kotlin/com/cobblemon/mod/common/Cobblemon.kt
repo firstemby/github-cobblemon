@@ -314,7 +314,6 @@ object Cobblemon {
             this.config.pokedexScannerPhotoCoverageScoreCapAtPercent,
             this.config.pokedexScannerPhotoCenteredScoreCap,
             this.config.pokedexScannerPhotoFacingBonus,
-            this.config.pokedexScannerPhotoLookTargetBonus,
             this.config.pokedexScannerPhotoFullBodyBonus,
             this.config.pokedexScannerPhotoOutOfFrameMultiplier,
             this.config.pokedexScannerPhotoShinyMultiplier,

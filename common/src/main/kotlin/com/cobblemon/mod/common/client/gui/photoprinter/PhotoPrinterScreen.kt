@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoSearch
 import com.cobblemon.mod.common.net.messages.client.ui.CraftPrintedPhotoPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetPhotoPrinterSelectionPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -44,6 +45,10 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         private const val SEARCH_TOP = 8
         private const val SEARCH_WIDTH = GRID_COLUMNS * THUMB_SIZE + (GRID_COLUMNS - 1) * THUMB_GAP
         private const val SEARCH_HEIGHT = 17
+        private const val SORT_FIELD_LEFT = GRID_LEFT + SEARCH_WIDTH + 4
+        private const val SORT_FIELD_WIDTH = 70
+        private const val SORT_DIRECTION_LEFT = SORT_FIELD_LEFT + SORT_FIELD_WIDTH + 4
+        private const val SORT_DIRECTION_WIDTH = 45
         private const val GRID_TOP = SEARCH_TOP + SEARCH_HEIGHT + 8
         private const val GRID_WIDTH = SEARCH_WIDTH
         private const val GRID_HEIGHT = GRID_ROWS * THUMB_SIZE + (GRID_ROWS - 1) * THUMB_GAP
@@ -81,8 +86,12 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
     private var filteredPhotoCount = 0
     private var searchWidget: SearchWidget? = null
     private var printButton: Button? = null
+    private var sortFieldButton: Button? = null
+    private var sortDirectionButton: Button? = null
     private val sizeButtons = mutableMapOf<PrintSizeOption, Button>()
     private var selectedPrintSize = PrintSizeOption.ONE
+    private var sortField = PokedexPhotoSearch.SortField.POINTS
+    private var sortDirection = PokedexPhotoSearch.SortDirection.DESCENDING
 
     override fun init() {
         imageWidth = BACKGROUND_WIDTH
@@ -106,6 +115,23 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             }
             addRenderableWidget(widget)
         }
+
+        sortFieldButton = addRenderableWidget(
+            Button.builder(Component.literal("")) {
+                sortField = sortField.next()
+                scrollOffsetRows = 0
+                updateSortButtons()
+            }.pos(leftPos + SORT_FIELD_LEFT, topPos + SEARCH_TOP).size(SORT_FIELD_WIDTH, SEARCH_HEIGHT).build()
+        )
+
+        sortDirectionButton = addRenderableWidget(
+            Button.builder(Component.literal("")) {
+                sortDirection = sortDirection.toggled()
+                scrollOffsetRows = 0
+                updateSortButtons()
+            }.pos(leftPos + SORT_DIRECTION_LEFT, topPos + SEARCH_TOP).size(SORT_DIRECTION_WIDTH, SEARCH_HEIGHT).build()
+        )
+        updateSortButtons()
 
         printButton = addRenderableWidget(
             Button.builder(Component.literal("Print 1x1 (1 paper)")) {
@@ -174,6 +200,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
         renderBackground(guiGraphics, mouseX, mouseY, partialTick)
         super.render(guiGraphics, mouseX, mouseY, partialTick)
         renderTooltip(guiGraphics, mouseX, mouseY)
+        renderRatingTooltip(guiGraphics, mouseX, mouseY)
     }
 
     override fun renderBg(guiGraphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {
@@ -321,7 +348,7 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
     }
 
     private fun filteredPhotos(photos: List<PokedexPhotoMetadata>): List<PokedexPhotoMetadata> {
-        return PokedexPhotoSearch.filter(photos, searchQuery)
+        return PokedexPhotoSearch.filterAndSort(photos, searchQuery, sortField, sortDirection)
     }
 
     private fun drawSlotOutline(guiGraphics: GuiGraphics, x: Int, y: Int) {
@@ -337,8 +364,8 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
     }
 
     private fun renderSelectedPreview(guiGraphics: GuiGraphics) {
-        val selected = selectedPhotoId ?: return
-        val texture = CobblemonClient.pokedexPhotoStore.getTexture(selected) ?: return
+        val selectedPhoto = selectedPhoto() ?: return
+        val texture = CobblemonClient.pokedexPhotoStore.getTexture(selectedPhoto.id) ?: return
         blitk(
             matrixStack = guiGraphics.pose(),
             texture = texture,
@@ -346,6 +373,13 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             y = topPos + PREVIEW_TOP,
             width = PREVIEW_SIZE,
             height = PREVIEW_SIZE
+        )
+        guiGraphics.drawCenteredString(
+            font,
+            Component.literal(PokedexPhotoRatings.ratingText(selectedPhoto.qualityScore)),
+            leftPos + PREVIEW_LEFT + (PREVIEW_SIZE / 2),
+            topPos + PREVIEW_TOP + PREVIEW_SIZE - 12,
+            0xFFFFFF
         )
     }
 
@@ -387,5 +421,25 @@ class PhotoPrinterScreen(menu: PhotoPrinterMenu, inventory: Inventory, title: Co
             button.active = !selected
             button.message = Component.literal(if (selected) "[${option.label}]" else option.label)
         }
+    }
+
+    private fun updateSortButtons() {
+        sortFieldButton?.message = Component.literal("Sort: ${PokedexPhotoSearch.sortFieldLabel(sortField)}")
+        sortDirectionButton?.message = Component.literal(PokedexPhotoSearch.sortDirectionLabel(sortDirection))
+    }
+
+    private fun selectedPhoto(): PokedexPhotoMetadata? {
+        val selected = selectedPhotoId ?: return null
+        return CobblemonClient.pokedexPhotoStore.getPhotos().firstOrNull { it.id == selected }
+    }
+
+    private fun renderRatingTooltip(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+        val selectedPhoto = selectedPhoto() ?: return
+        val starsX = leftPos + PREVIEW_LEFT + 10
+        val starsY = topPos + PREVIEW_TOP + PREVIEW_SIZE - 12
+        val starsWidth = PREVIEW_SIZE - 20
+        val starsHeight = 10
+        if (mouseX < starsX || mouseX >= starsX + starsWidth || mouseY < starsY || mouseY >= starsY + starsHeight) return
+        guiGraphics.renderComponentTooltip(font, PokedexPhotoRatings.scoreBreakdown(selectedPhoto), mouseX, mouseY)
     }
 }

@@ -20,7 +20,9 @@ import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoSearch
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.ui.DeletePokedexPhotoPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 import kotlin.math.max
@@ -46,12 +48,21 @@ class PhotoGalleryPokedexPage(
         private const val PREVIEW_OFFSET_X = 218
         private const val PREVIEW_OFFSET_Y = 43
         private const val PREVIEW_SIZE = 112
+        private const val SORT_FIELD_X = 28
+        private const val SORT_FIELD_Y = 157
+        private const val SORT_FIELD_WIDTH = 70
+        private const val SORT_DIRECTION_X = 102
+        private const val SORT_DIRECTION_Y = 157
+        private const val SORT_DIRECTION_WIDTH = 40
+        private const val SORT_BUTTON_HEIGHT = 14
     }
 
     private var scrollOffsetRows = 0
     private var selectedPhotoId: String? = null
     private var searchQuery = ""
     private var searchWidget: SearchWidget? = null
+    private var sortField = PokedexPhotoSearch.SortField.POINTS
+    private var sortDirection = PokedexPhotoSearch.SortDirection.DESCENDING
 
     override fun onSelected(gui: PokedexGUI) {
         scrollOffsetRows = 0
@@ -89,7 +100,7 @@ class PhotoGalleryPokedexPage(
         searchWidget?.render(context, mouseX, mouseY, delta)
 
         val allPhotos = photoStore.getPhotos()
-        val photos = PokedexPhotoSearch.filter(allPhotos, searchQuery)
+        val photos = PokedexPhotoSearch.filterAndSort(allPhotos, searchQuery, sortField, sortDirection)
 
         val countText = lang("ui.pokedex.gallery.filtered_count", photos.size, allPhotos.size).bold()
         drawScaledText(
@@ -210,6 +221,8 @@ class PhotoGalleryPokedexPage(
                 )
             }
             if (selectedPhoto != null) {
+                val starsX = x + PREVIEW_OFFSET_X + (PREVIEW_SIZE / 2)
+                val starsY = y + PREVIEW_OFFSET_Y + PREVIEW_SIZE + 18
                 drawScaledText(
                     context = context,
                     font = CobblemonResources.DEFAULT_LARGE,
@@ -219,22 +232,38 @@ class PhotoGalleryPokedexPage(
                     shadow = true,
                     centered = true
                 )
+                drawScaledText(
+                    context = context,
+                    font = CobblemonResources.DEFAULT_LARGE,
+                    text = lang("ui.pokedex.gallery.rating", PokedexPhotoRatings.ratingText(selectedPhoto.qualityScore)),
+                    x = starsX,
+                    y = starsY,
+                    shadow = true,
+                    centered = true
+                )
+                renderRatingTooltip(context, selectedPhoto, starsX - 38, starsY, 76, 10, mouseX, mouseY)
             }
         }
+
+        drawSortButton(
+            context = context,
+            x = x + SORT_FIELD_X,
+            y = y + SORT_FIELD_Y,
+            width = SORT_FIELD_WIDTH,
+            text = "Sort: ${PokedexPhotoSearch.sortFieldLabel(sortField)}"
+        )
+        drawSortButton(
+            context = context,
+            x = x + SORT_DIRECTION_X,
+            y = y + SORT_DIRECTION_Y,
+            width = SORT_DIRECTION_WIDTH,
+            text = PokedexPhotoSearch.sortDirectionLabel(sortDirection)
+        )
 
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
             text = lang("ui.pokedex.gallery.filter_hint"),
-            x = x + 173,
-            y = y + 158,
-            shadow = true,
-            centered = true
-        )
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.pokedex.gallery.select_hint"),
             x = x + 173,
             y = y + 168,
             shadow = true,
@@ -243,7 +272,7 @@ class PhotoGalleryPokedexPage(
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.pokedex.gallery.delete_hint"),
+            text = lang("ui.pokedex.gallery.select_hint"),
             x = x + 173,
             y = y + 178,
             shadow = true,
@@ -263,7 +292,18 @@ class PhotoGalleryPokedexPage(
 
         val x = (gui.width - BASE_WIDTH) / 2
         val y = (gui.height - BASE_HEIGHT) / 2
-        val photos = PokedexPhotoSearch.filter(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery)
+        if (isInside(mouseX, mouseY, x + SORT_FIELD_X, y + SORT_FIELD_Y, SORT_FIELD_WIDTH, SORT_BUTTON_HEIGHT)) {
+            sortField = sortField.next()
+            scrollOffsetRows = 0
+            return true
+        }
+        if (isInside(mouseX, mouseY, x + SORT_DIRECTION_X, y + SORT_DIRECTION_Y, SORT_DIRECTION_WIDTH, SORT_BUTTON_HEIGHT)) {
+            sortDirection = sortDirection.toggled()
+            scrollOffsetRows = 0
+            return true
+        }
+
+        val photos = PokedexPhotoSearch.filterAndSort(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery, sortField, sortDirection)
         if (photos.isEmpty()) return false
         val visibleStart = scrollOffsetRows * GRID_COLUMNS
         val visibleEnd = min(photos.size, (scrollOffsetRows + VISIBLE_ROWS) * GRID_COLUMNS)
@@ -300,11 +340,35 @@ class PhotoGalleryPokedexPage(
 
         val step = if (deltaY > 0) -1 else if (deltaY < 0) 1 else 0
         if (step == 0) return false
-        val photos = PokedexPhotoSearch.filter(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery)
+        val photos = PokedexPhotoSearch.filterAndSort(CobblemonClient.pokedexPhotoStore.getPhotos(), searchQuery, sortField, sortDirection)
         val totalRows = (photos.size + GRID_COLUMNS - 1) / GRID_COLUMNS
         val maxOffset = max(0, totalRows - VISIBLE_ROWS)
         scrollOffsetRows = (scrollOffsetRows + step).coerceIn(0, maxOffset)
         return true
+    }
+
+    private fun drawSortButton(context: GuiGraphics, x: Int, y: Int, width: Int, text: String) {
+        context.fill(x, y, x + width, y + SORT_BUTTON_HEIGHT, -12698050)
+        context.fill(x + 1, y + 1, x + width - 1, y + SORT_BUTTON_HEIGHT - 1, -4144960)
+        context.drawString(Minecraft.getInstance().font, text, x + 4, y + 4, 0xFFFFFF, false)
+    }
+
+    private fun renderRatingTooltip(
+        context: GuiGraphics,
+        photo: PokedexPhotoMetadata,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        mouseX: Int,
+        mouseY: Int
+    ) {
+        if (!isInside(mouseX.toDouble(), mouseY.toDouble(), x, y, width, height)) return
+        context.renderComponentTooltip(Minecraft.getInstance().font, PokedexPhotoRatings.scoreBreakdown(photo), mouseX, mouseY)
+    }
+
+    private fun isInside(mouseX: Double, mouseY: Double, x: Int, y: Int, width: Int, height: Int): Boolean {
+        return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height
     }
 
     private fun photoAt(

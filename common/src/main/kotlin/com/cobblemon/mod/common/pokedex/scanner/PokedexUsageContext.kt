@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.platform.events.RenderEvent
+import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoQuality
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -629,16 +630,22 @@ class PokedexUsageContext {
             } else {
                 "OUT OF FRAME: x${formatMultiplier(subject.clippingMultiplier)} (${subject.perimeterHits} perimeter hits)"
             }
-            val boostText = listOfNotNull(
+            val boostText = listOf(
+                "size +${subject.sizeScore}",
+                "centering +${subject.placementScore}",
+                "look-at-camera +${subject.directionScore}",
+                "animation pose +${subject.poseScore}",
+                clippingText,
+                "other Pokemon +${subject.otherPokemonScore}",
                 "animation x${formatMultiplier(subject.animationMultiplier)}",
-                if (subject.shiny) "shiny x${formatMultiplier(subject.shinyMultiplier)}" else null,
-                if (subject.otherPokemonScore > 0) "other Pokemon +${subject.otherPokemonScore}" else null
+                "shiny x${formatMultiplier(subject.shinyMultiplier)}",
+                "species rarity x${formatMultiplier(subject.rarityMultiplier)}"
             ).joinToString(", ")
 
             player.displayClientMessage(
                 Component.literal(
                     "[Photo Score Debug] $role ${subject.species}: score=${subject.subjectScore}, raw=$rawCategoryScore, " +
-                        "size=${subject.sizeScore}, placement=${subject.placementScore}, direction=${subject.directionScore}, " +
+                        "size=${subject.sizeScore}, placement=${subject.placementScore}, look=${subject.directionScore}, " +
                         "pose=${subject.poseScore}, center=${formatPercent(1F - subject.centerDistance)}, distance=${subject.distanceScore}, " +
                         "$clippingText"
                 ),
@@ -1010,8 +1017,8 @@ class PokedexUsageContext {
             .map { subject -> buildSubjectQuality(subject, inFrameRayCount) }
             .toList()
         val primary = scoredSubjects.minWithOrNull(
-            compareBy<PokedexPhotoSubjectQuality> { it.centerDistance }
-                .thenByDescending { it.distanceScore }
+            compareBy<PokedexPhotoSubjectQuality> { calculatePrimarySubjectSortValue(it) }
+                .thenByDescending { it.rayCoverage }
                 .thenByDescending { it.subjectScore }
         ) ?: return emptyList()
         val otherPokemonBonus = calculateOtherPokemonBonus(primary, scoredSubjects)
@@ -1070,12 +1077,25 @@ class PokedexUsageContext {
             activeAnimations = subject.activeAnimations,
             shiny = subject.shiny,
             shinyMultiplier = subject.shinyMultiplier,
-            animationMultiplier = subject.animationMultiplier
+            animationMultiplier = subject.animationMultiplier,
+            rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(
+                species = subject.species,
+                uncommonMultiplier = ServerSettings.pokedexScannerPhotoUncommonSpeciesMultiplier,
+                rareMultiplier = ServerSettings.pokedexScannerPhotoRareSpeciesMultiplier,
+                ultraRareMultiplier = ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier
+            )
         )
     }
 
     private fun calculatePhotoQualityScore(subjects: List<PokedexPhotoSubjectQuality>): Int {
         return subjects.firstOrNull { it.primarySubject }?.subjectScore ?: 0
+    }
+
+    private fun calculatePrimarySubjectSortValue(subject: PokedexPhotoSubjectQuality): Double {
+        val centerPenalty = subject.centerDistance.toDouble().coerceIn(0.0, 1.0)
+        val distancePenalty = 1.0 - (subject.distanceScore.toDouble() / 1000.0).coerceIn(0.0, 1.0)
+        val coverageBonus = subject.rayCoverage.toDouble().coerceIn(0.0, 1.0)
+        return (centerPenalty * 0.78) + (distancePenalty * 0.22) - (coverageBonus * 0.05)
     }
 
     private fun calculateSizeScore(rayCoverage: Double, wholeBodyInFrame: Boolean): Int {
@@ -1112,15 +1132,14 @@ class PokedexUsageContext {
         val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
         val look = entity.lookAngle.normalize()
         if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return 0
-        val facingScoreCap = ServerSettings.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
+        val lookAtCameraScoreCap = ServerSettings.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
         val facing = ((look.dot(toPlayer) + 0.2) / 1.2).coerceIn(0.0, 1.0)
-        val facingScore = (facingScoreCap.toDouble() * facing * facing).roundToInt().coerceIn(0, facingScoreCap)
-        val lookTargetBonus = if (isBrainLookingAtPlayer(entity, player)) {
-            ServerSettings.pokedexScannerPhotoLookTargetBonus.coerceAtLeast(0)
+        val facingScore = (lookAtCameraScoreCap.toDouble() * facing * facing).roundToInt().coerceIn(0, lookAtCameraScoreCap)
+        return if (isBrainLookingAtPlayer(entity, player)) {
+            max(facingScore, lookAtCameraScoreCap)
         } else {
-            0
+            facingScore
         }
-        return (facingScore + lookTargetBonus).coerceIn(0, facingScoreCap + lookTargetBonus)
     }
 
     private fun isEntityInsidePhotoBounds(entity: Entity, projection: PhotoProjection): Boolean {

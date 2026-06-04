@@ -311,10 +311,6 @@ class CobblemonConfig {
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoFacingBonus = 900
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_look_target_bonus", SERVER)
-    @IntConstraint(min = 0, max = 5000)
-    var pokedexScannerPhotoLookTargetBonus = 300
-
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_full_body_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoFullBodyBonus = 200

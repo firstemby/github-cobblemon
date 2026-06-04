@@ -34,7 +34,6 @@ class ServerSettingsPacket internal constructor(
     val pokedexScannerPhotoCoverageScoreCapAtPercent: Float,
     val pokedexScannerPhotoCenteredScoreCap: Int,
     val pokedexScannerPhotoFacingBonus: Int,
-    val pokedexScannerPhotoLookTargetBonus: Int,
     val pokedexScannerPhotoFullBodyBonus: Int,
     val pokedexScannerPhotoOutOfFrameMultiplier: Float,
     val pokedexScannerPhotoShinyMultiplier: Float,
@@ -61,7 +60,6 @@ class ServerSettingsPacket internal constructor(
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoCoverageScoreCapAtPercent)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoCenteredScoreCap)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFacingBonus)
-        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoLookTargetBonus)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFullBodyBonus)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoShinyMultiplier)
@@ -87,7 +85,6 @@ class ServerSettingsPacket internal constructor(
             buffer.readInt(),
             buffer.readInt(),
             buffer.readFloat(),
-            buffer.readInt(),
             buffer.readInt(),
             buffer.readInt(),
             buffer.readInt(),
