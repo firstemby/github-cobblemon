@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer
 
 object AcceptFormHandler : ServerNetworkPacketHandler<AcceptFormPacket> {
     override fun handle(packet: AcceptFormPacket, server: MinecraftServer, player: ServerPlayer) {
-        val pokemon = player.party().get(packet.pokemonUUID) ?: return
+        val pokemon = player.party()[packet.pokemonUUID] ?: return
         val form = pokemon.formProxy.server().getById(packet.formId) ?: return
         pokemon.formProxy.server().start(form)
     }

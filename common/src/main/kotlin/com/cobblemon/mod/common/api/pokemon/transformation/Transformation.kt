@@ -54,20 +54,25 @@ interface Transformation : TransformationLike {
      * @param context The optional [ContextTrigger.Context] needed to transform.
      * @return Whether the [Transformation] was successful.
      */
-    fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
+    fun tryStart(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (test(pokemon, context)) {
-            forceStart(pokemon)
+            perform(pokemon)
             return true
         }
         return false
     }
 
     /**
-     * Starts this transformation without evaluating the requirements.
+     * Performs the actual transformation.
      *
      * @param pokemon The [Pokemon] being transformed.
      */
-    fun forceStart(pokemon: Pokemon) { this.requirements.forEach { it.fulfill(pokemon) } }
+    fun perform(pokemon: Pokemon)
+
+    /** Finishes off the transformation, mainly by making any changes that the [TransformationRequirement]s demanded. */
+    fun fulfill(pokemon: Pokemon) {
+        this.requirements.forEach { it.fulfill(pokemon) }
+    }
 
     /**
      * Converts this transformation to its client side representation.

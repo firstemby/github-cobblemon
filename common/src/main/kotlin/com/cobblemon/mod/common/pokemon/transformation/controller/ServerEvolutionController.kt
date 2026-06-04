@@ -50,10 +50,7 @@ class ServerEvolutionController(
         if (!canStart(transformation)) return
         CobblemonEvents.EVOLUTION_ACCEPTED.postThen(
             event = EvolutionAcceptedEvent(this.pokemon, transformation),
-            ifSucceeded = {
-                // Evolution will clear the pending stuff after if successful
-                super.start(transformation)
-            }
+            ifSucceeded = { transformation.perform(this.pokemon) }
         )
     }
 

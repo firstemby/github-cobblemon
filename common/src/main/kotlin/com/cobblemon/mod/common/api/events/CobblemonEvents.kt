@@ -48,6 +48,10 @@ import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEv
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionDisplayEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionTestedEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormAcceptedEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormCompleteEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormDisplayEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormTestedEvent
 import com.cobblemon.mod.common.api.events.pokemon.healing.PokemonHealedEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import com.cobblemon.mod.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
@@ -102,6 +106,18 @@ object CobblemonEvents {
 
     @JvmField
     val EVOLUTION_COMPLETE = EventObservable<EvolutionCompleteEvent>()
+
+    @JvmField
+    val FORM_ACCEPTED = CancelableObservable<FormAcceptedEvent>()
+
+    @JvmField
+    val FORM_DISPLAY = EventObservable<FormDisplayEvent>()
+
+    @JvmField
+    val FORM_TESTED = EventObservable<FormTestedEvent>()
+
+    @JvmField
+    val FORM_COMPLETE = EventObservable<FormCompleteEvent>()
 
     @JvmField
     val POKEMON_NICKNAMED = CancelableObservable<PokemonNicknamedEvent>()

@@ -33,7 +33,6 @@ import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.party
@@ -83,12 +82,12 @@ class Evolution(
      * @param context The optional [TriggerContext] needed to evolve.
      * @return Whether the [Evolution] was successful.
      */
-    override fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
+    override fun tryStart(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (this.test(pokemon, context)) {
             return if (this.optional)
                 pokemon.evolutionProxy.server().add(this)
             else {
-                this.forceStart(pokemon)
+                this.perform(pokemon)
                 true
             }
         }
@@ -132,20 +131,16 @@ class Evolution(
      *
      * @param pokemon The [Pokemon] being evolved.
      */
-    override fun forceStart(pokemon: Pokemon) {
-        // This is a switch to enable/disable the evolution effect while we get particles improved
-        val useEvolutionEffect = true
-
+    override fun perform(pokemon: Pokemon) {
         if (pokemon.state is ShoulderedState) {
-            pokemon.tryRecallWithAnimation()
+            pokemon.recall()
         }
 
         val preEvoName = pokemon.getDisplayName()
         val pokemonEntity = pokemon.entity
-        if (pokemonEntity == null || !useEvolutionEffect) {
+        if (pokemonEntity == null) {
             pokemon.getOwnerPlayer()?.playNotifySound(CobblemonSounds.EVOLUTION_UI, SoundSource.PLAYERS, 1F, 1F)
-            evolutionMethod(pokemon)
-            super.forceStart(pokemon)
+            fulfill(pokemon)
             pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
         } else {
             pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
@@ -154,8 +149,7 @@ class Evolution(
                 evolutionAnimation(pokemonEntity)
             }
             pokemonEntity.after(11.2F) {
-                evolutionMethod(pokemon)
-                super.forceStart(pokemon)
+                fulfill(pokemon)
             }
             pokemonEntity.after(seconds = 12F) {
                 cryAnimation(pokemonEntity)
@@ -175,7 +169,7 @@ class Evolution(
         playPoseableAnimationPacket.sendToPlayersAround(pokemon.x, pokemon.y, pokemon.z, 128.0, pokemon.level().dimension())
     }
 
-    fun evolutionMethod(pokemon: Pokemon) {
+    override fun fulfill(pokemon: Pokemon) {
         // This ensures the Pokémon doesn't lose moves during evolution
         // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
         val previousSpeciesLearnableMoves = pokemon.relearnableMoves
@@ -219,6 +213,8 @@ class Evolution(
                 pokemon = pokemon
             )
         }
+
+        super.fulfill(pokemon)
 
         CobblemonEvents.EVOLUTION_COMPLETE.post(EvolutionCompleteEvent(pokemon, sourcePokemon, this))
         CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))

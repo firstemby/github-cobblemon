@@ -2317,7 +2317,7 @@ open class Pokemon : ShowdownIdentifiable {
      * @return The [Transformation]s of this [Pokemon] that were triggered.
      */
     fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: ContextTrigger.Context? = null) =
-        transformations.filter { type.isInstance(it.trigger) && it.start(this, context) }
+        transformations.filter { type.isInstance(it.trigger) && it.tryStart(this, context) }
 
     private fun isValidForm(form: FormData) = this.species.allForms.any { it === form }
 

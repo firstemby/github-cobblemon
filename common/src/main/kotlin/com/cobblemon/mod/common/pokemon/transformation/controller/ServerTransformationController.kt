@@ -83,7 +83,7 @@ abstract class ServerTransformationController<T : Transformation, I>(
         this.pokemon.getOwnerPlayer()?.isBusy() == false &&
         this.isNotEmpty()
 
-    open fun start(transformation: T) { if (this.canStart(transformation)) transformation.forceStart(this.pokemon) }
+    abstract fun start(transformation: T)
 
     open fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
 

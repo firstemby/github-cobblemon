@@ -9,6 +9,10 @@
 package com.cobblemon.mod.common.pokemon.transformation.form
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.form.FormCompleteEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormDisplayEvent
+import com.cobblemon.mod.common.api.events.pokemon.form.FormTestedEvent
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
@@ -23,6 +27,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -82,8 +87,12 @@ open class TemporaryForm (
     override val parentForm: PermanentForm by lazy { parentFormInitializer ?:
         throw IllegalStateException("Unable to resolve parent of ${this.species.name}'s temporary form: ${this.name}") } // temp forms MUST have a parent
 
-    // TODO FORM_TESTED event
-    override fun test(pokemon: Pokemon, context: ContextTrigger.Context?) = pokemon.form !== this && super.test(pokemon, context)
+    override fun test(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
+        val baseResult = pokemon.form !== this && super.test(pokemon, context)
+        val event = FormTestedEvent(pokemon, this, baseResult)
+        CobblemonEvents.FORM_TESTED.post(event)
+        return event.result
+    }
 
     /**
      * Starts this form change or queues it if [toggleable] is true.
@@ -92,20 +101,23 @@ open class TemporaryForm (
      * @param context The optional [TriggerContext] needed to change form.
      * @return Whether the [TemporaryForm] was successful.
      */
-    override fun start(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
+    override fun tryStart(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         if (this.test(pokemon, context)) {
             return if (this.optional)
                 pokemon.formProxy.server().add(this)
             else {
-                this.forceStart(pokemon)
+                this.perform(pokemon)
                 true
             }
         }
         return false
     }
 
-    // TODO FORM_COMPLETE event
-    override fun forceStart(pokemon: Pokemon) {
+    override fun perform(pokemon: Pokemon) {
+        if (pokemon.state is ShoulderedState) {
+            pokemon.recall()
+        }
+
         val pokemonEntity = pokemon.entity
         if (pokemonEntity != null) {
             val runtime = MoLangRuntime()
@@ -118,20 +130,23 @@ open class TemporaryForm (
                 level = pokemonEntity.level()
             )
             this.forceStart(pokemonEntity, context)
+        } else {
+            fulfill(pokemon)
         }
-        else {
-            pokemon.form = this
-            super.forceStart(pokemon)
-        }
+    }
+
+    override fun fulfill(pokemon: Pokemon) {
+        super.fulfill(pokemon)
+        pokemon.form = this
+        pokemon.entity?.entityData?.set(PokemonEntity.TRANSFORMATION_STARTED, false)
+        CobblemonEvents.FORM_COMPLETE.post(FormCompleteEvent(pokemon, this))
     }
 
     fun forceStart(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
         pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
         val finishTransformation: () -> Unit = {
             if (pokemonEntity.isTransforming) {
-                pokemonEntity.pokemon.form = this
-                pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, false)
-                super.forceStart(pokemonEntity.pokemon)
+                fulfill(pokemonEntity.pokemon)
             }
         }
         context.holdRemovalCallbacks["transformation"] = finishTransformation
@@ -152,6 +167,8 @@ open class TemporaryForm (
         aspects.removeAll(pokemon.form.aspects.toSet())
         aspects.addAll(this.aspects)
         val expectedDisplay = FormDisplay(this.id, species, aspects)
-        return expectedDisplay
+        val event = FormDisplayEvent(pokemon, expectedDisplay, this)
+        CobblemonEvents.FORM_DISPLAY.post(event)
+        return event.display
     }
 }

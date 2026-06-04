@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.controller
 
+import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.form.FormAcceptedEvent
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.AddFormPacket
@@ -44,7 +46,14 @@ class ServerFormController(
 
     override fun removePacket(transformation: TemporaryForm) = RemoveFormPacket(this.pokemon, transformation)
 
-    // TODO form events
+    override fun start(transformation: TemporaryForm) {
+        if (!canStart(transformation)) return
+        CobblemonEvents.FORM_ACCEPTED.postThen(
+            event = FormAcceptedEvent(this.pokemon, transformation),
+            ifSucceeded = { transformation.perform(this.pokemon) }
+        )
+    }
+
 
     override fun isDuplicate(element: TemporaryForm) = this.find { it.name == element.name } != null
 
@@ -56,7 +65,7 @@ class ServerFormController(
         val formIds: Set<String>,
         val progress: Set<TransformationProgress<*>>,
     ) {
-        fun create(pokemon: Pokemon): ServerFormController = ServerFormController(
+        fun create(pokemon: Pokemon) = ServerFormController(
             pokemon,
             this.formIds,
             this.progress

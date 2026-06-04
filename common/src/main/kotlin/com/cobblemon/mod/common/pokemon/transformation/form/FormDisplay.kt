@@ -8,10 +8,16 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.form
 
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.addMutableCollectionFunctions
+import com.cobblemon.mod.common.util.addReferentialGetterSetter
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeIdentifier
@@ -29,9 +35,22 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  */
 data class FormDisplay(
     override val id: String,
-    override val species: Species,
-    override val aspects: Set<String>
+    override var species: Species,
+    override var aspects: MutableSet<String>
 ) : TransformationDisplay {
+    @Transient
+    val struct = ObjectValue<FormDisplay>(this)
+        .addMutableCollectionFunctions(
+            collection = aspects,
+            name = "aspect",
+            parser = MoValue::asString,
+            serializer = ::StringValue
+        )
+        .addReferentialGetterSetter(
+            property = FormDisplay::species,
+            serializer = { value -> StringValue(value.resourceIdentifier.toString()) },
+            deserializer = { value -> PokemonSpecies.getByIdentifier(value.asString().asIdentifierDefaultingNamespace()) }
+        )
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(this.id)
@@ -46,7 +65,7 @@ data class FormDisplay(
                 Codec.STRING.fieldOf("id").forGetter(FormDisplay::id),
                 Species.BY_IDENTIFIER_CODEC.fieldOf("species").forGetter(FormDisplay::species),
                 Codec.list(Codec.STRING).fieldOf("aspects").forGetter { it.aspects.toList() }
-            ).apply(instance) { id, species, aspects -> FormDisplay(id, species, aspects.toSet()) }
+            ).apply(instance) { id, species, aspects -> FormDisplay(id, species, aspects.toMutableSet()) }
         }
 
         fun decode(buffer: RegistryFriendlyByteBuf): FormDisplay {
@@ -54,7 +73,7 @@ data class FormDisplay(
             val speciesIdentifier = buffer.readIdentifier()
             val species = PokemonSpecies.getByIdentifier(speciesIdentifier)
                 ?: throw IllegalArgumentException("Cannot resolve species from $speciesIdentifier")
-            val aspects = buffer.readList(ByteBuf::readString).toSet()
+            val aspects = buffer.readList(ByteBuf::readString).toMutableSet()
             return FormDisplay(id, species, aspects)
         }
     }

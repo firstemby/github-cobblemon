@@ -152,7 +152,9 @@ open class PlayerPartyStore(
 
                 // Reevaluate active form
                 val form = pokemon.form
-                if (form is TemporaryForm && !form.reevaluate(pokemon)) form.revert(pokemon) // TODO check locks?
+                if (form is TemporaryForm && !form.reevaluate(pokemon)) {
+                    form.revert(pokemon)
+                } // TODO check locks?
 
                 // Reevaluate transformation requirements and remove invalid transformations from the controller
                 pokemon.formProxy.server().reevaluate()
