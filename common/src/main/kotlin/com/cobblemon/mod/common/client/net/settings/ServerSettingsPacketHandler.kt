@@ -23,12 +23,12 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.maxDynamaxLevel = packet.maxDynamaxLevel
         ServerSettings.unlockAllMoveDexMovesByDefault = packet.unlockAllMoveDexMovesByDefault
         ServerSettings.pokedexScannerPhotoRaycastDistance = packet.pokedexScannerPhotoRaycastDistance
-        ServerSettings.pokedexScannerPhotoInnerRaycastDensity = packet.pokedexScannerPhotoInnerRaycastDensity
+        ServerSettings.pokedexScannerPhotoRaycastDensity = packet.pokedexScannerPhotoRaycastDensity
         ServerSettings.pokedexScannerPhotoPerimeterRaycastDensity = packet.pokedexScannerPhotoPerimeterRaycastDensity
         ServerSettings.pokedexScannerPhotoCoverageScoreCap = packet.pokedexScannerPhotoCoverageScoreCap
         ServerSettings.pokedexScannerPhotoCoverageScoreCapAtPercent = packet.pokedexScannerPhotoCoverageScoreCapAtPercent
         ServerSettings.pokedexScannerPhotoCenteredScoreCap = packet.pokedexScannerPhotoCenteredScoreCap
-        ServerSettings.pokedexScannerPhotoFacingScoreCap = packet.pokedexScannerPhotoFacingScoreCap
+        ServerSettings.pokedexScannerPhotoFacingBonus = packet.pokedexScannerPhotoFacingBonus
         ServerSettings.pokedexScannerPhotoLookTargetBonus = packet.pokedexScannerPhotoLookTargetBonus
         ServerSettings.pokedexScannerPhotoFullBodyBonus = packet.pokedexScannerPhotoFullBodyBonus
         ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier = packet.pokedexScannerPhotoOutOfFrameMultiplier
@@ -37,10 +37,8 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.pokedexScannerPhotoRareSpeciesMultiplier = packet.pokedexScannerPhotoRareSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier = packet.pokedexScannerPhotoUltraRareSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap = packet.pokedexScannerPhotoExtraPokemonBonusCap
-        ServerSettings.pokedexScannerPhotoExtraPokemonBonusPercentCap = packet.pokedexScannerPhotoExtraPokemonBonusPercentCap
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject = packet.pokedexScannerPhotoExtraPokemonBonusPerSubject
-        ServerSettings.pokedexScannerPhotoSameSpeciesBonus = packet.pokedexScannerPhotoSameSpeciesBonus
-        ServerSettings.pokedexScannerPhotoEvolutionLineBonus = packet.pokedexScannerPhotoEvolutionLineBonus
+        ServerSettings.pokedexScannerPhotoRelatedPokemonBonus = packet.pokedexScannerPhotoRelatedPokemonBonus
     }
 
 }

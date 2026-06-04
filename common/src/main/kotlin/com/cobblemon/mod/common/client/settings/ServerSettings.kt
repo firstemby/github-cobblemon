@@ -29,12 +29,12 @@ object ServerSettings {
     var maxDynamaxLevel = Cobblemon.config.maxDynamaxLevel
     var unlockAllMoveDexMovesByDefault = Cobblemon.config.unlockAllMoveDexMovesByDefault
     var pokedexScannerPhotoRaycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance
-    var pokedexScannerPhotoInnerRaycastDensity = Cobblemon.config.pokedexScannerPhotoInnerRaycastDensity
+    var pokedexScannerPhotoRaycastDensity = Cobblemon.config.pokedexScannerPhotoRaycastDensity
     var pokedexScannerPhotoPerimeterRaycastDensity = Cobblemon.config.pokedexScannerPhotoPerimeterRaycastDensity
     var pokedexScannerPhotoCoverageScoreCap = Cobblemon.config.pokedexScannerPhotoCoverageScoreCap
     var pokedexScannerPhotoCoverageScoreCapAtPercent = Cobblemon.config.pokedexScannerPhotoCoverageScoreCapAtPercent
     var pokedexScannerPhotoCenteredScoreCap = Cobblemon.config.pokedexScannerPhotoCenteredScoreCap
-    var pokedexScannerPhotoFacingScoreCap = Cobblemon.config.pokedexScannerPhotoFacingScoreCap
+    var pokedexScannerPhotoFacingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus
     var pokedexScannerPhotoLookTargetBonus = Cobblemon.config.pokedexScannerPhotoLookTargetBonus
     var pokedexScannerPhotoFullBodyBonus = Cobblemon.config.pokedexScannerPhotoFullBodyBonus
     var pokedexScannerPhotoOutOfFrameMultiplier = Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier
@@ -43,9 +43,7 @@ object ServerSettings {
     var pokedexScannerPhotoRareSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier
     var pokedexScannerPhotoUltraRareSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier
     var pokedexScannerPhotoExtraPokemonBonusCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap
-    var pokedexScannerPhotoExtraPokemonBonusPercentCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPercentCap
     var pokedexScannerPhotoExtraPokemonBonusPerSubject = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject
-    var pokedexScannerPhotoSameSpeciesBonus = Cobblemon.config.pokedexScannerPhotoSameSpeciesBonus
-    var pokedexScannerPhotoEvolutionLineBonus = Cobblemon.config.pokedexScannerPhotoEvolutionLineBonus
+    var pokedexScannerPhotoRelatedPokemonBonus = Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus
 
 }

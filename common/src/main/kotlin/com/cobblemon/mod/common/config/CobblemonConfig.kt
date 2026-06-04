@@ -292,10 +292,6 @@ class CobblemonConfig {
     @IntConstraint(min = 1, max = 6)
     var pokedexScannerPhotoRaycastDensity = 4
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_inner_raycast_density", SERVER)
-    @IntConstraint(min = 1, max = 6)
-    var pokedexScannerPhotoInnerRaycastDensity = 5
-
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_perimeter_raycast_density", SERVER)
     @IntConstraint(min = 1, max = 6)
     var pokedexScannerPhotoPerimeterRaycastDensity = 2
@@ -311,9 +307,9 @@ class CobblemonConfig {
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoCenteredScoreCap = 1000
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_facing_score_cap", SERVER)
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_facing_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
-    var pokedexScannerPhotoFacingScoreCap = 900
+    var pokedexScannerPhotoFacingBonus = 900
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_look_target_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
@@ -342,20 +338,13 @@ class CobblemonConfig {
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoExtraPokemonBonusCap = 500
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_extra_pokemon_bonus_percent_cap", SERVER)
-    var pokedexScannerPhotoExtraPokemonBonusPercentCap = 0.1F
-
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_extra_pokemon_bonus_per_subject", SERVER)
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoExtraPokemonBonusPerSubject = 150
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_same_species_bonus", SERVER)
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_related_pokemon_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
-    var pokedexScannerPhotoSameSpeciesBonus = 100
-
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_evolution_line_bonus", SERVER)
-    @IntConstraint(min = 0, max = 5000)
-    var pokedexScannerPhotoEvolutionLineBonus = 75
+    var pokedexScannerPhotoRelatedPokemonBonus = 100
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
     var pokedexDeletePhotoAfterPrint = false

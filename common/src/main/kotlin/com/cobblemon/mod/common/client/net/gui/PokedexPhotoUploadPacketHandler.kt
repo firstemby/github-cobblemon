@@ -70,7 +70,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     distanceScore = subject.distanceScore.coerceIn(0, 1000),
                     directionScore = subject.directionScore.coerceIn(
                         0,
-                        Cobblemon.config.pokedexScannerPhotoFacingScoreCap.coerceIn(0, 5000) +
+                        Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000) +
                             Cobblemon.config.pokedexScannerPhotoLookTargetBonus.coerceAtLeast(0)
                     ),
                     poseScore = subject.poseScore.coerceIn(0, 800),

@@ -308,12 +308,12 @@ object Cobblemon {
             this.config.maxDynamaxLevel,
             this.config.unlockAllMoveDexMovesByDefault,
             this.config.pokedexScannerPhotoRaycastDistance,
-            this.config.pokedexScannerPhotoInnerRaycastDensity,
+            this.config.pokedexScannerPhotoRaycastDensity,
             this.config.pokedexScannerPhotoPerimeterRaycastDensity,
             this.config.pokedexScannerPhotoCoverageScoreCap,
             this.config.pokedexScannerPhotoCoverageScoreCapAtPercent,
             this.config.pokedexScannerPhotoCenteredScoreCap,
-            this.config.pokedexScannerPhotoFacingScoreCap,
+            this.config.pokedexScannerPhotoFacingBonus,
             this.config.pokedexScannerPhotoLookTargetBonus,
             this.config.pokedexScannerPhotoFullBodyBonus,
             this.config.pokedexScannerPhotoOutOfFrameMultiplier,
@@ -322,10 +322,8 @@ object Cobblemon {
             this.config.pokedexScannerPhotoRareSpeciesMultiplier,
             this.config.pokedexScannerPhotoUltraRareSpeciesMultiplier,
             this.config.pokedexScannerPhotoExtraPokemonBonusCap,
-            this.config.pokedexScannerPhotoExtraPokemonBonusPercentCap,
             this.config.pokedexScannerPhotoExtraPokemonBonusPerSubject,
-            this.config.pokedexScannerPhotoSameSpeciesBonus,
-            this.config.pokedexScannerPhotoEvolutionLineBonus
+            this.config.pokedexScannerPhotoRelatedPokemonBonus
         ).sendToPlayer(player)
     }
 

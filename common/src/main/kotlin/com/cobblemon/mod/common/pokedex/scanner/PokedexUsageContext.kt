@@ -721,7 +721,7 @@ class PokedexUsageContext {
     }
 
     private fun buildPhotoRaySamples(): List<Pair<Double, Double>> {
-        val density = ServerSettings.pokedexScannerPhotoInnerRaycastDensity.coerceIn(1, 6)
+        val density = ServerSettings.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
         val rayCount = BASE_PHOTO_RAYCAST_COUNT * (1 shl (density - 1))
         val samples = ArrayList<Pair<Double, Double>>(rayCount * 2)
         val baseSamples = ArrayList<Pair<Double, Double>>(rayCount)
@@ -1112,7 +1112,7 @@ class PokedexUsageContext {
         val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
         val look = entity.lookAngle.normalize()
         if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return 0
-        val facingScoreCap = ServerSettings.pokedexScannerPhotoFacingScoreCap.coerceIn(0, 5000)
+        val facingScoreCap = ServerSettings.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
         val facing = ((look.dot(toPlayer) + 0.2) / 1.2).coerceIn(0.0, 1.0)
         val facingScore = (facingScoreCap.toDouble() * facing * facing).roundToInt().coerceIn(0, facingScoreCap)
         val lookTargetBonus = if (isBrainLookingAtPlayer(entity, player)) {
@@ -1162,9 +1162,7 @@ class PokedexUsageContext {
             .filter { it !== primary }
             .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateRelatedPokemonBonus(primary, subject) }
         val configuredCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)
-        val percentCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusPercentCap.coerceAtLeast(0F)
-        val cap = min(configuredCap, (primary.subjectScore * percentCap).roundToInt())
-        return rawBonus.coerceIn(0, cap)
+        return rawBonus.coerceIn(0, configuredCap)
     }
 
     private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
@@ -1177,10 +1175,10 @@ class PokedexUsageContext {
 
     private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
         if (primary.species == subject.species) {
-            return ServerSettings.pokedexScannerPhotoSameSpeciesBonus.coerceAtLeast(0)
+            return ServerSettings.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
         }
         return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
-            ServerSettings.pokedexScannerPhotoEvolutionLineBonus.coerceAtLeast(0)
+            ServerSettings.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
         } else {
             0
         }
