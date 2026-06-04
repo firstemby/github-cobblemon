@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokedex.photo
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -48,9 +49,9 @@ object PokedexPhotoQuality {
         }.getOrNull() ?: 0
 
         return when (bucketRank) {
-            4 -> 1.12F
-            3 -> 1.07F
-            2 -> 1.03F
+            4 -> Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier.coerceAtLeast(1F)
+            3 -> Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier.coerceAtLeast(1F)
+            2 -> Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier.coerceAtLeast(1F)
             else -> 1F
         }
     }

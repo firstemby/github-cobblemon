@@ -64,14 +64,18 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     species = species,
                     primarySubject = subject.primarySubject,
                     subjectScore = subject.subjectScore.coerceIn(0, 5000),
-                    sizeScore = subject.sizeScore.coerceIn(0, 3000),
-                    placementScore = subject.placementScore.coerceIn(0, 1000),
+                    sizeScore = subject.sizeScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoCoverageScoreCap.coerceIn(0, 5000)),
+                    placementScore = subject.placementScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoCenteredScoreCap.coerceIn(0, 5000)),
                     centerDistance = subject.centerDistance.coerceIn(0F, 1F),
                     distanceScore = subject.distanceScore.coerceIn(0, 1000),
-                    directionScore = subject.directionScore.coerceIn(0, 900),
+                    directionScore = subject.directionScore.coerceIn(
+                        0,
+                        Cobblemon.config.pokedexScannerPhotoFacingScoreCap.coerceIn(0, 5000) +
+                            Cobblemon.config.pokedexScannerPhotoLookTargetBonus.coerceAtLeast(0)
+                    ),
                     poseScore = subject.poseScore.coerceIn(0, 800),
-                    fullBodyScore = subject.fullBodyScore.coerceIn(0, 200),
-                    otherPokemonScore = subject.otherPokemonScore.coerceIn(0, 500),
+                    fullBodyScore = subject.fullBodyScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0)),
+                    otherPokemonScore = subject.otherPokemonScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)),
                     rayHits = subject.rayHits.coerceIn(0, 4096),
                     rayCoverage = subject.rayCoverage.coerceIn(0F, 1F),
                     perimeterHits = subject.perimeterHits.coerceIn(0, 4096),
@@ -79,7 +83,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     clippingMultiplier = subject.clippingMultiplier.coerceIn(0F, 1F),
                     activeAnimations = subject.activeAnimations.take(16),
                     shiny = subject.shiny,
-                    shinyMultiplier = subject.shinyMultiplier.coerceIn(1F, 1.25F),
+                    shinyMultiplier = subject.shinyMultiplier.coerceIn(1F, Cobblemon.config.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F)),
                     animationMultiplier = subject.animationMultiplier.coerceIn(1F, 1.5F),
                     rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(speciesId)
                 )

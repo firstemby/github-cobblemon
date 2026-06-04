@@ -292,6 +292,71 @@ class CobblemonConfig {
     @IntConstraint(min = 1, max = 6)
     var pokedexScannerPhotoRaycastDensity = 4
 
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_inner_raycast_density", SERVER)
+    @IntConstraint(min = 1, max = 6)
+    var pokedexScannerPhotoInnerRaycastDensity = 5
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_perimeter_raycast_density", SERVER)
+    @IntConstraint(min = 1, max = 6)
+    var pokedexScannerPhotoPerimeterRaycastDensity = 2
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_coverage_score_cap", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoCoverageScoreCap = 3000
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_coverage_score_cap_at_percent", SERVER)
+    var pokedexScannerPhotoCoverageScoreCapAtPercent = 0.5F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_centered_score_cap", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoCenteredScoreCap = 1000
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_facing_score_cap", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoFacingScoreCap = 900
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_look_target_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoLookTargetBonus = 300
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_full_body_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoFullBodyBonus = 200
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_out_of_frame_multiplier", SERVER)
+    var pokedexScannerPhotoOutOfFrameMultiplier = 0.55F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_shiny_multiplier", SERVER)
+    var pokedexScannerPhotoShinyMultiplier = 1.15F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_uncommon_species_multiplier", SERVER)
+    var pokedexScannerPhotoUncommonSpeciesMultiplier = 1.03F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_rare_species_multiplier", SERVER)
+    var pokedexScannerPhotoRareSpeciesMultiplier = 1.07F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_ultra_rare_species_multiplier", SERVER)
+    var pokedexScannerPhotoUltraRareSpeciesMultiplier = 1.12F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_extra_pokemon_bonus_cap", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoExtraPokemonBonusCap = 500
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_extra_pokemon_bonus_percent_cap", SERVER)
+    var pokedexScannerPhotoExtraPokemonBonusPercentCap = 0.1F
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_extra_pokemon_bonus_per_subject", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoExtraPokemonBonusPerSubject = 150
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_same_species_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoSameSpeciesBonus = 100
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_evolution_line_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoEvolutionLineBonus = 75
+
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
     var pokedexDeletePhotoAfterPrint = false
 

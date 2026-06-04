@@ -26,7 +26,26 @@ class ServerSettingsPacket internal constructor(
     val maxPokemonLevel: Int,
     val maxPokemonFriendship: Int,
     val maxDynamaxLevel: Int,
-    val unlockAllMoveDexMovesByDefault: Boolean
+    val unlockAllMoveDexMovesByDefault: Boolean,
+    val pokedexScannerPhotoRaycastDistance: Double,
+    val pokedexScannerPhotoInnerRaycastDensity: Int,
+    val pokedexScannerPhotoPerimeterRaycastDensity: Int,
+    val pokedexScannerPhotoCoverageScoreCap: Int,
+    val pokedexScannerPhotoCoverageScoreCapAtPercent: Float,
+    val pokedexScannerPhotoCenteredScoreCap: Int,
+    val pokedexScannerPhotoFacingScoreCap: Int,
+    val pokedexScannerPhotoLookTargetBonus: Int,
+    val pokedexScannerPhotoFullBodyBonus: Int,
+    val pokedexScannerPhotoOutOfFrameMultiplier: Float,
+    val pokedexScannerPhotoShinyMultiplier: Float,
+    val pokedexScannerPhotoUncommonSpeciesMultiplier: Float,
+    val pokedexScannerPhotoRareSpeciesMultiplier: Float,
+    val pokedexScannerPhotoUltraRareSpeciesMultiplier: Float,
+    val pokedexScannerPhotoExtraPokemonBonusCap: Int,
+    val pokedexScannerPhotoExtraPokemonBonusPercentCap: Float,
+    val pokedexScannerPhotoExtraPokemonBonusPerSubject: Int,
+    val pokedexScannerPhotoSameSpeciesBonus: Int,
+    val pokedexScannerPhotoEvolutionLineBonus: Int
 ) : NetworkPacket<ServerSettingsPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -37,9 +56,55 @@ class ServerSettingsPacket internal constructor(
         buffer.writeInt(Cobblemon.config.maxPokemonFriendship)
         buffer.writeInt(Cobblemon.config.maxDynamaxLevel)
         buffer.writeBoolean(Cobblemon.config.unlockAllMoveDexMovesByDefault)
+        buffer.writeDouble(Cobblemon.config.pokedexScannerPhotoRaycastDistance)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoInnerRaycastDensity)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoPerimeterRaycastDensity)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoCoverageScoreCap)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoCoverageScoreCapAtPercent)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoCenteredScoreCap)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFacingScoreCap)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoLookTargetBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFullBodyBonus)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoShinyMultiplier)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap)
+        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPercentCap)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoSameSpeciesBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoEvolutionLineBonus)
     }
     companion object {
         val ID = cobblemonResource("server_settings")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readBoolean())
+        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(
+            buffer.readBoolean(),
+            buffer.readBoolean(),
+            buffer.readBoolean(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readBoolean(),
+            buffer.readDouble(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readFloat(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readFloat(),
+            buffer.readFloat(),
+            buffer.readFloat(),
+            buffer.readFloat(),
+            buffer.readFloat(),
+            buffer.readInt(),
+            buffer.readFloat(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt()
+        )
     }
 }

@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.Active
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
+import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
@@ -31,6 +32,8 @@ import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanni
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
+import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -49,6 +52,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
@@ -170,8 +174,7 @@ class PokedexUsageContext {
     private data class RaycastCandidate(
         val entity: Entity,
         val scannable: ScannableEntity,
-        val entityBox: AABB,
-        val inflatedBox: AABB
+        val entityBox: AABB
     )
 
     private data class PhotoRaySample(
@@ -662,7 +665,7 @@ class PokedexUsageContext {
     private fun collectPhotoMetadata(player: LocalPlayer): PhotoCaptureMetadata {
         val level = player.level()
         val eyePos = player.getEyePosition(1.0F)
-        val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
+        val raycastDistance = ServerSettings.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
         val projection = buildPhotoProjection(player)
         val raySamples = computePhotoRaySamples(player, projection)
         val inFrameRayCount = raySamples.count { !it.perimeter }.coerceAtLeast(1)
@@ -683,7 +686,7 @@ class PokedexUsageContext {
                     animationMultiplier = animationType?.multiplier?.coerceIn(1F, 1.5F) ?: 1F,
                     activeAnimations = activeAnimations,
                     shiny = shiny,
-                    shinyMultiplier = if (shiny) 1.15F else 1F
+                    shinyMultiplier = if (shiny) ServerSettings.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F) else 1F
                 )
             }.also { subject ->
                 subject.projectedInsidePhotoBounds = subject.projectedInsidePhotoBounds && isEntityInsidePhotoBounds(hit.entity, projection)
@@ -718,7 +721,7 @@ class PokedexUsageContext {
     }
 
     private fun buildPhotoRaySamples(): List<Pair<Double, Double>> {
-        val density = Cobblemon.config.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
+        val density = ServerSettings.pokedexScannerPhotoInnerRaycastDensity.coerceIn(1, 6)
         val rayCount = BASE_PHOTO_RAYCAST_COUNT * (1 shl (density - 1))
         val samples = ArrayList<Pair<Double, Double>>(rayCount * 2)
         val baseSamples = ArrayList<Pair<Double, Double>>(rayCount)
@@ -745,8 +748,8 @@ class PokedexUsageContext {
     }
 
     private fun buildPhotoPerimeterRaySamples(): List<Pair<Double, Double>> {
-        val density = Cobblemon.config.pokedexScannerPhotoRaycastDensity.coerceIn(1, 6)
-        val edgeSamples = (density * 10).coerceAtLeast(16)
+        val density = ServerSettings.pokedexScannerPhotoPerimeterRaycastDensity.coerceIn(1, 6)
+        val edgeSamples = (density * 6).coerceAtLeast(8)
         val samples = ArrayList<Pair<Double, Double>>(edgeSamples * 4)
 
         repeat(edgeSamples) { index ->
@@ -853,7 +856,7 @@ class PokedexUsageContext {
 
     private fun captureDebugRays(player: LocalPlayer) {
         val eyePos = player.getEyePosition(1.0F)
-        val raycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
+        val raycastDistance = ServerSettings.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
         capturedDebugRays = computePhotoRaySamples(player).map { sample ->
             CapturedDebugRay(
                 start = eyePos,
@@ -923,7 +926,7 @@ class PokedexUsageContext {
         return player.level().getEntitiesOfClass(Entity::class.java, boundingBox) { it !== player && !it.isSpectator && it is ScannableEntity }
             .mapNotNull { entity ->
                 val scannable = entity as? ScannableEntity ?: return@mapNotNull null
-                RaycastCandidate(entity = entity, scannable = scannable, entityBox = entity.boundingBox, inflatedBox = inflateScannerHitbox(entity.boundingBox))
+                RaycastCandidate(entity = entity, scannable = scannable, entityBox = entity.boundingBox)
             }
     }
 
@@ -960,8 +963,7 @@ class PokedexUsageContext {
 
         val rayEnd = eyePos.add(sample.direction.scale(maxDistance))
         val hits = candidates.asSequence().mapNotNull { candidate ->
-            val hitBox = if (sample.perimeter) candidate.entityBox else candidate.inflatedBox
-            val intersection = hitBox.clip(eyePos, rayEnd)
+            val intersection = candidate.entityBox.clip(eyePos, rayEnd)
             if (intersection.isEmpty) {
                 return@mapNotNull null
             }
@@ -1044,8 +1046,8 @@ class PokedexUsageContext {
         val sizeScore = calculateSizeScore(rayCoverage, wholeBodyInFrame)
         val placementScore = calculatePlacementScore(centerDistance)
         val directionScore = calculateDirectionScore(subject.entity)
-        val fullBodyScore = if (wholeBodyInFrame) 200 else 0
-        val clippingMultiplier = if (wholeBodyInFrame) 1.0 else 0.55
+        val fullBodyScore = if (wholeBodyInFrame) ServerSettings.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
+        val clippingMultiplier = if (wholeBodyInFrame) 1.0 else ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
         val subjectScore = ((sizeScore + placementScore + directionScore + subject.poseScore + fullBodyScore) * clippingMultiplier)
             .roundToInt()
             .coerceIn(0, 5000)
@@ -1077,16 +1079,18 @@ class PokedexUsageContext {
     }
 
     private fun calculateSizeScore(rayCoverage: Double, wholeBodyInFrame: Boolean): Int {
-        val normalizedCoverage = (rayCoverage / 0.5).coerceIn(0.0, 1.0)
+        val scoreCap = ServerSettings.pokedexScannerPhotoCoverageScoreCap.coerceIn(0, 5000)
+        val capAtCoverage = ServerSettings.pokedexScannerPhotoCoverageScoreCapAtPercent.toDouble().coerceIn(0.01, 1.0)
+        val normalizedCoverage = (rayCoverage / capAtCoverage).coerceIn(0.0, 1.0)
         val coverageFactor = Math.pow(normalizedCoverage, 2.4)
         val tooLargeFactor = if (rayCoverage <= 0.55 || wholeBodyInFrame) {
             1.0
         } else {
             (1.0 - ((rayCoverage - 0.55) / 0.35 * 0.2)).coerceIn(0.8, 1.0)
         }
-        return (3000.0 * coverageFactor * tooLargeFactor)
+        return (scoreCap.toDouble() * coverageFactor * tooLargeFactor)
             .roundToInt()
-            .coerceIn(0, 3000)
+            .coerceIn(0, scoreCap)
     }
 
     private fun calculateCenterDistance(centroidX: Double, centroidY: Double): Double {
@@ -1095,7 +1099,8 @@ class PokedexUsageContext {
 
     private fun calculatePlacementScore(centerDistance: Double): Int {
         val placement = (1.0 - centerDistance).coerceIn(0.0, 1.0)
-        return (1000.0 * Math.pow(placement, 2.2)).roundToInt().coerceIn(0, 1000)
+        val scoreCap = ServerSettings.pokedexScannerPhotoCenteredScoreCap.coerceIn(0, 5000)
+        return (scoreCap.toDouble() * Math.pow(placement, 2.2)).roundToInt().coerceIn(0, scoreCap)
     }
 
     private fun calculateDistanceScore(distanceValue: Double): Int {
@@ -1107,8 +1112,15 @@ class PokedexUsageContext {
         val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
         val look = entity.lookAngle.normalize()
         if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return 0
+        val facingScoreCap = ServerSettings.pokedexScannerPhotoFacingScoreCap.coerceIn(0, 5000)
         val facing = ((look.dot(toPlayer) + 0.2) / 1.2).coerceIn(0.0, 1.0)
-        return (900.0 * facing * facing).roundToInt().coerceIn(0, 900)
+        val facingScore = (facingScoreCap.toDouble() * facing * facing).roundToInt().coerceIn(0, facingScoreCap)
+        val lookTargetBonus = if (isBrainLookingAtPlayer(entity, player)) {
+            ServerSettings.pokedexScannerPhotoLookTargetBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
+        return (facingScore + lookTargetBonus).coerceIn(0, facingScoreCap + lookTargetBonus)
     }
 
     private fun isEntityInsidePhotoBounds(entity: Entity, projection: PhotoProjection): Boolean {
@@ -1148,8 +1160,10 @@ class PokedexUsageContext {
         val rawBonus = subjects
             .asSequence()
             .filter { it !== primary }
-            .sumOf(::calculateSecondaryPokemonBonus)
-        val cap = min(500, (primary.subjectScore * 0.1).roundToInt())
+            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateRelatedPokemonBonus(primary, subject) }
+        val configuredCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)
+        val percentCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusPercentCap.coerceAtLeast(0F)
+        val cap = min(configuredCap, (primary.subjectScore * percentCap).roundToInt())
         return rawBonus.coerceIn(0, cap)
     }
 
@@ -1157,7 +1171,60 @@ class PokedexUsageContext {
         val visibility = (subject.rayCoverage / 0.12F).coerceIn(0F, 1F)
         val placement = (subject.placementScore / 1000F).coerceIn(0F, 1F)
         val body = if (subject.wholeBodyInFrame) 1F else 0.5F
-        return (150F * visibility * placement * body).roundToInt().coerceIn(0, 150)
+        val scoreCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject.coerceAtLeast(0)
+        return (scoreCap * visibility * placement * body).roundToInt().coerceIn(0, scoreCap)
+    }
+
+    private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
+        if (primary.species == subject.species) {
+            return ServerSettings.pokedexScannerPhotoSameSpeciesBonus.coerceAtLeast(0)
+        }
+        return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
+            ServerSettings.pokedexScannerPhotoEvolutionLineBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
+    }
+
+    private fun areSpeciesInSameEvolutionLine(firstSpecies: String, secondSpecies: String): Boolean {
+        val firstId = ResourceLocation.tryParse(firstSpecies) ?: return false
+        val secondId = ResourceLocation.tryParse(secondSpecies) ?: return false
+        if (firstId == secondId) return true
+        return secondId in collectEvolutionFamily(firstId)
+    }
+
+    private fun collectEvolutionFamily(speciesId: ResourceLocation): Set<ResourceLocation> {
+        val rootSpecies = PokemonSpecies.getByIdentifier(speciesId) ?: return setOf(speciesId)
+        val family = linkedSetOf<ResourceLocation>()
+        val processed = hashSetOf<ResourceLocation>()
+        val queue = ArrayDeque<Species>()
+        queue.add(rootSpecies)
+        var preEvolution = rootSpecies.preEvolution?.species
+        while (preEvolution != null && family.add(preEvolution.resourceIdentifier)) {
+            queue.add(preEvolution)
+            preEvolution = preEvolution.preEvolution?.species
+        }
+
+        while (queue.isNotEmpty()) {
+            val species = queue.removeFirst()
+            if (!processed.add(species.resourceIdentifier)) continue
+            family.add(species.resourceIdentifier)
+            species.evolutions
+                .asSequence()
+                .mapNotNull { evolution -> evolution.result.species?.asIdentifierDefaultingNamespace() }
+                .mapNotNull(PokemonSpecies::getByIdentifier)
+                .forEach(queue::add)
+        }
+        return family
+    }
+
+    private fun isBrainLookingAtPlayer(entity: Entity, player: LocalPlayer): Boolean {
+        val lookTarget = (entity as? PokemonEntity)
+            ?.brain
+            ?.getMemory(MemoryModuleType.LOOK_TARGET)
+            ?.orElse(null)
+            ?: return false
+        return lookTarget.currentPosition().distanceTo(player.eyePosition) <= 1.0
     }
 
     private fun isLookingAtPlayer(entity: Entity, player: LocalPlayer): Boolean {
