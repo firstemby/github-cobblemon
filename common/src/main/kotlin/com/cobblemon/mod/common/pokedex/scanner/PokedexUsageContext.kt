@@ -25,8 +25,10 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.Primar
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.settings.ServerSettings
+import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
+import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishPrintedPhotoScanningPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
@@ -49,6 +51,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
@@ -142,6 +145,8 @@ class PokedexUsageContext {
     var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
+    private var printedPhotoBlockInFocus: BlockPos? = null
+    private var printedPhotoScanCompleted = false
     private var previousAttackInput = false
     private var previousModeToggleInput = false
     private var pictureBuffer: RenderTarget? = null
@@ -150,12 +155,16 @@ class PokedexUsageContext {
     private var shutterAnimationDurationMs = 0L
     private var capturedDebugRays: List<CapturedDebugRay> = emptyList()
     private var capturedDebugRaysExpireAt: Long = 0L
+    var showDebugPhotoScore = false
+    var showDebugPhotoRaycast = false
 
     private data class PhotoCaptureMetadata(
         val detectedSpecies: List<String>,
         val biome: String,
         val dimension: String,
         val timeOfDayTicks: Long,
+        val raining: Boolean,
+        val thundering: Boolean,
         val qualityScore: Int,
         val qualitySubjects: List<PokedexPhotoSubjectQuality>
     ) {
@@ -165,6 +174,8 @@ class PokedexUsageContext {
                 biome = "minecraft:unknown",
                 dimension = "minecraft:overworld",
                 timeOfDayTicks = 0L,
+                raining = false,
+                thundering = false,
                 qualityScore = 0,
                 qualitySubjects = emptyList()
             )
@@ -277,6 +288,20 @@ class PokedexUsageContext {
             if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) scanningProgress += updateInterval
             if (scanningProgress >= MAX_SCAN_PROGRESS) targetId?.let { FinishScanningPacket(it, zoomLevel.toInt()).sendToServer() }
             if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
+        } else if (printedPhotoBlockInFocus != null) {
+            if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) {
+                scanningProgress += updateInterval
+            }
+            val targetPos = printedPhotoBlockInFocus
+            if (!printedPhotoScanCompleted && scanningProgress >= MAX_SCAN_PROGRESS && targetPos != null) {
+                printedPhotoScanCompleted = true
+                FinishPrintedPhotoScanningPacket(targetPos, zoomLevel.toInt()).sendToServer()
+                Minecraft.getInstance().player?.displayClientMessage(
+                    Component.translatable("cobblemon.ui.pokedex.photo_scan.sent"),
+                    true
+                )
+            }
+            if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
         } else {
             if (scannableEntityInFocus != null) {
                 if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
@@ -298,7 +323,7 @@ class PokedexUsageContext {
     fun useTick(user: LocalPlayer, ticksInUse: Int, inUse: Boolean) {
         tryOpenScanGui(ticksInUse, inUse)
         if (scanningGuiOpen && scannerMode == ScannerMode.SCANNING) tryScanPokemon(user)
-        if (scannerMode == ScannerMode.SCANNING && scannedSpecies !== null && scannableEntityInFocus !== null) {
+        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || printedPhotoBlockInFocus != null)) {
             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         }
     }
@@ -353,6 +378,7 @@ class PokedexUsageContext {
 
         scannerMode = if (scannerMode == ScannerMode.SCANNING) {
             resetFocusedPokemonState()
+            resetPrintedPhotoScanState()
             ScannerMode.CAMERA
         } else {
             ScannerMode.SCANNING
@@ -399,6 +425,7 @@ class PokedexUsageContext {
     fun tryScanPokemon(user: LocalPlayer) {
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
         if (targetScannableEntity != null) {
+            resetPrintedPhotoScanState()
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
@@ -427,8 +454,53 @@ class PokedexUsageContext {
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
         } else {
-            resetFocusedPokemonState()
+            if (!tryScanPrintedPhoto(user)) {
+                resetFocusedPokemonState()
+            }
         }
+    }
+
+    private fun tryScanPrintedPhoto(user: LocalPlayer): Boolean {
+        val targetPos = findPrintedPhotoDisplayBlock(user)
+        if (targetPos == null) {
+            resetPrintedPhotoScanState()
+            return false
+        }
+
+        scannableEntityInFocus = null
+        scannedSpecies = null
+        viewInfoTicks = 0
+        displayRegisterInfoIntervals = 0F
+        registerCompleted = false
+        isPokemonInFocusOwned = false
+        newPokemonInfo = PokedexLearnedInformation.NONE
+
+        if (printedPhotoBlockInFocus != targetPos) {
+            printedPhotoBlockInFocus = targetPos.immutable()
+            printedPhotoScanCompleted = false
+            scanningProgress = 0F
+            if (focusIntervals == 0F) {
+                availableInfoFrames = mutableListOf(null, null, null, null)
+            }
+        }
+        return true
+    }
+
+    private fun findPrintedPhotoDisplayBlock(user: LocalPlayer): BlockPos? {
+        val eyePos = user.getEyePosition(1.0F)
+        val maxDistance = Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel.toInt() * BLOCK_LENGTH_PER_ZOOM_STAGE)
+        val hit = user.level().clip(
+            ClipContext(
+                eyePos,
+                eyePos.add(user.getViewVector(1.0F).scale(maxDistance.toDouble())),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                user
+            )
+        )
+        if (hit.type != HitResult.Type.BLOCK) return null
+        val blockHit = hit as? BlockHitResult ?: return null
+        return blockHit.blockPos.takeIf { user.level().getBlockEntity(it) is PrintedPhotoDisplayBlockEntity }
     }
 
     fun onServerConfirmedRegister(packet: ServerConfirmedRegisterPacket) {
@@ -455,6 +527,11 @@ class PokedexUsageContext {
         newPokemonInfo = PokedexLearnedInformation.NONE
     }
 
+    private fun resetPrintedPhotoScanState() {
+        printedPhotoBlockInFocus = null
+        printedPhotoScanCompleted = false
+    }
+
     fun resetState(resetAnimationStates: Boolean = true) {
         scanningGuiOpen = false
         scannerMode = previousScanningMode
@@ -468,6 +545,7 @@ class PokedexUsageContext {
         shutterAnimationDurationMs = 0L
         capturedDebugRays = emptyList()
         capturedDebugRaysExpireAt = 0L
+        resetPrintedPhotoScanState()
         resetFocusedPokemonState()
 
         if (resetAnimationStates) {
@@ -563,7 +641,7 @@ class PokedexUsageContext {
             val targetSize = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
             resized = resizeToCaptureArea(image, targetSize)
             val player = Minecraft.getInstance().player
-            if (player != null) {
+            if (player != null && showDebugPhotoRaycast) {
                 captureDebugRays(player)
             }
             val metadata = if (player != null) collectPhotoMetadata(player) else PhotoCaptureMetadata.EMPTY
@@ -575,6 +653,8 @@ class PokedexUsageContext {
                 biome = metadata.biome,
                 dimension = metadata.dimension,
                 timeOfDayTicks = metadata.timeOfDayTicks,
+                raining = metadata.raining,
+                thundering = metadata.thundering,
                 qualityScore = metadata.qualityScore,
                 qualitySubjects = metadata.qualitySubjects,
                 pngData = resized.asByteArray()
@@ -595,8 +675,11 @@ class PokedexUsageContext {
         val player = Minecraft.getInstance().player ?: return
 
         if (metadata.detectedSpecies.isEmpty()) {
-            player.displayClientMessage(Component.literal("Photo scan detected: none (score ${metadata.qualityScore})"), false)
-            showPhotoScoringDebug(player, metadata)
+            if (showDebugPhotoScore)
+                player.displayClientMessage(Component.literal("Photo scan detected: none (score ${metadata.qualityScore})"), false)
+
+            if (showDebugPhotoScore)
+                showPhotoScoringDebug(player, metadata)
             return
         }
 
@@ -610,11 +693,12 @@ class PokedexUsageContext {
         val shown = speciesNames.take(maxShown)
         val overflow = speciesNames.size - shown.size
         val suffix = if (overflow > 0) ", +$overflow more" else ""
-        player.displayClientMessage(
-            Component.literal("Photo scan detected (${speciesNames.size}, score ${metadata.qualityScore}): ${shown.joinToString(", ")}$suffix"),
-            false
-        )
-        showPhotoScoringDebug(player, metadata)
+        if (showDebugPhotoScore)
+            player.displayClientMessage(
+                Component.literal("Photo scan detected (${speciesNames.size}, score ${metadata.qualityScore}): ${shown.joinToString(", ")}$suffix"),
+                false
+            )
+            showPhotoScoringDebug(player, metadata)
     }
 
     private fun showPhotoScoringDebug(player: LocalPlayer, metadata: PhotoCaptureMetadata) {
@@ -631,7 +715,15 @@ class PokedexUsageContext {
                     subject.placementScore +
                     subject.directionScore +
                     subject.poseScore +
-                    subject.fullBodyScore
+                    subject.otherPokemonScore +
+                    subject.herdScore +
+                    subject.habitatScore +
+                    subject.timeOfDayScore +
+                    subject.weatherScore +
+                    subject.shinyScore +
+                    subject.alphaScore +
+                    subject.wildScore +
+                    subject.formScore
 
             val animationText = if (subject.activeAnimations.isEmpty()) {
                 "none"
@@ -649,10 +741,17 @@ class PokedexUsageContext {
                 "size +${subject.sizeScore}",
                 "centering +${subject.placementScore}",
                 "look-at-camera +${subject.directionScore}",
+                "herd +${subject.herdScore}",
+                "wild +${subject.wildScore}",
+                "form +${subject.formScore}",
                 "animation pose +${subject.poseScore}",
+                "habitat +${subject.habitatScore}",
+                "time of day +${subject.timeOfDayScore}",
+                "weather +${subject.weatherScore}",
                 clippingText,
                 "other Pokemon +${subject.otherPokemonScore}",
-                "shiny x${formatMultiplier(subject.shinyMultiplier)}",
+                "shiny +${subject.shinyScore}",
+                "alpha +${subject.alphaScore}",
                 "species rarity x${formatMultiplier(subject.rarityMultiplier)}"
             ).joinToString(", ")
 
@@ -681,12 +780,19 @@ class PokedexUsageContext {
                     primary.placementScore +
                     primary.directionScore +
                     primary.poseScore +
-                    primary.fullBodyScore +
-                    primary.otherPokemonScore
+                    primary.otherPokemonScore +
+                    primary.herdScore +
+                    primary.wildScore +
+                    primary.formScore +
+                    primary.habitatScore +
+                    primary.timeOfDayScore +
+                    primary.weatherScore +
+                    primary.shinyScore +
+                    primary.alphaScore
 
             val expectedFinalScore = (finalRawScore *
-                    primary.clippingMultiplier *
-                    primary.shinyMultiplier
+                    primary.rarityMultiplier *
+                    primary.clippingMultiplier
                     ).roundToInt().coerceIn(0, 5000)
 
             player.displayClientMessage(
@@ -694,10 +800,13 @@ class PokedexUsageContext {
                     "[Photo Score Debug]   -> FINAL subject=${primary.species}, score=${primary.subjectScore}/5000, " +
                             "formula=(${primary.sizeScore} size + ${primary.placementScore} center + " +
                             "${primary.directionScore} look + ${primary.poseScore} pose + " +
-                            "${primary.fullBodyScore} fullBody + ${primary.otherPokemonScore} otherPokemon) = $finalRawScore, " +
+                            "${primary.otherPokemonScore} extra + ${primary.herdScore} herd + " +
+                            "${primary.wildScore} wild + ${primary.formScore} form + " +
+                            "${primary.habitatScore} habitat + ${primary.timeOfDayScore} time + " +
+                            "${primary.weatherScore} weather + ${primary.shinyScore} shiny + " +
+                            "${primary.alphaScore} alpha) = $finalRawScore, " +
                             "multipliers=[clip x${formatMultiplier(primary.clippingMultiplier)}, " +
-                            "shiny x${formatMultiplier(primary.shinyMultiplier)}, " +
-                            "rarity tracked x${formatMultiplier(primary.rarityMultiplier)}], " +
+                            "rarity x${formatMultiplier(primary.rarityMultiplier)}], " +
                             "expected=$expectedFinalScore, rays=${primary.rayHits}, coverage=${formatPercent(primary.rayCoverage)}, " +
                             "center=${formatPercent(1F - primary.centerDistance)}"
                 ),
@@ -759,6 +868,8 @@ class PokedexUsageContext {
             biome = biome,
             dimension = level.dimension().location().toString(),
             timeOfDayTicks = ((level.dayTime % 24000L) + 24000L) % 24000L,
+            raining = level.isRaining,
+            thundering = level.isThundering,
             qualityScore = calculatePhotoQualityScore(qualitySubjects),
             qualitySubjects = qualitySubjects
         )
@@ -1104,8 +1215,8 @@ class PokedexUsageContext {
                 .thenBy { it.distanceScore }
         ) ?: return emptyList()
         val primary = buildPrimarySubjectQuality(primaryStats)
-        val otherPokemonBonus = calculateOtherPokemonBonus(primary, subjectStats)
-        val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus)
+        val (otherPokemonBonus, herdBonus) = calculateOtherPokemonBonuses(primary, subjectStats)
+        val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus, herdBonus)
 
         return subjectStats.map { stats ->
             if (stats === primaryStats) {
@@ -1134,11 +1245,19 @@ class PokedexUsageContext {
         val subject = stats.accumulator
         val activeAnimations = getActiveAnimationNames(subject.entity).toList()
         val animationType = PokedexPhotoAnimationTypes.bestMatchFor(activeAnimations)
-        val shiny = (subject.entity as? PokemonEntity)?.pokemon?.shiny == true
+        val pokemon = (subject.entity as? PokemonEntity)?.pokemon
+        val shiny = pokemon?.shiny == true
+        val alpha = pokemon?.aspects?.contains("alpha") == true
+        val wild = pokemon?.isWild() == true
+        val alternateForm = pokemon?.let { it.form.name != it.species.standardForm.name } == true
         val sizeScore = calculateSizeScore(stats.rayCoverage, true)
         val placementScore = calculatePlacementScore(stats.centerDistance)
         val poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 0
-        val subjectScore = (sizeScore + placementScore + poseScore).coerceIn(0, 5000)
+        val shinyScore = if (shiny) ServerSettings.pokedexScannerPhotoShinyBonus.coerceAtLeast(0) else 0
+        val alphaScore = if (alpha) ServerSettings.pokedexScannerPhotoAlphaBonus.coerceAtLeast(0) else 0
+        val wildScore = if (wild) ServerSettings.pokedexScannerPhotoWildBonus.coerceAtLeast(0) else 0
+        val formScore = if (alternateForm) ServerSettings.pokedexScannerPhotoFormBonus.coerceAtLeast(0) else 0
+        val subjectScore = (sizeScore + placementScore + poseScore + shinyScore + alphaScore + wildScore + formScore).coerceIn(0, 5000)
 
         return PokedexPhotoSubjectQuality(
             species = subject.species.toString(),
@@ -1158,7 +1277,14 @@ class PokedexUsageContext {
             clippingMultiplier = 1F,
             activeAnimations = activeAnimations,
             shiny = shiny,
-            shinyMultiplier = if (shiny) ServerSettings.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F) else 1F,
+            shinyMultiplier = 1F,
+            shinyScore = shinyScore,
+            alpha = alpha,
+            alphaScore = alphaScore,
+            wild = wild,
+            wildScore = wildScore,
+            alternateForm = alternateForm,
+            formScore = formScore,
             rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(
                 species = subject.species,
                 uncommonMultiplier = ServerSettings.pokedexScannerPhotoUncommonSpeciesMultiplier,
@@ -1191,24 +1317,30 @@ class PokedexUsageContext {
             activeAnimations = emptyList(),
             shiny = false,
             shinyMultiplier = 1F,
+            alpha = false,
+            wild = false,
+            alternateForm = false,
             rarityMultiplier = 1F
         )
     }
 
     private fun applyPrimarySubjectScoring(
         primary: PokedexPhotoSubjectQuality,
-        otherPokemonBonus: Int
+        otherPokemonBonus: Int,
+        herdBonus: Int
     ): PokedexPhotoSubjectQuality {
         val wholeBodyInFrame = primary.perimeterHits == 0
         val sizeScore = calculateSizeScore(primary.rayCoverage.toDouble(), wholeBodyInFrame)
-        val fullBodyScore = if (wholeBodyInFrame) ServerSettings.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
         val clippingMultiplier = if (wholeBodyInFrame) {
             1.0
         } else {
             ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
         }
-        val rawScore = sizeScore + primary.placementScore + primary.directionScore + primary.poseScore + fullBodyScore + otherPokemonBonus
-        val subjectScore = (rawScore * clippingMultiplier * primary.shinyMultiplier)
+        val rawScore = sizeScore + primary.placementScore + otherPokemonBonus + primary.directionScore + herdBonus +
+                primary.wildScore + primary.formScore + primary.poseScore +
+                primary.habitatScore + primary.timeOfDayScore + primary.weatherScore +
+                primary.shinyScore + primary.alphaScore
+        val subjectScore = (rawScore * primary.rarityMultiplier * clippingMultiplier)
             .roundToInt()
             .coerceIn(0, 5000)
 
@@ -1216,8 +1348,9 @@ class PokedexUsageContext {
             primarySubject = true,
             subjectScore = subjectScore,
             sizeScore = sizeScore,
-            fullBodyScore = fullBodyScore,
+            fullBodyScore = 0,
             otherPokemonScore = otherPokemonBonus,
+            herdScore = herdBonus,
             wholeBodyInFrame = wholeBodyInFrame,
             clippingMultiplier = clippingMultiplier.toFloat()
         )
@@ -1286,16 +1419,18 @@ class PokedexUsageContext {
         return true
     }
 
-    private fun calculateOtherPokemonBonus(
+    private fun calculateOtherPokemonBonuses(
         primary: PokedexPhotoSubjectQuality,
         subjects: List<PhotoSubjectStats>
-    ): Int {
-        val rawBonus = subjects
+    ): Pair<Int, Int> {
+        val secondarySubjects = subjects
             .asSequence()
             .filter { it.accumulator.species.toString() != primary.species || it.accumulator.entity.uuid != primary.entityUuid }
-            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateFamilyBonus(primary, subject) }
+            .toList()
+        val rawBonus = secondarySubjects.sumOf(::calculateSecondaryPokemonBonus)
+        val herdBonus = secondarySubjects.sumOf { subject -> calculateFamilyBonus(primary, subject) }
         val configuredCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)
-        return rawBonus.coerceIn(0, configuredCap)
+        return rawBonus.coerceIn(0, configuredCap) to herdBonus.coerceAtLeast(0)
     }
 
     private fun calculateSecondaryPokemonBonus(subject: PhotoSubjectStats): Int {

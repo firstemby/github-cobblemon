@@ -31,13 +31,19 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.pokedexScannerPhotoFacingBonus = packet.pokedexScannerPhotoFacingBonus
         ServerSettings.pokedexScannerPhotoFullBodyBonus = packet.pokedexScannerPhotoFullBodyBonus
         ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier = packet.pokedexScannerPhotoOutOfFrameMultiplier
-        ServerSettings.pokedexScannerPhotoShinyMultiplier = packet.pokedexScannerPhotoShinyMultiplier
+        ServerSettings.pokedexScannerPhotoShinyBonus = packet.pokedexScannerPhotoShinyBonus
         ServerSettings.pokedexScannerPhotoUncommonSpeciesMultiplier = packet.pokedexScannerPhotoUncommonSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoRareSpeciesMultiplier = packet.pokedexScannerPhotoRareSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier = packet.pokedexScannerPhotoUltraRareSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap = packet.pokedexScannerPhotoExtraPokemonBonusCap
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject = packet.pokedexScannerPhotoExtraPokemonBonusPerSubject
         ServerSettings.pokedexScannerPhotoFamilyBonus = packet.pokedexScannerPhotoFamilyBonus
+        ServerSettings.pokedexScannerPhotoHabitatBonus = packet.pokedexScannerPhotoHabitatBonus
+        ServerSettings.pokedexScannerPhotoTimeOfDayBonus = packet.pokedexScannerPhotoTimeOfDayBonus
+        ServerSettings.pokedexScannerPhotoWeatherBonus = packet.pokedexScannerPhotoWeatherBonus
+        ServerSettings.pokedexScannerPhotoAlphaBonus = packet.pokedexScannerPhotoAlphaBonus
+        ServerSettings.pokedexScannerPhotoWildBonus = packet.pokedexScannerPhotoWildBonus
+        ServerSettings.pokedexScannerPhotoFormBonus = packet.pokedexScannerPhotoFormBonus
     }
 
 }

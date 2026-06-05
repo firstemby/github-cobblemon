@@ -42,6 +42,8 @@ class PokedexPhotoGalleryPacket(
             buffer.writeUtf(photo.biome)
             buffer.writeUtf(photo.dimension)
             buffer.writeLong(photo.timeOfDayTicks)
+            buffer.writeBoolean(photo.raining)
+            buffer.writeBoolean(photo.thundering)
             buffer.writeInt(photo.qualityScore)
             buffer.writeInt(photo.qualityBaseScore)
             buffer.writeFloat(photo.qualitySpeciesMultiplier)
@@ -57,6 +59,14 @@ class PokedexPhotoGalleryPacket(
                 buffer.writeInt(subject.poseScore)
                 buffer.writeInt(subject.fullBodyScore)
                 buffer.writeInt(subject.otherPokemonScore)
+                buffer.writeInt(subject.herdScore)
+                buffer.writeInt(subject.habitatScore)
+                buffer.writeInt(subject.timeOfDayScore)
+                buffer.writeInt(subject.weatherScore)
+                buffer.writeInt(subject.shinyScore)
+                buffer.writeInt(subject.alphaScore)
+                buffer.writeInt(subject.wildScore)
+                buffer.writeInt(subject.formScore)
                 buffer.writeInt(subject.rayHits)
                 buffer.writeFloat(subject.rayCoverage)
                 buffer.writeInt(subject.perimeterHits)
@@ -65,6 +75,9 @@ class PokedexPhotoGalleryPacket(
                 buffer.writeCollection(subject.activeAnimations.orEmpty()) { _, animation -> buffer.writeUtf(animation) }
                 buffer.writeBoolean(subject.shiny)
                 buffer.writeFloat(subject.shinyMultiplier)
+                buffer.writeBoolean(subject.alpha)
+                buffer.writeBoolean(subject.wild)
+                buffer.writeBoolean(subject.alternateForm)
                 buffer.writeFloat(subject.rarityMultiplier)
             }
         }
@@ -90,6 +103,8 @@ class PokedexPhotoGalleryPacket(
                     biome = buffer.readUtf(),
                     dimension = buffer.readUtf(),
                     timeOfDayTicks = buffer.readLong(),
+                    raining = buffer.readBoolean(),
+                    thundering = buffer.readBoolean(),
                     qualityScore = buffer.readInt(),
                     qualityBaseScore = buffer.readInt(),
                     qualitySpeciesMultiplier = buffer.readFloat(),
@@ -106,6 +121,14 @@ class PokedexPhotoGalleryPacket(
                             poseScore = it.readInt(),
                             fullBodyScore = it.readInt(),
                             otherPokemonScore = it.readInt(),
+                            herdScore = it.readInt(),
+                            habitatScore = it.readInt(),
+                            timeOfDayScore = it.readInt(),
+                            weatherScore = it.readInt(),
+                            shinyScore = it.readInt(),
+                            alphaScore = it.readInt(),
+                            wildScore = it.readInt(),
+                            formScore = it.readInt(),
                             rayHits = it.readInt(),
                             rayCoverage = it.readFloat(),
                             perimeterHits = it.readInt(),
@@ -114,6 +137,9 @@ class PokedexPhotoGalleryPacket(
                             activeAnimations = it.readList { buffer -> buffer.readUtf() },
                             shiny = it.readBoolean(),
                             shinyMultiplier = it.readFloat(),
+                            alpha = it.readBoolean(),
+                            wild = it.readBoolean(),
+                            alternateForm = it.readBoolean(),
                             rarityMultiplier = it.readFloat()
                         )
                     }

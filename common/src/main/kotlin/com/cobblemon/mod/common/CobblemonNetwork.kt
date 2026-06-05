@@ -167,6 +167,7 @@ import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.SetPastureConflictPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpastureAllPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.UnpasturePokemonPacket
+import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishPrintedPhotoScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPokemonPacket
@@ -225,6 +226,7 @@ import com.cobblemon.mod.common.net.serverhandling.pasture.PasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.SetPastureConflictHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpastureAllPokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.UnpasturePokemonHandler
+import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishPrintedPhotoScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokedex.scanner.StartScanningHandler
 import com.cobblemon.mod.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
@@ -566,6 +568,7 @@ object CobblemonNetwork {
         // Pokédex scanning
         list.add(PacketRegisterInfo(StartScanningPacket.ID, StartScanningPacket::decode, StartScanningHandler))
         list.add(PacketRegisterInfo(FinishScanningPacket.ID, FinishScanningPacket::decode, FinishScanningHandler))
+        list.add(PacketRegisterInfo(FinishPrintedPhotoScanningPacket.ID, FinishPrintedPhotoScanningPacket::decode, FinishPrintedPhotoScanningHandler))
         list.add(PacketRegisterInfo(PokedexPhotoUploadPacket.ID, PokedexPhotoUploadPacket::decode, PokedexPhotoUploadPacketHandler))
         list.add(PacketRegisterInfo(RequestPokedexPhotoGalleryPacket.ID, RequestPokedexPhotoGalleryPacket::decode, RequestPokedexPhotoGalleryPacketHandler))
         list.add(PacketRegisterInfo(RequestPokedexPhotoBatchPacket.ID, RequestPokedexPhotoBatchPacket::decode, RequestPokedexPhotoBatchPacketHandler))

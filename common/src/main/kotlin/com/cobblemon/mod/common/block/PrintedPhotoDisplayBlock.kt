@@ -9,12 +9,20 @@
 package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
+import com.cobblemon.mod.common.item.PokedexItem
+import com.cobblemon.mod.common.pokedex.photo.PrintedPhotoPokedexScanner
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.Containers
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.GameRules
@@ -34,6 +42,7 @@ import net.minecraft.world.level.block.state.properties.AttachFace
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -157,6 +166,40 @@ class PrintedPhotoDisplayBlock(properties: Properties) :
                 }
             }
         }
+    }
+
+    override fun useWithoutItem(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hitResult: BlockHitResult
+    ): InteractionResult {
+        return InteractionResult.PASS
+    }
+
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hitResult: BlockHitResult
+    ): ItemInteractionResult {
+        if (stack.item !is PokedexItem) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        }
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS
+        }
+
+        val serverPlayer = player as? ServerPlayer ?: return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        val component = (level.getBlockEntity(pos) as? PrintedPhotoDisplayBlockEntity)?.component
+            ?: return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+        val newlySeen = PrintedPhotoPokedexScanner.grantSeenEntries(serverPlayer, component)
+        PrintedPhotoPokedexScanner.sendResultMessage(serverPlayer, newlySeen, component.detectedSpecies.distinct().size)
+        return ItemInteractionResult.CONSUME
     }
 
     override fun canSurvive(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {

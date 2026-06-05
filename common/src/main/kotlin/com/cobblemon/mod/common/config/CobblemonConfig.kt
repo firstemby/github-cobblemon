@@ -318,8 +318,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_out_of_frame_multiplier", SERVER)
     var pokedexScannerPhotoOutOfFrameMultiplier = 0.55F
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_shiny_multiplier", SERVER)
-    var pokedexScannerPhotoShinyMultiplier = 1.15F
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_shiny_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoShinyBonus = 600
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_uncommon_species_multiplier", SERVER)
     var pokedexScannerPhotoUncommonSpeciesMultiplier = 1.03F
@@ -341,6 +342,30 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_family_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoFamilyBonus = 100
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_habitat_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoHabitatBonus = 150
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_time_of_day_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoTimeOfDayBonus = 150
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_weather_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoWeatherBonus = 150
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_alpha_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoAlphaBonus = 500
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_wild_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoWildBonus = 250
+
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_form_bonus", SERVER)
+    @IntConstraint(min = 0, max = 5000)
+    var pokedexScannerPhotoFormBonus = 400
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
     var pokedexDeletePhotoAfterPrint = false

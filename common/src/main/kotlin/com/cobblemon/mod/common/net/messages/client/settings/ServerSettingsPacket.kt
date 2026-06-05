@@ -36,13 +36,19 @@ class ServerSettingsPacket internal constructor(
     val pokedexScannerPhotoFacingBonus: Int,
     val pokedexScannerPhotoFullBodyBonus: Int,
     val pokedexScannerPhotoOutOfFrameMultiplier: Float,
-    val pokedexScannerPhotoShinyMultiplier: Float,
+    val pokedexScannerPhotoShinyBonus: Int,
     val pokedexScannerPhotoUncommonSpeciesMultiplier: Float,
     val pokedexScannerPhotoRareSpeciesMultiplier: Float,
     val pokedexScannerPhotoUltraRareSpeciesMultiplier: Float,
     val pokedexScannerPhotoExtraPokemonBonusCap: Int,
     val pokedexScannerPhotoExtraPokemonBonusPerSubject: Int,
-    val pokedexScannerPhotoFamilyBonus: Int
+    val pokedexScannerPhotoFamilyBonus: Int,
+    val pokedexScannerPhotoHabitatBonus: Int,
+    val pokedexScannerPhotoTimeOfDayBonus: Int,
+    val pokedexScannerPhotoWeatherBonus: Int,
+    val pokedexScannerPhotoAlphaBonus: Int,
+    val pokedexScannerPhotoWildBonus: Int,
+    val pokedexScannerPhotoFormBonus: Int
 ) : NetworkPacket<ServerSettingsPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -62,13 +68,19 @@ class ServerSettingsPacket internal constructor(
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFacingBonus)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFullBodyBonus)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier)
-        buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoShinyMultiplier)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoShinyBonus)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier)
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFamilyBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoHabitatBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoTimeOfDayBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoWeatherBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoAlphaBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoWildBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFormBonus)
     }
     companion object {
         val ID = cobblemonResource("server_settings")
@@ -89,10 +101,16 @@ class ServerSettingsPacket internal constructor(
             buffer.readInt(),
             buffer.readInt(),
             buffer.readFloat(),
+            buffer.readInt(),
             buffer.readFloat(),
             buffer.readFloat(),
             buffer.readFloat(),
-            buffer.readFloat(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
+            buffer.readInt(),
             buffer.readInt(),
             buffer.readInt(),
             buffer.readInt()

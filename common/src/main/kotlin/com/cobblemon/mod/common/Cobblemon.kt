@@ -316,13 +316,19 @@ object Cobblemon {
             this.config.pokedexScannerPhotoFacingBonus,
             this.config.pokedexScannerPhotoFullBodyBonus,
             this.config.pokedexScannerPhotoOutOfFrameMultiplier,
-            this.config.pokedexScannerPhotoShinyMultiplier,
+            this.config.pokedexScannerPhotoShinyBonus,
             this.config.pokedexScannerPhotoUncommonSpeciesMultiplier,
             this.config.pokedexScannerPhotoRareSpeciesMultiplier,
             this.config.pokedexScannerPhotoUltraRareSpeciesMultiplier,
             this.config.pokedexScannerPhotoExtraPokemonBonusCap,
             this.config.pokedexScannerPhotoExtraPokemonBonusPerSubject,
-            this.config.pokedexScannerPhotoFamilyBonus
+            this.config.pokedexScannerPhotoFamilyBonus,
+            this.config.pokedexScannerPhotoHabitatBonus,
+            this.config.pokedexScannerPhotoTimeOfDayBonus,
+            this.config.pokedexScannerPhotoWeatherBonus,
+            this.config.pokedexScannerPhotoAlphaBonus,
+            this.config.pokedexScannerPhotoWildBonus,
+            this.config.pokedexScannerPhotoFormBonus
         ).sendToPlayer(player)
     }
 

@@ -37,12 +37,18 @@ object ServerSettings {
     var pokedexScannerPhotoFacingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus
     var pokedexScannerPhotoFullBodyBonus = Cobblemon.config.pokedexScannerPhotoFullBodyBonus
     var pokedexScannerPhotoOutOfFrameMultiplier = Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier
-    var pokedexScannerPhotoShinyMultiplier = Cobblemon.config.pokedexScannerPhotoShinyMultiplier
+    var pokedexScannerPhotoShinyBonus = Cobblemon.config.pokedexScannerPhotoShinyBonus
     var pokedexScannerPhotoUncommonSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoUncommonSpeciesMultiplier
     var pokedexScannerPhotoRareSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoRareSpeciesMultiplier
     var pokedexScannerPhotoUltraRareSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier
     var pokedexScannerPhotoExtraPokemonBonusCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap
     var pokedexScannerPhotoExtraPokemonBonusPerSubject = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject
     var pokedexScannerPhotoFamilyBonus = Cobblemon.config.pokedexScannerPhotoFamilyBonus
+    var pokedexScannerPhotoHabitatBonus = Cobblemon.config.pokedexScannerPhotoHabitatBonus
+    var pokedexScannerPhotoTimeOfDayBonus = Cobblemon.config.pokedexScannerPhotoTimeOfDayBonus
+    var pokedexScannerPhotoWeatherBonus = Cobblemon.config.pokedexScannerPhotoWeatherBonus
+    var pokedexScannerPhotoAlphaBonus = Cobblemon.config.pokedexScannerPhotoAlphaBonus
+    var pokedexScannerPhotoWildBonus = Cobblemon.config.pokedexScannerPhotoWildBonus
+    var pokedexScannerPhotoFormBonus = Cobblemon.config.pokedexScannerPhotoFormBonus
 
 }

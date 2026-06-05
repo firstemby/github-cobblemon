@@ -11,12 +11,15 @@ package com.cobblemon.mod.common.client.net.gui
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
+import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadResultPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoQuality
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.network.chat.Component
@@ -30,6 +33,12 @@ import kotlin.math.roundToInt
 
 object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhotoUploadPacket> {
     private const val MAX_UPLOAD_SIZE = 5 * 1024 * 1024
+    var showDebugPhotoScore = false
+
+    private data class OtherPokemonBonuses(
+        val extraPokemonScore: Int,
+        val herdScore: Int
+    )
 
     override fun handle(packet: PokedexPhotoUploadPacket, server: MinecraftServer, player: ServerPlayer) {
         val configuredResolution = max(64, Cobblemon.config.pokedexScannerPhotoResolution)
@@ -58,8 +67,12 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             .toList()
 
         val safeBiome = ResourceLocation.tryParse(packet.biome)?.toString() ?: "minecraft:unknown"
+        val safeBiomeId = ResourceLocation.tryParse(safeBiome)
         val safeDimension = ResourceLocation.tryParse(packet.dimension)?.toString() ?: "minecraft:overworld"
+        val safeDimensionId = ResourceLocation.tryParse(safeDimension)
         val safeTimeOfDayTicks = packet.timeOfDayTicks.coerceIn(0L, 23999L)
+        val safeRaining = packet.raining
+        val safeThundering = packet.thundering
         val safeSubjects = packet.qualitySubjects
             .asSequence()
             .mapNotNull { subject ->
@@ -79,6 +92,14 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     poseScore = subject.poseScore.coerceIn(0, 800),
                     fullBodyScore = subject.fullBodyScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0)),
                     otherPokemonScore = subject.otherPokemonScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)),
+                    herdScore = subject.herdScore.coerceIn(0, 5000),
+                    habitatScore = subject.habitatScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoHabitatBonus.coerceAtLeast(0)),
+                    timeOfDayScore = subject.timeOfDayScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoTimeOfDayBonus.coerceAtLeast(0)),
+                    weatherScore = subject.weatherScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoWeatherBonus.coerceAtLeast(0)),
+                    shinyScore = subject.shinyScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoShinyBonus.coerceAtLeast(0)),
+                    alphaScore = subject.alphaScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoAlphaBonus.coerceAtLeast(0)),
+                    wildScore = subject.wildScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoWildBonus.coerceAtLeast(0)),
+                    formScore = subject.formScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoFormBonus.coerceAtLeast(0)),
                     rayHits = subject.rayHits.coerceIn(0, 4096),
                     rayCoverage = subject.rayCoverage.coerceIn(0F, 1F),
                     perimeterHits = subject.perimeterHits.coerceIn(0, 4096),
@@ -86,18 +107,29 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     clippingMultiplier = subject.clippingMultiplier.coerceIn(0F, 1F),
                     activeAnimations = subject.activeAnimations.take(16),
                     shiny = subject.shiny,
-                    shinyMultiplier = subject.shinyMultiplier.coerceIn(1F, Cobblemon.config.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F)),
+                    shinyMultiplier = 1F,
+                    alpha = subject.alpha,
+                    wild = subject.wild,
+                    alternateForm = subject.alternateForm,
                     rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(speciesId)
                 )
             }
             .take(64)
             .toList()
-        val adjustedSubjects = applyServerAuthoritativeLookScores(safeSubjects, player)
-        val safeQuality = PokedexPhotoQuality.applySpeciesMultiplier(
-            adjustedSubjects.firstOrNull { it.primarySubject }?.subjectScore ?: packet.qualityScore,
-            detectedSpecies
+        val adjustedSubjects = applyServerAuthoritativeScores(
+            subjects = safeSubjects,
+            player = player,
+            biome = safeBiomeId,
+            dimension = safeDimensionId,
+            timeOfDayTicks = safeTimeOfDayTicks,
+            raining = safeRaining,
+            thundering = safeThundering
         )
-        sendServerScoreDebug(player, adjustedSubjects, safeQuality.baseScore, safeQuality.score)
+        val primarySubject = adjustedSubjects.firstOrNull { it.primarySubject }
+        val safeBaseScore = calculateAdditiveSubtotal(primarySubject)
+        val safeFinalScore = primarySubject?.subjectScore ?: 0
+        val safeRarityMultiplier = primarySubject?.rarityMultiplier ?: 1F
+        sendServerScoreDebug(player, adjustedSubjects, safeBaseScore, safeFinalScore)
 
         val result = PokedexPhotoRepository.saveFromPng(
             owner = player.uuid,
@@ -106,9 +138,11 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             biome = safeBiome,
             dimension = safeDimension,
             timeOfDayTicks = safeTimeOfDayTicks,
-            qualityScore = safeQuality.score,
-            qualityBaseScore = safeQuality.baseScore,
-            qualitySpeciesMultiplier = safeQuality.speciesMultiplier,
+            raining = safeRaining,
+            thundering = safeThundering,
+            qualityScore = safeFinalScore,
+            qualityBaseScore = safeBaseScore,
+            qualitySpeciesMultiplier = safeRarityMultiplier,
             qualitySubjects = adjustedSubjects
         )
         if (result.success && result.photo != null) {
@@ -131,21 +165,29 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         finalScore: Int
     ) {
         val primary = subjects.firstOrNull { it.primarySubject } ?: return
-        player.sendSystemMessage(
-            Component.literal(
-                "[Photo Score Debug] server primary=${primary.species}, " +
-                    "look-at-camera +${primary.directionScore}, size +${primary.sizeScore}, " +
-                    "center +${primary.placementScore}, pose +${primary.poseScore}, " +
-                    "full body +${primary.fullBodyScore}, other Pokemon +${primary.otherPokemonScore}, " +
-                    "clip x${"%.2f".format(primary.clippingMultiplier)}, shiny x${"%.2f".format(primary.shinyMultiplier)}, " +
-                    "lookTargetMatched=${primary.directionScore > 0}, base=$baseScore, final=$finalScore"
+        if (showDebugPhotoScore)
+            player.sendSystemMessage(
+                Component.literal(
+                    "[Photo Score Debug] server primary=${primary.species}, " +
+                        "size +${primary.sizeScore}, center +${primary.placementScore}, " +
+                        "extra +${primary.otherPokemonScore}, look-at-camera +${primary.directionScore}, herd +${primary.herdScore}, " +
+                        "wild +${primary.wildScore}, form +${primary.formScore}, " +
+                        "pose +${primary.poseScore}, habitat +${primary.habitatScore}, time +${primary.timeOfDayScore}, " +
+                        "weather +${primary.weatherScore}, shiny +${primary.shinyScore}, alpha +${primary.alphaScore}, " +
+                        "rarity x${"%.2f".format(primary.rarityMultiplier)}, too close x${"%.2f".format(primary.clippingMultiplier)}, " +
+                        "lookTargetMatched=${primary.directionScore > 0}, base=$baseScore, final=$finalScore"
+                )
             )
-        )
     }
 
-    private fun applyServerAuthoritativeLookScores(
+    private fun applyServerAuthoritativeScores(
         subjects: List<PokedexPhotoSubjectQuality>,
-        player: ServerPlayer
+        player: ServerPlayer,
+        biome: ResourceLocation?,
+        dimension: ResourceLocation?,
+        timeOfDayTicks: Long,
+        raining: Boolean,
+        thundering: Boolean
     ): List<PokedexPhotoSubjectQuality> {
         if (subjects.isEmpty()) return emptyList()
         val facingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
@@ -155,8 +197,17 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                 primarySubject = false,
                 fullBodyScore = 0,
                 otherPokemonScore = 0,
+                herdScore = 0,
+                habitatScore = 0,
+                timeOfDayScore = 0,
+                weatherScore = 0,
+                shinyScore = 0,
+                alphaScore = 0,
+                wildScore = 0,
+                formScore = 0,
                 wholeBodyInFrame = true,
-                clippingMultiplier = 1F
+                clippingMultiplier = 1F,
+                shinyMultiplier = 1F
             )
         }
         val primary = withServerLookScores.maxWithOrNull(
@@ -165,13 +216,49 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                 .thenBy { -it.centerDistance }
         ) ?: return emptyList()
         val primaryLookTargetMatched = isBrainLookingAtPlayer(primary, player)
-        val otherPokemonBonus = calculateOtherPokemonBonus(primary, withServerLookScores)
+        val otherPokemonBonuses = calculateOtherPokemonBonuses(primary, withServerLookScores)
+        val entity = primary.entityUuid?.let { player.serverLevel().getEntity(it) } as? PokemonEntity
+        val serverShiny = entity?.pokemon?.shiny ?: primary.shiny
+        val serverAlpha = entity?.pokemon?.aspects?.contains("alpha") ?: primary.alpha
+        val serverWild = entity?.pokemon?.isWild() ?: primary.wild
+        val serverAlternateForm = entity?.pokemon?.let(::hasAlternateForm) ?: primary.alternateForm
+        val speciesId = ResourceLocation.tryParse(primary.species)
+        val spawnDetails = speciesId?.let(::spawnDetailsForSpecies).orEmpty()
+        val habitatScore = if (biome != null && dimension != null && spawnDetails.any { detail -> detailAllowsBiomeAndDimension(detail, biome, dimension) }) {
+            Cobblemon.config.pokedexScannerPhotoHabitatBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
+        val timeOfDayScore = if (spawnDetails.any { detail -> detailAllowsTime(detail, timeOfDayTicks.toInt()) }) {
+            Cobblemon.config.pokedexScannerPhotoTimeOfDayBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
+        val weatherScore = if (spawnDetails.any { detail -> detailAllowsWeather(detail, raining, thundering) }) {
+            Cobblemon.config.pokedexScannerPhotoWeatherBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
 
         return withServerLookScores.map { subject ->
             if (subject === primary) {
                 scorePrimarySubject(
-                    subject = subject.copy(directionScore = if (primaryLookTargetMatched) facingBonus else 0),
-                    otherPokemonBonus = otherPokemonBonus
+                    subject = subject.copy(
+                        directionScore = if (primaryLookTargetMatched) facingBonus else 0,
+                        habitatScore = habitatScore,
+                        timeOfDayScore = timeOfDayScore,
+                        weatherScore = weatherScore,
+                        shiny = serverShiny,
+                        shinyScore = if (serverShiny) Cobblemon.config.pokedexScannerPhotoShinyBonus.coerceAtLeast(0) else 0,
+                        alpha = serverAlpha,
+                        alphaScore = if (serverAlpha) Cobblemon.config.pokedexScannerPhotoAlphaBonus.coerceAtLeast(0) else 0,
+                        wild = serverWild,
+                        wildScore = if (serverWild) Cobblemon.config.pokedexScannerPhotoWildBonus.coerceAtLeast(0) else 0,
+                        alternateForm = serverAlternateForm,
+                        formScore = if (serverAlternateForm) Cobblemon.config.pokedexScannerPhotoFormBonus.coerceAtLeast(0) else 0,
+                        rarityMultiplier = speciesId?.let(PokedexPhotoQuality::speciesRarityMultiplier) ?: 1F
+                    ),
+                    otherPokemonBonuses = otherPokemonBonuses
                 )
             } else {
                 subject.copy(subjectScore = 0)
@@ -179,17 +266,20 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
     }
 
-    private fun scorePrimarySubject(subject: PokedexPhotoSubjectQuality, otherPokemonBonus: Int): PokedexPhotoSubjectQuality {
+    private fun scorePrimarySubject(subject: PokedexPhotoSubjectQuality, otherPokemonBonuses: OtherPokemonBonuses): PokedexPhotoSubjectQuality {
         val wholeBodyInFrame = subject.perimeterHits == 0
         val sizeScore = calculateSizeScore(subject.rayCoverage.toDouble(), wholeBodyInFrame)
-        val fullBodyScore = if (wholeBodyInFrame) Cobblemon.config.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
         val clippingMultiplier = if (wholeBodyInFrame) {
             1.0
         } else {
             Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
         }
-        val rawScore = sizeScore + subject.placementScore + subject.directionScore + subject.poseScore + fullBodyScore + otherPokemonBonus
-        val subjectScore = (rawScore * clippingMultiplier * subject.shinyMultiplier)
+        val additiveScore = sizeScore + subject.placementScore + otherPokemonBonuses.extraPokemonScore +
+                subject.directionScore + otherPokemonBonuses.herdScore + subject.wildScore +
+                subject.formScore + subject.poseScore +
+                subject.habitatScore + subject.timeOfDayScore + subject.weatherScore +
+                subject.shinyScore + subject.alphaScore
+        val subjectScore = (additiveScore * subject.rarityMultiplier * clippingMultiplier)
             .roundToInt()
             .coerceIn(0, 5000)
 
@@ -197,8 +287,9 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             primarySubject = true,
             subjectScore = subjectScore,
             sizeScore = sizeScore,
-            fullBodyScore = fullBodyScore,
-            otherPokemonScore = otherPokemonBonus,
+            fullBodyScore = 0,
+            otherPokemonScore = otherPokemonBonuses.extraPokemonScore,
+            herdScore = otherPokemonBonuses.herdScore,
             wholeBodyInFrame = wholeBodyInFrame,
             clippingMultiplier = clippingMultiplier.toFloat()
         )
@@ -218,15 +309,19 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         return lookTarget.currentPosition().distanceTo(player.getEyePosition(1.0F)) <= 1.0
     }
 
-    private fun calculateOtherPokemonBonus(
+    private fun calculateOtherPokemonBonuses(
         primary: PokedexPhotoSubjectQuality,
         subjects: List<PokedexPhotoSubjectQuality>
-    ): Int {
-        val rawBonus = subjects
+    ): OtherPokemonBonuses {
+        val secondarySubjects = subjects
             .asSequence()
             .filter { it !== primary }
-            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateFamilyBonus(primary, subject) }
-        return rawBonus.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0))
+            .toList()
+        val extraPokemonScore = secondarySubjects.sumOf(::calculateSecondaryPokemonBonus)
+            .coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0))
+        val herdScore = secondarySubjects.sumOf { subject -> calculateFamilyBonus(primary, subject) }
+            .coerceAtLeast(0)
+        return OtherPokemonBonuses(extraPokemonScore, herdScore)
     }
 
     private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
@@ -293,5 +388,80 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         return (scoreCap.toDouble() * coverageFactor * tooLargeFactor)
             .roundToInt()
             .coerceIn(0, scoreCap)
+    }
+
+    private fun calculateAdditiveSubtotal(subject: PokedexPhotoSubjectQuality?): Int {
+        if (subject == null) return 0
+        return (subject.sizeScore +
+                subject.placementScore +
+                subject.otherPokemonScore +
+                subject.directionScore +
+                subject.herdScore +
+                subject.wildScore +
+                subject.formScore +
+                subject.poseScore +
+                subject.habitatScore +
+                subject.timeOfDayScore +
+                subject.weatherScore +
+                subject.shinyScore +
+                subject.alphaScore
+            ).coerceIn(0, 5000)
+    }
+
+    private fun hasAlternateForm(pokemon: Pokemon): Boolean {
+        return pokemon.form.name != pokemon.species.standardForm.name
+    }
+
+    private fun spawnDetailsForSpecies(species: ResourceLocation): List<PokemonSpawnDetail> {
+        return CobblemonSpawnPools.WORLD_SPAWN_POOL
+            .asSequence()
+            .filterIsInstance<PokemonSpawnDetail>()
+            .filter { detail -> detail.pokemon.species?.asIdentifierDefaultingNamespace() == species }
+            .toList()
+    }
+
+    private fun detailAllowsBiomeAndDimension(
+        detail: PokemonSpawnDetail,
+        biome: ResourceLocation,
+        dimension: ResourceLocation
+    ): Boolean {
+        if (biome !in detail.validBiomes) return false
+        if (detail.conditions.isNotEmpty() && detail.conditions.none { condition ->
+            condition.dimensions.isNullOrEmpty() || dimension in condition.dimensions!!
+        }) {
+            return false
+        }
+        if (detail.anticonditions.any { condition -> !condition.dimensions.isNullOrEmpty() && dimension in condition.dimensions!! }) {
+            return false
+        }
+        return true
+    }
+
+    private fun detailAllowsTime(detail: PokemonSpawnDetail, timeOfDayTicks: Int): Boolean {
+        if (detail.conditions.isNotEmpty() && detail.conditions.none { condition ->
+            condition.timeRange == null || condition.timeRange!!.contains(timeOfDayTicks)
+        }) {
+            return false
+        }
+        if (detail.anticonditions.any { condition -> condition.timeRange?.contains(timeOfDayTicks) == true }) {
+            return false
+        }
+        return true
+    }
+
+    private fun detailAllowsWeather(detail: PokemonSpawnDetail, raining: Boolean, thundering: Boolean): Boolean {
+        if (detail.conditions.isNotEmpty() && detail.conditions.none { condition ->
+            (condition.isRaining == null || condition.isRaining == raining) &&
+                (condition.isThundering == null || condition.isThundering == thundering)
+        }) {
+            return false
+        }
+        if (detail.anticonditions.any { condition ->
+            (condition.isRaining != null && condition.isRaining == raining) ||
+                (condition.isThundering != null && condition.isThundering == thundering)
+        }) {
+            return false
+        }
+        return true
     }
 }

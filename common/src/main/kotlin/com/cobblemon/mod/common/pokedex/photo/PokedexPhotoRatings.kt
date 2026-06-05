@@ -33,44 +33,47 @@ object PokedexPhotoRatings {
 
     fun scoreBreakdown(photo: PokedexPhotoMetadata): List<Component> {
         val lines = mutableListOf<Component>()
-        lines += Component.literal("Rating: ${ratingText(photo.qualityScore)}")
-        lines += Component.literal("Total: ${photo.qualityScore}/5000")
-        if (photo.qualityBaseScore != photo.qualityScore || photo.qualitySpeciesMultiplier != 1F) {
-            lines += Component.literal("Base before rarity: ${photo.qualityBaseScore}")
-            lines += Component.literal("Species rarity: x${formatMultiplier(photo.qualitySpeciesMultiplier)}")
-        }
-
         val primary = photo.qualitySubjects.firstOrNull { it.primarySubject } ?: photo.qualitySubjects.firstOrNull()
         if (primary != null) {
-            lines += Component.literal("Primary: ${primary.species.substringAfter(':')}")
-            lines += Component.literal("Size: +${primary.sizeScore} (${formatPercent(primary.rayCoverage)} coverage)")
-            lines += Component.literal("Centering: +${primary.placementScore} (${formatPercent(1F - primary.centerDistance)} centered)")
-            lines += Component.literal("Look at camera: +${primary.directionScore}")
-            lines += Component.literal("Animation pose: +${primary.poseScore}")
-            if (primary.wholeBodyInFrame) {
-                lines += Component.literal("Full body: +${primary.fullBodyScore}")
-            } else {
-                lines += Component.literal("Out of frame: x${formatMultiplier(primary.clippingMultiplier)} (${primary.perimeterHits} perimeter hits)")
+            lines += Component.literal("Species: ${primary.species.substringAfter(':')}")
+            lines += Component.literal("Size: +${primary.sizeScore}")
+            lines += Component.literal("Centering: +${primary.placementScore}")
+
+            val bonusLines = listOf(
+                "Extra Pokemon" to primary.otherPokemonScore,
+                "Looking at Camera" to primary.directionScore,
+                "Herd" to primary.herdScore,
+                "Wild" to primary.wildScore,
+                "Form" to primary.formScore,
+                "Pose" to primary.poseScore,
+                "Habitat" to primary.habitatScore,
+                "Time of Day" to primary.timeOfDayScore,
+                "Weather" to primary.weatherScore,
+                "Shiny" to primary.shinyScore,
+                "Alpha" to primary.alphaScore
+            ).filter { (_, score) -> score > 0 }
+            if (bonusLines.isNotEmpty()) {
+                lines += Component.literal("Bonus Points")
+                bonusLines.forEach { (label, score) ->
+                    lines += Component.literal("$label: +$score")
+                }
             }
-            if (primary.otherPokemonScore > 0) {
-                lines += Component.literal("Other Pokemon: +${primary.otherPokemonScore}")
+
+            val multipliers = listOf(
+                "Rarity" to primary.rarityMultiplier,
+                "Too Close" to primary.clippingMultiplier
+            ).filter { (_, multiplier) -> multiplier != 1F }
+            if (multipliers.isNotEmpty()) {
+                lines += Component.literal("Multipliers:")
+                multipliers.forEach { (label, multiplier) ->
+                    lines += Component.literal("$label: x${formatMultiplier(multiplier)}")
+                }
             }
-            if (primary.shiny) {
-                lines += Component.literal("Shiny multiplier: x${formatMultiplier(primary.shinyMultiplier)}")
-            }
-            if (primary.activeAnimations.isNotEmpty()) {
-                lines += Component.literal("Animations: ${primary.activeAnimations.joinToString(", ")}")
-            }
-            lines += Component.literal("Subject total: ${primary.subjectScore}")
         }
 
-        val otherSubjects = photo.qualitySubjects.filterNot { it.primarySubject }.take(4)
-        if (otherSubjects.isNotEmpty()) {
-            lines += Component.literal("Other subjects:")
-            otherSubjects.forEach { subject ->
-                lines += Component.literal("  ${subject.species.substringAfter(':')}: +${subject.subjectScore}")
-            }
-        }
+        lines += Component.literal("--------------------")
+        lines += Component.literal("Total: ${photo.qualityScore}")
+        lines += Component.literal("Rating: ${ratingText(photo.qualityScore)}")
 
         return lines
     }
@@ -79,7 +82,4 @@ object PokedexPhotoRatings {
         return String.format(Locale.ROOT, "%.2f", value)
     }
 
-    private fun formatPercent(value: Float): String {
-        return String.format(Locale.ROOT, "%.1f%%", value.coerceIn(0F, 1F) * 100F)
-    }
 }

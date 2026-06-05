@@ -22,6 +22,8 @@ data class PokedexPhotoMetadata(
     val biome: String = "minecraft:unknown",
     val dimension: String = "minecraft:overworld",
     val timeOfDayTicks: Long = 0L,
+    val raining: Boolean = false,
+    val thundering: Boolean = false,
     val qualityScore: Int = 0,
     val qualityBaseScore: Int = 0,
     val qualitySpeciesMultiplier: Float = 1F,
@@ -41,6 +43,14 @@ data class PokedexPhotoSubjectQuality(
     val poseScore: Int = 0,
     val fullBodyScore: Int = 0,
     val otherPokemonScore: Int = 0,
+    val herdScore: Int = 0,
+    val habitatScore: Int = 0,
+    val timeOfDayScore: Int = 0,
+    val weatherScore: Int = 0,
+    val shinyScore: Int = 0,
+    val alphaScore: Int = 0,
+    val wildScore: Int = 0,
+    val formScore: Int = 0,
     val rayHits: Int = 0,
     val rayCoverage: Float = 0F,
     val perimeterHits: Int = 0,
@@ -49,6 +59,9 @@ data class PokedexPhotoSubjectQuality(
     val activeAnimations: List<String> = emptyList(),
     val shiny: Boolean = false,
     val shinyMultiplier: Float = 1F,
+    val alpha: Boolean = false,
+    val wild: Boolean = false,
+    val alternateForm: Boolean = false,
     val rarityMultiplier: Float = 1F
 )
 
