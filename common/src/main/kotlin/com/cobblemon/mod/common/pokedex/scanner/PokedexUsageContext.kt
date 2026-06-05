@@ -53,6 +53,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
@@ -187,6 +188,7 @@ class PokedexUsageContext {
 
     private data class CapturedDebugRay(
         val start: Vec3,
+        val hit: Vec3?,
         val end: Vec3,
         val perimeter: Boolean
     )
@@ -214,6 +216,7 @@ class PokedexUsageContext {
     private data class PhotoDetectedHit(
         val entity: Entity,
         val species: ResourceLocation,
+        val point: Vec3,
         val distance: Double
     )
 
@@ -221,7 +224,6 @@ class PokedexUsageContext {
         val entity: Entity,
         val species: ResourceLocation,
         val poseScore: Int,
-        val animationMultiplier: Float,
         val activeAnimations: List<String>,
         val shiny: Boolean,
         val shinyMultiplier: Float
@@ -616,6 +618,7 @@ class PokedexUsageContext {
 
     private fun showPhotoScoringDebug(player: LocalPlayer, metadata: PhotoCaptureMetadata) {
         player.displayClientMessage(Component.literal("[Photo Score Debug] client base score: ${metadata.qualityScore}/5000"), false)
+
         if (metadata.qualitySubjects.isEmpty()) {
             player.displayClientMessage(Component.literal("[Photo Score Debug] no in-frame Pokemon ray hits."), false)
             return
@@ -623,13 +626,24 @@ class PokedexUsageContext {
 
         metadata.qualitySubjects.forEachIndexed { index, subject ->
             val role = if (subject.primarySubject) "PRIMARY" else "other #${index + 1}"
-            val rawCategoryScore = subject.sizeScore + subject.placementScore + subject.directionScore + subject.poseScore + subject.fullBodyScore
-            val animationText = if (subject.activeAnimations.isEmpty()) "none" else subject.activeAnimations.joinToString(", ")
+            val rawCategoryScore = subject.sizeScore +
+                    subject.placementScore +
+                    subject.directionScore +
+                    subject.poseScore +
+                    subject.fullBodyScore
+
+            val animationText = if (subject.activeAnimations.isEmpty()) {
+                "none"
+            } else {
+                subject.activeAnimations.joinToString(", ")
+            }
+
             val clippingText = if (subject.wholeBodyInFrame) {
                 "full body +${subject.fullBodyScore}"
             } else {
                 "OUT OF FRAME: x${formatMultiplier(subject.clippingMultiplier)} (${subject.perimeterHits} perimeter hits)"
             }
+
             val boostText = listOf(
                 "size +${subject.sizeScore}",
                 "centering +${subject.placementScore}",
@@ -637,7 +651,6 @@ class PokedexUsageContext {
                 "animation pose +${subject.poseScore}",
                 clippingText,
                 "other Pokemon +${subject.otherPokemonScore}",
-                "animation x${formatMultiplier(subject.animationMultiplier)}",
                 "shiny x${formatMultiplier(subject.shinyMultiplier)}",
                 "species rarity x${formatMultiplier(subject.rarityMultiplier)}"
             ).joinToString(", ")
@@ -645,16 +658,47 @@ class PokedexUsageContext {
             player.displayClientMessage(
                 Component.literal(
                     "[Photo Score Debug] $role ${subject.species}: score=${subject.subjectScore}, raw=$rawCategoryScore, " +
-                        "size=${subject.sizeScore}, placement=${subject.placementScore}, look=${subject.directionScore}, " +
-                        "pose=${subject.poseScore}, center=${formatPercent(1F - subject.centerDistance)}, distance=${subject.distanceScore}, " +
-                        "$clippingText"
+                            "size=${subject.sizeScore}, placement=${subject.placementScore}, look=${subject.directionScore}, " +
+                            "pose=${subject.poseScore}, center=${formatPercent(1F - subject.centerDistance)}, distance=${subject.distanceScore}, " +
+                            clippingText
                 ),
                 false
             )
+
             player.displayClientMessage(
                 Component.literal(
                     "[Photo Score Debug]   rays=${subject.rayHits}, coverage=${formatPercent(subject.rayCoverage)}, " +
-                        "boosts=[$boostText], animations=[$animationText]"
+                            "boosts=[$boostText], animations=[$animationText]"
+                ),
+                false
+            )
+        }
+
+        val primary = metadata.qualitySubjects.firstOrNull { it.primarySubject }
+        if (primary != null) {
+            val finalRawScore = primary.sizeScore +
+                    primary.placementScore +
+                    primary.directionScore +
+                    primary.poseScore +
+                    primary.fullBodyScore +
+                    primary.otherPokemonScore
+
+            val expectedFinalScore = (finalRawScore *
+                    primary.clippingMultiplier *
+                    primary.shinyMultiplier
+                    ).roundToInt().coerceIn(0, 5000)
+
+            player.displayClientMessage(
+                Component.literal(
+                    "[Photo Score Debug]   -> FINAL subject=${primary.species}, score=${primary.subjectScore}/5000, " +
+                            "formula=(${primary.sizeScore} size + ${primary.placementScore} center + " +
+                            "${primary.directionScore} look + ${primary.poseScore} pose + " +
+                            "${primary.fullBodyScore} fullBody + ${primary.otherPokemonScore} otherPokemon) = $finalRawScore, " +
+                            "multipliers=[clip x${formatMultiplier(primary.clippingMultiplier)}, " +
+                            "shiny x${formatMultiplier(primary.shinyMultiplier)}, " +
+                            "rarity tracked x${formatMultiplier(primary.rarityMultiplier)}], " +
+                            "expected=$expectedFinalScore, rays=${primary.rayHits}, coverage=${formatPercent(primary.rayCoverage)}, " +
+                            "center=${formatPercent(1F - primary.centerDistance)}"
                 ),
                 false
             )
@@ -689,8 +733,7 @@ class PokedexUsageContext {
                 PhotoSubjectAccumulator(
                     entity = hit.entity,
                     species = hit.species,
-                    poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 250,
-                    animationMultiplier = animationType?.multiplier?.coerceIn(1F, 1.5F) ?: 1F,
+                    poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 0,
                     activeAnimations = activeAnimations,
                     shiny = shiny,
                     shinyMultiplier = if (shiny) ServerSettings.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F) else 1F
@@ -804,7 +847,7 @@ class PokedexUsageContext {
 
     private fun computePhotoRaySamples(player: LocalPlayer, projection: PhotoProjection): List<PhotoRaySample> {
         val samples = buildPhotoRaySamples().map { (sampleX, sampleY) -> sampleX to sampleY to false } +
-            buildPhotoPerimeterRaySamples().map { (sampleX, sampleY) -> sampleX to sampleY to true }
+                buildPhotoPerimeterRaySamples().map { (sampleX, sampleY) -> sampleX to sampleY to true }
 
         return samples.map { sample ->
             val sampleX = sample.first.first
@@ -864,13 +907,26 @@ class PokedexUsageContext {
     private fun captureDebugRays(player: LocalPlayer) {
         val eyePos = player.getEyePosition(1.0F)
         val raycastDistance = ServerSettings.pokedexScannerPhotoRaycastDistance.coerceIn(4.0, 512.0)
+        val candidates = collectRaycastCandidates(player, raycastDistance)
+
         capturedDebugRays = computePhotoRaySamples(player).map { sample ->
+            val rayEnd = eyePos.add(sample.direction.scale(raycastDistance))
+            val hit = detectPhotoHitAlongRay(
+                player = player,
+                eyePos = eyePos,
+                sample = sample,
+                maxDistance = raycastDistance,
+                candidates = candidates
+            )
+
             CapturedDebugRay(
                 start = eyePos,
-                end = eyePos.add(sample.direction.scale(raycastDistance)),
+                hit = hit?.point,
+                end = rayEnd,
                 perimeter = sample.perimeter
             )
         }
+
         capturedDebugRaysExpireAt = System.currentTimeMillis() + PHOTO_DEBUG_RAY_DURATION_MS
     }
 
@@ -893,25 +949,51 @@ class PokedexUsageContext {
             val entry = poseStack.last()
             val pose = entry.pose()
 
-            debugRays.forEach { ray ->
-                val dx = (ray.end.x - ray.start.x).toFloat()
-                val dy = (ray.end.y - ray.start.y).toFloat()
-                val dz = (ray.end.z - ray.start.z).toFloat()
-                val length = sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat().coerceAtLeast(0.0001F)
+            fun drawSegment(from: Vec3, to: Vec3, color: IntArray) {
+                val dx = (to.x - from.x).toFloat()
+                val dy = (to.y - from.y).toFloat()
+                val dz = (to.z - from.z).toFloat()
+                val length = sqrt((dx * dx + dy * dy + dz * dz).toDouble()).toFloat()
+
+                if (length <= 0.0001F) {
+                    return
+                }
+
                 val nx = dx / length
                 val ny = dy / length
                 val nz = dz / length
-                val startColor = if (ray.perimeter) intArrayOf(255, 235, 70, 220) else intArrayOf(70, 210, 255, 190)
-                val endColor = if (ray.perimeter) intArrayOf(255, 155, 35, 220) else intArrayOf(255, 110, 110, 190)
 
                 vertexBuffer
-                    .addVertex(pose, ray.start.x.toFloat(), ray.start.y.toFloat(), ray.start.z.toFloat())
-                    .setColor(startColor[0], startColor[1], startColor[2], startColor[3])
+                    .addVertex(pose, from.x.toFloat(), from.y.toFloat(), from.z.toFloat())
+                    .setColor(color[0], color[1], color[2], color[3])
                     .setNormal(entry, nx, ny, nz)
                 vertexBuffer
-                    .addVertex(pose, ray.end.x.toFloat(), ray.end.y.toFloat(), ray.end.z.toFloat())
-                    .setColor(endColor[0], endColor[1], endColor[2], endColor[3])
+                    .addVertex(pose, to.x.toFloat(), to.y.toFloat(), to.z.toFloat())
+                    .setColor(color[0], color[1], color[2], color[3])
                     .setNormal(entry, nx, ny, nz)
+            }
+
+            debugRays.forEach { ray ->
+                val beforeHitColor = if (ray.perimeter) {
+                    intArrayOf(70, 160, 255, 150)
+                } else {
+                    intArrayOf(70, 210, 255, 220)
+                }
+
+                val afterHitColor = if (ray.perimeter) {
+                    intArrayOf(255, 120, 70, 150)
+                } else {
+                    intArrayOf(255, 70, 70, 230)
+                }
+
+                val hit = ray.hit
+
+                if (hit == null) {
+                    drawSegment(ray.start, ray.end, beforeHitColor)
+                } else {
+                    drawSegment(ray.start, hit, beforeHitColor)
+                    drawSegment(hit, ray.end, afterHitColor)
+                }
             }
 
             poseStack.popPose()
@@ -1000,7 +1082,12 @@ class PokedexUsageContext {
 
             val species = hit.scannable.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier
             if (species != null) {
-                return PhotoDetectedHit(hit.entity, species, hit.distance)
+                return PhotoDetectedHit(
+                    entity = hit.entity,
+                    species = species,
+                    point = hit.point,
+                    distance = hit.distance
+                )
             }
         }
 
@@ -1016,24 +1103,17 @@ class PokedexUsageContext {
             .filter { it.rayHits > 0 }
             .map { subject -> buildSubjectQuality(subject, inFrameRayCount) }
             .toList()
-        val primary = scoredSubjects.minWithOrNull(
-            compareBy<PokedexPhotoSubjectQuality> { calculatePrimarySubjectSortValue(it) }
-                .thenByDescending { it.rayCoverage }
-                .thenByDescending { it.subjectScore }
+        val primary = scoredSubjects.maxWithOrNull(
+            compareBy<PokedexPhotoSubjectQuality> { it.rayHits }
+                .thenBy { it.rayCoverage }
+                .thenBy { calculatePrimarySubjectSortValue(it) * -1.0 }
         ) ?: return emptyList()
         val otherPokemonBonus = calculateOtherPokemonBonus(primary, scoredSubjects)
-        val primaryScore = ((primary.subjectScore + otherPokemonBonus) *
-            primary.shinyMultiplier *
-            primary.animationMultiplier
-        ).roundToInt().coerceIn(0, 5000)
+        val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus)
 
         return scoredSubjects.map { subject ->
             if (subject === primary) {
-                subject.copy(
-                    primarySubject = true,
-                    subjectScore = primaryScore,
-                    otherPokemonScore = otherPokemonBonus
-                )
+                scoredPrimary
             } else {
                 subject.copy(
                     primarySubject = false,
@@ -1049,18 +1129,14 @@ class PokedexUsageContext {
         val centroidY = subject.sampleYSum / subject.rayHits
         val centerDistance = calculateCenterDistance(centroidX, centroidY)
         val distanceScore = calculateDistanceScore(subject.distanceValueSum / subject.rayHits)
-        val wholeBodyInFrame = subject.perimeterHits == 0
-        val sizeScore = calculateSizeScore(rayCoverage, wholeBodyInFrame)
+        val sizeScore = calculateSizeScore(rayCoverage, true)
         val placementScore = calculatePlacementScore(centerDistance)
         val directionScore = calculateDirectionScore(subject.entity)
-        val fullBodyScore = if (wholeBodyInFrame) ServerSettings.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
-        val clippingMultiplier = if (wholeBodyInFrame) 1.0 else ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
-        val subjectScore = ((sizeScore + placementScore + directionScore + subject.poseScore + fullBodyScore) * clippingMultiplier)
-            .roundToInt()
-            .coerceIn(0, 5000)
+        val subjectScore = (sizeScore + placementScore + directionScore + subject.poseScore).coerceIn(0, 5000)
 
         return PokedexPhotoSubjectQuality(
             species = subject.species.toString(),
+            entityUuid = subject.entity.uuid,
             subjectScore = subjectScore,
             sizeScore = sizeScore,
             placementScore = placementScore,
@@ -1068,22 +1144,49 @@ class PokedexUsageContext {
             distanceScore = distanceScore,
             directionScore = directionScore,
             poseScore = subject.poseScore,
-            fullBodyScore = fullBodyScore,
+            fullBodyScore = 0,
             rayHits = subject.rayHits,
             rayCoverage = rayCoverage.toFloat(),
             perimeterHits = subject.perimeterHits,
-            wholeBodyInFrame = wholeBodyInFrame,
-            clippingMultiplier = clippingMultiplier.toFloat(),
+            wholeBodyInFrame = true,
+            clippingMultiplier = 1F,
             activeAnimations = subject.activeAnimations,
             shiny = subject.shiny,
             shinyMultiplier = subject.shinyMultiplier,
-            animationMultiplier = subject.animationMultiplier,
             rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(
                 species = subject.species,
                 uncommonMultiplier = ServerSettings.pokedexScannerPhotoUncommonSpeciesMultiplier,
                 rareMultiplier = ServerSettings.pokedexScannerPhotoRareSpeciesMultiplier,
                 ultraRareMultiplier = ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier
             )
+        )
+    }
+
+    private fun applyPrimarySubjectScoring(
+        primary: PokedexPhotoSubjectQuality,
+        otherPokemonBonus: Int
+    ): PokedexPhotoSubjectQuality {
+        val wholeBodyInFrame = primary.perimeterHits == 0
+        val sizeScore = calculateSizeScore(primary.rayCoverage.toDouble(), wholeBodyInFrame)
+        val fullBodyScore = if (wholeBodyInFrame) ServerSettings.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
+        val clippingMultiplier = if (wholeBodyInFrame) {
+            1.0
+        } else {
+            ServerSettings.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
+        }
+        val rawScore = sizeScore + primary.placementScore + primary.directionScore + primary.poseScore + fullBodyScore + otherPokemonBonus
+        val subjectScore = (rawScore * clippingMultiplier * primary.shinyMultiplier)
+            .roundToInt()
+            .coerceIn(0, 5000)
+
+        return primary.copy(
+            primarySubject = true,
+            subjectScore = subjectScore,
+            sizeScore = sizeScore,
+            fullBodyScore = fullBodyScore,
+            otherPokemonScore = otherPokemonBonus,
+            wholeBodyInFrame = wholeBodyInFrame,
+            clippingMultiplier = clippingMultiplier.toFloat()
         )
     }
 
@@ -1129,16 +1232,11 @@ class PokedexUsageContext {
 
     private fun calculateDirectionScore(entity: Entity): Int {
         val player = Minecraft.getInstance().player ?: return 0
-        val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
-        val look = entity.lookAngle.normalize()
-        if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return 0
         val lookAtCameraScoreCap = ServerSettings.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
-        val facing = ((look.dot(toPlayer) + 0.2) / 1.2).coerceIn(0.0, 1.0)
-        val facingScore = (lookAtCameraScoreCap.toDouble() * facing * facing).roundToInt().coerceIn(0, lookAtCameraScoreCap)
         return if (isBrainLookingAtPlayer(entity, player)) {
-            max(facingScore, lookAtCameraScoreCap)
+            lookAtCameraScoreCap
         } else {
-            facingScore
+            0
         }
     }
 
@@ -1185,11 +1283,11 @@ class PokedexUsageContext {
     }
 
     private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
-        val visibility = (subject.rayCoverage / 0.12F).coerceIn(0F, 1F)
-        val placement = (subject.placementScore / 1000F).coerceIn(0F, 1F)
-        val body = if (subject.wholeBodyInFrame) 1F else 0.5F
+        if (subject.rayHits <= 0) return 0
+        val visibility = (subject.rayCoverage / 0.08F).coerceIn(0.25F, 1F)
+        val placement = (0.35F + (subject.placementScore / 1000F)).coerceIn(0.35F, 1F)
         val scoreCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject.coerceAtLeast(0)
-        return (scoreCap * visibility * placement * body).roundToInt().coerceIn(0, scoreCap)
+        return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
     }
 
     private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
@@ -1241,14 +1339,8 @@ class PokedexUsageContext {
             ?.getMemory(MemoryModuleType.LOOK_TARGET)
             ?.orElse(null)
             ?: return false
-        return lookTarget.currentPosition().distanceTo(player.eyePosition) <= 1.0
-    }
-
-    private fun isLookingAtPlayer(entity: Entity, player: LocalPlayer): Boolean {
-        val toPlayer = player.getEyePosition(1.0F).subtract(entity.eyePosition).normalize()
-        val look = entity.lookAngle.normalize()
-        if (toPlayer.lengthSqr() < 1.0E-6 || look.lengthSqr() < 1.0E-6) return false
-        return look.dot(toPlayer) >= 0.85
+        val targetEntity = (lookTarget as? EntityTracker)?.entity ?: return false
+        return targetEntity === player || targetEntity.id == player.id || targetEntity.uuid == player.uuid
     }
 
     private fun getActiveAnimationNames(entity: Entity): Set<String> {

@@ -55,9 +55,6 @@ object PokedexPhotoRatings {
             if (primary.otherPokemonScore > 0) {
                 lines += Component.literal("Other Pokemon: +${primary.otherPokemonScore}")
             }
-            if (primary.animationMultiplier != 1F) {
-                lines += Component.literal("Animation multiplier: x${formatMultiplier(primary.animationMultiplier)}")
-            }
             if (primary.shiny) {
                 lines += Component.literal("Shiny multiplier: x${formatMultiplier(primary.shinyMultiplier)}")
             }

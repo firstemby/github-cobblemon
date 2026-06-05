@@ -11,15 +11,21 @@ package com.cobblemon.mod.common.client.net.gui
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadResultPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoQuality
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
+import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.ai.behavior.EntityTracker
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhotoUploadPacket> {
     private const val MAX_UPLOAD_SIZE = 5 * 1024 * 1024
@@ -53,7 +59,6 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         val safeBiome = ResourceLocation.tryParse(packet.biome)?.toString() ?: "minecraft:unknown"
         val safeDimension = ResourceLocation.tryParse(packet.dimension)?.toString() ?: "minecraft:overworld"
         val safeTimeOfDayTicks = packet.timeOfDayTicks.coerceIn(0L, 23999L)
-        val safeQuality = PokedexPhotoQuality.applySpeciesMultiplier(packet.qualityScore, detectedSpecies)
         val safeSubjects = packet.qualitySubjects
             .asSequence()
             .mapNotNull { subject ->
@@ -62,6 +67,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                 if (species !in detectedSpecies) return@mapNotNull null
                 PokedexPhotoSubjectQuality(
                     species = species,
+                    entityUuid = subject.entityUuid,
                     primarySubject = subject.primarySubject,
                     subjectScore = subject.subjectScore.coerceIn(0, 5000),
                     sizeScore = subject.sizeScore.coerceIn(0, Cobblemon.config.pokedexScannerPhotoCoverageScoreCap.coerceIn(0, 5000)),
@@ -80,12 +86,16 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                     activeAnimations = subject.activeAnimations.take(16),
                     shiny = subject.shiny,
                     shinyMultiplier = subject.shinyMultiplier.coerceIn(1F, Cobblemon.config.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F)),
-                    animationMultiplier = subject.animationMultiplier.coerceIn(1F, 1.5F),
                     rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(speciesId)
                 )
             }
             .take(64)
             .toList()
+        val adjustedSubjects = applyServerAuthoritativeLookScores(safeSubjects, player)
+        val safeQuality = PokedexPhotoQuality.applySpeciesMultiplier(
+            adjustedSubjects.firstOrNull { it.primarySubject }?.subjectScore ?: packet.qualityScore,
+            detectedSpecies
+        )
 
         val result = PokedexPhotoRepository.saveFromPng(
             owner = player.uuid,
@@ -97,7 +107,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             qualityScore = safeQuality.score,
             qualityBaseScore = safeQuality.baseScore,
             qualitySpeciesMultiplier = safeQuality.speciesMultiplier,
-            qualitySubjects = safeSubjects
+            qualitySubjects = adjustedSubjects
         )
         if (result.success && result.photo != null) {
             val photoId = result.photo.id
@@ -110,5 +120,150 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             val message = result.errorMessage ?: "Unknown save error."
             PokedexPhotoUploadResultPacket(false, "Failed to save Pokedex photo: $message").sendToPlayer(player)
         }
+    }
+
+    private fun applyServerAuthoritativeLookScores(
+        subjects: List<PokedexPhotoSubjectQuality>,
+        player: ServerPlayer
+    ): List<PokedexPhotoSubjectQuality> {
+        if (subjects.isEmpty()) return emptyList()
+        val facingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
+        val withServerLookScores = subjects.map { subject ->
+            subject.copy(
+                directionScore = if (isBrainLookingAtPlayer(subject, player)) facingBonus else 0,
+                primarySubject = false,
+                fullBodyScore = 0,
+                otherPokemonScore = 0,
+                wholeBodyInFrame = true,
+                clippingMultiplier = 1F
+            )
+        }
+        val primary = withServerLookScores.maxWithOrNull(
+            compareBy<PokedexPhotoSubjectQuality> { it.rayHits }
+                .thenBy { it.rayCoverage }
+                .thenBy { -it.centerDistance }
+        ) ?: return emptyList()
+        val otherPokemonBonus = calculateOtherPokemonBonus(primary, withServerLookScores)
+
+        return withServerLookScores.map { subject ->
+            if (subject === primary) {
+                scorePrimarySubject(subject, otherPokemonBonus)
+            } else {
+                subject.copy(subjectScore = calculateSecondaryPokemonBonus(subject))
+            }
+        }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
+    }
+
+    private fun scorePrimarySubject(subject: PokedexPhotoSubjectQuality, otherPokemonBonus: Int): PokedexPhotoSubjectQuality {
+        val wholeBodyInFrame = subject.perimeterHits == 0
+        val sizeScore = calculateSizeScore(subject.rayCoverage.toDouble(), wholeBodyInFrame)
+        val fullBodyScore = if (wholeBodyInFrame) Cobblemon.config.pokedexScannerPhotoFullBodyBonus.coerceAtLeast(0) else 0
+        val clippingMultiplier = if (wholeBodyInFrame) {
+            1.0
+        } else {
+            Cobblemon.config.pokedexScannerPhotoOutOfFrameMultiplier.coerceIn(0F, 1F).toDouble()
+        }
+        val rawScore = sizeScore + subject.placementScore + subject.directionScore + subject.poseScore + fullBodyScore + otherPokemonBonus
+        val subjectScore = (rawScore * clippingMultiplier * subject.shinyMultiplier)
+            .roundToInt()
+            .coerceIn(0, 5000)
+
+        return subject.copy(
+            primarySubject = true,
+            subjectScore = subjectScore,
+            sizeScore = sizeScore,
+            fullBodyScore = fullBodyScore,
+            otherPokemonScore = otherPokemonBonus,
+            wholeBodyInFrame = wholeBodyInFrame,
+            clippingMultiplier = clippingMultiplier.toFloat()
+        )
+    }
+
+    private fun isBrainLookingAtPlayer(subject: PokedexPhotoSubjectQuality, player: ServerPlayer): Boolean {
+        val entityUuid = subject.entityUuid ?: return false
+        val entity = player.serverLevel().getEntity(entityUuid) as? PokemonEntity ?: return false
+        val lookTarget = entity.brain
+            .getMemory(MemoryModuleType.LOOK_TARGET)
+            .orElse(null)
+            ?: return false
+        val targetEntity = (lookTarget as? EntityTracker)?.entity ?: return false
+        return targetEntity === player || targetEntity.id == player.id || targetEntity.uuid == player.uuid
+    }
+
+    private fun calculateOtherPokemonBonus(
+        primary: PokedexPhotoSubjectQuality,
+        subjects: List<PokedexPhotoSubjectQuality>
+    ): Int {
+        val rawBonus = subjects
+            .asSequence()
+            .filter { it !== primary }
+            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateRelatedPokemonBonus(primary, subject) }
+        return rawBonus.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0))
+    }
+
+    private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
+        if (subject.rayHits <= 0) return 0
+        val visibility = (subject.rayCoverage / 0.08F).coerceIn(0.25F, 1F)
+        val placement = (0.35F + (subject.placementScore / 1000F)).coerceIn(0.35F, 1F)
+        val scoreCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject.coerceAtLeast(0)
+        return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
+    }
+
+    private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
+        if (primary.species == subject.species) {
+            return Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+        }
+        return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
+            Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+        } else {
+            0
+        }
+    }
+
+    private fun areSpeciesInSameEvolutionLine(firstSpecies: String, secondSpecies: String): Boolean {
+        val firstId = ResourceLocation.tryParse(firstSpecies) ?: return false
+        val secondId = ResourceLocation.tryParse(secondSpecies) ?: return false
+        if (firstId == secondId) return true
+        return secondId in collectEvolutionFamily(firstId)
+    }
+
+    private fun collectEvolutionFamily(speciesId: ResourceLocation): Set<ResourceLocation> {
+        val rootSpecies = PokemonSpecies.getByIdentifier(speciesId) ?: return setOf(speciesId)
+        val family = linkedSetOf<ResourceLocation>()
+        val processed = hashSetOf<ResourceLocation>()
+        val queue = ArrayDeque<Species>()
+        queue.add(rootSpecies)
+        var preEvolution = rootSpecies.preEvolution?.species
+        while (preEvolution != null && family.add(preEvolution.resourceIdentifier)) {
+            queue.add(preEvolution)
+            preEvolution = preEvolution.preEvolution?.species
+        }
+
+        while (queue.isNotEmpty()) {
+            val species = queue.removeFirst()
+            if (!processed.add(species.resourceIdentifier)) continue
+            family.add(species.resourceIdentifier)
+            species.evolutions
+                .asSequence()
+                .mapNotNull { evolution -> evolution.result.species?.asIdentifierDefaultingNamespace() }
+                .mapNotNull(PokemonSpecies::getByIdentifier)
+                .forEach(queue::add)
+        }
+        return family
+    }
+
+    private fun calculateSizeScore(rayCoverage: Double, wholeBodyInFrame: Boolean): Int {
+        val scoreCap = Cobblemon.config.pokedexScannerPhotoCoverageScoreCap.coerceIn(0, 5000)
+        val capAtCoverage = Cobblemon.config.pokedexScannerPhotoCoverageScoreCapAtPercent.toDouble().coerceIn(0.01, 1.0)
+        val normalizedCoverage = (rayCoverage / capAtCoverage).coerceIn(0.0, 1.0)
+        val coverageFactor = Math.pow(normalizedCoverage, 2.4)
+        val tooLargeFactor = if (rayCoverage <= 0.55 || wholeBodyInFrame) {
+            1.0
+        } else {
+            (1.0 - ((rayCoverage - 0.55) / 0.35 * 0.2)).coerceIn(0.8, 1.0)
+        }
+        return (scoreCap.toDouble() * coverageFactor * tooLargeFactor)
+            .roundToInt()
+            .coerceIn(0, scoreCap)
     }
 }

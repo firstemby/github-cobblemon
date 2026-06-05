@@ -42,6 +42,8 @@ class PokedexPhotoUploadPacket(
         buffer.writeInt(qualityScore)
         buffer.writeCollection(qualitySubjects.orEmpty()) { _, subject ->
             buffer.writeUtf(subject.species)
+            buffer.writeBoolean(subject.entityUuid != null)
+            subject.entityUuid?.let(buffer::writeUUID)
             buffer.writeBoolean(subject.primarySubject)
             buffer.writeInt(subject.subjectScore)
             buffer.writeInt(subject.sizeScore)
@@ -60,7 +62,6 @@ class PokedexPhotoUploadPacket(
             buffer.writeCollection(subject.activeAnimations.orEmpty()) { _, animation -> buffer.writeUtf(animation) }
             buffer.writeBoolean(subject.shiny)
             buffer.writeFloat(subject.shinyMultiplier)
-            buffer.writeFloat(subject.animationMultiplier)
             buffer.writeFloat(subject.rarityMultiplier)
         }
         buffer.writeByteArray(pngData)
@@ -81,6 +82,7 @@ class PokedexPhotoUploadPacket(
                 qualitySubjects = buffer.readList {
                     PokedexPhotoSubjectQuality(
                         species = it.readUtf(),
+                        entityUuid = if (it.readBoolean()) it.readUUID() else null,
                         primarySubject = it.readBoolean(),
                         subjectScore = it.readInt(),
                         sizeScore = it.readInt(),
@@ -99,7 +101,6 @@ class PokedexPhotoUploadPacket(
                         activeAnimations = it.readList { buffer -> buffer.readUtf() },
                         shiny = it.readBoolean(),
                         shinyMultiplier = it.readFloat(),
-                        animationMultiplier = it.readFloat(),
                         rarityMultiplier = it.readFloat()
                     )
                 },

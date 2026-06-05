@@ -65,7 +65,6 @@ class PokedexPhotoGalleryPacket(
                 buffer.writeCollection(subject.activeAnimations.orEmpty()) { _, animation -> buffer.writeUtf(animation) }
                 buffer.writeBoolean(subject.shiny)
                 buffer.writeFloat(subject.shinyMultiplier)
-                buffer.writeFloat(subject.animationMultiplier)
                 buffer.writeFloat(subject.rarityMultiplier)
             }
         }
@@ -115,7 +114,6 @@ class PokedexPhotoGalleryPacket(
                             activeAnimations = it.readList { buffer -> buffer.readUtf() },
                             shiny = it.readBoolean(),
                             shinyMultiplier = it.readFloat(),
-                            animationMultiplier = it.readFloat(),
                             rarityMultiplier = it.readFloat()
                         )
                     }

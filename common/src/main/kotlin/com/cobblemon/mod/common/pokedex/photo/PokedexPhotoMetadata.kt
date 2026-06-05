@@ -30,6 +30,7 @@ data class PokedexPhotoMetadata(
 
 data class PokedexPhotoSubjectQuality(
     val species: String,
+    @Transient val entityUuid: UUID? = null,
     val primarySubject: Boolean = false,
     val subjectScore: Int = 0,
     val sizeScore: Int = 0,
@@ -48,7 +49,6 @@ data class PokedexPhotoSubjectQuality(
     val activeAnimations: List<String> = emptyList(),
     val shiny: Boolean = false,
     val shinyMultiplier: Float = 1F,
-    val animationMultiplier: Float = 1F,
     val rarityMultiplier: Float = 1F
 )
 

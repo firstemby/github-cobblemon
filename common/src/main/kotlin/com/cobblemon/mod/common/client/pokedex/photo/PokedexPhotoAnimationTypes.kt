@@ -49,7 +49,7 @@ object PokedexPhotoAnimationTypes : JsonDataRegistry<PokedexPhotoAnimationType> 
 
         return types.values
             .filter { type -> normalizedNames.any(type.match::matches) }
-            .maxWithOrNull(compareBy<PokedexPhotoAnimationType> { it.priority }.thenBy { it.poseScore }.thenBy { it.multiplier })
+            .maxWithOrNull(compareBy<PokedexPhotoAnimationType> { it.priority }.thenBy { it.poseScore })
     }
 
     private fun normalize(value: String): String {
@@ -59,8 +59,7 @@ object PokedexPhotoAnimationTypes : JsonDataRegistry<PokedexPhotoAnimationType> 
 
 class PokedexPhotoAnimationType {
     var priority: Int = 0
-    var poseScore: Int = 250
-    var multiplier: Float = 1F
+    var poseScore: Int = 0
     var match: PokedexPhotoAnimationMatch = PokedexPhotoAnimationMatch()
 }
 
