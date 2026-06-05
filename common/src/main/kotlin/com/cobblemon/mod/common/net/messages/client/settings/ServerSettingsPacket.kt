@@ -42,7 +42,7 @@ class ServerSettingsPacket internal constructor(
     val pokedexScannerPhotoUltraRareSpeciesMultiplier: Float,
     val pokedexScannerPhotoExtraPokemonBonusCap: Int,
     val pokedexScannerPhotoExtraPokemonBonusPerSubject: Int,
-    val pokedexScannerPhotoRelatedPokemonBonus: Int
+    val pokedexScannerPhotoFamilyBonus: Int
 ) : NetworkPacket<ServerSettingsPacket> {
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -68,7 +68,7 @@ class ServerSettingsPacket internal constructor(
         buffer.writeFloat(Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject)
-        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus)
+        buffer.writeInt(Cobblemon.config.pokedexScannerPhotoFamilyBonus)
     }
     companion object {
         val ID = cobblemonResource("server_settings")

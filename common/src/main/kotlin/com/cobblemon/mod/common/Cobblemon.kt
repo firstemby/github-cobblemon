@@ -322,7 +322,7 @@ object Cobblemon {
             this.config.pokedexScannerPhotoUltraRareSpeciesMultiplier,
             this.config.pokedexScannerPhotoExtraPokemonBonusCap,
             this.config.pokedexScannerPhotoExtraPokemonBonusPerSubject,
-            this.config.pokedexScannerPhotoRelatedPokemonBonus
+            this.config.pokedexScannerPhotoFamilyBonus
         ).sendToPlayer(player)
     }
 

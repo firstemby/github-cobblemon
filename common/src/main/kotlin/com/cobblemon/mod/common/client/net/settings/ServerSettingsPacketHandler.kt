@@ -37,7 +37,7 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier = packet.pokedexScannerPhotoUltraRareSpeciesMultiplier
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap = packet.pokedexScannerPhotoExtraPokemonBonusCap
         ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject = packet.pokedexScannerPhotoExtraPokemonBonusPerSubject
-        ServerSettings.pokedexScannerPhotoRelatedPokemonBonus = packet.pokedexScannerPhotoRelatedPokemonBonus
+        ServerSettings.pokedexScannerPhotoFamilyBonus = packet.pokedexScannerPhotoFamilyBonus
     }
 
 }

@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoSubjectQuality
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -96,6 +97,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             adjustedSubjects.firstOrNull { it.primarySubject }?.subjectScore ?: packet.qualityScore,
             detectedSpecies
         )
+        sendServerScoreDebug(player, adjustedSubjects, safeQuality.baseScore, safeQuality.score)
 
         val result = PokedexPhotoRepository.saveFromPng(
             owner = player.uuid,
@@ -122,6 +124,25 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         }
     }
 
+    private fun sendServerScoreDebug(
+        player: ServerPlayer,
+        subjects: List<PokedexPhotoSubjectQuality>,
+        baseScore: Int,
+        finalScore: Int
+    ) {
+        val primary = subjects.firstOrNull { it.primarySubject } ?: return
+        player.sendSystemMessage(
+            Component.literal(
+                "[Photo Score Debug] server primary=${primary.species}, " +
+                    "look-at-camera +${primary.directionScore}, size +${primary.sizeScore}, " +
+                    "center +${primary.placementScore}, pose +${primary.poseScore}, " +
+                    "full body +${primary.fullBodyScore}, other Pokemon +${primary.otherPokemonScore}, " +
+                    "clip x${"%.2f".format(primary.clippingMultiplier)}, shiny x${"%.2f".format(primary.shinyMultiplier)}, " +
+                    "lookTargetMatched=${primary.directionScore > 0}, base=$baseScore, final=$finalScore"
+            )
+        )
+    }
+
     private fun applyServerAuthoritativeLookScores(
         subjects: List<PokedexPhotoSubjectQuality>,
         player: ServerPlayer
@@ -130,7 +151,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         val facingBonus = Cobblemon.config.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
         val withServerLookScores = subjects.map { subject ->
             subject.copy(
-                directionScore = if (isBrainLookingAtPlayer(subject, player)) facingBonus else 0,
+                directionScore = 0,
                 primarySubject = false,
                 fullBodyScore = 0,
                 otherPokemonScore = 0,
@@ -143,13 +164,17 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                 .thenBy { it.rayCoverage }
                 .thenBy { -it.centerDistance }
         ) ?: return emptyList()
+        val primaryLookTargetMatched = isBrainLookingAtPlayer(primary, player)
         val otherPokemonBonus = calculateOtherPokemonBonus(primary, withServerLookScores)
 
         return withServerLookScores.map { subject ->
             if (subject === primary) {
-                scorePrimarySubject(subject, otherPokemonBonus)
+                scorePrimarySubject(
+                    subject = subject.copy(directionScore = if (primaryLookTargetMatched) facingBonus else 0),
+                    otherPokemonBonus = otherPokemonBonus
+                )
             } else {
-                subject.copy(subjectScore = calculateSecondaryPokemonBonus(subject))
+                subject.copy(subjectScore = 0)
             }
         }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
     }
@@ -186,8 +211,11 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
             .getMemory(MemoryModuleType.LOOK_TARGET)
             .orElse(null)
             ?: return false
-        val targetEntity = (lookTarget as? EntityTracker)?.entity ?: return false
-        return targetEntity === player || targetEntity.id == player.id || targetEntity.uuid == player.uuid
+        val targetEntity = (lookTarget as? EntityTracker)?.entity
+        if (targetEntity === player || targetEntity?.id == player.id || targetEntity?.uuid == player.uuid) {
+            return true
+        }
+        return lookTarget.currentPosition().distanceTo(player.getEyePosition(1.0F)) <= 1.0
     }
 
     private fun calculateOtherPokemonBonus(
@@ -197,24 +225,24 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         val rawBonus = subjects
             .asSequence()
             .filter { it !== primary }
-            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateRelatedPokemonBonus(primary, subject) }
+            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateFamilyBonus(primary, subject) }
         return rawBonus.coerceIn(0, Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0))
     }
 
     private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
         if (subject.rayHits <= 0) return 0
         val visibility = (subject.rayCoverage / 0.08F).coerceIn(0.25F, 1F)
-        val placement = (0.35F + (subject.placementScore / 1000F)).coerceIn(0.35F, 1F)
+        val placement = (1F - subject.centerDistance).coerceIn(0.35F, 1F)
         val scoreCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject.coerceAtLeast(0)
         return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
     }
 
-    private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
+    private fun calculateFamilyBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
         if (primary.species == subject.species) {
-            return Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+            return Cobblemon.config.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
         }
         return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
-            Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+            Cobblemon.config.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
         } else {
             0
         }

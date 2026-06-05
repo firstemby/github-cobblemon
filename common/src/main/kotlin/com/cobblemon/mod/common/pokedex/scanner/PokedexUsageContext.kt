@@ -53,8 +53,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.ai.behavior.EntityTracker
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
@@ -222,11 +220,7 @@ class PokedexUsageContext {
 
     private class PhotoSubjectAccumulator(
         val entity: Entity,
-        val species: ResourceLocation,
-        val poseScore: Int,
-        val activeAnimations: List<String>,
-        val shiny: Boolean,
-        val shinyMultiplier: Float
+        val species: ResourceLocation
     ) {
         var rayHits = 0
         var perimeterHits = 0
@@ -242,6 +236,13 @@ class PokedexUsageContext {
             distanceValueSum += distanceValue
         }
     }
+
+    private data class PhotoSubjectStats(
+        val accumulator: PhotoSubjectAccumulator,
+        val rayCoverage: Double,
+        val centerDistance: Double,
+        val distanceScore: Int
+    )
 
     fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
@@ -727,16 +728,9 @@ class PokedexUsageContext {
         raySamples.forEach { sample ->
             val hit = detectPhotoHitAlongRay(player, eyePos, sample, raycastDistance, candidates) ?: return@forEach
             val subject = subjectsByEntity.getOrPut(hit.entity.id) {
-                val activeAnimations = getActiveAnimationNames(hit.entity).toList()
-                val animationType = PokedexPhotoAnimationTypes.bestMatchFor(activeAnimations)
-                val shiny = (hit.entity as? PokemonEntity)?.pokemon?.shiny == true
                 PhotoSubjectAccumulator(
                     entity = hit.entity,
-                    species = hit.species,
-                    poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 0,
-                    activeAnimations = activeAnimations,
-                    shiny = shiny,
-                    shinyMultiplier = if (shiny) ServerSettings.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F) else 1F
+                    species = hit.species
                 )
             }.also { subject ->
                 subject.projectedInsidePhotoBounds = subject.projectedInsidePhotoBounds && isEntityInsidePhotoBounds(hit.entity, projection)
@@ -1098,41 +1092,53 @@ class PokedexUsageContext {
         subjects: Collection<PhotoSubjectAccumulator>,
         inFrameRayCount: Int
     ): List<PokedexPhotoSubjectQuality> {
-        val scoredSubjects = subjects
+        val subjectStats = subjects
             .asSequence()
             .filter { it.rayHits > 0 }
-            .map { subject -> buildSubjectQuality(subject, inFrameRayCount) }
+            .map { subject -> buildSubjectStats(subject, inFrameRayCount) }
             .toList()
-        val primary = scoredSubjects.maxWithOrNull(
-            compareBy<PokedexPhotoSubjectQuality> { it.rayHits }
+        val primaryStats = subjectStats.maxWithOrNull(
+            compareBy<PhotoSubjectStats> { it.accumulator.rayHits }
                 .thenBy { it.rayCoverage }
-                .thenBy { calculatePrimarySubjectSortValue(it) * -1.0 }
+                .thenBy { -it.centerDistance }
+                .thenBy { it.distanceScore }
         ) ?: return emptyList()
-        val otherPokemonBonus = calculateOtherPokemonBonus(primary, scoredSubjects)
+        val primary = buildPrimarySubjectQuality(primaryStats)
+        val otherPokemonBonus = calculateOtherPokemonBonus(primary, subjectStats)
         val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus)
 
-        return scoredSubjects.map { subject ->
-            if (subject === primary) {
+        return subjectStats.map { stats ->
+            if (stats === primaryStats) {
                 scoredPrimary
             } else {
-                subject.copy(
-                    primarySubject = false,
-                    subjectScore = calculateSecondaryPokemonBonus(subject)
-                )
+                buildSecondarySubjectMetadata(stats)
             }
-        }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
+        }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.rayHits })
     }
 
-    private fun buildSubjectQuality(subject: PhotoSubjectAccumulator, inFrameRayCount: Int): PokedexPhotoSubjectQuality {
+    private fun buildSubjectStats(subject: PhotoSubjectAccumulator, inFrameRayCount: Int): PhotoSubjectStats {
         val rayCoverage = (subject.rayHits.toDouble() / inFrameRayCount.toDouble()).coerceIn(0.0, 1.0)
         val centroidX = subject.sampleXSum / subject.rayHits
         val centroidY = subject.sampleYSum / subject.rayHits
         val centerDistance = calculateCenterDistance(centroidX, centroidY)
         val distanceScore = calculateDistanceScore(subject.distanceValueSum / subject.rayHits)
-        val sizeScore = calculateSizeScore(rayCoverage, true)
-        val placementScore = calculatePlacementScore(centerDistance)
-        val directionScore = calculateDirectionScore(subject.entity)
-        val subjectScore = (sizeScore + placementScore + directionScore + subject.poseScore).coerceIn(0, 5000)
+        return PhotoSubjectStats(
+            accumulator = subject,
+            rayCoverage = rayCoverage,
+            centerDistance = centerDistance,
+            distanceScore = distanceScore
+        )
+    }
+
+    private fun buildPrimarySubjectQuality(stats: PhotoSubjectStats): PokedexPhotoSubjectQuality {
+        val subject = stats.accumulator
+        val activeAnimations = getActiveAnimationNames(subject.entity).toList()
+        val animationType = PokedexPhotoAnimationTypes.bestMatchFor(activeAnimations)
+        val shiny = (subject.entity as? PokemonEntity)?.pokemon?.shiny == true
+        val sizeScore = calculateSizeScore(stats.rayCoverage, true)
+        val placementScore = calculatePlacementScore(stats.centerDistance)
+        val poseScore = animationType?.poseScore?.coerceIn(0, 800) ?: 0
+        val subjectScore = (sizeScore + placementScore + poseScore).coerceIn(0, 5000)
 
         return PokedexPhotoSubjectQuality(
             species = subject.species.toString(),
@@ -1140,25 +1146,52 @@ class PokedexUsageContext {
             subjectScore = subjectScore,
             sizeScore = sizeScore,
             placementScore = placementScore,
-            centerDistance = centerDistance.toFloat(),
-            distanceScore = distanceScore,
-            directionScore = directionScore,
-            poseScore = subject.poseScore,
+            centerDistance = stats.centerDistance.toFloat(),
+            distanceScore = stats.distanceScore,
+            directionScore = 0,
+            poseScore = poseScore,
             fullBodyScore = 0,
             rayHits = subject.rayHits,
-            rayCoverage = rayCoverage.toFloat(),
+            rayCoverage = stats.rayCoverage.toFloat(),
             perimeterHits = subject.perimeterHits,
             wholeBodyInFrame = true,
             clippingMultiplier = 1F,
-            activeAnimations = subject.activeAnimations,
-            shiny = subject.shiny,
-            shinyMultiplier = subject.shinyMultiplier,
+            activeAnimations = activeAnimations,
+            shiny = shiny,
+            shinyMultiplier = if (shiny) ServerSettings.pokedexScannerPhotoShinyMultiplier.coerceAtLeast(1F) else 1F,
             rarityMultiplier = PokedexPhotoQuality.speciesRarityMultiplier(
                 species = subject.species,
                 uncommonMultiplier = ServerSettings.pokedexScannerPhotoUncommonSpeciesMultiplier,
                 rareMultiplier = ServerSettings.pokedexScannerPhotoRareSpeciesMultiplier,
                 ultraRareMultiplier = ServerSettings.pokedexScannerPhotoUltraRareSpeciesMultiplier
             )
+        )
+    }
+
+    private fun buildSecondarySubjectMetadata(stats: PhotoSubjectStats): PokedexPhotoSubjectQuality {
+        val subject = stats.accumulator
+        return PokedexPhotoSubjectQuality(
+            species = subject.species.toString(),
+            entityUuid = subject.entity.uuid,
+            primarySubject = false,
+            subjectScore = 0,
+            sizeScore = 0,
+            placementScore = 0,
+            centerDistance = stats.centerDistance.toFloat(),
+            distanceScore = stats.distanceScore,
+            directionScore = 0,
+            poseScore = 0,
+            fullBodyScore = 0,
+            otherPokemonScore = 0,
+            rayHits = subject.rayHits,
+            rayCoverage = stats.rayCoverage.toFloat(),
+            perimeterHits = subject.perimeterHits,
+            wholeBodyInFrame = subject.perimeterHits == 0,
+            clippingMultiplier = 1F,
+            activeAnimations = emptyList(),
+            shiny = false,
+            shinyMultiplier = 1F,
+            rarityMultiplier = 1F
         )
     }
 
@@ -1194,13 +1227,6 @@ class PokedexUsageContext {
         return subjects.firstOrNull { it.primarySubject }?.subjectScore ?: 0
     }
 
-    private fun calculatePrimarySubjectSortValue(subject: PokedexPhotoSubjectQuality): Double {
-        val centerPenalty = subject.centerDistance.toDouble().coerceIn(0.0, 1.0)
-        val distancePenalty = 1.0 - (subject.distanceScore.toDouble() / 1000.0).coerceIn(0.0, 1.0)
-        val coverageBonus = subject.rayCoverage.toDouble().coerceIn(0.0, 1.0)
-        return (centerPenalty * 0.78) + (distancePenalty * 0.22) - (coverageBonus * 0.05)
-    }
-
     private fun calculateSizeScore(rayCoverage: Double, wholeBodyInFrame: Boolean): Int {
         val scoreCap = ServerSettings.pokedexScannerPhotoCoverageScoreCap.coerceIn(0, 5000)
         val capAtCoverage = ServerSettings.pokedexScannerPhotoCoverageScoreCapAtPercent.toDouble().coerceIn(0.01, 1.0)
@@ -1228,16 +1254,6 @@ class PokedexUsageContext {
 
     private fun calculateDistanceScore(distanceValue: Double): Int {
         return (1000.0 * distanceValue.coerceIn(0.0, 1.0)).roundToInt().coerceIn(0, 1000)
-    }
-
-    private fun calculateDirectionScore(entity: Entity): Int {
-        val player = Minecraft.getInstance().player ?: return 0
-        val lookAtCameraScoreCap = ServerSettings.pokedexScannerPhotoFacingBonus.coerceIn(0, 5000)
-        return if (isBrainLookingAtPlayer(entity, player)) {
-            lookAtCameraScoreCap
-        } else {
-            0
-        }
     }
 
     private fun isEntityInsidePhotoBounds(entity: Entity, projection: PhotoProjection): Boolean {
@@ -1272,30 +1288,31 @@ class PokedexUsageContext {
 
     private fun calculateOtherPokemonBonus(
         primary: PokedexPhotoSubjectQuality,
-        subjects: List<PokedexPhotoSubjectQuality>
+        subjects: List<PhotoSubjectStats>
     ): Int {
         val rawBonus = subjects
             .asSequence()
-            .filter { it !== primary }
-            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateRelatedPokemonBonus(primary, subject) }
+            .filter { it.accumulator.species.toString() != primary.species || it.accumulator.entity.uuid != primary.entityUuid }
+            .sumOf { subject -> calculateSecondaryPokemonBonus(subject) + calculateFamilyBonus(primary, subject) }
         val configuredCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusCap.coerceAtLeast(0)
         return rawBonus.coerceIn(0, configuredCap)
     }
 
-    private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
-        if (subject.rayHits <= 0) return 0
-        val visibility = (subject.rayCoverage / 0.08F).coerceIn(0.25F, 1F)
-        val placement = (0.35F + (subject.placementScore / 1000F)).coerceIn(0.35F, 1F)
+    private fun calculateSecondaryPokemonBonus(subject: PhotoSubjectStats): Int {
+        if (subject.accumulator.rayHits <= 0) return 0
+        val visibility = (subject.rayCoverage.toFloat() / 0.08F).coerceIn(0.25F, 1F)
+        val placement = (1F - subject.centerDistance.toFloat()).coerceIn(0.35F, 1F)
         val scoreCap = ServerSettings.pokedexScannerPhotoExtraPokemonBonusPerSubject.coerceAtLeast(0)
         return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
     }
 
-    private fun calculateRelatedPokemonBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
-        if (primary.species == subject.species) {
-            return ServerSettings.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+    private fun calculateFamilyBonus(primary: PokedexPhotoSubjectQuality, subject: PhotoSubjectStats): Int {
+        val subjectSpecies = subject.accumulator.species.toString()
+        if (primary.species == subjectSpecies) {
+            return ServerSettings.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
         }
-        return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
-            ServerSettings.pokedexScannerPhotoRelatedPokemonBonus.coerceAtLeast(0)
+        return if (areSpeciesInSameEvolutionLine(primary.species, subjectSpecies)) {
+            ServerSettings.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
         } else {
             0
         }
@@ -1331,16 +1348,6 @@ class PokedexUsageContext {
                 .forEach(queue::add)
         }
         return family
-    }
-
-    private fun isBrainLookingAtPlayer(entity: Entity, player: LocalPlayer): Boolean {
-        val lookTarget = (entity as? PokemonEntity)
-            ?.brain
-            ?.getMemory(MemoryModuleType.LOOK_TARGET)
-            ?.orElse(null)
-            ?: return false
-        val targetEntity = (lookTarget as? EntityTracker)?.entity ?: return false
-        return targetEntity === player || targetEntity.id == player.id || targetEntity.uuid == player.uuid
     }
 
     private fun getActiveAnimationNames(entity: Entity): Set<String> {

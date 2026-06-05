@@ -338,9 +338,9 @@ class CobblemonConfig {
     @IntConstraint(min = 0, max = 5000)
     var pokedexScannerPhotoExtraPokemonBonusPerSubject = 150
 
-    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_related_pokemon_bonus", SERVER)
+    @CobblemonConfigField(Category.Pokedex, lang = "pokedex_scanner_photo_family_bonus", SERVER)
     @IntConstraint(min = 0, max = 5000)
-    var pokedexScannerPhotoRelatedPokemonBonus = 100
+    var pokedexScannerPhotoFamilyBonus = 100
 
     @CobblemonConfigField(Category.Pokedex, lang = "pokedex_delete_photo_after_print", SERVER)
     var pokedexDeletePhotoAfterPrint = false

@@ -43,6 +43,6 @@ object ServerSettings {
     var pokedexScannerPhotoUltraRareSpeciesMultiplier = Cobblemon.config.pokedexScannerPhotoUltraRareSpeciesMultiplier
     var pokedexScannerPhotoExtraPokemonBonusCap = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusCap
     var pokedexScannerPhotoExtraPokemonBonusPerSubject = Cobblemon.config.pokedexScannerPhotoExtraPokemonBonusPerSubject
-    var pokedexScannerPhotoRelatedPokemonBonus = Cobblemon.config.pokedexScannerPhotoRelatedPokemonBonus
+    var pokedexScannerPhotoFamilyBonus = Cobblemon.config.pokedexScannerPhotoFamilyBonus
 
 }
