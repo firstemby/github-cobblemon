@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.emi
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import dev.emi.emi.api.recipe.EmiRecipe
 import dev.emi.emi.api.recipe.EmiRecipeCategory
 import dev.emi.emi.api.stack.EmiIngredient
@@ -42,7 +43,7 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
             val ingredient = ingredientHash.getOrPut(it.ingredient.ingredient) { EmiIngredient.of(it.ingredient.ingredient, it.ingredient.count.toLong()) }
             val emiSlot = SlotWidget(ingredient, it.x - 1, it.y - 1) //X, Y coordinate system slightly offset
             emiSlot.drawBack(false)
-            if (it.type == RecipeViewerCategoryProvider.SlotType.OUTPUT) emiSlot.recipeContext(this)
+            if (it.type == SlotType.OUTPUT) emiSlot.recipeContext(this)
             widgets.add(emiSlot)
         }
     }

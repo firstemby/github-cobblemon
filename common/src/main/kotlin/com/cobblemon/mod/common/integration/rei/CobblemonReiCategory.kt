@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.rei
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import me.shedaniel.math.Point
 import me.shedaniel.math.Rectangle
 import me.shedaniel.rei.api.client.gui.Renderer
@@ -49,9 +50,9 @@ class CobblemonReiCategory<T: RecipeViewerRecipe>(val provider: CobblemonReiProv
             reiSlot.entries(EntryIngredients.ofItems(slot.ingredient.ingredient.items.map { it.item }, slot.ingredient.count))
             reiSlot.disableBackground()
             when (slot.type) {
-                RecipeViewerCategoryProvider.SlotType.INPUT -> reiSlot.markInput()
-                RecipeViewerCategoryProvider.SlotType.OUTPUT -> reiSlot.markOutput()
-                else -> {}
+                SlotType.INPUT -> reiSlot.markInput()
+                SlotType.CATALYST -> reiSlot.markInput()
+                SlotType.OUTPUT -> reiSlot.markOutput()
             }
             widgets.add(reiSlot)
         }

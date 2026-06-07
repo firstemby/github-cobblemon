@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.integration.recipeviewer.RecipeIngredient
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeSlot
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import com.cobblemon.mod.common.item.berry.BerryItem
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -60,9 +61,9 @@ data class BerryMutationRecipe(
 
     override fun getSlots(): List<RecipeSlot> {
         val list = mutableListOf<RecipeSlot>()
-        list.add(RecipeSlot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(Ingredient.of(berryOne))))
-        list.add(RecipeSlot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(Ingredient.of(berryTwo))))
-        list.add(RecipeSlot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, RecipeIngredient(Ingredient.of(berryResult))))
+        list.add(RecipeSlot(1, 1, SlotType.INPUT, RecipeIngredient(Ingredient.of(berryOne))))
+        list.add(RecipeSlot(50, 1, SlotType.INPUT, RecipeIngredient(Ingredient.of(berryTwo))))
+        list.add(RecipeSlot(108, 1, SlotType.OUTPUT, RecipeIngredient(Ingredient.of(berryResult))))
         return list
     }
 

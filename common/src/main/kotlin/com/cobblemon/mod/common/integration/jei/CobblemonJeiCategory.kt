@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.jei
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import mezz.jei.api.constants.VanillaTypes
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder
@@ -48,12 +49,11 @@ class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRec
     override fun setRecipe(builder: IRecipeLayoutBuilder, recipe: T, focuses: IFocusGroup) {
         recipe.getSlots().forEach { slot ->
             val jeiSlot: IRecipeSlotBuilder = builder.addSlot(when (slot.type) {
-                RecipeViewerCategoryProvider.SlotType.INPUT -> RecipeIngredientRole.INPUT
-                RecipeViewerCategoryProvider.SlotType.OUTPUT -> RecipeIngredientRole.OUTPUT
-                RecipeViewerCategoryProvider.SlotType.CATALYST -> RecipeIngredientRole.CATALYST
+                SlotType.INPUT -> RecipeIngredientRole.INPUT
+                SlotType.OUTPUT -> RecipeIngredientRole.OUTPUT
+                SlotType.CATALYST -> RecipeIngredientRole.CATALYST
             }, slot.x, slot.y)
-            val items = slot.ingredient.ingredient.items.toList()
-            items.forEach { it.count = slot.ingredient.count }
+            val items = slot.ingredient.ingredient.items.map { it.copyWithCount(slot.ingredient.count) }
             jeiSlot.addIngredients(VanillaTypes.ITEM_STACK, items)
         }
     }

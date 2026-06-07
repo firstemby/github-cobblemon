@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.CRAFT
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.SEASONING_SLOTS
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeIngredient
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeSlot
+import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 
@@ -55,7 +56,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
             val row = index / CRAFTING_GRID_WIDTH
             val column = index % CRAFTING_GRID_WIDTH
             slots.add(RecipeSlot(16 + column * 18, 1 + row * 18,
-                RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(ingredient)))
+                SlotType.INPUT, RecipeIngredient(ingredient)))
         }
 
         if (originalRecipe.seasoningProcessors.isNotEmpty()) {
@@ -66,12 +67,12 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 val y = 1
 
                 slots.add(RecipeSlot(x, y,
-                    RecipeViewerCategoryProvider.SlotType.CATALYST, RecipeIngredient(Ingredient.of(*processedSeasonings.shuffled().toTypedArray()))))
+                    SlotType.CATALYST, RecipeIngredient(Ingredient.of(*processedSeasonings.shuffled().toTypedArray()))))
             }
         }
 
         slots.add(RecipeSlot(111, 38,
-            RecipeViewerCategoryProvider.SlotType.OUTPUT, RecipeIngredient(Ingredient.of(originalRecipe.getResultItem(registryAccess)))))
+            SlotType.OUTPUT, RecipeIngredient(Ingredient.of(originalRecipe.getResultItem(registryAccess)))))
 
         return slots
     }
