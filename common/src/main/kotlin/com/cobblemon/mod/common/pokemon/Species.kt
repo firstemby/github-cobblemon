@@ -136,7 +136,9 @@ class Species : ShowdownIdentifiable {
             preEvolution = this.preEvolution,
             evolutions = this.evolutions,
             forms = this.forms
-        ).initialize(this) as StandardForm
+        ).also {
+            it.initialize(this)
+        }
     }
 
     /** Aggregates child forms, their nested forms, and the base standard form. This is all possible forms of the species. */

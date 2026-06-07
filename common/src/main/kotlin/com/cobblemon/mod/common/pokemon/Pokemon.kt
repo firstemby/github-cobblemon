@@ -770,6 +770,9 @@ open class Pokemon : ShowdownIdentifiable {
     var formProxy: FormProxy = FormProxy(this.self())
         private set
 
+    val transformationProxies: Iterable<TransformationProxy<*, *, *>>
+        get() = listOf(evolutionProxy, formProxy)
+
     val customProperties = mutableListOf<CustomPokemonProperty>()
 
     /**

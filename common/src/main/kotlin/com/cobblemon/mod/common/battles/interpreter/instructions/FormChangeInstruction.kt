@@ -75,7 +75,7 @@ class FormChangeInstruction(val message: BattleMessage): ActionEffectInstruction
                     providers = providers,
                     level = battle.players.firstOrNull()?.level()
                 )
-                (form as TemporaryForm).forceStart(battlePokemon.effectedPokemon.entity!!, context)
+                (form as TemporaryForm).perform(battlePokemon.effectedPokemon.entity!!, context)
                 UntilDispatch { context.future.isDone }
             } else {
                 val form = battlePokemon.effectedPokemon.form

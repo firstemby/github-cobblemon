@@ -14,11 +14,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.progress.DefeatTransformationProgress
 
 /**
-<<<<<<<< HEAD:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/transformation/requirements/DefeatRequirement.kt
  * A [TransformationRequirement] which requires a specific [amount] of [target]s defeated to pass.
-========
- * An [Requirement] which requires a specific [amount] of [target]s defeated to pass.
->>>>>>>> origin/main:common/src/main/kotlin/com/cobblemon/mod/common/pokemon/requirements/DefeatRequirement.kt
  *
  * @property target The [PokemonProperties] of the target Pokémon.
  * @property amount The amount of [target]s to faint.

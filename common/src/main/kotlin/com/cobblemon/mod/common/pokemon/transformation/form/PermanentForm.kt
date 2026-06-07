@@ -52,7 +52,7 @@ open class PermanentForm (
     /** The [TemporaryForm]s and [Evolution]s this form can transform to. */
     val transformations: List<Transformation> get() = forms.filterIsInstance<TemporaryForm>() + evolutions
 
-    override fun initialize(species: Species, parent: PermanentForm?): FormData {
+    override fun initialize(species: Species, parent: PermanentForm?) {
         super.initialize(species, parent)
         // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species
@@ -60,8 +60,9 @@ open class PermanentForm (
         this.evolutions.size
         // init nested forms
         this.forms.forEach { it.initialize(species, this) }
-        return this
     }
+
+    override fun getBaseForm() = this
 
     internal fun resolveEvolutionMoves() {
         this.evolutions.forEach { evolution ->

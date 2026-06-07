@@ -39,9 +39,11 @@ class CritInstruction(val message: BattleMessage, val instructionSet: Instructio
                     battle.broadcastChatMessage(battleLang("crit").yellow())
                 }
                 if (LastBattleCriticalHitsTransformationProgress.supports(battlePokemon.effectedPokemon)) {
-                    // TODO refactor and apply to forms
-                    val progress = battlePokemon.effectedPokemon.evolutionProxy.server().progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }) { LastBattleCriticalHitsTransformationProgress() }
-                    progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
+                    // TODO look at this some more
+                    for (proxy in battlePokemon.effectedPokemon.transformationProxies) {
+                        val progress = proxy.server().progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }) { LastBattleCriticalHitsTransformationProgress() }
+                        progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
+                    }
                 }
             }
             battle.minorBattleActions[pokemon.uuid] = message

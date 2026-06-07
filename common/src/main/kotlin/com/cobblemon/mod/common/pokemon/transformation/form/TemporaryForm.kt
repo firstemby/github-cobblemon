@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
@@ -71,8 +72,21 @@ open class TemporaryForm (
             ?: ActionEffects.actionEffects["generic_form".asIdentifierDefaultingNamespace()]
             ?: throw Exception()
 
+
+
     /* Temporary forms DO NOT have their own preevo/evolutions/forms and have to fallback on the parent. Because parentForm
        is not initialized until AFTER species registration, none of these properties are safe to access until [PokemonSpecies.observable] */
+
+    /**
+     * The [PermanentForm] that precedes this form or this form.
+     *
+     * For example the parent of Toxtricity's 'Gmax' form can be either its  'Low-Key' or 'Standard' form.
+     * The parent of Toxtricity's 'Low-Key' form is its 'Standard' form.
+     * And the parent of Toxtricity's 'Standard' form is null (does not exist).
+     *
+     * This is initialized during species registration, and is not safe to access until [PokemonSpecies.observable] is emitted.
+     */
+    lateinit var parentForm: PermanentForm
 
     // preevo is the same as the parent
     override val preEvolution: PreEvolution? get() = parentForm.preEvolution
@@ -83,9 +97,15 @@ open class TemporaryForm (
     // allows for form changes between adjacent temporary forms belonging to the same parent
     override val changeableForms: Collection<TemporaryForm> get() = parentForm.changeableForms  // technically this includes itself
 
-    @delegate:Transient
-    override val parentForm: PermanentForm by lazy { parentFormInitializer ?:
-        throw IllegalStateException("Unable to resolve parent of ${this.species.name}'s temporary form: ${this.name}") } // temp forms MUST have a parent
+    override fun initialize(species: Species, parent: PermanentForm?) {
+        super.initialize(species, parent)
+        if (parent == null) {
+            throw IllegalArgumentException("Temporary form $name lacks a parent form - that is meant to be impossible")
+        }
+        this.parentForm = parent
+    }
+
+    override fun getBaseForm() = parentForm.getBaseForm()
 
     override fun test(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
         val baseResult = pokemon.form !== this && super.test(pokemon, context)
@@ -129,7 +149,7 @@ open class TemporaryForm (
                 providers = providers,
                 level = pokemonEntity.level()
             )
-            this.forceStart(pokemonEntity, context)
+            this.perform(pokemonEntity, context)
         } else {
             fulfill(pokemon)
         }
@@ -142,7 +162,7 @@ open class TemporaryForm (
         CobblemonEvents.FORM_COMPLETE.post(FormCompleteEvent(pokemon, this))
     }
 
-    fun forceStart(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
+    fun perform(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
         pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
         val finishTransformation: () -> Unit = {
             if (pokemonEntity.isTransforming) {

@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
-import com.cobblemon.mod.common.api.abilities.PotentialAbility
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
@@ -131,7 +130,7 @@ abstract class FormData(
     // UPDATE THE SPECIES SCHEMA IF YOU MODIFY THIS! THANKS
 ) : Decodable, Encodable, ShowdownIdentifiable {
 
-    /** The name of this form. This is unique among forms belonging to the same [parentForm]. */
+    /** The name of this form. For temporary forms, this is unique among forms belonging to the same [TemporaryForm.parentForm]. */
     val name: String
         get() = _name ?: "Standard"
 
@@ -228,31 +227,15 @@ abstract class FormData(
     /** The [TemporaryForm]s that are interchangeable with this form. */
     abstract val changeableForms: Collection<TemporaryForm>
 
-    /**
-     * The [PermanentForm] that precedes this form. Null if a parent form does not exist.
-     *
-     * For example the parent of Toxtricity's 'Gmax' form can be either its  'Low-Key' or 'Standard' form.
-     * The parent of Toxtricity's 'Low-Key' form is its 'Standard' form.
-     * And the parent of Toxtricity's 'Standard' form is null (does not exist).
-     *
-     * This is initialized during species registration, and is not safe to access until [PokemonSpecies.observable] is emitted.
-     */
-    @delegate:Transient
-    open val parentForm: PermanentForm? by lazy { parentFormInitializer }
+    abstract fun getBaseForm(): PermanentForm
 
     /**
      * The base [Species] of this form.
      *
      * This is initialized during species registration, and is not safe to access until [PokemonSpecies.observable] is emitted.
      */
-    @delegate:Transient
-    val species: Species by lazy { speciesInitializer }
-
-    @Transient
-    protected open var parentFormInitializer: PermanentForm? = null
-
-    @Transient
-    private lateinit var speciesInitializer: Species
+    lateinit var species: Species
+        private set
 
     val battleTheme: ResourceLocation
         get() = _battleTheme ?: species.battleTheme
@@ -289,7 +272,7 @@ abstract class FormData(
         get() = _defaultWildMovesetBuilder ?: species.defaultWildMovesetBuilder
 
     fun eyeHeight(entity: PokemonEntity): Float {
-        return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)
+        return this.resolveEyeHeight(entity) ?: this.species.eyeHeight(entity)
     }
 
     private fun resolveEyeHeight(entity: PokemonEntity): Float? = when {
@@ -298,16 +281,12 @@ abstract class FormData(
         else -> this.standingEyeHeight
     }
 
-    open fun initialize(species: Species, parent: PermanentForm? = null): FormData {
-        this.speciesInitializer = species
-        this.species
-        this.parentFormInitializer = parent
-        this.parentForm
+    open fun initialize(species: Species, parent: PermanentForm? = null) {
+        this.species = species
         this.behaviour.parent = species.behaviour
         Cobblemon.statProvider.provide(this)
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         behaviour.herd.initialize()
-        return this
     }
 
     override fun equals(other: Any?): Boolean = other is FormData && other.showdownId() == this.showdownId()
@@ -343,12 +322,12 @@ abstract class FormData(
         }
         buffer.writeNullable(_drops) { _, value -> value.encode(buffer) }
         buffer.writeNullable(_abilities) { _, abilities ->
-            buffer.writeCollection<PotentialAbility>(abilities.toList()) { pb, ability ->
+            buffer.writeCollection(abilities.toList()) { pb, ability ->
                 pb.writeBoolean(ability is CommonAbility)
                 pb.writeString(ability.template.name)
             }
         }
-        buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
+        buffer.writeNullable(_riding) { _, riding -> riding.encode(buffer) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -385,7 +364,7 @@ abstract class FormData(
                 }.forEach { add(Priority.NORMAL, it) }
             }
         }
-        this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
+        this._riding = buffer.readNullable { _ -> RidingProperties.decode(buffer) }
     }
 
     /**
@@ -399,7 +378,7 @@ abstract class FormData(
      * @return The literal Showdown ID of this form only. If this is the [Species.standardForm], this will be an empty
      * string.
      */
-    fun formOnlyShowdownId(): String = this.parentForm?.let { parent -> parent.formOnlyShowdownId() + ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "") } ?: ""
+    fun formOnlyShowdownId(): String = if (this is TemporaryForm) this.parentForm.formOnlyShowdownId() + ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "") else ""
 
     // TODO - will including 'standard' cause breakage?
 
@@ -423,9 +402,9 @@ abstract class FormData(
      *
      * @return The Showdown name of this species and form.
      */
-    open fun showdownName(): String = this.parentForm?.let { parent -> parent.showdownName() + "-" + this.name } ?: this.species.showdownName()
+    open fun showdownName(): String = if (this is TemporaryForm) this.parentForm.let { parent -> parent.showdownName() + "-" + this.name } else this.species.showdownName()
 
-    // TODO - these only work when retrieved at runtime because setting them on deserializaiton gives defaults... maybe by lazy?
+    // TODO - these only work when retrieved at runtime because setting them on deserialization gives defaults... maybe by lazy?
 
     /**
      * Checks if two forms are interchangeable with each other.
