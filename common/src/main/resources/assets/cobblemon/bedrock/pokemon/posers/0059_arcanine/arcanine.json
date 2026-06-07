@@ -29,10 +29,7 @@
       ],
       "quirks": [
         "q.bedrock_quirk('arcanine', 'blink')"
-      ],
-      "namedAnimations": {
-        "cry": "q.bedrock_primary('arcanine', 'battle_cry', q.curve('symmetrical_wide'))"
-      }
+      ]
     },
     "jump": {
       "poseTypes": ["STAND", "WALK"],

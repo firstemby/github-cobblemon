@@ -6,9 +6,9 @@
 				"identifier": "geometry.dracozolt",
 				"texture_width": 256,
 				"texture_height": 128,
-				"visible_bounds_width": 11,
-				"visible_bounds_height": 4.5,
-				"visible_bounds_offset": [0, 1.75, 0]
+				"visible_bounds_width": 12,
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [0, 1.5, 0]
 			},
 			"bones": [
 				{
@@ -389,6 +389,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.5, 47, -5],
+					"rotation": [-35, -90, 0],
+					"locators": {
+						"eye2": [2.5, 47, -5]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "eyes",
 					"pivot": [-2.52, 47.02, -5]
@@ -416,6 +425,15 @@
 					"cubes": [
 						{"origin": [-2.42, 45.52, -6], "size": [1, 2, 2], "inflate": 0.02, "uv": [78, 0], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.5, 47, -5],
+					"rotation": [-35, 90, 0],
+					"locators": {
+						"eye1": [-2.5, 47, -5]
+					}
 				},
 				{
 					"name": "head_fur",

@@ -69,12 +69,30 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_right",
+					"pivot": [2, 12.85, -4.75],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"eye2": [2, 12.85, -4.75]
+					}
+				},
+				{
 					"name": "eye_left",
 					"parent": "head",
 					"pivot": [-2, 12.85, -4.25],
 					"cubes": [
 						{"origin": [-2.01, 11.85, -5.25], "size": [0, 2, 1], "inflate": 0.01, "uv": [0, 8]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_left",
+					"pivot": [-2, 12.85, -4.75],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"eye1": [-2, 12.85, -4.75]
+					}
 				},
 				{
 					"name": "eye_right_closed",

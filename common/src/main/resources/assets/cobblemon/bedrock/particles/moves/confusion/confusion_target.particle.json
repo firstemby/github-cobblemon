@@ -48,7 +48,7 @@
                     0.55,
                     0.55
                 ],
-                "facing_camera_mode": "rotate_xyz",
+                "facing_camera_mode": "emitter_transform_xy",
                 "uv": {
                     "texture_width": 68,
                     "texture_height": 17,

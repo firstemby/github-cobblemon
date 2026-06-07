@@ -11,6 +11,18 @@
     {
       "aspects": ["shiny", "region-bias-galar"],
       "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "region-bias-galar"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

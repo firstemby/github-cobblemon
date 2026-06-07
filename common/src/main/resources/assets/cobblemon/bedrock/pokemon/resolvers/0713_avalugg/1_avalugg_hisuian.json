@@ -12,6 +12,18 @@
     {
       "aspects": ["hisuian", "shiny"],
       "texture": "cobblemon:textures/pokemon/0713_avalugg/avalugg_hisuian_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "hisuian"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0713_avalugg/avalugg_hisuian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

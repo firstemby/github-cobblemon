@@ -13,7 +13,10 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.LevelHeightAccessor
+import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.levelgen.RandomState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
@@ -24,6 +27,25 @@ class HeightRangeStructureProcessor(
 	val reference: HeightReference = HeightReference.SEA_LEVEL
 ) : StructureProcessor() {
 
+	fun isValidPlacement(world: LevelReader, pos: BlockPos): Boolean {
+		val referenceY = reference.getY(world, pos)
+		val minY = referenceY + minOffset
+		val maxY = referenceY + maxOffset
+		return pos.y in minY..maxY
+	}
+
+	fun isValidPlacement(
+		chunkGenerator: ChunkGenerator,
+		heightAccessor: LevelHeightAccessor,
+		randomState: RandomState,
+		pos: BlockPos
+	): Boolean {
+		val referenceY = reference.getY(chunkGenerator, heightAccessor, randomState, pos)
+		val minY = referenceY + minOffset
+		val maxY = referenceY + maxOffset
+		return pos.y in minY..maxY
+	}
+
 	override fun processBlock(
 		world: LevelReader,
 		pos: BlockPos,
@@ -32,11 +54,7 @@ class HeightRangeStructureProcessor(
 		currentBlockInfo: StructureTemplate.StructureBlockInfo,
 		data: StructurePlaceSettings
 	): StructureTemplate.StructureBlockInfo? {
-		val referenceY = reference.getY(world, pos)
-		val minY = referenceY + minOffset
-		val maxY = referenceY + maxOffset
-
-		return if (pos.y in minY..maxY) {
+		return if (isValidPlacement(world, pos)) {
 			currentBlockInfo
 		} else {
 			null
@@ -62,6 +80,19 @@ class HeightRangeStructureProcessor(
 				world.seaLevel
 			} else {
 				world.getHeight(type ?: Heightmap.Types.WORLD_SURFACE_WG, pos.x, pos.z)
+			}
+		}
+
+		fun getY(
+			chunkGenerator: ChunkGenerator,
+			heightAccessor: LevelHeightAccessor,
+			randomState: RandomState,
+			pos: BlockPos
+		): Int {
+			return if (this == SEA_LEVEL) {
+				chunkGenerator.seaLevel
+			} else {
+				chunkGenerator.getBaseHeight(pos.x, pos.z, type ?: Heightmap.Types.WORLD_SURFACE_WG, heightAccessor, randomState)
 			}
 		}
 

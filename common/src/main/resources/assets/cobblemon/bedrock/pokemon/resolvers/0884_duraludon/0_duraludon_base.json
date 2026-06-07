@@ -25,6 +25,18 @@
           "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon_emissive_shiny.png"
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0884_duraludon/duraludon_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -22,7 +22,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0783_hakamoo/hakamoo_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0783_hakamoo/hakamo-o_alpha.png",
           "emissive": true
         }
       ]

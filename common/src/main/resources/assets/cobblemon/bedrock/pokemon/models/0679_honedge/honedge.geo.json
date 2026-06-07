@@ -44,6 +44,14 @@
 					]
 				},
 				{
+					"name": "locator_eye",
+					"parent": "pupil",
+					"pivot": [0, 21.5, -1.85],
+					"locators": {
+						"eye": [0, 21.5, -1.85]
+					}
+				},
+				{
 					"name": "pupil_happy",
 					"parent": "eye",
 					"pivot": [0, 21.3, -1.75],
