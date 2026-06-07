@@ -20,7 +20,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.util.EntryIngredients
 import net.minecraft.network.chat.Component
 
-class CobblemonReiCategory<T: RecipeViewerRecipe>(val provider: CobblemonReiProvider<T, *>): DisplayCategory<CobblemonReiDisplay<T>> {
+class CobblemonReiCategory<T: RecipeViewerRecipe>(val provider: CobblemonReiProvider<T>): DisplayCategory<CobblemonReiDisplay<T>> {
     companion object {
         private const val PADDING = 4
     }
@@ -46,7 +46,7 @@ class CobblemonReiCategory<T: RecipeViewerRecipe>(val provider: CobblemonReiProv
 
         display.recipe.getSlots().forEach { slot ->
             val reiSlot = Widgets.createSlot(Point(startX + slot.x, startY + slot.y))
-            reiSlot.entries(EntryIngredients.ofIngredient(slot.ingredient))
+            reiSlot.entries(EntryIngredients.ofItems(slot.ingredient.ingredient.items.map { it.item }, slot.ingredient.count))
             reiSlot.disableBackground()
             when (slot.type) {
                 RecipeViewerCategoryProvider.SlotType.INPUT -> reiSlot.markInput()

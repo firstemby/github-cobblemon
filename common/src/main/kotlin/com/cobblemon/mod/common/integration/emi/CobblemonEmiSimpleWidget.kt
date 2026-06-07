@@ -14,7 +14,7 @@ import dev.emi.emi.api.widget.Widget
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 
-class CobblemonEmiSimpleWidget<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvider<T, *>, val recipe: T): Widget() {
+class CobblemonEmiSimpleWidget<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvider<T>, val recipe: T): Widget() {
     override fun getBounds(): Bounds {
         val original = provider.originalProvider
         return Bounds(0, 0, original.getWidth(), original.getHeight())

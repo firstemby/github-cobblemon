@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.integration.recipeviewer.berry
 
 import com.cobblemon.mod.common.api.gui.blitk
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeIngredient
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeSlot
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import com.cobblemon.mod.common.item.berry.BerryItem
@@ -30,8 +32,8 @@ data class BerryMutationRecipe(
     override fun getId() = cobblemonResource("/berry_mutation_" +
             "${berryIdentifier(berryResult)}_${berryIdentifier(berryOne)}_${berryIdentifier(berryTwo)}")
 
-    override fun getInputs(): List<Ingredient> {
-        return listOf(Ingredient.of(berryOne), Ingredient.of(berryTwo))
+    override fun getInputs(): List<RecipeIngredient> {
+        return listOf(RecipeIngredient(Ingredient.of(berryOne)), RecipeIngredient(Ingredient.of(berryTwo)))
     }
 
     override fun getOutputs(): List<ItemStack> {
@@ -56,11 +58,11 @@ data class BerryMutationRecipe(
         )
     }
 
-    override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
-        val list = mutableListOf<RecipeViewerCategoryProvider.Slot>()
-        list.add(RecipeViewerCategoryProvider.Slot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryOne)))
-        list.add(RecipeViewerCategoryProvider.Slot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, Ingredient.of(berryTwo)))
-        list.add(RecipeViewerCategoryProvider.Slot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, Ingredient.of(berryResult)))
+    override fun getSlots(): List<RecipeSlot> {
+        val list = mutableListOf<RecipeSlot>()
+        list.add(RecipeSlot(1, 1, RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(Ingredient.of(berryOne))))
+        list.add(RecipeSlot(50, 1, RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(Ingredient.of(berryTwo))))
+        list.add(RecipeSlot(108, 1, RecipeViewerCategoryProvider.SlotType.OUTPUT, RecipeIngredient(Ingredient.of(berryResult))))
         return list
     }
 

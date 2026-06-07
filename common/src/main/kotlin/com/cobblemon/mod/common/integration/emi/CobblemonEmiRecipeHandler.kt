@@ -14,7 +14,7 @@ import dev.emi.emi.api.recipe.handler.StandardRecipeHandler
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.Slot
 
-class CobblemonEmiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonEmiProvider<*, *>, val originalHandler: RecipeViewerRecipeHandler<E>): StandardRecipeHandler<E> {
+class CobblemonEmiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonEmiProvider<*>, val originalHandler: RecipeViewerRecipeHandler<E>): StandardRecipeHandler<E> {
     override fun getCraftingSlots(menu: E): List<Slot> {
         return originalHandler.getInputSlots(menu)
     }

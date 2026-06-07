@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector2i
 
-class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe, CookingPotMenu> {
+class BerryMutationProvider: RecipeViewerCategoryProvider<BerryMutationRecipe> {
     override val id = ID
     override val recipeClass = BerryMutationRecipe::class.java
 

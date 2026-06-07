@@ -17,7 +17,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import mezz.jei.api.registration.IRecipeTransferRegistration
 
-class CobblemonJeiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T, *>) {
+class CobblemonJeiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T>) {
     val recipeType: RecipeType<T> =
         RecipeType<T>.create(originalProvider.id.namespace, originalProvider.id.path, originalProvider.recipeClass)
 
@@ -40,6 +40,6 @@ class CobblemonJeiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeVi
     }
 
     fun registerRecipeTransferHandlers(registration: IRecipeTransferRegistration) {
-        originalProvider.recipeHandler()?.let { registration.addRecipeTransferHandler(CobblemonJeiRecipeHandler(this, it)) }
+        originalProvider.recipeHandler().forEach { registration.addRecipeTransferHandler(CobblemonJeiRecipeHandler(this, it)) }
     }
 }

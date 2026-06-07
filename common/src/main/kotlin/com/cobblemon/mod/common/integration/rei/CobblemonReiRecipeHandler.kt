@@ -14,7 +14,7 @@ import me.shedaniel.rei.api.client.registry.transfer.simple.SimpleTransferHandle
 import me.shedaniel.rei.api.common.transfer.info.stack.SlotAccessor
 import net.minecraft.world.inventory.AbstractContainerMenu
 
-class CobblemonReiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonReiProvider<*, E>, val originalHandler: RecipeViewerRecipeHandler<E>): SimpleTransferHandler {
+class CobblemonReiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonReiProvider<*>, val originalHandler: RecipeViewerRecipeHandler<E>): SimpleTransferHandler {
     override fun checkApplicable(context: TransferHandler.Context): TransferHandler.ApplicabilityResult {
         val category = (context.display as? CobblemonReiDisplay<*>)?.categoryId
         if (category == null || category != provider.categoryIdentifier || context.menu == null || !originalHandler.getMenuClass().isInstance(context.menu))

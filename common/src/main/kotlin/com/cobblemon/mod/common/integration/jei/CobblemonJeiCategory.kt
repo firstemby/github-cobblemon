@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.jei
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import mezz.jei.api.constants.VanillaTypes
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder
 import mezz.jei.api.gui.drawable.IDrawable
@@ -22,6 +23,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
+import net.minecraft.world.item.ItemStack
 
 class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRecipeCategoryRegistration, val categoryProvider: CobblemonJeiProvider<T>):
     IRecipeCategory<T> {
@@ -50,7 +52,9 @@ class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRec
                 RecipeViewerCategoryProvider.SlotType.OUTPUT -> RecipeIngredientRole.OUTPUT
                 RecipeViewerCategoryProvider.SlotType.CATALYST -> RecipeIngredientRole.CATALYST
             }, slot.x, slot.y)
-            jeiSlot.addIngredients(slot.ingredient)
+            val items = slot.ingredient.ingredient.items.toList()
+            items.forEach { it.count = slot.ingredient.count }
+            jeiSlot.addIngredients(VanillaTypes.ITEM_STACK, items)
         }
     }
 

@@ -20,6 +20,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.CRAFTING_GRID_WIDTH
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity.Companion.SEASONING_SLOTS
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeIngredient
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeSlot
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 
@@ -32,8 +34,8 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
 
     override fun getId(): ResourceLocation = theId
 
-    override fun getInputs(): List<Ingredient> {
-        return originalRecipe.ingredients
+    override fun getInputs(): List<RecipeIngredient> {
+        return originalRecipe.ingredients.map { RecipeIngredient(it) }
     }
 
     override fun getOutputs(): List<ItemStack> {
@@ -41,19 +43,19 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
         return listOf(originalRecipe.getResultItem(registryAccess))
     }
 
-    override fun getOptionalInputs(): List<Ingredient> {
-        return listOf(Ingredient.of(*generateProperSeasoningList().toTypedArray()))
+    override fun getOptionalInputs(): List<RecipeIngredient> {
+        return listOf(RecipeIngredient(Ingredient.of(*generateProperSeasoningList().toTypedArray())))
     }
 
-    override fun getSlots(): List<RecipeViewerCategoryProvider.Slot> {
+    override fun getSlots(): List<RecipeSlot> {
         val registryAccess = Minecraft.getInstance().level?.registryAccess() ?: throw IllegalStateException("Registry access not found")
-        val slots = mutableListOf<RecipeViewerCategoryProvider.Slot>()
+        val slots = mutableListOf<RecipeSlot>()
 
         originalRecipe.ingredients.forEachIndexed { index, ingredient ->
             val row = index / CRAFTING_GRID_WIDTH
             val column = index % CRAFTING_GRID_WIDTH
-            slots.add(RecipeViewerCategoryProvider.Slot(16 + column * 18, 1 + row * 18,
-                RecipeViewerCategoryProvider.SlotType.INPUT, ingredient))
+            slots.add(RecipeSlot(16 + column * 18, 1 + row * 18,
+                RecipeViewerCategoryProvider.SlotType.INPUT, RecipeIngredient(ingredient)))
         }
 
         if (originalRecipe.seasoningProcessors.isNotEmpty()) {
@@ -63,13 +65,13 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 val x = 93 + index * 18
                 val y = 1
 
-                slots.add(RecipeViewerCategoryProvider.Slot(x, y,
-                    RecipeViewerCategoryProvider.SlotType.CATALYST, Ingredient.of(*processedSeasonings.shuffled().toTypedArray())))
+                slots.add(RecipeSlot(x, y,
+                    RecipeViewerCategoryProvider.SlotType.CATALYST, RecipeIngredient(Ingredient.of(*processedSeasonings.shuffled().toTypedArray()))))
             }
         }
 
-        slots.add(RecipeViewerCategoryProvider.Slot(111, 38,
-            RecipeViewerCategoryProvider.SlotType.OUTPUT, Ingredient.of(originalRecipe.getResultItem(registryAccess))))
+        slots.add(RecipeSlot(111, 38,
+            RecipeViewerCategoryProvider.SlotType.OUTPUT, RecipeIngredient(Ingredient.of(originalRecipe.getResultItem(registryAccess)))))
 
         return slots
     }

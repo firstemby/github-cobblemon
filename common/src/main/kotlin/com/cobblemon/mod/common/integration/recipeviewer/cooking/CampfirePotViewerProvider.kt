@@ -23,7 +23,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector2i
 
-class CampfirePotViewerProvider: RecipeViewerCategoryProvider<CampfirePotViewerRecipe, CookingPotMenu> {
+class CampfirePotViewerProvider: RecipeViewerCategoryProvider<CampfirePotViewerRecipe> {
     override val id = ID
     override val recipeClass = CampfirePotViewerRecipe::class.java
 
@@ -54,7 +54,7 @@ class CampfirePotViewerProvider: RecipeViewerCategoryProvider<CampfirePotViewerR
     override fun getClickArea(): RecipeClickArea = RecipeClickArea(CookingPotScreen::class.java as Class<AbstractContainerScreen<AbstractContainerMenu>>, 96, 39 ,
         CookingPotScreen.COOK_PROGRESS_WIDTH, CookingPotScreen.COOK_PROGRESS_HEIGHT)
 
-    override fun recipeHandler(): RecipeViewerRecipeHandler<CookingPotMenu> = CampfirePotViewerRecipeHandler()
+    override fun recipeHandler(): List<RecipeViewerRecipeHandler<AbstractContainerMenu>> = listOf(CampfirePotViewerRecipeHandler() as RecipeViewerRecipeHandler<AbstractContainerMenu>)
 
     companion object {
         private const val WIDTH = 146

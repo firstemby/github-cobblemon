@@ -14,7 +14,7 @@ import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.stack.EmiStack
 import net.minecraft.world.inventory.AbstractContainerMenu
 
-class CobblemonEmiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val originalProvider: RecipeViewerCategoryProvider<T, E>) {
+class CobblemonEmiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T>) {
     val category = CobblemonEmiCategory(this)
 
     fun register(registry: EmiRegistry) {
@@ -28,7 +28,7 @@ class CobblemonEmiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val 
             registry.addRecipe(CobblemonEmiRecipe(this, it))
         }
 
-        originalProvider.recipeHandler()?.let {
+        originalProvider.recipeHandler().forEach {
             registry.addRecipeHandler(it.getMenuType(), CobblemonEmiRecipeHandler(this, it))
         }
     }

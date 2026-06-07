@@ -19,7 +19,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier
 import me.shedaniel.rei.api.common.util.EntryStacks
 import net.minecraft.world.inventory.AbstractContainerMenu
 
-class CobblemonReiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val originalProvider: RecipeViewerCategoryProvider<T, E>) {
+class CobblemonReiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeViewerCategoryProvider<T>) {
     val categoryIdentifier: CategoryIdentifier<CobblemonReiDisplay<T>> = CategoryIdentifier.of<CobblemonReiDisplay<T>>(originalProvider.id)
 
     fun registerDisplay(registry: DisplayRegistry) {
@@ -38,6 +38,6 @@ class CobblemonReiProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu>(val 
     }
 
     fun registerTransferHandlers(registry: TransferHandlerRegistry) {
-        originalProvider.recipeHandler()?.let { registry.register(CobblemonReiRecipeHandler(this,it)) }
+        originalProvider.recipeHandler().forEach { registry.register(CobblemonReiRecipeHandler(this,it)) }
     }
 }

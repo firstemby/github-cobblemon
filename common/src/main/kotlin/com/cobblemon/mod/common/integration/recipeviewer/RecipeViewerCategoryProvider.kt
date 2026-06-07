@@ -18,9 +18,9 @@ import net.minecraft.world.item.crafting.Ingredient
 
 import org.joml.Vector2i
 
-interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe, E: AbstractContainerMenu> {
+interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
     companion object {
-        val categoriesProviders: Set<RecipeViewerCategoryProvider<*,*>> = setOf(
+        val categoriesProviders: Set<RecipeViewerCategoryProvider<*>> = setOf(
             BerryMutationProvider(),
             CampfirePotViewerProvider()
         )
@@ -41,14 +41,7 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe, E: AbstractContain
 
     fun getClickArea(): RecipeClickArea? = null
 
-    fun recipeHandler(): RecipeViewerRecipeHandler<E>? = null
-
-    data class Slot(
-        val x: Int,
-        val y: Int,
-        val type: SlotType,
-        val ingredient: Ingredient
-    )
+    fun recipeHandler(): List<RecipeViewerRecipeHandler<AbstractContainerMenu>> = listOf()
 
     enum class SlotType {
         INPUT,
