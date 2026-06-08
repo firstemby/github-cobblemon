@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.pokedex.scanner
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
@@ -202,13 +201,6 @@ class PokedexUsageContext {
             if (be != blockEntityInFocus || pos != blockPosInFocus) {
                 resetFocusedPokemonState()
                 blockEntityInFocus = be
-
-                /*Cobblemon.LOGGER.info(
-                    "[PokedexUsageContext] blockEntityInFocus set: {} typeId={}",
-                    blockEntityInFocus?.javaClass?.simpleName,
-                    blockEntityInFocus?.type?.let { net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it) }
-                )*/
-
                 blockPosInFocus = pos
 
                 if (focusIntervals == 0F) {

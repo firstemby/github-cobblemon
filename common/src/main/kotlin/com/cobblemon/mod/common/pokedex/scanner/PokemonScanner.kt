@@ -132,7 +132,6 @@ object PokemonScanner {
         val be = castingEntity.level().getBlockEntity(pos) ?: return null
 
         val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type) ?: return null
-        //Cobblemon.LOGGER.info("Focused BE: class=${be.javaClass.name} typeId=$typeId pos=$pos")
         if (BlockScanProviderRegistry.get(typeId) == null) return null
 
         return pos to be
