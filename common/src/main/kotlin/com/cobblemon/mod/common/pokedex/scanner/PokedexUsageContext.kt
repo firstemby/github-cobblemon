@@ -25,10 +25,9 @@ import com.cobblemon.mod.common.client.render.models.blockbench.animation.Primar
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.client.settings.ServerSettings
-import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
-import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishPrintedPhotoScanningPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
@@ -53,6 +52,7 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
@@ -148,8 +148,7 @@ class PokedexUsageContext {
     var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
-    private var printedPhotoBlockInFocus: BlockPos? = null
-    private var printedPhotoScanCompleted = false
+    private var blockEntityScanCompleted = false
     private var previousAttackInput = false
     private var previousModeToggleInput = false
     private var pictureBuffer: RenderTarget? = null
@@ -297,18 +296,18 @@ class PokedexUsageContext {
             if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) scanningProgress += updateInterval
             if (scanningProgress >= MAX_SCAN_PROGRESS) targetId?.let { FinishScanningPacket(it, zoomLevel.toInt()).sendToServer() }
             if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
-        } else if (printedPhotoBlockInFocus != null) {
+        } else if (blockEntityInFocus != null) {
             if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) {
                 scanningProgress += updateInterval
             }
-            val targetPos = printedPhotoBlockInFocus
-            if (!printedPhotoScanCompleted && scanningProgress >= MAX_SCAN_PROGRESS && targetPos != null) {
-                printedPhotoScanCompleted = true
-                FinishPrintedPhotoScanningPacket(targetPos, zoomLevel.toInt()).sendToServer()
-                Minecraft.getInstance().player?.displayClientMessage(
-                    Component.translatable("cobblemon.ui.pokedex.photo_scan.sent"),
-                    true
-                )
+            if (!blockEntityScanCompleted && scanningProgress >= MAX_SCAN_PROGRESS) {
+                blockEntityScanCompleted = true
+                val be = blockEntityInFocus
+                val pos = blockPosInFocus
+                if (be != null && pos != null) {
+                    val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type)
+                    if (typeId != null) BlockScanProviderRegistry.get(typeId)?.onScanComplete(pos, zoomLevel.toInt())
+                }
             }
             if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
         } else {
@@ -332,7 +331,7 @@ class PokedexUsageContext {
     fun useTick(user: LocalPlayer, ticksInUse: Int, inUse: Boolean) {
         tryOpenScanGui(ticksInUse, inUse)
         if (scanningGuiOpen && scannerMode == ScannerMode.SCANNING) tryScanPokemon(user)
-        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || printedPhotoBlockInFocus != null)) {
+        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || blockEntityInFocus != null)) {
             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         }
     }
@@ -387,7 +386,6 @@ class PokedexUsageContext {
 
         scannerMode = if (scannerMode == ScannerMode.SCANNING) {
             resetFocusedPokemonState()
-            resetPrintedPhotoScanState()
             ScannerMode.CAMERA
         } else {
             ScannerMode.SCANNING
@@ -437,12 +435,12 @@ class PokedexUsageContext {
         if (targetScannableEntity != null) {
             blockEntityInFocus = null
             blockPosInFocus = null
-            resetPrintedPhotoScanState()
+            blockEntityScanCompleted = false
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
                 scannableEntityInFocus = targetScannableEntity
                 val resolvedPokemon = scannableEntityInFocus?.resolvePokemonScan()
-                if(resolvedPokemon == null) {
+                if (resolvedPokemon == null) {
                     resetFocusedPokemonState()
                     return
                 }
@@ -465,82 +463,31 @@ class PokedexUsageContext {
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
-        } else {
-            if (!tryScanBlockEntity(user)) {
+            return
+        }
+
+        // BlockEntity scan
+        val blockHit = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
+        if (blockHit != null) {
+            val (pos, be) = blockHit
+            if (be != blockEntityInFocus || pos != blockPosInFocus) {
                 resetFocusedPokemonState()
-                return
-            }
-            // BlockEntity scan
-            val blockHit = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
-            if (blockHit != null) {
-                val (pos, be) = blockHit
-                if (be != blockEntityInFocus || pos != blockPosInFocus) {
-                    resetFocusedPokemonState()
-                    blockEntityInFocus = be
-
-                    /*Cobblemon.LOGGER.info(
-                        "[PokedexUsageContext] blockEntityInFocus set: {} typeId={}",
-                        blockEntityInFocus?.javaClass?.simpleName,
-                        blockEntityInFocus?.type?.let { net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it) }
-                    )*/
-
-                    blockPosInFocus = pos
-
-                    if (focusIntervals == 0F) {
-                        availableInfoFrames = mutableListOf(null, null, null, null)
-                        for (i in 0..3) {
-                            var randomIndex = Random.nextInt(availableInfoFrames.size)
-                            if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                            availableInfoFrames[randomIndex] = Random.nextBoolean()
-                        }
+                blockEntityInFocus = be
+                blockPosInFocus = pos
+                blockEntityScanCompleted = false
+                if (focusIntervals == 0F) {
+                    availableInfoFrames = mutableListOf(null, null, null, null)
+                    for (i in 0..3) {
+                        var randomIndex = Random.nextInt(availableInfoFrames.size)
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        availableInfoFrames[randomIndex] = Random.nextBoolean()
                     }
                 }
-                return
             }
-
-            resetFocusedPokemonState()
-        }
-    }
-
-    private fun tryScanBlockEntity(user: LocalPlayer): Boolean {
-        val target = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
-        if (target == null) {
-            resetPrintedPhotoScanState()
-            return false
+            return
         }
 
-        val (targetPos, targetBlockEntity) = target
-        scannableEntityInFocus = null
-        scannedSpecies = null
-        viewInfoTicks = 0
-        displayRegisterInfoIntervals = 0F
-        registerCompleted = false
-        isPokemonInFocusOwned = false
-        newPokemonInfo = PokedexLearnedInformation.NONE
-        blockEntityInFocus = targetBlockEntity
-        blockPosInFocus = targetPos.immutable()
-
-        val isPrintedPhoto = targetBlockEntity is PrintedPhotoDisplayBlockEntity
-        if (!isPrintedPhoto) {
-            resetPrintedPhotoScanState()
-            scanningProgress = 0F
-        }
-
-        if (isPrintedPhoto && printedPhotoBlockInFocus != targetPos) {
-            printedPhotoBlockInFocus = targetPos.immutable()
-            printedPhotoScanCompleted = false
-            scanningProgress = 0F
-        }
-
-        if (focusIntervals == 0F) {
-            availableInfoFrames = mutableListOf(null, null, null, null)
-            for (i in 0..3) {
-                var randomIndex = Random.nextInt(availableInfoFrames.size)
-                if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
-                availableInfoFrames.set(randomIndex, Random.nextBoolean())
-            }
-        }
-        return true
+        resetFocusedPokemonState()
     }
 
     fun onServerConfirmedRegister(packet: ServerConfirmedRegisterPacket) {
@@ -560,6 +507,7 @@ class PokedexUsageContext {
         scannableEntityInFocus = null
         blockEntityInFocus = null
         blockPosInFocus = null
+        blockEntityScanCompleted = false
         scannedSpecies = null
         viewInfoTicks = 0
         scanningProgress = 0F
@@ -567,11 +515,6 @@ class PokedexUsageContext {
         registerCompleted = false
         isPokemonInFocusOwned = false
         newPokemonInfo = PokedexLearnedInformation.NONE
-    }
-
-    private fun resetPrintedPhotoScanState() {
-        printedPhotoBlockInFocus = null
-        printedPhotoScanCompleted = false
     }
 
     fun resetState(resetAnimationStates: Boolean = true) {
@@ -587,7 +530,6 @@ class PokedexUsageContext {
         shutterAnimationDurationMs = 0L
         capturedDebugRays = emptyList()
         capturedDebugRaysExpireAt = 0L
-        resetPrintedPhotoScanState()
         resetFocusedPokemonState()
 
         if (resetAnimationStates) {

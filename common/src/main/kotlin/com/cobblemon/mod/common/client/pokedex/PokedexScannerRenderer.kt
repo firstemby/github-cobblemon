@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.pokedex
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -47,11 +46,6 @@ import kotlin.math.*
  * @author Village
  */
 class PokedexScannerRenderer {
-    private data class BlockScanRenderContext(
-        val definition: BlockScanDefinition,
-        val values: Map<String, Any?>
-    )
-
     companion object {
         val SCAN_OVERLAY_NOTCH_WIDTH = 200
         val CENTER_INFO_FRAME_WIDTH = 128
@@ -131,12 +125,9 @@ class PokedexScannerRenderer {
 
                     // if a block entity is being focused on make sure we only show the frames needed
                     if (pokedexEntityData == null && effectiveTypeId != null) {
-                        val def = BlockScanDefinitions.get(effectiveTypeId)
-                        if (def != null) {
-                            val hasFrameForSlot = def.frames.any { it.slot == infoDisplayedCounter }
-                            if (!hasFrameForSlot) {
-                                return@forEachIndexed
-                            }
+                        val provider = BlockScanProviderRegistry.get(effectiveTypeId)
+                        if (provider != null) {
+                            if (!provider.frames.any { it.slot == infoDisplayedCounter }) return@forEachIndexed
                         }
                     }
 
@@ -276,22 +267,9 @@ class PokedexScannerRenderer {
                             }
                         } else if (blockEntityInFocus != null) {
                             val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type) ?: return@forEachIndexed
-
-                            /*Cobblemon.LOGGER.info(
-                                "[ScannerRender] typeId={} focusIntervals={} usageIntervals={} defPresent={} providerPresent={}",
-                                typeId,
-                                usageContext.focusIntervals,
-                                usageContext.usageIntervals,
-                                BlockScanDefinitions.get(typeId) != null,
-                                BlockScanProviderRegistry.get(typeId) != null
-                            )*/
-
-                            val def = BlockScanDefinitions.get(typeId) ?: return@forEachIndexed
                             val provider = BlockScanProviderRegistry.get(typeId) ?: return@forEachIndexed
-
                             val values = provider.getValues(blockEntityInFocus)
-
-                            val frame = def.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
+                            val frame = provider.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
                             val textComponent = resolveScanText(frame.text, values).bold()
 
                             val scale = frame.scale
@@ -322,13 +300,6 @@ class PokedexScannerRenderer {
                 }
             }
         }
-    }
-
-    private fun BlockEntity.toBlockScanRenderContext(): BlockScanRenderContext? {
-        val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type) ?: return null
-        val definition = BlockScanDefinitions.get(typeId) ?: return null
-        val provider = BlockScanProviderRegistry.get(typeId) ?: return null
-        return BlockScanRenderContext(definition, provider.getValues(this))
     }
 
     private fun resolveScanText(spec: BlockScanDefinition.ScanText, values: Map<String, Any?>): MutableComponent {

@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.pokedex.scanner.block
 
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.BerryBlock
@@ -8,6 +9,31 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 
 object BerryBlockScanProvider : BlockScanProvider {
+    override val frames = listOf(
+        BlockScanDefinition.Frame(
+            slot = 1,
+            text = BlockScanDefinition.ScanText.Translate(
+                key = "ui.pokedex.scan.block.berry_stage",
+                with = listOf(BlockScanDefinition.ScanText.Key("stage"))
+            )
+        ),
+        BlockScanDefinition.Frame(
+            slot = 2,
+            text = BlockScanDefinition.ScanText.Translate(
+                key = "ui.pokedex.scan.block.berry",
+                with = listOf(BlockScanDefinition.ScanText.Key("berry_name"))
+            )
+        ),
+        BlockScanDefinition.Frame(
+            slot = 3,
+            text = BlockScanDefinition.ScanText.Translate(
+                key = "ui.pokedex.scan.block.berry_mulch",
+                with = listOf(BlockScanDefinition.ScanText.Key("mulch_variant"))
+            ),
+            scale = 1.0f
+        )
+    )
+
     override fun getValues(be: BlockEntity): Map<String, Any?> {
         val berry = be as BerryBlockEntity
         val stage = runCatching { berry.blockState.getValue(BerryBlock.AGE) }.getOrDefault(0)

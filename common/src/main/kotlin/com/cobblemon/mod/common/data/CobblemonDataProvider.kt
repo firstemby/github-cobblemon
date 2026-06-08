@@ -43,7 +43,6 @@ import com.cobblemon.mod.common.api.pokedex.DexAdditions
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntryAdditions
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.feature.GlobalSpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatureAssignments
@@ -120,7 +119,6 @@ object CobblemonDataProvider : DataProvider {
         this.register(SpawnBaitEffects, reloadable = false)
         this.register(CobblemonRideSettings, reloadable = true)
         this.register(TechnicalMachines, reloadable = false)
-        this.register(BlockScanDefinitions, reloadable = true)
         SpawnBait.Effects.setupEffects()
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
