@@ -17,7 +17,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 
@@ -131,10 +131,9 @@ object PokemonScanner {
         val pos = (hit as BlockHitResult).blockPos
         val be = castingEntity.level().getBlockEntity(pos) ?: return null
 
-        // Only allow block entities that have a JSON definition
         val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type) ?: return null
         //Cobblemon.LOGGER.info("Focused BE: class=${be.javaClass.name} typeId=$typeId pos=$pos")
-        if (BlockScanDefinitions.get(typeId) == null) return null
+        if (BlockScanProviderRegistry.get(typeId) == null) return null
 
         return pos to be
     }

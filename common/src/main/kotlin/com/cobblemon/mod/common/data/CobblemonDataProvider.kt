@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.api.pokedex.DexAdditions
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntryAdditions
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.feature.GlobalSpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatureAssignments
@@ -99,7 +98,6 @@ object CobblemonDataProvider : DataProvider {
         this.register(DexEntryAdditions, reloadable = false)
         this.register(Dexes, reloadable = false)
         this.register(DexAdditions, reloadable = false)
-        this.register(BlockScanDefinitions, reloadable = true)
         this.register(CobblemonCosmeticItems, reloadable = true)
         this.register(CobblemonCallbacks, reloadable = true)
         this.register(CobblemonUnlockableWallpapers, reloadable = true)

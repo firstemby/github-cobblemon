@@ -20,7 +20,6 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.block.entity.BlockEntity
 import kotlin.math.max

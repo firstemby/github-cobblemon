@@ -27,7 +27,6 @@ import com.cobblemon.mod.common.pokemon.PokemonSizeCategory
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
@@ -120,9 +119,9 @@ class PokedexScannerRenderer {
 
                     // if a block entity is being focused on make sure we only show the frames needed
                     if (pokedexEntityData == null && effectiveTypeId != null) {
-                        val def = BlockScanDefinitions.get(effectiveTypeId)
-                        if (def != null) {
-                            val hasFrameForSlot = def.frames.any { it.slot == infoDisplayedCounter }
+                        val provider = BlockScanProviderRegistry.get(effectiveTypeId)
+                        if (provider != null) {
+                            val hasFrameForSlot = provider.frames.any { it.slot == infoDisplayedCounter }
                             if (!hasFrameForSlot) {
                                 return@forEachIndexed
                             }
@@ -288,22 +287,9 @@ class PokedexScannerRenderer {
                             }
                         } else if (blockEntityInFocus != null) {
                             val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type) ?: return@forEachIndexed
-
-                            /*Cobblemon.LOGGER.info(
-                                "[ScannerRender] typeId={} focusIntervals={} usageIntervals={} defPresent={} providerPresent={}",
-                                typeId,
-                                usageContext.focusIntervals,
-                                usageContext.usageIntervals,
-                                BlockScanDefinitions.get(typeId) != null,
-                                BlockScanProviderRegistry.get(typeId) != null
-                            )*/
-
-                            val def = BlockScanDefinitions.get(typeId) ?: return@forEachIndexed
                             val provider = BlockScanProviderRegistry.get(typeId) ?: return@forEachIndexed
-
                             val values = provider.getValues(blockEntityInFocus)
-
-                            val frame = def.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
+                            val frame = provider.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
                             val textComponent = resolveScanText(frame.text, values).bold()
 
                             val scale = frame.scale

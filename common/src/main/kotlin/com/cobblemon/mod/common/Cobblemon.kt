@@ -25,7 +25,6 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculators
-import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceCalculator
@@ -94,7 +93,6 @@ import com.cobblemon.mod.common.events.StatHandler
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
-import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
