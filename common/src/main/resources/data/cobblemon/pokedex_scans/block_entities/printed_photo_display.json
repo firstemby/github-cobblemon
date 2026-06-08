@@ -1,0 +1,41 @@
+{
+  "block_entity_type": "cobblemon:printed_photo_display",
+  "frames": [
+    {
+      "slot": 1,
+      "text": {
+        "translate": "cobblemon.ui.pokedex.scan.block.printed_photo_rating",
+        "with": [
+          {
+            "key": "rating"
+          }
+        ]
+      },
+      "scale": 0.65
+    },
+    {
+      "slot": 2,
+      "text": {
+        "translate": "cobblemon.ui.pokedex.scan.block.printed_photo_score",
+        "with": [
+          {
+            "key": "score"
+          }
+        ]
+      },
+      "scale": 0.65
+    },
+    {
+      "slot": 3,
+      "text": {
+        "translate": "cobblemon.ui.pokedex.scan.block.printed_photo_species_count",
+        "with": [
+          {
+            "key": "species_count"
+          }
+        ]
+      },
+      "scale": 0.65
+    }
+  ]
+}

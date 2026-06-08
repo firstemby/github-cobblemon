@@ -1330,6 +1330,12 @@
   "cobblemon.ui.pokedex.scan.mode.capture_hint": "Left Click: Take Picture",
   "cobblemon.ui.pokedex.scan.mode.scanning_enabled": "Scanning Mode Enabled",
   "cobblemon.ui.pokedex.scan.mode.camera_enabled": "Camera Mode Enabled",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.berry": "%1$s",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.berry_stage": "Growth: %1$s",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.berry_mulch": "Mulch: %1$s",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.printed_photo_rating": "Rating: %1$s",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.printed_photo_score": "Score: %1$s",
+  "cobblemon.cobblemon.ui.pokedex.scan.block.printed_photo_species_count": "Pokemon: %1$s",
 
   "cobblemon.ui.pokedex.region.national": "National",
   "cobblemon.ui.pokedex.region.alola": "Alola",

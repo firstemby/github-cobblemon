@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.EvCalculator
 import com.cobblemon.mod.common.api.pokemon.stats.Generation8EvCalculator
 import com.cobblemon.mod.common.api.pokemon.stats.StatProvider
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.scheduling.ServerRealTimeTaskTracker
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
@@ -93,6 +94,8 @@ import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
 import com.cobblemon.mod.common.pokedex.photo.PrintedPhotoAssetRepository
+import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
+import com.cobblemon.mod.common.pokedex.scanner.block.PrintedPhotoBlockScanProvider
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
@@ -239,6 +242,8 @@ object Cobblemon {
         CobblemonGameRules // Init fields and register
 
         ShoulderEffectRegistry.register()
+        BlockScanProviderRegistry.register(cobblemonResource("berry"), BerryBlockScanProvider)
+        BlockScanProviderRegistry.register(cobblemonResource("printed_photo_display"), PrintedPhotoBlockScanProvider)
 
         DATA_SYNCHRONIZED.subscribe {
             storage.onPlayerDataSync(it)

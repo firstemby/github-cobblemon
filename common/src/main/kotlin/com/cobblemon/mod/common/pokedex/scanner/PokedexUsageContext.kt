@@ -57,6 +57,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
@@ -132,6 +133,8 @@ class PokedexUsageContext {
     var registerCompleted: Boolean = false
     var scannedSpecies: ResourceLocation? = null
     var scannableEntityInFocus: ScannableEntity? = null
+    var blockEntityInFocus: BlockEntity? = null
+    var blockPosInFocus: BlockPos? = null
     var viewInfoTicks: Int = 0
     var scanningProgress: Float = 0F
     var displayRegisterInfoIntervals: Float = 0F
@@ -157,6 +160,8 @@ class PokedexUsageContext {
     private var capturedDebugRaysExpireAt: Long = 0L
     var showDebugPhotoScore = false
     var showDebugPhotoRaycast = false
+
+    private fun hasAnyFocus(): Boolean = scannableEntityInFocus != null || blockEntityInFocus != null
 
     private data class PhotoCaptureMetadata(
         val detectedSpecies: List<String>,
@@ -269,14 +274,18 @@ class PokedexUsageContext {
 
         if (scanningGuiOpen && viewInfoTicks < VIEW_INFO_BUFFER_TICKS) {
             if (transitionIntervals < TRANSITION_INTERVALS) transitionIntervals = min(transitionIntervals + updateInterval, TRANSITION_INTERVALS)
-            innerRingRotation = (if (scannableEntityInFocus != null) (innerRingRotation + (updateInterval * 10F)) else (innerRingRotation + updateInterval)) % 360
+            innerRingRotation = (if (hasAnyFocus()) (innerRingRotation + (updateInterval * 10F)) else (innerRingRotation + updateInterval)) % 360
             usageIntervals += updateInterval
         } else {
             if (transitionIntervals > 0) {
                 if (transitionIntervals == TRANSITION_INTERVALS) playSound(CobblemonSounds.POKEDEX_SCAN_CLOSE)
                 transitionIntervals = max(transitionIntervals - updateInterval, 0F)
                 if (transitionIntervals <= 0) {
-                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS) openPokedexGUI(type, scannableEntityInFocus!!.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier)
+                    if (viewInfoTicks >= VIEW_INFO_BUFFER_TICKS) {
+                        scannableEntityInFocus?.resolvePokemonScan()?.getApparentSpecies()?.resourceIdentifier?.let { species ->
+                            openPokedexGUI(type, species)
+                        }
+                    }
                     resetState()
                 }
             }
@@ -301,9 +310,9 @@ class PokedexUsageContext {
                     true
                 )
             }
-            if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
+            if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
         } else {
-            if (scannableEntityInFocus != null) {
+            if (hasAnyFocus()) {
                 if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
             } else {
                 if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
@@ -342,7 +351,7 @@ class PokedexUsageContext {
     }
 
     fun attackKeyHeld(isHeld: Boolean) {
-        if (isHeld && scannableEntityInFocus !== null && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
+        if (isHeld && hasAnyFocus() && viewInfoTicks < VIEW_INFO_BUFFER_TICKS && scanningProgress == 0F) {
             viewInfoTicks++
             if (viewInfoTicks % 2 == 0) playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         } else if (viewInfoTicks > 0 && viewInfoTicks < VIEW_INFO_BUFFER_TICKS) {
@@ -423,8 +432,11 @@ class PokedexUsageContext {
     }
 
     fun tryScanPokemon(user: LocalPlayer) {
+        // Pokémon/entity scan
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
         if (targetScannableEntity != null) {
+            blockEntityInFocus = null
+            blockPosInFocus = null
             resetPrintedPhotoScanState()
             if (targetScannableEntity != scannableEntityInFocus) {
                 resetFocusedPokemonState()
@@ -441,9 +453,9 @@ class PokedexUsageContext {
                 // Randomize info frames for render
                 if (focusIntervals == 0F) {
                     availableInfoFrames = mutableListOf(null, null, null, null)
-                    for (i in 0..2) {
+                    for (i in 0..3) {
                         var randomIndex = Random.nextInt(availableInfoFrames.size)
-                        if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
                         availableInfoFrames.set(randomIndex, Random.nextBoolean())
                     }
                 }
@@ -454,19 +466,50 @@ class PokedexUsageContext {
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
             }
         } else {
-            if (!tryScanPrintedPhoto(user)) {
+            if (!tryScanBlockEntity(user)) {
                 resetFocusedPokemonState()
+                return
             }
+            // BlockEntity scan
+            val blockHit = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
+            if (blockHit != null) {
+                val (pos, be) = blockHit
+                if (be != blockEntityInFocus || pos != blockPosInFocus) {
+                    resetFocusedPokemonState()
+                    blockEntityInFocus = be
+
+                    /*Cobblemon.LOGGER.info(
+                        "[PokedexUsageContext] blockEntityInFocus set: {} typeId={}",
+                        blockEntityInFocus?.javaClass?.simpleName,
+                        blockEntityInFocus?.type?.let { net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it) }
+                    )*/
+
+                    blockPosInFocus = pos
+
+                    if (focusIntervals == 0F) {
+                        availableInfoFrames = mutableListOf(null, null, null, null)
+                        for (i in 0..3) {
+                            var randomIndex = Random.nextInt(availableInfoFrames.size)
+                            if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                            availableInfoFrames[randomIndex] = Random.nextBoolean()
+                        }
+                    }
+                }
+                return
+            }
+
+            resetFocusedPokemonState()
         }
     }
 
-    private fun tryScanPrintedPhoto(user: LocalPlayer): Boolean {
-        val targetPos = findPrintedPhotoDisplayBlock(user)
-        if (targetPos == null) {
+    private fun tryScanBlockEntity(user: LocalPlayer): Boolean {
+        val target = PokemonScanner.findScannableBlockEntity(user, zoomLevel.toInt())
+        if (target == null) {
             resetPrintedPhotoScanState()
             return false
         }
 
+        val (targetPos, targetBlockEntity) = target
         scannableEntityInFocus = null
         scannedSpecies = null
         viewInfoTicks = 0
@@ -474,33 +517,30 @@ class PokedexUsageContext {
         registerCompleted = false
         isPokemonInFocusOwned = false
         newPokemonInfo = PokedexLearnedInformation.NONE
+        blockEntityInFocus = targetBlockEntity
+        blockPosInFocus = targetPos.immutable()
 
-        if (printedPhotoBlockInFocus != targetPos) {
+        val isPrintedPhoto = targetBlockEntity is PrintedPhotoDisplayBlockEntity
+        if (!isPrintedPhoto) {
+            resetPrintedPhotoScanState()
+            scanningProgress = 0F
+        }
+
+        if (isPrintedPhoto && printedPhotoBlockInFocus != targetPos) {
             printedPhotoBlockInFocus = targetPos.immutable()
             printedPhotoScanCompleted = false
             scanningProgress = 0F
-            if (focusIntervals == 0F) {
-                availableInfoFrames = mutableListOf(null, null, null, null)
+        }
+
+        if (focusIntervals == 0F) {
+            availableInfoFrames = mutableListOf(null, null, null, null)
+            for (i in 0..3) {
+                var randomIndex = Random.nextInt(availableInfoFrames.size)
+                if (availableInfoFrames[randomIndex] !== null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                availableInfoFrames.set(randomIndex, Random.nextBoolean())
             }
         }
         return true
-    }
-
-    private fun findPrintedPhotoDisplayBlock(user: LocalPlayer): BlockPos? {
-        val eyePos = user.getEyePosition(1.0F)
-        val maxDistance = Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel.toInt() * BLOCK_LENGTH_PER_ZOOM_STAGE)
-        val hit = user.level().clip(
-            ClipContext(
-                eyePos,
-                eyePos.add(user.getViewVector(1.0F).scale(maxDistance.toDouble())),
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                user
-            )
-        )
-        if (hit.type != HitResult.Type.BLOCK) return null
-        val blockHit = hit as? BlockHitResult ?: return null
-        return blockHit.blockPos.takeIf { user.level().getBlockEntity(it) is PrintedPhotoDisplayBlockEntity }
     }
 
     fun onServerConfirmedRegister(packet: ServerConfirmedRegisterPacket) {
@@ -518,6 +558,8 @@ class PokedexUsageContext {
 
     fun resetFocusedPokemonState() {
         scannableEntityInFocus = null
+        blockEntityInFocus = null
+        blockPosInFocus = null
         scannedSpecies = null
         viewInfoTicks = 0
         scanningProgress = 0F
@@ -1216,7 +1258,8 @@ class PokedexUsageContext {
         ) ?: return emptyList()
         val primary = buildPrimarySubjectQuality(primaryStats)
         val (otherPokemonBonus, herdBonus) = calculateOtherPokemonBonuses(primary, subjectStats)
-        val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus, herdBonus)
+        val familyCoverage = calculateFamilyCoverage(primary, subjectStats)
+        val scoredPrimary = applyPrimarySubjectScoring(primary, otherPokemonBonus, herdBonus, familyCoverage)
 
         return subjectStats.map { stats ->
             if (stats === primaryStats) {
@@ -1327,10 +1370,12 @@ class PokedexUsageContext {
     private fun applyPrimarySubjectScoring(
         primary: PokedexPhotoSubjectQuality,
         otherPokemonBonus: Int,
-        herdBonus: Int
+        herdBonus: Int,
+        familyCoverage: Float
     ): PokedexPhotoSubjectQuality {
         val wholeBodyInFrame = primary.perimeterHits == 0
-        val sizeScore = calculateSizeScore(primary.rayCoverage.toDouble(), wholeBodyInFrame)
+        val scoringCoverage = (primary.rayCoverage + familyCoverage).coerceIn(0F, 1F)
+        val sizeScore = calculateSizeScore(scoringCoverage.toDouble(), wholeBodyInFrame)
         val clippingMultiplier = if (wholeBodyInFrame) {
             1.0
         } else {
@@ -1433,6 +1478,16 @@ class PokedexUsageContext {
         return rawBonus.coerceIn(0, configuredCap) to herdBonus.coerceAtLeast(0)
     }
 
+    private fun calculateFamilyCoverage(primary: PokedexPhotoSubjectQuality, subjects: List<PhotoSubjectStats>): Float {
+        return subjects
+            .asSequence()
+            .filter { it.accumulator.species.toString() != primary.species || it.accumulator.entity.uuid != primary.entityUuid }
+            .filter { subject -> isFamilyMember(primary.species, subject.accumulator.species.toString()) }
+            .sumOf { it.rayCoverage }
+            .toFloat()
+            .coerceIn(0F, 1F)
+    }
+
     private fun calculateSecondaryPokemonBonus(subject: PhotoSubjectStats): Int {
         if (subject.accumulator.rayHits <= 0) return 0
         val visibility = (subject.rayCoverage.toFloat() / 0.08F).coerceIn(0.25F, 1F)
@@ -1442,15 +1497,15 @@ class PokedexUsageContext {
     }
 
     private fun calculateFamilyBonus(primary: PokedexPhotoSubjectQuality, subject: PhotoSubjectStats): Int {
-        val subjectSpecies = subject.accumulator.species.toString()
-        if (primary.species == subjectSpecies) {
-            return ServerSettings.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
-        }
-        return if (areSpeciesInSameEvolutionLine(primary.species, subjectSpecies)) {
-            ServerSettings.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
-        } else {
-            0
-        }
+        if (!isFamilyMember(primary.species, subject.accumulator.species.toString())) return 0
+        val visibility = (subject.rayCoverage.toFloat() / 0.12F).coerceIn(0F, 1F)
+        val placement = (1F - subject.centerDistance.toFloat()).coerceIn(0F, 1F)
+        val scoreCap = ServerSettings.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
+        return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
+    }
+
+    private fun isFamilyMember(primarySpecies: String, subjectSpecies: String): Boolean {
+        return primarySpecies == subjectSpecies || areSpeciesInSameEvolutionLine(primarySpecies, subjectSpecies)
     }
 
     private fun areSpeciesInSameEvolutionLine(firstSpecies: String, secondSpecies: String): Boolean {

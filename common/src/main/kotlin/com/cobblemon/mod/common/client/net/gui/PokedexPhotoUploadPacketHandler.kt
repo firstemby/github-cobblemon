@@ -217,6 +217,7 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         ) ?: return emptyList()
         val primaryLookTargetMatched = isBrainLookingAtPlayer(primary, player)
         val otherPokemonBonuses = calculateOtherPokemonBonuses(primary, withServerLookScores)
+        val familyCoverage = calculateFamilyCoverage(primary, withServerLookScores)
         val entity = primary.entityUuid?.let { player.serverLevel().getEntity(it) } as? PokemonEntity
         val serverShiny = entity?.pokemon?.shiny ?: primary.shiny
         val serverAlpha = entity?.pokemon?.aspects?.contains("alpha") ?: primary.alpha
@@ -258,7 +259,8 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
                         formScore = if (serverAlternateForm) Cobblemon.config.pokedexScannerPhotoFormBonus.coerceAtLeast(0) else 0,
                         rarityMultiplier = speciesId?.let(PokedexPhotoQuality::speciesRarityMultiplier) ?: 1F
                     ),
-                    otherPokemonBonuses = otherPokemonBonuses
+                    otherPokemonBonuses = otherPokemonBonuses,
+                    familyCoverage = familyCoverage
                 )
             } else {
                 subject.copy(subjectScore = 0)
@@ -266,9 +268,14 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         }.sortedWith(compareByDescending<PokedexPhotoSubjectQuality> { it.primarySubject }.thenByDescending { it.subjectScore })
     }
 
-    private fun scorePrimarySubject(subject: PokedexPhotoSubjectQuality, otherPokemonBonuses: OtherPokemonBonuses): PokedexPhotoSubjectQuality {
+    private fun scorePrimarySubject(
+        subject: PokedexPhotoSubjectQuality,
+        otherPokemonBonuses: OtherPokemonBonuses,
+        familyCoverage: Float
+    ): PokedexPhotoSubjectQuality {
         val wholeBodyInFrame = subject.perimeterHits == 0
-        val sizeScore = calculateSizeScore(subject.rayCoverage.toDouble(), wholeBodyInFrame)
+        val scoringCoverage = (subject.rayCoverage + familyCoverage).coerceIn(0F, 1F)
+        val sizeScore = calculateSizeScore(scoringCoverage.toDouble(), wholeBodyInFrame)
         val clippingMultiplier = if (wholeBodyInFrame) {
             1.0
         } else {
@@ -324,6 +331,19 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
         return OtherPokemonBonuses(extraPokemonScore, herdScore)
     }
 
+    private fun calculateFamilyCoverage(
+        primary: PokedexPhotoSubjectQuality,
+        subjects: List<PokedexPhotoSubjectQuality>
+    ): Float {
+        return subjects
+            .asSequence()
+            .filter { it !== primary }
+            .filter { subject -> isFamilyMember(primary.species, subject.species) }
+            .sumOf { subject -> subject.rayCoverage.toDouble() }
+            .toFloat()
+            .coerceIn(0F, 1F)
+    }
+
     private fun calculateSecondaryPokemonBonus(subject: PokedexPhotoSubjectQuality): Int {
         if (subject.rayHits <= 0) return 0
         val visibility = (subject.rayCoverage / 0.08F).coerceIn(0.25F, 1F)
@@ -333,14 +353,15 @@ object PokedexPhotoUploadPacketHandler : ServerNetworkPacketHandler<PokedexPhoto
     }
 
     private fun calculateFamilyBonus(primary: PokedexPhotoSubjectQuality, subject: PokedexPhotoSubjectQuality): Int {
-        if (primary.species == subject.species) {
-            return Cobblemon.config.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
-        }
-        return if (areSpeciesInSameEvolutionLine(primary.species, subject.species)) {
-            Cobblemon.config.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
-        } else {
-            0
-        }
+        if (!isFamilyMember(primary.species, subject.species)) return 0
+        val visibility = (subject.rayCoverage / 0.12F).coerceIn(0F, 1F)
+        val placement = (1F - subject.centerDistance).coerceIn(0F, 1F)
+        val scoreCap = Cobblemon.config.pokedexScannerPhotoFamilyBonus.coerceAtLeast(0)
+        return (scoreCap * visibility * placement).roundToInt().coerceIn(0, scoreCap)
+    }
+
+    private fun isFamilyMember(primarySpecies: String, subjectSpecies: String): Boolean {
+        return primarySpecies == subjectSpecies || areSpeciesInSameEvolutionLine(primarySpecies, subjectSpecies)
     }
 
     private fun areSpeciesInSameEvolutionLine(firstSpecies: String, secondSpecies: String): Boolean {

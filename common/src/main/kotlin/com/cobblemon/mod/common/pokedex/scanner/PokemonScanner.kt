@@ -9,10 +9,15 @@
 package com.cobblemon.mod.common.pokedex.scanner
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinitions
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext.Companion.BLOCK_LENGTH_PER_ZOOM_STAGE
+import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 
 //Handles the actual raycasting to figure out what pokemon we are looking at
@@ -95,6 +100,29 @@ object PokemonScanner {
     fun findScannableEntity(castingEntity: Entity, zoomLevel: Int): ScannableEntity? {
         val targetedEntity = detectEntity(castingEntity, zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)
         return targetedEntity as? ScannableEntity
+    }
+
+    fun findScannableBlockEntity(castingEntity: Entity, zoomLevel: Int): Pair<BlockPos, BlockEntity>? {
+        val eyePos = castingEntity.getEyePosition(1.0F)
+        val lookVec = castingEntity.getViewVector(1.0F)
+        val maxDistance = Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)
+        val hit = castingEntity.level().clip(
+            ClipContext(
+                eyePos,
+                eyePos.add(lookVec.scale(maxDistance.toDouble())),
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                castingEntity
+            )
+        )
+        if (hit.type != HitResult.Type.BLOCK) return null
+
+        val blockPos = (hit as? BlockHitResult)?.blockPos ?: return null
+        val blockEntity = castingEntity.level().getBlockEntity(blockPos) ?: return null
+        val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.type) ?: return null
+        if (BlockScanDefinitions.get(typeId) == null) return null
+
+        return blockPos to blockEntity
     }
 
     fun isEntityInRange(castingEntity: Entity, targetEntity: Entity, zoomLevel: Int): Boolean {
