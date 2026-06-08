@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.pokemon.Gender
+import com.cobblemon.mod.common.pokemon.PokemonSizeCategory
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
@@ -222,7 +223,30 @@ class PokedexScannerRenderer {
 
 
                             if (infoDisplayedCounter == 3) {
-                                val typeText = lang(
+                                val pokemon = pokedexEntityData.pokemon
+                            val entityAlpha = (usageContext.scannableEntityInFocus?.resolveEntityScan() as? PokemonEntity)
+                                ?.entityData
+                                ?.get(PokemonEntity.IS_ALPHA)
+                            val isAlpha = entityAlpha ?: pokemon.isAlpha
+                            val sizeText = if (isAlpha) {
+                                lang("ui.pokemon.alpha").bold()
+                            } else {
+                                val sizeCategoryText = PokemonSizeCategory.translationKey(pokemon.getSizeCategory()).text()
+                                lang("size_category.prefix", sizeCategoryText).bold()
+                            }
+                            drawScaledText(
+                                context = graphics,
+                                font = CobblemonResources.DEFAULT_LARGE,
+                                text = sizeText,
+                                x = centerX + xOffset + xOffsetText,
+                                y = centerY + yOffset + yOffsetText,
+                                shadow = true,
+                                centered = true
+                            )
+                        }
+
+                        if (infoDisplayedCounter == 4) {
+                            val typeText = lang(
                                     "type.suffix",
                                     pokedexEntityData.getApparentForm().types.map { it.displayName.copy() }
                                         .reduce { acc, next -> acc.plus("/").plus(next) }).bold()

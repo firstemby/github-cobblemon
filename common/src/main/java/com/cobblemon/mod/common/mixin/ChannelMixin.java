@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.mixin;
 import com.cobblemon.mod.common.duck.ChannelDuck;
 import com.mojang.blaze3d.audio.Channel;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.EXTEfx;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,8 +22,10 @@ public abstract class ChannelMixin implements ChannelDuck {
     @Shadow
     private int source;
 
-    // Id of filter applied when sound is obstructed
+    // Ids of effects applied to the channel
     private int cobblemon$lowPassFilterId = 0;
+    private int cobblemon$reverbEffectId = 0;
+    private int cobblemon$reverbSlotId = 0;
 
     @Override
     public void cobblemon$applyLowPassFilter(float gain, float hfGain) {
@@ -65,6 +68,56 @@ public abstract class ChannelMixin implements ChannelDuck {
         if (EXTEfx.alIsFilter(cobblemon$lowPassFilterId)) {
             EXTEfx.alDeleteFilters(cobblemon$lowPassFilterId);
             cobblemon$lowPassFilterId = 0;
+        }
+    }
+
+    @Override
+    public void cobblemon$applyReverb(float decayTime, float gain, float diffusion, float density) {
+        // Clean up existing reverb first if it exists
+        cobblemon$clearReverb();
+
+        // Create the effect object
+        int effectId = EXTEfx.alGenEffects();
+        if (!EXTEfx.alIsEffect(effectId)) {
+            System.err.println("Failed to create OpenAL reverb effect");
+            return;
+        }
+
+        EXTEfx.alEffecti(effectId, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_REVERB);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_DECAY_TIME, decayTime);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_GAIN, gain);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_DIFFUSION, diffusion);
+        EXTEfx.alEffectf(effectId, EXTEfx.AL_REVERB_DENSITY, density);
+
+        // Create auxiliary effect slot and load effect into it
+        int slotId = EXTEfx.alGenAuxiliaryEffectSlots();
+        if (!EXTEfx.alIsAuxiliaryEffectSlot(slotId)) {
+            System.err.println("Failed to create OpenAL auxiliary effect slot");
+            EXTEfx.alDeleteEffects(effectId);
+            return;
+        }
+
+        EXTEfx.alAuxiliaryEffectSloti(slotId, EXTEfx.AL_EFFECTSLOT_EFFECT, effectId);
+
+        // Route source through the slot — send 0, no direct filter
+        AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, slotId, 0, EXTEfx.AL_FILTER_NULL);
+
+        cobblemon$reverbEffectId = effectId;
+        cobblemon$reverbSlotId = slotId;
+    }
+
+    @Override
+    public void cobblemon$clearReverb() {
+        if (cobblemon$reverbSlotId != 0) {
+            // Detach source from slot
+            AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER,
+                    EXTEfx.AL_EFFECTSLOT_NULL, 0, EXTEfx.AL_FILTER_NULL);
+            EXTEfx.alDeleteAuxiliaryEffectSlots(cobblemon$reverbSlotId);
+            cobblemon$reverbSlotId = 0;
+        }
+        if (cobblemon$reverbEffectId != 0) {
+            EXTEfx.alDeleteEffects(cobblemon$reverbEffectId);
+            cobblemon$reverbEffectId = 0;
         }
     }
 }

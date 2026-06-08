@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 919,
   "name": "Nymble",
   "primaryType": "bug",
@@ -40,6 +41,12 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 20,
+  "baseScale": 0.5,
+  "hitbox": {
+    "width": 0.5,
+    "height": 0.5,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [
@@ -111,7 +118,18 @@
           "variant": "level",
           "minLevel": 24
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     }
   ],
   "behaviour": {

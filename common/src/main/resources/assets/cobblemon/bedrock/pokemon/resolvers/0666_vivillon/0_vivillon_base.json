@@ -272,6 +272,18 @@
           "texture": "cobblemon:textures/pokemon/0666_vivillon/vivillon_wings_forsaken.png"
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0666_vivillon/vivillon_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

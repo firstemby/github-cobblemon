@@ -1,0 +1,11 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/eroded_pillar1",
+            "cobblemon:fossils/eroded_pillar2",
+            "cobblemon:fossils/eroded_pillar3"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_eroded_pillar"
+    }
+}

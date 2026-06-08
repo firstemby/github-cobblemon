@@ -16,8 +16,22 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0911_skeledirge/skeledirge_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0911_skeledirge/skeledirge_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

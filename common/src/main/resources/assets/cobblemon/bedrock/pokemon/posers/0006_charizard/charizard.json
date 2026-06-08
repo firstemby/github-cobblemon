@@ -29,8 +29,7 @@
       "poseTypes": ["PORTRAIT", "PROFILE"],
       "isBattle": false,
       "isTouchingWater": false,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -47,8 +46,7 @@
       "poseTypes": ["STAND"],
       "isBattle": true,
       "isTouchingWater": false,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -70,8 +68,7 @@
     "battle-flying": {
       "poseTypes": ["HOVER"],
       "isBattle": true,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -96,8 +93,7 @@
     "jump": {
       "poseTypes": ["STAND", "WALK"],
       "condition": "q.in_air",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -119,8 +115,7 @@
       "isBattle": false,
       "isTouchingWater": false,
       "condition": "!q.in_air && q.is_sprinting",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -144,8 +139,7 @@
       "isBattle": false,
       "isTouchingWater": false,
       "condition": "!q.in_air",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -167,8 +161,7 @@
       "isBattle": false,
       "isTouchingWater": false,
       "condition": "!q.in_air && !q.is_sprinting",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -190,8 +183,7 @@
     "hover": {
       "poseTypes": ["HOVER"],
       "isBattle": false,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -210,8 +202,7 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "!q.is_gliding",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -235,8 +226,7 @@
       "poseTypes": ["FLY"],
       "isBattle": false,
       "condition": "q.is_gliding",
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -260,8 +250,7 @@
       "poseTypes": ["STAND", "FLOAT"],
       "isTouchingWater": true,
       "isUnderWater": false,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -286,8 +275,7 @@
       "poseTypes": ["WALK", "SWIM"],
       "isTouchingWater": true,
       "isUnderWater": false,
-      "animations": [
-        "q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
+      "animations": ["q.look('neck', 0.5, 0.5, 15, -15, 30, -30)",
         "q.look('neck2', 0.5, 0.5, 10, -10, 25, -25)",
         "q.look('neck3', 0.45, 0.45, 10, -10, 20, -20)",
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
@@ -313,8 +301,7 @@
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
-      "animations": [
-        "q.bedrock('charizard', 'sleep')",
+      "animations": ["q.bedrock('charizard', 'sleep')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('charizard', 'hold_item')"
@@ -326,3 +313,6 @@
     }
   }
 }
+
+
+

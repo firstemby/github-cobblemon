@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "rewards": {
     "recipes": [
       "cobblemon:water_stone_from_smelting_water_stone_ore"

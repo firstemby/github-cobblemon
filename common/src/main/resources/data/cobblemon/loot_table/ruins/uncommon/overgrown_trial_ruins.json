@@ -1,0 +1,42 @@
+{
+    "type": "minecraft:archaeology",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:focus_sash",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:fairy_feather",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:unremarkable_teacup",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:masterpiece_teacup",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:capture_sherd",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:suspicious_sherd",
+                    "weight": 15
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cobblemon:ruins/uncommon/overgrown_trial_ruins"
+}

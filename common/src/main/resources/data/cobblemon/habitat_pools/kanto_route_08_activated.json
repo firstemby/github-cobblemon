@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 8",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:meowth",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:sandshrew",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:ekans",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "16-24",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:growlithe",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "18-26",
+                       "weight":  7
+                   },
+                   {
+                       "species":  "cobblemon:vulpix",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "18-26",
+                       "weight":  7
+                   }
+               ]
+}

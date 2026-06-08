@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMovesetBuilders
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacketToPlayers
 import com.cobblemon.mod.common.CobblemonSounds
@@ -34,6 +35,7 @@ import com.cobblemon.mod.common.api.moves.Move
 import com.cobblemon.mod.common.api.moves.MoveSet
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.api.moves.MovesetBuilder
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -107,9 +109,12 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP3
+import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP4
 import com.cobblemon.mod.common.util.codec.internal.PokemonP1
 import com.cobblemon.mod.common.util.codec.internal.PokemonP2
 import com.cobblemon.mod.common.util.codec.internal.PokemonP3
+import com.cobblemon.mod.common.util.codec.internal.PokemonP4
+import com.cobblemon.mod.common.util.nextBetween
 import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.setPositionSafely
@@ -128,6 +133,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import net.minecraft.core.BlockPos
@@ -241,12 +247,36 @@ open class Pokemon : ShowdownIdentifiable {
     var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
         private set
 
+    var isAlpha: Boolean = false
+        set(value) {
+            if (field != value) {
+                field = value
+                val alphaMark = Marks.getByIdentifier(cobblemonResource("mark_alpha"))!!
+
+                if (value) { activeMark = alphaMark }
+                else { scaleModifier = 1F }
+
+                exchangeMark(alphaMark, value)
+                updateAspects()
+                onChange(AlphaUpdatePacket({ this }, value))
+            }
+        }
+
     fun setIV(stat : Stat, value : Int) {
         val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
         ivs[stat] = value
         if (stat == Stats.HP) {
             updateHP(quotient)
         }
+    }
+
+    fun initializeScale() {
+        if (isAlpha) {
+            scaleModifier = 1F
+            return
+        }
+        val config = Cobblemon.config
+        setIntrinsicScale(Random.nextBetween(config.pokemonIntrinsicSizeMin, config.pokemonIntrinsicSizeMax))
     }
 
     fun hyperTrainIV(stat: Stat, value: Int) {
@@ -516,11 +546,21 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     /**
+     * Cache friendship on trade for OT
+     */
+    var originalTrainerFriendship: Int? = null
+        internal set
+
+    /**
      * All moves that the Pokémon has, at some point, known. This is to allow players to
      * swap in moves they've used before at any time, while holding onto the remaining PP
      * that they had last.
      */
-    var benchedMoves = BenchedMoves().also { it.changeFunction = { onChange(BenchedMovesUpdatePacket({ this }, it)) }}
+    var benchedMoves = BenchedMoves().also { it.changeFunction = {
+            onChange(BenchedMovesUpdatePacket({ this }, it))
+            this.getOwnerUUID()?.let { it1 -> Cobblemon.playerDataManager.getTMData(it1)?.syncTMsFromPokemon(this) } // we want to make sure to update the players TM Data store when any moves are learned
+        }
+    }
         internal set(value) {
             val oldChangeFunction = field.changeFunction
             field.changeFunction = {}
@@ -553,7 +593,49 @@ open class Pokemon : ShowdownIdentifiable {
     val speed: Int
         get() = getStat(Stats.SPEED)
 
-    var scaleModifier = 1F
+    var scaleModifier: Float = 1F
+        set(value) {
+            if (field != value) {
+                field = value
+                onChange(ScaleModifierUpdatePacket({ this }, value))
+            }
+        }
+
+    val effectiveScale: Float
+        get() {
+            val babyPokemonMultiplier = if (level <= 1) {
+                Cobblemon.config.babyPokemonSizeMultiplier
+            } else if (Cobblemon.config.babyPokemonLevelDuration <= 1 || level >= Cobblemon.config.babyPokemonLevelDuration) {
+                1F
+            } else {
+                val minMultiplier = Cobblemon.config.babyPokemonSizeMultiplier
+                val maxLevel = Cobblemon.config.babyPokemonLevelDuration
+                val t = (level - 1).toFloat() / (maxLevel - 1).toFloat()
+                minMultiplier + (1F - minMultiplier) * t
+            }
+            return if (this.isAlpha) getAlphaScaleMultiplier() else babyPokemonMultiplier * scaleModifier // todo for cleanliness we can also move the alpha check at the start to get that scale early
+        }
+
+    private fun getAlphaScaleMultiplier(): Float {
+        val hitbox = form.hitbox
+        val baseHitboxSize = max(hitbox.width, hitbox.height) * form.baseScale
+
+        // returns the multiplier for the alpha scale based on the hitbox size.
+        val largestSize = 5.0
+        val smallestSize = 0.25
+
+        val coercedHitboxSize = clamp(baseHitboxSize.toDouble(), smallestSize, largestSize)
+
+        val newPokemonAlphaScaleMultiplier = 1.1 + (0.8 * ( (1.0/2.0).pow(coercedHitboxSize) ))
+
+        return newPokemonAlphaScaleMultiplier.toFloat()
+    }
+
+    private fun setIntrinsicScale(value: Float) {
+        val deltaPercent = (value - 1F) * 100F
+        val roundedPercent = (deltaPercent * 10F).roundToInt() / 10F
+        scaleModifier = 1F + (roundedPercent / 100F)
+    }
 
     var caughtBall: PokeBall = PokeBalls.POKE_BALL
         set(value) {
@@ -573,6 +655,7 @@ open class Pokemon : ShowdownIdentifiable {
     var activeMark: Mark? = null
         set(value) {
             field = value
+            updateAspects()
             onChange(ActiveMarkUpdatePacket({ this }, value))
         }
 
@@ -593,6 +676,9 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             onChange(MarkingsUpdatePacket({ this }, value))
         }
+
+    // Last flower fed to a Mooshtank
+    var lastFlowerFed: ItemStack = ItemStack.EMPTY
 
     fun asRenderablePokemon() = RenderablePokemon(species, aspects, if (heldItemVisible) heldItem else ItemStack.EMPTY)
 
@@ -1291,7 +1377,7 @@ open class Pokemon : ShowdownIdentifiable {
      * Calculate mark to give from list of potential marks.
      * @return True if a mark has been applied, false otherwise
      */
-    fun applyPotentialMarks(): Boolean {
+    fun applyPotentialMarks(chance: Double = 1.0): Boolean {
         // Remove any marks that are already owned
         val potentials = potentialMarks.filterNot { mark -> marks.contains(mark) }.toMutableSet()
 
@@ -1303,7 +1389,7 @@ open class Pokemon : ShowdownIdentifiable {
                 val probability = chanceGroup.second.coerceIn(0F, 1F) * 100
                 val randomValue = Random.nextDouble(0.0, 100.0)
 
-                if (randomValue < probability) {
+                if (randomValue / chance < probability) {
                     selectedMark = group.random()
                     break
                 }
@@ -1564,10 +1650,8 @@ open class Pokemon : ShowdownIdentifiable {
         originalTrainer = fakeTrainerName
     }
 
-    fun refreshOriginalTrainer()
-    {
-        when (originalTrainerType)
-        {
+    fun refreshOriginalTrainer() {
+        when (originalTrainerType) {
             OriginalTrainerType.PLAYER -> {
                 UUID.fromString(originalTrainer)?.let { uuid ->
                     server()?.profileCache?.get(uuid)?.orElse(null)?.name?.let {
@@ -1584,8 +1668,7 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-    fun removeOriginalTrainer()
-    {
+    fun removeOriginalTrainer() {
         originalTrainer = null
         originalTrainerType = OriginalTrainerType.NONE
         originalTrainerName = null
@@ -1627,13 +1710,10 @@ open class Pokemon : ShowdownIdentifiable {
         species = species
         checkGender()
         if (moveSet.getMoves().isEmpty()) {
-            initializeMoveset()
+            initializeMovesetFromDefault()
         }
         return this
     }
-
-    // Last flower fed to a Mooshtank
-    var lastFlowerFed: ItemStack = ItemStack.EMPTY
 
     fun checkGender() {
         var reassess = false
@@ -1810,6 +1890,67 @@ open class Pokemon : ShowdownIdentifiable {
         moveSet.update()
     }
 
+    fun initializeMovesetFromDefault() {
+        initializeMovesetFrom(movesetBuilder = CobblemonMovesetBuilders.getOrThrow(form.defaultWildMovesetBuilder))
+    }
+
+    fun initializeMovesetFrom(movesetBuilder: MovesetBuilder) {
+        val newMoveset = movesetBuilder.build(form = form, level = level)
+        moveSet.copyFrom(newMoveset)
+    }
+
+    fun initializeMovesetWithRandomTm(moveCount: Int = MoveSet.MOVE_COUNT): Boolean {
+        val numTMMoves = moveCount.coerceIn(1, MoveSet.MOVE_COUNT)
+
+        val tmMoves = form.moves.tmMoves.distinct().toMutableList()
+        if (tmMoves.isEmpty()) {
+            return false
+        }
+
+        tmMoves.shuffle()
+        val tmCount = min(numTMMoves, tmMoves.size)
+        moveSet.doWithoutEmitting {
+            moveSet.clear()
+            val selectedMoves = mutableSetOf<MoveTemplate>()
+            for (i in 0 until tmCount) {
+                val selectedTm = tmMoves[i]
+                moveSet.setMove(i, selectedTm.create())
+                moveSet[i]?.update()
+                selectedMoves.add(selectedTm)
+            }
+
+            // Fill blank moveset slots with random benched moves
+            if (tmCount < MoveSet.MOVE_COUNT) {
+                val benchedCandidates = benchedMoves
+                    .filter { benchedMove ->
+                        benchedMove.moveTemplate !is MoveTemplate.Dummy &&
+                            benchedMove.moveTemplate !in selectedMoves
+                    }
+                    .distinctBy { it.moveTemplate }
+                    .shuffled()
+
+                var nextMoveSlot = tmCount
+                for (benchedMove in benchedCandidates) {
+                    if (nextMoveSlot >= MoveSet.MOVE_COUNT) {
+                        break
+                    }
+
+                    moveSet.setMove(nextMoveSlot, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
+                    moveSet[nextMoveSlot]?.update()
+                    selectedMoves.add(benchedMove.moveTemplate)
+                    nextMoveSlot++
+                }
+            }
+        }
+        moveSet.update()
+        return true
+    }
+
+    @Deprecated(
+        message = "Will be removed with a title update, maybe as early as 1.9",
+        replaceWith = ReplaceWith("initializeMovesetFromDefault() or initializeMovesetFrom(movesetBuilder)"),
+        level = DeprecationLevel.WARNING
+    )
     fun initializeMoveset(preferLatest: Boolean = true) {
         val possibleMoves = form.moves.getLevelUpMovesUpTo(level).toMutableList()
         moveSet.doWithoutEmitting {
@@ -2009,6 +2150,10 @@ open class Pokemon : ShowdownIdentifiable {
         return createPokemonProperties(*extractors.toTypedArray())
     }
 
+    fun getSizeCategory(): PokemonSizeCategory {
+        return PokemonSizeCategory.fromScale(scaleModifier)
+    }
+
     fun addExperience(source: ExperienceSource, xp: Int): AddExperienceResult {
         if (xp < 0 || !this.canLevelUpFurther()) {
             return AddExperienceResult(level, level, emptySet(), 0) // no negatives!
@@ -2126,6 +2271,19 @@ open class Pokemon : ShowdownIdentifiable {
         onChange(packet)
     }
 
+    fun cacheFriendship(playerID: UUID) {
+        if ((OriginalTrainerType.PLAYER == originalTrainerType) && (UUID.fromString(originalTrainer) == playerID)) originalTrainerFriendship = friendship
+    }
+
+    fun restoreFriendship(playerID: UUID) : Boolean {
+        if ((OriginalTrainerType.PLAYER == originalTrainerType) && (UUID.fromString(originalTrainer) == playerID)) {
+            originalTrainerFriendship?.let { friendship = it }
+            originalTrainerFriendship = null
+            return true
+        }
+        return false
+    }
+
     /**
      * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
      * players just for convenience, but the main thing is that this will notify the store that this Pokémon is in
@@ -2219,13 +2377,15 @@ open class Pokemon : ShowdownIdentifiable {
             instance.group(
                 PokemonP1.CODEC.forGetter(PokemonP1::from),
                 PokemonP2.CODEC.forGetter(PokemonP2::from),
-                PokemonP3.CODEC.forGetter(PokemonP3::from)
-            ).apply(instance) { p1, p2, p3->
+                PokemonP3.CODEC.forGetter(PokemonP3::from),
+                PokemonP4.CODEC.forGetter(PokemonP4::from)
+            ).apply(instance) { p1, p2, p3, p4 ->
                 val pokemon = Pokemon()
                 pokemon.isClient = false
                 p1.into(pokemon)
                 p2.into(pokemon)
                 p3.into(pokemon)
+                p4.into(pokemon)
                 pokemon.initialize()
             }
         }
@@ -2244,13 +2404,15 @@ open class Pokemon : ShowdownIdentifiable {
             instance.group(
                 ClientPokemonP1.CODEC.forGetter(ClientPokemonP1::from),
                 ClientPokemonP2.CODEC.forGetter(ClientPokemonP2::from),
-                ClientPokemonP3.CODEC.forGetter(ClientPokemonP3::from)
-            ).apply(instance) { p1, p2, p3->
+                ClientPokemonP3.CODEC.forGetter(ClientPokemonP3::from),
+                ClientPokemonP4.CODEC.forGetter(ClientPokemonP4::from)
+            ).apply(instance) { p1, p2, p3, p4 ->
                 val pokemon = Pokemon()
                 pokemon.isClient = true
                 p1.into(pokemon)
                 p2.into(pokemon)
                 p3.into(pokemon)
+                p4.into(pokemon)
                 pokemon.initialize()
             }
         }

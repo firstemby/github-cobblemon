@@ -1,0 +1,40 @@
+{
+    "feature": "cobblemon:fossils/prehistoric_spruce_trees",
+    "placement": [
+        {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
+            "type": "minecraft:rarity_filter",
+            "chance": 100
+        },
+        {
+            "type": "minecraft:heightmap",
+            "heightmap": "OCEAN_FLOOR_WG"
+        },
+        {
+            "type": "minecraft:block_predicate_filter",
+            "predicate": {
+                "type": "minecraft:would_survive",
+                "state": {
+                    "Name": "minecraft:spruce_sapling"
+                }
+            }
+        },
+        {
+            "type": "minecraft:biome"
+        },
+        {
+            "type": "minecraft:random_offset",
+            "y_spread": -16,
+            "xz_spread": 0
+        },
+        {
+            "type": "minecraft:random_offset",
+            "y_spread": -9,
+            "xz_spread": 0
+        }
+        
+    ]
+}

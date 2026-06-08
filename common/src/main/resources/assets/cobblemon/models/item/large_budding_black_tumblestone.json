@@ -1,6 +1,11 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/amethyst_bud",
   "textures": {
     "layer0": "cobblemon:block/tumblestone/large_budding_black_tumblestone"
+  },
+  "display": {
+    "fixed": {
+      "translation": [ 0, 4, 0 ]
+    }
   }
 }

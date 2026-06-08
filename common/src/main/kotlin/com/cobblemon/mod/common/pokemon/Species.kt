@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addSpeciesFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
@@ -42,15 +43,7 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
-import com.cobblemon.mod.common.util.readEntityDimensions
-import com.cobblemon.mod.common.util.readEnumConstant
-import com.cobblemon.mod.common.util.readIdentifier
-import com.cobblemon.mod.common.util.readSizedInt
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeEnumConstant
-import com.cobblemon.mod.common.util.writeIdentifier
-import com.cobblemon.mod.common.util.writeSizedInt
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.*
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -61,8 +54,10 @@ import net.minecraft.world.entity.EntityDimensions
 
 class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var name: String = "Bulbasaur"
+    val translationKey: String
+        get() = "${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name"
     val translatedName: MutableComponent
-        get() = Component.translatable("${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name")
+        get() = Component.translatable(translationKey)
     var nationalPokedexNumber = 1
 
     var baseStats = hashMapOf<Stat, Int>()
@@ -111,6 +106,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var implemented = false
     var baseAI: MutableList<BehaviourConfig>? = null
     var ai = mutableListOf<BehaviourConfig>()
+    var signatureMoves = mutableListOf<MoveTemplate>()
+    var defaultWildMovesetBuilder = cobblemonResource("wild")
 
     /**
      * The height in decimeters

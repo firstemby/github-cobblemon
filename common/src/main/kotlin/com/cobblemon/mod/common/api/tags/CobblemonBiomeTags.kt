@@ -36,6 +36,42 @@ object CobblemonBiomeTags {
     val IS_PLAINS = create("is_plains")
     @JvmField
     val IS_BEACH = create("is_beach")
+    @JvmField
+    val IS_CAVE = create("is_cave")
+    @JvmField
+    val IS_LUSH = create("is_lush")
+    @JvmField
+    val IS_DRIPSTONE = create("is_dripstone")
+    @JvmField
+    val IS_END = create("is_end")
+    @JvmField
+    val IS_STONY_BEACH = create("is_stony_beach")
+    @JvmField
+    val IS_SOUL_SAND = create("nether/is_soul_sand")
+    @JvmField
+    val IS_FUNGUS = create("nether/is_fungus")
+    @JvmField
+    val IS_GLACIAL = create("is_glacial")
+    @JvmField
+    val IS_TEMPERATE_OCEAN = create("is_temperate_ocean")
+    @JvmField
+    val IS_JUNGLE = create("is_jungle")
+    @JvmField
+    val IS_SNOWY = create("is_snowy")
+    @JvmField
+    val IS_FROZEN_OCEAN = create("is_frozen_ocean")
+    @JvmField
+    val IS_WARM_OCEAN = create("is_warm_ocean")
+    @JvmField
+    val IS_DEEP_DARK = create("is_deep_dark")
+
+    // Has Block tags
+    @JvmField
+    val HAS_BIRCH_LOG = create("has_block/birch_log")
+    val HAS_OAK_LOG = create("has_block/oak_log")
+    val HAS_SPRUCE_LOG = create("has_block/spruce_log")
+    val HAS_RED_SAND = create("has_block/red_sand")
+    val HAS_SAND = create("has_block/sand")
 
     // Has Feature tags
     @JvmField

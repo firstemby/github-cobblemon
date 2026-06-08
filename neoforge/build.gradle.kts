@@ -33,13 +33,14 @@ repositories {
 }
 
 dependencies {
-    neoForge(libs.neoforge)
+    neoForge(libs.neoforge.api)
     //shadowCommon group: 'commons-io', name: 'commons-io', version: '2.6'
     //modImplementation(libs.flywheelForge)
     //include(libs.flywheelForge)
     modLocalRuntime(libs.neoforge.debugutils)
     modRuntimeOnly(libs.bundles.neoforge.integrations.runtimeOnly)
     modRuntimeOnly(libs.bundles.mongo)
+    forgeRuntimeLibrary(libs.bundles.mongo)
 
     implementation(libs.neo.kotlin.forge)
 
@@ -52,15 +53,21 @@ dependencies {
     testImplementation(project(":common", configuration = "namedElements"))
 
     listOf(
-        libs.graal,
+        libs.bundles.graal,
+        libs.bundles.mongo
+    ).forEach {
+        include(it)
+    }
+    modRuntimeOnly(libs.bundles.graal)
+    forgeRuntimeLibrary(libs.bundles.graal)
+
+    listOf(
         libs.molang
     ).forEach {
         forgeRuntimeLibrary(it)
         bundle(it)
     }
 
-    forgeRuntimeLibrary(libs.bundles.mongo)
-    bundle(libs.bundles.mongo)
 }
 
 tasks {

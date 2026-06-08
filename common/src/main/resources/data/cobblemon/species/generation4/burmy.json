@@ -94,7 +94,18 @@
           "variant": "properties",
           "target": "gender=female"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     },
     {
       "id": "burmy_mothim",
@@ -113,7 +124,18 @@
           "variant": "properties",
           "target": "gender=male"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
     }
   ],
   "forms": [
@@ -150,7 +172,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
         },
         {
           "id": "burmy_mothim",
@@ -169,7 +202,18 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
         }
       ],
       "battleOnly": false
@@ -207,7 +251,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
         },
         {
           "id": "burmy_mothim",
@@ -226,7 +281,18 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": [ ]
+          }
+        ]
+      }
         }
       ],
       "battleOnly": false

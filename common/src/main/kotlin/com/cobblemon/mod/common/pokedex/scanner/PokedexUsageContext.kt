@@ -175,7 +175,7 @@ class PokedexUsageContext {
 
                 // Check if Pokémon in focus is owned
                 isPokemonInFocusOwned =
-                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.CAUGHT
+                    CobblemonClient.clientPokedexData.getHighestKnowledgeForSpecies(resolvedPokemon.getApparentSpecies().resourceIdentifier) == PokedexEntryProgress.OWNED
 
                 // Randomize info frames for render
                 if (focusIntervals == 0F) {

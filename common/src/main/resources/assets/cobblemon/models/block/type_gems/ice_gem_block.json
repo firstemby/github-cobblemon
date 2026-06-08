@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cobblemon:block/type_gems/ice_gem_block"
+  }
+}

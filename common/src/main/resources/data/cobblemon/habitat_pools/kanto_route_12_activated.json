@@ -1,0 +1,48 @@
+{
+    "name":  "Kanto Route 12",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:oddish",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "18-26",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:bellsprout",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "18-26",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:venonat",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "18-27",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:pidgeotto",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "20-28",
+                       "weight":  6
+                   },
+                   {
+                       "species":  "cobblemon:poliwag",
+                       "spawnablePositionType":  "surface",
+                       "levelRange":  "15-24",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:tentacool",
+                       "spawnablePositionType":  "surface",
+                       "levelRange":  "18-28",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:magikarp",
+                       "spawnablePositionType":  "surface",
+                       "levelRange":  "10-20",
+                       "weight":  6
+                   }
+               ]
+}

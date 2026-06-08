@@ -1,0 +1,24 @@
+{
+  "species": "cobblemon:carkol",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:carkol",
+      "model": "cobblemon:carkol.geo",
+      "texture": "cobblemon:textures/pokemon/0838_carkol/carkol.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0838_carkol/carkol_emissive.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0838_carkol/carkol_shiny.png"
+    }
+  ]
+}

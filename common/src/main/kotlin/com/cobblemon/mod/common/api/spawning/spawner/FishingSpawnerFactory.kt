@@ -8,21 +8,27 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.CobblemonPoiTypes
+import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
-import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
 import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence
 import com.cobblemon.mod.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.influence.detector.HabitatBlockDetector
+import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
+import com.cobblemon.mod.common.api.spawning.spawner.FishingSpawnerFactory.buildPositionInfluences
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.util.mutableLazy
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.item.ItemStack
-import com.cobblemon.mod.common.api.spawning.BestSpawner;
-import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
 
 
 /**
@@ -57,9 +63,10 @@ object FishingSpawnerFactory {
      * List of influences for a new cast of the fishing rod. Context is provided at
      * build time in [buildPositionInfluences]
      */
-    var positionInfluenceBuilders = mutableListOf<(ctx: Context) -> SpawningInfluence?>(
-        { ctx -> PlayerLevelRangeInfluence(ctx.player, TYPICAL_VARIATION) },
-        { ctx -> BucketNormalizingInfluence(tier = ctx.lureLevel + ctx.luckOfTheSeaLevel) }
+    var positionInfluenceBuilders = mutableListOf<(ctx: Context) -> List<SpawningInfluence>>(
+        { ctx -> listOf(PlayerLevelRangeInfluence(ctx.player, TYPICAL_VARIATION)) },
+        { ctx -> listOf(BucketNormalizingInfluence(tier = ctx.lureLevel + ctx.luckOfTheSeaLevel)) },
+        { ctx -> findHabitatInfluences(ctx.world, ctx.pos, ctx.spawner).toList() }
     )
 
     fun createSharedSpawner(): BasicSpawner {
@@ -77,10 +84,29 @@ object FishingSpawnerFactory {
         }
     }
 
+    fun findHabitatInfluences(world: ServerLevel, position: BlockPos, spawner: Spawner): Array<HabitatBlockEntity> {
+
+        val habitatBlockPositions = world.poiManager.findAll(
+            { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.HABITAT_BLOCK_KEY) },
+            { true },
+            position,
+            HabitatBlockDetector.RANGE,
+            PoiManager.Occupancy.ANY
+        ).toList()
+
+        // just fyi, HabitatBlockEntity implements SpawningInfluence
+        val influentialHabitats = habitatBlockPositions
+            .mapNotNull { pos -> world.getBlockEntity(pos) as? HabitatBlockEntity }
+            .filter { habitatBlockEntity -> habitatBlockEntity.getInfluentialRange(spawner) > 0 }
+            .toTypedArray()
+
+        return influentialHabitats
+    }
+
     /**
      * Builds the per-cast influences for [FishingSpawnablePosition]
      */
     fun buildPositionInfluences(ctx: Context): MutableList<SpawningInfluence> {
-        return positionInfluenceBuilders.mapNotNullTo(mutableListOf()) { it(ctx) }
+        return positionInfluenceBuilders.asSequence().flatMap { it.invoke(ctx) }.toMutableList()
     }
 }

@@ -1,0 +1,18 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/spruce_tree1",
+            "cobblemon:fossils/spruce_tree2",
+            "cobblemon:fossils/spruce_tree3",
+            "cobblemon:fossils/spruce_tree4",
+            "cobblemon:fossils/spruce_tree5",
+            "cobblemon:fossils/spruce_tree6",
+            "cobblemon:fossils/spruce_tree7",
+            "cobblemon:fossils/spruce_tree8",
+            "cobblemon:fossils/spruce_tree9",
+            "cobblemon:fossils/spruce_tree10"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_spruce_tree"
+    }
+}

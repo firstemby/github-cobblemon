@@ -40,8 +40,6 @@ class CachedPlayerDataStoreFactory<T : InstancedPlayerData>(val backend: PlayerD
         }
     }
 
-
-
     override fun saveAll() {
         cache.forEach { (_, pd) -> backend.save(pd) }
         cache.removeIf { (uuid, _) -> uuid.getPlayer() == null }

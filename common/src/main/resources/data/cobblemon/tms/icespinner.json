@@ -1,0 +1,19 @@
+{
+  "moveName": "icespinner",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ice",
+  "recipe": [
+    {
+      "item": "cobblemon:ice_gem",
+      "count": 8
+    },
+    {
+      "tag": "cobblemon:held/terrain_seeds",
+      "count": 1
+    }
+  ]
+}

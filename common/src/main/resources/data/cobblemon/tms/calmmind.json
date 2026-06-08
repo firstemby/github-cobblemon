@@ -1,0 +1,23 @@
+{
+  "moveName": "calmmind",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "psychic",
+  "recipe": [
+    {
+      "item": "cobblemon:psychic_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:cyan_mint_leaf",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:pink_mint_leaf",
+      "count": 1
+    }
+  ]
+}

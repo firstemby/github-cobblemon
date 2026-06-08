@@ -22,6 +22,11 @@
       "targetLocators": ["middle"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false",
+      "expressions": ["q.sound('move.stringshot.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.3
     },
@@ -42,6 +47,11 @@
       "type": "entity_molang",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "expressions": ["q.play_animation(q.bedrock_stateful('stringshot', 'target'))"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.stringshot.target');"]
     },
     {
       "type": "pause",

@@ -21,6 +21,7 @@ object ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPa
         ServerSettings.maxPokemonLevel = packet.maxPokemonLevel
         ServerSettings.maxPokemonFriendship = packet.maxPokemonFriendship
         ServerSettings.maxDynamaxLevel = packet.maxDynamaxLevel
+        ServerSettings.unlockAllMoveDexMovesByDefault = packet.unlockAllMoveDexMovesByDefault
     }
 
 }

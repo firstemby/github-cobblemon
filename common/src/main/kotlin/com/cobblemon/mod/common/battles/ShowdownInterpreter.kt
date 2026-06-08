@@ -9,10 +9,14 @@
 package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.api.battles.interpreter.*
+import com.cobblemon.mod.common.api.battles.interpreter.BasicContext
+import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
+import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
+import com.cobblemon.mod.common.api.battles.interpreter.Effect
+import com.cobblemon.mod.common.api.battles.interpreter.InvalidInstructionException
+import com.cobblemon.mod.common.api.battles.interpreter.MissingContext
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
-import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
@@ -22,21 +26,7 @@ import com.cobblemon.mod.common.battles.interpreter.instructions.*
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.runOnServer
-import net.minecraft.world.level.ClipContext
-import net.minecraft.world.phys.HitResult
-import net.minecraft.world.phys.Vec3
 import java.util.UUID
-import kotlin.collections.Iterator
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
-import kotlin.collections.set
-import kotlin.collections.toMutableList
-import kotlin.collections.toTypedArray
-import kotlin.time.measureTime
 
 @Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")
 object ShowdownInterpreter {
@@ -66,9 +56,11 @@ object ShowdownInterpreter {
         updateInstructionParser["-boost"]                = { battle, _, message, _ -> BoostInstruction(battle, message, true) }
         updateInstructionParser["-block"]                = { _, _, message, _ -> BlockInstruction(message) }
         updateInstructionParser["cant"]                  = { _, _, message, _ -> CantInstruction(message) }
+        updateInstructionParser["-center"]               = { _, _, message, _ -> CenterInstruction(message) }
         updateInstructionParser["-clearallboost"]        = { _, _, message, _ -> ClearAllBoostInstruction(message) }
         updateInstructionParser["-clearnegativeboost"]   = { _, _, message, _ -> ClearNegativeBoostInstruction(message) }
         updateInstructionParser["-clearboost"]           = {  _, _, message, _ -> ClearBoostInstruction(message) }
+        updateInstructionParser["-combine"]              = { _, _, message, _ -> CombineInstruction(message) }
         updateInstructionParser["-copyboost"]            = { _, _, message, _ -> CopyBoostInstruction(message) }
         updateInstructionParser["-crit"]                 = { _, instructionSet, message, _ -> CritInstruction(message, instructionSet) }
         updateInstructionParser["-curestatus"]           = { _, _, message, _ -> CureStatusInstruction(message) }
@@ -104,6 +96,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-start"]                = { _, _, message, _ -> StartInstruction(message) }
         updateInstructionParser["-status"]               = { _, _, message, _ -> StatusInstruction(message) }
         updateInstructionParser["-supereffective"]       = { _, instructionSet, message, _ -> SuperEffectiveInstruction(message, instructionSet) }
+        updateInstructionParser["swap"]                  = { _, instructionSet, message, _ -> SwapInstruction(message, instructionSet) }
         updateInstructionParser["-swapboost"]            = { _, _, message, _ -> SwapBoostInstruction(message) }
         updateInstructionParser["-swapsideconditions"]   = { _, _, message, _ -> SwapSideConditionsInstruction(message) }
         updateInstructionParser["-terastallize"]         = { _, _, message, _ -> TerastallizeInstruction(message) }
@@ -111,12 +104,11 @@ object ShowdownInterpreter {
         updateInstructionParser["turn"]                  = { _, _, message, _ -> TurnInstruction(message) }
         updateInstructionParser["-unboost"]              = { battle, _, message, _ -> BoostInstruction(battle, message, false) }
         updateInstructionParser["upkeep"]                = { _, _, _, _ -> UpkeepInstruction() }
+        updateInstructionParser["-waiting"]              = { _, _, message, _ -> WaitingInstruction(message) }
         updateInstructionParser["-weather"]              = { _, _, message, _ -> WeatherInstruction(message) }
         updateInstructionParser["win"]                   = { _, _, message, _ -> WinInstruction(message) }
         updateInstructionParser["-zbroken"]              = { _, _, message, _ -> ZBrokenInstruction(message) }
         updateInstructionParser["-zpower"]               = { _, _, message, _ -> ZPowerInstruction(message) }
-        updateInstructionParser["swap"]                  = { _, instructionSet, message, _ -> SwapInstruction(message, instructionSet) }
-        updateInstructionParser["-center"]               = { _, _, message, _ -> CenterInstruction(message) }
 
         sideInstructionParser["error"]                   = { _, targetActor, _, message -> ErrorInstruction(targetActor, message) }
         sideInstructionParser["request"]                 = { _, targetActor, _, message -> RequestInstruction(targetActor, message) }
@@ -140,7 +132,6 @@ object ShowdownInterpreter {
 
         // Note '-cureteam' is a legacy thing that is only used in generation 2 and 4 mods for heal bell and aromatherapy respectively as such we can just ignore that
     }
-
 
     fun interpretMessage(battleId: UUID, message: String) {
         // Check key map and use function if matching
@@ -170,7 +161,6 @@ object ShowdownInterpreter {
         val instructionSet = InstructionSet()
         val battleMessages = mutableListOf<BattleMessage>()
 
-
         try {
             val lines = rawMessage.split("\n").toMutableList()
             if (lines[0] == "update") {
@@ -184,6 +174,7 @@ object ShowdownInterpreter {
                     val instruction = updateInstructionParser[id]?.invoke(battle, instructionSet, message, iterator) ?: UnknownInstruction(message)
                     instructionSet.instructions.add(instruction)
                 }
+                instructionSet.instructions.add(PostUpdateInstruction)
             }
             else if (lines[0] == "sideupdate") {
                 val showdownId = lines[1]
@@ -330,5 +321,4 @@ object ShowdownInterpreter {
     fun registerSideInstructionParser(id: String, callback: (PokemonBattle, BattleActor, InstructionSet, BattleMessage) -> InterpreterInstruction) {
         sideInstructionParser[id] = callback
     }
-
 }

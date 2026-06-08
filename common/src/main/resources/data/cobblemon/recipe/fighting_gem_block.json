@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:fighting_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:fighting_gem_block",
+    "count": 1
+  },
+  "criteria": {
+    "has_fighting_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:fighting_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:fighting_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_fighting_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

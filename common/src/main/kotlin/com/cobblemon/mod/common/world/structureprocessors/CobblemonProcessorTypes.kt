@@ -22,6 +22,9 @@ object CobblemonProcessorTypes {
     @JvmField
     val RANDOM_POOLED_STATES = register("random_pooled_states", RandomizedStructureMappedBlockStatePairProcessor.CODEC)
 
+    @JvmField
+    val HEIGHT_RANGE = register("height_range", HeightRangeStructureProcessor.CODEC)
+
     fun <T : StructureProcessor> register(id: String, codec: MapCodec<T>): StructureProcessorType<T> {
         return Registry.register(registry, cobblemonResource(id), StructureProcessorType { codec })
     }

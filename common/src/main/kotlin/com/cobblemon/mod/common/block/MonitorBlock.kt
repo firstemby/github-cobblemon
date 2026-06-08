@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.api.multiblock.MultiblockBlock
 import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.block.entity.FossilMultiblockEntity
@@ -16,6 +17,11 @@ import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -23,11 +29,15 @@ import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.Rotation
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -35,7 +45,8 @@ import net.minecraft.world.phys.shapes.VoxelShape
 class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
     init {
         registerDefaultState(stateDefinition.any()
-            .setValue(HORIZONTAL_FACING, Direction.NORTH))
+            .setValue(HORIZONTAL_FACING, Direction.NORTH)
+            .setValue(SCREEN, MonitorScreen.OFF))
     }
 
     override fun createMultiBlockEntity(
@@ -53,6 +64,47 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
 
     override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
         return defaultBlockState().setValue(HORIZONTAL_FACING, blockPlaceContext.horizontalDirection)
+    }
+
+    override fun useWithoutItem(
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hit: BlockHitResult
+    ): InteractionResult {
+        val entity = level.getBlockEntity(pos) as? FossilMultiblockEntity ?: return InteractionResult.PASS
+        return entity.handleUseWithoutItem(state, level, pos, player)
+    }
+
+    override fun useItemOn(
+        stack: ItemStack,
+        state: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): ItemInteractionResult {
+        val entity = level.getBlockEntity(pos) as? FossilMultiblockEntity
+            ?: return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+        val result = entity.handleUseItem(stack, state, level, pos, player, hand)
+        if (result == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) {
+            return if (entity.handleUseWithoutItem(state, level, pos, player).consumesAction()) {
+                ItemInteractionResult.sidedSuccess(level.isClientSide)
+            } else {
+                ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+            }
+        }
+        return result
+    }
+
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
+        if (state.block != newState.block && !level.isClientSide && !movedByPiston) {
+            val entity = level.getBlockEntity(pos) as? FossilMultiblockEntity
+            entity?.dropDisk(level, pos, state)
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -85,6 +137,14 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
             Direction.EAST -> HITBOX_EAST
             Direction.SOUTH -> HITBOX_SOUTH
             else -> HITBOX_NORTH
+        }
+    }
+
+    override fun <T: BlockEntity?> getTicker(level: Level, state: BlockState, type: BlockEntityType<T>): BlockEntityTicker<T>? {
+        return if (type == CobblemonBlockEntities.FOSSIL_MULTIBLOCK) {
+            FossilMultiblockEntity.TICKER as BlockEntityTicker<T>
+        } else {
+            null
         }
     }
 
@@ -143,7 +203,29 @@ class MonitorBlock(settings: Properties) : MultiblockBlock(settings) {
         BLUE_PROGRESS_7,
         BLUE_PROGRESS_8,
         BLUE_PROGRESS_9,
-        GREEN_PROGRESS_9;
+        GREEN_PROGRESS_9,
+        TM_NORMAL,
+        TM_FIRE,
+        TM_WATER,
+        TM_GRASS,
+        TM_ELECTRIC,
+        TM_ICE,
+        TM_FIGHTING,
+        TM_POISON,
+        TM_GROUND,
+        TM_FLYING,
+        TM_PSYCHIC,
+        TM_BUG,
+        TM_ROCK,
+        TM_GHOST,
+        TM_DRAGON,
+        TM_DARK,
+        TM_STEEL,
+        TM_FAIRY,
+        MUSIC,
+        PORYGON_GRID,
+        PORYGON_GLITCHING;
+
 
         override fun getSerializedName(): String = this.name.lowercase()
     }

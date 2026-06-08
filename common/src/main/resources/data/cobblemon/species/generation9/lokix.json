@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 920,
   "name": "Lokix",
   "primaryType": "bug",
@@ -41,6 +42,12 @@
   "catchRate": 30,
   "eggCycles": 20,
   "baseFriendship": 0,
+  "baseScale": 0.65,
+  "hitbox": {
+    "width": 0.75,
+    "height": 1.75,
+    "fixed": false
+  },
   "drops": {
     "amount": 1,
     "entries": [

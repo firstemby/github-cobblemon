@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 4",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:rattata", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "7-12", "weight": 11 },
+    { "species": "cobblemon:spearow", "bucket": "common", "spawnablePositionType": "grounded", "levelRange": "7-12", "weight": 11 },
+    { "species": "cobblemon:sandshrew", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "8-14", "weight": 7 },
+    { "species": "cobblemon:ekans", "bucket": "uncommon", "spawnablePositionType": "grounded", "levelRange": "8-14", "weight": 7 },
+    { "species": "cobblemon:mankey", "bucket": "rare", "spawnablePositionType": "grounded", "levelRange": "10-15", "weight": 4 }
+  ]
+}

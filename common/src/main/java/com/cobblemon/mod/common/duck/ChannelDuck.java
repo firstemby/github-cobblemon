@@ -13,5 +13,6 @@ public interface ChannelDuck {
     void cobblemon$inverseAttenuation(float rolloffFactor);
     void cobblemon$clearFilters();
 
-//    void cobblemon$exponentialAttenuation(float rolloff, float refDistance, float maxDistance);
+    void cobblemon$applyReverb(float decayTime, float gain, float diffusion, float density);
+    void cobblemon$clearReverb();
 }

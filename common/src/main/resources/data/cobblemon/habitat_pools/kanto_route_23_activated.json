@@ -1,0 +1,36 @@
+{
+    "name":  "Kanto Route 23",
+    "type":  "cobblemon:activated",
+    "spawns":  [
+                   {
+                       "species":  "cobblemon:geodude",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "35-45",
+                       "weight":  10
+                   },
+                   {
+                       "species":  "cobblemon:zubat",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "35-45",
+                       "weight":  9
+                   },
+                   {
+                       "species":  "cobblemon:machop",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "36-46",
+                       "weight":  8
+                   },
+                   {
+                       "species":  "cobblemon:graveler",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "40-50",
+                       "weight":  6
+                   },
+                   {
+                       "species":  "cobblemon:golbat",
+                       "spawnablePositionType":  "grounded",
+                       "levelRange":  "40-50",
+                       "weight":  6
+                   }
+               ]
+}

@@ -44,7 +44,7 @@ import kotlin.random.Random
  * @since July 10th, 2022
  */
 open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelectionData> {
-    class SelectingSpawnInformation {
+    class SelectingSpawnInformation(val spawnDetail: SpawnDetail) {
         val spawnablePositions = mutableMapOf<SpawnablePosition, Float>()
         var highestWeight = 0F
 
@@ -58,61 +58,81 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         fun chooseSpawnablePosition() = spawnablePositions.entries.weightedSelection { it.value }!!.key
     }
 
-    class SpawnablePositionSelectionData(
-        val spawnToSpawnablePosition: MutableMap<SpawnDetail, SelectingSpawnInformation>,
-        var percentSum: Float
-    ): SpawnSelectionData {
-        val size: Int
-            get() = spawnToSpawnablePosition.size
+    class SpawnablePositionBucketSelectionData(
+        val selectingSpawnInformation: MutableList<SelectingSpawnInformation>
+    ) {
+        var percentSum: Float = 0F
+        val seenSpawns = mutableListOf<SpawnDetail>()
 
+        fun add(spawnDetail: SpawnDetail, spawnablePosition: SpawnablePosition) {
+            // Only add to percentSum if this is the first time we've seen this SpawnDetail, otherwise
+            // the percentage will get amplified for every spawnable position the thing was possible, completely
+            // ruining the point of this pre-selection percentage.
+            if (spawnDetail.percentage > 0 && spawnDetail !in seenSpawns) {
+                seenSpawns.add(spawnDetail)
+                percentSum += spawnDetail.percentage
+            }
+            val spawnInformation = selectingSpawnInformation.find { it.spawnDetail == spawnDetail }
+                ?: SelectingSpawnInformation(spawnDetail).also { selectingSpawnInformation.add(it) }
+            spawnInformation.add(spawnablePosition, spawnablePosition.getWeight(spawnDetail))
+        }
+
+        fun remove(spawnInformation: SelectingSpawnInformation) {
+            selectingSpawnInformation -= spawnInformation
+            if (spawnInformation.spawnDetail.percentage > 0) {
+                percentSum -= spawnInformation.spawnDetail.percentage
+            }
+        }
+    }
+
+    class SpawnablePositionSelectionData(
+        val spawner: Spawner,
+        val spawnablePositions: List<SpawnablePosition>,
+        val selectingSpawnInformation: MutableMap<SpawnBucket, SpawnablePositionBucketSelectionData>,
+    ): SpawnSelectionData {
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
+        fun getDataForBucket(bucket: SpawnBucket): SpawnablePositionBucketSelectionData {
+            val existing = selectingSpawnInformation[bucket]
+            if (existing != null) {
+                return existing
+            }
+
+            val bucketSpawnInformation = SpawnablePositionBucketSelectionData(mutableListOf())
+            spawnablePositions.forEach { spawnablePosition ->
+                spawner.getMatchingSpawns(bucket, spawnablePosition).forEach {
+                    bucketSpawnInformation.add(it, spawnablePosition)
+                }
+            }
+
+            selectingSpawnInformation[bucket] = bucketSpawnInformation
+            return bucketSpawnInformation
+        }
+
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
-            val toRemove = spawnToSpawnablePosition.entries.filter { shouldRemove(it.key) }
-            toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
+            selectingSpawnInformation.flatMap { it.value.selectingSpawnInformation.filter { shouldRemove(it.spawnDetail) } }
+                .forEach { selectingSpawnInformation[it.spawnDetail.bucket]?.remove(it) }
         }
 
         override fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean) {
-            val toRemove = spawnToSpawnablePosition.entries.filter { (spawnDetail, positionData) ->
-                positionData.spawnablePositions.removeIf { shouldRemove(spawnDetail, it.key) }
+            val toRemove = selectingSpawnInformation.flatMap { it.value.selectingSpawnInformation }.filter { positionData ->
+                positionData.spawnablePositions.removeIf { shouldRemove(positionData.spawnDetail, it.key) }
                 positionData.highestWeight = positionData.spawnablePositions.maxOfOrNull { it.value } ?: 0F
                 positionData.spawnablePositions.isEmpty()
             }
 
-            toRemove.forEach { spawnToSpawnablePosition.remove(it.key) }
-
-            percentSum -= toRemove.sumOf { it.key.percentage.toDouble().takeIf { it > 0 } ?: 0.0 }.toFloat()
+            toRemove.forEach { selectingSpawnInformation[it.spawnDetail.bucket]?.remove(it) }
         }
     }
 
     override fun getSelectionData(
         spawner: Spawner,
-        bucket: SpawnBucket,
         spawnablePositions: List<SpawnablePosition>
     ): SpawnablePositionSelectionData {
-        val spawnToSpawnablePosition: MutableMap<SpawnDetail, SelectingSpawnInformation> = mutableMapOf()
-        var percentSum = 0F
+        val selectingSpawnInformation: MutableMap<SpawnBucket, SpawnablePositionBucketSelectionData> = mutableMapOf()
 
-        spawnablePositions.forEach { spawnablePosition ->
-            spawner.getMatchingSpawns(bucket, spawnablePosition).forEach {
-                // Only add to percentSum if this is the first time we've seen this SpawnDetail, otherwise
-                // the percentage will get amplified for every spawnable position the thing was possible, completely
-                // ruining the point of this pre-selection percentage.
-                if (it.percentage > 0 && !spawnToSpawnablePosition.containsKey(it)) {
-                    percentSum += it.percentage
-                }
-
-                val selectingSpawnInformation = spawnToSpawnablePosition.getOrPut(
-                    it,
-                    ::SelectingSpawnInformation
-                )
-                selectingSpawnInformation.add(spawnablePosition, spawnablePosition.getWeight(it))
-            }
-        }
-
-        return SpawnablePositionSelectionData(spawnToSpawnablePosition, percentSum)
+        return SpawnablePositionSelectionData(spawner, spawnablePositions, selectingSpawnInformation)
     }
 
     override fun selectSpawnAction(
@@ -120,8 +140,8 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         bucket: SpawnBucket,
         selectionData: SpawnablePositionSelectionData,
     ): SpawnAction<*>? {
-        val spawnToSpawnablePosition = selectionData.spawnToSpawnablePosition
-        var percentSum = selectionData.percentSum
+        val selectingSpawnInformation = selectionData.getDataForBucket(bucket) ?: return null
+        var percentSum = selectingSpawnInformation.percentSum
 
         // First pass is doing percentage checks.
         if (percentSum > 0) {
@@ -129,7 +149,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
             if (percentSum > 100) {
                 Cobblemon.LOGGER.warn(
                     """
-                        A spawn list for ${spawner.name} exceeded 100% on percentage sums...
+                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket ${bucket.name}...
                         This means you don't understand how this option works.
                     """.trimIndent()
                 )
@@ -140,13 +160,13 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
              * It's [0, 1) and I want (0, 1]
              * See half-open intervals here https://en.wikipedia.org/wiki/Interval_(mathematics)#Terminology
              */
-            val selectedPercentage = 100 - Random.Default.nextFloat() * 100
+            val selectedPercentage = 100 - Random.nextFloat() * 100
             percentSum = 0F
-            for ((spawnDetail, info) in spawnToSpawnablePosition) {
-                if (spawnDetail.percentage > 0) {
-                    percentSum += spawnDetail.percentage
+            for (info in selectingSpawnInformation.selectingSpawnInformation) {
+                if (info.spawnDetail.percentage > 0) {
+                    percentSum += info.spawnDetail.percentage
                     if (percentSum >= selectedPercentage) {
-                        return spawnDetail.choose(
+                        return info.spawnDetail.choose(
                             spawnablePosition = info.chooseSpawnablePosition(),
                             bucket = bucket,
                             selectionData = selectionData
@@ -156,9 +176,9 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
             }
         }
 
-        val selectedSpawn = spawnToSpawnablePosition.entries.toList().weightedSelection { it.value.highestWeight }!!
-        return selectedSpawn.key.choose(
-            spawnablePosition = selectedSpawn.value.chooseSpawnablePosition(),
+        val selectedSpawn = selectingSpawnInformation.selectingSpawnInformation.toList().weightedSelection { it.highestWeight }!!
+        return selectedSpawn.spawnDetail.choose(
+            spawnablePosition = selectedSpawn.chooseSpawnablePosition(),
             bucket = bucket,
             selectionData = selectionData
         )
@@ -169,16 +189,16 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         bucket: SpawnBucket,
         spawnablePositions: List<SpawnablePosition>
     ): Map<SpawnDetail, Float> {
-        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
+        val selectionData = getSelectionData(spawner, spawnablePositions).getDataForBucket(bucket)
 
-        if (selectionData.size == 0) {
+        if (selectionData.selectingSpawnInformation.isEmpty()) {
             return emptyMap()
         }
 
         val totalWeights = mutableMapOf<SpawnDetail, Float>()
 
-        for ((spawnDetail, info) in selectionData.spawnToSpawnablePosition.entries) {
-            totalWeights[spawnDetail] = info.highestWeight
+        for (info in selectionData.selectingSpawnInformation) {
+            totalWeights[info.spawnDetail] = info.highestWeight
         }
 
         return totalWeights

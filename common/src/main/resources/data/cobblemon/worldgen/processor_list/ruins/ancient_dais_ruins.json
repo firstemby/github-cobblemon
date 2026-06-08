@@ -1,0 +1,377 @@
+{
+    "processors": [
+        {
+            "processor_type": "minecraft:rule",
+            "rules": [
+                {
+                    "block_entity_modifier": {
+                        "type": "minecraft:append_loot",
+                        "loot_table": "cobblemon:ruins/common/ancient_dias_ruins"
+                    },
+                    "input_predicate": {
+                        "block": "minecraft:gravel",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.2
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:suspicious_gravel"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:gravel",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.2
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:grass_block"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:polished_granite",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.2
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:granite"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:jungle_button",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.3
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:air"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:waxed_exposed_copper_trapdoor",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.2
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:air"
+                    }
+                }
+            ]
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/uncommon/ancient_dias_ruins"
+                        },
+                        "input_predicate": {
+                            "block": "minecraft:suspicious_gravel",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 0.2
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:suspicious_gravel"
+                        }
+                    }
+                ]
+            },
+            "limit": 5,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/rare/sky_tumblestone"
+                        },
+                        "input_predicate": {
+                            "block": "minecraft:suspicious_gravel",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:suspicious_gravel"
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "input_predicate": {
+                            "block": "cobblemon:gilded_chest",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:air"
+                        }
+                    }
+                ]
+            },
+            "limit": 7,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/upperhand"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        }
+    ]
+}

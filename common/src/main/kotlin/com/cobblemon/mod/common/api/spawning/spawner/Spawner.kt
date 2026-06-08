@@ -29,13 +29,6 @@ import com.cobblemon.mod.common.util.isBoxLoaded
 import com.cobblemon.mod.common.util.squeezeWithinBounds
 import com.cobblemon.mod.common.util.toVec3f
 import com.cobblemon.mod.common.util.weightedSelection
-import kotlin.Any
-import kotlin.Boolean
-import kotlin.Float
-import kotlin.Int
-import kotlin.Pair
-import kotlin.String
-import kotlin.collections.plus
 import kotlin.math.max
 import net.minecraft.core.BlockPos
 import net.minecraft.core.SectionPos
@@ -95,10 +88,9 @@ interface Spawner {
     ): SpawnAction<*>? {
         influences.removeIf { it.isExpired() }
         spawnablePosition.influences.addAll(influences)
-        val bucket = chooseBucket(cause, spawnablePosition.influences)
         return selector.select(
             spawner = this,
-            bucket = bucket,
+            bucketSelector = { chooseBucket(cause, spawnablePosition.influences) },
             spawnablePositions = listOf(spawnablePosition),
             maxSpawns = 1
         ).firstOrNull()
@@ -116,9 +108,9 @@ interface Spawner {
 
         val areaBox = AABB.ofSize(
             Vec3(constrainedArea.getCenter().toVec3f()),
-            ENTITY_LIMIT_CHUNK_RANGE * 16.0 * 2,
+            ENTITY_LIMIT_CHUNK_RANGE * 16.0,
             1000.0,
-            ENTITY_LIMIT_CHUNK_RANGE * 16.0 * 2
+            ENTITY_LIMIT_CHUNK_RANGE * 16.0
         )
 
         if (!constrainedArea.world.isBoxLoaded(areaBox)) {
@@ -140,11 +132,10 @@ interface Spawner {
         val zone = generator.generate(this, constrainedArea)
         val spawnablePositions = resolver.resolve(this, prioritizedAreaCalculators, zone)
         val influences = influences + zone.unconditionalInfluences
-        val bucket = chooseBucket(zoneInput.cause, influences)
 
         return selector.select(
             spawner = this,
-            bucket = bucket,
+            bucketSelector = { chooseBucket(zoneInput.cause, influences) },
             spawnablePositions = spawnablePositions,
             maxSpawns = maxSpawns
         )

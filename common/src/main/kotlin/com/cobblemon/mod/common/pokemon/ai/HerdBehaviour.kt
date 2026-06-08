@@ -39,6 +39,14 @@ class HerdBehaviour {
                 }
             }
         }
+        if (bestLeader != null && possibleLeader.pokemon.isAlpha) {
+            return ToleratedHerdLeader(
+                pokemon = bestLeader.pokemon,
+                tier = bestLeader.tier + 9001, // OVER 9000!!! (memes aside this is to make it so ALphas are always leaders over non alphas, but better alphas can become the leader if a higher score comes by)
+                ignoresLevel = bestLeader.ignoresLevel,
+                followDistance = bestLeader.followDistance
+            )
+        }
         return bestLeader
     }
 

@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:runerigus",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:runerigus",
+      "model": "cobblemon:runerigus.geo",
+      "texture": "cobblemon:textures/pokemon/0867_runerigus/runerigus.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0867_runerigus/runerigus_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0867_runerigus/runerigus_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0867_runerigus/runerigus_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}
+

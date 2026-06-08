@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/lost_ruins1",
+            "cobblemon:habitats/lost_ruins2",
+            "cobblemon:habitats/lost_ruins3",
+            "cobblemon:habitats/lost_ruins4",
+            "cobblemon:habitats/lost_ruins5",
+            "cobblemon:habitats/lost_ruins6",
+            "cobblemon:habitats/lost_ruins7",
+            "cobblemon:habitats/lost_ruins8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/lost_ruins"
+    }
+}

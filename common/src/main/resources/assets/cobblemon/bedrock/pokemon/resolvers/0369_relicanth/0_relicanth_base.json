@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0369_relicanth/relicanth_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0369_relicanth/relicanth_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0369_relicanth/relicanth_alpha.png",
           "emissive": true
         }
       ]

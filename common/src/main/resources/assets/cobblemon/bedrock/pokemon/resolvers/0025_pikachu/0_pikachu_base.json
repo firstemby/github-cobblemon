@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_shiny.png",
       "layers": [
         {
@@ -29,7 +31,9 @@
       ]
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "poser": "cobblemon:pikachu",
       "model": "cobblemon:pikachu_female.geo",
       "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu.png",
@@ -43,7 +47,10 @@
       ]
     },
     {
-      "aspects": ["shiny", "female"],
+      "aspects": [
+        "shiny",
+        "female"
+      ],
       "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_shiny.png",
       "layers": [
         {
@@ -55,7 +62,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-rage_candy_bar"],
+      "aspects": [
+        "cosmetic_item-rage_candy_bar"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -65,7 +74,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-pewter_crunchies"],
+      "aspects": [
+        "cosmetic_item-pewter_crunchies"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -75,7 +86,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lava_cookie"],
+      "aspects": [
+        "cosmetic_item-lava_cookie"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -85,7 +98,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-old_gateau"],
+      "aspects": [
+        "cosmetic_item-old_gateau"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -95,7 +110,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-casteliacone"],
+      "aspects": [
+        "cosmetic_item-casteliacone"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -105,7 +122,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lumiose_galette"],
+      "aspects": [
+        "cosmetic_item-lumiose_galette"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -115,7 +134,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-big_malasada"],
+      "aspects": [
+        "cosmetic_item-big_malasada"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -125,7 +146,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-smoked_tail_curry"],
+      "aspects": [
+        "cosmetic_item-smoked_tail_curry"
+      ],
       "model": "cobblemon:pikachu_cap_male.geo",
       "layers": [
         {
@@ -135,7 +158,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-compass"],
+      "aspects": [
+        "cosmetic_item-compass"
+      ],
       "model": "cobblemon:pikachu_captain_male.geo",
       "layers": [
         {
@@ -145,11 +170,15 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-shears"],
+      "aspects": [
+        "cosmetic_item-shears"
+      ],
       "model": "cobblemon:pikachu_fluff_male.geo"
     },
     {
-      "aspects": ["cosmetic_item-leather_helmet"],
+      "aspects": [
+        "cosmetic_item-leather_helmet"
+      ],
       "model": "cobblemon:pikachu_detective_male.geo",
       "layers": [
         {
@@ -159,7 +188,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-sinister_tea"],
+      "aspects": [
+        "cosmetic_item-sinister_tea"
+      ],
       "model": "cobblemon:pikachu_detective_male.geo",
       "layers": [
         {
@@ -169,7 +200,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-cocoa_beans"],
+      "aspects": [
+        "cosmetic_item-cocoa_beans"
+      ],
       "model": "cobblemon:pikachu_detective_male.geo",
       "layers": [
         {
@@ -179,7 +212,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-rage_candy_bar", "female"],
+      "aspects": [
+        "cosmetic_item-rage_candy_bar",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -189,7 +225,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-pewter_crunchies", "female"],
+      "aspects": [
+        "cosmetic_item-pewter_crunchies",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -199,7 +238,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lava_cookie", "female"],
+      "aspects": [
+        "cosmetic_item-lava_cookie",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -209,7 +251,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-old_gateau", "female"],
+      "aspects": [
+        "cosmetic_item-old_gateau",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -219,7 +264,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-casteliacone", "female"],
+      "aspects": [
+        "cosmetic_item-casteliacone",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -229,7 +277,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lumiose_galette", "female"],
+      "aspects": [
+        "cosmetic_item-lumiose_galette",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -239,7 +290,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-big_malasada", "female"],
+      "aspects": [
+        "cosmetic_item-big_malasada",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -249,7 +303,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-smoked_tail_curry", "female"],
+      "aspects": [
+        "cosmetic_item-smoked_tail_curry",
+        "female"
+      ],
       "model": "cobblemon:pikachu_cap_female.geo",
       "layers": [
         {
@@ -259,7 +316,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-compass", "female"],
+      "aspects": [
+        "cosmetic_item-compass",
+        "female"
+      ],
       "model": "cobblemon:pikachu_captain_female.geo",
       "layers": [
         {
@@ -269,11 +329,17 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-shears", "female"],
+      "aspects": [
+        "cosmetic_item-shears",
+        "female"
+      ],
       "model": "cobblemon:pikachu_fluff_female.geo"
     },
     {
-      "aspects": ["cosmetic_item-leather_helmet", "female"],
+      "aspects": [
+        "cosmetic_item-leather_helmet",
+        "female"
+      ],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {
@@ -283,7 +349,10 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-sinister_tea", "female"],
+      "aspects": [
+        "cosmetic_item-sinister_tea",
+        "female"
+      ],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {
@@ -293,12 +362,27 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-cocoa_beans", "female"],
+      "aspects": [
+        "cosmetic_item-cocoa_beans",
+        "female"
+      ],
       "model": "cobblemon:pikachu_detective_female.geo",
       "layers": [
         {
           "name": "detective",
           "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_detective.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0025_pikachu/pikachu_alpha.png",
+          "emissive": true
         }
       ]
     }

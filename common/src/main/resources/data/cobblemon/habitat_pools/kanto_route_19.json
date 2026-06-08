@@ -1,0 +1,11 @@
+{
+  "name": "Kanto Route 19",
+  "type": "cobblemon:natural",
+  "spawns": [
+    { "species": "cobblemon:tentacool", "bucket": "common", "spawnablePositionType": "surface", "levelRange": "25-35", "weight": 12 },
+    { "species": "cobblemon:tentacruel", "bucket": "uncommon", "spawnablePositionType": "submerged", "levelRange": "30-40", "weight": 6 },
+    { "species": "cobblemon:horsea", "bucket": "common", "spawnablePositionType": "submerged", "levelRange": "25-35", "weight": 9 },
+    { "species": "cobblemon:seel", "bucket": "uncommon", "spawnablePositionType": "surface", "levelRange": "28-38", "weight": 7 },
+    { "species": "cobblemon:shellder", "bucket": "uncommon", "spawnablePositionType": "seafloor", "levelRange": "28-38", "weight": 7 }
+  ]
+}

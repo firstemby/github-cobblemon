@@ -19,9 +19,7 @@ import com.google.gson.JsonElement
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 open class Learnset : ClientDataSynchronizer<Learnset> {
-    class Interpreter(
-        val loadMove: (JsonElement, Learnset) -> Boolean
-    ) {
+    class Interpreter(val loadMove: (JsonElement, Learnset) -> Boolean) {
         companion object {
             fun parseFromPrefixIntoList(prefix: String, list: (Learnset) -> MutableList<MoveTemplate>): Interpreter {
                 return Interpreter { element, learnset ->
@@ -73,8 +71,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
             eggInterpreter,
             tutorInterpreter,
             legacyInterpreter,
-            specialInterpreter,
-            levelUpInterpreter,
+            specialInterpreter, levelUpInterpreter,
             formChangeInterpreter
         )
     }
@@ -98,6 +95,11 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         .sortedBy { it.key }
         .flatMap { it.value }
         .toSet()
+
+    fun tmLearnableMoves(): MutableList<MoveTemplate> {
+        return tmMoves.toMutableList()
+    }
+
 
     fun getAllLegalMoves(): Set<MoveTemplate> {
         return levelUpMoves.values.flatten().toSet() +

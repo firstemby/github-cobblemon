@@ -1,0 +1,14 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/strange_fungal_dwelling1",
+            "cobblemon:habitats/strange_fungal_dwelling3",
+            "cobblemon:habitats/strange_fungal_dwelling4",
+            "cobblemon:habitats/strange_fungal_dwelling5",
+            "cobblemon:habitats/strange_fungal_dwelling7",
+            "cobblemon:habitats/strange_fungal_dwelling8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/strange_fungal_dwelling"
+    }
+}

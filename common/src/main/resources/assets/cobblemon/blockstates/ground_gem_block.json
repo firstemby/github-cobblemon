@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cobblemon:block/type_gems/ground_gem_block"
+    }
+  }
+}

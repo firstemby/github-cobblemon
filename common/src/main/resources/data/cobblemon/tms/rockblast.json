@@ -1,0 +1,19 @@
+{
+  "moveName": "rockblast",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "rock",
+  "recipe": [
+    {
+      "item": "cobblemon:rock_gem",
+      "count": 4
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "count": 1
+    }
+  ]
+}

@@ -264,11 +264,6 @@
             ]
         },
         {
-            "processor_type": "gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -24
-        },
-        {
             "delegate": {
                 "processor_type": "minecraft:rule",
                 "rules": [

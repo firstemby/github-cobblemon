@@ -1,0 +1,63 @@
+{
+    "feature": "cobblemon:habitats/deep_roots",
+    "placement": [
+        {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
+            "type": "minecraft:rarity_filter",
+            "chance": 40
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "type": "minecraft:uniform",
+                "min_inclusive": {
+                    "absolute": -33
+                },
+                "max_inclusive": {
+                    "absolute": 30
+                }
+            }
+        },
+        {
+            "type": "minecraft:environment_scan",
+            "allowed_search_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:deepslate",
+                    "minecraft:stone",
+                    "minecraft:clay",
+                    "minecraft:moss_block"
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "direction_of_search": "up",
+            "max_steps": 7,
+            "target_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:air"
+                ],
+                "offset": [
+                    0,
+                    2,
+                    0
+                ]
+            }
+        },
+        {
+            "type": "minecraft:random_offset",
+            "y_spread": -15,
+            "xz_spread": 0
+        },
+        {
+            "type": "minecraft:biome"
+        }
+    ]
+}
