@@ -4,9 +4,11 @@ import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
 import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishPrintedPhotoScanningPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
 
 object PrintedPhotoBlockScanProvider : BlockScanProvider {
@@ -34,6 +36,8 @@ object PrintedPhotoBlockScanProvider : BlockScanProvider {
             scale = 1.0f
         )
     )
+
+    override fun getScanKey(be: BlockEntity): ResourceLocation = cobblemonResource("printed_photo_display")
 
     override fun getValues(be: BlockEntity): Map<String, Any?> {
         val component = (be as? PrintedPhotoDisplayBlockEntity)?.component

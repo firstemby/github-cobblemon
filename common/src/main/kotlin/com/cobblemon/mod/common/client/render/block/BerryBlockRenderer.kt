@@ -12,6 +12,9 @@ import com.cobblemon.mod.common.api.mulch.MulchVariant
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides
+import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases.BERRY_SPRITE_ATLAS
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.setPosition
@@ -81,6 +84,13 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
 //            matrices.popPose()
 //        }
         drawMulch(matrices, vertexConsumers, entity, light, overlay)
+
+        val ctx = CobblemonClient.pokedexUsageContext
+        if (ctx.scanningGuiOpen && ctx.scannerMode == PokedexUsageContext.ScannerMode.SCANNING) {
+            val scanKey = BerryBlockScanProvider.getScanKey(entity)
+            val scanned = CobblemonClient.clientScannedBlocksData.hasScanned(scanKey)
+            ScanIndicatorRenderer.render(matrices, vertexConsumers, entity, scanned)
+        }
     }
 
     private fun drawMulch(

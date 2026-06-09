@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import com.cobblemon.mod.common.net.messages.client.ui.PokedexPhotoUploadPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishScanningPacket
+import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.RecordBlockScanPacket
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.StartScanningPacket
 import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoQuality
@@ -148,7 +149,8 @@ class PokedexUsageContext {
     var type: PokedexType = PokedexType.RED
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
-    private var blockEntityScanCompleted = false
+    var blockEntityScanCompleted = false
+        private set
     private var previousAttackInput = false
     private var previousModeToggleInput = false
     private var pictureBuffer: RenderTarget? = null
@@ -306,8 +308,14 @@ class PokedexUsageContext {
                 val pos = blockPosInFocus
                 if (be != null && pos != null) {
                     val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type)
-                    if (typeId != null) BlockScanProviderRegistry.get(typeId)?.onScanComplete(pos, zoomLevel.toInt())
+                    if (typeId != null) {
+                        val provider = BlockScanProviderRegistry.get(typeId)
+                        provider?.onScanComplete(pos, zoomLevel.toInt())
+                        provider?.getScanKey(be)?.let { RecordBlockScanPacket(it).sendToServer() }
+                    }
                 }
+                // Audio cue that the scan has finished, mirroring how Pokémon scans signal completion
+                playSound(CobblemonSounds.POKEDEX_SCAN_REGISTER_POKEMON)
             }
             if (focusIntervals < FOCUS_INTERVALS) focusIntervals = min(focusIntervals + updateInterval, FOCUS_INTERVALS)
         } else {
@@ -331,7 +339,7 @@ class PokedexUsageContext {
     fun useTick(user: LocalPlayer, ticksInUse: Int, inUse: Boolean) {
         tryOpenScanGui(ticksInUse, inUse)
         if (scanningGuiOpen && scannerMode == ScannerMode.SCANNING) tryScanPokemon(user)
-        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || blockEntityInFocus != null)) {
+        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || (blockEntityInFocus != null && !blockEntityScanCompleted))) {
             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         }
     }

@@ -97,6 +97,9 @@ class PokedexScannerRenderer {
     }
 
     private var lastFocusedBlockTypeId: ResourceLocation? = null
+    // Whether the focused block's info frames should be visible: shown only once the block has been
+    // fully scanned this session or was scanned previously. Retained through the close animation.
+    private var lastFocusedBlockRevealed: Boolean = false
 
     fun renderInfoFrames(graphics: GuiGraphics, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
@@ -114,7 +117,13 @@ class PokedexScannerRenderer {
                     if (pokedexEntityData != null) {
                         lastFocusedBlockTypeId = null
                     } else if (blockEntityInFocus != null) {
-                        lastFocusedBlockTypeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type)
+                        val focusedTypeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type)
+                        lastFocusedBlockTypeId = focusedTypeId
+                        // Reveal the frames only once the block has been fully scanned or scanned before
+                        val provider = focusedTypeId?.let { BlockScanProviderRegistry.get(it) }
+                        val scannedBefore = provider?.getScanKey(blockEntityInFocus)
+                            ?.let { CobblemonClient.clientScannedBlocksData.hasScanned(it) } ?: false
+                        lastFocusedBlockRevealed = usageContext.blockEntityScanCompleted || scannedBefore
                     } else if (usageContext.focusIntervals <= 0f) {
                         lastFocusedBlockTypeId = null
                     }
@@ -127,6 +136,8 @@ class PokedexScannerRenderer {
                     if (pokedexEntityData == null && effectiveTypeId != null) {
                         val provider = BlockScanProviderRegistry.get(effectiveTypeId)
                         if (provider != null) {
+                            // Hide the panels entirely until the block is scanned (or was scanned before)
+                            if (!lastFocusedBlockRevealed) return@forEachIndexed
                             if (!provider.frames.any { it.slot == infoDisplayedCounter }) return@forEachIndexed
                         }
                     }

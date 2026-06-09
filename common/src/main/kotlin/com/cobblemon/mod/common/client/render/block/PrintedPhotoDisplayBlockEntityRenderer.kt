@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.block.PrintedPhotoDisplayBlock
 import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.pokedex.scanner.block.PrintedPhotoBlockScanProvider
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.MultiBufferSource
@@ -48,6 +50,13 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         val buffer = bufferSource.getBuffer(RenderType.entityCutout(texture))
         val axes = PrintedPhotoDisplayBlock.resolveAxes(be.blockState)
         drawQuad(buffer, matrices, light, axes, be.cellX, be.cellY, be.gridSize)
+
+        val ctx = CobblemonClient.pokedexUsageContext
+        if (ctx.scanningGuiOpen && ctx.scannerMode == PokedexUsageContext.ScannerMode.SCANNING) {
+            val scanKey = PrintedPhotoBlockScanProvider.getScanKey(be)
+            val scanned = CobblemonClient.clientScannedBlocksData.hasScanned(scanKey)
+            ScanIndicatorRenderer.render(matrices, bufferSource, be, scanned)
+        }
     }
 
     private fun drawQuad(

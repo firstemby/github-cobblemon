@@ -9,8 +9,9 @@
 package com.cobblemon.mod.common.api.storage.player
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
+import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
+import com.cobblemon.mod.common.api.storage.player.client.ClientScannedBlocksManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -34,6 +35,12 @@ object PlayerInstancedDataStoreTypes {
         ClientTMMoveManager::decode,
         ClientTMMoveManager::runAction,
         ClientTMMoveManager::runIncremental
+    ))
+    val SCANNED_BLOCKS = register(PlayerInstancedDataStoreType(
+        cobblemonResource("scanned_blocks"),
+        ClientScannedBlocksManager::decode,
+        ClientScannedBlocksManager::runAction,
+        ClientScannedBlocksManager::runIncremental
     ))
 
     fun register(type: PlayerInstancedDataStoreType): PlayerInstancedDataStoreType {

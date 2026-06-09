@@ -63,6 +63,8 @@ import com.cobblemon.mod.common.api.storage.player.adapter.DexDataMongoBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.DexDataNbtBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataJsonBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.ScannedBlocksMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.ScannedBlocksNbtBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveMongoBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveNbtBackend
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
@@ -408,9 +410,13 @@ object Cobblemon {
                     val tmMoveFactory = CachedPlayerDataStoreFactory(TMMoveNbtBackend())
                     tmMoveFactory.setup(server)
 
+                    val scannedBlocksFactory = CachedPlayerDataStoreFactory(ScannedBlocksNbtBackend())
+                    scannedBlocksFactory.setup(server)
+
                     playerDataManager.setFactory(generalJsonFactory, PlayerInstancedDataStoreTypes.GENERAL)
                     playerDataManager.setFactory(pokedexNbtFactory, PlayerInstancedDataStoreTypes.POKEDEX)
                     playerDataManager.setFactory(tmMoveFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
+                    playerDataManager.setFactory(scannedBlocksFactory, PlayerInstancedDataStoreTypes.SCANNED_BLOCKS)
 
                     if (config.storageFormat == "nbt") {
                         NBTStoreAdapter(pokemonStoreRoot.absolutePath, useNestedFolders = true, folderPerClass = true)
@@ -442,9 +448,15 @@ object Cobblemon {
                         )
                         tmMovesMongoFactory.setup(server)
 
+                        val scannedBlocksMongoFactory = CachedPlayerDataStoreFactory(
+                                ScannedBlocksMongoBackend(mongoClient, config.mongoDBDatabaseName, "ScannedBlocksCollection")
+                        )
+                        scannedBlocksMongoFactory.setup(server)
+
                         playerDataManager.setFactory(generalMongoFactory, PlayerInstancedDataStoreTypes.GENERAL)
                         playerDataManager.setFactory(pokedexMongoFactory, PlayerInstancedDataStoreTypes.POKEDEX)
                         playerDataManager.setFactory(tmMovesMongoFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
+                        playerDataManager.setFactory(scannedBlocksMongoFactory, PlayerInstancedDataStoreTypes.SCANNED_BLOCKS)
                         MongoDBStoreAdapter(mongoClient, config.mongoDBDatabaseName)
                     } catch (e: ClassNotFoundException) {
                         LOGGER.error("MongoDB driver not found.")

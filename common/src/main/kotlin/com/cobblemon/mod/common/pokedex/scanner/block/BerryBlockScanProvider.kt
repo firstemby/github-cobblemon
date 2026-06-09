@@ -5,6 +5,7 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.entity.BerryBlockEntity
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 
@@ -33,6 +34,8 @@ object BerryBlockScanProvider : BlockScanProvider {
             scale = 1.0f
         )
     )
+
+    override fun getScanKey(be: BlockEntity): ResourceLocation = (be as BerryBlockEntity).berryIdentifier
 
     override fun getValues(be: BlockEntity): Map<String, Any?> {
         val berry = be as BerryBlockEntity

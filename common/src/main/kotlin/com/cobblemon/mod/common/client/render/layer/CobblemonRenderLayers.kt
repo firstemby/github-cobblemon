@@ -86,4 +86,34 @@ object CobblemonRenderLayers {
         )
     };
 
+    /**
+     * Translucent, fullbright, no-cull layer that ignores depth testing so the quad always renders
+     * on top of the world geometry. Used by the Pokédex scan indicator so it's visible from any angle.
+     */
+    val SCAN_INDICATOR: Function<ResourceLocation, RenderType> = Util.memoize { texture: ResourceLocation ->
+        val multiPhaseParameters =
+            RenderType.CompositeState.builder()
+                // Emissive shader renders fullbright and ignores lightmap + directional diffuse shading,
+                // so the icon stays uniformly bright regardless of world light or viewing angle.
+                .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER)
+                .setTextureState(TextureStateShard(texture, false, false))
+                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                .setCullState(NO_CULL)
+                .setLightmapState(LightmapStateShard(false))
+                .setOverlayState(OVERLAY)
+                .setDepthTestState(NO_DEPTH_TEST)
+                .setWriteMaskState(COLOR_WRITE)
+                .createCompositeState(false)
+
+        RenderType.create(
+            "cobblemon_scan_indicator",
+            DefaultVertexFormat.NEW_ENTITY,
+            VertexFormat.Mode.QUADS,
+            256,
+            false,
+            true,
+            multiPhaseParameters
+        )
+    };
+
 }
