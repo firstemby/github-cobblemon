@@ -6,7 +6,7 @@
 				"identifier": "geometry.darmanitan",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 6,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 4.5,
 				"visible_bounds_offset": [0, 1.75, 0]
 			},
@@ -63,9 +63,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso",
-					"pivot": [0, 16.5, 13],
+					"pivot": [0, 17.5, 13],
 					"locators": {
-						"seat_1": [0, 16.5, 13]
+						"seat_1": [0, 17.5, 13]
 					}
 				},
 				{

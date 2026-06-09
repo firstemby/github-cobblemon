@@ -16,15 +16,30 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_shiny.png",
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_emissive_shiny.png",
+          "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0563_cofagrigus/cofagrigus_alpha.png",
           "emissive": true
         }
       ]
     }
   ]
 }
+

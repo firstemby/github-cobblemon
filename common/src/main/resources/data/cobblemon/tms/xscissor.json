@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:bug_gem",
-      "count": 7
+      "count": 5
     },
     {
       "item": "cobblemon:steel_gem",
-      "count": 2
+      "count": 3
     }
   ]
 }

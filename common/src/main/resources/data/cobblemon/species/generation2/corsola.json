@@ -71,7 +71,7 @@
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canSwimInWater": false,
+        "canSwimInWater": true,
         "canBreatheUnderwater": true
       }
     },

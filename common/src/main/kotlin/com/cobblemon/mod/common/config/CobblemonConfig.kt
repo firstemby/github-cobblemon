@@ -146,6 +146,12 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Battles, lang = "experience_share_multiplier", SERVER)
     var experienceShareMultiplier = .5
 
+    @CobblemonConfigField(Category.Battles, lang = "award_experience_to_fainted_pokemon", SERVER)
+    var awardExperienceToFaintedPokemon = false
+
+    @CobblemonConfigField(Category.Battles, lang = "award_experience_on_battle_loss", SERVER)
+    var awardExperienceOnBattleLoss = false
+
     @CobblemonConfigField(Category.Battles, lang = "lucky_egg_multiplier", SERVER)
     var luckyEggMultiplier = 1.5
 
@@ -210,6 +216,18 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate", SERVER)
     var shinyRate = 8192F
 
+    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_alpha_chance", SERVER)
+    var fossilMachineAlphaChance = 20
+
+    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_shiny_chance", SERVER)
+    var fossilMachineShinyChance = 100
+
+    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_alpha_chance", SERVER)
+    var honeySlatherAlphaChance = 100
+
+    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_shiny_chance", SERVER)
+    var honeySlatherShinyChance = 4000
+
     @CobblemonConfigField(Category.Pokemon, lang = "shiny_notice_particles_distance", CLIENT)
     var shinyNoticeParticlesDistance = 24F
 
@@ -218,6 +236,21 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Pokemon, lang = "player_damage_pokemon", SERVER)
     var playerDamagePokemon = true
+
+    @CobblemonConfigField(Category.Pokemon, lang = "pokemon_intrinsic_size_min", SERVER)
+    var pokemonIntrinsicSizeMin = 0.95F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "pokemon_intrinsic_size_max", SERVER)
+    var pokemonIntrinsicSizeMax = 1.05F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_level_duration", SERVER)
+    var babyPokemonLevelDuration = 9
+
+    @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_size_multiplier", SERVER)
+    var babyPokemonSizeMultiplier = 0.9F
+
+    @CobblemonConfigField(Category.Pokemon, lang = "minimum_riding_scale", SERVER)
+    var minimumRidingScale = 0.75F
 
     @CobblemonConfigField(Category.World, lang = "apple_leftovers_chance", SERVER)
     var appleLeftoversChance = 0.025
@@ -398,9 +431,6 @@ class CobblemonConfig {
     // @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing", CLIENT)
     var thirdPersonViewBobbing = true
 
-    @CobblemonConfigField(Category.Riding, lang = "invert_roll", CLIENT)
-    var invertRoll = false
-
     @CobblemonConfigField(Category.Riding, lang = "invert_pitch", CLIENT)
     var invertPitch = false
 
@@ -415,9 +445,6 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Riding, lang = "swap_x_and_y_axes", CLIENT)
     var swapXAndYAxes = false
-
-    @CobblemonConfigField(Category.Riding, lang = "automatic_righting_delay", CLIENT)
-    var rightingDelay = -1.0
 
     @CobblemonConfigField(Category.Riding, lang = "disable_roll", CLIENT)
     var disableRoll = false
@@ -448,6 +475,12 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Spawning, lang = "despawner_max_age_ticks", SERVER)
     var despawnerMaxAgeTicks = 3600
+
+    @CobblemonConfigField(Category.Spawning, lang = "data_monitor_alpha_rate", SERVER)
+    var monitorAlphaRate = 40
+
+    @CobblemonConfigField(Category.Spawning, lang = "data_monitor_shiny_rate", SERVER)
+    var monitorShinyRate = 200
 
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()

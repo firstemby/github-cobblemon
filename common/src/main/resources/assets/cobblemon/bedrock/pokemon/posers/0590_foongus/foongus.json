@@ -3,6 +3,7 @@
   "portraitTranslation": [0.10, -0.3, 0],
   "profileScale": 0.58,
   "profileTranslation": [0.01, 0.94, 0],
+  "rootBone": "foongus",
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],

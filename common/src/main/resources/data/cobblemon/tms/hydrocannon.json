@@ -9,14 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:water_gem",
-      "count": 8
+      "count": 12
     },
     {
       "item": "minecraft:diamond",
-      "count": 2
-    },
-    {
-      "item": "cobblemon:power_herb",
       "count": 1
     }
   ]

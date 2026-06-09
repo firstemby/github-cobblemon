@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:grass_gem",
-      "count": 6
+      "count": 5
     },
     {
       "item": "cobblemon:grassy_seed",
-      "count": 2
+      "count": 1
     }
   ]
 }

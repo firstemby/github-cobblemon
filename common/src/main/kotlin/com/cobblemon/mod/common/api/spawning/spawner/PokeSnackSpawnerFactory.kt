@@ -8,11 +8,11 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
@@ -61,15 +61,6 @@ object PokeSnackSpawnerFactory {
                 firstTier = 1.2F
             )
         },
-        { _ ->
-            BucketMultiplyingInfluence(
-                mapOf(
-                    "uncommon" to 2.25f,
-                    "rare" to 5.5f,
-                    "ultra-rare" to 5.5f,
-                )
-            )
-        },
         { ctx ->
             SpawnBaitInfluence(effects = ctx.baitEffects)
         },
@@ -81,6 +72,7 @@ object PokeSnackSpawnerFactory {
         return FixedAreaSpawner(
             name = ctx.name,
             spawnPool = spawnPool,
+            buckets = Cobblemon.bestSpawner.config.pokeSnackBuckets,
             world = ctx.world,
             position = ctx.pos,
             horizontalRadius = ctx.horizontalRadius,

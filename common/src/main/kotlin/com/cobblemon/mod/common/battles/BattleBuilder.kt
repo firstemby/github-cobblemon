@@ -282,9 +282,13 @@ object BattleBuilder {
         }
         playerActor.battleTheme = pokemonEntity.getBattleTheme()
 
+        val finalFormat = if (pokemonEntity.pokemon.isAlpha && BattleRules.WILD_ALPHA !in battleFormat.ruleSet) {
+            BattleFormat.setBattleRules(battleFormat, battleFormat.ruleSet + BattleRules.WILD_ALPHA)
+        } else battleFormat
+
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
-                battleFormat = battleFormat,
+                battleFormat = finalFormat,
                 side1 = BattleSide(playerActor),
                 side2 = BattleSide(wildActor)
             ).ifSuccessful {

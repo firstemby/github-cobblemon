@@ -28,6 +28,9 @@ object ServerSettings {
     var maxPokemonFriendship = Cobblemon.config.maxPokemonFriendship
     var maxDynamaxLevel = Cobblemon.config.maxDynamaxLevel
     var unlockAllMoveDexMovesByDefault = Cobblemon.config.unlockAllMoveDexMovesByDefault
+    var pokemonIntrinsicSizeMin = Cobblemon.config.pokemonIntrinsicSizeMin
+    var pokemonIntrinsicSizeMax = Cobblemon.config.pokemonIntrinsicSizeMax
+
     var pokedexScannerPhotoRaycastDistance = Cobblemon.config.pokedexScannerPhotoRaycastDistance
     var pokedexScannerPhotoRaycastDensity = Cobblemon.config.pokedexScannerPhotoRaycastDensity
     var pokedexScannerPhotoPerimeterRaycastDensity = Cobblemon.config.pokedexScannerPhotoPerimeterRaycastDensity

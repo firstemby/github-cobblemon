@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:normal_gem",
-      "count": 1
+      "count": 2
     },
     {
-      "item": "cobblemon:relic_coin",
+      "item": "cobblemon:relic_pouch",
       "count": 1
     }
   ]

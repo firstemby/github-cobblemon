@@ -8,22 +8,15 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.block.entity.BerryBlockEntity
-import com.cobblemon.mod.common.block.entity.HealingMachineBlockEntity
-import com.cobblemon.mod.common.block.entity.PCBlockEntity
-import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
-import com.cobblemon.mod.common.block.entity.FossilAnalyzerBlockEntity
-import com.cobblemon.mod.common.block.entity.FossilMultiblockEntity
-import com.cobblemon.mod.common.block.entity.RestorationTankBlockEntity
-import com.cobblemon.mod.common.block.multiblock.FossilMultiblockBuilder
 import com.cobblemon.mod.common.block.entity.*
-import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
+import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
+import com.cobblemon.mod.common.block.multiblock.FossilMultiblockBuilder
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.level.block.entity.BlockEntityType
 
 object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, ResourceKey<Registry<BlockEntityType<*>>>, BlockEntityType<*>>() {
 
@@ -40,7 +33,7 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))
 
     @JvmField
-    val TM_SHELF: BlockEntityType<TMShelfBlockEntity> = this.create("tm_shelf", BlockEntityType.Builder.of(::TMShelfBlockEntity, CobblemonBlocks.TM_SHELF).build(null))
+    val DISC_SHELF: BlockEntityType<DiscShelfBlockEntity> = this.create("disc_shelf", BlockEntityType.Builder.of(::DiscShelfBlockEntity, CobblemonBlocks.DISC_SHELF).build(null))
 
     @JvmField
     val BERRY = this.create("berry", BlockEntityType.Builder.of(::BerryBlockEntity, *CobblemonBlocks.berries().values.toTypedArray()).build(null))
@@ -61,6 +54,11 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val PRINTED_PHOTO_DISPLAY: BlockEntityType<PrintedPhotoDisplayBlockEntity> = this.create(
         "printed_photo_display",
         BlockEntityType.Builder.of(::PrintedPhotoDisplayBlockEntity, CobblemonBlocks.PRINTED_PHOTO_DISPLAY).build(null)
+    )
+
+    @JvmField
+    val HABITAT_BLOCK: BlockEntityType<HabitatBlockEntity> = this.create("habitat_block",
+            BlockEntityType.Builder.of(::HabitatBlockEntity, CobblemonBlocks.HABITAT_BLOCK).build(null)
     )
 
     @JvmField

@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "rewards": {
     "recipes": [
       "cobblemon:moon_stone_from_smelting_dripstone_moon_stone_ore"

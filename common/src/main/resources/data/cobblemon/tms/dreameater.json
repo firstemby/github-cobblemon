@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:psychic_gem",
-      "count": 6
+      "count": 5
     },
     {
       "item": "cobblemon:ghost_gem",
-      "count": 1
+      "count": 3
     }
   ]
 }

@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.api.drop.EvolutionItemDropEntry
 import com.cobblemon.mod.common.api.drop.ItemDropEntry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED
+import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
@@ -33,6 +34,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
+import com.cobblemon.mod.common.api.pokemon.feature.WeightedChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.EvCalculator
 import com.cobblemon.mod.common.api.pokemon.stats.Generation8EvCalculator
@@ -99,9 +101,11 @@ import com.cobblemon.mod.common.pokedex.photo.PrintedPhotoAssetRepository
 import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
 import com.cobblemon.mod.common.pokedex.scanner.block.PrintedPhotoBlockScanProvider
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
+import com.cobblemon.mod.common.pokemon.aspects.MARK_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature
@@ -336,6 +340,9 @@ object Cobblemon {
             this.config.pokedexScannerPhotoAlphaBonus,
             this.config.pokedexScannerPhotoWildBonus,
             this.config.pokedexScannerPhotoFormBonus
+            this.config.unlockAllMoveDexMovesByDefault,
+            this.config.pokemonIntrinsicSizeMin,
+            this.config.pokemonIntrinsicSizeMax
         ).sendToPlayer(player)
     }
 
@@ -349,8 +356,11 @@ object Cobblemon {
         GENDER_ASPECT.register()
         COSMETIC_SLOT_ASPECT.register()
         CHARACTERISTIC_RAINBOW_ASPECT.register()
+        ALPHA_ASPECT.register()
+        MARK_ASPECT.register()
 
         SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
+        SpeciesFeatures.types["weighted_choice"] = WeightedChoiceSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
 
@@ -395,6 +405,7 @@ object Cobblemon {
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
             PokedexPhotoRepository.initialize(server)
             PrintedPhotoAssetRepository.initialize(server)
+            HabitatPools.onServerLoading(server)
 
             val mongoClient: MongoClient?
 

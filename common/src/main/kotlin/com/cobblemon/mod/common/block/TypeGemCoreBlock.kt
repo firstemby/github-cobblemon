@@ -35,24 +35,24 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
         val BLOCK_TO_CLUSTER: Map<ResourceLocation, Block> by lazy {
             mapOf(
-                ResourceLocation.parse("cobblemon:type_gem_block_normal") to CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
-                ResourceLocation.parse("cobblemon:type_gem_block_fire") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
-                ResourceLocation.parse("cobblemon:type_gem_block_water") to CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
-                ResourceLocation.parse("cobblemon:type_gem_block_electric") to CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
-                ResourceLocation.parse("cobblemon:type_gem_block_grass") to CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
-                ResourceLocation.parse("cobblemon:type_gem_block_ice") to CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
-                ResourceLocation.parse("cobblemon:type_gem_block_fighting") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
-                ResourceLocation.parse("cobblemon:type_gem_block_poison") to CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
-                ResourceLocation.parse("cobblemon:type_gem_block_ground") to CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
-                ResourceLocation.parse("cobblemon:type_gem_block_flying") to CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
-                ResourceLocation.parse("cobblemon:type_gem_block_psychic") to CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
-                ResourceLocation.parse("cobblemon:type_gem_block_bug") to CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
-                ResourceLocation.parse("cobblemon:type_gem_block_rock") to CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
-                ResourceLocation.parse("cobblemon:type_gem_block_ghost") to CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
-                ResourceLocation.parse("cobblemon:type_gem_block_dragon") to CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
-                ResourceLocation.parse("cobblemon:type_gem_block_dark") to CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
-                ResourceLocation.parse("cobblemon:type_gem_block_steel") to CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
-                ResourceLocation.parse("cobblemon:type_gem_block_fairy") to CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY
+                ResourceLocation.parse("cobblemon:normal_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
+                ResourceLocation.parse("cobblemon:fire_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
+                ResourceLocation.parse("cobblemon:water_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
+                ResourceLocation.parse("cobblemon:electric_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
+                ResourceLocation.parse("cobblemon:grass_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
+                ResourceLocation.parse("cobblemon:ice_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
+                ResourceLocation.parse("cobblemon:fighting_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
+                ResourceLocation.parse("cobblemon:poison_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
+                ResourceLocation.parse("cobblemon:ground_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
+                ResourceLocation.parse("cobblemon:flying_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
+                ResourceLocation.parse("cobblemon:psychic_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
+                ResourceLocation.parse("cobblemon:bug_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
+                ResourceLocation.parse("cobblemon:rock_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
+                ResourceLocation.parse("cobblemon:ghost_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
+                ResourceLocation.parse("cobblemon:dragon_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
+                ResourceLocation.parse("cobblemon:dark_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
+                ResourceLocation.parse("cobblemon:steel_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
+                ResourceLocation.parse("cobblemon:fairy_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY
             )
         }
 
@@ -148,7 +148,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
         for ((gemState, gemPos) in connectedGems.shuffled(javaRandom)) {
             val registryKey = BuiltInRegistries.BLOCK.getKey(gemState.block)
-            val clusterBlock = BLOCK_TO_CLUSTER[registryKey]
+            val clusterBlock = BLOCK_TO_CLUSTER[registryKey] ?: continue // If there is no block to grow, skip the block
 
             for (dir in Direction.entries.shuffled(javaRandom)) {
                 val targetPos = gemPos.relative(dir)
@@ -158,16 +158,14 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                 if (!isPositionValidForGrowth(level, targetPos)) continue
 
                 // Place gem cluster
-                if (clusterBlock != null) {
-                    var placeState = clusterBlock.defaultBlockState()
-                        .setValue(DirectionalBlock.FACING, dir)
-                        .setValue(TypeGemClusterBlock.STAGE, 0)
-                        .setValue(SHOULD_GROW, true)
+                val placeState = clusterBlock.defaultBlockState()
+                    .setValue(DirectionalBlock.FACING, dir)
+                    .setValue(TypeGemClusterBlock.STAGE, 0)
+                    .setValue(SHOULD_GROW, true)
 
-                    level.setBlock(targetPos, placeState, UPDATE_ALL)
-                }
+                level.setBlock(targetPos, placeState, UPDATE_ALL)
 
-                if (forced && clusterBlock != null) {
+                if (forced) {
                     forceAdvanceClusterGrowth(level, targetPos, random)
                 }
 

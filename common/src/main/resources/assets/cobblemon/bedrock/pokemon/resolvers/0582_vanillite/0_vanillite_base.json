@@ -9,8 +9,22 @@
       "texture": "cobblemon:textures/pokemon/0582_vanillite/vanillite.png"
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0582_vanillite/vanillite_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0582_vanillite/vanillite_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

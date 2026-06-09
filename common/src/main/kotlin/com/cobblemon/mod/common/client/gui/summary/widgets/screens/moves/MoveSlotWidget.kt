@@ -38,6 +38,7 @@ class MoveSlotWidget(
     companion object {
         val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
         val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
+        val moveOverlayBarResource = cobblemonResource("textures/gui/summary/summary_move_overlay_bar.png")
         val moveSelectedOverlayResource = cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png")
 
         const val MOVE_WIDTH = 108
@@ -108,6 +109,15 @@ class MoveSlotWidget(
                 y = y,
                 width = MOVE_WIDTH,
                 height = MOVE_HEIGHT
+            )
+
+            blitk(
+                matrixStack = matrices,
+                texture = moveOverlayBarResource,
+                x = x + 60,
+                y = y + 13,
+                width = 47,
+                height = 8
             )
 
             var movePPText = Component.literal("${move.currentPp}/${move.maxPp}").bold()

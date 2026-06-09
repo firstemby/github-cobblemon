@@ -9,15 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:bug_gem",
-      "count": 9
+      "count": 8
     },
     {
       "item": "cobblemon:big_root",
-      "count": 1
-    },
-    {
-      "item": "cobblemon:revival_herb",
-      "count": 1
+      "count": 2
     }
   ]
 }

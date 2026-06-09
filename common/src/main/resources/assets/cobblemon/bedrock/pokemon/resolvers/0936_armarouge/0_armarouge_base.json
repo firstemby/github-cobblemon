@@ -6,16 +6,16 @@
       "aspects": [],
       "poser": "cobblemon:armarouge",
       "model": "cobblemon:armarouge.geo",
-        "texture": {
-          "frames": [
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_1.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_2.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_3.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_4.png"
-          ],
-          "fps": 8,
-          "loop": true
-        },
+      "texture": {
+        "frames": [
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_1.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_2.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_3.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_4.png"
+        ],
+        "fps": 8,
+        "loop": true
+      },
       "layers": [
         {
           "name": "flame",
@@ -35,17 +35,19 @@
       ]
     },
     {
-      "aspects": ["shiny"],
-        "texture": {
-          "frames": [
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_1.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_2.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_3.png",
-            "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_4.png"
-          ],
-          "fps": 8,
-          "loop": true
-        },
+      "aspects": [
+        "shiny"
+      ],
+      "texture": {
+        "frames": [
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_1.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_2.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_3.png",
+          "cobblemon:textures/pokemon/0936_armarouge/armarouge_shiny_4.png"
+        ],
+        "fps": 8,
+        "loop": true
+      },
       "layers": [
         {
           "name": "flame",
@@ -61,6 +63,18 @@
           },
           "emissive": true,
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0936_armarouge/armarouge_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0655_delphox/delphox_shiny.png",
       "layers": [
         {
@@ -29,10 +31,24 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-silk_scarf"],
+      "aspects": [
+        "cosmetic_item-silk_scarf"
+      ],
       "layers": [
         {
           "texture": "cobblemon:textures/pokemon/0655_delphox/delphox_ribbon.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0655_delphox/delphox_alpha.png",
+          "emissive": true
         }
       ]
     }

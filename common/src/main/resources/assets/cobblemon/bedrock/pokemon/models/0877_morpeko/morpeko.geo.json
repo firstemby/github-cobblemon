@@ -76,6 +76,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [3, 11.7, -5.5],
+					"locators": {
+						"eye2": [3, 11.7, -5.5]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [3, 11.75, -4.91],
@@ -91,6 +99,14 @@
 						{"origin": [-4, 10.75, -5.51], "size": [2, 2, 1], "inflate": 0.01, "uv": [44, 7]},
 						{"origin": [-3.5, 11.25, -5.515], "size": [1, 1, 1], "inflate": 0.02, "uv": [44, 21]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-3, 11.7, -5.5],
+					"locators": {
+						"eye1": [-3, 11.7, -5.5]
+					}
 				},
 				{
 					"name": "eyelid_right",

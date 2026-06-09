@@ -368,7 +368,7 @@
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
       "animations": [
-        "q.bedrock('garchomp', 'sleep')",
+        "q.bedrock('garchomp', 'battle_sleep')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('garchomp', 'hold_item')"

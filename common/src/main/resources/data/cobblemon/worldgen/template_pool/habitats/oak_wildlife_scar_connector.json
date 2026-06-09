@@ -1,0 +1,32 @@
+{
+    "name": "cobblemon:habitats/oak_wildlife_scar_connector",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/oak_wildlife_scar_connector1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/oak_wildlife_scar",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/oak_wildlife_scar_connector2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/oak_wildlife_scar",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 2,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+    ]
+}

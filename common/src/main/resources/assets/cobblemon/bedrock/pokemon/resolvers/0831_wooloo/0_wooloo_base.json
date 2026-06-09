@@ -10,11 +10,15 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0831_wooloo/wooloo_shiny.png"
     },
     {
-      "aspects": ["color-black"],
+      "aspects": [
+        "color-black"
+      ],
       "layers": [
         {
           "name": "color",
@@ -24,7 +28,9 @@
       ]
     },
     {
-      "aspects": ["color-blue"],
+      "aspects": [
+        "color-blue"
+      ],
       "layers": [
         {
           "name": "color",
@@ -34,7 +40,9 @@
       ]
     },
     {
-      "aspects": ["color-brown"],
+      "aspects": [
+        "color-brown"
+      ],
       "layers": [
         {
           "name": "color",
@@ -44,7 +52,9 @@
       ]
     },
     {
-      "aspects": ["color-cyan"],
+      "aspects": [
+        "color-cyan"
+      ],
       "layers": [
         {
           "name": "color",
@@ -54,7 +64,9 @@
       ]
     },
     {
-      "aspects": ["color-gray"],
+      "aspects": [
+        "color-gray"
+      ],
       "layers": [
         {
           "name": "color",
@@ -64,7 +76,9 @@
       ]
     },
     {
-      "aspects": ["color-green"],
+      "aspects": [
+        "color-green"
+      ],
       "layers": [
         {
           "name": "color",
@@ -74,7 +88,9 @@
       ]
     },
     {
-      "aspects": ["color-light_blue"],
+      "aspects": [
+        "color-light_blue"
+      ],
       "layers": [
         {
           "name": "color",
@@ -84,7 +100,9 @@
       ]
     },
     {
-      "aspects": ["color-light_gray"],
+      "aspects": [
+        "color-light_gray"
+      ],
       "layers": [
         {
           "name": "color",
@@ -94,7 +112,9 @@
       ]
     },
     {
-      "aspects": ["color-lime"],
+      "aspects": [
+        "color-lime"
+      ],
       "layers": [
         {
           "name": "color",
@@ -104,7 +124,9 @@
       ]
     },
     {
-      "aspects": ["color-magenta"],
+      "aspects": [
+        "color-magenta"
+      ],
       "layers": [
         {
           "name": "color",
@@ -114,7 +136,9 @@
       ]
     },
     {
-      "aspects": ["color-orange"],
+      "aspects": [
+        "color-orange"
+      ],
       "layers": [
         {
           "name": "color",
@@ -124,7 +148,9 @@
       ]
     },
     {
-      "aspects": ["color-pink"],
+      "aspects": [
+        "color-pink"
+      ],
       "layers": [
         {
           "name": "color",
@@ -134,7 +160,9 @@
       ]
     },
     {
-      "aspects": ["color-purple"],
+      "aspects": [
+        "color-purple"
+      ],
       "layers": [
         {
           "name": "color",
@@ -144,7 +172,9 @@
       ]
     },
     {
-      "aspects": ["color-red"],
+      "aspects": [
+        "color-red"
+      ],
       "layers": [
         {
           "name": "color",
@@ -154,7 +184,9 @@
       ]
     },
     {
-      "aspects": ["color-white"],
+      "aspects": [
+        "color-white"
+      ],
       "layers": [
         {
           "name": "color",
@@ -164,7 +196,9 @@
       ]
     },
     {
-      "aspects": ["color-white shiny"],
+      "aspects": [
+        "color-white shiny"
+      ],
       "layers": [
         {
           "name": "color",
@@ -174,12 +208,26 @@
       ]
     },
     {
-      "aspects": ["color-yellow"],
+      "aspects": [
+        "color-yellow"
+      ],
       "layers": [
         {
           "name": "color",
           "texture": "cobblemon:textures/pokemon/0831_wooloo/wooloo_wool_yellow.png",
           "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0831_wooloo/wooloo_alpha.png",
+          "emissive": true
         }
       ]
     }

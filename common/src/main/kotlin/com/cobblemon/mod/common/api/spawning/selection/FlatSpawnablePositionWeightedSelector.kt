@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.spawning.selection
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -105,7 +104,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 
-        val bucketData = mutableMapOf<SpawnBucket, MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData>>()
+        val bucketData = mutableMapOf<String, MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData>>()
 
         override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {
             bucketData.values.forEach {
@@ -121,7 +120,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
             }
         }
 
-        fun getDataForBucket(bucket: SpawnBucket): MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData> {
+        fun getDataForBucket(bucket: String): MutableMap<SpawnablePositionType<*>, SpawnablePositionSelectionData> {
             bucketData[bucket]?.let { return it }
 
             val spawnablePositionTypeToSpawns = mutableMapOf<SpawnablePositionType<*>, SpawnablePositionSelectionData>()
@@ -149,7 +148,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
 
     override fun selectSpawnAction(
         spawner: Spawner,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SeparatedSelectionData
     ): SpawnAction<*>? {
         val bucketData = selectionData.getDataForBucket(bucket)
@@ -172,7 +171,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
             if (percentSum > 100) {
                 LOGGER.warn(
                     """
-                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket ${bucket.name}...
+                        A spawn list for ${spawner.name} exceeded 100% on percentage sums in bucket $bucket...
                         This means you don't understand how this option works.
                     """.trimIndent()
                 )
@@ -244,7 +243,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
 
     override fun getTotalWeights(
         spawner: Spawner,
-        bucket: SpawnBucket,
+        bucket: String,
         spawnablePositions: List<SpawnablePosition>
     ): Map<SpawnDetail, Float> {
         val selectionData = getSelectionData(spawner, spawnablePositions).getDataForBucket(bucket)

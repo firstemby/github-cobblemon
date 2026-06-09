@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 841,
   "name": "Flapple",
   "primaryType": "grass",
@@ -43,12 +44,13 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.5,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.8,
     "fixed": false
   },
+  "standingEyeHeight": 0.8,
   "drops": {
     "amount": 2,
     "entries": [

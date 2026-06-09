@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:flying_gem",
-      "count": 6
+      "count": 9
     },
     {
-      "item": "minecraft:feather",
+      "item": "cobblemon:sharp_beak",
       "count": 1
     }
   ]

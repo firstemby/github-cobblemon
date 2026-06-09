@@ -1,0 +1,2 @@
+q.player.tell(q.npc.name + ': ' + q.npc.config.chat_message);
+q.npc.config.play_animation ? q.npc.play_animation(q.npc.config.animation_name, q.player.uuid);

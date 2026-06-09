@@ -61,6 +61,7 @@
       },
       "swim": {
         "swimSpeed": 0.15,
+        "canWalkOnWater": true,
         "avoidsWater": true
       }
     },

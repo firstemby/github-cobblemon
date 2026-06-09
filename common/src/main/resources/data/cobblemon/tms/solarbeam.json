@@ -12,7 +12,11 @@
       "count": 12
     },
     {
-      "item": "cobblemon:power_herb",
+      "item": "cobblemon:sun_stone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

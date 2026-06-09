@@ -27,6 +27,8 @@ class ServerSettingsPacket internal constructor(
     val maxPokemonFriendship: Int,
     val maxDynamaxLevel: Int,
     val unlockAllMoveDexMovesByDefault: Boolean,
+    val pokemonIntrinsicSizeMin: Float,
+    val pokemonIntrinsicSizeMax: Float,
     val pokedexScannerPhotoRaycastDistance: Double,
     val pokedexScannerPhotoRaycastDensity: Int,
     val pokedexScannerPhotoPerimeterRaycastDensity: Int,
@@ -59,6 +61,8 @@ class ServerSettingsPacket internal constructor(
         buffer.writeInt(Cobblemon.config.maxPokemonFriendship)
         buffer.writeInt(Cobblemon.config.maxDynamaxLevel)
         buffer.writeBoolean(Cobblemon.config.unlockAllMoveDexMovesByDefault)
+        buffer.writeFloat(Cobblemon.config.pokemonIntrinsicSizeMin)
+        buffer.writeFloat(Cobblemon.config.pokemonIntrinsicSizeMax)
         buffer.writeDouble(Cobblemon.config.pokedexScannerPhotoRaycastDistance)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoRaycastDensity)
         buffer.writeInt(Cobblemon.config.pokedexScannerPhotoPerimeterRaycastDensity)
@@ -84,6 +88,10 @@ class ServerSettingsPacket internal constructor(
     }
     companion object {
         val ID = cobblemonResource("server_settings")
+        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(buffer.readBoolean(),
+            buffer.readBoolean(), buffer.readBoolean(),
+            buffer.readInt(), buffer.readInt(), buffer.readInt(),
+            buffer.readBoolean(), buffer.readFloat(), buffer.readFloat())
         fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(
             buffer.readBoolean(),
             buffer.readBoolean(),

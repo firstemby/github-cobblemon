@@ -94,6 +94,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_left1",
+					"parent": "eye_left1",
+					"pivot": [-4.5, 31.5, -10.1],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye2": [-4.5, 31.5, -10.1]
+					}
+				},
+				{
 					"name": "eye_angry_left1",
 					"parent": "eye_left1",
 					"pivot": [-4.5, 33, -10.03],
@@ -149,6 +158,15 @@
 					"cubes": [
 						{"origin": [-8, 30.5, -10.12], "size": [1, 2, 0], "uv": [1, 2]}
 					]
+				},
+				{
+					"name": "locator_eye_right1",
+					"parent": "eye_right1",
+					"pivot": [-7.5, 31.5, -10.1],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye1": [-7.5, 31.5, -10.1]
+					}
 				},
 				{
 					"name": "eye_angry_right1",
@@ -253,6 +271,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_left2",
+					"parent": "eye_left2",
+					"pivot": [8.5, 23, -10.1],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye4": [8.5, 23, -10.1]
+					}
+				},
+				{
 					"name": "eye_angry_left2",
 					"parent": "eye_left2",
 					"pivot": [8.5, 24.5, -10.03],
@@ -308,6 +335,15 @@
 					"cubes": [
 						{"origin": [5, 22, -10.12], "size": [1, 2, 0], "uv": [1, 16]}
 					]
+				},
+				{
+					"name": "locator_eye_right2",
+					"parent": "eye_right2",
+					"pivot": [5.5, 23, -10.1],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye3": [5.5, 23, -10.1]
+					}
 				},
 				{
 					"name": "eye_angry_right2",
@@ -428,6 +464,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_left3",
+					"parent": "eye_left3",
+					"pivot": [5, 39.5, 1.9],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye6": [5, 39.5, 1.9]
+					}
+				},
+				{
 					"name": "eye_angry_left3",
 					"parent": "eye_left3",
 					"pivot": [5, 41, 1.97],
@@ -483,6 +528,15 @@
 					"cubes": [
 						{"origin": [1.5, 38.5, 1.88], "size": [1, 2, 0], "uv": [1, 31]}
 					]
+				},
+				{
+					"name": "locator_eye_right3",
+					"parent": "eye_right3",
+					"pivot": [2, 39.5, 1.9],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye5": [2, 39.5, 1.9]
+					}
 				},
 				{
 					"name": "eye_angry_right3",

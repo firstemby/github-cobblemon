@@ -6,7 +6,7 @@
 				"identifier": "geometry.purugly",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 12,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -241,6 +241,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [3, 16.7, -10.5],
+					"locators": {
+						"eye2": [3, 16.7, -10.5]
+					}
+				},
+				{
 					"name": "left_eyelid",
 					"parent": "left_eye",
 					"pivot": [4.3, 17.75, -10.3],
@@ -257,6 +265,14 @@
 						{"origin": [-3.5, 16.25, -10.5], "size": [1, 1, 0], "inflate": 0.015, "uv": [0, 5]},
 						{"origin": [-4.5, 17, -10.5], "size": [3, 2, 2], "inflate": 0.02, "uv": [81, 22]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-3, 16.7, -10.5],
+					"locators": {
+						"eye1": [-3, 16.7, -10.5]
+					}
 				},
 				{
 					"name": "right_eyelid",

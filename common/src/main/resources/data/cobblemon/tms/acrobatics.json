@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:flying_gem",
-      "count": 3
+      "count": 6
     },
     {
-      "item": "cobblemon:black_belt",
+      "item": "minecraft:wind_charge",
       "count": 1
     }
   ]

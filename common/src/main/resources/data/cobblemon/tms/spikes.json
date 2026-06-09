@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:ground_gem",
-      "count": 6
+      "count": 8
     },
     {
-      "item": "minecraft:dripstone",
-      "count": 3
+      "item": "minecraft:pointed_dripstone",
+      "count": 2
     }
   ]
 }

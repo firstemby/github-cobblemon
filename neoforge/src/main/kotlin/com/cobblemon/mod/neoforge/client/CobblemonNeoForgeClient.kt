@@ -24,9 +24,7 @@ import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import java.util.concurrent.CompletableFuture
 import java.util.function.Supplier
 import net.minecraft.client.Minecraft
@@ -128,11 +126,10 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     }
 
     private fun onShaderRegistration(event: RegisterShadersEvent) {
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_add"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_BLEND = it
-        }
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_CUTOUT = it
+        CobblemonShaders.init()
+        CobblemonShaders.SHADERS_TO_REGISTER.forEach { (factory, callback) ->
+            val data = factory(event.resourceProvider)
+            event.registerShader(ShaderInstance(data.resourceFactory, data.shaderName, data.vertexFormat), callback)
         }
     }
 

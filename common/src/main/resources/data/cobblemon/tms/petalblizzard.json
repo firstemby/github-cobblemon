@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:grass_gem",
-      "count": 8
+      "count": 9
     },
     {
-      "tag": "minecraft:flowers",
+      "item": "minecraft:pink_petals",
       "count": 1
     }
   ]

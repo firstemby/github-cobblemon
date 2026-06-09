@@ -43,6 +43,16 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": ["alpha_eyes", "hisuian"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0628_braviary/braviary_hisuian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

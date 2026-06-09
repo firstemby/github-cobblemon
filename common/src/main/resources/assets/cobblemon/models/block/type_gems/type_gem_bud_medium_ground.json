@@ -3,6 +3,6 @@
   "ambientocclusion": false,
   "gui_light": "front",
   "textures": {
-    "cross": "cobblemon:block/type_gems/type_gem_bud_medium_ground"
+    "cross": "cobblemon:block/type_gems/medium_ground_gem_bud"
   }
 }

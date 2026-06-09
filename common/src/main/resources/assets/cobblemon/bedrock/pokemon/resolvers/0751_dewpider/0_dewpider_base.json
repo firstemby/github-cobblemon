@@ -37,6 +37,18 @@
           "translucent": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0751_dewpider/dewpider_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

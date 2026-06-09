@@ -29,7 +29,8 @@
     "cocoa_beans",
     "compass",
     "shears",
-    "gold_armor"
+    "gold_armor",
+    "chest"
   ],
   "isAspect": true,
   "aspectFormat": "cosmetic_item-{{choice}}"

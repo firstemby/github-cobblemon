@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:rock_gem",
-      "count": 10
+      "count": 12
     },
     {
-      "item": "cobblemon:fairy_gem",
+      "item": "cobblemon:moon_stone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

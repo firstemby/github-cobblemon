@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -38,7 +38,7 @@ class SearchWidget(
 ): EditBox(Minecraft.getInstance().font, posX.toInt(), posY.toInt(), width, height, text), CobblemonRenderable {
 
     companion object {
-        private val backgroundOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_search_overlay.png")
+        private val searchBarOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_bar_search.png")
         private val searchIcon = cobblemonResource("textures/gui/pokedex/search_icon.png")
     }
 
@@ -69,10 +69,10 @@ class SearchWidget(
         try {
             blitk(
                 matrixStack = matrices,
-                texture = backgroundOverlay,
+                texture = searchBarOverlay,
                 x = posX, y = posY,
                 width = HALF_OVERLAY_WIDTH,
-                height = HALF_OVERLAY_HEIGHT
+                height = HEADER_BAR_HEIGHT
             )
 
             blitk(

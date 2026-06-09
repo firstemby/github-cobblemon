@@ -17,6 +17,6 @@ import net.minecraft.client.Minecraft
 object StarterUIPacketHandler : ClientNetworkPacketHandler<OpenStarterUIPacket> {
     override fun handle(packet: OpenStarterUIPacket, client: Minecraft) {
         CobblemonClient.checkedStarterScreen = true
-        client.setScreen(StarterSelectionScreen(categories = packet.categories))
+        client.setScreen(StarterSelectionScreen(categories = packet.categories.sortedBy { it.order }))
     }
 }

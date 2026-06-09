@@ -6,8 +6,8 @@
     },
     {
       "type": "entity_particles",
-      "effect": "cobblemon:protect-block",
-      "locators": ["target"]
+      "effect": "cobblemon:protect_block",
+      "locators": ["root"]
     },
     {
       "type": "remove_holds",
@@ -15,7 +15,7 @@
     },
     {
       "type": "pause",
-      "pause": 1.5
+      "pause": 1
     }
   ]
 }

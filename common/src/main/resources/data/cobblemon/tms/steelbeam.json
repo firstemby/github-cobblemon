@@ -9,14 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:steel_gem",
-      "count": 10
+      "count": 14
     },
     {
       "item": "cobblemon:metal_coat",
       "count": 1
     },
     {
-      "item": "cobblemon:pep_up_flower",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

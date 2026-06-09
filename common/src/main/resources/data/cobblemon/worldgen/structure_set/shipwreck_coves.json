@@ -2,8 +2,8 @@
     "placement": {
         "type": "minecraft:random_spread",
         "salt": 94251327,
-        "separation": 75,
-        "spacing": 150,
+        "separation": 50,
+        "spacing": 100,
         "spread_type": "triangular"
     },
     "structures": [
@@ -13,6 +13,10 @@
         },
         {
             "structure": "cobblemon:shipwreck_coves/lush_shipwreck_cove",
+            "weight": 1
+        },
+        {
+            "structure": "cobblemon:shipwreck_coves/magma_shipwreck_cove",
             "weight": 1
         }
     ]

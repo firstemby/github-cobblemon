@@ -9,11 +9,15 @@
   "recipe": [
     {
       "item": "cobblemon:grass_gem",
-      "count": 10
+      "count": 12
     },
     {
-      "item": "minecraft:vine",
-      "count": 5
+      "item": "cobblemon:leaf_stone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
     }
   ]
 }

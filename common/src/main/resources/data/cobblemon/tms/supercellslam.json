@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:electric_gem",
-      "count": 10
+      "count": 7
     },
     {
-      "item": "cobblemon:black_belt",
+      "item": "cobblemon:rock_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:magnet",
       "count": 1
     }
   ]
