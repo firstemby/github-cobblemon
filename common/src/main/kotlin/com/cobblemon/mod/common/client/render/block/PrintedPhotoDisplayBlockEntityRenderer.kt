@@ -54,7 +54,7 @@ class PrintedPhotoDisplayBlockEntityRenderer(
         val ctx = CobblemonClient.pokedexUsageContext
         if (ctx.scanningGuiOpen && ctx.scannerMode == PokedexUsageContext.ScannerMode.SCANNING) {
             val scanKey = PrintedPhotoBlockScanProvider.getScanKey(be)
-            val scanned = CobblemonClient.clientScannedBlocksData.hasScanned(scanKey)
+            val scanned = CobblemonClient.clientScannedData.has(PrintedPhotoBlockScanProvider.bucket(be), scanKey)
             ScanIndicatorRenderer.render(matrices, bufferSource, be, scanned)
         }
     }

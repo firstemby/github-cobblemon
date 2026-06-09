@@ -97,10 +97,11 @@ class PokedexScannerRenderer {
         fun infoFrameResource(isLeft: Boolean, tier: Int): ResourceLocation = cobblemonResource("textures/gui/pokedex/scan/scan_info_frame_${if (isLeft) "left" else "right"}_$tier.png")
     }
 
-    private var lastFocusedBlockTypeId: ResourceLocation? = null
-    // Whether the focused block's info frames should be visible: shown only once the block has been
-    // fully scanned this session or was scanned previously. Retained through the close animation.
-    private var lastFocusedBlockRevealed: Boolean = false
+    // The last resolved block/node scan, retained through the close animation so frames keep showing.
+    private var lastScanSnapshot: com.cobblemon.mod.common.pokedex.scanner.ResolvedScan? = null
+    // Whether the focused scan's frames should be visible: shown only once it has been fully scanned
+    // this session or was scanned previously. Retained through the close animation.
+    private var lastScanRevealed: Boolean = false
 
     fun renderInfoFrames(graphics: GuiGraphics, poseStack: PoseStack, usageContext: PokedexUsageContext, centerX: Int, centerY: Int, opacity: Float) {
         if (usageContext.focusIntervals > 0) {
@@ -111,36 +112,23 @@ class PokedexScannerRenderer {
                     if (isPokemonFocus && infoDisplayedCounter > 2 && !usageContext.isPokemonInFocusOwned) return@forEachIndexed
                     infoDisplayedCounter++
 
-                    val blockEntityInFocus: BlockEntity? = usageContext.blockEntityInFocus
                     val pokedexEntityData = usageContext.scannableEntityInFocus?.resolvePokemonScan()
+                    val activeScan = if (pokedexEntityData == null) usageContext.resolveActiveScan() else null
 
-                    // store the block entity typeId so our close animation knows what to show
+                    // Snapshot the focused scan so the close animation knows what frames to show
                     if (pokedexEntityData != null) {
-                        lastFocusedBlockTypeId = null
-                    } else if (blockEntityInFocus != null) {
-                        val focusedTypeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type)
-                        lastFocusedBlockTypeId = focusedTypeId
-                        // Reveal the frames only once the block has been fully scanned or scanned before
-                        val provider = focusedTypeId?.let { BlockScanProviderRegistry.get(it) }
-                        val scannedBefore = provider?.getScanKey(blockEntityInFocus)
-                            ?.let { CobblemonClient.clientScannedBlocksData.hasScanned(it) } ?: false
-                        lastFocusedBlockRevealed = usageContext.blockEntityScanCompleted || scannedBefore
-                    } else if (usageContext.focusIntervals <= 0f) {
-                        lastFocusedBlockTypeId = null
+                        lastScanSnapshot = null
+                    } else if (activeScan != null) {
+                        lastScanSnapshot = activeScan
+                        lastScanRevealed = usageContext.blockEntityScanCompleted ||
+                            CobblemonClient.clientScannedData.has(activeScan.bucket, activeScan.scanKey)
                     }
+                    val effectiveScan = activeScan ?: lastScanSnapshot
 
-                    val effectiveTypeId = blockEntityInFocus
-                        ?.let { BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(it.type) }
-                        ?: lastFocusedBlockTypeId
-
-                    // if a block entity is being focused on make sure we only show the frames needed
-                    if (pokedexEntityData == null && effectiveTypeId != null) {
-                        val provider = BlockScanProviderRegistry.get(effectiveTypeId)
-                        if (provider != null) {
-                            // Hide the panels entirely until the block is scanned (or was scanned before)
-                            if (!lastFocusedBlockRevealed) return@forEachIndexed
-                            if (!provider.frames.any { it.slot == infoDisplayedCounter }) return@forEachIndexed
-                        }
+                    // Only show the frames this scannable defines, and only once it has been revealed
+                    if (pokedexEntityData == null && effectiveScan != null) {
+                        if (!lastScanRevealed) return@forEachIndexed
+                        if (!effectiveScan.frames.any { it.slot == infoDisplayedCounter }) return@forEachIndexed
                     }
 
 
@@ -165,7 +153,7 @@ class PokedexScannerRenderer {
                     val yOffsetText = when(index) { 0 -> 5; 1 -> 4; 2 -> 8; 3 -> 42; else -> 0 }
 
                     // Text
-                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || blockEntityInFocus != null)) {
+                    if (usageContext.focusIntervals == PokedexUsageContext.FOCUS_INTERVALS && (pokedexEntityData != null || activeScan != null)) {
                         if (pokedexEntityData != null) {
                             if (infoDisplayedCounter == 1) {
                                 drawScaledText(
@@ -300,12 +288,9 @@ class PokedexScannerRenderer {
                                     )
                                 }
                             }
-                        } else if (blockEntityInFocus != null) {
-                            val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityInFocus.type) ?: return@forEachIndexed
-                            val provider = BlockScanProviderRegistry.get(typeId) ?: return@forEachIndexed
-                            val values = provider.getValues(blockEntityInFocus)
-                            val frame = provider.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
-                            val textComponent = resolveScanText(frame.text, values).bold()
+                        } else if (activeScan != null) {
+                            val frame = activeScan.frames.firstOrNull { it.slot == infoDisplayedCounter } ?: return@forEachIndexed
+                            val textComponent = resolveScanText(frame.text, activeScan.values).bold()
 
                             val scale = frame.scale
                             if (scale != null) {

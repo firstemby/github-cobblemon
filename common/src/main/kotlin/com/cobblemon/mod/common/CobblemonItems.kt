@@ -75,6 +75,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val NPC_EDITOR = create("npc_editor", CobblemonItem(Item.Properties().stacksTo(1)))
 
     @JvmField
+    val SCAN_NODE_STICK = create("scan_node_stick", ScanNodeStickItem(Item.Properties().stacksTo(1)))
+
+    @JvmField
     val pokeBalls = mutableListOf<PokeBallItem>()
     @JvmField
     val POKE_BALL = pokeBallItem(PokeBalls.POKE_BALL)

@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
-import com.cobblemon.mod.common.api.storage.player.client.ClientScannedBlocksManager
+import com.cobblemon.mod.common.api.storage.player.client.ClientScannedDataManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
@@ -61,6 +61,7 @@ import com.cobblemon.mod.common.client.render.color.PokeSnackItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PonigiriItemColorProvider
 import com.cobblemon.mod.common.client.render.color.SinisterTeaItemColorProvider
 import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
+import com.cobblemon.mod.common.client.render.entity.ScanNodeRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
@@ -120,7 +121,7 @@ object CobblemonClient {
     var clientPlayerData = ClientGeneralPlayerData()
     var clientPokedexData = ClientPokedexManager(mutableMapOf())
     var clientTMMoveData = ClientTMMoveManager(mutableSetOf())
-    var clientScannedBlocksData = ClientScannedBlocksManager(mutableSetOf())
+    var clientScannedData = ClientScannedDataManager(mutableMapOf())
 
     /** If true then we won't bother them anymore about choosing a starter even if it's a thing they can do. */
     var checkedStarterScreen = false
@@ -140,7 +141,7 @@ object CobblemonClient {
         teamData = ClientPlayerTeamData()
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         clientTMMoveData = ClientTMMoveManager(mutableSetOf())
-        clientScannedBlocksData = ClientScannedBlocksManager(mutableSetOf())
+        clientScannedData = ClientScannedDataManager(mutableMapOf())
         storage.onLogin()
         pokedexPhotoStore.clear()
         printedPhotoAssetStore.clear()
@@ -496,6 +497,8 @@ object CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.POKE_BOBBER) { ctx -> PokeBobberEntityRenderer(ctx) }
         LOGGER.info("Registering NPC renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.NPC, ::NPCRenderer)
+        LOGGER.info("Registering Scan Node renderer")
+        this.implementation.registerEntityRenderer(CobblemonEntities.SCAN_NODE, ::ScanNodeRenderer)
     }
 
     private fun registerItemColors() {

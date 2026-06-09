@@ -13,7 +13,10 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.DisplayCaseBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
+import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
+import com.cobblemon.mod.common.pokedex.scanner.block.DisplayCaseScanProvider
 import com.cobblemon.mod.common.item.PokedexItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
@@ -90,6 +93,19 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
 
         matrices.popPose()
 
+        // Scan indicator: only when scanning, the held item is allow-listed, and not yet scanned.
+        val ctx = CobblemonClient.pokedexUsageContext
+        if (ctx.scanningGuiOpen && ctx.scannerMode == PokedexUsageContext.ScannerMode.SCANNING &&
+            DisplayCaseScanProvider.isScannable(entity)
+        ) {
+            val alreadyScanned = CobblemonClient.clientScannedData.has(
+                DisplayCaseScanProvider.bucket(entity),
+                DisplayCaseScanProvider.getScanKey(entity)
+            )
+            if (!alreadyScanned) {
+                ScanIndicatorRenderer.render(matrices, vertexConsumers, entity, scanned = false)
+            }
+        }
     }
     /*
     private fun renderPokemon(

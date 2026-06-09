@@ -65,8 +65,8 @@ import com.cobblemon.mod.common.api.storage.player.adapter.DexDataMongoBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.DexDataNbtBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataJsonBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBackend
-import com.cobblemon.mod.common.api.storage.player.adapter.ScannedBlocksMongoBackend
-import com.cobblemon.mod.common.api.storage.player.adapter.ScannedBlocksNbtBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.ScannedDataMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.ScannedDataNbtBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveMongoBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveNbtBackend
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
@@ -98,7 +98,9 @@ import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRepository
 import com.cobblemon.mod.common.pokedex.photo.PrintedPhotoAssetRepository
+import com.cobblemon.mod.common.pokedex.scanner.ItemScanRecorder
 import com.cobblemon.mod.common.pokedex.scanner.block.BerryBlockScanProvider
+import com.cobblemon.mod.common.pokedex.scanner.block.DisplayCaseScanProvider
 import com.cobblemon.mod.common.pokedex.scanner.block.PrintedPhotoBlockScanProvider
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
@@ -250,6 +252,7 @@ object Cobblemon {
         ShoulderEffectRegistry.register()
         BlockScanProviderRegistry.register(cobblemonResource("berry"), BerryBlockScanProvider)
         BlockScanProviderRegistry.register(cobblemonResource("printed_photo_display"), PrintedPhotoBlockScanProvider)
+        BlockScanProviderRegistry.register(cobblemonResource("display_case"), DisplayCaseScanProvider)
 
         DATA_SYNCHRONIZED.subscribe {
             storage.onPlayerDataSync(it)
@@ -421,13 +424,13 @@ object Cobblemon {
                     val tmMoveFactory = CachedPlayerDataStoreFactory(TMMoveNbtBackend())
                     tmMoveFactory.setup(server)
 
-                    val scannedBlocksFactory = CachedPlayerDataStoreFactory(ScannedBlocksNbtBackend())
-                    scannedBlocksFactory.setup(server)
+                    val scannedDataFactory = CachedPlayerDataStoreFactory(ScannedDataNbtBackend())
+                    scannedDataFactory.setup(server)
 
                     playerDataManager.setFactory(generalJsonFactory, PlayerInstancedDataStoreTypes.GENERAL)
                     playerDataManager.setFactory(pokedexNbtFactory, PlayerInstancedDataStoreTypes.POKEDEX)
                     playerDataManager.setFactory(tmMoveFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
-                    playerDataManager.setFactory(scannedBlocksFactory, PlayerInstancedDataStoreTypes.SCANNED_BLOCKS)
+                    playerDataManager.setFactory(scannedDataFactory, PlayerInstancedDataStoreTypes.SCANNED_DATA)
 
                     if (config.storageFormat == "nbt") {
                         NBTStoreAdapter(pokemonStoreRoot.absolutePath, useNestedFolders = true, folderPerClass = true)
@@ -459,15 +462,15 @@ object Cobblemon {
                         )
                         tmMovesMongoFactory.setup(server)
 
-                        val scannedBlocksMongoFactory = CachedPlayerDataStoreFactory(
-                                ScannedBlocksMongoBackend(mongoClient, config.mongoDBDatabaseName, "ScannedBlocksCollection")
+                        val scannedDataMongoFactory = CachedPlayerDataStoreFactory(
+                                ScannedDataMongoBackend(mongoClient, config.mongoDBDatabaseName, "ScannedDataCollection")
                         )
-                        scannedBlocksMongoFactory.setup(server)
+                        scannedDataMongoFactory.setup(server)
 
                         playerDataManager.setFactory(generalMongoFactory, PlayerInstancedDataStoreTypes.GENERAL)
                         playerDataManager.setFactory(pokedexMongoFactory, PlayerInstancedDataStoreTypes.POKEDEX)
                         playerDataManager.setFactory(tmMovesMongoFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
-                        playerDataManager.setFactory(scannedBlocksMongoFactory, PlayerInstancedDataStoreTypes.SCANNED_BLOCKS)
+                        playerDataManager.setFactory(scannedDataMongoFactory, PlayerInstancedDataStoreTypes.SCANNED_DATA)
                         MongoDBStoreAdapter(mongoClient, config.mongoDBDatabaseName)
                     } catch (e: ClassNotFoundException) {
                         LOGGER.error("MongoDB driver not found.")
@@ -504,6 +507,7 @@ object Cobblemon {
             battleRegistry.onServerStarted()
         }
         PlatformEvents.SERVER_TICK_POST.subscribe { ServerTickHandler.onTick(it.server) }
+        PlatformEvents.SERVER_PLAYER_TICK_POST.subscribe { ItemScanRecorder.onPlayerTick(it.player) }
 
         BagItems.observable.subscribe {
             LOGGER.info("Starting dummy Showdown battle to force it to pre-load data.")

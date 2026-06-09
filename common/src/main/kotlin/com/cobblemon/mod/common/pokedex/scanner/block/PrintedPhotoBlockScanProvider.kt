@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.pokedex.scanner.block
 
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
+import com.cobblemon.mod.common.api.pokedex.scan.ScannedDataCategory
 import com.cobblemon.mod.common.block.entity.PrintedPhotoDisplayBlockEntity
 import com.cobblemon.mod.common.net.messages.server.pokedex.scanner.FinishPrintedPhotoScanningPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
 
 object PrintedPhotoBlockScanProvider : BlockScanProvider {
+    override val category = ScannedDataCategory.BLOCKS
     override val frames = listOf(
         BlockScanDefinition.Frame(
             slot = 1,

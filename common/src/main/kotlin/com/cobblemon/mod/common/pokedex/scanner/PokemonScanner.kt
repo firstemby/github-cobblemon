@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokedex.scanner
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanProviderRegistry
+import com.cobblemon.mod.common.entity.scan.ScanNodeEntity
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext.Companion.BLOCK_LENGTH_PER_ZOOM_STAGE
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
@@ -120,9 +121,32 @@ object PokemonScanner {
         val blockPos = (hit as? BlockHitResult)?.blockPos ?: return null
         val blockEntity = castingEntity.level().getBlockEntity(blockPos) ?: return null
         val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.type) ?: return null
-        if (BlockScanProviderRegistry.get(typeId) == null) return null
+        val provider = BlockScanProviderRegistry.get(typeId) ?: return null
+        if (!provider.isScannable(blockEntity)) return null
 
         return blockPos to blockEntity
+    }
+
+    /** Raycasts for the nearest ScanNode entity the player is aiming at, within scan range. */
+    fun findScannableNode(castingEntity: Entity, zoomLevel: Int): ScanNodeEntity? {
+        val eyePos = castingEntity.getEyePosition(1.0F)
+        val lookVec = castingEntity.getViewVector(1.0F)
+        val maxDistance = (Cobblemon.config.maxPokedexScanningDetectionRange + (zoomLevel * BLOCK_LENGTH_PER_ZOOM_STAGE)).toDouble()
+        val reach = eyePos.add(lookVec.scale(maxDistance))
+        val searchBox = castingEntity.boundingBox.expandTowards(lookVec.scale(maxDistance)).inflate(1.0)
+
+        var closest: ScanNodeEntity? = null
+        var closestDistance = maxDistance
+        for (node in castingEntity.level().getEntitiesOfClass(ScanNodeEntity::class.java, searchBox)) {
+            if (node.scanId.isBlank()) continue
+            val hit = node.boundingBox.inflate(0.15).clip(eyePos, reach).orElse(null) ?: continue
+            val distance = eyePos.distanceTo(hit)
+            if (distance < closestDistance) {
+                closest = node
+                closestDistance = distance
+            }
+        }
+        return closest
     }
 
     fun isEntityInRange(castingEntity: Entity, targetEntity: Entity, zoomLevel: Int): Boolean {

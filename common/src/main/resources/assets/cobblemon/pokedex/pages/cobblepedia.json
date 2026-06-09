@@ -1,0 +1,6 @@
+{
+  "pageType": "cobblemon:cobblepedia",
+  "titleKey": "ui.pokedex.page.cobblepedia",
+  "order": 3,
+  "enabled": true
+}

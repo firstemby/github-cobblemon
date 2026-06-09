@@ -8,6 +8,6 @@ import net.minecraft.server.level.ServerPlayer
 
 object RecordBlockScanPacketHandler : ServerNetworkPacketHandler<RecordBlockScanPacket> {
     override fun handle(packet: RecordBlockScanPacket, server: MinecraftServer, player: ServerPlayer) {
-        Cobblemon.playerDataManager.getScannedBlocksData(player).record(packet.scanKey)
+        Cobblemon.playerDataManager.getScannedData(player).record(packet.bucket, packet.scanKey)
     }
 }

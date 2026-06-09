@@ -88,7 +88,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         val ctx = CobblemonClient.pokedexUsageContext
         if (ctx.scanningGuiOpen && ctx.scannerMode == PokedexUsageContext.ScannerMode.SCANNING) {
             val scanKey = BerryBlockScanProvider.getScanKey(entity)
-            val scanned = CobblemonClient.clientScannedBlocksData.hasScanned(scanKey)
+            val scanned = CobblemonClient.clientScannedData.has(BerryBlockScanProvider.bucket(entity), scanKey)
             ScanIndicatorRenderer.render(matrices, vertexConsumers, entity, scanned)
         }
     }

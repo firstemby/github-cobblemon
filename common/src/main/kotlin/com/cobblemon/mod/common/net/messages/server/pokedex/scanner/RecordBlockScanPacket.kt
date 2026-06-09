@@ -5,16 +5,21 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class RecordBlockScanPacket(val scanKey: ResourceLocation) : NetworkPacket<RecordBlockScanPacket> {
+/** Records a scanned entry into the player's [com.cobblemon.mod.common.api.pokedex.scan.ScannedDataManager] under [bucket]. */
+class RecordBlockScanPacket(val bucket: String, val scanKey: ResourceLocation) : NetworkPacket<RecordBlockScanPacket> {
     override val id = ID
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUtf(bucket)
         buffer.writeResourceLocation(scanKey)
     }
 
     companion object {
         val ID = cobblemonResource("record_block_scan")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = RecordBlockScanPacket(buffer.readResourceLocation())
+        fun decode(buffer: RegistryFriendlyByteBuf): RecordBlockScanPacket {
+            val bucket = buffer.readUtf()
+            return RecordBlockScanPacket(bucket, buffer.readResourceLocation())
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.pokedex.scanner.block
 
 import com.cobblemon.mod.common.api.pokedex.scan.BlockScanDefinition
+import com.cobblemon.mod.common.api.pokedex.scan.ScannedDataCategory
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.block.BerryBlock
@@ -10,6 +11,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 
 object BerryBlockScanProvider : BlockScanProvider {
+    override val category = ScannedDataCategory.BERRIES
     override val frames = listOf(
         BlockScanDefinition.Frame(
             slot = 1,

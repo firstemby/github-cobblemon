@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.scan.ScanNodeEntity
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
@@ -85,6 +86,17 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
         GENERIC_BEDROCK_ENTITY_KEY.path,
         EntityType.Builder.of({ _, world -> GenericBedrockEntity(world) }, MobCategory.MISC)
             .build(GENERIC_BEDROCK_ENTITY_KEY.toString())
+    )
+
+    @JvmField
+    val SCAN_NODE_KEY = cobblemonResource("scan_node")
+    @JvmField
+    val SCAN_NODE: EntityType<ScanNodeEntity> = this.create(
+        SCAN_NODE_KEY.path,
+        EntityType.Builder.of({ _, world -> ScanNodeEntity(world) }, MobCategory.MISC)
+            .sized(0.3F, 0.3F)
+            .clientTrackingRange(8)
+            .build(SCAN_NODE_KEY.toString())
     )
 
     @JvmField

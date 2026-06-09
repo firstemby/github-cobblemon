@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientInstancedPlayerData
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
-import com.cobblemon.mod.common.api.pokedex.scan.ScannedBlocksManager
+import com.cobblemon.mod.common.api.pokedex.scan.ScannedDataManager
 import com.cobblemon.mod.common.api.tms.TMMoveManager
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import java.util.UUID
@@ -78,8 +78,8 @@ open class PlayerInstancedDataStoreManager {
                 .tracker(ServerTaskTracker)
                 .build()
 
-        saveTasks[PlayerInstancedDataStoreTypes.SCANNED_BLOCKS] = ScheduledTask.Builder()
-                .execute { saveAllOfOneType(PlayerInstancedDataStoreTypes.SCANNED_BLOCKS) }
+        saveTasks[PlayerInstancedDataStoreTypes.SCANNED_DATA] = ScheduledTask.Builder()
+                .execute { saveAllOfOneType(PlayerInstancedDataStoreTypes.SCANNED_DATA) }
                 .delay(30F)
                 .interval(120F)
                 .infiniteIterations()
@@ -158,11 +158,11 @@ open class PlayerInstancedDataStoreManager {
         return data as TMMoveManager
     }
 
-    fun getScannedBlocksData(player: ServerPlayer): ScannedBlocksManager {
-        return getScannedBlocksData(player.uuid)
+    fun getScannedData(player: ServerPlayer): ScannedDataManager {
+        return getScannedData(player.uuid)
     }
 
-    fun getScannedBlocksData(playerId: UUID): ScannedBlocksManager {
-        return get(playerId, PlayerInstancedDataStoreTypes.SCANNED_BLOCKS) as ScannedBlocksManager
+    fun getScannedData(playerId: UUID): ScannedDataManager {
+        return get(playerId, PlayerInstancedDataStoreTypes.SCANNED_DATA) as ScannedDataManager
     }
 }

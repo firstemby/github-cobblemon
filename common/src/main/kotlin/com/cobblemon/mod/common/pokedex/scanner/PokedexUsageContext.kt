@@ -135,6 +135,7 @@ class PokedexUsageContext {
     var scannedSpecies: ResourceLocation? = null
     var scannableEntityInFocus: ScannableEntity? = null
     var blockEntityInFocus: BlockEntity? = null
+    var scanNodeInFocus: com.cobblemon.mod.common.entity.scan.ScanNodeEntity? = null
     var blockPosInFocus: BlockPos? = null
     var viewInfoTicks: Int = 0
     var scanningProgress: Float = 0F
@@ -162,7 +163,25 @@ class PokedexUsageContext {
     var showDebugPhotoScore = false
     var showDebugPhotoRaycast = false
 
-    private fun hasAnyFocus(): Boolean = scannableEntityInFocus != null || blockEntityInFocus != null
+    private fun hasAnyFocus(): Boolean = scannableEntityInFocus != null || blockEntityInFocus != null || scanNodeInFocus != null
+
+    /** Resolves the currently-focused block-entity or scan-node into a uniform scan holder, else null. */
+    fun resolveActiveScan(): ResolvedScan? {
+        val node = scanNodeInFocus
+        if (node != null) {
+            return ResolvedScan(node.resolvedFrames(), emptyMap(), node.category.bucket(), node.scanKey())
+        }
+        val be = blockEntityInFocus ?: return null
+        val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type) ?: return null
+        val provider = BlockScanProviderRegistry.get(typeId) ?: return null
+        return ResolvedScan(provider.frames, provider.getValues(be), provider.bucket(be), provider.getScanKey(be))
+    }
+
+    /** True if the focused block/node target has already been scanned/discovered by this player. */
+    private fun focusedScanAlreadyScanned(): Boolean {
+        val resolved = resolveActiveScan() ?: return false
+        return CobblemonClient.clientScannedData.has(resolved.bucket, resolved.scanKey)
+    }
 
     private data class PhotoCaptureMetadata(
         val detectedSpecies: List<String>,
@@ -298,21 +317,19 @@ class PokedexUsageContext {
             if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) scanningProgress += updateInterval
             if (scanningProgress >= MAX_SCAN_PROGRESS) targetId?.let { FinishScanningPacket(it, zoomLevel.toInt()).sendToServer() }
             if (focusIntervals > 0) focusIntervals = max(0F, focusIntervals - updateInterval)
-        } else if (blockEntityInFocus != null) {
+        } else if ((blockEntityInFocus != null || scanNodeInFocus != null) && !focusedScanAlreadyScanned()) {
             if (scanningProgress < (MAX_SCAN_PROGRESS + CENTER_INFO_DISPLAY_INTERVALS)) {
                 scanningProgress += updateInterval
             }
             if (!blockEntityScanCompleted && scanningProgress >= MAX_SCAN_PROGRESS) {
                 blockEntityScanCompleted = true
+                resolveActiveScan()?.let { RecordBlockScanPacket(it.bucket, it.scanKey).sendToServer() }
+                // Block entities may have extra completion behaviour (e.g. printed photo upload)
                 val be = blockEntityInFocus
                 val pos = blockPosInFocus
                 if (be != null && pos != null) {
                     val typeId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.type)
-                    if (typeId != null) {
-                        val provider = BlockScanProviderRegistry.get(typeId)
-                        provider?.onScanComplete(pos, zoomLevel.toInt())
-                        provider?.getScanKey(be)?.let { RecordBlockScanPacket(it).sendToServer() }
-                    }
+                    if (typeId != null) BlockScanProviderRegistry.get(typeId)?.onScanComplete(pos, zoomLevel.toInt())
                 }
                 // Audio cue that the scan has finished, mirroring how Pokémon scans signal completion
                 playSound(CobblemonSounds.POKEDEX_SCAN_REGISTER_POKEMON)
@@ -339,7 +356,7 @@ class PokedexUsageContext {
     fun useTick(user: LocalPlayer, ticksInUse: Int, inUse: Boolean) {
         tryOpenScanGui(ticksInUse, inUse)
         if (scanningGuiOpen && scannerMode == ScannerMode.SCANNING) tryScanPokemon(user)
-        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || (blockEntityInFocus != null && !blockEntityScanCompleted))) {
+        if (scannerMode == ScannerMode.SCANNING && ((scannedSpecies !== null && scannableEntityInFocus !== null) || ((blockEntityInFocus != null || scanNodeInFocus != null) && !blockEntityScanCompleted && !focusedScanAlreadyScanned()))) {
             playSound(CobblemonSounds.POKEDEX_SCAN_LOOP)
         }
     }
@@ -442,6 +459,7 @@ class PokedexUsageContext {
         val targetScannableEntity = PokemonScanner.findScannableEntity(user, zoomLevel.toInt())
         if (targetScannableEntity != null) {
             blockEntityInFocus = null
+            scanNodeInFocus = null
             blockPosInFocus = null
             blockEntityScanCompleted = false
             if (targetScannableEntity != scannableEntityInFocus) {
@@ -470,6 +488,26 @@ class PokedexUsageContext {
                 newPokemonInfo = CobblemonClient.clientPokedexData.getNewInformation(resolvedPokemon)
                 if (newPokemonInfo == PokedexLearnedInformation.NONE) playSound(CobblemonSounds.POKEDEX_SCAN_DETAIL)
                 else scannedSpecies = resolvedPokemon.getApparentSpecies().resourceIdentifier
+            }
+            return
+        }
+
+        // ScanNode entity scan
+        val node = PokemonScanner.findScannableNode(user, zoomLevel.toInt())
+        if (node != null) {
+            if (node != scanNodeInFocus) {
+                resetFocusedPokemonState()
+                scanNodeInFocus = node
+                blockPosInFocus = node.blockPosition()
+                blockEntityScanCompleted = false
+                if (focusIntervals == 0F) {
+                    availableInfoFrames = mutableListOf(null, null, null, null)
+                    for (i in 0..3) {
+                        var randomIndex = Random.nextInt(availableInfoFrames.size)
+                        if (availableInfoFrames[randomIndex] != null) randomIndex = availableInfoFrames.indexOfFirst { it == null }
+                        availableInfoFrames[randomIndex] = Random.nextBoolean()
+                    }
+                }
             }
             return
         }
@@ -514,6 +552,7 @@ class PokedexUsageContext {
     fun resetFocusedPokemonState() {
         scannableEntityInFocus = null
         blockEntityInFocus = null
+        scanNodeInFocus = null
         blockPosInFocus = null
         blockEntityScanCompleted = false
         scannedSpecies = null
