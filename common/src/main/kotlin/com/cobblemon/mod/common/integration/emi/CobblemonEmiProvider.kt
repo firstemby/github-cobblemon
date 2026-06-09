@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.integration.emi
 
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipeHandler
 import dev.emi.emi.api.EmiRegistry
 import dev.emi.emi.api.stack.EmiStack
 import net.minecraft.world.inventory.AbstractContainerMenu

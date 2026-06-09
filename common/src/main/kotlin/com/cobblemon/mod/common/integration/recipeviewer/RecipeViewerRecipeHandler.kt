@@ -12,10 +12,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
 
-interface RecipeViewerRecipeHandler<E: AbstractContainerMenu> {
+interface RecipeViewerRecipeHandler<T: RecipeViewerRecipe, E: AbstractContainerMenu> {
     fun getInputSlots(menu: E): List<Slot> //Returns crafting slots
     fun getInventorySlots(menu: E): List<Slot>
 
     fun getMenuClass(): Class<E>
     fun getMenuType(): MenuType<E>
+
+    fun isApplicable(recipe: T): Boolean = true
+    fun additionalHandle(recipe: T) {}
 }

@@ -1,6 +1,7 @@
 package com.cobblemon.mod.common.integration.recipeviewer.tm
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.tms.TechnicalMachine
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -18,10 +19,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 
 class TMViewerRecipe(val originalTM: TechnicalMachine): RecipeViewerRecipe {
-    override fun getId(): ResourceLocation = originalTM.id
+    override fun getId(): ResourceLocation = cobblemonResource("/tm_recipe_" + originalTM.id.path)
 
     override fun getInputs(): List<RecipeIngredient> {
-        return originalTM.recipe?.map { RecipeIngredient(it.ingredient, it.count) } ?: listOf()
+        val items = mutableListOf(RecipeIngredient(Ingredient.of(CobblemonItems.BLANK_TM)))
+        items.addAll(originalTM.recipe?.map { RecipeIngredient(it.ingredient, it.count) } ?: listOf())
+        return items
     }
 
     override fun getOutputs(): List<ItemStack> {
@@ -47,15 +50,17 @@ class TMViewerRecipe(val originalTM: TechnicalMachine): RecipeViewerRecipe {
     override fun renderRecipe(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         // TODO: Make and Render Background, also tooltip
 
-        val learnedTMs = CobblemonClient.clientTMMoveData.learnedTMs
-        val tmKnown = originalTM.isPassivelyObtained() || originalTM.id in learnedTMs
-
         drawScaledText(
             context = context,
-            text = if (tmKnown) lang("recipeviewer.tm_learned") else lang("recipeviewer.tm_not_learned"),
+            text = if (recipeKnown()) lang("recipeviewer.tm_learned") else lang("recipeviewer.tm_not_learned").red(),
             x = 2,
             y = 30,
             shadow = true
         )
+    }
+
+    fun recipeKnown(): Boolean {
+        val learnedTMs = CobblemonClient.clientTMMoveData.learnedTMs
+        return originalTM.isPassivelyObtained() || originalTM.id in learnedTMs
     }
 }

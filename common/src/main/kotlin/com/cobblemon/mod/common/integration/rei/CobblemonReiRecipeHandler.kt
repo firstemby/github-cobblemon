@@ -8,16 +8,20 @@
 
 package com.cobblemon.mod.common.integration.rei
 
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipe
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipeHandler
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandler
 import me.shedaniel.rei.api.client.registry.transfer.simple.SimpleTransferHandler
+import me.shedaniel.rei.api.common.entry.InputIngredient
 import me.shedaniel.rei.api.common.transfer.info.stack.SlotAccessor
 import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.item.ItemStack
 
-class CobblemonReiRecipeHandler<E: AbstractContainerMenu>(val provider: CobblemonReiProvider<*>, val originalHandler: RecipeViewerRecipeHandler<E>): SimpleTransferHandler {
+class CobblemonReiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>(val provider: CobblemonReiProvider<*>, val originalHandler: RecipeViewerRecipeHandler<R, E>): SimpleTransferHandler {
     override fun checkApplicable(context: TransferHandler.Context): TransferHandler.ApplicabilityResult {
-        val category = (context.display as? CobblemonReiDisplay<*>)?.categoryId
-        if (category == null || category != provider.categoryIdentifier || context.menu == null || !originalHandler.getMenuClass().isInstance(context.menu))
+        val display = context.display as? CobblemonReiDisplay<R>
+        if (display == null || display.categoryId != provider.categoryIdentifier || context.menu == null
+            || !originalHandler.getMenuClass().isInstance(context.menu) || !originalHandler.isApplicable(display.recipe))
             return TransferHandler.ApplicabilityResult.createNotApplicable()
         return TransferHandler.ApplicabilityResult.createApplicable()
     }
@@ -28,5 +32,13 @@ class CobblemonReiRecipeHandler<E: AbstractContainerMenu>(val provider: Cobblemo
 
     override fun getInventorySlots(context: TransferHandler.Context): Iterable<SlotAccessor> {
         return originalHandler.getInventorySlots(context.menu!! as E).map { SlotAccessor.fromSlot(it) }
+    }
+
+    override fun handle(context: TransferHandler.Context): TransferHandler.Result {
+        if (context.isActuallyCrafting) {
+            val display = context.display as? CobblemonReiDisplay<R>
+            display?.let { originalHandler.additionalHandle(display.recipe) }
+        }
+        return super.handle(context)
     }
 }

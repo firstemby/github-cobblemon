@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerRecipeHandl
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
 
-class CampfirePotViewerRecipeHandler: RecipeViewerRecipeHandler<CookingPotMenu> {
+class CampfirePotViewerRecipeHandler: RecipeViewerRecipeHandler<CampfirePotViewerRecipe, CookingPotMenu> {
     override fun getInputSlots(menu: CookingPotMenu): List<Slot> {
         return menu.slots.filter { it.index in CampfireBlockEntity.CRAFTING_GRID_SLOTS }
     }

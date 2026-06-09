@@ -25,7 +25,7 @@ class CobblemonReiDisplay<T: RecipeViewerRecipe>(val recipe: T, val categoryId: 
 
     override fun getInputEntries(): List<EntryIngredient> {
         val entries = recipe.getInputs().map { EntryIngredients.ofItems(it.ingredient.items.map { it.item }, it.count) }.toMutableList()
-        entries.addAll(recipe.getOptionalInputs().map { EntryIngredients.ofItems(it.ingredient.items.map { it.item }, it.count) })
+        entries.addAll(recipe.getOptionalInputs().map { EntryIngredients.ofItemStacks(it.ingredient.items.map { it.copyWithCount(it.count) }) })
         return entries
     }
 
@@ -34,7 +34,7 @@ class CobblemonReiDisplay<T: RecipeViewerRecipe>(val recipe: T, val categoryId: 
     }
 
     override fun getRequiredEntries(): List<EntryIngredient> {
-        return recipe.getInputs().map { EntryIngredients.ofItems(it.ingredient.items.map { it.item }, it.count) }
+        return recipe.getInputs().map { EntryIngredients.ofItemStacks(it.ingredient.items.map { it.copyWithCount(it.count) }) }
     }
 
     override fun getDisplayLocation(): Optional<ResourceLocation> = Optional.of(recipe.getId())

@@ -8,12 +8,15 @@
 
 package com.cobblemon.mod.common.integration.emi
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.emi.brewing.EmiCobblemonBrewingRecipe
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import dev.emi.emi.api.EmiEntrypoint
 import dev.emi.emi.api.EmiPlugin
 import dev.emi.emi.api.EmiRegistry
+import dev.emi.emi.api.stack.Comparison
+import dev.emi.emi.api.stack.EmiStack
 
 @EmiEntrypoint
 class CobblemonEmiPlugin: EmiPlugin {
@@ -32,5 +35,7 @@ class CobblemonEmiPlugin: EmiPlugin {
         CobblemonBrewingRecipeProvider.getRecipes().forEach { entry ->
             registry.addRecipe(EmiCobblemonBrewingRecipe(entry.value, entry.id))
         }
+
+        registry.setDefaultComparison(EmiStack.of(CobblemonItems.TECHNICAL_MACHINE), Comparison.compareComponents())
     }
 }

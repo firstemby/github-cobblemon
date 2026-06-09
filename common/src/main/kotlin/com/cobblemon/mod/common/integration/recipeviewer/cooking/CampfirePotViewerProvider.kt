@@ -54,7 +54,7 @@ class CampfirePotViewerProvider: RecipeViewerCategoryProvider<CampfirePotViewerR
     override fun getClickArea(): RecipeClickArea = RecipeClickArea(CookingPotScreen::class.java as Class<AbstractContainerScreen<AbstractContainerMenu>>, 96, 39 ,
         CookingPotScreen.COOK_PROGRESS_WIDTH, CookingPotScreen.COOK_PROGRESS_HEIGHT)
 
-    override fun recipeHandler(): List<RecipeViewerRecipeHandler<AbstractContainerMenu>> = listOf(CampfirePotViewerRecipeHandler() as RecipeViewerRecipeHandler<AbstractContainerMenu>)
+    override fun recipeHandler(): List<RecipeViewerRecipeHandler<CampfirePotViewerRecipe, AbstractContainerMenu>> = listOf(CampfirePotViewerRecipeHandler() as RecipeViewerRecipeHandler<CampfirePotViewerRecipe, AbstractContainerMenu>)
 
     companion object {
         private const val WIDTH = 146

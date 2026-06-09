@@ -47,7 +47,7 @@ class CobblemonReiCategory<T: RecipeViewerRecipe>(val provider: CobblemonReiProv
 
         display.recipe.getSlots().forEach { slot ->
             val reiSlot = Widgets.createSlot(Point(startX + slot.x, startY + slot.y))
-            reiSlot.entries(EntryIngredients.ofItems(slot.ingredient.ingredient.items.map { it.item }, slot.ingredient.count))
+            reiSlot.entries(EntryIngredients.ofItemStacks(slot.ingredient.ingredient.items.map { it.copyWithCount(slot.ingredient.count) }))
             reiSlot.disableBackground()
             when (slot.type) {
                 SlotType.INPUT -> reiSlot.markInput()

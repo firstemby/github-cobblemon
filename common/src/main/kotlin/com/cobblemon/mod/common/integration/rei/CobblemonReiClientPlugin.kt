@@ -8,14 +8,19 @@
 
 package com.cobblemon.mod.common.integration.rei
 
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
 import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import com.cobblemon.mod.common.integration.rei.brewing.ReiCobblemonBrewingDisplay
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry
+import me.shedaniel.rei.api.client.registry.entry.EntryRegistry
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry
 import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry
+import me.shedaniel.rei.api.common.entry.comparison.ItemComparatorRegistry
+import me.shedaniel.rei.api.common.util.EntryStacks
 
 open class CobblemonReiClientPlugin: REIClientPlugin {
     companion object {
@@ -51,5 +56,9 @@ open class CobblemonReiClientPlugin: REIClientPlugin {
         reiProviders.forEach {
             it.registerTransferHandlers(registry)
         }
+    }
+
+    override fun registerItemComparators(registry: ItemComparatorRegistry) {
+        registry.registerComponents(CobblemonItems.TECHNICAL_MACHINE)
     }
 }

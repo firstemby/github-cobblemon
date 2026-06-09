@@ -43,5 +43,5 @@ interface RecipeViewerCategoryProvider<T: RecipeViewerRecipe> {
 
     fun getClickArea(): RecipeClickArea? = null
 
-    fun recipeHandler(): List<RecipeViewerRecipeHandler<AbstractContainerMenu>> = listOf()
+    fun recipeHandler(): List<RecipeViewerRecipeHandler<T, AbstractContainerMenu>> = listOf()
 }
