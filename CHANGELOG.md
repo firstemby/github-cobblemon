@@ -300,6 +300,7 @@
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 - Resolved Z-Fighting on Pokédex Models
 - Restored Ninjask's ability to do barrel rolls
+- Fixed a crash caused by adding enchanted items to the Resurrection Machine
 
 ### Fixes
 - Fixed Croagunk's walkspeed
@@ -360,6 +361,7 @@
 - Separated all the functions of MoLangFunctions.kt into their own files.
 - Spawn buckets and their base weights are now provided by the spawner, with different base weights for world, fishing, snack, and habitat spawn buckets.
 - Removed "SpawnBucket" class in favour of just storing maps of bucket names to weights.
+- Fixed nicknames not being applied to Pokémon spawned from `spawn_pool_world` files
 
 ### Molang & Datapacks
 - Added `moveset_builders` datapack folder for different styles of movesets.
