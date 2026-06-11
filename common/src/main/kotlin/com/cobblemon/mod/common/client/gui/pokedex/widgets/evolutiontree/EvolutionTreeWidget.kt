@@ -52,10 +52,12 @@ class EvolutionTreeWidget(
 ) {
     companion object {
         private val slotResource = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
+        private val expandResource = cobblemonResource("textures/gui/pokedex/expand.png")
+        private val minimizeResource = cobblemonResource("textures/gui/pokedex/minimize.png")
 
         const val X_MARGIN = 180
         const val Y_MARGIN_MINIMIZED = 135
-        const val Y_MARGIN_EXPANDED = 52
+        const val Y_MARGIN_EXPANDED = 53
         const val EXPANDED_HEIGHT = 125
 
         const val HORIZONTAL_PADDING = 38
@@ -72,8 +74,8 @@ class EvolutionTreeWidget(
 
         const val LINE_COLOR = 0xff1d6b85.toInt()
 
-        const val EXPAND_BUTTON_X_MARGIN = 128f
-        const val EXPAND_BUTTON_Y_MARGIN = -11f
+        const val EXPAND_BUTTON_X_MARGIN = 127f
+        const val EXPAND_BUTTON_Y_MARGIN = -10.5f
         const val EXPAND_BUTTON_SIZE = 20
 
         private var previousRootPokedexEntry: PokedexEntry? = null
@@ -90,14 +92,15 @@ class EvolutionTreeWidget(
 
     private var hoveredTooltips: List<MutableComponent>? = null
 
-    private val expandButton = ScaledButton(
+    private val expandButton: ScaledButton = ScaledButton(
         0f,
         0f,
         EXPAND_BUTTON_SIZE,
         EXPAND_BUTTON_SIZE,
-        resource = slotResource,
+        resource = expandResource,
         clickAction = {
             parent.evolutionTreeExpanded = !parent.evolutionTreeExpanded
+            expandButton.resource = if (parent.evolutionTreeExpanded) minimizeResource else expandResource
             updatePositioning()
         }
     ).apply { addWidget(this) }
@@ -483,8 +486,8 @@ class EvolutionTreeWidget(
         val xCenter = width / 2f - halfSlot
         val yCenter = height / 2f - halfSlot
 
-        val screenX = (xCenter.toInt() + xDislocation.toInt() + panningX.toInt() + x).toInt()
-        val screenY = (yCenter.toInt() + yDislocation.toInt() + panningY.toInt() + y).toInt()
+        val screenX = (xCenter.toInt() + xDislocation.toInt() + panningX.toInt() + x)
+        val screenY = (yCenter.toInt() + yDislocation.toInt() + panningY.toInt() + y)
 
         return screenX to screenY
     }
@@ -517,12 +520,12 @@ class EvolutionTreeWidget(
         val xStep = HORIZONTAL_PADDING + SCROLL_SLOT_SIZE / 2.0
         val yStep = VERTICAL_PADDING + SCROLL_SLOT_SIZE / 2.0
 
-        val minPanningX = (treeHeight - 1) * -xStep.toDouble() / 2.0 - (width + SCROLL_SLOT_SIZE) / 2.0
-        val maxPanningX = (treeHeight - 1) * xStep.toDouble() / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
+        val minPanningX = (treeHeight - 1) * -xStep / 2.0 - (width + SCROLL_SLOT_SIZE) / 2.0
+        val maxPanningX = (treeHeight - 1) * xStep / 2.0 + (width + SCROLL_SLOT_SIZE) / 2.0
 
         val divideBy = if (treeWidth % 2 == 0) 4.0 else 2.0
-        val minPanningY = (treeWidth - 1) * -yStep.toDouble() / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
-        val maxPanningY = (treeWidth - 1) * yStep.toDouble() / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
+        val minPanningY = (treeWidth - 1) * -yStep / 2.0 - height / 2.0 + SCROLL_SLOT_SIZE / divideBy
+        val maxPanningY = (treeWidth - 1) * yStep / 2.0 + height / 2.0 - SCROLL_SLOT_SIZE / divideBy
 
         panningX = panningX.coerceIn(minPanningX, maxPanningX)
         panningY = panningY.coerceIn(minPanningY, maxPanningY)
@@ -535,8 +538,7 @@ class EvolutionTreeWidget(
     }
 
     fun enableScissors(guiGraphics: GuiGraphics) {
-        val yStartScissor = if (parent.evolutionTreeExpanded) 1 else 0
-        guiGraphics.enableScissor(x + 1, y + yStartScissor, x + width - 1, y + height)
+        guiGraphics.enableScissor(x + 1, y, x + width - 1, y + height)
     }
 
     private class EvolutionNode(
