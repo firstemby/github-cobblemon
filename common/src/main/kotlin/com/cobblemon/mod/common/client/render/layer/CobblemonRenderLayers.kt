@@ -88,9 +88,11 @@ object CobblemonRenderLayers {
 
     /**
      * Flat translucent (position + color) layer for the CobblePedia structure preview's approximate
-     * water/lava volumes. Back-face culling is ON so only outward-facing faces draw (no seeing through
-     * to the far/inner faces of the water body), and upload-sorting is OFF (the translucent sort
-     * reorders faces by view angle under the preview's flipped/scaled GUI pose).
+     * water/lava volumes. The preview renderer sorts these quads back-to-front on the CPU for the
+     * current camera rotation every frame, so this layer must not reorder or occlude on its own:
+     *  - upload-sorting OFF (the renderer's per-frame sort is the source of truth for blend order),
+     *  - COLOR_WRITE (no depth write) so water never occludes the block models inside it,
+     *  - NO_CULL since the quads aren't consistently outward-wound.
      */
     val STRUCTURE_PREVIEW_FLUID: RenderType = RenderType.create(
         "cobblemon_structure_preview_fluid",
@@ -102,6 +104,8 @@ object CobblemonRenderLayers {
         RenderType.CompositeState.builder()
             .setShaderState(POSITION_COLOR_SHADER)
             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+            .setCullState(NO_CULL)
+            .setWriteMaskState(COLOR_WRITE)
             .createCompositeState(false)
     )
 

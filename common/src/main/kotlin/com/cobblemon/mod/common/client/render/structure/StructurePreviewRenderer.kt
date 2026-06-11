@@ -8,24 +8,25 @@
 
 package com.cobblemon.mod.common.client.render.structure
 
+import com.cobblemon.mod.common.client.render.layer.CobblemonRenderLayers
 import com.mojang.blaze3d.platform.Lighting
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.BiomeColors
 import net.minecraft.client.renderer.ItemBlockRenderTypes
-import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.Registries
-import net.minecraft.tags.FluidTags
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.material.FluidState
+import net.minecraft.world.level.material.Fluids
 import org.joml.Matrix4f
+import org.joml.Quaternionf
+import org.joml.Vector3f
 import kotlin.math.max
 
 /**
@@ -71,64 +72,117 @@ object StructurePreviewRenderer {
         val bufferSource = context.bufferSource()
         val random = RandomSource.create()
 
+        val rootMatrix = Matrix4f(pose.last().pose())
+
+        // Pass 1: solid/cutout block models. These write depth and are flushed before the water, so the
+        // fluid drawn afterward blends over them where it's in front and is depth-rejected where behind.
         for (entry in preview.blocks) {
             val pos = entry.pos
             val state = entry.state
+            // Skip blocks fully enclosed by solid neighbors: invisible, so don't process them at all.
+            if (state.renderShape != RenderShape.MODEL || isFullyOccluded(fakeLevel, pos)) continue
             pose.pushPose()
             pose.translate(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
-
-            // Skip blocks fully enclosed by solid neighbors: invisible, so don't process them at all.
-            if (state.renderShape == RenderShape.MODEL && !isFullyOccluded(fakeLevel, pos)) {
-                // renderBatched applies the block's getOffset() to the pose and does NOT restore it, so
-                // isolate it in its own push/pop — otherwise a plant's random XZ offset leaks into the
-                // fluid matrix below and shifts the water into the neighboring block.
-                pose.pushPose()
-                random.setSeed(state.getSeed(pos))
-                val renderType = ItemBlockRenderTypes.getChunkRenderType(state)
-                blockRenderer.renderBatched(state, pos, fakeLevel, pose, bufferSource.getBuffer(renderType), true, random)
-                pose.popPose()
-            }
-
-            val fluid = state.fluidState
-            if (!fluid.isEmpty) {
-                renderFluid(pose.last().pose(), bufferSource, fakeLevel, pos, fluid)
-            }
-
+            random.setSeed(state.getSeed(pos))
+            val renderType = ItemBlockRenderTypes.getChunkRenderType(state)
+            blockRenderer.renderBatched(state, pos, fakeLevel, pose, bufferSource.getBuffer(renderType), true, random)
             pose.popPose()
         }
-
         context.flush()
+
+        // Pass 2: fluid. The camera rotation is known (yaw/pitch), so transform each face center by the
+        // same rotation the pose applies and draw the translucent quads back-to-front for the CURRENT
+        // view angle, re-sorted every frame. Blending therefore stays correct however the model is
+        // rotated, instead of depending on the order blocks happen to appear in the NBT.
+        val rotation = Axis.XP.rotationDegrees(pitch).mul(Axis.YP.rotationDegrees(yaw))
+        val faces = ArrayList<FluidFace>()
+        for (entry in preview.blocks) {
+            val fluid = entry.state.fluidState
+            if (!fluid.isEmpty) collectFluidFaces(fakeLevel, entry.pos, fluid, preview, rotation, faces)
+        }
+        faces.sortBy { it.viewDepth } // most negative = farthest from the camera, drawn first
+        val fluidBuffer = bufferSource.getBuffer(CobblemonRenderLayers.STRUCTURE_PREVIEW_FLUID)
+        for (face in faces) {
+            var i = 0
+            while (i < 12) {
+                fluidBuffer.addVertex(rootMatrix, face.verts[i], face.verts[i + 1], face.verts[i + 2])
+                    .setColor(face.r, face.g, face.b, face.a)
+                i += 3
+            }
+        }
+        context.flush()
+
         Lighting.setupFor3DItems()
         pose.popPose()
         context.disableScissor()
     }
 
+    /** One translucent fluid quad: 4 corners in structure space + color + camera-space depth key. */
+    private class FluidFace(
+        val verts: FloatArray, // 12 floats: 4 corners × xyz
+        val r: Float, val g: Float, val b: Float, val a: Float,
+        val viewDepth: Float
+    )
+
+    // Unit-cube corner positions per face, wound to match the previous full-cube quads.
+    private val FACE_CORNERS: Map<Direction, FloatArray> = mapOf(
+        Direction.UP to floatArrayOf(0f, 1f, 0f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 0f),
+        Direction.DOWN to floatArrayOf(0f, 0f, 1f, 0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f),
+        Direction.NORTH to floatArrayOf(1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 0f, 0f, 0f, 0f),
+        Direction.SOUTH to floatArrayOf(0f, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 1f),
+        Direction.WEST to floatArrayOf(0f, 0f, 0f, 0f, 1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f),
+        Direction.EAST to floatArrayOf(1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 1f, 0f, 0f)
+    )
+
     /**
-     * Tinted translucent fluid volume. The preview has no flowing-water support, so every water spot —
-     * plain water OR a waterlogged block — is drawn as a consistent full cube; this keeps all water at
-     * the same height so nothing misaligns. Only faces exposed to air or a different fluid are emitted;
-     * faces shared with a same-fluid or solid neighbor are culled so the body reads as one connected volume.
+     * Collects the exposed faces of one fluid block as full-cube quads (the preview has no flowing-water
+     * support, so plain and waterlogged blocks are identical full cubes; faces against same-fluid or
+     * solid neighbors are never created). Each face is tagged with its camera-space depth — the face
+     * center run through the same yaw/pitch [rotation] the pose applies — so the caller can sort all
+     * fluid quads back-to-front for the current view before drawing them.
      */
-    private fun renderFluid(matrix: Matrix4f, bufferSource: MultiBufferSource, level: BlockAndTintGetter, pos: BlockPos, fluid: FluidState) {
-        val lava = fluid.`is`(FluidTags.LAVA)
+    private fun collectFluidFaces(
+        level: BlockAndTintGetter,
+        pos: BlockPos,
+        fluid: FluidState,
+        preview: StructurePreview,
+        rotation: Quaternionf,
+        out: MutableList<FluidFace>
+    ) {
+        val lava = isLava(fluid)
         val color = if (lava) 0xFF6A00 else BiomeColors.getAverageWaterColor(level, pos)
         val r = ((color shr 16) and 0xFF) / 255f
         val g = ((color shr 8) and 0xFF) / 255f
         val b = (color and 0xFF) / 255f
         val a = if (lava) 0.95f else 0.7f
+        val bx = pos.x.toFloat()
+        val by = pos.y.toFloat()
+        val bz = pos.z.toFloat()
 
-        val buffer = bufferSource.getBuffer(RenderType.debugQuads())
-        fun v(x: Float, y: Float, z: Float) { buffer.addVertex(matrix, x, y, z).setColor(r, g, b, a) }
-
-        if (!fluidFaceHidden(level, pos, Direction.UP, fluid))    { v(0f, 1f, 0f); v(0f, 1f, 1f); v(1f, 1f, 1f); v(1f, 1f, 0f) }
-        if (!fluidFaceHidden(level, pos, Direction.DOWN, fluid))  { v(0f, 0f, 1f); v(0f, 0f, 0f); v(1f, 0f, 0f); v(1f, 0f, 1f) }
-        if (!fluidFaceHidden(level, pos, Direction.NORTH, fluid)) { v(1f, 0f, 0f); v(1f, 1f, 0f); v(0f, 1f, 0f); v(0f, 0f, 0f) }
-        if (!fluidFaceHidden(level, pos, Direction.SOUTH, fluid)) { v(0f, 0f, 1f); v(0f, 1f, 1f); v(1f, 1f, 1f); v(1f, 0f, 1f) }
-        if (!fluidFaceHidden(level, pos, Direction.WEST, fluid))  { v(0f, 0f, 0f); v(0f, 1f, 0f); v(0f, 1f, 1f); v(0f, 0f, 1f) }
-        if (!fluidFaceHidden(level, pos, Direction.EAST, fluid))  { v(1f, 0f, 1f); v(1f, 1f, 1f); v(1f, 1f, 0f); v(1f, 0f, 0f) }
+        for (dir in Direction.entries) {
+            if (fluidFaceHidden(level, pos, dir, fluid)) continue
+            val corners = FACE_CORNERS.getValue(dir)
+            val verts = FloatArray(12)
+            for (i in 0 until 4) {
+                verts[i * 3] = bx + corners[i * 3]
+                verts[i * 3 + 1] = by + corners[i * 3 + 1]
+                verts[i * 3 + 2] = bz + corners[i * 3 + 2]
+            }
+            // Camera-space depth of the face center (+z is toward the viewer in the preview pose).
+            val center = Vector3f(
+                bx + 0.5f + dir.stepX * 0.5f - preview.centerX,
+                by + 0.5f + dir.stepY * 0.5f - preview.centerY,
+                bz + 0.5f + dir.stepZ * 0.5f - preview.centerZ
+            )
+            rotation.transform(center)
+            out.add(FluidFace(verts, r, g, b, a, center.z))
+        }
     }
 
-    /** A fluid face is hidden if the neighbor is the same fluid kind or a solid opaque block. */
+    /**
+     * A fluid face is hidden if the neighbor is the same fluid kind (so two water/two lava blocks never
+     * draw the shared interior face between them) or a solid opaque block.
+     */
     private fun fluidFaceHidden(level: BlockAndTintGetter, pos: BlockPos, dir: Direction, fluid: FluidState): Boolean {
         val neighborPos = pos.relative(dir)
         val neighborState = level.getBlockState(neighborPos)
@@ -136,9 +190,13 @@ object StructurePreviewRenderer {
         return neighborState.isSolidRender(level, neighborPos)
     }
 
+    // Compare fluid TYPES rather than FluidTags: the tag lookup can come back false in some contexts,
+    // which would stop interior faces from being culled and draw every shared face.
+    private fun isWater(fs: FluidState) = fs.type === Fluids.WATER || fs.type === Fluids.FLOWING_WATER
+    private fun isLava(fs: FluidState) = fs.type === Fluids.LAVA || fs.type === Fluids.FLOWING_LAVA
     private fun sameFluidKind(a: FluidState, b: FluidState): Boolean {
-        if (a.isEmpty) return false
-        return (a.`is`(FluidTags.WATER) && b.`is`(FluidTags.WATER)) || (a.`is`(FluidTags.LAVA) && b.`is`(FluidTags.LAVA))
+        if (a.isEmpty || b.isEmpty) return false
+        return (isWater(a) && isWater(b)) || (isLava(a) && isLava(b))
     }
 
     /** True when every neighbor is a solid opaque cube, so this block cannot be seen and can be skipped. */
