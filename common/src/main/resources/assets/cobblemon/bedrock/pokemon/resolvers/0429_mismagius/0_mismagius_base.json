@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0429_mismagius/mismagius_shiny.png",
       "layers": [
         {
@@ -25,6 +27,18 @@
           "emissive": true,
           "texture": "cobblemon:textures/pokemon/0429_mismagius/mismagius_emissive.png",
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0429_mismagius/mismagius_alpha.png",
+          "emissive": true
         }
       ]
     }

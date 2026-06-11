@@ -11,15 +11,25 @@
     },
     {
       "type": "entity_particles",
-      "effect": "cobblemon:thunderwave_launch",
-      "locators": ["target"],
-      "delay": 0.05
+      "effect": "cobblemon:thunderwave_launch1",
+      "locators": ["special_attack"],
+      "targetLocators": ["target"]
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:thunderwave_actor",
-      "locators": ["target"],
-      "delay": 0.05
+      "locators": ["special_attack"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.05
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:thunderwave_launch2",
+      "locators": ["special_attack"],
+      "targetLocators": ["target"]
     },
     {
       "type": "pause",
@@ -59,11 +69,7 @@
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:thunderwave_impact3",
       "locators": ["target"],
-      "delay": 0.05
-    },
-    {
-      "type": "pause",
-      "pause": 0.65
+      "delay": 0.1
     },
     {
       "type": "remove_holds",
@@ -71,7 +77,7 @@
     },
     {
       "type": "pause",
-      "pause": 1.25
+      "pause": 1.65
     }
   ]
 }

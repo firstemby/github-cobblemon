@@ -4,10 +4,6 @@
     "minecraft:mangrove_swamp",
     "minecraft:swamp",
     {
-      "id": "#byg:is_swamp",
-      "required": false
-    },
-    {
       "id": "#c:is_swamp",
       "required": false
     },

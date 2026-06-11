@@ -1,0 +1,19 @@
+{
+  "moveName": "gigadrain",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 7
+    },
+    {
+      "item": "cobblemon:big_root",
+      "count": 1
+    }
+  ]
+}

@@ -8,14 +8,17 @@
 
 package com.cobblemon.mod.common.api.storage.player
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.MODID
 import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
+import com.cobblemon.mod.common.api.storage.player.client.ClientInstancedPlayerData
+import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
+import com.cobblemon.mod.common.api.tms.TMMoveManager
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import java.util.UUID
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
@@ -30,7 +33,6 @@ import net.minecraft.world.entity.player.Player
  * @author Apion
  * @since February 21, 2024
  */
-
 open class PlayerInstancedDataStoreManager {
     val saveExecutor = Executors.newSingleThreadExecutor(
         ThreadFactoryBuilder()
@@ -53,19 +55,27 @@ open class PlayerInstancedDataStoreManager {
         //Should put this somewhere else
         saveTasks[PlayerInstancedDataStoreTypes.GENERAL] = ScheduledTask.Builder()
             .execute { saveAllOfOneType(PlayerInstancedDataStoreTypes.GENERAL) }
-            .delay(30f)
-            .interval(120f)
+            .delay(30F)
+            .interval(120F)
             .infiniteIterations()
             .tracker(ServerTaskTracker)
             .build()
 
         saveTasks[PlayerInstancedDataStoreTypes.POKEDEX] = ScheduledTask.Builder()
             .execute { saveAllOfOneType(PlayerInstancedDataStoreTypes.POKEDEX) }
-            .delay(30f)
-            .interval(120f)
+            .delay(30F)
+            .interval(120F)
             .infiniteIterations()
             .tracker(ServerTaskTracker)
             .build()
+
+        saveTasks[PlayerInstancedDataStoreTypes.TM_MOVES] = ScheduledTask.Builder()
+                .execute { saveAllOfOneType(PlayerInstancedDataStoreTypes.TM_MOVES) }
+                .delay(30F)
+                .interval(120F)
+                .infiniteIterations()
+                .tracker(ServerTaskTracker)
+                .build()
     }
 
     open fun get(playerId: UUID, dataType: PlayerInstancedDataStoreType): InstancedPlayerData {
@@ -125,5 +135,17 @@ open class PlayerInstancedDataStoreManager {
 
     open fun getPokedexData(playerId: UUID): PokedexManager {
         return get(playerId, PlayerInstancedDataStoreTypes.POKEDEX) as PokedexManager
+    }
+
+    fun getTMData(player: ServerPlayer): TMMoveManager {
+        return getTMData(player.uuid)
+    }
+
+    fun getTMData(playerId: UUID): TMMoveManager {
+        val data = get(playerId, PlayerInstancedDataStoreTypes.TM_MOVES)
+        if (data !is TMMoveManager) {
+            Cobblemon.LOGGER.warn("getTMData: No TMMoveManager found for $playerId (got ${data?.javaClass?.name})")
+        }
+        return data as TMMoveManager
     }
 }

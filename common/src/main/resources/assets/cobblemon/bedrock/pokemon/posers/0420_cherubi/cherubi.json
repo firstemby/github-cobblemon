@@ -1,0 +1,37 @@
+{
+  "portraitScale": 2.27,
+  "portraitTranslation": [-0.29, -1.77, 0],
+  "profileScale": 0.63,
+  "profileTranslation": [ 0, 0.77, 0],
+  "rootBone": "cherubi",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('cherubi', 'ground_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cherubi', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.bedrock('cherubi', 'ground_walk_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cherubi', 'blink')"
+      ]
+    }
+  }
+}

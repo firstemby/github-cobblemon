@@ -32,15 +32,15 @@
       "required": false
     },
     {
-      "id": "byg:temperate_rainforest",
+      "id": "biomeswevegone:forgotten_forest",
       "required": false
     },
     {
-      "id": "byg:tropical_rainforest",
+      "id": "biomeswevegone:tropical_rainforest",
       "required": false
     },
     {
-      "id": "byg:weeping_witch_forest",
+      "id": "biomeswevegone:weeping_witch_forest",
       "required": false
     },
     {

@@ -5,6 +5,7 @@
     "cobblemon:sweet_apple",
     "cobblemon:tart_apple",
 	"cobblemon:syrupy_apple",
-	"cobblemon:candied_apple"
+	"cobblemon:candied_apple",
+    { "id": "create:honeyed_apple","required": false }
   ]
 }

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.spawning.TimeRange.Companion.timeRanges
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.network.chat.MutableComponent
+import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
 
 /**
  * A range of time ticks for a world mainly to be used in [SpawningCondition]s. A time range
@@ -45,6 +46,7 @@ class TimeRange : IntRanges {
             "dusk" to TimeRange(11834..13701),
             "twilight" to TimeRange(11834..13701, 22300..23999, 0..166)
         )
+        val adapter = IntRangesAdapter(timeRanges) { TimeRange(*it) }
     }
 
     constructor() : super()

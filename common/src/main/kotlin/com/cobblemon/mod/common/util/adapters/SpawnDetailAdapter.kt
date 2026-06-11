@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.preset.SpawnDetailPreset
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.singularToPluralList
@@ -76,7 +76,7 @@ object SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
             ?: throw IllegalStateException("There is no spawning condition registered with the name '${ctxType.defaultCondition}'")
         val detail = registeredSpawnDetail.deserializeDetail(element, ctx)
         presets.forEach { it.apply(detail) }
-        if (detail.bucket.name.isBlank()) {
+        if (detail.bucket.isBlank()) {
             throw IllegalStateException("No bucket was specified for spawn: ${detail.id}")
         }
         detail.autoLabel()

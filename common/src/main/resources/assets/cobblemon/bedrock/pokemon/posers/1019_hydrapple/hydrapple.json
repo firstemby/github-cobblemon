@@ -1,0 +1,44 @@
+{
+  "portraitScale": 1.74,
+  "portraitTranslation": [-0.34, 2.37, 0],
+  "profileScale": 0.54,
+  "profileTranslation": [0.00, 0.93, 0],
+  "rootBone": "hydrapple",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('main_head_neck_end_bend', 1, 1, 5, -5, 15, -15)",
+		"q.look('main_head_neck_tip', 1, 1, 5, -5, 15, -15)",
+		"q.look('head_ai', 1, -1, 15, -15, 15, -15)",
+        "q.bedrock('hydrapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('hydrapple', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('main_head_neck_end_bend', 1, 1, 5, -5, 15, -15)",
+		"q.look('main_head_neck_tip', 1, 1, 5, -5, 15, -15)",
+		"q.look('head_ai', 1, -1, 15, -15, 15, -15)",
+        "q.bedrock('hydrapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('hydrapple', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('hydrapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('hydrapple', 'blink')"
+      ]
+    }
+  }
+ }

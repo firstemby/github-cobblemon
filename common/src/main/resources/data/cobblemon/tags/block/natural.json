@@ -28,6 +28,7 @@
     "#minecraft:snow",
     "#minecraft:terracotta",
     "#minecraft:valid_spawn",
+    "#cobblemon:type_gem_blocks",
     {
       "id": "#c:coral_blocks",
       "required": false

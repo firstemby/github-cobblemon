@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:steel_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:steel_gem_block",
+    "count": 1
+  },
+  "criteria": {
+    "has_steel_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:steel_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:steel_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_steel_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

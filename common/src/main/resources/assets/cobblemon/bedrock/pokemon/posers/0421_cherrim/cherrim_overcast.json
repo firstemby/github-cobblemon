@@ -1,0 +1,37 @@
+{
+  "portraitScale": 1.7,
+  "portraitTranslation": [ -0.07, -0.97, 0],
+  "profileScale": 0.61,
+  "profileTranslation": [ 0, 0.83, 0],
+  "rootBone": "cherrim",
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('cherrim_overcast', 'ground_idle_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cherrim_overcast', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.bedrock('cherrim_overcast', 'ground_walk_placeholder')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cherrim_overcast', 'blink')"
+      ]
+    }
+  }
+}

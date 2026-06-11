@@ -35,7 +35,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('spearow', 'ground_idle')",
-        "q.biped_walk(1, 1, 'left_leg', 'right_leg')"
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
       ],
       "quirks": ["q.bedrock_quirk('spearow', 'blink')"],
       "transformedParts": [

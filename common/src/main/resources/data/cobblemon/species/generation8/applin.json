@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 840,
   "name": "Applin",
   "primaryType": "grass",
@@ -43,12 +44,13 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.6,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.5,
+    "height": 0.9,
     "fixed": false
   },
+  "standingEyeHeight": 0.74,
   "behaviour": {
     "moving": {
       "swim": {

@@ -22,7 +22,7 @@ import kotlin.random.Random
  * @author Hiroku
  * @since January 30th, 2026
  */
-class ChanceRequirement : Requirement {
+class ChanceRequirement : Requirement() {
     companion object {
         const val ADAPTER_VARIANT = "chance"
     }

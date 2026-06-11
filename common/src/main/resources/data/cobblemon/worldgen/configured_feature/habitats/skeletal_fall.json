@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/skeletal_fall1",
+            "cobblemon:habitats/skeletal_fall2",
+            "cobblemon:habitats/skeletal_fall3",
+            "cobblemon:habitats/skeletal_fall4",
+            "cobblemon:habitats/skeletal_fall5",
+            "cobblemon:habitats/skeletal_fall6",
+            "cobblemon:habitats/skeletal_fall7",
+            "cobblemon:habitats/skeletal_fall8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/skeletal_fall"
+    }
+}

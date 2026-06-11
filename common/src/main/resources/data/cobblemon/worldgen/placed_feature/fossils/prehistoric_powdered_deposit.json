@@ -1,0 +1,56 @@
+{
+    "feature": "cobblemon:fossils/prehistoric_powdered_deposit",
+    "placement": [
+        {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
+            "type": "minecraft:rarity_filter",
+            "chance": 100
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "type": "minecraft:uniform",
+                "max_inclusive": {
+                    "absolute": 256
+                },
+                "min_inclusive": {
+                    "absolute": 67
+                }
+            }
+        },
+        {
+            "type": "minecraft:environment_scan",
+            "allowed_search_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:grass_block",
+                    "minecraft:snow_block"
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "direction_of_search": "up",
+            "max_steps": 7,
+            "target_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:air"
+                ],
+                "offset": [
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "type": "minecraft:biome"
+        }
+    ]
+}

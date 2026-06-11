@@ -92,8 +92,8 @@ class PokemonNameWidget(
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId) ?: return
 
         val progress = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(pokedexEntry.speciesId)
-        this.hasKnowledge =  progress != PokedexEntryProgress.NONE
-        this.isOwned = progress == PokedexEntryProgress.CAUGHT
+        this.hasKnowledge =  progress != PokedexEntryProgress.UNREGISTERED
+        this.isOwned = progress == PokedexEntryProgress.OWNED
         this.speciesNumber = species.nationalPokedexNumber.toString().padStart(4, '0').text()
         this.speciesName = species.translatedName
     }

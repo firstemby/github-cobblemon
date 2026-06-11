@@ -12,7 +12,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
-            "level": "30-50",
+            "level": "30-49",
             "weight": 0.304,
             "weightMultiplier": {
                 "multiplier": 5.0,

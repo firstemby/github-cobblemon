@@ -314,7 +314,7 @@ class EvolutionTreeWidget(
         val discoveryLevel = evolutionNode.pokedexEntryProgress
         if (isSlotHovered) {
             val text =
-                if (discoveryLevel == PokedexEntryProgress.NONE) {
+                if (discoveryLevel == PokedexEntryProgress.UNREGISTERED) {
                     lang("ui.pokedex.unknown")
                 } else {
                     val species = PokemonSpecies.getByIdentifier(evolutionNode.pokedexEntry.speciesId)!!

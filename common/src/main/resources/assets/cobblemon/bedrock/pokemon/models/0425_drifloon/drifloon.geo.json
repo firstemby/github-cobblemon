@@ -6,7 +6,7 @@
 				"identifier": "geometry.drifloon",
 				"texture_width": 64,
 				"texture_height": 32,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -47,6 +47,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [3.25, 19, -5.05],
+					"locators": {
+						"eye2": [3.25, 19, -5.05]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [3.5, 19, -4.41],
@@ -61,6 +69,14 @@
 					"cubes": [
 						{"origin": [-3.75, 18, -4.835], "size": [1, 2, 0], "inflate": 0.2, "uv": [2, 0], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-3.25, 19, -5.05],
+					"locators": {
+						"eye1": [-3.25, 19, -5.05]
+					}
 				},
 				{
 					"name": "eyelid_right",

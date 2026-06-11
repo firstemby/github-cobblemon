@@ -22,7 +22,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:sugar_cane",
                     "#cobblemon:saccharine_trees"
                 ]
             }
@@ -51,7 +50,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:cake",
                     "minecraft:sugar_cane"
                 ]
             }
@@ -80,7 +78,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:cake",
                     "#cobblemon:saccharine_trees"
                 ]
             }

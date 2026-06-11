@@ -43,6 +43,18 @@
           "translucent": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0218_slugma/slugma_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

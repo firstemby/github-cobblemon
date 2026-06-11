@@ -462,7 +462,7 @@
 				}
 			}
 		},
-		"animation.luvdisc.sleep": {
+		"animation.luvdisc.ground_sleep": {
 			"loop": true,
 			"bones": {
 				"body": {
@@ -680,7 +680,7 @@
 			}
 		},
 		"animation.luvdisc.blink": {
-			"animation_length": 0.16667,
+			"animation_length": 0.1667,
 			"bones": {
 				"eyelid_right": {
 					"position": {
@@ -699,7 +699,7 @@
 			}
 		},
 		"animation.luvdisc.special_attack": {
-			"animation_length": 3.91667,
+			"animation_length": 3.9167,
 			"bones": {
 				"body": {
 					"rotation": {

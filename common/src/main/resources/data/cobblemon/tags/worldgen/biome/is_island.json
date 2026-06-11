@@ -4,7 +4,7 @@
     "minecraft:mushroom_fields",
     "#cobblemon:is_tropical_island",
     {
-      "id": "byg:lush_stacks",
+      "id": "biomeswevegone:lush_stacks",
       "required": false
     },
     {

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.aspects
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonCosmeticItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -51,6 +52,37 @@ val COSMETIC_SLOT_ASPECT = object : AspectProvider {
     }
 
     override fun provide(properties: PokemonProperties) = emptySet<String>()
+}
+
+/**
+ * Provides the aspect(s) of the active mark, if any.
+ */
+val MARK_ASPECT = object : AspectProvider {
+    override fun provide(pokemon: Pokemon): Set<String> {
+        return pokemon.activeMark?.aspects?.toSet() ?: emptySet()
+    }
+
+    override fun provide(properties: PokemonProperties): Set<String> = emptySet()
+}
+
+val ALPHA_ASPECT = object : AspectProvider {
+    val ASPECT = "alpha"
+
+    override fun provide(pokemon: Pokemon): Set<String> {
+        return if (pokemon.isAlpha) {
+            setOf(ASPECT)
+        } else {
+            emptySet()
+        }
+    }
+
+    override fun provide(properties: PokemonProperties): Set<String> {
+        return if (properties.isAlpha == true) {
+            setOf(ASPECT)
+        } else {
+            emptySet()
+        }
+    }
 }
 
 val CHARACTERISTIC_RAINBOW_ASPECT = object : AspectProvider {

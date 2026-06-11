@@ -1,0 +1,19 @@
+{
+  "moveName": "surf",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 10
+    },
+    {
+      "item": "cobblemon:mystic_water",
+      "count": 1
+    }
+  ]
+}

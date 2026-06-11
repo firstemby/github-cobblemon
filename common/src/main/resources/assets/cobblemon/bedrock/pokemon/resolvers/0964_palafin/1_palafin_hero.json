@@ -12,6 +12,18 @@
     {
       "aspects": ["hero-form", "shiny"],
       "texture": "cobblemon:textures/pokemon/0964_palafin/palafin_hero_shiny.png"
+    },
+	    {
+      "aspects": [
+        "alpha_eyes", "hero-form"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0964_palafin/palafin_hero_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

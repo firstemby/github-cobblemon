@@ -25,7 +25,8 @@ import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 open class BasicSpawner(
     override val name: String,
     override var spawnPool: SpawnPool,
-    override var maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk
+    override var maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk,
+    override val buckets: Map<String, Float>
 ) : Spawner {
     override var selector: SpawningSelector<*> = SpawningSelector.DEFAULT
     override var generator: SpawningZoneGenerator = Cobblemon.spawningZoneGenerator

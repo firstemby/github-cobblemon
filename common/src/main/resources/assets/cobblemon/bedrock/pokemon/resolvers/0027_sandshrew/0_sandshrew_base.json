@@ -10,8 +10,22 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0027_sandshrew/sandshrew_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0027_sandshrew/sandshrew_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -14,6 +14,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0087_dewgong/dewgong_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0087_dewgong/dewgong_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

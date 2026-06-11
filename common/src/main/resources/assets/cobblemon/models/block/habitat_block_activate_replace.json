@@ -1,0 +1,43 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 32],
+	"textures": {
+		"particle": "cobblemon:block/functional/habitat_block"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [4, 0, 8, 8], "texture": "#particle"},
+				"east": {"uv": [12, 0, 8, 8], "texture": "#particle"},
+				"south": {"uv": [12, 0, 16, 8], "texture": "#particle"},
+				"west": {"uv": [8, 0, 12, 8], "texture": "#particle"},
+				"up": {"uv": [8, 8, 12, 16], "texture": "#particle"},
+				"down": {"uv": [12, 8, 16, 16], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [0.5, 5.5, 0.025],
+			"to": [3.5, 8.5, 0.025],
+			"faces": {
+				"north": {"uv": [0.5, 0, 1, 1], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [12.5, 5.5, 15.975],
+			"to": [15.5, 8.5, 15.975],
+			"faces": {
+				"south": {"uv": [0.5, 0, 1, 1], "texture": "#particle"}
+			}
+		},
+		{
+			"from": [0, 10, 0],
+			"to": [16, 10, 16],
+			"faces": {
+				"up": {"uv": [0, 8, 4, 16], "texture": "#particle"}
+			}
+		}
+	]
+}

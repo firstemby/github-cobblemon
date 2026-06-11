@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:equipment",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:loot_table",
+                    "value": "cobblemon:equipment/shipwreck_coves/lush_armor"
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "enchantments": {
+                                "minecraft:punch": 2.0,
+                                "power": 4.0
+                            },
+                            "function": "minecraft:set_enchantments"
+                        }
+                    ],
+                    "name": "minecraft:bow"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cobblemon:equipment/shipwreck_coves/lush_ominous_skeletons"
+}

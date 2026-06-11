@@ -17,14 +17,28 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "emissive": true,
-          "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_shiny_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_emissive_shiny.png",
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0146_moltres/moltres_alpha.png",
+          "emissive": true
         }
       ]
     }

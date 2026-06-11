@@ -4,14 +4,23 @@
   "variations": [
     {
       "aspects": ["region-bias-hisui"],
-      "poser": "cobblemon:rowlet_hisui_bias",
       "model": "cobblemon:rowlet_hisui_bias.geo",
-      "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_hisui_bias.png",
+      "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet.png",
       "layers": []
     },
     {
       "aspects": ["region-bias-hisui", "shiny"],
-      "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_hisui_bias_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_shiny.png"
+    },
+    {
+      "aspects": ["region-bias-hisui", "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0722_rowlet/rowlet_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
@@ -19,17 +20,19 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BAR_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SPACING
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget.PokemonScrollSlotRow
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
-import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 
 class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (PokedexEntry) -> (Unit)): ScrollingWidget<PokemonScrollSlotRow>(
@@ -39,6 +42,10 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
     top = pY - SCROLL_BASE_HEIGHT,
     slotHeight = SCROLL_SLOT_SIZE + 2
 ) {
+    companion object {
+        val scrollbarSlide = cobblemonResource("textures/gui/pokedex/scrollbar_slide.png")
+        val scrollbarTrack = cobblemonResource("textures/gui/pokedex/scrollbar_track.png")
+    }
 
     fun createEntries(filteredPokedex: Collection<PokedexEntry>) {
         filteredPokedex.chunked(5).forEachIndexed { index, listChunk ->
@@ -57,24 +64,40 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
     }
 
     override fun getScrollbarPosition(): Int {
-        return pX + width - 3// scrollBarWidth
+        return pX + width - SCROLL_BAR_WIDTH
     }
 
     override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val xLeft = this.scrollbarPosition
-        val xRight = xLeft + 3
+        val yMargin = 3
+        val yStart = y + yMargin
 
-        val barHeight = this.bottom - this.y
+        val barHeight = this.bottom - yMargin - yStart
 
         var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
         yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
-        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + this.y
-        if (yTop < this.y) {
-            yTop = this.y
-        }
+        var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
+        if (yTop < yStart) yTop = yStart
 
-        context.fill(xLeft, this.y + 3, xRight, this.bottom - 3, FastColor.ARGB32.color(255, 58, 150, 182)) // background
-        context.fill(xLeft,yTop + 3, xRight, yTop + yBottom - 3, FastColor.ARGB32.color(255, 252, 252, 252)) // base
+        // Scroll Track
+        blitk(
+            texture = scrollbarTrack,
+            matrixStack = context.pose(),
+            x = xLeft,
+            y = yStart,
+            width = SCROLL_BAR_WIDTH,
+            height = height - (yMargin * 2)
+        )
+
+        // Scroll Slide
+        blitk(
+            texture = scrollbarSlide,
+            matrixStack = context.pose(),
+            x = xLeft,
+            y = yTop,
+            width = SCROLL_BAR_WIDTH,
+            height = yBottom
+        )
     }
 
     override fun renderItem(

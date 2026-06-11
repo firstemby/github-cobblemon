@@ -23,7 +23,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_shiny.png",
       "layers": [
         {
@@ -37,6 +39,18 @@
           "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_transparency_shiny.png",
           "translucent": true,
           "translucent_cull": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0609_chandelure/chandelure_alpha.png",
+          "emissive": true
         }
       ]
     }

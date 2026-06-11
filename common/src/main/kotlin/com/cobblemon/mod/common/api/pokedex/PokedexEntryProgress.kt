@@ -14,22 +14,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.util.StringRepresentable
 
 /**
- * Contains stats about a specific pokemon for putting in the pokedex
+ * Contains stats about a specific Pokémon for putting in the PokéDex
  *
  * @author JPAK, Apion
  * @since February 21, 2024
  */
 enum class PokedexEntryProgress : StringRepresentable, Comparable<PokedexEntryProgress> {
-    NONE,
-    ENCOUNTERED,
-    CAUGHT;
+    UNREGISTERED,
+    SEEN,
+    OWNED;
 
     override fun getSerializedName() = this.name
-    companion object {
-        val CODEC: Codec<PokedexEntryProgress> = RecordCodecBuilder.create { instance ->
-            instance.map ({
-                PokedexEntryProgress.valueOf(it)
-            }, PrimitiveCodec.STRING.fieldOf("name").forGetter { it.name })
-        }
-    }
 }

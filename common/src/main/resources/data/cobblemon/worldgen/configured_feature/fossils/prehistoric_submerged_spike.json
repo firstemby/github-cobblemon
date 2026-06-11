@@ -1,0 +1,10 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/submerged_spike1",
+            "cobblemon:fossils/submerged_spike2"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_submerged_spike"
+    }
+}

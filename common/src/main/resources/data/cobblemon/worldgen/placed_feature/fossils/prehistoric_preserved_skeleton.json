@@ -1,0 +1,61 @@
+{
+    "feature": "cobblemon:fossils/prehistoric_preserved_skeleton",
+    "placement": [
+        {
+            "type": "minecraft:count",
+            "count": 1
+        },
+        {
+            "type": "minecraft:rarity_filter",
+            "chance": 5
+        },
+        {
+            "type": "minecraft:height_range",
+            "height": {
+                "type": "minecraft:uniform",
+                "max_inclusive": {
+                    "absolute": 93
+                },
+                "min_inclusive": {
+                    "above_bottom": 65
+                }
+            }
+        },
+        {
+            "type": "minecraft:environment_scan",
+            "allowed_search_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:packed_ice",
+                    "minecraft:ice"
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "direction_of_search": "up",
+            "max_steps": 7,
+            "target_condition": {
+                "type": "minecraft:matching_blocks",
+                "blocks": [
+                    "minecraft:air"
+                ],
+                "offset": [
+                    0,
+                    1,
+                    0
+                ]
+            }
+        },
+        {
+            "type": "minecraft:biome"
+        },
+        {
+            "type": "minecraft:random_offset",
+            "y_spread": -6,
+            "xz_spread": 0
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:black_belt"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.root_battle"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.root_battle.description"
+    },
+    "frame": "task"
+  },
+  "parent": "cobblemon:root",
+  "criteria": {
+    "win": {
+      "trigger": "cobblemon:battles_won",
+      "conditions": {
+        "count": 1,
+        "battle_types": [
+          "pvp"
+        ]
+      }
+    }
+  },
+	"requirements": [
+		[
+			"win"
+		]
+	],
+  "sends_telemetry_event": false
+}

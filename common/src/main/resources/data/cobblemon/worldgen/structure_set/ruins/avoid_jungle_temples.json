@@ -1,0 +1,31 @@
+{
+    "placement": {
+        "type": "minecraft:random_spread",
+        "exclusion_zone": {
+            "chunk_count": 7,
+            "other_set": "minecraft:jungle_temples"
+        },
+        "spacing": 30,
+        "separation": 13,
+        "salt": 1027497744,
+        "spread_type": "triangular"
+    },
+    "structures": [
+        {
+            "structure": "cobblemon:ruins/overgrown_trial_ruins",
+            "weight": 8
+        },
+        {
+            "structure": "cobblemon:ruins/lush_monument_ruins",
+            "weight": 4
+        },
+        {
+            "structure": "cobblemon:habitats/reclaimed_lush_monument",
+            "weight": 4
+        },
+        {
+            "structure": "cobblemon:ruins/meteor_battleground_ruins",
+            "weight": 8
+        }
+    ]
+}

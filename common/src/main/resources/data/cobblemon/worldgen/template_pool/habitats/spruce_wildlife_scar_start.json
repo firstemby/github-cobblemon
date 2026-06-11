@@ -1,0 +1,86 @@
+{
+    "name": "cobblemon:habitats/spruce_wildlife_scar_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/spruce_wildlife_scar8",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/spruce_wildlife_scar_start",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

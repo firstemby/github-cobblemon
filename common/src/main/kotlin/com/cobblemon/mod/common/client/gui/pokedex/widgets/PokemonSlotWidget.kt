@@ -71,7 +71,7 @@ abstract class PokemonSlotWidget {
                 )
             }
 
-            if (shouldDrawMon && discoveryLevel != PokedexEntryProgress.NONE) {
+            if (shouldDrawMon && discoveryLevel != PokedexEntryProgress.UNREGISTERED) {
                 context.enableScissor(
                     x + 1,
                     y + 1,
@@ -133,7 +133,7 @@ abstract class PokemonSlotWidget {
                 scale = SCALE
             )
 
-            if (discoveryLevel == PokedexEntryProgress.CAUGHT) {
+            if (discoveryLevel == PokedexEntryProgress.OWNED) {
                 blitk(
                     matrixStack = matrices,
                     texture = caughtIcon,

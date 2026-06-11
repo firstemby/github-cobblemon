@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.command.argument
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.util.lang
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
@@ -17,25 +16,25 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
-import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
+import net.minecraft.commands.SharedSuggestionProvider
 
-class SpawnBucketArgumentType: ArgumentType<SpawnBucket> {
+class SpawnBucketArgumentType: ArgumentType<String> {
 
     companion object {
-        val EXAMPLES: List<String> = listOf(Cobblemon.bestSpawner.config.buckets.first().name)
+        val EXAMPLES: List<String> = listOf(Cobblemon.bestSpawner.config.worldBuckets.keys.first())
         val INVALID_BUCKET = lang("command.checkspawns.invalid-bucket")
 
         fun spawnBucket() = SpawnBucketArgumentType()
 
-        fun <S> getSpawnBucket(context: CommandContext<S>, name: String): SpawnBucket {
-            return context.getArgument(name, SpawnBucket::class.java)
+        fun <S> getSpawnBucket(context: CommandContext<S>, name: String): String {
+            return context.getArgument(name, String::class.java)
         }
     }
 
-    override fun parse(reader: StringReader): SpawnBucket {
+    override fun parse(reader: StringReader): String {
         val name = reader.readString()
-        return Cobblemon.bestSpawner.config.buckets.find { it.name.equals(name, ignoreCase = true) }
+        return Cobblemon.bestSpawner.config.worldBuckets.entries.find { it.key.equals(name, ignoreCase = true) }?.key
             ?: throw SimpleCommandExceptionType(INVALID_BUCKET).createWithContext(reader)
     }
 
@@ -43,7 +42,7 @@ class SpawnBucketArgumentType: ArgumentType<SpawnBucket> {
         context: CommandContext<S>,
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
-        return SharedSuggestionProvider.suggest(Cobblemon.bestSpawner.config.buckets.map { it.name }, builder)
+        return SharedSuggestionProvider.suggest(Cobblemon.bestSpawner.config.worldBuckets.keys, builder)
     }
 
     override fun getExamples() = EXAMPLES
