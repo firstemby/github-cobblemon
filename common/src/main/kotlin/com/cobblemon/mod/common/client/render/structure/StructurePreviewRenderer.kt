@@ -79,9 +79,14 @@ object StructurePreviewRenderer {
 
             // Skip blocks fully enclosed by solid neighbors: invisible, so don't process them at all.
             if (state.renderShape == RenderShape.MODEL && !isFullyOccluded(fakeLevel, pos)) {
+                // renderBatched applies the block's getOffset() to the pose and does NOT restore it, so
+                // isolate it in its own push/pop — otherwise a plant's random XZ offset leaks into the
+                // fluid matrix below and shifts the water into the neighboring block.
+                pose.pushPose()
                 random.setSeed(state.getSeed(pos))
                 val renderType = ItemBlockRenderTypes.getChunkRenderType(state)
                 blockRenderer.renderBatched(state, pos, fakeLevel, pose, bufferSource.getBuffer(renderType), true, random)
+                pose.popPose()
             }
 
             val fluid = state.fluidState
@@ -98,15 +103,11 @@ object StructurePreviewRenderer {
         context.disableScissor()
     }
 
-    /** Lowered surface for an exposed fluid top, approximating the in-game water/lava surface height. */
-    private const val FLUID_SURFACE = 0.875f
-
     /**
-     * Approximate fluid volume: a tinted translucent box, with only the faces exposed to air or a
-     * different fluid emitted. Two rules keep stacked/adjacent fluids looking like one connected body:
-     *  - faces shared with the same fluid kind are culled (removes doubled interior seams), and
-     *  - a block is only lowered to [FLUID_SURFACE] when its top is actually exposed to air; if fluid
-     *    or a solid block sits directly above, it fills the full block so vertical columns have no gaps.
+     * Tinted translucent fluid volume. The preview has no flowing-water support, so every water spot —
+     * plain water OR a waterlogged block — is drawn as a consistent full cube; this keeps all water at
+     * the same height so nothing misaligns. Only faces exposed to air or a different fluid are emitted;
+     * faces shared with a same-fluid or solid neighbor are culled so the body reads as one connected volume.
      */
     private fun renderFluid(matrix: Matrix4f, bufferSource: MultiBufferSource, level: BlockAndTintGetter, pos: BlockPos, fluid: FluidState) {
         val lava = fluid.`is`(FluidTags.LAVA)
@@ -116,25 +117,15 @@ object StructurePreviewRenderer {
         val b = (color and 0xFF) / 255f
         val a = if (lava) 0.95f else 0.7f
 
-        val abovePos = pos.above()
-        val aboveState = level.getBlockState(abovePos)
-        // Covered = fluid continues up, or a solid block caps it: either way the surface isn't visible,
-        // so fill the whole block height to connect with the layer above.
-        val coveredAbove = sameFluidKind(aboveState.fluidState, fluid) || aboveState.isSolidRender(level, abovePos)
-        val top = if (coveredAbove) 1.0f else FLUID_SURFACE
-
         val buffer = bufferSource.getBuffer(RenderType.debugQuads())
         fun v(x: Float, y: Float, z: Float) { buffer.addVertex(matrix, x, y, z).setColor(r, g, b, a) }
 
-        if (!coveredAbove)                                        { v(0f, top, 0f); v(0f, top, 1f); v(1f, top, 1f); v(1f, top, 0f) }
+        if (!fluidFaceHidden(level, pos, Direction.UP, fluid))    { v(0f, 1f, 0f); v(0f, 1f, 1f); v(1f, 1f, 1f); v(1f, 1f, 0f) }
         if (!fluidFaceHidden(level, pos, Direction.DOWN, fluid))  { v(0f, 0f, 1f); v(0f, 0f, 0f); v(1f, 0f, 0f); v(1f, 0f, 1f) }
-
-        // Side faces render only the strip above the neighbor's fluid surface, sealing stepped surfaces
-        // (a tall covered column next to a shorter exposed pool) without re-drawing shared interior area.
-        visibleSideLow(level, pos, Direction.NORTH, fluid, top)?.let { lo -> v(1f, lo, 0f); v(1f, top, 0f); v(0f, top, 0f); v(0f, lo, 0f) }
-        visibleSideLow(level, pos, Direction.SOUTH, fluid, top)?.let { lo -> v(0f, lo, 1f); v(0f, top, 1f); v(1f, top, 1f); v(1f, lo, 1f) }
-        visibleSideLow(level, pos, Direction.WEST, fluid, top)?.let  { lo -> v(0f, lo, 0f); v(0f, top, 0f); v(0f, top, 1f); v(0f, lo, 1f) }
-        visibleSideLow(level, pos, Direction.EAST, fluid, top)?.let  { lo -> v(1f, lo, 1f); v(1f, top, 1f); v(1f, top, 0f); v(1f, lo, 0f) }
+        if (!fluidFaceHidden(level, pos, Direction.NORTH, fluid)) { v(1f, 0f, 0f); v(1f, 1f, 0f); v(0f, 1f, 0f); v(0f, 0f, 0f) }
+        if (!fluidFaceHidden(level, pos, Direction.SOUTH, fluid)) { v(0f, 0f, 1f); v(0f, 1f, 1f); v(1f, 1f, 1f); v(1f, 0f, 1f) }
+        if (!fluidFaceHidden(level, pos, Direction.WEST, fluid))  { v(0f, 0f, 0f); v(0f, 1f, 0f); v(0f, 1f, 1f); v(0f, 0f, 1f) }
+        if (!fluidFaceHidden(level, pos, Direction.EAST, fluid))  { v(1f, 0f, 1f); v(1f, 1f, 1f); v(1f, 1f, 0f); v(1f, 0f, 0f) }
     }
 
     /** A fluid face is hidden if the neighbor is the same fluid kind or a solid opaque block. */
@@ -143,26 +134,6 @@ object StructurePreviewRenderer {
         val neighborState = level.getBlockState(neighborPos)
         if (sameFluidKind(neighborState.fluidState, fluid)) return true
         return neighborState.isSolidRender(level, neighborPos)
-    }
-
-    /**
-     * For a horizontal fluid face, returns the lower Y of the strip that should be drawn, or null if the
-     * face is fully hidden. Air/transparent neighbors expose the whole face (0); a same-fluid neighbor
-     * hides everything up to its own surface height, so only the strip above it (if this block is taller)
-     * is drawn; a solid neighbor hides the face entirely.
-     */
-    private fun visibleSideLow(level: BlockAndTintGetter, pos: BlockPos, dir: Direction, fluid: FluidState, thisTop: Float): Float? {
-        val neighborPos = pos.relative(dir)
-        val neighborState = level.getBlockState(neighborPos)
-        if (neighborState.isSolidRender(level, neighborPos)) return null
-        if (sameFluidKind(neighborState.fluidState, fluid)) {
-            val neighborAbove = neighborPos.above()
-            val neighborAboveState = level.getBlockState(neighborAbove)
-            val neighborCovered = sameFluidKind(neighborAboveState.fluidState, fluid) || neighborAboveState.isSolidRender(level, neighborAbove)
-            val neighborTop = if (neighborCovered) 1.0f else FLUID_SURFACE
-            return if (thisTop > neighborTop + 1e-4f) neighborTop else null
-        }
-        return 0f
     }
 
     private fun sameFluidKind(a: FluidState, b: FluidState): Boolean {

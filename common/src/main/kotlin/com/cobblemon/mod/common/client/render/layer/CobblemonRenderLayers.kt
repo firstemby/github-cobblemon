@@ -87,6 +87,25 @@ object CobblemonRenderLayers {
     };
 
     /**
+     * Flat translucent (position + color) layer for the CobblePedia structure preview's approximate
+     * water/lava volumes. Back-face culling is ON so only outward-facing faces draw (no seeing through
+     * to the far/inner faces of the water body), and upload-sorting is OFF (the translucent sort
+     * reorders faces by view angle under the preview's flipped/scaled GUI pose).
+     */
+    val STRUCTURE_PREVIEW_FLUID: RenderType = RenderType.create(
+        "cobblemon_structure_preview_fluid",
+        DefaultVertexFormat.POSITION_COLOR,
+        VertexFormat.Mode.QUADS,
+        1536,
+        false,
+        false,
+        RenderType.CompositeState.builder()
+            .setShaderState(POSITION_COLOR_SHADER)
+            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+            .createCompositeState(false)
+    )
+
+    /**
      * Translucent, fullbright, no-cull layer that ignores depth testing so the quad always renders
      * on top of the world geometry. Used by the Pokédex scan indicator so it's visible from any angle.
      */
