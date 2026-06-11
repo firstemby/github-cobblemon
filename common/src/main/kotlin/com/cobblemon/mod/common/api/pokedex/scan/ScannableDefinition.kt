@@ -20,11 +20,17 @@ import net.minecraft.resources.ResourceLocation
  * @param tags item tag ids whose members are scannable in this bucket (items only).
  */
 data class ScannableDefinition(
-    val category: String,
+    // Nullable because GSON deserialization ignores Kotlin defaults; a missing JSON field stays null.
+    val category: String? = null,
     val subCategory: String? = null,
-    val entries: List<ResourceLocation> = emptyList(),
-    val tags: List<ResourceLocation> = emptyList()
+    val entries: List<ResourceLocation>? = null,
+    val tags: List<ResourceLocation>? = null
 ) {
-    fun bucketPath(): String =
-        if (subCategory.isNullOrBlank()) category.lowercase() else "${category.lowercase()}/${subCategory.lowercase()}"
+    fun entryIds(): List<ResourceLocation> = entries ?: emptyList()
+    fun tagIds(): List<ResourceLocation> = tags ?: emptyList()
+
+    fun bucketPath(): String {
+        val cat = (category ?: ScannedDataCategory.MISC.id).lowercase()
+        return if (subCategory.isNullOrBlank()) cat else "$cat/${subCategory.lowercase()}"
+    }
 }

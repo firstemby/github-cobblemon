@@ -58,7 +58,7 @@ object PokedexPhotoQuality {
                 .asSequence()
                 .filterIsInstance<PokemonSpawnDetail>()
                 .filter { detail -> detail.pokemon.species?.asIdentifierDefaultingNamespace() == species }
-                .map { detail -> rankBucket(detail.bucket.name) }
+                .map { detail -> rankBucket(detail.bucket) }
                 .maxOrNull()
         }.getOrNull() ?: 0
 

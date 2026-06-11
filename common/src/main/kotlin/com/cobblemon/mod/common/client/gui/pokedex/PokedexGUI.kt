@@ -510,7 +510,7 @@ class PokedexGUI private constructor(
         val page = currentPage
         // Manually scroll moves widget as its scroll area seems misaligned
         if (tabInfoIndex == TAB_MOVES) {
-            (tabInfoElement as MovesLearnsetWidget).mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+            (tabInfoElement as MovesLearnsetWidget).mouseScrolled(mouseX, mouseY, deltaX, deltaY)
         }
         if (page != null && page !is MainDexPokedexPage && page.mouseScrolled(this, mouseX, mouseY, deltaX, deltaY)) {
             return true

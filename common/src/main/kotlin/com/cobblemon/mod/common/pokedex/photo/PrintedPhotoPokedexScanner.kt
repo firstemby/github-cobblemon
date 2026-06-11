@@ -26,7 +26,7 @@ object PrintedPhotoPokedexScanner {
             .mapNotNull(ResourceLocation::tryParse)
             .distinct()
             .forEach { speciesId ->
-                if (pokedex.getKnowledgeForSpecies(speciesId) >= PokedexEntryProgress.ENCOUNTERED) {
+                if (pokedex.getKnowledgeForSpecies(speciesId) >= PokedexEntryProgress.SEEN) {
                     return@forEach
                 }
                 val species = PokemonSpecies.getByIdentifier(speciesId) ?: return@forEach

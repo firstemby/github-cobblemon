@@ -7,12 +7,14 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
@@ -23,20 +25,18 @@ object ScanIndicatorRenderer {
     private val FULL_BRIGHT = LightTexture.pack(15, 15)
     private val FULL_BLOCK_BOUNDS = AABB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0)
 
-    /** Max distance from the node to the first occluder for it to count as "its own block". */
-    private const val ONE_BLOCK_REACH = 1.6
-
     /**
-     * The ">= 1 block only" visibility gate shared by all scan indicators/nodes: returns true when at
-     * most the target's own block sits between the camera and [center], and false once a real wall is
-     * in front of it. Implemented as a single ray + distance check (cheap, no DDA): if nothing solid
-     * is hit, line of sight is clear; if the first occluder is within ~one block of the target it's the
-     * target's own block; anything farther means a wall is between the viewer and the target.
+     * The "1 block only" visibility gate shared by all scan indicators/nodes: visible through at most
+     * the node's own block, hidden behind any real wall. The node sits at the centre of its anchor
+     * block, so the own block is simply the block containing [center]. A single clip toward the centre
+     * shows it only when nothing solid is in the way, or when the very first solid block hit IS that
+     * own block (i.e. the node is embedded in / sitting on it). Any other block in front hides it.
      */
     fun isWithinOneBlock(level: Level, eye: Vec3, center: Vec3, viewer: Entity): Boolean {
+        val ownBlock = BlockPos.containing(center)
         val hit = level.clip(ClipContext(eye, center, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, viewer))
-        if (hit.type != HitResult.Type.BLOCK) return true
-        return hit.location.distanceTo(center) <= ONE_BLOCK_REACH
+        if (hit.type != HitResult.Type.BLOCK) return true // clear line of sight
+        return (hit as BlockHitResult).blockPos == ownBlock // visible only if its own block is the first thing hit
     }
 
     /**

@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.structure.StructurePreviewLoader
+import com.cobblemon.mod.common.client.render.structure.StructurePreviewRenderer
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
@@ -56,6 +58,21 @@ class CobblePediaPokedexPage(
         private const val BACK_BG_HOVER = 0xCC3A3A3A.toInt()
         private const val BARE_SUB = "" // sentinel sub id for a category's bare bucket
 
+        // Right-side structure preview pane (relative to the page origin x,y)
+        private const val PREVIEW_X = 170
+        private const val PREVIEW_Y = 42
+        private const val PREVIEW_W = 155
+        private const val PREVIEW_H = 130
+        private const val PREVIEW_BG = 0xC0101010.toInt()
+        private const val LIST_ROW_HIGHLIGHT = 0x803A3A3A.toInt()
+        private const val LIST_ROW_WIDTH = 130
+
+        // "Refresh" button overlaid at the preview pane's top-right: re-rolls processor substitutions.
+        private const val REFRESH_W = 50
+        private const val REFRESH_H = 12
+        private const val REFRESH_BG = 0xCC1A1A1A.toInt()
+        private const val REFRESH_BG_HOVER = 0xCC3A3A3A.toInt()
+
         private fun tileWidth(): Int = (GRID_WIDTH - TILE_GAP * (COLUMNS - 1)) / COLUMNS
 
         private fun categoryName(category: ScannedDataCategory): Component =
@@ -77,10 +94,24 @@ class CobblePediaPokedexPage(
     private var selectedSub: String? = null // null = sub-grid (or direct list if no subs); non-null = a bucket's list
     private var scrollRow = 0
 
+    // Structure preview pane state
+    private var selectedEntry: ResourceLocation? = null
+    private var previewYaw = -30f
+    private var previewPitch = 30f
+    private var previewZoom = 1f
+
     override fun onSelected(gui: PokedexGUI) {
         selectedCategory = null
         selectedSub = null
         scrollRow = 0
+        clearSelectedEntry()
+    }
+
+    private fun clearSelectedEntry() {
+        selectedEntry = null
+        previewYaw = -30f
+        previewPitch = 30f
+        previewZoom = 1f
     }
 
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
@@ -96,7 +127,7 @@ class CobblePediaPokedexPage(
             renderTileGrid(context, x, y, mouseX, mouseY, categoryName(category), subTiles(category))
         } else {
             val title = if (selectedSub == null) categoryName(category) else subName(selectedSub!!)
-            renderList(context, x, y, title.copy().bold(), listEntriesFor(category, selectedSub))
+            renderList(context, x, y, mouseX, mouseY, title.copy().bold(), listEntriesFor(category, selectedSub))
         }
     }
 
@@ -151,7 +182,7 @@ class CobblePediaPokedexPage(
 
     // ---- list ----
 
-    private fun renderList(context: GuiGraphics, x: Int, y: Int, title: MutableComponent, entries: List<ResourceLocation>) {
+    private fun renderList(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, title: MutableComponent, entries: List<ResourceLocation>) {
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -172,14 +203,49 @@ class CobblePediaPokedexPage(
 
         val end = (scrollRow + LIST_VISIBLE_ROWS).coerceAtMost(entries.size)
         for (i in scrollRow until end) {
+            val rowY = y + LIST_TOP + (i - scrollRow) * LIST_LINE_HEIGHT
+            if (entries[i] == selectedEntry) {
+                context.fill(x + LIST_LEFT - 2, rowY - 1, x + LIST_LEFT + LIST_ROW_WIDTH, rowY + LIST_LINE_HEIGHT - 2, LIST_ROW_HIGHLIGHT)
+            }
             drawScaledText(
                 context = context,
                 text = entryName(entries[i]),
                 x = x + LIST_LEFT,
-                y = y + LIST_TOP + (i - scrollRow) * LIST_LINE_HEIGHT,
+                y = rowY,
                 shadow = true
             )
         }
+
+        // Right-side 3D preview of the selected entry's structure, if one exists.
+        val sel = selectedEntry
+        if (sel != null) {
+            val preview = StructurePreviewLoader.forEntry(sel)
+            if (preview != null) {
+                context.fill(x + PREVIEW_X, y + PREVIEW_Y, x + PREVIEW_X + PREVIEW_W, y + PREVIEW_Y + PREVIEW_H, PREVIEW_BG)
+                StructurePreviewRenderer.render(
+                    context, preview,
+                    x + PREVIEW_X, y + PREVIEW_Y, PREVIEW_W, PREVIEW_H,
+                    previewYaw, previewPitch, previewZoom
+                )
+                renderRefreshButton(context, x, y, mouseX, mouseY)
+            }
+        }
+    }
+
+    private fun renderRefreshButton(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val bx = x + PREVIEW_X + PREVIEW_W - REFRESH_W - 2
+        val by = y + PREVIEW_Y + 2
+        val hovered = mouseX in bx..(bx + REFRESH_W) && mouseY in by..(by + REFRESH_H)
+        context.fill(bx, by, bx + REFRESH_W, by + REFRESH_H, if (hovered) REFRESH_BG_HOVER else REFRESH_BG)
+        drawScaledText(
+            context = context,
+            text = Component.translatableWithFallback("cobblemon.ui.pokedex.cobblepedia.refresh", "Refresh"),
+            x = bx + REFRESH_W / 2,
+            y = by + 3,
+            shadow = true,
+            centered = true,
+            scale = 0.5F
+        )
     }
 
     private fun renderBackButton(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
@@ -210,12 +276,14 @@ class CobblePediaPokedexPage(
             selectedCategory = ScannedDataCategory.entries[index]
             selectedSub = null
             scrollRow = 0
+            clearSelectedEntry()
             return true
         }
 
         if (isBackClicked(x, y, mouseX, mouseY)) {
             if (selectedSub != null && hasSubcategories(category)) selectedSub = null else selectedCategory = null
             scrollRow = 0
+            clearSelectedEntry()
             return true
         }
 
@@ -224,15 +292,49 @@ class CobblePediaPokedexPage(
             val index = tileIndexAt(x, y, mouseX, mouseY, subs.size) ?: return false
             selectedSub = subs[index]
             scrollRow = 0
+            clearSelectedEntry()
             return true
         }
 
+        // Refresh button (only present while a preview is shown): re-roll the structure's substitutions.
+        if (previewVisible() && isRefreshClicked(x, y, mouseX, mouseY)) {
+            selectedEntry?.let { StructurePreviewLoader.reroll(it) }
+            return true
+        }
+
+        // List view: clicking a row selects that entry (and shows its structure preview if any).
+        val entries = listEntriesFor(category, selectedSub)
+        val rowIndex = rowIndexAt(x, y, mouseX, mouseY, entries.size)
+        if (rowIndex != null) {
+            selectedEntry = entries[rowIndex]
+            previewYaw = -30f
+            previewPitch = 30f
+            previewZoom = 1f
+            return true
+        }
         return false
+    }
+
+    override fun mouseDragged(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
+        if (button != 0 || !previewVisible()) return false
+        previewYaw += deltaX.toFloat()
+        previewPitch = (previewPitch + deltaY.toFloat()).coerceIn(-90f, 90f)
+        return true
     }
 
     override fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
         val category = selectedCategory ?: return false
         if (selectedSub == null && hasSubcategories(category)) return false
+
+        // Scrolling over the preview pane zooms; elsewhere it scrolls the list.
+        val x = (gui.width - BASE_WIDTH) / 2
+        val y = (gui.height - BASE_HEIGHT) / 2
+        if (previewVisible() && mouseX >= x + PREVIEW_X && mouseX <= x + PREVIEW_X + PREVIEW_W &&
+            mouseY >= y + PREVIEW_Y && mouseY <= y + PREVIEW_Y + PREVIEW_H) {
+            previewZoom = (previewZoom + deltaY.toFloat() * 0.1f).coerceIn(0.25f, 4f)
+            return true
+        }
+
         val count = listEntriesFor(category, selectedSub).size
         val maxScroll = max(0, count - LIST_VISIBLE_ROWS)
         scrollRow = (scrollRow - deltaY.toInt()).coerceIn(0, maxScroll)
@@ -266,10 +368,17 @@ class CobblePediaPokedexPage(
     private fun bucketEntries(bucket: String): List<ResourceLocation> =
         CobblemonClient.clientScannedData.scanned[bucket]?.toList() ?: emptyList()
 
-    private fun entriesForCategory(category: ScannedDataCategory): List<ResourceLocation> =
-        CobblemonClient.clientScannedData.scanned
+    private fun entriesForCategory(category: ScannedDataCategory): List<ResourceLocation> {
+        val scanned = CobblemonClient.clientScannedData.scanned
             .filterKeys { ScannedDataCategory.categoryOfBucket(it) == category }
-            .values.flatten().distinct()
+            .values.flatten()
+        // TEMPORARY: all habitats and structures are treated as unlocked for testing the page + preview.
+        return when (category) {
+            ScannedDataCategory.HABITATS -> (scanned + TestUnlockedHabitats.entries).distinct()
+            ScannedDataCategory.STRUCTURES -> (scanned + TestUnlockedStructures.entries).distinct()
+            else -> scanned.distinct()
+        }
+    }
 
     // ---- geometry ----
 
@@ -293,4 +402,24 @@ class CobblePediaPokedexPage(
         val by = y + BACK_Y
         return mouseX >= bx && mouseX <= bx + BACK_W && mouseY >= by && mouseY <= by + BACK_H
     }
+
+    /** Which visible list row (absolute index into entries) is under the cursor, or null. */
+    private fun rowIndexAt(x: Int, y: Int, mouseX: Double, mouseY: Double, count: Int): Int? {
+        if (mouseX < x + LIST_LEFT - 2 || mouseX > x + LIST_LEFT + LIST_ROW_WIDTH) return null
+        val end = (scrollRow + LIST_VISIBLE_ROWS).coerceAtMost(count)
+        for (i in scrollRow until end) {
+            val rowY = y + LIST_TOP + (i - scrollRow) * LIST_LINE_HEIGHT
+            if (mouseY >= rowY - 1 && mouseY <= rowY + LIST_LINE_HEIGHT - 2) return i
+        }
+        return null
+    }
+
+    private fun isRefreshClicked(x: Int, y: Int, mouseX: Double, mouseY: Double): Boolean {
+        val bx = x + PREVIEW_X + PREVIEW_W - REFRESH_W - 2
+        val by = y + PREVIEW_Y + 2
+        return mouseX >= bx && mouseX <= bx + REFRESH_W && mouseY >= by && mouseY <= by + REFRESH_H
+    }
+
+    /** True when a structure preview is currently being shown for the selected entry. */
+    private fun previewVisible(): Boolean = selectedEntry?.let { StructurePreviewLoader.hasPreview(it) } == true
 }

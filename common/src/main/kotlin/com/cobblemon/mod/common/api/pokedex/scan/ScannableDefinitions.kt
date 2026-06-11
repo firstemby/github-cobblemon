@@ -58,9 +58,9 @@ object ScannableDefinitions : JsonDataRegistry<ScannableDefinition> {
         val holder = item.builtInRegistryHolder()
         val itemId = BuiltInRegistries.ITEM.getKey(item)
         for (def in definitions) {
-            if (!def.category.equals(ScannedDataCategory.ITEMS.id, ignoreCase = true)) continue
-            val matches = itemId in def.entries ||
-                def.tags.any { holder.`is`(TagKey.create(Registries.ITEM, it)) }
+            if (def.category?.equals(ScannedDataCategory.ITEMS.id, ignoreCase = true) != true) continue
+            val matches = itemId in def.entryIds() ||
+                def.tagIds().any { holder.`is`(TagKey.create(Registries.ITEM, it)) }
             if (matches) return def.bucketPath()
         }
         return null
@@ -68,5 +68,5 @@ object ScannableDefinitions : JsonDataRegistry<ScannableDefinition> {
 
     /** Whether [id] is explicitly allow-listed in [bucket] (id matching only; for non-item categories). */
     fun isAllowed(bucket: String, id: ResourceLocation): Boolean =
-        definitions.any { it.bucketPath() == bucket && id in it.entries }
+        definitions.any { it.bucketPath() == bucket && id in it.entryIds() }
 }

@@ -43,7 +43,7 @@ class PrintedPhotoItem(properties: Item.Properties) : Item(properties) {
         val pokedex = Cobblemon.playerDataManager.getPokedexData(player.uuid)
         printedPhoto.detectedSpecies.forEach { speciesKey ->
             val speciesId = ResourceLocation.tryParse(speciesKey) ?: return@forEach
-            if (pokedex.getKnowledgeForSpecies(speciesId) >= PokedexEntryProgress.ENCOUNTERED) return@forEach
+            if (pokedex.getKnowledgeForSpecies(speciesId) >= PokedexEntryProgress.SEEN) return@forEach
             val species = PokemonSpecies.getByIdentifier(speciesId) ?: return@forEach
             pokedex.encounter(species.create(level = 1))
         }

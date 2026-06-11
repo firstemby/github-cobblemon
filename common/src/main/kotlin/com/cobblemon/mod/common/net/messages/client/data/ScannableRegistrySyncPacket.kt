@@ -14,10 +14,10 @@ class ScannableRegistrySyncPacket(definitions: Collection<ScannableDefinition>) 
     override val id = ID
 
     override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: ScannableDefinition) {
-        buffer.writeString(entry.category)
+        buffer.writeString(entry.category ?: "")
         buffer.writeString(entry.subCategory ?: "")
-        buffer.writeCollection(entry.entries) { _, rl -> buffer.writeString(rl.toString()) }
-        buffer.writeCollection(entry.tags) { _, rl -> buffer.writeString(rl.toString()) }
+        buffer.writeCollection(entry.entryIds()) { _, rl -> buffer.writeString(rl.toString()) }
+        buffer.writeCollection(entry.tagIds()) { _, rl -> buffer.writeString(rl.toString()) }
     }
 
     override fun decodeEntry(buffer: RegistryFriendlyByteBuf): ScannableDefinition {

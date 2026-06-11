@@ -88,40 +88,38 @@ class ServerSettingsPacket internal constructor(
     }
     companion object {
         val ID = cobblemonResource("server_settings")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(buffer.readBoolean(),
-            buffer.readBoolean(), buffer.readBoolean(),
-            buffer.readInt(), buffer.readInt(), buffer.readInt(),
-            buffer.readBoolean(), buffer.readFloat(), buffer.readFloat())
         fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(
-            buffer.readBoolean(),
-            buffer.readBoolean(),
-            buffer.readBoolean(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readBoolean(),
-            buffer.readDouble(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readFloat(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readFloat(),
-            buffer.readInt(),
-            buffer.readFloat(),
-            buffer.readFloat(),
-            buffer.readFloat(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt(),
-            buffer.readInt()
+            buffer.readBoolean(), // preventCompletePartyDeposit
+            buffer.readBoolean(), // displayEntityLevelLabel
+            buffer.readBoolean(), // displayEntityNameLabel
+            buffer.readInt(),     // maxPokemonLevel
+            buffer.readInt(),     // maxPokemonFriendship
+            buffer.readInt(),     // maxDynamaxLevel
+            buffer.readBoolean(), // unlockAllMoveDexMovesByDefault
+            buffer.readFloat(),   // pokemonIntrinsicSizeMin
+            buffer.readFloat(),   // pokemonIntrinsicSizeMax
+            buffer.readDouble(),  // pokedexScannerPhotoRaycastDistance
+            buffer.readInt(),     // pokedexScannerPhotoRaycastDensity
+            buffer.readInt(),     // pokedexScannerPhotoPerimeterRaycastDensity
+            buffer.readInt(),     // pokedexScannerPhotoCoverageScoreCap
+            buffer.readFloat(),   // pokedexScannerPhotoCoverageScoreCapAtPercent
+            buffer.readInt(),     // pokedexScannerPhotoCenteredScoreCap
+            buffer.readInt(),     // pokedexScannerPhotoFacingBonus
+            buffer.readInt(),     // pokedexScannerPhotoFullBodyBonus
+            buffer.readFloat(),   // pokedexScannerPhotoOutOfFrameMultiplier
+            buffer.readInt(),     // pokedexScannerPhotoShinyBonus
+            buffer.readFloat(),   // pokedexScannerPhotoUncommonSpeciesMultiplier
+            buffer.readFloat(),   // pokedexScannerPhotoRareSpeciesMultiplier
+            buffer.readFloat(),   // pokedexScannerPhotoUltraRareSpeciesMultiplier
+            buffer.readInt(),     // pokedexScannerPhotoExtraPokemonBonusCap
+            buffer.readInt(),     // pokedexScannerPhotoExtraPokemonBonusPerSubject
+            buffer.readInt(),     // pokedexScannerPhotoFamilyBonus
+            buffer.readInt(),     // pokedexScannerPhotoHabitatBonus
+            buffer.readInt(),     // pokedexScannerPhotoTimeOfDayBonus
+            buffer.readInt(),     // pokedexScannerPhotoWeatherBonus
+            buffer.readInt(),     // pokedexScannerPhotoAlphaBonus
+            buffer.readInt(),     // pokedexScannerPhotoWildBonus
+            buffer.readInt()      // pokedexScannerPhotoFormBonus
         )
     }
 }

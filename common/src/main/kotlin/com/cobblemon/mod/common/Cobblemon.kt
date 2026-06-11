@@ -321,6 +321,8 @@ object Cobblemon {
             this.config.maxPokemonFriendship,
             this.config.maxDynamaxLevel,
             this.config.unlockAllMoveDexMovesByDefault,
+            this.config.pokemonIntrinsicSizeMin,
+            this.config.pokemonIntrinsicSizeMax,
             this.config.pokedexScannerPhotoRaycastDistance,
             this.config.pokedexScannerPhotoRaycastDensity,
             this.config.pokedexScannerPhotoPerimeterRaycastDensity,
@@ -343,9 +345,6 @@ object Cobblemon {
             this.config.pokedexScannerPhotoAlphaBonus,
             this.config.pokedexScannerPhotoWildBonus,
             this.config.pokedexScannerPhotoFormBonus
-            this.config.unlockAllMoveDexMovesByDefault,
-            this.config.pokemonIntrinsicSizeMin,
-            this.config.pokemonIntrinsicSizeMax
         ).sendToPlayer(player)
     }
 

@@ -34,7 +34,6 @@ import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.gui.photoprinter.PhotoPrinterScreen
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
-import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoAnimationTypes
 import com.cobblemon.mod.common.client.pokedex.photo.PokedexPhotoClientStore
@@ -52,7 +51,6 @@ import com.cobblemon.mod.common.client.render.block.PhotoPrinterBlockEntityRende
 import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.PrintedPhotoDisplayBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
-import com.cobblemon.mod.common.client.render.block.TMShelfBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
