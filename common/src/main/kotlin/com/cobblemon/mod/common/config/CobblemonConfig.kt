@@ -360,7 +360,8 @@ class CobblemonConfig {
     var infiniteRideStamina = false
 
     @CobblemonConfigField(Category.Riding, lang = "remember_riding_camera", CLIENT)
-    var rememberRidingCamera = false
+    @LastChangedVersion("1.8.0")
+    var rememberRidingCamera = true
 
     @CobblemonConfigField(Category.Riding, lang = "enable_in_flight_dismounting", CLIENT)
     var enableInFlightDismounting = false
