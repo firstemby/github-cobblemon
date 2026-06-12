@@ -97,7 +97,9 @@ class Berry(
     val stageOnePositioning: GrowthPoint,
     val pokeSnackPositionings: Array<GrowthPoint>,
     val weight: Float,
-    val boneMealChance: Float
+    val boneMealChance: Float,
+    /** Datapack-defined quality score (higher = better), used for sorting/display e.g. in the BerryDex. */
+    val quality: Int = 0
 ) {
     @Transient
     var identifier: ResourceLocation = identifier

@@ -29,7 +29,9 @@ import net.minecraft.world.level.material.FluidState
  */
 class StructurePreviewLevel(
     private val states: Map<BlockPos, BlockState>,
-    private val biome: Biome?
+    private val biome: Biome?,
+    /** Multiplier on directional face shading (clamped to 1.0); >1 brightens side/bottom faces. */
+    private val shadeBoost: Float = 1f
 ) : BlockAndTintGetter {
 
     override fun getBlockState(pos: BlockPos): BlockState = states[pos] ?: Blocks.AIR.defaultBlockState()
@@ -42,13 +44,13 @@ class StructurePreviewLevel(
     override fun getBrightness(lightLayer: LightLayer, pos: BlockPos): Int = 15
     override fun getRawBrightness(pos: BlockPos, ambientDarkening: Int): Int = 15
 
-    // Standard overworld face shading for a clear 3D look.
-    override fun getShade(direction: Direction, shade: Boolean): Float = when (direction) {
+    // Standard overworld face shading for a clear 3D look (optionally boosted brighter).
+    override fun getShade(direction: Direction, shade: Boolean): Float = (when (direction) {
         Direction.DOWN -> 0.5f
         Direction.UP -> 1.0f
         Direction.NORTH, Direction.SOUTH -> 0.8f
         else -> 0.6f
-    }
+    } * shadeBoost).coerceAtMost(1.0f)
 
     override fun getBlockTint(pos: BlockPos, colorResolver: ColorResolver): Int {
         val resolvedBiome = biome ?: return -1 // white = no tint

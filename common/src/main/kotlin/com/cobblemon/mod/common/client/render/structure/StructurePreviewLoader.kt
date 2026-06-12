@@ -60,6 +60,69 @@ object StructurePreviewLoader {
 
     fun hasPreview(entryId: ResourceLocation): Boolean = forEntry(entryId) != null
 
+    /** Cheap existence check: does some bundled .nbt resolve for this id (index lookup only, no parsing). */
+    fun hasTemplate(entryId: ResourceLocation): Boolean = resolve(entryId) != null
+
+    /** Family key (digit-stripped path / filename) -> all concrete .nbt variants, in numeric order. */
+    private val families: Map<String, List<ResourceLocation>> by lazy {
+        val byFamily = HashMap<String, LinkedHashSet<ResourceLocation>>()
+        for (indexed in index.values.distinct()) {
+            val loc = indexed.elementLocation
+            byFamily.getOrPut("${loc.namespace}:${stripTrailingDigits(loc.path)}") { LinkedHashSet() }.add(loc)
+            byFamily.getOrPut("${loc.namespace}:${stripTrailingDigits(loc.path.substringAfterLast('/'))}") { LinkedHashSet() }.add(loc)
+        }
+        byFamily.mapValues { (_, set) ->
+            set.sortedWith(compareBy({ stripTrailingDigits(it.path) }, { trailingNumber(it.path) }))
+        }
+    }
+
+    /** Folder key (full parent path and last folder segment) -> the .nbts inside, in numeric order. */
+    private val folderFamilies: Map<String, List<ResourceLocation>> by lazy {
+        val byFolder = HashMap<String, LinkedHashSet<ResourceLocation>>()
+        for (indexed in index.values.distinct()) {
+            val loc = indexed.elementLocation
+            val parent = loc.path.substringBeforeLast('/', "")
+            if (parent.isEmpty()) continue
+            byFolder.getOrPut("${loc.namespace}:$parent") { LinkedHashSet() }.add(loc)
+            byFolder.getOrPut("${loc.namespace}:${parent.substringAfterLast('/')}") { LinkedHashSet() }.add(loc)
+        }
+        byFolder.mapValues { (_, set) ->
+            set.sortedWith(compareBy({ stripTrailingDigits(it.path) }, { trailingNumber(it.path) }))
+        }
+    }
+
+    /**
+     * Every concrete variant of an entry's structure family — e.g. `habitats/berry_patch` returns
+     * `habitats/berry_patch1`..`berry_patchN` — so callers can cycle between variations. Matching is
+     * deliberately forgiving about naming drift between worldgen ids and .nbt files: digit-stripped,
+     * filename-only, and singular/plural forms are all tried (so `earthen_hives` finds `earthen_hive1`),
+     * then folders named like the entry (so vanilla `shipwreck` finds `structure/shipwreck/`'s pieces).
+     * Falls back to the entry itself, or an empty list when no .nbt exists for it.
+     */
+    fun variantsFor(entryId: ResourceLocation): List<ResourceLocation> {
+        val ns = entryId.namespace
+        val bases = LinkedHashSet<String>()
+        for (base in listOf(
+            entryId.path,
+            stripTrailingDigits(entryId.path),
+            entryId.path.substringAfterLast('/'),
+            stripTrailingDigits(entryId.path.substringAfterLast('/'))
+        )) {
+            bases.add(base)
+            bases.add(base + "s")
+            if (base.endsWith("s")) bases.add(base.dropLast(1))
+        }
+        for (base in bases) {
+            families["$ns:$base"]?.let { return it }
+        }
+        for (base in bases) {
+            folderFamilies["$ns:$base"]?.let { return it }
+        }
+        return if (hasTemplate(entryId)) listOf(entryId) else emptyList()
+    }
+
+    private fun trailingNumber(path: String): Int = Regex("(\\d+)$").find(path)?.value?.toIntOrNull() ?: 0
+
     private fun rawFor(entryId: ResourceLocation): Raw? = rawCache.getOrPut(entryId) {
         val indexed = resolve(entryId) ?: return@getOrPut null
         val parsed = loadFromClasspath(indexed.resourceName) ?: return@getOrPut null

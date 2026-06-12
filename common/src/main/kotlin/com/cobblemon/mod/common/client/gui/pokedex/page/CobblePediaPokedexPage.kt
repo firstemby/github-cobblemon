@@ -94,6 +94,14 @@ class CobblePediaPokedexPage(
     private var selectedSub: String? = null // null = sub-grid (or direct list if no subs); non-null = a bucket's list
     private var scrollRow = 0
 
+    // WorldDex (replaces the Habitats/Structures categories with a biome-grouped browser)
+    private var worldDexMode = false
+    private val worldDexView = WorldDexView()
+
+    // BerryDex (opened from the Berries tile)
+    private var berryDexMode = false
+    private val berryDexView = BerryDexView()
+
     // Structure preview pane state
     private var selectedEntry: ResourceLocation? = null
     private var previewYaw = -30f
@@ -104,7 +112,16 @@ class CobblePediaPokedexPage(
         selectedCategory = null
         selectedSub = null
         scrollRow = 0
+        worldDexMode = false
+        worldDexView.reset()
+        berryDexMode = false
+        berryDexView.reset()
         clearSelectedEntry()
+    }
+
+    /** Categories shown as CobblePedia tiles; Habitats and Structures are folded into the WorldDex. */
+    private fun tileCategories(): List<ScannedDataCategory> = ScannedDataCategory.entries.filter {
+        it != ScannedDataCategory.HABITATS && it != ScannedDataCategory.STRUCTURES
     }
 
     private fun clearSelectedEntry() {
@@ -115,6 +132,17 @@ class CobblePediaPokedexPage(
     }
 
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
+        if (worldDexMode) {
+            renderBackButton(context, x, y, mouseX, mouseY)
+            worldDexView.render(context, x, y, mouseX, mouseY)
+            return
+        }
+        if (berryDexMode) {
+            renderBackButton(context, x, y, mouseX, mouseY)
+            berryDexView.render(context, x, y, mouseX, mouseY)
+            return
+        }
+
         val category = selectedCategory
         if (category == null) {
             renderTileGrid(context, x, y, mouseX, mouseY, lang("ui.pokedex.page.cobblepedia"), categoryTiles())
@@ -136,7 +164,8 @@ class CobblePediaPokedexPage(
     private data class Tile(val label: Component, val count: Int)
 
     private fun categoryTiles(): List<Tile> =
-        ScannedDataCategory.entries.map { Tile(categoryName(it), entriesForCategory(it).size) }
+        tileCategories().map { Tile(categoryName(it), entriesForCategory(it).size) } +
+            Tile(Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"), WorldDexData.totalEntries)
 
     private fun subTiles(category: ScannedDataCategory): List<Tile> =
         subKeys(category).map { sub -> Tile(subName(sub), bucketEntries(category.bucket(sub)).size) }
@@ -269,11 +298,38 @@ class CobblePediaPokedexPage(
     override fun mouseClicked(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int): Boolean {
         val x = (gui.width - BASE_WIDTH) / 2
         val y = (gui.height - BASE_HEIGHT) / 2
+
+        if (worldDexMode) {
+            if (isBackClicked(x, y, mouseX, mouseY)) {
+                worldDexMode = false
+                worldDexView.reset()
+                return true
+            }
+            return worldDexView.mouseClicked(x, y, mouseX, mouseY)
+        }
+        if (berryDexMode) {
+            if (isBackClicked(x, y, mouseX, mouseY)) {
+                berryDexMode = false
+                berryDexView.reset()
+                return true
+            }
+            return berryDexView.mouseClicked(x, y, mouseX, mouseY)
+        }
+
         val category = selectedCategory
 
         if (category == null) {
-            val index = tileIndexAt(x, y, mouseX, mouseY, ScannedDataCategory.entries.size) ?: return false
-            selectedCategory = ScannedDataCategory.entries[index]
+            val categories = tileCategories()
+            val index = tileIndexAt(x, y, mouseX, mouseY, categories.size + 1) ?: return false
+            if (index == categories.size) {
+                worldDexMode = true
+                return true
+            }
+            if (categories[index] == ScannedDataCategory.BERRIES) {
+                berryDexMode = true
+                return true
+            }
+            selectedCategory = categories[index]
             selectedSub = null
             scrollRow = 0
             clearSelectedEntry()
@@ -315,14 +371,39 @@ class CobblePediaPokedexPage(
         return false
     }
 
+    override fun keyPressed(gui: PokedexGUI, keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (worldDexMode) return worldDexView.keyPressed(keyCode)
+        if (berryDexMode) return berryDexView.keyPressed(keyCode)
+        return false
+    }
+
+    override fun charTyped(gui: PokedexGUI, codePoint: Char, modifiers: Int): Boolean {
+        if (worldDexMode) return worldDexView.charTyped(codePoint)
+        if (berryDexMode) return berryDexView.charTyped(codePoint)
+        return false
+    }
+
     override fun mouseDragged(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (button != 0 || !previewVisible()) return false
+        if (button != 0) return false
+        if (worldDexMode) return worldDexView.mouseDragged(deltaX, deltaY)
+        if (berryDexMode) return berryDexView.mouseDragged(deltaX, deltaY)
+        if (!previewVisible()) return false
         previewYaw += deltaX.toFloat()
         previewPitch = (previewPitch + deltaY.toFloat()).coerceIn(-90f, 90f)
         return true
     }
 
     override fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
+        if (worldDexMode) {
+            val wx = (gui.width - BASE_WIDTH) / 2
+            val wy = (gui.height - BASE_HEIGHT) / 2
+            return worldDexView.mouseScrolled(wx, wy, mouseX, mouseY, deltaY)
+        }
+        if (berryDexMode) {
+            val bx = (gui.width - BASE_WIDTH) / 2
+            val by = (gui.height - BASE_HEIGHT) / 2
+            return berryDexView.mouseScrolled(bx, by, mouseX, mouseY, deltaY)
+        }
         val category = selectedCategory ?: return false
         if (selectedSub == null && hasSubcategories(category)) return false
 
