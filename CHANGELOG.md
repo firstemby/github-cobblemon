@@ -300,6 +300,7 @@
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 - Resolved Z-Fighting on Pokédex Models
 - Restored Ninjask's ability to do barrel rolls
+- Fixed the Remember Riding Camera config not being respected when dismounting and resolved the incompatibility with the Auto Third Person mod
 
 ### Fixes
 - Fixed Croagunk's walkspeed
