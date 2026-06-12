@@ -137,8 +137,8 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             party2.add(pokemon1)
             party1.add(pokemon2)
 
-            pokemon1.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon2))
-            pokemon2.triggerTransformations(TradeTrigger::class.java, TradeTrigger.Context(pokemon1))
+            pokemon1.triggerTransformations<TradeTrigger>(TradeTrigger.Context(pokemon2))
+            pokemon2.triggerTransformations<TradeTrigger>(TradeTrigger.Context(pokemon1))
 
             activeTrade.completeTrade()
 

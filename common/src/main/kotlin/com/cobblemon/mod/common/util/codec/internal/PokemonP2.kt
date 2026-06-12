@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.datafixers.util.Pair
@@ -25,6 +26,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.DynamicOps
 import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.Optional
 import java.util.UUID
@@ -38,7 +40,7 @@ internal data class PokemonP2(
     val caughtBall: PokeBall,
     val faintedTimer: Int,
     val healTimer: Int,
-    val evolutionController: ServerEvolutionController.Intermediate,
+    val evolutionIds: List<String>,
     val customProperties: MutableList<CustomPokemonProperty>,
     val nature: Nature,
     val mintedNature: Optional<Nature>,
@@ -57,7 +59,7 @@ internal data class PokemonP2(
         other.caughtBall = this.caughtBall
         other.faintedTimer = this.faintedTimer
         other.healTimer = this.healTimer
-        other.evolutionProxy.overrideController(evolutionController.create(other))
+        other.evolutionProxy.overrideController(ServerEvolutionController(other, evolutionIds.toSet()))
         other.customProperties.clear()
         other.customProperties += customProperties
         other.nature = this.nature
@@ -80,7 +82,7 @@ internal data class PokemonP2(
                 PokeBall.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_CAUGHT_BALL).forGetter(PokemonP2::caughtBall),
                 Codec.INT.fieldOf(DataKeys.POKEMON_FAINTED_TIMER).forGetter(PokemonP2::faintedTimer),
                 Codec.INT.fieldOf(DataKeys.POKEMON_HEALING_TIMER).forGetter(PokemonP2::healTimer),
-                ServerEvolutionController.CODEC.fieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(PokemonP2::evolutionController),
+                PrimitiveCodec.STRING.listOf().fieldOf(DataKeys.POKEMON_EVOLUTIONS).forGetter(PokemonP2::evolutionIds),
                 PokemonProperties.CUSTOM_PROPERTIES_CODEC.optionalFieldOf(DataKeys.POKEMON_DATA, arrayListOf()).forGetter(PokemonP2::customProperties),
                 Nature.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_NATURE).forGetter(PokemonP2::nature),
                 Nature.BY_IDENTIFIER_CODEC.optionalFieldOf(DataKeys.POKEMON_MINTED_NATURE).forGetter(PokemonP2::mintedNature),
@@ -119,7 +121,7 @@ internal data class PokemonP2(
             pokemon.caughtBall,
             pokemon.faintedTimer,
             pokemon.healTimer,
-            pokemon.evolutionProxy.server().asIntermediate(),
+            pokemon.evolutionProxy.server().map(Evolution::id),
             pokemon.customProperties,
             pokemon.nature,
             Optional.ofNullable(pokemon.mintedNature),

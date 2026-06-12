@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.RecoilRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
@@ -42,7 +41,7 @@ class RecoilTransformationProgress : TransformationProgress<RecoilTransformation
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(pokemon: Pokemon): Boolean = pokemon.hasMatchingRequirement<RecoilRequirement>()
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.RECOIL
 
@@ -59,17 +58,6 @@ class RecoilTransformationProgress : TransformationProgress<RecoilTransformation
                 Codec.intRange(0, Int.MAX_VALUE).fieldOf(RECOIL).forGetter { it.progress.amount }
             ).apply(instance) { amount -> RecoilTransformationProgress().apply { updateProgress(Progress(amount)) } }
         }
-
-        fun supports(pokemon: Pokemon): Boolean {
-            val form = pokemon.form
-            if (form !is PermanentForm) return false
-            return form.transformations.any { transformation ->
-                transformation.requirements.any { requirement ->
-                    requirement is RecoilRequirement
-                }
-            }
-        }
-
     }
 
 }

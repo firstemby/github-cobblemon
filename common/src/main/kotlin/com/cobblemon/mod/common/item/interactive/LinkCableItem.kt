@@ -13,8 +13,8 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
-import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 
 class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
     override val accepted = setOf(PokemonEntityInteraction.Ownership.OWNER)
@@ -23,7 +23,7 @@ class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
 
         // empty properties provided - this will fail for Pokémon that require a specific trading partner
         val context = TradeTrigger.Context(PokemonProperties())
-        val transformed = pokemon.triggerTransformations(TradeTrigger::class.java, context)
+        val transformed = pokemon.triggerTransformations<TradeTrigger>(context)
         if (transformed.any()) {
             stack.consume(1, player)
             return true

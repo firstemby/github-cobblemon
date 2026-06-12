@@ -43,12 +43,7 @@ class DefeatTransformationProgress : TransformationProgress<DefeatTransformation
     }
 
     override fun shouldKeep(pokemon: Pokemon): Boolean {
-        val form = pokemon.form
-        return form.getBaseForm().transformations.any { transformation ->
-            transformation.requirements.any { requirement ->
-                requirement is DefeatRequirement && requirement.target.originalString.equals(this.progress.target.originalString, true)
-            }
-        }
+        return pokemon.hasMatchingRequirement<DefeatRequirement> { it.target.asString().equals(this.progress.target.asString(), true) }
     }
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.DEFEAT

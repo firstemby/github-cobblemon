@@ -22,13 +22,11 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.LastBattleCritic
  */
 class BattleCriticalHitsRequirement(val amount: Int = 0) : TransformationRequirement {
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
-        .progress()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.requirementProgress
         .filterIsInstance<LastBattleCriticalHitsTransformationProgress>()
-        .any { progress -> progress.currentProgress().amount >= this.amount }
+        .any { it.currentProgress().amount >= this.amount }
 
     companion object {
         const val ADAPTER_VARIANT = "battle_critical_hits"
     }
-
 }

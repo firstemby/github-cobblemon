@@ -22,17 +22,15 @@ import com.cobblemon.mod.common.pokemon.transformation.controller.ServerTransfor
  *
  * @param C The type of [TransformationDisplay] on the client side.
  * @param S The type of [Transformation] on the server side.
- * @param SI The type of intermediary used for serializing it on the server side.
  *
  * @author Licious, Segfault Guy
  * @since January 19th, 2025
  */
-abstract class TransformationProxy<C : TransformationDisplay, S : Transformation, SI>(
+abstract class TransformationProxy<C : TransformationDisplay, S : Transformation>(
     private val pokemon: Pokemon,
 ) {
-
     protected abstract var clientController: ClientTransformationController<C>
-    protected abstract var serverController: ServerTransformationController<S, SI>
+    protected abstract var serverController: ServerTransformationController<S>
 
     /** @return whether this proxy is on the client or server. */
     fun isClient(): Boolean = this.pokemon.isClient
@@ -49,7 +47,7 @@ abstract class TransformationProxy<C : TransformationDisplay, S : Transformation
     }
 
     /** @return the [ServerTransformationController] belonging to this proxy. */
-    fun server(): ServerTransformationController<S, SI> {
+    fun server(): ServerTransformationController<S> {
         if (this.isClient()) {
             throw ClassCastException("Cannot use the server implementation from the client side")
         }
@@ -60,19 +58,13 @@ abstract class TransformationProxy<C : TransformationDisplay, S : Transformation
      * Replaces the existing [ServerTransformationController] or [ClientTransformationController].
      *
      * NOTE: the [TransformationLike] and intermediary generic types of [newInstance] are not checked against the types
-     * of the existing controller. They are casted to the types of this proxy. YOU HAVE BEEN WARNED!
+     * of the existing controller. They are cast to the types of this proxy. YOU HAVE BEEN WARNED!
      */
     internal fun overrideController(newInstance: TransformationController<out TransformationLike>) {
         when (newInstance) {
-            is ClientTransformationController -> {
-                this.clientController = newInstance as ClientTransformationController<C>
-            }
-            is ServerTransformationController<*, *> -> {
-                this.serverController = newInstance as ServerTransformationController<S, SI>
-            }
-            else -> {
-                throw IllegalArgumentException("Cannot resolve override of type ${newInstance::class.simpleName}")
-            }
+            is ClientTransformationController -> { this.clientController = newInstance as ClientTransformationController<C> }
+            is ServerTransformationController<*> -> { this.serverController = newInstance as ServerTransformationController<S> }
+            else -> { throw IllegalArgumentException("Cannot resolve override of type ${newInstance::class.simpleName}") }
         }
     }
 }

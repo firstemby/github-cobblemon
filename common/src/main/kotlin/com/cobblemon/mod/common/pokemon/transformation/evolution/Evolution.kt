@@ -199,7 +199,7 @@ class Evolution(
         pokemon.benchedMoves.update()
 
         // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available
-        pokemon.triggerTransformations(PassiveTrigger::class.java)
+        pokemon.triggerTransformations<PassiveTrigger>()
 
         this.shed(pokemon)
 

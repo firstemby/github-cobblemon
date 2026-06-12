@@ -148,7 +148,7 @@ open class PlayerPartyStore(
                 }
 
                 // Passive evolutions and form changes
-                pokemon.triggerTransformations(PassiveTrigger::class.java)
+                pokemon.triggerTransformations<PassiveTrigger>()
 
                 // Reevaluate active form
                 val form = pokemon.form

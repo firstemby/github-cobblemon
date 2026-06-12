@@ -12,13 +12,12 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.DamageTakenRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.resources.ResourceLocation
 
 /**
  * A [TransformationProgress] meant to keep track of damage taken in battle without fainting.
@@ -42,7 +41,7 @@ class DamageTakenTransformationProgress : TransformationProgress<DamageTakenTran
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(pokemon: Pokemon): Boolean = pokemon.hasMatchingRequirement<DamageTakenRequirement>()
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.DAMAGE_TAKEN
 
@@ -59,18 +58,5 @@ class DamageTakenTransformationProgress : TransformationProgress<DamageTakenTran
                 Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { amount -> DamageTakenTransformationProgress().apply { updateProgress(Progress(amount)) } }
         }
-
-        fun supports(pokemon: Pokemon): Boolean {
-            val form = pokemon.form
-            if (form !is PermanentForm) return false
-            return form.transformations.any { transformation ->
-                transformation.requirements.any { requirement ->
-                    requirement is DamageTakenRequirement
-                }
-            }
-        }
-        // TODO improve (see triggerTransformations)
-
     }
-
 }

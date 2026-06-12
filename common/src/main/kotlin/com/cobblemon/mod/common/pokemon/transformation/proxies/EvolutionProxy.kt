@@ -25,10 +25,8 @@ import com.cobblemon.mod.common.pokemon.transformation.evolution.EvolutionDispla
  */
 class EvolutionProxy(
     private val pokemon: Pokemon,
-) : TransformationProxy<EvolutionDisplay, Evolution, ServerEvolutionController.Intermediate>(pokemon) {
+) : TransformationProxy<EvolutionDisplay, Evolution>(pokemon) {
 
-    override var clientController: ClientTransformationController<EvolutionDisplay> =
-        ClientEvolutionController(this.pokemon, emptySet())
-    override var serverController: ServerTransformationController<Evolution, ServerEvolutionController.Intermediate> =
-        ServerEvolutionController(this.pokemon, emptySet(), emptySet())
+    override var clientController: ClientTransformationController<EvolutionDisplay> = ClientEvolutionController(this.pokemon, emptySet())
+    override var serverController: ServerTransformationController<Evolution> = ServerEvolutionController(this.pokemon, emptySet())
 }

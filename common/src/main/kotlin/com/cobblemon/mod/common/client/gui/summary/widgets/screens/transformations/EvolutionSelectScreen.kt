@@ -99,7 +99,7 @@ abstract class EvolutionSelectScreen<C : TransformationDisplay, S : Transformati
             textScale = 0.5F
         )
 
-        abstract fun getProxy(pokemon: Pokemon): TransformationProxy<C, S, *>
+        abstract fun getProxy(pokemon: Pokemon): TransformationProxy<C, S>
 
         fun playSound(soundEvent: SoundEvent) {
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))

@@ -13,13 +13,12 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.UseMoveRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.resources.ResourceLocation
 
 /**
  * A [TransformationProgress] meant to keep track of the amount of times a specific move in battle.
@@ -43,7 +42,7 @@ class UseMoveTransformationProgress : TransformationProgress<UseMoveTransformati
         this.progress = Progress(MoveTemplate.dummy(""), 0)
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon, this.progress.move)
+    override fun shouldKeep(pokemon: Pokemon): Boolean = pokemon.hasMatchingRequirement<UseMoveRequirement> { it.move == progress.move }
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.USE_MOVE
 
@@ -65,17 +64,5 @@ class UseMoveTransformationProgress : TransformationProgress<UseMoveTransformati
                 Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { move, amount -> UseMoveTransformationProgress().apply { updateProgress(Progress(move, amount)) } }
         }
-
-        fun supports(pokemon: Pokemon, move: MoveTemplate): Boolean {
-            val form = pokemon.form
-            if (form !is PermanentForm) return false
-            return form.transformations.any { transformation ->
-                transformation.requirements.any { requirement ->
-                    requirement is UseMoveRequirement && requirement.move == move
-                }
-            }
-        }
-
     }
-
 }

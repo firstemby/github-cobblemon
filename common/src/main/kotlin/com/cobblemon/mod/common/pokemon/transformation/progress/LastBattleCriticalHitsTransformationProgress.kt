@@ -12,13 +12,12 @@ import com.cobblemon.mod.common.api.pokemon.transformation.progress.Transformati
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressType
 import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
 import com.cobblemon.mod.common.pokemon.transformation.requirements.BattleCriticalHitsRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.resources.ResourceLocation
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.resources.ResourceLocation
 
 class LastBattleCriticalHitsTransformationProgress : TransformationProgress<LastBattleCriticalHitsTransformationProgress.Progress> {
 
@@ -36,7 +35,7 @@ class LastBattleCriticalHitsTransformationProgress : TransformationProgress<Last
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(pokemon: Pokemon): Boolean = pokemon.hasMatchingRequirement<BattleCriticalHitsRequirement>()
 
     override fun type(): TransformationProgressType<*> = TransformationProgressTypes.LAST_BATTLE_CRITICAL_HITS
 
@@ -53,17 +52,5 @@ class LastBattleCriticalHitsTransformationProgress : TransformationProgress<Last
                 Codec.intRange(0, Int.MAX_VALUE).fieldOf(AMOUNT).forGetter { it.progress.amount }
             ).apply(instance) { amount -> LastBattleCriticalHitsTransformationProgress().apply { updateProgress(Progress(amount)) } }
         }
-
-        fun supports(pokemon: Pokemon): Boolean {
-            val form = pokemon.form
-            if (form !is PermanentForm) return false
-            return form.transformations.any { transformation ->
-                transformation.requirements.any { requirement ->
-                    requirement is BattleCriticalHitsRequirement
-                }
-            }
-        }
-
     }
-
 }

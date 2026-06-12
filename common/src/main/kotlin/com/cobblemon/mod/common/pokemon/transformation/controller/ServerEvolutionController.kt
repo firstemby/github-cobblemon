@@ -10,15 +10,11 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
-import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
-import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgressTypes
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 
 /**
  * Controller for managing evolutions on the server. These are data objects in the form of [Evolution]s.
@@ -29,8 +25,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 class ServerEvolutionController(
     private val pokemon: Pokemon,
     evolutionIds: Set<String>,
-    progress: Set<TransformationProgress<*>>,
-) : ServerTransformationController<Evolution, ServerEvolutionController.Intermediate>(pokemon, evolutionIds, progress) {
+) : ServerTransformationController<Evolution>(pokemon, evolutionIds) {
 
     init {
         val potentialEvolutions = this.pokemon.evolutions.map { it.id }.toSet()
@@ -39,12 +34,11 @@ class ServerEvolutionController(
     }
 
     private fun findEvolutionFromId(id: String): Evolution? = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
-
     override fun addPacket(transformation: Evolution) = AddEvolutionPacket(this.pokemon, transformation)
-
     override fun clearPacket() = ClearEvolutionsPacket { this.pokemon }
-
     override fun removePacket(transformation: Evolution) = RemoveEvolutionPacket(this.pokemon, transformation)
+    override fun canRevert() = false  // TODO evolutions are currently one-way, but modders may appreciate reversion support
+    override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
 
     override fun start(transformation: Evolution) {
         if (!canStart(transformation)) return
@@ -52,35 +46,5 @@ class ServerEvolutionController(
             event = EvolutionAcceptedEvent(this.pokemon, transformation),
             ifSucceeded = { transformation.perform(this.pokemon) }
         )
-    }
-
-    override fun canRevert() = false  // TODO evolutions are currently one-way, but modders may appreciate reversion support
-
-    override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
-
-    override fun asIntermediate(): Intermediate = Intermediate(this.transformations.map { it.id }.toSet(), this.progress)
-
-    data class Intermediate(
-        val evolutionIds: Set<String>,
-        val progress: Set<TransformationProgress<*>>,
-    ) {
-        fun create(pokemon: Pokemon) = ServerEvolutionController(
-            pokemon,
-            this.evolutionIds,
-            this.progress
-        )
-    }
-
-    companion object {
-        private const val PENDING = "pending"
-        private const val PROGRESS = "progress"
-
-        @JvmStatic
-        val CODEC: Codec<Intermediate> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                Codec.list(Codec.STRING).fieldOf(PENDING).forGetter { controller -> controller.evolutionIds.toMutableList() },
-                Codec.list(TransformationProgressTypes.codec()).fieldOf(PROGRESS).forGetter { controller -> controller.progress.toMutableList() }
-            ).apply(instance) { evolutions, progress -> Intermediate(evolutions.toSet(), progress.toSet()) }
-        }
     }
 }

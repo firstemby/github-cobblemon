@@ -97,7 +97,7 @@ open class PokemonBattle(
         this.actors.forEach { actor ->
             actor.battle = this
             actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.effectedPokemon.evolutionProxy.server().progress()
+                battlePokemon.effectedPokemon.requirementProgress
                     .filterIsInstance<LastBattleCriticalHitsTransformationProgress>()
                     .forEach { it.reset() }
             }
@@ -271,13 +271,13 @@ open class PokemonBattle(
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
                         val pokemon = opponentPokemon.effectedPokemon
                         if (facedFainted) {
-                            // TODO refactor and apply to forms
-                            pokemon.lockedEvolutions.forEach { evolution ->
-                                evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
-                                    if (defeatRequirement.target.matches(faintedPokemon.effectedPokemon)) {
-                                        val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is DefeatTransformationProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatTransformationProgress() }
-                                        progress.updateProgress(DefeatTransformationProgress.Progress(defeatRequirement.target, progress.currentProgress().amount + 1))
-                                    }
+                            if (pokemon.hasMatchingRequirement<DefeatRequirement>({ it.target.matches(faintedPokemon.effectedPokemon) })) {
+                                val requiredPokemonProperties = pokemon.getRelevantRequirements<DefeatRequirement> { it.target.matches(faintedPokemon.effectedPokemon) }
+                                    .map { it.target }
+                                    .distinctBy { it.asString() }
+                                for (props in requiredPokemonProperties) {
+                                    val progress = pokemon.progressFirstOrCreate({ it is DefeatTransformationProgress && it.currentProgress().target.asString().equals(props.asString(), ignoreCase = true) }, ::DefeatTransformationProgress)
+                                    progress.updateProgress(DefeatTransformationProgress.Progress(props.copy(), progress.currentProgress().amount + 1))
                                 }
                             }
                         }

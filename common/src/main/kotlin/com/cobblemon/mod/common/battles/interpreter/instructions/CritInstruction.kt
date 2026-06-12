@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.pokemon.transformation.progress.LastBattleCriticalHitsTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.BattleCriticalHitsRequirement
 import com.cobblemon.mod.common.util.battleLang
 
 /**
@@ -38,12 +39,9 @@ class CritInstruction(val message: BattleMessage, val instructionSet: Instructio
                 } else {
                     battle.broadcastChatMessage(battleLang("crit").yellow())
                 }
-                if (LastBattleCriticalHitsTransformationProgress.supports(battlePokemon.effectedPokemon)) {
-                    // TODO look at this some more
-                    for (proxy in battlePokemon.effectedPokemon.transformationProxies) {
-                        val progress = proxy.server().progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }) { LastBattleCriticalHitsTransformationProgress() }
-                        progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
-                    }
+                if (battlePokemon.effectedPokemon.hasMatchingRequirement<BattleCriticalHitsRequirement>()) {
+                    val progress = battlePokemon.effectedPokemon.progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }, ::LastBattleCriticalHitsTransformationProgress)
+                    progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
                 }
             }
             battle.minorBattleActions[pokemon.uuid] = message

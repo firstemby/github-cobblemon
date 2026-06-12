@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
-import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.net.messages.client.PokemonUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.isBusy
@@ -21,26 +20,16 @@ import com.cobblemon.mod.common.util.isBusy
  *
  * @param pokemon The [Pokemon] attached to this controller
  * @param transformationIds
- * @param progress
  *
  * @author Licious, Segfault Guy
  * @since January 19, 2025
  */
-abstract class ServerTransformationController<T : Transformation, I>(
+abstract class ServerTransformationController<T : Transformation>(
     private val pokemon: Pokemon,
     transformationIds: Set<String>,
-    progress: Set<TransformationProgress<*>>,
 ) : TransformationController<T> {
-
-    abstract fun asIntermediate(): I
-
     protected val transformations = hashSetOf<T>()
-    protected val progress = progress.toMutableSet()
     protected val transformationIds = transformationIds.toMutableSet()
-
-    init {
-        this.progress.removeIf { !it.shouldKeep(this.pokemon) }
-    }
 
     /** Creates a [PokemonUpdatePacket] for adding a [TransformationDisplay] to this [pokemon]'s attached client [TransformationController]. */
     protected abstract fun addPacket(transformation: T): PokemonUpdatePacket<*>
@@ -85,31 +74,6 @@ abstract class ServerTransformationController<T : Transformation, I>(
 
     abstract fun start(transformation: T)
 
-    open fun progress(): Collection<TransformationProgress<*>> = this.progress.toList()
-
-    open fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
-        this.progress.add(progress)
-        return progress
-    }
-
-    /**
-     * Attempts to find an [TransformationProgress] in [progress] or creates and tracks using [trackProgress].
-     *
-     * @param P The type of [TransformationProgress].
-     * @param predicate The lambda attempting to find specific progress. This needs to ensure the [TransformationProgress] is of type [P] or the cast will fail.
-     * @param progressFactory The lambda creating a new instance of type [P] if [predicate] can't find an element.
-     * @return The found match in [progress] or the created and now tracked with [trackProgress].
-     */
-    open fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
-        val existing = this.progress.firstOrNull(predicate)
-        if (existing == null) {
-            val created = progressFactory()
-            this.progress.add(created)
-            return created
-        }
-        return existing as P
-    }
-
     // FROM MutableSet ------------------------------------------------------------------------------------------------
 
     override val size: Int get() = this.transformations.size
@@ -143,7 +107,6 @@ abstract class ServerTransformationController<T : Transformation, I>(
             this.transformations.clear()
             this.pokemon.notify(clearPacket())
         }
-        this.progress.clear()
     }
 
     override fun contains(element: T) = this.transformations.contains(element)

@@ -274,7 +274,7 @@ object Cobblemon {
             val player = event.player
             val block = player.level().getBlockState(event.pos).block
             val context = BlockClickTrigger.Context(block, player.level())
-            player.party().forEach { pokemon -> pokemon.triggerTransformations(BlockClickTrigger::class.java, context) }
+            player.party().forEach { pokemon -> pokemon.triggerTransformations<BlockClickTrigger>(context) }
         }
 
         PlatformEvents.CHANGE_DIMENSION.subscribe {

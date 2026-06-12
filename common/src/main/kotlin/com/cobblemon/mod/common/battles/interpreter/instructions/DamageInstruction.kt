@@ -28,6 +28,8 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePac
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
 import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
 import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.DamageTakenRequirement
+import com.cobblemon.mod.common.pokemon.transformation.requirements.RecoilRequirement
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -74,17 +76,14 @@ class DamageInstruction(
 
     private fun doRecoilEvoChecks(battlePokemon: BattlePokemon) {
         battlePokemon.effectedPokemon.let { pokemon ->
-            if (RecoilTransformationProgress.supports(pokemon)) {
-                val healthStr = privateMessage.argumentAt(1) ?: throw UnsupportedOperationException(
-                    "Cant get recoil string"
-                )
-                val newHealth =
-                    "([0-9]+).*".toRegex().find(healthStr)?.groups?.get(1)?.value?.toIntOrNull()
-                        ?: throw UnsupportedOperationException("Cant get recoil string")
+            if (pokemon.hasMatchingRequirement<RecoilRequirement>()) {
+                val healthStr = privateMessage.argumentAt(1)
+                    ?: throw UnsupportedOperationException("Cant get recoil string")
+                val newHealth = "([0-9]+).*".toRegex().find(healthStr)?.groups?.get(1)?.value?.toIntOrNull()
+                    ?: throw UnsupportedOperationException("Cant get recoil string")
                 val difference = pokemon.currentHealth - newHealth
                 if (difference > 0) {
-                    // TODO refactor and apply to forms
-                    val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
+                    val progress = pokemon.progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
                     progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().amount + difference))
                 }
             }
@@ -186,9 +185,8 @@ class DamageInstruction(
                     battlePokemon.effectedPokemon.currentHealth = remainingHealth
                     if (difference > 0) {
                         battlePokemon.effectedPokemon.let { pokemon ->
-                            if (DamageTakenTransformationProgress.supports(pokemon)) {
-                                // TODO refactor and apply to forms
-                                val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is DamageTakenTransformationProgress }) { DamageTakenTransformationProgress() }
+                            if (pokemon.hasMatchingRequirement<DamageTakenRequirement>()) {
+                                val progress = pokemon.progressFirstOrCreate({ it is DamageTakenTransformationProgress }, ::DamageTakenTransformationProgress)
                                 progress.updateProgress(DamageTakenTransformationProgress.Progress(progress.currentProgress().amount + difference))
                             }
                         }

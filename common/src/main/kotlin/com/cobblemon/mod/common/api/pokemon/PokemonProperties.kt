@@ -49,6 +49,7 @@ import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.ResourceLocationException
@@ -65,7 +66,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A grouping of typical, selectable properties for a Pokémon. This is serializable
@@ -168,8 +168,8 @@ open class PokemonProperties {
                 parseIntProperty(keyPairs, listOf("${statName}_iv"))?.coerceIn(0, IVs.MAX_VALUE)?.let { maybeIVs[stat] = it }
                 parseIntProperty(keyPairs, listOf("${statName}_ev"))?.coerceIn(0, EVs.MAX_STAT_VALUE)?.let { maybeEVs[stat] = it }
             }
-            props.ivs = maybeIVs
-            props.evs = maybeEVs
+            props.evs = maybeEVs.takeIf { it.total() > 0 }
+            props.ivs = maybeIVs.takeIf { it.total() > 0 }
 
             props.updateAspects()
             return props

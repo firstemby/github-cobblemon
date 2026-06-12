@@ -23,10 +23,9 @@ import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransforma
  */
 class RecoilRequirement(val amount: Int = 0) : TransformationRequirement {
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.server()
-        .progress()
+    override fun check(pokemon: Pokemon): Boolean = pokemon.requirementProgress
         .filterIsInstance<RecoilTransformationProgress>()
-        .any { progress -> progress.currentProgress().amount >= this.amount }
+        .any { it.currentProgress().amount >= this.amount }
 
     companion object {
         const val ADAPTER_VARIANT = "recoil"

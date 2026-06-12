@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.transformation.progress.UseMoveTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.UseMoveRequirement
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
@@ -84,9 +85,8 @@ class MoveInstruction(
             }
 
             userPokemon.effectedPokemon.let { pokemon ->
-                // TODO refactor and apply to forms
-                if (UseMoveTransformationProgress.supports(pokemon, move)) {
-                    val progress = pokemon.evolutionProxy.server().progressFirstOrCreate({ it is UseMoveTransformationProgress && it.currentProgress().move == move }) { UseMoveTransformationProgress() }
+                if (pokemon.hasMatchingRequirement<UseMoveRequirement>({ it.move == move })) {
+                    val progress = pokemon.progressFirstOrCreate({ it is UseMoveTransformationProgress && it.currentProgress().move == move }, ::UseMoveTransformationProgress)
                     progress.updateProgress(UseMoveTransformationProgress.Progress(move, progress.currentProgress().amount + 1))
                 }
             }

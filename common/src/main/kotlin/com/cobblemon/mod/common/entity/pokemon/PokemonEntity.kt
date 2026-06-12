@@ -1489,7 +1489,7 @@ open class PokemonEntity(
         // Check evolution and form change item interaction
         if (pokemon.getOwnerPlayer() == player) {
             val context = ItemInteractionTrigger.Context(stack, player.level())
-            val transformed = pokemon.triggerTransformations(ItemInteractionTrigger::class.java, context)
+            val transformed = pokemon.triggerTransformations<ItemInteractionTrigger>(context)
 
             if (transformed.any()) {
                 if (!player.isCreative) stack.shrink(1)

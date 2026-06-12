@@ -57,6 +57,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
@@ -100,6 +101,8 @@ import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
@@ -266,6 +269,9 @@ open class Pokemon : ShowdownIdentifiable {
             value.changeFunction = oldChangeFunction
         }
 
+    // If you access this on the client then you are a stupid
+    var requirementProgress = mutableSetOf<TransformationProgress<*>>()
+
     var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
         private set
 
@@ -379,7 +385,7 @@ open class Pokemon : ShowdownIdentifiable {
                     this.faintedTimer = it.faintedTimer
                 }
                 // These are meant to reset on faint
-                this.evolutionProxy.server().progress()
+                requirementProgress
                     .filter { it is RecoilTransformationProgress || it is DamageTakenTransformationProgress }
                     .forEach { it.reset() }
             }
@@ -757,6 +763,17 @@ open class Pokemon : ShowdownIdentifiable {
     val lockedForms: Iterable<TemporaryForm>
         get() = changeableForms.filter { it !in formProxy.current() }
 
+    val relevantRequirements: Iterable<TransformationRequirement>
+        get() = (lockedEvolutions + lockedForms).flatMap { it.requirements }
+
+    inline fun <reified T : TransformationRequirement> getRelevantRequirements(condition: (T) -> Boolean): List<T> {
+        return (lockedEvolutions + lockedForms).flatMap { it.requirements.filterIsInstance<T>().filter(condition) }
+    }
+
+    inline fun <reified T : TransformationRequirement> hasMatchingRequirement(condition: (T) -> Boolean = { true }): Boolean {
+        return (lockedEvolutions + lockedForms).any { it.requirements.any { it is T && condition(it) } }
+    }
+
     private val rideBoosts: MutableMap<RidingStat, Float> = mutableMapOf()
 
     /**
@@ -769,9 +786,6 @@ open class Pokemon : ShowdownIdentifiable {
     /** Provides the sided [TransformationController]s for managing [TemporaryForm]s. */
     var formProxy: FormProxy = FormProxy(this.self())
         private set
-
-    val transformationProxies: Iterable<TransformationProxy<*, *, *>>
-        get() = listOf(evolutionProxy, formProxy)
 
     val customProperties = mutableListOf<CustomPokemonProperty>()
 
@@ -1536,7 +1550,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.caughtBall = other.caughtBall
         this.faintedTimer = other.faintedTimer
         this.healTimer = other.healTimer
-        this.evolutionProxy.overrideController(other.evolutionProxy.server().asIntermediate().create(this))
+        this.evolutionProxy.overrideController(ServerEvolutionController(this, other.evolutionProxy.server().map(Evolution::id).toSet()))
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
@@ -1553,7 +1567,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
-        this.formProxy.overrideController(other.formProxy.server().asIntermediate().create(this))
+        this.formProxy.overrideController(ServerFormController(this, other.formProxy.server().map(TemporaryForm::id).toSet()))
         this.features = other.features
         this.cosmeticItem = other.cosmeticItem
         this.activeMark = other.activeMark
@@ -1748,6 +1762,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (moveSet.getMoves().isEmpty()) {
             initializeMovesetFromDefault()
         }
+        this.requirementProgress.removeIf { !it.shouldKeep(this) }
         return this
     }
 
@@ -2291,6 +2306,29 @@ open class Pokemon : ShowdownIdentifiable {
         return false
     }
 
+    open fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
+        this.requirementProgress.add(progress)
+        return progress
+    }
+
+    /**
+     * Attempts to find an [TransformationProgress] in [requirementProgress] or creates and tracks using [trackProgress].
+     *
+     * @param P The type of [TransformationProgress].
+     * @param predicate The lambda attempting to find specific progress. This needs to ensure the [TransformationProgress] is of type [P] or the cast will fail.
+     * @param progressFactory The lambda creating a new instance of type [P] if [predicate] can't find an element.
+     * @return The found match in [requirementProgress] or the created and now tracked with [trackProgress].
+     */
+    open fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
+        val existing = requirementProgress.firstOrNull(predicate)
+        if (existing == null) {
+            val created = progressFactory()
+            this.requirementProgress.add(created)
+            return created
+        }
+        return existing as P
+    }
+
     /**
      * Function to run when a save-able change has been made to the Pokémon. This takes a packet to send to watching
      * players just for convenience, but the main thing is that this will notify the store that this Pokémon is in
@@ -2315,12 +2353,11 @@ open class Pokemon : ShowdownIdentifiable {
     /**
      * Triggers [TemporaryForm]s and [Evolution]s if requirements are met.
      *
-     * @param type The type of [TransformationTrigger] to trigger.
      * @param context The optional [ContextTrigger.Context] required for [ContextTrigger]s.
      * @return The [Transformation]s of this [Pokemon] that were triggered.
      */
-    fun <T : TransformationTrigger> triggerTransformations(type: Class<T>, context: ContextTrigger.Context? = null) =
-        transformations.filter { type.isInstance(it.trigger) && it.tryStart(this, context) }
+    inline fun <reified T : TransformationTrigger> triggerTransformations(context: ContextTrigger.Context? = null) =
+        transformations.filter { it.trigger is T && it.tryStart(this, context) }
 
     private fun isValidForm(form: FormData) = this.species.allForms.any { it === form }
 
