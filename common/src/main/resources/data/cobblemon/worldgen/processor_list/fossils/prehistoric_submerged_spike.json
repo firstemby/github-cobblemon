@@ -62,11 +62,6 @@
             ]
         },
         {
-            "processor_type": "gravity",
-            "heightmap": "OCEAN_FLOOR_WG",
-            "offset": -1
-        },
-        {
             "delegate": {
                 "processor_type": "minecraft:rule",
                 "rules": [

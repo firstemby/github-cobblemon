@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:ruins/old_garden_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

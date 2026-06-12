@@ -43,7 +43,10 @@
     "battle_hover": {
       "poseTypes": ["HOVER", "STAND", "FLOAT", "NONE"],
       "isBattle": true,
-      "animations": ["q.bedrock('bronzong', 'ground_idle')"]
+      "animations": ["q.bedrock('bronzong', 'ground_idle')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_primary('bronzong', 'battle_cry', q.curve('symmetrical_wide'))"
+      }
     },
     "walking": {
       "poseTypes": ["FLY", "WALK", "SWIM"],

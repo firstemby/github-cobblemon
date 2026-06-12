@@ -16,13 +16,27 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0179_mareep/mareep_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "emissive": true,
           "texture": "cobblemon:textures/pokemon/0179_mareep/mareep_shiny_emissive.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0179_mareep/mareep_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokedex.def
 
-import com.cobblemon.mod.common.api.data.ClientDataSynchronizer
-import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -23,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * @since August 24, 2024
  * @author Apion
  */
-abstract class PokedexDef: ClientDataSynchronizer<PokedexDef> {
+abstract class PokedexDef {
     //The ID used to find the codecs for this "type" of PokedexDef
     abstract val typeId: ResourceLocation
     //The ID of this dex in the Dexes registry

@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.api.spawning.spawner
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 
 /**
  * A spawner that works within a fixed area. Instances provide the center point and the radii and then the spawner
@@ -24,12 +24,13 @@ import net.minecraft.core.BlockPos
 open class FixedAreaSpawner(
     name: String,
     spawnPool: SpawnPool,
+    buckets: Map<String, Float>,
     val world: ServerLevel,
     val position: BlockPos,
     val horizontalRadius: Int,
     val verticalRadius: Int,
     maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk
-) : BasicSpawner(name, spawnPool, maxPokemonPerChunk) {
+) : BasicSpawner(name, spawnPool, maxPokemonPerChunk, buckets) {
     fun run(cause: SpawnCause, maxSpawns: Int? = null): List<Any> {
         return runForArea(
             zoneInput = getZoneInput(cause),

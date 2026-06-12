@@ -1,8 +1,8 @@
 {
   "portraitScale": 2.24,
-  "portraitTranslation": [-0.71, 0.46, 0],
-  "profileScale": 0.52,
-  "profileTranslation": [0, 0.95, 0],
+  "portraitTranslation": [-0.78, 0.86, 0],
+  "profileScale": 0.43,
+  "profileTranslation": [0.02, 1.03, 0],
   "rootBone": "primarina",
   "animations": {
     "faint": "q.bedrock_primary('primarina', 'faint', q.curve('one'))",

@@ -75,6 +75,17 @@
           "texture": "cobblemon:textures/pokemon/0999_gimmighoul/gimmighoul_chest_blank.png"
         }
       ]
+    },
+	    {
+      "aspects": [
+        "alpha_eyes", "roaming"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0999_gimmighoul/gimmighoul_roaming_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

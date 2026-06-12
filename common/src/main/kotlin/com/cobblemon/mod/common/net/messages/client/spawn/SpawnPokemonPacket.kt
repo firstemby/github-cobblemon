@@ -62,6 +62,7 @@ class SpawnPokemonPacket(
     var tickSpawned: Int,
     var rideBoosts: Map<RidingStat, Float>,
     var rideStamina: Float,
+    var isAlpha: Boolean,
     var silent: Boolean,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
@@ -95,6 +96,7 @@ class SpawnPokemonPacket(
         entity.tickCount,
         entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
+        entity.entityData.get(PokemonEntity.IS_ALPHA),
         entity.isSilent,
         vanillaSpawnPacket
     )
@@ -130,6 +132,7 @@ class SpawnPokemonPacket(
             { _, value -> buffer.writeFloat(value) }
         )
         buffer.writeFloat(rideStamina)
+        buffer.writeBoolean(isAlpha)
         buffer.writeBoolean(silent)
     }
 
@@ -176,6 +179,7 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
+        entity.entityData.set(PokemonEntity.IS_ALPHA, isAlpha)
         entity.isSilent = silent
 
         entity.tickSpawned = this.tickSpawned
@@ -216,6 +220,7 @@ class SpawnPokemonPacket(
                 { buffer.readFloat() }
             )
             val rideStamina = buffer.readFloat()
+            val isAlpha = buffer.readBoolean()
             val silent = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
@@ -246,6 +251,7 @@ class SpawnPokemonPacket(
                 tickSpawned,
                 rideBoosts,
                 rideStamina,
+                isAlpha,
                 silent,
                 vanillaPacket
             )

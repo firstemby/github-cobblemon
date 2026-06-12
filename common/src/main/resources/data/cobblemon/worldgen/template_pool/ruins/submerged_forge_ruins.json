@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:ruins/submerged_forge_ruins",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/submerged_forge",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/submerged_forge_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "moveName": "drainpunch",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fighting",
+  "recipe": [
+    {
+      "item": "cobblemon:fighting_gem",
+      "count": 7
+    },
+    {
+      "item": "cobblemon:big_root",
+      "count": 2
+    }
+  ]
+}

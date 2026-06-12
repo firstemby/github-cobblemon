@@ -35,6 +35,14 @@
 					]
 				},
 				{
+					"name": "locator_eye",
+					"parent": "face",
+					"pivot": [0, 8.2, -4.25],
+					"locators": {
+						"eye1": [0, 8.2, -4.25]
+					}
+				},
+				{
 					"name": "gem_emissive",
 					"parent": "face",
 					"pivot": [0, 8.25, -3.65],

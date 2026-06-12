@@ -12,14 +12,13 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "16-40",
+            "level": "16-41",
             "weight": 3.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_tropical_island"
+                    "#cobblemon:is_jungle"
                 ]
             }
         }

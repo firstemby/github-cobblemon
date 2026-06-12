@@ -1,0 +1,7 @@
+{
+  "type": "cobblemon:default",
+  "slot1": ["last_offensive", "last_levelup"],
+  "slot2": ["last_levelup"],
+  "slot3": ["last_levelup"],
+  "slot4": ["last_levelup"]
+}

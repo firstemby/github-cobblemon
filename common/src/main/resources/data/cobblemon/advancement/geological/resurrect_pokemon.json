@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:restoration_tank"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.resurrect_pokemon"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.resurrect_pokemon.description"
+    }
+  },
+  "parent": "cobblemon:geological/obtain_fossil",
+  "criteria": {
+    "resurrected_pokemon": {
+      "trigger": "cobblemon:resurrect_pokemon",
+      "conditions": {
+        "species": "any"
+      }
+    }
+  }
+}

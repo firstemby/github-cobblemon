@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/abandoned_fortress1",
+            "cobblemon:habitats/abandoned_fortress2",
+            "cobblemon:habitats/abandoned_fortress3",
+            "cobblemon:habitats/abandoned_fortress4",
+            "cobblemon:habitats/abandoned_fortress5",
+            "cobblemon:habitats/abandoned_fortress6",
+            "cobblemon:habitats/abandoned_fortress7",
+            "cobblemon:habitats/abandoned_fortress8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/abandoned_fortress"
+    }
+}

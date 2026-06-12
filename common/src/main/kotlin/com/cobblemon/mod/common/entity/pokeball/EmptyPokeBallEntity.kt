@@ -191,7 +191,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 }
             }
         } else {
-            setNoGravity(false)
+            isNoGravity = false
             deltaMovement = Vec3.ZERO
         }
     }

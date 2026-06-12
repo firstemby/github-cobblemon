@@ -202,7 +202,7 @@ open class PlayerPartyStore(
         val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
         val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
         // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
-        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
+        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable || pokemon.isAlpha) {
             return false
         }
         player.updateShoulderNbt(pokemon)

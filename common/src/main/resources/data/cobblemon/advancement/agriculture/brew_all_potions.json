@@ -1,0 +1,256 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:full_heal"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.brew_all_potions"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.brew_all_potions.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "cobblemon:agriculture/brew_full_restore",
+  "criteria": {
+    "obtain_potion": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:potion"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_super_potion": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:super_potion"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_hyper_potion": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:hyper_potion"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_max_potion": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:max_potion"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_full_restore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:full_restore"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_ether": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:ether"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_elixir": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:elixir"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_max_ether": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:max_ether"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_max_elixir": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:max_elixir"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_ability_capsule": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:ability_capsule"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_hp_up": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:hp_up"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_protein": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:protein"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:iron"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_calcium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:calcium"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_zinc": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:zinc"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_carbos": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:carbos"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_pp_up": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:pp_up"
+            ]
+          }
+        ]
+      }
+    },
+	"obtain_pp_max": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:pp_max"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [ "obtain_potion" ],
+	[ "obtain_super_potion" ],
+	[ "obtain_hyper_potion" ],
+	[ "obtain_max_potion" ],
+	[ "obtain_full_restore" ],
+	[ "obtain_ether" ],
+	[ "obtain_elixir" ],
+	[ "obtain_max_ether" ],
+	[ "obtain_max_elixir" ],
+	[ "obtain_ability_capsule" ],
+	[ "obtain_hp_up" ],
+	[ "obtain_protein" ],
+	[ "obtain_iron" ],
+	[ "obtain_calcium" ],
+	[ "obtain_zinc" ],
+	[ "obtain_carbos" ],
+	[ "obtain_pp_up" ],
+	[ "obtain_pp_max" ]
+  ],
+  "rewards": {
+    "experience": 100
+  }
+}

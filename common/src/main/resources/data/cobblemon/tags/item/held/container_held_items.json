@@ -33,6 +33,41 @@
       "id": "packedup:silverbackpack",
       "required": false
     },
+    {
+      "id": "#supplementaries:shulker_blacklist",
+      "required": false
+    },
+    {
+      "id": "supplementaries:quiver",
+      "required": false
+    },{
+      "id": "supplementaries:jar",
+      "required": false
+    },
+    {
+      "id": "#supplementaries:presents",
+      "required": false
+    },
+    {
+      "id": "#supplementaries:trapped_presents",
+      "required": false
+    },
+    {
+      "id": "supplementaries:lunch_basket",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:cooking_pot",
+      "required": false
+    },
+    {
+      "id": "#create:packages",
+      "required": false
+    },
+    {
+      "id": "#create:toolboxes",
+      "required": false
+    },
     "minecraft:shulker_box",
     "minecraft:black_shulker_box",
     "minecraft:blue_shulker_box",

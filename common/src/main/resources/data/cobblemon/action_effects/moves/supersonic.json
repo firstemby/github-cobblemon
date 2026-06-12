@@ -1,0 +1,57 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["supersonic", "special", "cry"],
+      "delay": 1.25
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:supersonic_launch",
+      "locators": ["special_attack"],
+      "delay": 0.1
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:supersonic_actor",
+      "locators": ["special_attack"],
+      "targetLocators": ["target"],
+      "delay": 0.1
+    },
+    {
+      "type": "pause",
+      "pause": 0.55
+    },
+    {
+      "type": "entity_particles",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "effect": "cobblemon:supersonic_impact1",
+      "locators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.1
+    },
+    {
+      "type": "animation",
+      "animation": ["recoil"],
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false"
+    },
+    {
+      "type": "pause",
+      "pause": 0.4
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.25
+    }
+  ]
+}

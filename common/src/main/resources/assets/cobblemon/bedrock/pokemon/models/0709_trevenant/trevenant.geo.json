@@ -399,6 +399,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_open",
+					"pivot": [0, 34.25, -3.5],
+					"locators": {
+						"eye1": [0, 34.25, -3.5]
+					}
+				},
+				{
 					"name": "eye_closed",
 					"parent": "eye",
 					"pivot": [0, 32.5, 0.1],

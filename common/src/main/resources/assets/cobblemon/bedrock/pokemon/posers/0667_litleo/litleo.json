@@ -13,6 +13,9 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('litleo', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('litleo', 'blink')"
       ]
     },
     "walking": {
@@ -22,6 +25,9 @@
         "q.look('head_ai')",
         "q.bedrock('litleo', 'ground_idle')",
         "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('litleo', 'blink')"
       ]
     }
   }

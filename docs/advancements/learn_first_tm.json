@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:technical_machine"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.learn_first_tm"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.learn_first_tm.description"
+    }
+  },
+  "parent": "cobblemon:first_catch",
+  "criteria": {
+    "learn_tm": {
+      "trigger": "cobblemon:has_learn_specific_tm",
+      "conditions": {
+        "tm": "any"
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

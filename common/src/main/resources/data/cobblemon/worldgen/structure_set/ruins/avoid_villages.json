@@ -54,6 +54,26 @@
         {
             "structure": "cobblemon:ruins/toppled_pillars_ruins",
             "weight": 8
+        },
+        {
+            "structure": "cobblemon:ruins/frozen_altar_ruins",
+            "weight": 8
+        },
+        {
+            "structure": "cobblemon:ruins/deserted_monument_ruins",
+            "weight": 4
+        },
+        {
+            "structure": "cobblemon:habitats/reclaimed_deserted_monument",
+            "weight": 4
+        },
+        {
+            "structure": "cobblemon:ruins/ancient_dais_ruins",
+            "weight": 8
+        },
+        {
+            "structure": "cobblemon:ruins/sunscorched_shaded_ruins",
+            "weight": 8
         }
     ]
 }

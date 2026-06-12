@@ -1,0 +1,19 @@
+{
+  "moveName": "bugbite",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 4
+    },
+    {
+      "tag": "cobblemon:berries",
+      "count": 1
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.mimikyu_male",
+				"identifier": "geometry.mimikyu",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 5,
@@ -223,12 +223,28 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-1.25, 2.7, -3],
+					"locators": {
+						"eye1": [-1.25, 2.7, -3]
+					}
+				},
+				{
 					"name": "eye_left",
 					"parent": "torso_bottom",
 					"pivot": [1.25, 2.75, -3.025],
 					"cubes": [
 						{"origin": [0.75, 1.75, -3], "size": [1, 2, 0], "inflate": 0.01, "uv": [0, 0]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [1.25, 2.7, -3],
+					"locators": {
+						"eye2": [1.25, 2.7, -3]
+					}
 				},
 				{
 					"name": "hand_right",

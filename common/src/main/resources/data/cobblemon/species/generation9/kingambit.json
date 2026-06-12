@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 983,
   "name": "Kingambit",
   "primaryType": "dark",
@@ -42,6 +43,12 @@
   "catchRate": 25,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.65,
+  "hitbox": {
+    "width": 1.75,
+    "height": 2.65,
+    "fixed": false
+  },
   "drops": {
     "amount": 2,
     "entries": [

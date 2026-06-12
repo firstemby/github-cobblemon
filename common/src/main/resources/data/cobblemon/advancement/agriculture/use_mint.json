@@ -1,0 +1,146 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:serious_mint"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.use_mint"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.use_mint.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "cobblemon:agriculture/root_agriculture",
+  "criteria": {
+    "use_serious_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:serious_mint"
+      }
+    },
+    "use_lonely_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:lonely_mint"
+      }
+    },
+    "use_adamant_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:adamant_mint"
+      }
+    },
+    "use_naughty_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:naughty_mint"
+      }
+    },
+    "use_brave_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:brave_mint"
+      }
+    },
+    "use_bold_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:bold_mint"
+      }
+    },
+    "use_impish_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:impish_mint"
+      }
+    },
+    "use_lax_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:lax_mint"
+      }
+    },
+    "use_relaxed_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:relaxed_mint"
+      }
+    },
+    "use_modest_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:modest_mint"
+      }
+    },
+    "use_mild_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:mild_mint"
+      }
+    },
+    "use_rash_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:rash_mint"
+      }
+    },
+    "use_quiet_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:quiet_mint"
+      }
+    },
+    "use_calm_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:calm_mint"
+      }
+    },
+    "use_gentle_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:gentle_mint"
+      }
+    },
+    "use_careful_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:careful_mint"
+      }
+    },
+    "use_sassy_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:sassy_mint"
+      }
+    },
+    "use_timid_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:timid_mint"
+      }
+    },
+    "use_hasty_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:hasty_mint"
+      }
+    },
+    "use_jolly_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:jolly_mint"
+      }
+    },
+    "use_naive_mint": {
+      "trigger": "cobblemon:pokemon_interact",
+      "conditions": {
+        "item": "cobblemon:naive_mint"
+      }
+    }
+  },
+  "requirements": [
+	[ "use_serious_mint", "use_lonely_mint", "use_adamant_mint", "use_naughty_mint", "use_brave_mint", "use_bold_mint", "use_impish_mint", "use_lax_mint", "use_relaxed_mint", "use_modest_mint", "use_mild_mint", "use_rash_mint", "use_quiet_mint", "use_calm_mint", "use_gentle_mint", "use_careful_mint", "use_sassy_mint", "use_timid_mint", "use_hasty_mint", "use_jolly_mint", "use_naive_mint" ]
+  ]
+}

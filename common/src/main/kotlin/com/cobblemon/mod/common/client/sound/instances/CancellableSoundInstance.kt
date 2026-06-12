@@ -37,6 +37,17 @@ class CancellableSoundInstance(sound: SoundEvent, pos: BlockPos = BlockPos.ZERO,
         this.attenuation = SoundInstance.Attenuation.LINEAR
     }
 
+    override fun canPlaySound(): Boolean {
+        val listenerPos = Minecraft.getInstance().player?.position()?.distanceToSqr(
+            Vec3(
+                this.x,
+                this.y,
+                this.z
+            )
+        )
+        return !(listenerPos != null && listenerPos > ATTENUATION_DISTANCE_MAX_SQUARED)
+    }
+
     override fun isStopped(): Boolean {
         return this.done
     }

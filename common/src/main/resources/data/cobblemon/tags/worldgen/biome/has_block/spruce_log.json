@@ -48,43 +48,47 @@
       "required": false
     },
     {
-      "id": "byg:autumnal_taiga",
+      "id": "biomeswevegone:pumpkin_valley",
       "required": false
     },
     {
-      "id": "byg:autumnal_valley",
+      "id": "biomeswevegone:canadian_shield",
       "required": false
     },
     {
-      "id": "byg:borealis_grove",
+      "id": "biomeswevegone:coniferous_forest",
       "required": false
     },
     {
-      "id": "byg:canadian_shield",
+      "id": "biomeswevegone:crimson_tundra",
       "required": false
     },
     {
-      "id": "byg:coniferous_forest",
+      "id": "biomeswevegone:eroded_borealis",
       "required": false
     },
     {
-      "id": "byg:frosted_coniferous_forest",
+      "id": "biomeswevegone:frosted_coniferous_forest",
       "required": false
     },
     {
-      "id": "byg:frosted_taiga",
+      "id": "biomeswevegone:frosted_taiga",
       "required": false
     },
     {
-      "id": "byg:howling_peaks",
+      "id": "biomeswevegone:howling_peaks",
       "required": false
     },
     {
-      "id": "byg:rose_fields",
+      "id": "biomeswevegone:maple_taiga",
       "required": false
     },
     {
-      "id": "byg:weeping_witch_forest",
+      "id": "biomeswevegone:redwood_thicket",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:rose_fields",
       "required": false
     },
     {

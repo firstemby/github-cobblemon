@@ -1,0 +1,153 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:blank_tm"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.obtain_ancient_tm"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.obtain_ancient_tm.description"
+    }
+  },
+  "parent": "cobblemon:geological/craft_tm",
+  "criteria": {
+    "learn_tm_alluringvoice":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:alluringvoice"}},
+    "gain_tm_alluringvoice": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"alluringvoice"}}}]}},
+    "learn_tm_blastburn":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:blastburn"}},
+    "gain_tm_blastburn": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"blastburn"}}}]}},
+    "learn_tm_bodypress":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:bodypress"}},
+    "gain_tm_bodypress": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"bodypress"}}}]}},
+    "learn_tm_burningjealousy":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:burningjealousy"}},
+    "gain_tm_burningjealousy": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"burningjealousy"}}}]}},
+    "learn_tm_dracometeor":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:dracometeor"}},
+    "gain_tm_dracometeor": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"dracometeor"}}}]}},
+    "learn_tm_focusblast":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:focusblast"}},
+    "gain_tm_focusblast": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"focusblast"}}}]}},
+    "learn_tm_frenzyplant":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:frenzyplant"}},
+    "gain_tm_frenzyplant": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"frenzyplant"}}}]}},
+    "learn_tm_grassyglide":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:grassyglide"}},
+    "gain_tm_grassyglide": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"grassyglide"}}}]}},
+    "learn_tm_hydrocannon":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:hydrocannon"}},
+    "gain_tm_hydrocannon": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"hydrocannon"}}}]}},
+    "learn_tm_lashout":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:lashout"}},
+    "gain_tm_lashout": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"lashout"}}}]}},
+    "learn_tm_meteorbeam":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:meteorbeam"}},
+    "gain_tm_meteorbeam": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"meteorbeam"}}}]}},
+    "learn_tm_mistyexplosion":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:mistyexplosion"}},
+    "gain_tm_mistyexplosion": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"mistyexplosion"}}}]}},
+    "learn_tm_poltergeist":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:poltergeist"}},
+    "gain_tm_poltergeist": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"poltergeist"}}}]}},
+    "learn_tm_psychicnoise":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:psychicnoise"}},
+    "gain_tm_psychicnoise": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"psychicnoise"}}}]}},
+    "learn_tm_risingvoltage":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:risingvoltage"}},
+    "gain_tm_risingvoltage": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"risingvoltage"}}}]}},
+    "learn_tm_scaleshot":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:scaleshot"}},
+    "gain_tm_scaleshot": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"scaleshot"}}}]}},
+    "learn_tm_scorchingsands":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:scorchingsands"}},
+    "gain_tm_scorchingsands": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"scorchingsands"}}}]}},
+    "learn_tm_steelbeam":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:steelbeam"}},
+    "gain_tm_steelbeam": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"steelbeam"}}}]}},
+    "learn_tm_supercellslam":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:supercellslam"}},
+    "gain_tm_supercellslam": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"supercellslam"}}}]}},
+    "learn_tm_temperflare":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:temperflare"}},
+    "gain_tm_temperflare": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"temperflare"}}}]}},
+    "learn_tm_terablast":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:terablast"}},
+    "gain_tm_terablast": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"terablast"}}}]}},
+    "learn_tm_tripleaxel":
+        {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:tripleaxel"}},
+    "gain_tm_tripleaxel": 
+        {"trigger": "minecraft:inventory_changed","conditions":{"items":[{"items":"cobblemon:technical_machine","components":{"cobblemon:tm_move":{"move":"tripleaxel"}}}]}}
+  },
+  "requirements": [
+    [
+      "learn_tm_alluringvoice",
+      "gain_tm_alluringvoice",
+      "learn_tm_blastburn",
+      "gain_tm_blastburn",
+      "learn_tm_bodypress",
+      "gain_tm_bodypress",
+      "learn_tm_burningjealousy",
+      "gain_tm_burningjealousy",
+      "learn_tm_dracometeor",
+      "gain_tm_dracometeor",
+      "learn_tm_focusblast",
+      "gain_tm_focusblast",
+      "learn_tm_frenzyplant",
+      "gain_tm_frenzyplant",
+      "learn_tm_grassyglide",
+      "gain_tm_grassyglide",
+      "learn_tm_hydrocannon",
+      "gain_tm_hydrocannon",
+      "learn_tm_lashout",
+      "gain_tm_lashout",
+      "learn_tm_meteorbeam",
+      "gain_tm_meteorbeam",
+      "learn_tm_mistyexplosion",
+      "gain_tm_mistyexplosion",
+      "learn_tm_poltergeist",
+      "gain_tm_poltergeist",
+      "learn_tm_psychicnoise",
+      "gain_tm_psychicnoise",
+      "learn_tm_risingvoltage",
+      "gain_tm_risingvoltage",
+      "learn_tm_scaleshot",
+      "gain_tm_scaleshot",
+      "learn_tm_scorchingsands",
+      "gain_tm_scorchingsands",
+      "learn_tm_steelbeam",
+      "gain_tm_steelbeam",
+      "learn_tm_supercellslam",
+      "gain_tm_supercellslam",
+      "learn_tm_temperflare",
+      "gain_tm_temperflare",
+      "learn_tm_terablast",
+      "gain_tm_terablast",
+      "learn_tm_tripleaxel",
+      "gain_tm_tripleaxel"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

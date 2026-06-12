@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 839,
   "name": "Coalossal",
   "primaryType": "rock",
@@ -42,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.25,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 2.5,
     "fixed": false
   },
   "behaviour": {

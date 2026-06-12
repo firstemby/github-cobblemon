@@ -1,0 +1,19 @@
+{
+  "moveName": "encore",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "normal",
+  "recipe": [
+    {
+      "item": "cobblemon:normal_gem",
+      "count": 5
+    },
+    {
+      "item": "cobblemon:mental_herb",
+      "count": 1
+    }
+  ]
+}

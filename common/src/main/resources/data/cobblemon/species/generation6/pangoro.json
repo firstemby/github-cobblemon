@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 675,
   "name": "Pangoro",
   "primaryType": "fighting",
@@ -43,10 +44,13 @@
   "catchRate": 65,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.25,
+  "standingEyeHeight": 0.85,
+  "swimmingEyeHeight": 0.85,
+  "flyingEyeHeight": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.6,
+    "height": 2.35,
     "fixed": false
   },
   "drops": {

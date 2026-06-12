@@ -71,9 +71,10 @@
 				{
 					"name": "locator_item",
 					"parent": "body",
-					"pivot": [0, 9, -9.5],
+					"pivot": [-5.83363, 10.23744, -8.5],
+					"rotation": [180, 0, -135],
 					"locators": {
-						"item": [0, 9, -9.5]
+						"item": [-5.83363, 10.23744, -8.5]
 					}
 				},
 				{
@@ -226,9 +227,9 @@
 				{
 					"name": "locator_item_face",
 					"parent": "mouth",
-					"pivot": [0, 14.4, -5],
+					"pivot": [0, 14.65, -5],
 					"locators": {
-						"item_face": [0, 14.4, -5]
+						"item_face": [0, 14.65, -5]
 					}
 				},
 				{

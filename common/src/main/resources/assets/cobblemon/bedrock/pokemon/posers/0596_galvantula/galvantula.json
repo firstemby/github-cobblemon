@@ -10,7 +10,17 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "PORTRAIT", "PROFILE", "NONE"],
+      "isBattle": false,
       "animations": ["q.bedrock('galvantula', 'ground_idle')"],
+      "quirks": [
+        "q.bedrock_quirk('galvantula', 'blink1')",
+        "q.bedrock_quirk('galvantula', 'blink2')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": ["q.bedrock('galvantula', 'battle_idle')"],
       "quirks": [
         "q.bedrock_quirk('galvantula', 'blink1')",
         "q.bedrock_quirk('galvantula', 'blink2')"
@@ -20,13 +30,17 @@
       "poseName": "walking",
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
-        "q.bedrock('galvantula', 'ground_idle')",
-        "q.quadruped_walk(1, 1, 'front_leg_left', 'front_leg_right', 'back_leg_left', 'back_leg_right')"
+        "q.bedrock('galvantula', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('galvantula', 'blink1')",
         "q.bedrock_quirk('galvantula', 'blink2')"
       ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('galvantula', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     }
   }
 }

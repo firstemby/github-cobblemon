@@ -36,21 +36,14 @@
       "minecraft:particle_lifetime_events": {
         "timeline": {
           "0.00": [
-            "waterpulseSplash"
-          ],
-          "0.09": [
             "waterpulseRing",
             "waterpulseSplash"
           ],
-          "0.18": [
+          "0.15": [
             "waterpulseRing",
             "waterpulseSplash"
           ],
-          "0.27": [
-            "waterpulseRing",
-            "waterpulseSplash"
-          ],
-          "0.36": [
+          "0.3": [
             "waterpulseRing",
             "waterpulseSplash"
           ],
@@ -58,19 +51,11 @@
             "waterpulseRing",
             "waterpulseSplash"
           ],
-          "0.54": [
+          "0.6": [
             "waterpulseRing",
             "waterpulseSplash"
           ],
-          "0.63": [
-            "waterpulseRing",
-            "waterpulseSplash"
-          ],
-          "0.72": [
-            "waterpulseRing",
-            "waterpulseSplash"
-          ],
-          "0.81": [
+          "0.75": [
             "waterpulseRing",
             "waterpulseSplash"
           ]

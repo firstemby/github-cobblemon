@@ -2335,6 +2335,12 @@
 				"claw_outer_left": {
 					"rotation": [15, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.3333": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"1.5833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"2.8333": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"4.0833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.honchkrow.air_fly": {
@@ -4033,6 +4039,12 @@
 				"foot_left": {
 					"rotation": [92.5, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.0833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"0.8333": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"1.5833": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
+				"2.3333": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
 			}
 		},
 		"animation.honchkrow.air_glide": {

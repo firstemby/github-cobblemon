@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "rewards": {
     "recipes": [
       "cobblemon:dawn_stone_from_blasting_dawn_stone_ore"

@@ -126,7 +126,7 @@
 					}
 				},
 				{
-					"name": "item_hat",
+					"name": "locator_item_hat",
 					"parent": "head_angle",
 					"pivot": [0, 22.20004, -6.95],
 					"locators": {

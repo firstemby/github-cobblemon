@@ -29,6 +29,18 @@
           "translucent": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0815_cinderace/cinderace_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

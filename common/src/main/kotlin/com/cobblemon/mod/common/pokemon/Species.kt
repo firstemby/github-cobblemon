@@ -16,12 +16,12 @@ import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.CommonAbility
 import com.cobblemon.mod.common.api.abilities.PotentialAbility
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
-import com.cobblemon.mod.common.api.data.ClientDataSynchronizer
 import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addSpeciesFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
@@ -42,15 +42,7 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
-import com.cobblemon.mod.common.util.readEntityDimensions
-import com.cobblemon.mod.common.util.readEnumConstant
-import com.cobblemon.mod.common.util.readIdentifier
-import com.cobblemon.mod.common.util.readSizedInt
-import com.cobblemon.mod.common.util.readString
-import com.cobblemon.mod.common.util.writeEnumConstant
-import com.cobblemon.mod.common.util.writeIdentifier
-import com.cobblemon.mod.common.util.writeSizedInt
-import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.*
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -59,10 +51,12 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
 
-class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
+class Species : ShowdownIdentifiable {
     var name: String = "Bulbasaur"
+    val translationKey: String
+        get() = "${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name"
     val translatedName: MutableComponent
-        get() = Component.translatable("${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name")
+        get() = Component.translatable(translationKey)
     var nationalPokedexNumber = 1
 
     var baseStats = hashMapOf<Stat, Int>()
@@ -111,6 +105,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     var implemented = false
     var baseAI: MutableList<BehaviourConfig>? = null
     var ai = mutableListOf<BehaviourConfig>()
+    var signatureMoves = mutableListOf<MoveTemplate>()
+    var defaultWildMovesetBuilder = cobblemonResource("wild")
 
     /**
      * The height in decimeters
@@ -221,7 +217,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     fun canGmax() = this.forms.find { it.formOnlyShowdownId() == "gmax" } != null
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeBoolean(this.implemented)
         buffer.writeString(this.name)
         buffer.writeInt(this.nationalPokedexNumber)
@@ -262,7 +258,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.riding.encode(buffer)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         this.implemented = buffer.readBoolean()
         this.name = buffer.readString()
         this.nationalPokedexNumber = buffer.readInt()
@@ -304,27 +300,6 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         }
         this.riding = RidingProperties.decode(buffer)
         this.initialize()
-    }
-
-    override fun shouldSynchronize(other: Species): Boolean {
-        if (other.resourceIdentifier.toString() != other.resourceIdentifier.toString())
-            return false
-        return other.showdownId() != this.showdownId()
-                || other.nationalPokedexNumber != this.nationalPokedexNumber
-                || other.baseStats != this.baseStats
-                || other.hitbox != this.hitbox
-                || other.primaryType != this.primaryType
-                || other.secondaryType != this.secondaryType
-                || other.standingEyeHeight != this.standingEyeHeight
-                || other.swimmingEyeHeight != this.swimmingEyeHeight
-                || other.flyingEyeHeight != this.flyingEyeHeight
-                || other.dynamaxBlocked != this.dynamaxBlocked
-                || other.pokedex != this.pokedex
-                || other.forms != this.forms
-                // We only sync level up moves atm
-                || this.moves.shouldSynchronize(other.moves)
-                || other.battleTheme != this.battleTheme
-                || other.features != this.features
     }
 
     /**

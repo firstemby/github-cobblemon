@@ -63,18 +63,18 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso",
-					"pivot": [0, 34, -10.5],
+					"pivot": [0, 38, -10.5],
 					"rotation": [10, 0, 0],
 					"locators": {
-						"seat_1": [0, 34, -10.5]
+						"seat1": [0, 38, -10.5]
 					}
 				},
 				{
 					"name": "locator_seat_2",
 					"parent": "torso",
-					"pivot": [0, 35, 5.5],
+					"pivot": [0, 38, 5.5],
 					"locators": {
-						"seat_2": [0, 35, 5.5]
+						"seat2": [0, 38, 5.5]
 					}
 				},
 				{

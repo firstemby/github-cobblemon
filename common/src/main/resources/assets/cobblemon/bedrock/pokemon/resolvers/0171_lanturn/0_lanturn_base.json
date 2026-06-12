@@ -21,7 +21,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0171_lanturn/lanturn_shiny.png",
       "layers": [
         {
@@ -32,6 +34,18 @@
         {
           "name": "emissive2",
           "texture": "cobblemon:textures/pokemon/0171_lanturn/lanturn_emissive_shiny.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0171_lanturn/lanturn_alpha.png",
           "emissive": true
         }
       ]

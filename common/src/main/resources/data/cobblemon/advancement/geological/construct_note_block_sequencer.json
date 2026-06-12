@@ -1,0 +1,72 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:note_block"
+        },
+        "title": {
+            "translate": "advancements.cobblemon.construct_note_block_sequencer"
+        },
+        "description": {
+            "translate": "advancements.cobblemon.construct_note_block_sequencer.description"
+        }
+    },
+    "parent": "cobblemon:geological/craft_tm",
+    "criteria": {
+        "note_block_last": {
+        "trigger": "minecraft:placed_block",
+            "conditions": {
+                "location": [
+                    {
+                        "condition": "minecraft:all_of",
+                        "terms": [
+                            {
+                                "block": "minecraft:note_block",
+                                "condition": "minecraft:block_state_property"
+                            },
+                            {
+                                "condition": "minecraft:location_check",
+                                "offsetY": -1,
+                                "predicate": {
+                                    "block": {
+                                        "blocks": "cobblemon:disc_shelf"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "disc_shelf_last": {
+            "trigger": "minecraft:placed_block",
+            "conditions": {
+                "location": [
+                    {
+                        "condition": "minecraft:all_of",
+                        "terms": [
+                            {
+                                "block": "cobblemon:disc_shelf",
+                                "condition": "minecraft:block_state_property"
+                            },
+                            {
+                                "condition": "minecraft:location_check",
+                                "offsetY": 1,
+                                "predicate": {
+                                    "block": {
+                                        "blocks": "minecraft:note_block"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "requirements": [
+        [
+            "note_block_last",
+            "disc_shelf_last"
+        ]
+    ]
+}

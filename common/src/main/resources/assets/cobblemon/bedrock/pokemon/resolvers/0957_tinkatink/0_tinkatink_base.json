@@ -10,16 +10,35 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0957_tinkatink/tinkatink_shiny.png"
     },
     {
-      "aspects": ["cosmetic_item-music"],
+      "aspects": [
+        "cosmetic_item-music"
+      ],
       "texture": "cobblemon:textures/pokemon/0957_tinkatink/tinkatink_dot.png"
     },
     {
-      "aspects": ["cosmetic_item-music", "shiny"],
+      "aspects": [
+        "cosmetic_item-music",
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0957_tinkatink/tinkatink_dot_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0957_tinkatink/tinkatink_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

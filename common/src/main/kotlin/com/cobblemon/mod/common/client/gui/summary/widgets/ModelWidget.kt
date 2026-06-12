@@ -26,11 +26,12 @@ class ModelWidget(
     pX: Int, pY: Int,
     pWidth: Int, pHeight: Int,
     pokemon: RenderablePokemon,
-    val baseScale: Float = 2.7F,
+    var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,
     val shouldFollowCursor: Boolean = false,
+    val blockLight: Int = 13
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
@@ -115,6 +116,7 @@ class ModelWidget(
             partialTicks = partialTicks,
             headYaw = currentYawAndPitch.first,
             headPitch = currentYawAndPitch.second,
+            blockLight = blockLight
         )
 
         heldItemRenderer.renderOnModel(

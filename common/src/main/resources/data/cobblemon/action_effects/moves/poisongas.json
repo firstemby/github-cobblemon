@@ -16,6 +16,11 @@
       "targetLocators": ["target"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.poisongas.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.6
     },
@@ -24,6 +29,11 @@
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:poisongas_target",
       "locators": ["target"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.poisongas.target');"]
     },
     {
       "type": "animation",

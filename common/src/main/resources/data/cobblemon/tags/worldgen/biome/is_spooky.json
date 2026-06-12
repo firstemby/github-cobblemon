@@ -3,10 +3,6 @@
   "values": [
     "minecraft:dark_forest",
     {
-      "id": "#byg:is_spooky",
-      "required": false
-    },
-    {
       "id": "#c:is_spooky",
       "required": false
     },
@@ -19,7 +15,19 @@
       "required": false
     },
     {
-      "id": "byg:ebony_woods",
+      "id": "biomeswevegone:ebony_woods",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:overgrowth_woodlands",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:pale_bog",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:weeping_witch_forest",
       "required": false
     },
     {

@@ -38,6 +38,14 @@
 					]
 				},
 				{
+					"name": "locator_eye",
+					"parent": "face",
+					"pivot": [0, 12.5, -8.4],
+					"locators": {
+						"eye1": [0, 12.5, -8.4]
+					}
+				},
+				{
 					"name": "gem_emissive",
 					"parent": "face",
 					"pivot": [1, 1.75, -5.5],
@@ -147,14 +155,6 @@
 						{"origin": [-4, 9.65, -0.9], "size": [8, 8, 6], "inflate": -0.02, "uv": [82, 0]},
 						{"origin": [-0.5, 9.65, 3.1], "size": [1, 3, 2], "inflate": -0.01, "uv": [82, 1]}
 					]
-				},
-				{
-					"name": "locator_seat_1",
-					"parent": "body_back",
-					"pivot": [0, 18, 6],
-					"locators": {
-						"seat_1": [0, 18, 6]
-					}
 				},
 				{
 					"name": "body_back_limbs",

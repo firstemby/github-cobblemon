@@ -57,7 +57,7 @@ class WaveAnimation(
             state.animationSeconds
         }
 
-        var totalTimeDisplacement = (headLength + segments.map { it.length }.sum()) / oscillationsScalar
+        var totalTimeDisplacement = (headLength + segments.sumOf { it.length.toDouble() }.toFloat()) / oscillationsScalar
         if (moveHead) {
             val headDisplacement = waveFunction(t + totalTimeDisplacement - headLength / oscillationsScalar) * 16
             head.addPosition(motionAxis, -headDisplacement * intensity)

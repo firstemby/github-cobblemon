@@ -42,7 +42,7 @@
   "catchRate": 45,
   "eggCycles": 30,
   "baseFriendship": 50,
-  "baseScale": 0.8,
+  "baseScale": 0.5,
   "hitbox": {
     "width": 0.7,
     "height": 1.15,
@@ -57,7 +57,7 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.18
+        "walkSpeed": 0.16
       },
       "swim": {
         "avoidsWater": true,

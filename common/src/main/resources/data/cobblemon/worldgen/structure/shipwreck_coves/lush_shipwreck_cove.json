@@ -1,6 +1,39 @@
 {
     "biomes": "#cobblemon:is_cold_ocean",
-    "spawn_overrides": {},
+    "spawn_overrides": {
+        "ambient": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "axolotls": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "creature": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "misc": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "monster": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "underground_water_creature": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "water_ambient": {
+            "bounding_box": "piece",
+            "spawns": []
+        },
+        "water_creature": {
+            "bounding_box": "piece",
+            "spawns": []
+        }
+    },
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:shipwreck_coves/cove2/starting_cave",
     "dimension_padding": 1,
