@@ -38,7 +38,6 @@ class ServerFormController(
     override fun clearPacket() = ClearFormsPacket { this.pokemon }
     override fun removePacket(transformation: TemporaryForm) = RemoveFormPacket(this.pokemon, transformation)
     override fun isDuplicate(element: TemporaryForm) = this.find { it.name == element.name } != null
-    override fun canRevert(): Boolean = pokemon.form is TemporaryForm && (pokemon.form as TemporaryForm).toggleable
 
     override fun start(transformation: TemporaryForm) {
         if (!canStart(transformation)) return

@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
-import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
@@ -61,7 +60,7 @@ class MoveToTargetActionEffectKeyframe : ActionEffectKeyframe {
             }
         )
 
-        afterOnServer(seconds = timeout.resolveFloat(context.runtime)) {
+        context.tracker.after(seconds = timeout.resolveFloat(context.runtime)) {
             if (!future.isDone && !timedOut) {
                 timedOut = true
                 timeoutEffect.run(context).thenApply { future.complete(Unit) }

@@ -8,16 +8,13 @@
 
 package com.cobblemon.mod.common.pokemon.transformation.form
 
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.form.FormCompleteEvent
 import com.cobblemon.mod.common.api.events.pokemon.form.FormDisplayEvent
 import com.cobblemon.mod.common.api.events.pokemon.form.FormTestedEvent
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
-import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
@@ -72,7 +69,10 @@ open class TemporaryForm (
             ?: ActionEffects.actionEffects["generic_form".asIdentifierDefaultingNamespace()]
             ?: throw Exception()
 
-
+    val revertActionEffect: ActionEffectTimeline
+        get() = ActionEffects.actionEffects[actionEffectIdentifier?.withPath { "revert" } ?: cobblemonResource("form_${name.lowercase()}_revert")]
+            ?: ActionEffects.actionEffects["generic_form_revert".asIdentifierDefaultingNamespace()]
+            ?: throw Exception()
 
     /* Temporary forms DO NOT have their own preevo/evolutions/forms and have to fallback on the parent. Because parentForm
        is not initialized until AFTER species registration, none of these properties are safe to access until [PokemonSpecies.observable] */
@@ -138,40 +138,46 @@ open class TemporaryForm (
             pokemon.recall()
         }
 
-        val pokemonEntity = pokemon.entity
-        if (pokemonEntity != null) {
-            val runtime = MoLangRuntime()
-            runtime.environment.query.addStandardFunctions()
-            val providers: MutableList<Any> = mutableListOf(UsersProvider(pokemonEntity))
-            val context = ActionEffectContext(
-                actionEffect = actionEffect,
-                runtime = runtime,
-                providers = providers,
-                level = pokemonEntity.level()
-            )
-            this.perform(pokemonEntity, context)
-        } else {
+        val pokemonEntity = pokemon.entity ?: run {
+            pokemon.form = this
             fulfill(pokemon)
+            return
         }
+
+        val context = ActionEffectContext.fromPokemonEntity(
+            actionEffect = actionEffect,
+            pokemonEntity = pokemonEntity
+        )
+
+        this.perform(pokemonEntity, context)
     }
 
     override fun fulfill(pokemon: Pokemon) {
         super.fulfill(pokemon)
         pokemon.form = this
-        pokemon.entity?.entityData?.set(PokemonEntity.TRANSFORMATION_STARTED, false)
         CobblemonEvents.FORM_COMPLETE.post(FormCompleteEvent(pokemon, this))
     }
 
-    fun perform(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
+    private fun doActionEffect(pokemonEntity: PokemonEntity, context: ActionEffectContext, afterAction: () -> Unit) {
+        context.tracker = pokemonEntity // Bind all of this to an entity so recalling the entity just kills all of this
         pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, true)
         val finishTransformation: () -> Unit = {
             if (pokemonEntity.isTransforming) {
-                fulfill(pokemonEntity.pokemon)
+                afterAction()
+                pokemonEntity.entityData.set(PokemonEntity.TRANSFORMATION_STARTED, false)
             }
         }
         context.holdRemovalCallbacks["transformation"] = finishTransformation
-        val future = actionEffect.run(context)
+        val future = context.actionEffect.run(context)
         future.thenRun(finishTransformation)
+    }
+
+    fun perform(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
+        doActionEffect(pokemonEntity, context) { fulfill(pokemonEntity.pokemon) }
+    }
+
+    fun performRevert(pokemonEntity: PokemonEntity, context: ActionEffectContext) {
+        doActionEffect(pokemonEntity, context) { revert(pokemonEntity.pokemon) }
     }
 
     fun revert(pokemon: Pokemon) {

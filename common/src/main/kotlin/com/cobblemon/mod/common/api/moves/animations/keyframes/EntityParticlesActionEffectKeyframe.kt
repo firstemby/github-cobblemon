@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import net.minecraft.commands.arguments.EntityArgument.getPlayers
 import java.util.concurrent.CompletableFuture
 import net.minecraft.server.level.ServerLevel
 
@@ -79,6 +78,6 @@ class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), E
             }
         }
 
-        return delayedFuture(seconds = delay.resolveFloat(context.runtime))
+        return delayedFuture(seconds = delay.resolveFloat(context.runtime), context.tracker)
     }
 }

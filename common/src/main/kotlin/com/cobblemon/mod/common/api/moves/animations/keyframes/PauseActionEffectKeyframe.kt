@@ -14,5 +14,5 @@ import com.cobblemon.mod.common.util.asExpressionLike
 
 class PauseActionEffectKeyframe : ConditionalActionEffectKeyframe() {
     val pause = "1".asExpressionLike()
-    override fun playWhenTrue(context: ActionEffectContext) = delayedFuture(seconds = pause.resolveFloat(context.runtime))
+    override fun playWhenTrue(context: ActionEffectContext) = delayedFuture(seconds = pause.resolveFloat(context.runtime), context.tracker)
 }

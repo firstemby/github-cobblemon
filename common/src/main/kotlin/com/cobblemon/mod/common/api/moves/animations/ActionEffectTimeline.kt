@@ -10,8 +10,12 @@ package com.cobblemon.mod.common.api.moves.animations
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.moves.animations.keyframes.ActionEffectKeyframe
+import com.cobblemon.mod.common.api.scheduling.Schedulable
+import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
 import java.util.concurrent.CompletableFuture
@@ -76,8 +80,28 @@ class ActionEffectContext(
     var interrupted: Boolean = false,
     var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf(),
     var level: Level? = null,
-    var holdRemovalCallbacks: MutableMap<String, () -> Unit> = mutableMapOf()
+    var holdRemovalCallbacks: MutableMap<String, () -> Unit> = mutableMapOf(),
+    var tracker: Schedulable = ServerTaskTracker
 ) {
+    companion object {
+        fun fromPokemonEntity(
+            actionEffect: ActionEffectTimeline,
+            pokemonEntity: PokemonEntity,
+            runtime: MoLangRuntime = MoLangRuntime().also { it.environment.query.addStandardFunctions() },
+            holds: Collection<String> = emptySet(),
+            holdRemovalCallbacks: Map<String, () -> Unit> = emptyMap()
+        ): ActionEffectContext {
+            return ActionEffectContext(
+                actionEffect = actionEffect,
+                providers = mutableListOf(UsersProvider(listOf(pokemonEntity))),
+                holdRemovalCallbacks = holdRemovalCallbacks.toMutableMap(),
+                holds = holds.toMutableSet(),
+                runtime = runtime,
+                level = pokemonEntity.level()
+            )
+        }
+    }
+
     lateinit var future: CompletableFuture<Unit>
     inline fun <reified T> findOneProvider() = providers.filterIsInstance<T>().firstOrNull()
 

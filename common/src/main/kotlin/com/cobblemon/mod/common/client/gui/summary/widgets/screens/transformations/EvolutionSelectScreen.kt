@@ -23,7 +23,6 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.transformation.controller.ClientTransformationController
 import com.cobblemon.mod.common.pokemon.transformation.proxies.TransformationProxy
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.fromEulerXYZDegrees
@@ -87,7 +86,7 @@ abstract class EvolutionSelectScreen<C : TransformationDisplay, S : Transformati
             clickAction = {
                 Minecraft.getInstance().player?.clientSideCloseContainer()
                 playSound(CobblemonSounds.GUI_CLICK)
-                val controller = getProxy(pokemon).client() as ClientTransformationController
+                val controller = getProxy(pokemon).client()
                 if (controller.canStart(this.display)) {
                     CobblemonNetwork.sendToServer(controller.acceptPacket(this.pokemon, this.display))
                 }

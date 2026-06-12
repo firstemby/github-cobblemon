@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.transformation.controller
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.pokemon.transformation.TransformationDisplay
+import com.cobblemon.mod.common.api.pokemon.transformation.TransformationLike
 import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -43,6 +44,15 @@ abstract class ClientTransformationController<T : TransformationDisplay>(
     override fun canStart(transformation: T): Boolean =
         this.canStart() &&
         this.any { it === transformation }
+
+
+    /**
+     * Validates the [TransformationLike] currently active for this controller's [pokemon] and determines whether it can be
+     * reverted and if the pokemon is capable of reverting right now.
+     *
+     * @return whether the transformation can be reverted.
+     */
+    abstract fun canRevert(): Boolean
 
     // FROM MutableSet ------------------------------------------------------------------------------------------------
 

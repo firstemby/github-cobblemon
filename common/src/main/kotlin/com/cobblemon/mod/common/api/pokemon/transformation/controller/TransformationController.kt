@@ -40,14 +40,6 @@ interface TransformationController<T : TransformationLike> : MutableSet<T> {
     fun canStart(): Boolean
 
     /**
-     * Validates the [TransformationLike] currently active for this controller's [pokemon] and determines whether it can be
-     * reverted and if the pokemon is capable of reverting right now.
-     *
-     * @return whether the transformation can be reverted.
-     */
-    fun canRevert(): Boolean
-
-    /**
      * Retrieves the [TransformationLike] in this controller that matches the provided id.
      *
      * @param id the identifier of the transformation.

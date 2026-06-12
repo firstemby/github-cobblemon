@@ -1,0 +1,8 @@
+{
+  "timeline": [
+    {
+      "type": "remove_holds",
+      "holds": ["transformation"]
+    }
+  ]
+}

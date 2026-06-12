@@ -46,6 +46,6 @@ class EntityMoLangActionEffectKeyframe : ConditionalActionEffectKeyframe(), Enti
             players.forEach { it.sendPacket(pkt) }
         }
 
-        return delayedFuture(seconds = delay.resolveFloat(context.runtime))
+        return delayedFuture(seconds = delay.resolveFloat(context.runtime), context.tracker)
     }
 }

@@ -37,7 +37,6 @@ class ServerEvolutionController(
     override fun addPacket(transformation: Evolution) = AddEvolutionPacket(this.pokemon, transformation)
     override fun clearPacket() = ClearEvolutionsPacket { this.pokemon }
     override fun removePacket(transformation: Evolution) = RemoveEvolutionPacket(this.pokemon, transformation)
-    override fun canRevert() = false  // TODO evolutions are currently one-way, but modders may appreciate reversion support
     override fun isDuplicate(element: Evolution) = this.find { element.result.matches(it.result) } != null
 
     override fun start(transformation: Evolution) {

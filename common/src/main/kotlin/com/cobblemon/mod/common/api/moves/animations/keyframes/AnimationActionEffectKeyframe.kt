@@ -49,6 +49,6 @@ class AnimationActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityC
             players.forEach { it.sendPacket(pkt) }
         }
 
-        return delayedFuture(seconds = delay.resolveFloat(context.runtime))
+        return delayedFuture(seconds = delay.resolveFloat(context.runtime), tracker = context.tracker)
     }
 }

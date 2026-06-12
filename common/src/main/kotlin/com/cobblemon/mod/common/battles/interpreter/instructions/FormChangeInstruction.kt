@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
-import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
@@ -64,26 +63,36 @@ class FormChangeInstruction(val message: BattleMessage): ActionEffectInstruction
 
     override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
         battle.dispatch {
-            if (form is TemporaryForm) {
-                val actionEffect = (form as TemporaryForm).actionEffect
-                val providers = mutableListOf<Any>(battle)
-                val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
-                pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
-                val context = ActionEffectContext(
-                    actionEffect = actionEffect,
-                    runtime = runtime,
-                    providers = providers,
-                    level = battle.players.firstOrNull()?.level()
-                )
-                (form as TemporaryForm).perform(battlePokemon.effectedPokemon.entity!!, context)
-                UntilDispatch { context.future.isDone }
-            } else {
-                val form = battlePokemon.effectedPokemon.form
-                if (form is TemporaryForm) {
-                    form.revert(battlePokemon.effectedPokemon)
-                }
+            val entity = battlePokemon.effectedPokemon.entity
+            val currentForm = battlePokemon.effectedPokemon.form
+            if (entity == null) {
+                battlePokemon.effectedPokemon.form = form
+                return@dispatch GO
             }
-            return@dispatch GO
+
+            val form = form
+            val actionEffect = if (form is TemporaryForm) {
+                form.actionEffect
+            } else if (currentForm is TemporaryForm) {
+                currentForm.revertActionEffect
+            } else {
+                battlePokemon.effectedPokemon.form = form
+                return@dispatch GO // This should never happen tbh
+            }
+
+            val context = ActionEffectContext.fromPokemonEntity(
+                actionEffect = actionEffect,
+                runtime = runtime,
+                pokemonEntity = entity
+            )
+
+            if (form is TemporaryForm) {
+                form.perform(entity, context)
+            } else {
+                (currentForm as TemporaryForm).performRevert(entity, context)
+            }
+
+            return@dispatch UntilDispatch { context.future.isDone }
         }
     }
 

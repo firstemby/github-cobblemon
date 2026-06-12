@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.storage.pc.PCStore
@@ -22,6 +23,7 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.isBusy
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.server
@@ -152,9 +154,20 @@ open class PlayerPartyStore(
 
                 // Reevaluate active form
                 val form = pokemon.form
-                if (form is TemporaryForm && !form.reevaluate(pokemon)) {
-                    form.revert(pokemon)
-                } // TODO check locks?
+                if (form is TemporaryForm && !form.reevaluate(pokemon) && !player.isBusy() && pokemon.entity?.isBusy != true) {
+                    val entity = pokemon.entity
+                    if (entity == null) {
+                        form.revert(pokemon)
+                    } else {
+                        form.performRevert(
+                            pokemonEntity = entity,
+                            context =ActionEffectContext.fromPokemonEntity(
+                                actionEffect = form.revertActionEffect,
+                                pokemonEntity = entity
+                            )
+                        )
+                    }
+                }
 
                 // Reevaluate transformation requirements and remove invalid transformations from the controller
                 pokemon.formProxy.server().reevaluate()
