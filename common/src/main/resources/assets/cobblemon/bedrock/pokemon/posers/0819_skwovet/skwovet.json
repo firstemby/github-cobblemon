@@ -13,7 +13,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
       "animations": [
         "q.bedrock('skwovet', 'ground_idle')"
       ]
@@ -24,8 +23,7 @@
         "SWIM"
       ],
       "animations": [
-        "q.bedrock('skwovet', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('skwovet', 'ground_walk')"
       ]
     }
   }

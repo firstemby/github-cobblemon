@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.spawning.selection
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -29,20 +28,26 @@ interface SpawningSelector<T : SpawnSelectionData> {
         val DEFAULT = FlatSpawnablePositionWeightedSelector()
     }
 
-    fun getSelectionData(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): T
+    fun getSelectionData(spawner: Spawner, spawnablePositions: List<SpawnablePosition>): T
 
     fun selectSpawnAction(
         spawner: Spawner,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: T
     ): SpawnAction<*>?
 
-    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, maxSpawns: Int): List<SpawnAction<*>> {
-        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
+    fun select(
+        spawner: Spawner,
+        bucketSelector: () -> String,
+        spawnablePositions: List<SpawnablePosition>,
+        maxSpawns: Int
+    ): List<SpawnAction<*>> {
+        val selectionData = getSelectionData(spawner, spawnablePositions)
 
         val spawnActions = selectionData.spawnActions
 
         while (spawnActions.size < maxSpawns) {
+            val bucket = bucketSelector()
             val spawnAction = selectSpawnAction(
                 spawner = spawner,
                 bucket = bucket,
@@ -59,7 +64,7 @@ interface SpawningSelector<T : SpawnSelectionData> {
         return spawnActions
     }
 
-    fun getProbabilities(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float> {
+    fun getProbabilities(spawner: Spawner, bucket: String, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float> {
         val weights = getTotalWeights(spawner, bucket, spawnablePositions)
         val totalWeight = weights.values.sum()
         val percentages = mutableMapOf<SpawnDetail, Float>()
@@ -67,5 +72,5 @@ interface SpawningSelector<T : SpawnSelectionData> {
         return percentages
     }
 
-    fun getTotalWeights(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float>
+    fun getTotalWeights(spawner: Spawner, bucket: String, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float>
 }

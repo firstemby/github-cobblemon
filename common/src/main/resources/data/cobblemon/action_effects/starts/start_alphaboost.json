@@ -1,0 +1,31 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:alphaboost_actorburst",
+      "locators": ["middle"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:alphaboost_actor",
+      "delay": 0.1,
+      "locators": ["root"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.75
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.8
+    }
+  ]
+}

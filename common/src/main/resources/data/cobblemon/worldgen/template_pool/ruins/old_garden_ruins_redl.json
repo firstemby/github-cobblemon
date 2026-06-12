@@ -1,0 +1,76 @@
+{
+    "name": "cobblemon:ruins/old_garden_ruins_redl",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_lwall1_7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "cobblemon:ruins/old_garden_ruins_pieces",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

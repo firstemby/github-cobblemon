@@ -28,16 +28,18 @@ object IntRangeAdapter : JsonSerializer<IntRange>, JsonDeserializer<IntRange> {
 
     private val PATTERN = "(-?\\d+)-?(-?\\d+)?".toRegex()
 
-    override fun serialize(range: IntRange, type: Type, ctx: JsonSerializationContext): JsonElement {
+    override fun serialize(range: IntRange, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(serialize(range))
+    fun serialize(range: IntRange): String {
         return if (range.first == range.last) {
-            JsonPrimitive(range.first)
+            range.first.toString()
         } else {
-            JsonPrimitive("${range.first}-${range.last}")
+            "${range.first}-${range.last}"
         }
     }
 
-    override fun deserialize(json: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
-        val (start, end) = PATTERN.find(json.asString)!!.destructured
+    override fun deserialize(json: JsonElement, type: Type, context: JsonDeserializationContext) = deserialize(json.asString)
+    fun deserialize(string: String): IntRange {
+        val (start, end) = PATTERN.find(string)!!.destructured
         return if (end.isEmpty()) {
             IntRange(start.toInt(), start.toInt())
         } else {

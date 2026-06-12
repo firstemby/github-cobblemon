@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.pyroar_male",
+				"identifier": "geometry.pyroar_female",
 				"texture_width": 256,
 				"texture_height": 256,
 				"visible_bounds_width": 10,
@@ -559,6 +559,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.5, 37.5, -14],
+					"locators": {
+						"eye2": [2.5, 37.5, -14]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [2.4, 37.5, -12.9],
@@ -622,6 +630,14 @@
 					"cubes": [
 						{"origin": [-3, 36.9, -14.03], "size": [1, 2, 0], "uv": [98, 80]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.5, 37.5, -14],
+					"locators": {
+						"eye1": [-2.5, 37.5, -14]
+					}
 				},
 				{
 					"name": "eyelid_right",

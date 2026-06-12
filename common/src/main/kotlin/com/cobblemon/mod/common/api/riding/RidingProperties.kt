@@ -15,10 +15,22 @@ import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RidingProperties(
-        val seats: List<Seat> = listOf(),
+        seats: List<Seat> = listOf(),
         val conditions: List<Expression> = listOf(),
         val behaviours: Map<RidingStyle, RidingBehaviourSettings>? = null
 ) {
+
+    /**
+     * If a seats locator name is empty then populate it with the name that it would have
+     * under the legacy logic
+     */
+    val seats: List<Seat> = seats.mapIndexed { index, seat ->
+        if (seat.locator.isEmpty()) {
+            seat.copy(locator = "seat_${index + 1}")
+        } else {
+            seat
+        }
+    }
 
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {

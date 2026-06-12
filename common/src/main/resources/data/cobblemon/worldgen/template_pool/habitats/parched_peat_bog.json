@@ -1,0 +1,86 @@
+{
+    "name": "cobblemon:habitats/parched_peat_bog",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/parched_peat_bog8",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/parched_peat_bog",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

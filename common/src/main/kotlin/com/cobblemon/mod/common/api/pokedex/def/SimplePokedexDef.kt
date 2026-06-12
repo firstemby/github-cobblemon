@@ -45,9 +45,7 @@ class SimplePokedexDef(
 
     override fun getEntries() = entries.mapNotNull { DexEntries.entries[it] }
 
-    override fun shouldSynchronize(other: PokedexDef) = true
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         sortOrder = buffer.readSizedInt(IntSize.U_BYTE)
         val size = buffer.readInt()
         for (i in 0 until size) {
@@ -55,7 +53,7 @@ class SimplePokedexDef(
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeSizedInt(IntSize.U_BYTE, sortOrder)
         buffer.writeInt(entries.size)
         entries.forEach {

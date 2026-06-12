@@ -1,0 +1,19 @@
+{
+  "moveName": "waterfall",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:deep_sea_tooth",
+      "count": 1
+    }
+  ]
+}

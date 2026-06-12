@@ -1,0 +1,26 @@
+{
+    "name": "cobblemon:habitats/lush_canopy_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/lush_canopy_start1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/lush_canopy_start2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "terrain_matching"
+            }
+        }
+    ]
+}

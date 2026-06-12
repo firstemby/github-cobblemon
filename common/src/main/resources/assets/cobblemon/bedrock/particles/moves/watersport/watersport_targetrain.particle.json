@@ -109,7 +109,8 @@
             },
             "cobblemon:emitter_space": {
                 "scaling": "entity"
-            }
+            },
+            "minecraft:particle_appearance_lighting": {}
         }
     }
 }

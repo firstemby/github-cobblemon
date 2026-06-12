@@ -1,16 +1,30 @@
 {
-    "species": "cobblemon:amoonguss",
-    "order": 0,
-    "variations": [
-      {
-        "aspects": [],
-        "poser": "cobblemon:amoonguss",
-        "model": "cobblemon:amoonguss.geo",
-        "texture": "cobblemon:textures/pokemon/0591_amoonguss/amoonguss.png"
-        },
-      {
-        "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0591_amoonguss/amoonguss_shiny.png"
-      }
-    ]
-  }
+  "species": "cobblemon:amoonguss",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:amoonguss",
+      "model": "cobblemon:amoonguss.geo",
+      "texture": "cobblemon:textures/pokemon/0591_amoonguss/amoonguss.png"
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0591_amoonguss/amoonguss_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0591_amoonguss/amoonguss_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

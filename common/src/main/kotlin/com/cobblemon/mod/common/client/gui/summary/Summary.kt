@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWi
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
+import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
@@ -295,9 +296,10 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             baseScale = 2F,
             rotationY = 325F,
             offsetY = -10.0,
+            playCryOnClick = true,
             shouldFollowCursor = true,
         )
-        addRenderableOnly(this.modelWidget)
+        addRenderableWidget(this.modelWidget)
 
         updatePokemonInfo()
     }
@@ -700,7 +702,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         }
 
 
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && !nicknameSelected) {
+        if ( !nicknameSelected && (isInventoryKeyPressed(minecraft, keyCode, scanCode) || SummaryBinding.matches(keyCode, scanCode)) ){
             saveActiveMark()
             saveMarkings()
             Minecraft.getInstance().setScreen(null)

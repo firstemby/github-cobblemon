@@ -289,11 +289,11 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("ancient_great_ball", MultiplierModifier(1.5F), ancient = true)
         createDefault("ancient_ultra_ball", MultiplierModifier(2F), ancient = true)
         createDefault("ancient_heavy_ball", throwPower = 0.75f, ancient = true)
-        createDefault("ancient_leaden_ball", throwPower = 0.75f, ancient = true)
-        createDefault("ancient_gigaton_ball", throwPower = 0.75f, ancient = true)
+        createDefault("ancient_leaden_ball", MultiplierModifier(1.5F), throwPower = 0.75f, ancient = true)
+        createDefault("ancient_gigaton_ball", MultiplierModifier(2F), throwPower = 0.75f, ancient = true)
         createDefault("ancient_feather_ball", throwPower = 2.5f, ancient = true)
-        createDefault("ancient_wing_ball", throwPower = 2.5f, ancient = true)
-        createDefault("ancient_jet_ball", throwPower = 2.5f, ancient = true)
+        createDefault("ancient_wing_ball", MultiplierModifier(1.5F), throwPower = 2.5f, ancient = true)
+        createDefault("ancient_jet_ball", MultiplierModifier(2F), throwPower = 2.5f, ancient = true)
         createDefault("ancient_origin_ball", GuaranteedModifier(), ancient = true)
         // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->

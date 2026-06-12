@@ -35,7 +35,7 @@ internal data class ClientPokemonP3(
     val rideBoosts: Map<String, Float>,
     val currentFullness: Int,
     val interactionCooldowns: Map<ResourceLocation, Int>,
-    val skillCooldownTicks: Map<ResourceLocation, Int>,
+    val isAlpha: Boolean,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -54,7 +54,7 @@ internal data class ClientPokemonP3(
         this.rideBoosts.let { other.setRideBoosts(it.mapKeys { RidingStat.valueOf(it.key) }) }
         other.currentFullness = this.currentFullness
         other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
-        other.skillCooldownsTicks = this.skillCooldownTicks.toMutableMap()
+        other.isAlpha = isAlpha
         return other
     }
 
@@ -77,8 +77,8 @@ internal data class ClientPokemonP3(
                 Codec.unboundedMap(Codec.STRING, Codec.FLOAT).fieldOf(DataKeys.POKEMON_RIDE_BOOSTS).forGetter(ClientPokemonP3::rideBoosts),
                 Codec.intRange(0, 100).fieldOf(DataKeys.POKEMON_FULLNESS).forGetter(ClientPokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN).forGetter(ClientPokemonP3::interactionCooldowns),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf(DataKeys.POKEMON_SKILL_COOLDOWNS).forGetter(ClientPokemonP3::skillCooldownTicks)
-            ).apply(instance, ::ClientPokemonP3)
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(ClientPokemonP3::isAlpha)
+                ).apply(instance, ::ClientPokemonP3)
         }
 
         internal fun from(pokemon: Pokemon): ClientPokemonP3 = ClientPokemonP3(
@@ -95,7 +95,7 @@ internal data class ClientPokemonP3(
             pokemon.getRideBoosts().mapKeys { it.key.name },
             pokemon.currentFullness,
             pokemon.interactionCooldowns,
-            pokemon.skillCooldownsTicks,
+            pokemon.isAlpha,
         )
     }
 }

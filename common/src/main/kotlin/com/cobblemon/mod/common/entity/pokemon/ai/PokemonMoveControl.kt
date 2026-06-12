@@ -33,6 +33,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import kotlin.math.sqrt
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
@@ -100,7 +101,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
-        val adjustedSpeed = baseSpeed * mediumSpeed
+        // Mult the baseSpeed by the square root of the effectivescale to prevent foot slide (alpha/baby scaling)
+        val adjustedSpeed = baseSpeed * mediumSpeed * sqrt(pokemonEntity.pokemon.effectiveScale)
 
         if (banking) {
             pokemonEntity.yRot += bankRightDegreesPerTick

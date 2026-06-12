@@ -36,15 +36,15 @@ public class ClientPacketListenerMixin {
             for (int passenger : packet.getPassengers()) {
                 passengers.add(this.level.getEntity(passenger));
             }
-            Arrays
-                    .stream(pokemon.getOccupiedSeats())
+            pokemon.getOccupiedSeats().values().stream()
                     .filter(x -> !passengers.contains(x))
                     .filter(Objects::nonNull)
                     .forEach(Entity::stopRiding);
 
-            var occupiedSeats = Arrays.asList(pokemon.getOccupiedSeats());
+            // Mount passengers not yet in the map
+            var currentPassengers = new ArrayList<>(pokemon.getOccupiedSeats().values());
             passengers.stream()
-                    .filter(x -> !occupiedSeats.contains(x))
+                    .filter(x -> !currentPassengers.contains(x))
                     .filter(Objects::nonNull)
                     .forEach(x -> x.startRiding(pokemon, true));
             ci.cancel();

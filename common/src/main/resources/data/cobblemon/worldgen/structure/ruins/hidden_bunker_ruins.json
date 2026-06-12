@@ -4,7 +4,7 @@
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:ruins/hidden_bunker_ruins",
     "size": 7,
-    "step": "underground_decoration",
+    "step": "underground_structures",
     "start_height": {
         "absolute": -15
     },

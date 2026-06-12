@@ -51,11 +51,15 @@ data class PokemonInteractionSet(
 }
 
 data class PokemonInteraction(
-    val grouping: ResourceLocation,
     val requirements: List<Requirement> = listOf(),
     val effects: List<InteractionEffect> = listOf(),
     val cooldown: ExpressionLike = "0".asExpressionLike()
 ) {
+    // Not put as a necessary constructor parameter because then there isn't a default constructor
+    // and that means Gson just gives null for everything in the constructor and falls back to the JSON
+    // properties - completely ignoring the default values above.
+    lateinit var grouping: ResourceLocation
+
     fun encode(buffer: FriendlyByteBuf) {
         buffer.writeResourceLocation(grouping)
         buffer.writeCollection(requirements) { it, requirement ->
@@ -76,11 +80,12 @@ data class PokemonInteraction(
             val cooldown = buffer.readExpressionLike()
 
             return PokemonInteraction(
-                grouping,
                 requirements,
                 effects,
                 cooldown,
-            )
+            ).also {
+                it.grouping = grouping
+            }
         }
     }
 }

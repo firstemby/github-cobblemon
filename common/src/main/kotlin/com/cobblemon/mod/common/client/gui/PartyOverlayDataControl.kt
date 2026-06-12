@@ -19,10 +19,10 @@ object PartyOverlayDataControl {
     const val BAR_UPDATE_BEFORE_TIME = 15
     const val BAR_UPDATE_AFTER_TIME = 15
     const val BAR_FLASH_TIME = 2
+    const val BAR_UPDATE_NO_LEVEL_TIME = BAR_UPDATE_BEFORE_TIME + BAR_UPDATE_AFTER_TIME + BAR_FLASH_TIME
     val POPUP_TIME = FadeTimings(3, 40, 3)
     const val LEVEL_UP_PORTRAIT_TIME = 10
-
-    val BAR_UPDATE_NO_LEVEL_TIME = BAR_UPDATE_BEFORE_TIME + BAR_UPDATE_AFTER_TIME + BAR_FLASH_TIME
+    val EXP_POPUP_TIME = FadeTimings(3, BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME + POPUP_TIME.total() - 6, 3)
 
     private enum class RenderTarget {
         NONE,
@@ -35,21 +35,19 @@ object PartyOverlayDataControl {
 
     private var barFillupSound: SoundInstance? = null
     private var levelUpJingleSound: SoundInstance? = null
+    private var levelUpJingleSoundType: SoundEvent? = null
 
     fun pokemonGainedExp(pokemonUuid : UUID, oldLevel: Int?, expGained: Int, countOfMovesLearned: Int, countOfEvosUnlocked: Int = 0) {
-        var time = BAR_UPDATE_NO_LEVEL_TIME
-        if (countOfMovesLearned > 0 || countOfEvosUnlocked > 0) {
-            time = BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME + POPUP_TIME.total()
-        }
-
         val data = overlayData[pokemonUuid]
-        val newData = ExpGainedData(oldLevel, expGained, countOfMovesLearned, countOfEvosUnlocked).also { it.ticksMax = time }
+        val newData = ExpGainedData(oldLevel, expGained, countOfMovesLearned, countOfEvosUnlocked).also { it.ticksMax = BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME + POPUP_TIME.total() }
         if (data != null) {
-            if (data.movesGainedData != null) {
+            if (data.movesGainedData != null) { //Absorb Data
                 newData.countOfMovesLearned += data.movesGainedData!!.movesCount
+                data.movesGainedData = null
             }
-            if (data.evoGainedData != null) {
+            if (data.evoGainedData != null) { //Absorb Data
                 newData.countOfEvosUnlocked += data.evoGainedData!!.evolutionCount
+                data.evoGainedData = null
             }
 
             val expData = data.expGainedData
@@ -72,8 +70,7 @@ object PartyOverlayDataControl {
         val data = overlayData[pokemonUuid]
         val newData = EvolutionGainedData(evoCount).also { it.ticksMax = POPUP_TIME.total() }
         if (data != null) {
-            if (data.expGainedData != null && data.expGainedData!!.ticks < BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME) {
-                data.expGainedData!!.ticksMax = BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME + POPUP_TIME.total()
+            if (data.expGainedData != null) {
                 data.expGainedData!!.countOfEvosUnlocked += evoCount
                 return
             }
@@ -93,8 +90,7 @@ object PartyOverlayDataControl {
         val data = overlayData[pokemonUuid]
         val newData = MovesGainedData(movesCount).also { it.ticksMax = POPUP_TIME.total() }
         if (data != null) {
-            if (data.expGainedData != null && data.expGainedData!!.ticks < BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME) {
-                data.expGainedData!!.ticksMax = BAR_UPDATE_BEFORE_TIME + BAR_FLASH_TIME + POPUP_TIME.total()
+            if (data.expGainedData != null) {
                 data.expGainedData!!.countOfMovesLearned += movesCount
                 return
             }
@@ -137,13 +133,28 @@ object PartyOverlayDataControl {
     fun tick(paused: Boolean) {
         val deletion = mutableListOf<UUID>()
         if (paused) return
+
+        if (levelUpJingleSound != null && !Minecraft.getInstance().soundManager.isActive(levelUpJingleSound!!)) {
+            levelUpJingleSound = null
+            levelUpJingleSoundType = null
+        }
+
         overlayData.forEach { (id, data) ->
             if (data.expGainedData != null) { // We update this in order and render these in order, and as such we don't tick others
                 val expGainedData = data.expGainedData!!
                 expGainedData.ticks += 1
                 if (expGainedData.ticks == BAR_UPDATE_BEFORE_TIME && expGainedData.oldLevel != null) {
-                    stopSound(levelUpJingleSound)
-                    levelUpJingleSound = playSound(CobblemonSounds.LEVELUP)
+                    if (expGainedData.countOfEvosUnlocked > 0) {
+                        stopSound(levelUpJingleSound)
+                        levelUpJingleSound = playSound(CobblemonSounds.EVOLUTION_NOTIFICATION)
+                        levelUpJingleSoundType = CobblemonSounds.EVOLUTION_NOTIFICATION
+                    } else {
+                        if (levelUpJingleSoundType != CobblemonSounds.EVOLUTION_NOTIFICATION) {
+                            stopSound(levelUpJingleSound)
+                            levelUpJingleSound = playSound(CobblemonSounds.LEVELUP)
+                            levelUpJingleSoundType = CobblemonSounds.LEVELUP
+                        }
+                    }
                 }
                 if (expGainedData.ticks >= expGainedData.ticksMax) {
                     data.expGainedData = null
@@ -166,6 +177,7 @@ object PartyOverlayDataControl {
             }
             if (getCurrentRenderTarget(id) == RenderTarget.NONE) deletion.add(id)
         }
+
         deletion.forEach {
             overlayData.remove(it)
         }
@@ -216,7 +228,7 @@ object PartyOverlayDataControl {
     //SOUNDS
     private fun playSound(soundEvent: SoundEvent): SoundInstance? {
         if (!PartyOverlay.canRender()) return null
-        val soundInstance = SimpleSoundInstance.forUI(soundEvent, 1F)
+        val soundInstance = SimpleSoundInstance.forUI(soundEvent, 1F, 1F)
         Minecraft.getInstance().soundManager.play(soundInstance)
         return soundInstance
     }

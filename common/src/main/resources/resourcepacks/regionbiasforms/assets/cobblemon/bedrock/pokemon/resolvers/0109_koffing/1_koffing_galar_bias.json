@@ -5,12 +5,12 @@
     {
       "aspects": ["region-bias-galar"],
       "model": "cobblemon:koffing_galar_bias.geo",
-      "texture": "cobblemon:textures/pokemon/0109_koffing/koffing_galar_bias.png",
+      "texture": "cobblemon:textures/pokemon/0109_koffing/koffing.png",
       "layers": []
     },
     {
       "aspects": ["shiny", "region-bias-galar"],
-      "texture": "cobblemon:textures/pokemon/0109_koffing/koffing_galar_bias_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0109_koffing/koffing_shiny.png"
     }
   ]
 }

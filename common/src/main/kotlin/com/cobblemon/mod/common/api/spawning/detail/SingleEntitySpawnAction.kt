@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.util.toVec3d
 import net.minecraft.world.entity.Entity
@@ -26,7 +25,7 @@ import net.minecraft.world.entity.MobSpawnType
  */
 abstract class SingleEntitySpawnAction<T : Entity>(
     spawnablePosition: SpawnablePosition,
-    bucket: SpawnBucket,
+    bucket: String,
     detail: SpawnDetail
 ) : SpawnAction<EntitySpawnResult>(spawnablePosition, bucket, detail) {
     abstract fun createEntity(): T?

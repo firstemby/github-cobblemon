@@ -1,6 +1,12 @@
 {
     "processors": [
         {
+            "processor_type": "cobblemon:height_range",
+            "reference": "sea_level",
+            "min_offset": 1,
+            "max_offset": 250
+        },
+        {
             "processor_type": "minecraft:rule",
             "rules": [
                 {
@@ -54,7 +60,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -79,7 +85,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -104,7 +110,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -129,7 +135,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -225,7 +231,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -252,7 +258,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -279,7 +285,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -306,7 +312,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/steelbeam"
                     },
                     "input_predicate": {
                         "block_state": {

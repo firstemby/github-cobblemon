@@ -16,6 +16,10 @@
     {
       "id": "farmersdelight:rich_soil_farmland",
       "required": false
+    },
+    {
+      "id": "supplementaries:planter",
+      "required": false
     }
   ]
 }

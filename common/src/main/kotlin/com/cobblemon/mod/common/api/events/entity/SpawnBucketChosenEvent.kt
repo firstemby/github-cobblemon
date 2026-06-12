@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.events.entity
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 
@@ -21,7 +20,7 @@ class SpawnBucketChosenEvent(
     /** The cause of the spawn. */
     val spawnCause: SpawnCause,
     /** The bucket that was chosen. You can alter this. */
-    var bucket: SpawnBucket,
+    var bucket: String,
     /** The final weights that were used to make the choice. */
-    val bucketWeights: Map<SpawnBucket, Float>
+    val bucketWeights: Map<String, Float>
 )

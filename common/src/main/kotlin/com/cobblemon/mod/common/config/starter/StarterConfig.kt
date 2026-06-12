@@ -39,6 +39,7 @@ class StarterConfig {
     var starters = mutableListOf(
         StarterCategory(
             name = "Kanto",
+            order = -110,
             displayName = "cobblemon.starterselection.category.kanto",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Bulbasaur level=10"),
@@ -48,6 +49,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Johto",
+            order = -109,
             displayName = "cobblemon.starterselection.category.johto",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Chikorita level=10"),
@@ -57,6 +59,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Hoenn",
+            order = -108,
             displayName = "cobblemon.starterselection.category.hoenn",
             pokemon = mutableListOf(
                     PokemonProperties.parse("Treecko level=10"),
@@ -66,6 +69,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Sinnoh",
+            order = -107,
             displayName = "cobblemon.starterselection.category.sinnoh",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Turtwig level=10"),
@@ -75,6 +79,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Unova",
+            order = -106,
             displayName = "cobblemon.starterselection.category.unova",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Snivy level=10"),
@@ -84,6 +89,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Kalos",
+            order = -105,
             displayName = "cobblemon.starterselection.category.kalos",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Chespin level=10"),
@@ -93,6 +99,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Alola",
+            order = -104,
             displayName = "cobblemon.starterselection.category.alola",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Rowlet level=10"),
@@ -102,6 +109,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Galar",
+            order = -103,
             displayName = "cobblemon.starterselection.category.galar",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Grookey level=10"),
@@ -111,6 +119,7 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Hisui Bias",
+            order = -102,
             displayName = "cobblemon.starterselection.category.hisui_bias",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Rowlet region_bias=hisui level=10 pokeball=ancient_poke_ball"),
@@ -120,11 +129,21 @@ class StarterConfig {
         ),
         StarterCategory(
             name = "Paldea",
+            order = -101,
             displayName = "cobblemon.starterselection.category.paldea",
             pokemon = mutableListOf(
                 PokemonProperties.parse("Sprigatito level=10"),
                 PokemonProperties.parse("Fuecoco level=10"),
                 PokemonProperties.parse("Quaxly level=10"),
+            )
+        ),
+        StarterCategory(
+            name = "Special",
+            order = -100,
+            displayName = "cobblemon.starterselection.category.special",
+            pokemon = mutableListOf(
+                PokemonProperties.parse("Pikachu level=10"),
+                PokemonProperties.parse("Eevee level=10")
             )
         )
     )

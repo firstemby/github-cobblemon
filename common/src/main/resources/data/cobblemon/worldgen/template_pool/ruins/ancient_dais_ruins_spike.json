@@ -1,0 +1,26 @@
+{
+    "name": "cobblemon:ruins/anient_dais_ruins_spike",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/ancient_dais_ruins_spike_1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/ancient_dais_ruins",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/ancient_dais_ruins_spike_2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/ancient_dais_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

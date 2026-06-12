@@ -6,11 +6,11 @@
       "aspects": ["female"],
       "poser": "cobblemon:venusaur",
       "model": "cobblemon:venusaur_female.geo",
-      "texture": "cobblemon:textures/pokemon/0003_venusaur/venusaur_female.png"
+      "texture": "cobblemon:textures/pokemon/0003_venusaur/venusaur.png"
     },
     {
       "aspects": ["shiny", "female"],
-      "texture": "cobblemon:textures/pokemon/0003_venusaur/venusaur_female_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0003_venusaur/venusaur_shiny.png"
     }
   ]
 }

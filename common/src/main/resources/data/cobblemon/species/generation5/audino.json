@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 531,
   "name": "Audino",
   "primaryType": "normal",
@@ -41,12 +42,13 @@
   "catchRate": 255,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 1.8,
     "fixed": false
   },
+  "standingEyeHeight": 0.82,
   "drops": {
     "amount": 2,
     "entries": [

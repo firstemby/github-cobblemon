@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0094_gengar/gengar_shiny.png",
       "layers": [
         {
@@ -29,11 +31,25 @@
       ]
     },
     {
-      "aspects": ["color-green"],
+      "aspects": [
+        "color-green"
+      ],
       "layers": [
         {
           "name": "pokemopolis",
           "texture": "cobblemon:textures/pokemon/0094_gengar/gengar_pokemopolis.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0094_gengar/gengar_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -25,6 +25,19 @@
           "emissive": "true"
         }
       ]
+    },
+    {
+      "aspects": [
+        "galarian",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0077_ponyta/ponyta_galar_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

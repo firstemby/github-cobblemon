@@ -103,8 +103,6 @@ class GildedChestBlockEntity(pos: BlockPos, state: BlockState, val type: Type = 
         return dir == Direction.DOWN
     }
 
-    override fun stillValid(player: Player) = !player.isSpectator
-
     override fun setItems(inventory: NonNullList<ItemStack>) {
         inventoryContents = inventory
     }

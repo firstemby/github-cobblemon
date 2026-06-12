@@ -1,0 +1,92 @@
+{
+    "name": "cobblemon:habitats/flowerbed_clearing_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing7",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/flowerbed_clearing8",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/flowerbed_clearing_start",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 20,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+    ]
+}

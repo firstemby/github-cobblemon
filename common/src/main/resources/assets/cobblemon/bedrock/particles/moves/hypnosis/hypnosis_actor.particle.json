@@ -40,7 +40,7 @@
           "0.25+(v.particle_age*0.5)",
           "0.25+(v.particle_age*0.5)"
         ],
-        "facing_camera_mode": "rotate_xyz",
+        "facing_camera_mode": "emitter_transform_xy",
         "uv": {
           "texture_width": 117,
           "texture_height": 13,

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 876,
   "name": "Indeedee",
   "primaryType": "psychic",
@@ -44,12 +45,13 @@
   "catchRate": 30,
   "eggCycles": 40,
   "baseFriendship": 140,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.9,
     "fixed": false
   },
+  "standingEyeHeight": 0.74,
   "drops": {
     "amount": 2,
     "entries": [

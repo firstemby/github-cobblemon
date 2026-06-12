@@ -31,6 +31,7 @@ open class PokemonBehaviour(
     val herd: HerdBehaviour = HerdBehaviour(),
     val characteristicRainbow: Boolean = false,
     val itemInteract: ItemBehavior = ItemBehavior(),
+    val freezeImmune: Boolean = false,
 ) {
     @Transient
     val struct = ObjectValue<PokemonBehaviour>(this).also {

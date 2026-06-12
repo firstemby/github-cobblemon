@@ -1,0 +1,28 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_original_recipe": {
+      "conditions": {
+        "recipe": "minecraft:golden_apple"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:golden_apple_using_applins"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_original_recipe",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:golden_apple_using_applins"
+    ]
+  }
+}

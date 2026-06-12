@@ -1,0 +1,19 @@
+{
+  "moveName": "iciclespear",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "ice",
+  "recipe": [
+    {
+      "item": "cobblemon:ice_gem",
+      "count": 4
+    },
+    {
+      "item": "minecraft:snowball",
+      "count": 1
+    }
+  ]
+}

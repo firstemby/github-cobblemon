@@ -22,9 +22,22 @@
                 },
                 {
                     "input_predicate": {
-                        "block": "minecraft:stone_bricks",
+                        "block": "minecraft:gravel",
                         "predicate_type": "minecraft:random_block_match",
                         "probability": 0.4
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:deepslate"
+                    }
+                },
+                {
+                    "input_predicate": {
+                        "block": "minecraft:stone_bricks",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.3
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -35,9 +48,22 @@
                 },
                 {
                     "input_predicate": {
+                        "block": "minecraft:stone_brick_wall",
+                        "predicate_type": "minecraft:random_block_match",
+                        "probability": 0.3
+                    },
+                    "location_predicate": {
+                        "predicate_type": "minecraft:always_true"
+                    },
+                    "output_state": {
+                        "Name": "minecraft:andesite_wall"
+                    }
+                },
+                {
+                    "input_predicate": {
                         "block": "minecraft:stone_bricks",
                         "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.4
+                        "probability": 0.2
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -50,7 +76,7 @@
                     "input_predicate": {
                         "block": "minecraft:stone_bricks",
                         "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.4
+                        "probability": 0.2
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -63,7 +89,7 @@
                     "input_predicate": {
                         "block": "minecraft:stone_brick_wall",
                         "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.5
+                        "probability": 0.3
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -74,41 +100,15 @@
                 },
                 {
                     "input_predicate": {
-                        "block": "minecraft:end_stone_brick_wall",
+                        "block": "minecraft:stone_brick_wall",
                         "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.5
+                        "probability": 0.3
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
                     },
                     "output_state": {
-                        "Name": "minecraft:cobbled_deepslate_wall"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:glass",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 1
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "minecraft:cave_air"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:stone_bricks",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.4
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "minecraft:cave_air"
+                        "Name": "minecraft:cobblestone_wall"
                     }
                 },
                 {
@@ -116,45 +116,6 @@
                         "block": "minecraft:stone_brick_wall",
                         "predicate_type": "minecraft:random_block_match",
                         "probability": 0.4
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "minecraft:cave_air"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:calcite",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.3
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "cobblemon:big_root"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:calcite",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 0.3
-                    },
-                    "location_predicate": {
-                        "predicate_type": "minecraft:always_true"
-                    },
-                    "output_state": {
-                        "Name": "cobblemon:energy_root"
-                    }
-                },
-                {
-                    "input_predicate": {
-                        "block": "minecraft:calcite",
-                        "predicate_type": "minecraft:random_block_match",
-                        "probability": 1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -236,6 +197,253 @@
                         },
                         "output_state": {
                             "Name": "minecraft:suspicious_gravel"
+                        }
+                    }
+                ]
+            },
+            "limit": 1,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "input_predicate": {
+                            "block": "cobblemon:gilded_chest",
+                            "predicate_type": "minecraft:random_block_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "minecraft:air"
+                        }
+                    }
+                ]
+            },
+            "limit": 6,
+            "processor_type": "minecraft:capped"
+        },
+        {
+            "delegate": {
+                "processor_type": "minecraft:rule",
+                "rules": [
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 0.4
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gimmighoul_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "north",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "north",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "south",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "south",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "east",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "east",
+                                "waterlogged": "false"
+                            }
+                        }
+                    },
+                    {
+                        "block_entity_modifier": {
+                            "type": "minecraft:append_loot",
+                            "loot_table": "cobblemon:ruins/gilded_chests/lashout"
+                        },
+                        "input_predicate": {
+                            "block_state": {
+                                "Name": "cobblemon:gilded_chest",
+                                "Properties": {
+                                    "facing": "west",
+                                    "waterlogged": "false"
+                                }
+                            },
+                            "predicate_type": "minecraft:random_blockstate_match",
+                            "probability": 1.0
+                        },
+                        "location_predicate": {
+                            "predicate_type": "minecraft:always_true"
+                        },
+                        "output_state": {
+                            "Name": "cobblemon:gilded_chest",
+                            "Properties": {
+                                "facing": "west",
+                                "waterlogged": "false"
+                            }
                         }
                     }
                 ]

@@ -1,0 +1,67 @@
+{
+  "portraitScale": 1.74,
+  "portraitTranslation": [-0.29, 0.69, 0],
+  "profileScale": 0.52,
+  "profileTranslation": [0.00, 0.81, 0],
+  "rootBone": "flapple",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('flapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('flapple', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('flapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('flapple', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('flapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('flapple', 'blink')"
+      ]
+    },
+    "hover": {
+      "poseName": "hover",
+      "poseTypes": [
+        "FLOAT",
+        "HOVER",
+        "NONE"
+      ],
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('flapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('flapple', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseName": "fly",
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.bedrock('flapple', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('flapple', 'blink')"
+      ]
+    }
+  }
+ }

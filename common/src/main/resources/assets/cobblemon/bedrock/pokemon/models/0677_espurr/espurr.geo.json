@@ -6,7 +6,7 @@
 				"identifier": "geometry.espurr",
 				"texture_width": 64,
 				"texture_height": 32,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 2,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -212,6 +212,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.5, 10, -3.8],
+					"locators": {
+						"eye2": [2.5, 10, -3.8]
+					}
+				},
+				{
 					"name": "eye_shine_left",
 					"parent": "eye_left",
 					"pivot": [1.9, 10.6, -3.43],
@@ -297,6 +305,14 @@
 					"cubes": [
 						{"origin": [-3, 9.5, -3.82], "size": [1, 1, 0], "uv": [2, 2], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.5, 10, -3.8],
+					"locators": {
+						"eye1": [-2.5, 10, -3.8]
+					}
 				},
 				{
 					"name": "eye_shine_right",

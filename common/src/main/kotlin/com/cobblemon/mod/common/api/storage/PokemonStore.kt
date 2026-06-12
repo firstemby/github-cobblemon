@@ -77,6 +77,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         remove(pokemon)
         val position = getFirstAvailablePosition() ?: return false // Couldn't fit, shrug emoji
         set(position, pokemon)
+        Cobblemon.playerDataManager.getTMData(uuid)?.syncTMsFromPokemon(pokemon)
         return true
     }
 
@@ -149,7 +150,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         return true
     }
 
-    operator fun get(uuid: UUID) = find { it.uuid == uuid }
+    operator fun get(uuid: UUID) = find { it.uuid.equals(uuid) }
 
     open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")

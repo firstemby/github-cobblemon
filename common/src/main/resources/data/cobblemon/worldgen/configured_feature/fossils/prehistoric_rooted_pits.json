@@ -1,0 +1,11 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/rooted_pit1",
+            "cobblemon:fossils/rooted_pit2",
+            "cobblemon:fossils/rooted_pit3"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_rooted_pit"
+    }
+}

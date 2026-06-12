@@ -1,0 +1,22 @@
+{
+    "name": "cobblemon:habitats/desert_shaded_rock_connector",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/desert_shaded_rock_connector",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "terrain_matching"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+    ]
+}

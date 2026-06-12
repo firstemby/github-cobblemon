@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 873,
   "name": "Frosmoth",
   "primaryType": "ice",
@@ -41,12 +42,13 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.6,
     "fixed": false
   },
+  "standingEyeHeight": 0.74,
   "drops": {
     "amount": 4,
     "entries": [

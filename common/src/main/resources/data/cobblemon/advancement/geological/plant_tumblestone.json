@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:tumblestone_cluster"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.plant_tumblestone"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.plant_tumblestone.description"
+    }
+  },
+  "parent": "cobblemon:geological/obtain_tumblestone",
+  "criteria": {
+    "plant_tumblestone": {
+      "trigger": "cobblemon:plant_tumblestone"
+    }
+  },
+  "requirements": [
+    [
+      "plant_tumblestone"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

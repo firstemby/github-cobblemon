@@ -1,0 +1,33 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "create"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "cobblemon:vivichoke"
+    }
+  ],
+  "processing_time": 50,
+  "results": [
+    {
+      "count": 1,
+      "id": "cobblemon:vivichoke_seeds"
+    },
+    {
+      "chance": 0.025,
+      "id": "cobblemon:vivichoke_seeds"
+    }
+  ]
+}

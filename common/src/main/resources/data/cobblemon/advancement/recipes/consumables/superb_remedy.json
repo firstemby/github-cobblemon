@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/consumables",
   "criteria": {
     "has_remedy": {
       "conditions": {

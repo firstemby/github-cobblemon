@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 867,
   "name": "Runerigus",
   "primaryType": "ground",
@@ -44,12 +45,13 @@
   "catchRate": 90,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.4,
+    "height": 3.15,
     "fixed": false
   },
+  "standingEyeHeight": 0.78,
   "drops": {
     "amount": 1,
     "entries": [

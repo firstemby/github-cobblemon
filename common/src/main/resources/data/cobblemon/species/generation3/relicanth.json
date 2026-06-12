@@ -60,7 +60,7 @@
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": false,
             "playForPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.water_sufrace.stereo",
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
@@ -94,83 +94,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": -0.48058435,
-              "y": -0.27500024,
-              "z": 0.14605118
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.48242062,
-              "y": -1.3168869,
-              "z": 0.053928375
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.044194173,
-              "y": -1.3188695,
-              "z": 0.16690472
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.044194173,
-              "y": -1.3188695,
-              "z": 0.16690472
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.044194173,
-              "y": -1.3188695,
-              "z": 0.16690472
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.021463323,
-              "y": -1.3135426,
-              "z": 0.1828245
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.044194173,
-              "y": -1.3188695,
-              "z": 0.16690472
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },

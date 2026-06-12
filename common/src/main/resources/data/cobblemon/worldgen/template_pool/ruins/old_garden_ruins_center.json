@@ -1,0 +1,72 @@
+{
+    "name": "cobblemon:ruins/old_garden_ruins_center",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_1a",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_1b",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_1c",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_2a",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_2b",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/old_gardens_ruins_bed_2c",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "ignore_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+    ]
+}
