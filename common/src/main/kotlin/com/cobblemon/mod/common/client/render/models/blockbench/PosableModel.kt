@@ -134,6 +134,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      */
     open var profileTranslation = Vec3(0.0, 0.0, 0.0)
 
+    open var profilePokedexScale: Float? = null
+    open var profilePokedexTranslation: Vec3? = null
+    open var profileSummaryScale: Float? = null
+    open var profileSummaryTranslation: Vec3? = null
+
     var red = 1F
     var green = 1F
     var blue = 1F

@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.summary.widgets
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.client.gui.ProfileTransformType
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.calculateHeadYawAndPitch
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -116,7 +117,8 @@ class ModelWidget(
             partialTicks = partialTicks,
             headYaw = currentYawAndPitch.first,
             headPitch = currentYawAndPitch.second,
-            blockLight = blockLight
+            blockLight = blockLight,
+            profileTransformType = ProfileTransformType.SUMMARY,
         )
 
         heldItemRenderer.renderOnModel(

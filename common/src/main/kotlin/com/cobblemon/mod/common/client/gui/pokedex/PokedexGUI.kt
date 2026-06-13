@@ -32,6 +32,8 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.handleProfileDebugKeys
+import com.cobblemon.mod.common.client.gui.logProfileTranslations
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
@@ -427,6 +429,11 @@ class PokedexGUI private constructor(
     override fun onClose() {
         if (blockPos != null) AdjustBlockEntityViewerCountPacket(blockPos, false).sendToServer()
         playSound(CobblemonSounds.POKEDEX_CLOSE)
+
+        selectedEntry?.speciesId?.let { speciesId ->
+            logProfileTranslations(speciesId, pokemonInfoWidget.state)
+        }
+
         super.onClose()
     }
 
@@ -755,6 +762,12 @@ class PokedexGUI private constructor(
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
             onClose()
             return true
+        }
+
+        if (!searchWidget.isFocused) {
+            selectedEntry?.speciesId?.let { speciesId ->
+                handleProfileDebugKeys(keyCode, speciesId, pokemonInfoWidget.state)
+            }
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers)
