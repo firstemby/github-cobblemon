@@ -22,19 +22,29 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-abstract class RealTimeMoveInstance(val move: RealTimeMove, val pokemonEntity: PokemonEntity, val targetEntity: LivingEntity) {
+abstract class RealTimeMoveInstance(
+    val move: RealTimeMove,
+    val pokemonEntity: PokemonEntity,
+    val targetEntity: LivingEntity,
+    val parentEntity: Entity? = null) {
+
     var delayTicks = move.delayTicks
     var recoveryTicks = move.recoveryTicks
+    var completed = false
+    var rotation: Vec3 = pokemonEntity.lookAngle
+    var positionOffset: Vec3 = Vec3.ZERO
 
-    abstract fun start(pokemonEntity: PokemonEntity, targetEntity: LivingEntity)
+    abstract fun start()
 
-    abstract fun tick(pokemonEntity: PokemonEntity, targetEntity: LivingEntity) : Boolean
+    abstract fun tick() : Boolean
 
-    abstract fun end(pokemonEntity: PokemonEntity, targetEntity: LivingEntity)
+    open fun end() {
+        completed = true
+    }
 
 
     companion object {
-        // TODO: Probably a better location for these
+        // TODO: Probably need to find a better location for these
         fun getDamageMultiplier(pokemonEntity: PokemonEntity, targetEntity: Entity, elementalType: ElementalType) : Int {
             var attack = pokemonEntity.pokemon.attack
             var specialAttack = pokemonEntity.pokemon.specialAttack

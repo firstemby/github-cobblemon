@@ -15,10 +15,12 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
 import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
+import com.cobblemon.mod.common.pokemon.ai.moves.events.MoveEventAction
 import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.RealTimeMoveConfigAdapter
+import com.cobblemon.mod.common.util.adapters.RealTimeMoveEventActionConfigAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -39,6 +41,7 @@ object CobblemonRealTimeMoves : JsonDataRegistry<RealTimeMove> {
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(RealTimeMove::class.java, RealTimeMoveConfigAdapter)
+        .registerTypeAdapter(MoveEventAction::class.java, RealTimeMoveEventActionConfigAdapter)
         .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
         .create()
 

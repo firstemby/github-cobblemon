@@ -1,0 +1,17 @@
+{
+  "name": "Super Sludge Bomb a",
+  "type": "projectile",
+  "elementalType": "Poison",
+  "priority": 2,
+  "power": 1,
+  "cooldownTicks": 0,
+  "salvoCount": 1,
+  "spreadDegrees": 2.0,
+  "speed": 0.3,
+  "hasGravity": true,
+  "piercing": true,
+  "targetOpponent": false,
+  "minRange": 0,
+  "maxRange": 7,
+  "effect": "q.target.ignite_for_ticks(30)"
+}

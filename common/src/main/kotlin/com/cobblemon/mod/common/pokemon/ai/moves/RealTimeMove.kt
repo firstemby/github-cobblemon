@@ -15,10 +15,12 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.ai.moves.events.CollisionMoveEvent
+import com.cobblemon.mod.common.pokemon.ai.moves.events.TickMoveEvent
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.google.gson.annotations.SerializedName
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 
 abstract class RealTimeMove(
@@ -33,6 +35,11 @@ abstract class RealTimeMove(
     val effect: Expression = "".asExpression(),
     val effectChance: Float = 1.0f,
     val priority: Int = 1,
+    val anchoredToOwner: Boolean = false,
+    val targetOpponent: Boolean = true,
+    val tickEvents: List<TickMoveEvent> = emptyList(),
+    val collisionEvents: List<CollisionMoveEvent> = emptyList()
+
 ) {
     lateinit var id: ResourceLocation
 
@@ -49,7 +56,7 @@ abstract class RealTimeMove(
     }
 
 
-    abstract fun createInstance(pokemonEntity: PokemonEntity, targetEntity: LivingEntity): RealTimeMoveInstance
+    abstract fun createInstance(pokemonEntity: PokemonEntity, targetEntity: LivingEntity, parentEntity: Entity? = null ): RealTimeMoveInstance
 
     companion object {
         val defaultMelee: RealTimeMove = RayCastMove(
@@ -77,7 +84,7 @@ abstract class RealTimeMove(
         val types = mutableMapOf(
             cobblemonResource("projectile") to ProjectileMove::class.java,
             cobblemonResource("raycast") to RayCastMove::class.java,
-
+            cobblemonResource("dash") to DashMove::class.java,
             )
     }
 }

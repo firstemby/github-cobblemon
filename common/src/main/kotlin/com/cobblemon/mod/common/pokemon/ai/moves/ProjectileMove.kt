@@ -12,7 +12,10 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokemon.ai.moves.events.CollisionMoveEvent
+import com.cobblemon.mod.common.pokemon.ai.moves.events.TickMoveEvent
 import com.cobblemon.mod.common.util.asExpression
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 
 class ProjectileMove(
@@ -24,9 +27,12 @@ class ProjectileMove(
     maxRange : Float = 10f,
     delayTicks : Int = 0,
     recoveryTicks : Int = 1,
+    targetOpponent: Boolean = true,
     effect : Expression = "".asExpression(),
     effectChance: Float = 1.0f,
     priority : Int = 1,
+    tickEvents: List<TickMoveEvent> = emptyList(),
+    collisionEvents : List<CollisionMoveEvent> = emptyList(),
     val size : Float = 0.4f,
     val salvoCount : Int = 1,
     val salvoDelayTicks : Int = 1,
@@ -34,6 +40,7 @@ class ProjectileMove(
     val spreadDegrees : Float = 0f,
     val speed : Float = 1.0f,
     val hasGravity : Boolean = false,
+    val gravity : Double = 0.3,
     val piercing : Boolean = false,
     val piercingMultiplier : Float = 1.0f,
     val homingDegrees : Float = 0f,
@@ -51,15 +58,21 @@ class ProjectileMove(
     maxRange = maxRange,
     delayTicks = delayTicks,
     recoveryTicks = recoveryTicks,
+    targetOpponent = targetOpponent,
     effect = effect,
     effectChance = effectChance,
-    priority = priority
+    priority = priority,
+    tickEvents = tickEvents,
+    collisionEvents = collisionEvents
 ) {
     override fun createInstance(
         pokemonEntity: PokemonEntity,
-        targetEntity: LivingEntity
+        targetEntity: LivingEntity,
+        parentEntity: Entity?,
     ): RealTimeMoveInstance {
-        return ProjectileMoveInstance(this, pokemonEntity, targetEntity)
+        val instance = ProjectileMoveInstance(this, pokemonEntity, targetEntity, parentEntity)
+        RealTimeMoveManager.addInstance(instance)
+        return instance
     }
 
 

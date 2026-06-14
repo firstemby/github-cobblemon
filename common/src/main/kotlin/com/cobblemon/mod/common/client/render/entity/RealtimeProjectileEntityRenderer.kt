@@ -15,15 +15,15 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
-import com.cobblemon.mod.common.entity.GenericHurtingProjectile
+import com.cobblemon.mod.common.entity.RealtimeMoveProjectile
 
-class GenericHurtingProjectileEntityRenderer(context: EntityRendererProvider.Context) : EntityRenderer<GenericHurtingProjectile>(context) {
-    override fun getBlockLightLevel(entity: GenericHurtingProjectile, pos: BlockPos): Int {
+class RealtimeProjectileEntityRenderer(context: EntityRendererProvider.Context) : EntityRenderer<RealtimeMoveProjectile>(context) {
+    override fun getBlockLightLevel(entity: RealtimeMoveProjectile, pos: BlockPos): Int {
         return 15
     }
 
     override fun render(
-        entity: GenericHurtingProjectile,
+        entity: RealtimeMoveProjectile,
         entityYaw: Float,
         partialTicks: Float,
         poseStack: PoseStack,
@@ -43,7 +43,7 @@ class GenericHurtingProjectileEntityRenderer(context: EntityRendererProvider.Con
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight)
     }
 
-    override fun getTextureLocation(entity: GenericHurtingProjectile): ResourceLocation {
+    override fun getTextureLocation(entity: RealtimeMoveProjectile): ResourceLocation {
         return TEXTURE_LOCATION
     }
 

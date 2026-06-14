@@ -34,7 +34,7 @@ import kotlin.collections.set
 class AttackFixation(
     val targetEntity: LivingEntity,
     /** Distraction types that will be respected. */
-    private val speedMultiplier: Expression = "1.0".asExpression(), // TODO: Dynamically override movement speed for different aggro behav
+    private val speedMultiplier: Expression = "1.0".asExpression(),
     private val availableMoves: List<RealTimeMove> = emptyList(),
     val distractionTypes: Set<DistractionType>,
 ) : EntityFixation {
@@ -80,14 +80,8 @@ class AttackFixation(
             }
         }
 
-        if (activeMoveInstance != null) {
-            val shouldContinue = activeMoveInstance!!.tick(entity, targetedEntity)
-            if (shouldContinue) {
-                return true
-            } else {
-                activeMoveInstance!!.end(entity, targetedEntity)
-                activeMoveInstance = null
-            }
+        if (activeMoveInstance != null && activeMoveInstance!!.completed) {
+            activeMoveInstance = null
         }
 
         var runtime = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
@@ -115,7 +109,7 @@ class AttackFixation(
             if (selectedMoveIndex != -1) {
                 val selectedMove = availableMoves[selectedMoveIndex]
                 activeMoveInstance = selectedMove.createInstance(entity, targetedEntity)
-                activeMoveInstance?.start(entity, targetedEntity)
+                activeMoveInstance?.start()
                 // Reset cooldowns
                 entity.pokemon.realTimeMoveCooldowns[selectedMove.id] = selectedMove.cooldownTicks
                 brain.setMemory(MemoryModuleType.ATTACK_COOLING_DOWN, true, globalAttackCooldownTicks.toLong())

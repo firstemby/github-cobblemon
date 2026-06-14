@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.client
 
-import GenericHurtingProjectileEntityRenderer
+import RealtimeProjectileEntityRenderer
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
@@ -387,7 +387,7 @@ object CobblemonClient {
         LOGGER.info("Registering PokéBall renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.EMPTY_POKEBALL, ::PokeBallRenderer)
         LOGGER.info("Registering Generic Projectile renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.GENERIC_HURTING_PROJECTILE_ENTITY, ::GenericHurtingProjectileEntityRenderer)
+        this.implementation.registerEntityRenderer(CobblemonEntities.REALTIME_MOVE_PROJECTILE_ENTITY, ::RealtimeProjectileEntityRenderer)
         LOGGER.info("Registering Boat renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx -> CobblemonBoatRenderer(ctx, false) }
         LOGGER.info("Registering Boat with Chest renderer")

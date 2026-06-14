@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 
 class RayCastMove(
@@ -49,9 +50,12 @@ class RayCastMove(
 
     override fun createInstance(
         pokemonEntity: PokemonEntity,
-        targetEntity: LivingEntity
-    ): RealTimeMoveInstance {
-        return RayCastMoveInstance(this, pokemonEntity, targetEntity)
+        targetEntity: LivingEntity,
+        parentEntity: Entity?,
+        ): RealTimeMoveInstance {
+        val instance = RayCastMoveInstance(this, pokemonEntity, targetEntity, parentEntity)
+        RealTimeMoveManager.addInstance(instance)
+        return instance
     }
 
 }

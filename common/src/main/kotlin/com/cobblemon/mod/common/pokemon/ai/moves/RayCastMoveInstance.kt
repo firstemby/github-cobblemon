@@ -15,27 +15,34 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
 
-class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEntity, targetEntity: LivingEntity) :
-    RealTimeMoveInstance(move = rayCastMove, pokemonEntity = pokemonEntity, targetEntity) {
+class RayCastMoveInstance(
+    val rayCastMove: RayCastMove,
+    pokemonEntity: PokemonEntity,
+    targetEntity: LivingEntity,
+    parentEntity: Entity?
+) : RealTimeMoveInstance(
+    move = rayCastMove,
+    pokemonEntity = pokemonEntity,
+    targetEntity = targetEntity,
+    parentEntity = parentEntity
+) {
 
     var durationTicks = rayCastMove.durationTicks
     var hitCount = 0
 
-    override fun start(
-        pokemonEntity: PokemonEntity,
-        targetEntity: LivingEntity
-    ) {
+    override fun start() {
         pokemonEntity.navigation.stop()
     }
 
 
-    override fun tick(pokemonEntity: PokemonEntity, targetEntity: LivingEntity): Boolean {
+    override fun tick(): Boolean {
 
         if (delayTicks > 0) {
             delayTicks--
@@ -50,8 +57,12 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
                 // Raycasts Center, top, bottom
                 var collisionResult = pokemonEntity.level().clip(
                     ClipContext(
-                        pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
-                        Vec3(targetEntity.x, targetEntity.y + targetEntity.bbHeight / 2.0, targetEntity.z), // end position
+                        pokemonEntity.position().add(Vec3(0.0, pokemonEntity.bbHeight / 2.0, 0.0)), // start position
+                        Vec3(
+                            targetEntity.x,
+                            targetEntity.y + targetEntity.bbHeight / 2.0,
+                            targetEntity.z
+                        ), // end position
                         ClipContext.Block.COLLIDER,
                         ClipContext.Fluid.NONE,
                         pokemonEntity
@@ -60,8 +71,13 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
                 if (collisionResult.type == HitResult.Type.BLOCK) {
                     collisionResult = pokemonEntity.level().clip(
                         ClipContext(
-                            pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
-                            Vec3(targetEntity.x, targetEntity.y + targetEntity.bbHeight, targetEntity.z), // end position
+                            pokemonEntity.position()
+                                .add(Vec3(0.0, pokemonEntity.bbHeight / 2.0, 0.0)), // start position
+                            Vec3(
+                                targetEntity.x,
+                                targetEntity.y + targetEntity.bbHeight,
+                                targetEntity.z
+                            ), // end position
                             ClipContext.Block.COLLIDER,
                             ClipContext.Fluid.NONE,
                             pokemonEntity
@@ -71,7 +87,8 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
                 if (collisionResult.type == HitResult.Type.BLOCK) {
                     collisionResult = pokemonEntity.level().clip(
                         ClipContext(
-                            pokemonEntity.position().add(Vec3(0.0,pokemonEntity.bbHeight / 2.0,0.0)), // start position
+                            pokemonEntity.position()
+                                .add(Vec3(0.0, pokemonEntity.bbHeight / 2.0, 0.0)), // start position
                             Vec3(targetEntity.x, pokemonEntity.bbHeight / 2.0, targetEntity.z), // end position
                             ClipContext.Block.COLLIDER,
                             ClipContext.Fluid.NONE,
@@ -83,7 +100,8 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
                 if (collisionResult.type != HitResult.Type.BLOCK && pokemonEntity.doHurtTarget(targetEntity)) {
                     // Dish out the damage
                     // TODO: Respect minecraft status effect modifiers
-                    val damage = getDamageMultiplier(pokemonEntity, targetEntity, move.elementalType) * rayCastMove.power
+                    val damage =
+                        getDamageMultiplier(pokemonEntity, targetEntity, move.elementalType) * rayCastMove.power
                     targetEntity.hurt(
                         pokemonEntity.damageSources().mobAttack(pokemonEntity),
                         damage
@@ -119,8 +137,8 @@ class RayCastMoveInstance(val rayCastMove: RayCastMove, pokemonEntity: PokemonEn
         return false
     }
 
-    override fun end(pokemonEntity: PokemonEntity, targetEntity: LivingEntity) {
-
+    override fun end() {
+        super.end()
     }
 
 }

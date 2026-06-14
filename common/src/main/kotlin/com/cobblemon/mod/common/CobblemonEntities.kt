@@ -26,7 +26,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
-import com.cobblemon.mod.common.entity.GenericHurtingProjectile
+import com.cobblemon.mod.common.entity.RealtimeMoveProjectile
 
 object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
 
@@ -89,12 +89,12 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     )
 
     @JvmField
-    val GENERIC_HURTING_PROJECTILE_ENTITY_KEY = cobblemonResource("generic_projectile")
+    val REALTIME_MOVE_PROJECTILE_ENTITY_KEY = cobblemonResource("realtime_move_projectile")
     @JvmField
-    val GENERIC_HURTING_PROJECTILE_ENTITY: EntityType<GenericHurtingProjectile> = this.create(
-        GENERIC_HURTING_PROJECTILE_ENTITY_KEY.path,
-        EntityType.Builder.of({ _, world -> GenericHurtingProjectile(world) }, MobCategory.MISC)
-            .build(GENERIC_HURTING_PROJECTILE_ENTITY_KEY.toString())
+    val REALTIME_MOVE_PROJECTILE_ENTITY: EntityType<RealtimeMoveProjectile> = this.create(
+        REALTIME_MOVE_PROJECTILE_ENTITY_KEY.path,
+        EntityType.Builder.of({ _, world -> RealtimeMoveProjectile(world) }, MobCategory.MISC)
+            .build(REALTIME_MOVE_PROJECTILE_ENTITY_KEY.toString())
     )
 
 

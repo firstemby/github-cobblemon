@@ -75,10 +75,11 @@
       ]
     },
     "combat": {
-      "willDefendSelf": true,
+      "willDefendSelf": false,
       "willDefendOwner": true,
       "willFlee": false,
       "moves": [
+        "cobblemon:super_sludge_bomb",
         "cobblemon:sky_uppercut"
       ]
     }

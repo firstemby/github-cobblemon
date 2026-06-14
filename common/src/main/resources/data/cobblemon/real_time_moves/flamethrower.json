@@ -10,6 +10,7 @@
   "spreadDegrees": 5.0,
   "speed": 1.5,
   "hasGravity": true,
+  "gravity": 0.03,
   "piercing": true,
   "minRange": 0,
   "maxRange": 7,
