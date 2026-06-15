@@ -56,30 +56,30 @@ class SnowstormParticle(
 ) : Particle(world, x, y, z) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
-        // ---- Rock Slide debug instrumentation (temporary). Capped so a runaway can't flood the log. ----
-        var dbgLines = 0
-        const val DBG_CAP = 6000
+//        // ---- Rock Slide debug instrumentation (temporary). Capped so a runaway can't flood the log. ----
+//        var dbgLines = 0
+//        const val DBG_CAP = 6000
     }
 
-    // True only for Rock Slide storms running inside the MoveDex GUI scene — keeps the firehose off battle/other moves.
-    private val dbgOn: Boolean get() = storm.guiScene != null && storm.effect.id.path.contains("rockslide")
-
-    /** Logs one line of everything we know about this particle right now, prefixed [phase]. Gated + capped. */
-    private fun dbg(phase: String, extra: String = "") {
-        if (!dbgOn || dbgLines >= DBG_CAP) return
-        dbgLines++
-        val floor = storm.guiScene?.guiFloorY(storm) ?: 0.0
-        Cobblemon.LOGGER.info(
-            "ROCKDBG#{} {} id={} age={}/{} worldY={} aboveFloor={} pos=({},{},{}) vel=({},{},{}) localSpace={} localPos={} collEnabled={} expireOnContact={} removed={} {}",
-            dbgLines, "%-16s".format(phase), storm.effect.id.path, age, lifetime,
-            "%.3f".format(y), "%.3f".format(y - floor),
-            "%.2f".format(x), "%.2f".format(y), "%.2f".format(z),
-            "%.4f".format(xd), "%.4f".format(yd), "%.4f".format(zd),
-            storm.effect.space.isLocalSpace, storm.effect.space.localPosition,
-            runtime.resolveBoolean(storm.effect.particle.collision.enabled),
-            storm.effect.particle.collision.expiresOnContact, removed, extra
-        )
-    }
+//    // True only for Rock Slide storms running inside the MoveDex GUI scene — keeps the firehose off battle/other moves.
+//    private val dbgOn: Boolean get() = storm.guiScene != null && storm.effect.id.path.contains("rockslide")
+//
+//    /** Logs one line of everything we know about this particle right now, prefixed [phase]. Gated + capped. */
+//    private fun dbg(phase: String, extra: String = "") {
+//        if (!dbgOn || dbgLines >= DBG_CAP) return
+//        dbgLines++
+//        val floor = storm.guiScene?.guiFloorY(storm) ?: 0.0
+//        Cobblemon.LOGGER.info(
+//            "ROCKDBG#{} {} id={} age={}/{} worldY={} aboveFloor={} pos=({},{},{}) vel=({},{},{}) localSpace={} localPos={} collEnabled={} expireOnContact={} removed={} {}",
+//            dbgLines, "%-16s".format(phase), storm.effect.id.path, age, lifetime,
+//            "%.3f".format(y), "%.3f".format(y - floor),
+//            "%.2f".format(x), "%.2f".format(y), "%.2f".format(z),
+//            "%.4f".format(xd), "%.4f".format(yd), "%.4f".format(zd),
+//            storm.effect.space.isLocalSpace, storm.effect.space.localPosition,
+//            runtime.resolveBoolean(storm.effect.particle.collision.enabled),
+//            storm.effect.particle.collision.expiresOnContact, removed, extra
+//        )
+//    }
 
     val sprite = getSpriteFromAtlas()
 
@@ -152,11 +152,11 @@ class SnowstormParticle(
             }
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
-        dbg("SPAWN", "initVel=(${"%.3f".format(initialVelocity.x)},${"%.3f".format(initialVelocity.y)},${"%.3f".format(initialVelocity.z)}) " +
-            "collRadius=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.collision.radius))} " +
-            "motion=${storm.effect.particle.motion::class.simpleName} maxAgeSec=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.maxAge))} " +
-            "stormXYZ=(${"%.2f".format(storm.getX())},${"%.2f".format(storm.getY())},${"%.2f".format(storm.getZ())}) " +
-            "localX/Y/Z=(${"%.2f".format(localX)},${"%.2f".format(localY)},${"%.2f".format(localZ)}) originPos=(${"%.2f".format(originPos.x)},${"%.2f".format(originPos.y)},${"%.2f".format(originPos.z)})")
+//        dbg("SPAWN", "initVel=(${"%.3f".format(initialVelocity.x)},${"%.3f".format(initialVelocity.y)},${"%.3f".format(initialVelocity.z)}) " +
+//            "collRadius=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.collision.radius))} " +
+//            "motion=${storm.effect.particle.motion::class.simpleName} maxAgeSec=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.maxAge))} " +
+//            "stormXYZ=(${"%.2f".format(storm.getX())},${"%.2f".format(storm.getY())},${"%.2f".format(storm.getZ())}) " +
+//            "localX/Y/Z=(${"%.2f".format(localX)},${"%.2f".format(localY)},${"%.2f".format(localZ)}) originPos=(${"%.2f".format(originPos.x)},${"%.2f".format(originPos.y)},${"%.2f".format(originPos.z)})")
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -391,9 +391,9 @@ class SnowstormParticle(
         runtime.execute(storm.effect.particle.updateExpressions)
         angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
-        dbg("TICK")
+//        dbg("TICK")
         if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
-            dbg("EXPIRE-AGE/KILL", "ageHit=${age >= lifetime} killExpr=${runtime.resolveBoolean(storm.effect.particle.killExpression)}")
+//            dbg("EXPIRE-AGE/KILL", "ageHit=${age >= lifetime} killExpr=${runtime.resolveBoolean(storm.effect.particle.killExpression)}")
             runExpirationEvents()
             remove()
             return
@@ -462,8 +462,8 @@ class SnowstormParticle(
         var dz = dz
 
         val collEnabled = runtime.resolveBoolean(collision.enabled)
-        dbg("MOVE", "dxyz=(${"%.4f".format(dx)},${"%.4f".format(dy)},${"%.4f".format(dz)}) collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace} " +
-            "=> collisionPath=${collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace}")
+//        dbg("MOVE", "dxyz=(${"%.4f".format(dx)},${"%.4f".format(dy)},${"%.4f".format(dz)}) collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace} " +
+//            "=> collisionPath=${collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace}")
         if (collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace) {
             hasPhysics = true
 
@@ -507,7 +507,7 @@ class SnowstormParticle(
 //            }
         } else {
             hasPhysics = false
-            dbg("MOVE-NOCOLLISION", "floor & expire_on_contact are SKIPPED here (collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace})")
+//            dbg("MOVE-NOCOLLISION", "floor & expire_on_contact are SKIPPED here (collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace})")
             if (dx != 0.0 || dy != 0.0 || dz != 0.0) {
                 localX += dx
                 localY += dy
@@ -572,32 +572,24 @@ class SnowstormParticle(
                 val floorY = scene.guiFloorY(storm)
                 if (sweep.minY <= floorY) {
                     extra.add(Shapes.create(AABB(sweep.minX - 64.0, floorY - 64.0, sweep.minZ - 64.0, sweep.maxX + 64.0, floorY, sweep.maxZ + 64.0)))
-                    dbg("COLL-FLOOR-ADDED", "floorY=${"%.3f".format(floorY)} sweepMinY=${"%.3f".format(sweep.minY)} movementY=${"%.4f".format(movement.y)}")
-                } else {
-                    dbg("COLL-FLOOR-NOTREACHED", "floorY=${"%.3f".format(floorY)} sweepMinY=${"%.3f".format(sweep.minY)} (still ${"%.2f".format(sweep.minY - floorY)} above floor — falling)")
                 }
-            } else {
-                dbg("COLL-FLOOR-SKIPPED", "movementY=${"%.4f".format(movement.y)} (>0, moving up — no floor this tick)")
             }
             // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it —
             // but, like the floor, only when the swept box actually touches it (else it'd be a permanent candidate).
             scene.guiImpactBox(storm)?.let { ib ->
-                if (sweep.intersects(ib)) { extra.add(Shapes.create(ib)); dbg("COLL-IMPACTBOX-ADDED", "box=$ib") }
+                if (sweep.intersects(ib)) { extra.add(Shapes.create(ib)) }
             }
             worldCollisions + extra
         } ?: worldCollisions
-        if (dbgOn) dbg("COLLISION-CHECK", "collisionsCount=${collisions.count()} movementY=${"%.4f".format(movement.y)} boxY=[${"%.3f".format(box.minY)},${"%.3f".format(box.maxY)}] expiresOnContact=$expiresOnContact age=$age")
         if (collisions.none()) {
             colliding = false
             return movement
         } else if (expiresOnContact && age <= 2) {
-            dbg("GRACE-SKIP", "collision present but age<=2, not breaking yet")
             // Grace period: an expire_on_contact particle must not break on the tick(s) it spawns. Rock Slide lofts
             // its rocks into the air with a guide ray and they were breaking instantly at the spawn point instead of
             // falling to the floor. Let them move a couple ticks to clear the spawn before contact can kill them.
             return movement
         } else if (expiresOnContact) {
-            dbg("EXPIRE-CONTACT", "breaking on contact at aboveFloor=${"%.3f".format(y - (storm.guiScene?.guiFloorY(storm) ?: 0.0))}")
             runExpirationEvents()
             remove()
             return movement

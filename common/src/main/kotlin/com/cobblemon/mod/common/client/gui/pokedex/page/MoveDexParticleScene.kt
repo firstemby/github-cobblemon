@@ -37,8 +37,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewResources
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.BufferUploader
-import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.resolveDouble
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import com.mojang.blaze3d.vertex.Tesselator
@@ -262,19 +260,19 @@ class MoveDexParticleScene : GuiParticleScene {
         startTickOf[storm] = nextStartTick
         locatorOffsetOf[storm] = nextLocatorOffset
         locatorNamesOf[storm] = nextLocatorNames
-        if (storm.effect.id.path.contains("rockslide")) {
-            val sp = storm.effect.space; val col = storm.effect.particle.collision
-            runCatching {
-                Cobblemon.LOGGER.info(
-                    "ROCKDBG STORM-ADD id={} side={} startTick={} locOffset={} locNames={} | space[localPos={} localRot={} isLocalSpace={}] | coll[enabled={} radius={} expireOnContact={}] | maxAgeSec={} motion={} stormXYZ=({},{},{}) floorY={}",
-                    storm.effect.id.path, currentSide, nextStartTick, nextLocatorOffset, nextLocatorNames,
-                    sp.localPosition, sp.localRotation, sp.isLocalSpace,
-                    storm.runtime.resolveBoolean(col.enabled), "%.3f".format(storm.runtime.resolveDouble(col.radius)), col.expiresOnContact,
-                    "%.3f".format(storm.runtime.resolveDouble(storm.effect.particle.maxAge)), storm.effect.particle.motion::class.simpleName,
-                    "%.2f".format(storm.getX()), "%.2f".format(storm.getY()), "%.2f".format(storm.getZ()), "%.2f".format(guiFloorY(storm))
-                )
-            }
-        }
+//        if (storm.effect.id.path.contains("rockslide")) {
+//            val sp = storm.effect.space; val col = storm.effect.particle.collision
+//            runCatching {
+//                Cobblemon.LOGGER.info(
+//                    "ROCKDBG STORM-ADD id={} side={} startTick={} locOffset={} locNames={} | space[localPos={} localRot={} isLocalSpace={}] | coll[enabled={} radius={} expireOnContact={}] | maxAgeSec={} motion={} stormXYZ=({},{},{}) floorY={}",
+//                    storm.effect.id.path, currentSide, nextStartTick, nextLocatorOffset, nextLocatorNames,
+//                    sp.localPosition, sp.localRotation, sp.isLocalSpace,
+//                    storm.runtime.resolveBoolean(col.enabled), "%.3f".format(storm.runtime.resolveDouble(col.radius)), col.expiresOnContact,
+//                    "%.3f".format(storm.runtime.resolveDouble(storm.effect.particle.maxAge)), storm.effect.particle.motion::class.simpleName,
+//                    "%.2f".format(storm.getX()), "%.2f".format(storm.getY()), "%.2f".format(storm.getZ()), "%.2f".format(guiFloorY(storm))
+//                )
+//            }
+//        }
         // Battle sets entity_width/height/size/radius/scale from the emitting entity's bounding box; our storms
         // have no entity, so populate them here from the emitting doll's hitbox — otherwise effects sized off the
         // Pokémon (e.g. Dragon Claw's aura disc `radius: v.entity_radius`) collapse to a point. Done for EVERY
