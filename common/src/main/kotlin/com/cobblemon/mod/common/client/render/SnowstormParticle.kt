@@ -295,8 +295,16 @@ class SnowstormParticle(
         // length is the real emit->target distance, so the beam connects the two exactly instead of over/under-
         // shooting like the billboard's fixed size would.
         if (beamEnd != null && storm.effect.particle.cameraMode.type == ParticleCameraModeType.LOOK_AT_DIRECTION) {
+            // Pin the NEAR end to the emit anchor (the frozen mouth/hand locator), NOT the particle's own position.
+            // A beam particle carries an initial_speed along its aim direction (e.g. Ice Beam's `direction:
+            // [-v.target_deltax, v.target_deltay, -v.target_deltaz]`), so it drifts forward toward the target over
+            // its life. Anchoring the start to that drifting particle tore the beam away from the mouth, leaving a
+            // gap. The anchor (anchorX, -anchorY, anchorZ) is exactly where a freshly-emitted particle sits — the
+            // same point the debug locator marker draws — so the beam now starts right at the mouth. Far end stays
+            // the fixed [beamEnd] target locator.
+            val sx = anchorX; val sy = -anchorY; val sz = anchorZ
             val ex = beamEnd[0]; val ey = beamEnd[1]; val ez = beamEnd[2]
-            var ax = ex - px; var ay = ey - py; var az = ez - pz
+            var ax = ex - sx; var ay = ey - sy; var az = ez - sz
             val len = Mth.sqrt(ax * ax + ay * ay + az * az)
             if (len < 1.0e-4f) return
             ax /= len; ay /= len; az /= len
@@ -308,26 +316,43 @@ class SnowstormParticle(
             if (rlen < 1.0e-4f) { rx = 0f; ry = 1f; rz = 0f; rlen = 1f } // beam ~parallel to view: any perpendicular
             rx /= rlen; ry /= rlen; rz /= rlen
             val hw = if (ySize > 0f) ySize else 0.05f // half the beam's authored thickness
-            vertexConsumer.addVertex(m, px + rx * hw, py + ry * hw, pz + rz * hw).setUv(minU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            vertexConsumer.addVertex(m, sx + rx * hw, sy + ry * hw, sz + rz * hw).setUv(minU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
             vertexConsumer.addVertex(m, ex + rx * hw, ey + ry * hw, ez + rz * hw).setUv(maxU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
             vertexConsumer.addVertex(m, ex - rx * hw, ey - ry * hw, ez - rz * hw).setUv(maxU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
-            vertexConsumer.addVertex(m, px - rx * hw, py - ry * hw, pz - rz * hw).setUv(minU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            vertexConsumer.addVertex(m, sx - rx * hw, sy - ry * hw, sz - rz * hw).setUv(minU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
             return
         }
 
-        val cameraPosition = Vec3(x - forward.x * 64.0, y - forward.y * 64.0, z - forward.z * 64.0)
+        // Direction-based camera modes (LOOK_AT_DIRECTION without a beam target, DIRECTION_X/Y/Z) orient the quad
+        // from the particle's velocity (viewDirection) and its position relative to the camera. Those vectors are
+        // in sim space, but the scene PLACES particles with Y negated (see py above) — a vertical mirror. Feeding
+        // sim-space vectors into the orientation while the position is mirrored leaves a MOVING sprite's facing
+        // flipped against its travel (e.g. Thunderbolt's bolts, which orient along a velocity whose Y is now
+        // upside-down relative to where the sprite actually goes). So compute the orientation in the SAME scene
+        // space the quad is placed in: Y-flip the view direction and use the scene-space particle/camera positions.
+        // (rotate_xyz/rotate_y read only the camera params, so they're unaffected and keep working as before.)
+        val scenePos = Vec3(px.toDouble(), py.toDouble(), pz.toDouble())
+        val cameraPosition = scenePos.subtract(forward.x * 64.0, forward.y * 64.0, forward.z * 64.0)
+        val sceneViewDirection = Vec3(viewDirection.x, -viewDirection.y, viewDirection.z)
         val quaternion = storm.effect.particle.cameraMode.getRotation(
             matrixWrapper = matrixWrapper,
             prevAngle = oRoll,
             angle = roll,
             deltaTicks = tickDelta,
-            particlePosition = Vec3(x, y, z),
+            particlePosition = scenePos,
             cameraPosition = cameraPosition,
             cameraAngle = Quaternionf(cameraAngle),
             cameraYaw = cameraYaw,
             cameraPitch = cameraPitch,
-            viewDirection = viewDirection
+            viewDirection = sceneViewDirection
         )
+        // GUI-scene correction: ROTATE_Y sprites come out spun 90° in-plane in this mirrored scene (e.g. Dragon
+        // Claw's long "cut" aura slashes lie sideways instead of along their travel). Spin them back about their
+        // own view axis. Scene-only — the real battle render is untouched because this is in renderInScene, not the
+        // shared ParticleCameraMode the world uses.
+        if (storm.effect.particle.cameraMode.type == ParticleCameraModeType.ROTATE_Y) {
+            quaternion.rotateZ(Mth.HALF_PI)
+        }
 
         val particleVertices = arrayOf(
             Vector3f(xSize, -ySize, 0.0f),

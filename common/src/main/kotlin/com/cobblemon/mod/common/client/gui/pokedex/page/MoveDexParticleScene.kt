@@ -134,6 +134,13 @@ class MoveDexParticleScene : GuiParticleScene {
     private var tickCount = 0
     private var renderPartial = 0f
 
+    // DIAGNOSTIC (temporary): per-effect counts of storms registered vs dropped by the cap, plus the peak live
+    // storm count. Logged once per build cycle in [clear] so a single Eruption run reveals whether the trail
+    // child effects (eruption_targetflame) are being starved by the storm cap.
+    private val spawnTally = HashMap<String, Int>()
+    private val dropTally = HashMap<String, Int>()
+    private var peakStorms = 0
+
     // Context for [addStorm]: the side/start a newly-registered storm inherits. Set before spawning a root
     // (its keyframe's side + windup tick) and before ticking each storm (its own side + "now" for children).
     private var currentSide = false
@@ -157,6 +164,14 @@ class MoveDexParticleScene : GuiParticleScene {
         locatorNamesOf.clear()
         targetHolderOf.clear()
         frozenEmitAnchorOf.clear()
+        // Log the previous cycle's storm pressure before wiping it, so one run shows whether the cap drops storms.
+        if (spawnTally.isNotEmpty() || dropTally.isNotEmpty()) {
+            Cobblemon.LOGGER.info("MoveDex particle cycle: peakStorms={} spawned={} dropped={}", peakStorms, spawnTally, dropTally)
+            // If ANY effect was dropped, this move is still hitting the cap — surface it loudly so it's obvious
+            // which move (the effect ids name it) needs the ceiling raised further, not just Eruption.
+            if (dropTally.isNotEmpty()) Cobblemon.LOGGER.warn("MoveDex particle scene hit the storm cap (peak {}); dropped child storms: {}", peakStorms, dropTally)
+        }
+        spawnTally.clear(); dropTally.clear(); peakStorms = 0
         tickCount = 0
         renderPartial = 0f
         // Reset the spawn context too, so a rebuilt scene never inherits the previous cycle's leftover start tick.
@@ -210,8 +225,16 @@ class MoveDexParticleScene : GuiParticleScene {
     fun floorOriginY(): Double = origin.y
 
     override fun addStorm(storm: ParticleStorm) {
-        // Safety cap: event-spawned children can multiply; never let the scene grow unbounded.
-        if (storms.size + pending.size >= 256) return
+        // Safety cap: event-spawned children can multiply; never let the scene grow unbounded. 256 was far too low
+        // for emitter-heavy moves — Eruption's burning rocks each spawn a steady stream of `eruption_targetflame`
+        // trail storms on top of the actor-side fountain, so the later trails were hitting the cap and getting
+        // dropped (rocks survived because their storm was already registered). These are lightweight bookkeeping
+        // objects; the real cost is particles, which each storm bounds via its own max_particles.
+        if (storms.size + pending.size >= 4096) {
+            dropTally.merge(storm.effect.id.toString(), 1, Int::plus)
+            return
+        }
+        spawnTally.merge(storm.effect.id.toString(), 1, Int::plus)
         pending.add(storm)
         sideOf[storm] = currentSide
         startTickOf[storm] = nextStartTick
@@ -413,6 +436,7 @@ class MoveDexParticleScene : GuiParticleScene {
             storms.addAll(pending)
             pending.clear()
         }
+        if (storms.size > peakStorms) peakStorms = storms.size
         refreshTargets() // re-aim from the real emit locators before this tick spawns particles
         for (storm in storms.toList()) {
             if ((startTickOf[storm] ?: 0) > tickCount) continue
