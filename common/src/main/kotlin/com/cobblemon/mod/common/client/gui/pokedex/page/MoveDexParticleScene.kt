@@ -9,9 +9,22 @@
 package com.cobblemon.mod.common.client.gui.pokedex.page
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.moves.animations.keyframes.ActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.AnimationActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.EntityMoLangActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.EntityParticlesActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.EntitySoundActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.ForkActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.ParallelActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.PauseActionEffectKeyframe
+import com.cobblemon.mod.common.api.moves.animations.keyframes.SequenceActionEffectKeyframe
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
@@ -21,11 +34,10 @@ import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewResources
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
 import com.mojang.blaze3d.vertex.Tesselator
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -147,6 +159,11 @@ class MoveDexParticleScene : GuiParticleScene {
         frozenEmitAnchorOf.clear()
         tickCount = 0
         renderPartial = 0f
+        // Reset the spawn context too, so a rebuilt scene never inherits the previous cycle's leftover start tick.
+        currentSide = false
+        nextStartTick = 0
+        nextLocatorOffset = 1.0f to 0f
+        nextLocatorNames = emptyList()
     }
 
     /**
@@ -200,6 +217,21 @@ class MoveDexParticleScene : GuiParticleScene {
         startTickOf[storm] = nextStartTick
         locatorOffsetOf[storm] = nextLocatorOffset
         locatorNamesOf[storm] = nextLocatorNames
+        // Battle sets entity_width/height/size/radius/scale from the emitting entity's bounding box; our storms
+        // have no entity, so populate them here from the emitting doll's hitbox — otherwise effects sized off the
+        // Pokémon (e.g. Dragon Claw's aura disc `radius: v.entity_radius`) collapse to a point. Done for EVERY
+        // storm (roots AND event-spawned children, which also get fresh entity-less runtimes).
+        val ew = (if (currentSide) targetWidth else actorWidth).toDouble()
+        val eh = (if (currentSide) targetHeight else actorHeight).toDouble()
+        val longer = maxOf(ew, eh)
+        val env = storm.runtime.environment
+        // Effects reference these as BOTH variables (v.entity_*) and queries (q.entity_size/height/radius/width are
+        // each used by 100+ effects), so provide both namespaces — otherwise size-relative effects collapse to 0.
+        env.setSimpleVariable("entity_width", DoubleValue(ew));   env.query.addFunction("entity_width") { DoubleValue(ew) }
+        env.setSimpleVariable("entity_height", DoubleValue(eh));  env.query.addFunction("entity_height") { DoubleValue(eh) }
+        env.setSimpleVariable("entity_size", DoubleValue(longer)); env.query.addFunction("entity_size") { DoubleValue(longer) }
+        env.setSimpleVariable("entity_radius", DoubleValue(longer / 2.0)); env.query.addFunction("entity_radius") { DoubleValue(longer / 2.0) }
+        env.setSimpleVariable("entity_scale", DoubleValue(1.0));  env.query.addFunction("entity_scale") { DoubleValue(1.0) }
     }
 
     /**
@@ -218,81 +250,88 @@ class MoveDexParticleScene : GuiParticleScene {
 
             val resource = "data/cobblemon/action_effects/moves/${move.name}.json"
             val stream = StructurePreviewResources.openStream(resource) ?: return
-            val json = stream.use { JsonParser.parseReader(it.reader()) }.takeIf { it.isJsonObject }?.asJsonObject ?: return
-            val timeline = json.getAsJsonArray("timeline") ?: return
-
-            // Walk the WHOLE timeline keeping a running clock so each effect fires at its real start time.
-            var clock = 0f
-            for (element in timeline) {
-                val obj = element.takeIf { it.isJsonObject }?.asJsonObject ?: continue
-                clock = processKeyframe(obj, clock, world, targetDistance)
-            }
+            // Parse with the SAME deserializer the battle system uses, then walk the typed keyframes — so locators,
+            // entity conditions, molang delays, and sequence/parallel/fork nesting are interpreted exactly as in
+            // battle, instead of a hand-rolled JSON walk that drifted from the real format.
+            val actionEffect = stream.use { ActionEffects.gson.fromJson(it.reader(), ActionEffectTimeline::class.java) } ?: return
+            walk(actionEffect.timeline, 0f, world, targetDistance)
         }.onFailure { Cobblemon.LOGGER.warn("MoveDex particle scene build failed for {}", move.name, it) }
     }
 
-    private fun delayOf(obj: JsonObject) = obj.get("delay")?.takeIf { it.isJsonPrimitive }?.asFloat ?: 0f
-    private fun pauseOf(obj: JsonObject) = obj.get("pause")?.takeIf { it.isJsonPrimitive }?.asFloat ?: 0f
+    private val parseRuntime by lazy { MoLangRuntime().setup().setupClient() }
+    private fun secs(e: ExpressionLike) = runCatching { e.resolveFloat(parseRuntime) }.getOrDefault(0f).let { if (it.isFinite()) it else 0f }
 
     /**
-     * Processes one keyframe and returns the clock after it. Keyframes run sequentially, so most just
-     * advance the clock by their `delay`/`pause`; `sequence` runs its children in order, while
-     * `parallel`/`fork` run theirs from the same start. Recursing here is what makes moves whose particles
-     * are nested inside those containers (e.g. Bubble Beam's `sequence`) actually play.
+     * Walks the typed timeline keeping a running clock so each storm spawns at its real start time. Keyframes run
+     * sequentially (each advancing the clock by its `delay`/`pause`); `sequence` chains its children, `parallel`
+     * runs them from the same start (clock = latest end), and `fork` spawns its branch without blocking. This is
+     * the same control flow [ActionEffectTimeline] uses to play the effect in battle.
      */
-    private fun processKeyframe(obj: JsonObject, clock: Float, world: ClientLevel, targetDistance: Float): Float {
-        val type = obj.get("type")?.takeIf { it.isJsonPrimitive }?.asString ?: return clock
-        return when (type) {
-            "entity_particles" -> {
-                spawnRoot(obj, clock, world, targetDistance)
-                clock + delayOf(obj)
-            }
-            "pause" -> clock + pauseOf(obj)
-            "sequence" -> {
-                var c = clock
-                obj.getAsJsonArray("keyframes")?.forEach { c = processKeyframe(it.asJsonObject, c, world, targetDistance) }
-                c + delayOf(obj)
-            }
-            "parallel", "fork" -> {
-                var maxEnd = clock
-                obj.getAsJsonArray("keyframes")?.forEach {
-                    val end = processKeyframe(it.asJsonObject, clock, world, targetDistance)
-                    if (end > maxEnd) maxEnd = end
+    private fun walk(keyframes: List<ActionEffectKeyframe>, start: Float, world: ClientLevel, targetDistance: Float): Float {
+        var clock = start
+        for (kf in keyframes) {
+            clock = when (kf) {
+                is PauseActionEffectKeyframe -> clock + secs(kf.pause)
+                is EntityParticlesActionEffectKeyframe -> { spawnRoot(kf, clock, world, targetDistance); clock + secs(kf.delay) }
+                is AnimationActionEffectKeyframe -> clock + secs(kf.delay)
+                is EntityMoLangActionEffectKeyframe -> clock + secs(kf.delay)
+                is EntitySoundActionEffectKeyframe -> clock + secs(kf.delay)
+                is SequenceActionEffectKeyframe -> walk(kf.keyframes, clock, world, targetDistance)
+                is ParallelActionEffectKeyframe -> {
+                    var maxEnd = clock
+                    kf.keyframes.forEach { maxEnd = maxOf(maxEnd, walk(listOf(it), clock, world, targetDistance)) }
+                    maxEnd
                 }
-                maxEnd + delayOf(obj)
+                is ForkActionEffectKeyframe -> { walk(kf.ifTrue, clock, world, targetDistance); clock } // non-blocking branch
+                else -> clock // add_holds / remove_holds / interrupt markers: no particles, no delay
             }
-            else -> clock + delayOf(obj) // animation / molang / holds / sounds: just advance by their delay
         }
+        return clock
     }
 
-    /** Creates and registers one `entity_particles` storm, starting at [startClock] seconds into the cycle. */
-    private fun spawnRoot(obj: JsonObject, startClock: Float, world: ClientLevel, targetDistance: Float) {
-        val effectId = obj.get("effect")?.takeIf { it.isJsonPrimitive }?.asString?.let(ResourceLocation::tryParse) ?: return
+    /** Creates and registers one [EntityParticlesActionEffectKeyframe]'s storm, starting at [startClock] seconds. */
+    private fun spawnRoot(kf: EntityParticlesActionEffectKeyframe, startClock: Float, world: ClientLevel, targetDistance: Float) {
+        val effectId = kf.effect?.let(ResourceLocation::tryParse) ?: return // skip molang-computed ids (e.g. generic_move)
         val effect = BedrockParticleOptionsRepository.getEffect(effectId) ?: return
         // Which doll emits is decided by the keyframe's entityCondition, exactly as in battle:
         // absent -> the USER (point A); "is_user == false" -> the defending Pokémon (point B).
-        val condition = obj.get("entityCondition")?.takeIf { it.isJsonPrimitive }?.asString?.replace(" ", "") ?: ""
-        val emitsAtTarget = condition.contains("is_user==false")
-        val targetArr = obj.getAsJsonArray("targetLocators")
-        val hasTarget = targetArr != null && targetArr.size() > 0
-        val locNames = obj.getAsJsonArray("locators")?.mapNotNull { it.takeIf { e -> e.isJsonPrimitive }?.asString }
-            ?: obj.get("locator")?.takeIf { it.isJsonPrimitive }?.asString?.let { listOf(it) }
-            ?: emptyList()
+        val emitsAtTarget = kf.entityCondition.getString().replace(" ", "").contains("is_user==false")
+        // The typed `locators`/`targetLocators` fields ARE what battle reads (so a stray singular "locator" key is
+        // ignored here too — matching battle rather than our old hand-parser).
+        val locNames = kf.locators
+        val targetLocs = kf.targetLocators
+        val hasTarget = !targetLocs.isNullOrEmpty()
 
         val wrapper = MatrixWrapper()
         val matrix = PoseStack()
         matrix.translate(origin.x, origin.y, origin.z)
+        // Face the emitter at its opponent, exactly like the battle entity's locator matrix. The effect's local
+        // FORWARD is -Z; the user already looks down -Z (target sits there), but the TARGET's opponent (the
+        // attacker) is at +Z, so its emitter must be turned 180° — otherwise every "fire forward" effect on the
+        // defender (Close Combat's hit burst, Draco Meteor's meteors, etc.) sprays out the BACK of the target.
+        if (emitsAtTarget) matrix.mulPose(Axis.YP.rotationDegrees(180f))
         wrapper.updateMatrix(matrix.last().pose())
         // The opponent sits along the emitter's FORWARD (-Z) axis (every directional effect is authored against
         // this, e.g. Flamethrower drives speed/rate/direction off v.target_deltaz). We ALSO offset the target in
         // Y by the height difference between the emitter's locator and the opponent's target-locator, so the
         // beam angles up/down toward where the opposing doll actually is rather than always firing dead level.
         val emitHeight = locatorOffset(locNames.firstOrNull(), emitsAtTarget).first
-        val targetHeight = locatorOffset(targetArr?.firstOrNull()?.asString, !emitsAtTarget).first
+        val targetHeight = locatorOffset(targetLocs?.firstOrNull(), !emitsAtTarget).first
         val towardZ = if (emitsAtTarget) targetDistance else -targetDistance
         // Mutable aim point (initial hitbox-based guess); refreshTargets() re-aims it from the real emit locator
         // toward the opposing doll's centre each tick.
         val holder = arrayOf(origin.add(0.0, (targetHeight - emitHeight).toDouble(), towardZ.toDouble()))
         val runtime = MoLangRuntime().setup().setupClient()
+        // Set the spawn context (side, windup start tick, locators) BEFORE constructing the storm. The storm's
+        // `init` synchronously fires its creation events — which spawn child effects like Bubble Beam's bubble
+        // column — and those children inherit this context through addStorm. If it were set AFTER construction the
+        // child would grab the STALE nextStartTick left over from the previous cycle's ticking (a value near the
+        // loop point), so it would start too late or past the loop and only appear on some cycles. That was the
+        // "column shows every few loops" bug.
+        currentSide = emitsAtTarget
+        nextStartTick = (startClock * 20f).toInt()
+        nextLocatorOffset = locatorOffset(locNames.firstOrNull(), emitsAtTarget)
+        nextLocatorNames = locNames
         val storm = ParticleStorm(
             effect, wrapper, wrapper, world,
             targetPos = if (hasTarget) ({ holder[0] }) else null,
@@ -300,11 +339,6 @@ class MoveDexParticleScene : GuiParticleScene {
             guiScene = this
         )
         if (hasTarget) targetHolderOf[storm] = holder // addAttackingFunctions is set in spawn() for guiScene storms
-        // Register this root: side, windup start tick (seconds -> 20 Hz ticks), and its locator names/offset.
-        currentSide = emitsAtTarget
-        nextStartTick = (startClock * 20f).toInt()
-        nextLocatorOffset = locatorOffset(locNames.firstOrNull(), emitsAtTarget)
-        nextLocatorNames = locNames
         storm.spawn()
     }
 
@@ -426,8 +460,11 @@ class MoveDexParticleScene : GuiParticleScene {
         val locWrapper = matched?.let { state?.locatorStates?.get(it) }
         if (state != null && root != null && locWrapper != null) {
             val loc = locWrapper.getOrigin(); val r = root.getOrigin()
-            // Un-flip LocatorAccess's per-locator ZP(180) (negates X,Y) to upright model space; keep Z.
-            var mx = -(loc.x - r.x).toFloat(); val my = -(loc.y - r.y).toFloat(); var mz = (loc.z - r.z).toFloat()
+            // getOrigin() returns the locator's true model-space offset from root (the per-locator ZP180 is a
+            // post-multiplied ROTATION, so it doesn't change the translation we read). X must NOT be negated —
+            // doing so mirrored left/right, e.g. Charizard's "physical" locator (its left hand at x=-21.5) emitted
+            // from the right. Y is negated to match the render's upright flip; Z is forward toward the opponent.
+            var mx = (loc.x - r.x).toFloat(); val my = -(loc.y - r.y).toFloat(); var mz = (loc.z - r.z).toFloat()
             if (atTarget) { mx = -mx; mz = -mz } // the target doll faces +Z (rendered at facingYaw 180)
             val anchor = floatArrayOf(scale * mx, scale * my, sideZ + scale * mz)
             // Lock it the moment this storm starts emitting, so the beam doesn't slide with the head afterwards.

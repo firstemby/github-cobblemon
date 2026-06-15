@@ -92,10 +92,6 @@ class MoveDexView {
         // The floor's Z half-extent is derived from this so the pads always land exactly under the two dolls,
         // however far apart the per-move separation pushes them.
         private const val FLOOR_PAD_V = 0.25f
-        // Generic move animations appended after a move's own (ordered) names so SOME attack animation plays even
-        // when a species lacks the specific one — e.g. Lapras has no "physical", so a physical move falls back to
-        // its "special"/"status" animation. Tried only after the move's specific names, so it never overrides them.
-        private val ACTOR_ANIM_FALLBACKS = listOf("physical", "special", "status")
 
         // Pokédex move-list assets, reused so the MoveDex list matches the Pokédex info-tab move list.
         private val MOVE_SLOT = cobblemonResource("textures/gui/pokedex/move_slot.png")
@@ -246,7 +242,20 @@ class MoveDexView {
      * pre-simulating the whole effect once. That centroid is what the camera pans to so everything stays nicely
      * centred at any zoom/rotation. Scale itself is the single manual [sceneZoom]. Leaves the scene freshly built.
      */
+    /**
+     * Kills everything in flight on both dolls before a fresh move starts/loops: any active + primary bedrock
+     * animations, and any queued-but-unplayed animation cues. The particle scene's own [MoveDexParticleScene.clear]
+     * (run by [buildScene]) kills the active emitters and particles. Together this guarantees a new move/cycle
+     * never inherits a half-played animation or leftover storm from the previous one.
+     */
+    private fun resetDolls() {
+        actorState.activeAnimations.clear(); actorState.primaryAnimation = null
+        targetState.activeAnimations.clear(); targetState.primaryAnimation = null
+        pendingAnims.clear()
+    }
+
     private fun prepareMove(move: MoveTemplate) {
+        resetDolls()
         val (ah, aw) = actorHW(); val (th, tw) = targetHW()
         // Push bigger Pokémon further apart so a massive mon (Wailord) doesn't overlap the target and the move's
         // particles have room to read. Computed BEFORE the auto-fit, which then zooms to fit the wider scene.
@@ -479,14 +488,20 @@ class MoveDexView {
                 pendingAnims.add(ev.first to ev.third)
                 nextAnimIndex++
             }
-            // Loop as soon as every effect has finished (scene emptied) — don't sit frozen through the
-            // action effect's trailing battle pauses — with animDuration as a hard fallback cap.
-            if (animTime >= animDuration || (animTime > 0.5f && scene.isEmpty)) {
+            // Loop only once EVERYTHING has played — particles gone (scene emptied), every animation/sound cue
+            // fired, AND both dolls' bedrock animations have finished — so a move with trailing cues or a long
+            // doll animation after its last particle (common on longer moves) isn't cut off and restarted early.
+            // This skips only the empty trailing battle pauses. animDuration is the hard fallback cap.
+            val cuesRemain = nextAnimIndex < animEvents.size || nextSoundIndex < moveSounds.size
+            val dollAnimating = actorState.primaryAnimation != null || actorState.activeAnimations.isNotEmpty() ||
+                targetState.primaryAnimation != null || targetState.activeAnimations.isNotEmpty()
+            if (animTime >= animDuration || (animTime > 0.5f && scene.isEmpty && !cuesRemain && !dollAnimating)) {
                 animTime = 0f
                 tickAccumulatorMs = 0f
                 nextSoundIndex = 0
                 nextAnimIndex = 0
-                selected?.let { buildScene(it) }
+                resetDolls() // clear leftover animations/cues so the next cycle starts clean
+                selected?.let { buildScene(it) } // rebuild kills the previous cycle's emitters/particles
             }
         }
         val partial = (tickAccumulatorMs / 50f).coerceIn(0f, 1f)
@@ -570,17 +585,14 @@ class MoveDexView {
             // Record the largest upward rise of either doll for NEXT frame's follow-camera (1-frame lag is fine).
             dollRiseY = max(0f, max(actorRise, MoveDexSceneRenderer.lastRootRiseY))
 
-            // Play this frame's due cues on the matching doll. Both are real models, so each plays the move's
-            // bedrock animation (the actor's windup/overlay, the target's hit/throw/squash) just like battle.
-            // Move-specific animations live in shared files resolved by the "group:key" names; the actor also gets
-            // generic fallbacks (physical/special/status) so a species lacking the specific one still reacts.
+            // Play this frame's due cues on the matching doll, EXACTLY like battle's PlayPosableAnimationHandler:
+            // addFirstAnimation across the move's ordered names, first match wins, and NO fallback — if a species
+            // has no animation for the move (e.g. Charmander has no "physical", so Fire Punch resolves nothing) it
+            // plays no body animation, just like battle. (We resolve across poses because the GUI doll sits in a UI
+            // pose and can't enter the battle pose where those animations are registered.)
             if (pendingAnims.isNotEmpty()) {
                 pendingAnims.forEach { (names, isTarget) ->
-                    if (isTarget) {
-                        targetState.addFirstAnimationAcrossPoses(names)
-                    } else {
-                        actorState.addFirstAnimationAcrossPoses(names + ACTOR_ANIM_FALLBACKS)
-                    }
+                    (if (isTarget) targetState else actorState).addFirstAnimationAcrossPoses(names)
                 }
                 pendingAnims.clear()
             }
@@ -639,7 +651,9 @@ class MoveDexView {
         pose.translate(0.0, 0.0, sceneSeparation)
         actorState.locatorStates.forEach { (_, wrapper) ->
             val o = wrapper.getOrigin()
-            val mx = -((o.x - root.x).toFloat())
+            // Match emitAnchor: X is the true model offset (NOT negated — negating mirrored left/right), Y negated
+            // for the upright render flip, Z forward. Keeps the markers on the same side as the model's parts.
+            val mx = (o.x - root.x).toFloat()
             val my = -((o.y - root.y).toFloat())
             val mz = (o.z - root.z).toFloat()
             MoveDexSceneRenderer.renderDebugMarker(context, actorScale * mx, -(actorScale * my), actorScale * mz, 0.05f, 0.3f, 0.7f, 1f)
