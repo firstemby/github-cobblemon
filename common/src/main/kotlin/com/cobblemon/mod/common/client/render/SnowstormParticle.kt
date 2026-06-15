@@ -56,6 +56,29 @@ class SnowstormParticle(
 ) : Particle(world, x, y, z) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
+        // ---- Rock Slide debug instrumentation (temporary). Capped so a runaway can't flood the log. ----
+        var dbgLines = 0
+        const val DBG_CAP = 6000
+    }
+
+    // True only for Rock Slide storms running inside the MoveDex GUI scene — keeps the firehose off battle/other moves.
+    private val dbgOn: Boolean get() = storm.guiScene != null && storm.effect.id.path.contains("rockslide")
+
+    /** Logs one line of everything we know about this particle right now, prefixed [phase]. Gated + capped. */
+    private fun dbg(phase: String, extra: String = "") {
+        if (!dbgOn || dbgLines >= DBG_CAP) return
+        dbgLines++
+        val floor = storm.guiScene?.guiFloorY(storm) ?: 0.0
+        Cobblemon.LOGGER.info(
+            "ROCKDBG#{} {} id={} age={}/{} worldY={} aboveFloor={} pos=({},{},{}) vel=({},{},{}) localSpace={} localPos={} collEnabled={} expireOnContact={} removed={} {}",
+            dbgLines, "%-16s".format(phase), storm.effect.id.path, age, lifetime,
+            "%.3f".format(y), "%.3f".format(y - floor),
+            "%.2f".format(x), "%.2f".format(y), "%.2f".format(z),
+            "%.4f".format(xd), "%.4f".format(yd), "%.4f".format(zd),
+            storm.effect.space.isLocalSpace, storm.effect.space.localPosition,
+            runtime.resolveBoolean(storm.effect.particle.collision.enabled),
+            storm.effect.particle.collision.expiresOnContact, removed, extra
+        )
     }
 
     val sprite = getSpriteFromAtlas()
@@ -129,6 +152,11 @@ class SnowstormParticle(
             }
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
+        dbg("SPAWN", "initVel=(${"%.3f".format(initialVelocity.x)},${"%.3f".format(initialVelocity.y)},${"%.3f".format(initialVelocity.z)}) " +
+            "collRadius=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.collision.radius))} " +
+            "motion=${storm.effect.particle.motion::class.simpleName} maxAgeSec=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.maxAge))} " +
+            "stormXYZ=(${"%.2f".format(storm.getX())},${"%.2f".format(storm.getY())},${"%.2f".format(storm.getZ())}) " +
+            "localX/Y/Z=(${"%.2f".format(localX)},${"%.2f".format(localY)},${"%.2f".format(localZ)}) originPos=(${"%.2f".format(originPos.x)},${"%.2f".format(originPos.y)},${"%.2f".format(originPos.z)})")
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -293,10 +321,16 @@ class SnowstormParticle(
         // screen-up by negating Y in the particle POSITION (py). We reconcile that below by mirroring the oriented
         // quad's Y for the world-locked modes, rather than distorting the inputs into getRotation.
         val cameraPosition = Vec3(x - forward.x * 64.0, y - forward.y * 64.0, z - forward.z * 64.0)
+        // ROTATE_Y applies the particle's in-plane spin (roll) in a frame the scene's Y-mirror REVERSES, so an
+        // authored initial_spin comes out rotated the wrong way — Dragon Claw's aura (spin -135°) and Swords Dance's
+        // swords (-45°) looked rotated. Negate the roll for this mode so spun rotate_y sprites match battle. A sprite
+        // with NO spin (Thunder's vertical bolt, roll 0) is unchanged, so this can't re-break it. rotate_xyz applies
+        // roll in screen space (after cameraAngle) and already reads correctly, so it is left alone.
+        val rotateY = storm.effect.particle.cameraMode.type == ParticleCameraModeType.ROTATE_Y
         val quaternion = storm.effect.particle.cameraMode.getRotation(
             matrixWrapper = matrixWrapper,
-            prevAngle = oRoll,
-            angle = roll,
+            prevAngle = if (rotateY) -oRoll else oRoll,
+            angle = if (rotateY) -roll else roll,
             deltaTicks = tickDelta,
             particlePosition = Vec3(x, y, z),
             cameraPosition = cameraPosition,
@@ -305,14 +339,6 @@ class SnowstormParticle(
             cameraPitch = cameraPitch,
             viewDirection = viewDirection
         )
-        // ROTATE_Y is a SEPARATE issue from the mirror: it reads cameraYaw directly (not the cameraAngle quaternion
-        // the other modes use), and the scene feeds it a synthesised yaw that lands its long sprites 90° in-plane
-        // off what battle shows (Dragon Claw's "cut" aura). Spin them back about the view axis. Not the mirror — a
-        // Y-mirror can't produce a 90° rotation — so it stays an explicit correction until the scene's virtual
-        // camera yaw is reconciled with battle's convention.
-        if (storm.effect.particle.cameraMode.type == ParticleCameraModeType.ROTATE_Y) {
-            quaternion.rotateZ(Mth.HALF_PI)
-        }
         // A camera-facing billboard (rotate_xyz/rotate_y/lookat_y/lookat_xyz) is symmetric under the scene's Y
         // mirror, so its world-space orientation still reads correctly. But a mode that locks the quad to a WORLD
         // axis or the particle's velocity (lookat_direction, direction_*, emitter planes) must have its oriented
@@ -365,7 +391,9 @@ class SnowstormParticle(
         runtime.execute(storm.effect.particle.updateExpressions)
         angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
+        dbg("TICK")
         if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
+            dbg("EXPIRE-AGE/KILL", "ageHit=${age >= lifetime} killExpr=${runtime.resolveBoolean(storm.effect.particle.killExpression)}")
             runExpirationEvents()
             remove()
             return
@@ -433,7 +461,10 @@ class SnowstormParticle(
         var dy = dy
         var dz = dz
 
-        if (runtime.resolveBoolean(collision.enabled) && radius > 0.0 && !storm.effect.space.isLocalSpace) {
+        val collEnabled = runtime.resolveBoolean(collision.enabled)
+        dbg("MOVE", "dxyz=(${"%.4f".format(dx)},${"%.4f".format(dy)},${"%.4f".format(dz)}) collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace} " +
+            "=> collisionPath=${collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace}")
+        if (collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace) {
             hasPhysics = true
 
             val newMovement = checkCollision(Vec3(dx, dy, dz))
@@ -476,6 +507,7 @@ class SnowstormParticle(
 //            }
         } else {
             hasPhysics = false
+            dbg("MOVE-NOCOLLISION", "floor & expire_on_contact are SKIPPED here (collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace})")
             if (dx != 0.0 || dy != 0.0 || dz != 0.0) {
                 localX += dx
                 localY += dy
@@ -523,18 +555,49 @@ class SnowstormParticle(
         val worldCollisions = level.getBlockCollisions(null, box.expandTowards(movement))
         val collisions: Iterable<VoxelShape> = storm.guiScene?.let { scene ->
             val extra = ArrayList<VoxelShape>()
-            // A thick slab whose TOP face sits exactly at floorY, covering well beyond the particle's reach.
-            val floorY = scene.guiFloorY()
+            // A thick slab whose TOP face sits exactly at floorY, covering well beyond the particle's reach. Only
+            // add it when the particle is NOT moving upward away from it: a particle launched UP off the floor
+            // (Rock Slide's `guide2` ray, which spawns the falling rocks high overhead, spawns AT floor level and
+            // shoots up with expire_on_contact) must not be killed by the floor on its first tick — else the rocks
+            // never spawn above the target. A descending/level particle still collides and settles normally.
+            // CRITICAL: only add a synthesized shape if the swept box ACTUALLY reaches it. The real
+            // level.getBlockCollisions only returns shapes the box truly intersects, and downstream logic
+            // (collisions.none(), the expire_on_contact shortcut) treats "list non-empty" as "colliding". If we
+            // add the floor unconditionally whenever a particle descends, an expire_on_contact particle (Rock
+            // Slide's falling rocks) sees a permanent candidate and breaks in mid-air the instant the spawn grace
+            // ends — never falling to the ground. The floor slab's top is floorY, so the box reaches it only once
+            // its swept minY dips to/below floorY.
             val sweep = box.expandTowards(movement)
-            extra.add(Shapes.create(AABB(sweep.minX - 64.0, floorY - 64.0, sweep.minZ - 64.0, sweep.maxX + 64.0, floorY, sweep.maxZ + 64.0)))
-            // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it.
-            scene.guiImpactBox(storm)?.let { extra.add(Shapes.create(it)) }
+            if (movement.y <= 0.0) {
+                val floorY = scene.guiFloorY(storm)
+                if (sweep.minY <= floorY) {
+                    extra.add(Shapes.create(AABB(sweep.minX - 64.0, floorY - 64.0, sweep.minZ - 64.0, sweep.maxX + 64.0, floorY, sweep.maxZ + 64.0)))
+                    dbg("COLL-FLOOR-ADDED", "floorY=${"%.3f".format(floorY)} sweepMinY=${"%.3f".format(sweep.minY)} movementY=${"%.4f".format(movement.y)}")
+                } else {
+                    dbg("COLL-FLOOR-NOTREACHED", "floorY=${"%.3f".format(floorY)} sweepMinY=${"%.3f".format(sweep.minY)} (still ${"%.2f".format(sweep.minY - floorY)} above floor — falling)")
+                }
+            } else {
+                dbg("COLL-FLOOR-SKIPPED", "movementY=${"%.4f".format(movement.y)} (>0, moving up — no floor this tick)")
+            }
+            // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it —
+            // but, like the floor, only when the swept box actually touches it (else it'd be a permanent candidate).
+            scene.guiImpactBox(storm)?.let { ib ->
+                if (sweep.intersects(ib)) { extra.add(Shapes.create(ib)); dbg("COLL-IMPACTBOX-ADDED", "box=$ib") }
+            }
             worldCollisions + extra
         } ?: worldCollisions
+        if (dbgOn) dbg("COLLISION-CHECK", "collisionsCount=${collisions.count()} movementY=${"%.4f".format(movement.y)} boxY=[${"%.3f".format(box.minY)},${"%.3f".format(box.maxY)}] expiresOnContact=$expiresOnContact age=$age")
         if (collisions.none()) {
             colliding = false
             return movement
+        } else if (expiresOnContact && age <= 2) {
+            dbg("GRACE-SKIP", "collision present but age<=2, not breaking yet")
+            // Grace period: an expire_on_contact particle must not break on the tick(s) it spawns. Rock Slide lofts
+            // its rocks into the air with a guide ray and they were breaking instantly at the spawn point instead of
+            // falling to the floor. Let them move a couple ticks to clear the spawn before contact can kill them.
+            return movement
         } else if (expiresOnContact) {
+            dbg("EXPIRE-CONTACT", "breaking on contact at aboveFloor=${"%.3f".format(y - (storm.guiScene?.guiFloorY(storm) ?: 0.0))}")
             runExpirationEvents()
             remove()
             return movement

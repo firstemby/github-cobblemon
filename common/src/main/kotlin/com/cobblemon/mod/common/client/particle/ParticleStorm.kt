@@ -438,11 +438,15 @@ interface GuiParticleScene {
     fun addStorm(storm: ParticleStorm)
 
     /**
-     * World Y of the scene's virtual ground plane (the dolls' feet). The offscreen scene runs high in empty
-     * sky where there are no real blocks, so ground-collision effects (e.g. Bulldoze) would otherwise fall
-     * through forever. Particle collision treats everything at or below this Y as solid floor.
+     * World Y of the scene's virtual ground plane FOR [storm] (the dolls' feet, below this storm's emit point).
+     * The offscreen scene runs high in empty sky where there are no real blocks, so ground-collision effects
+     * (e.g. Bulldoze) would otherwise fall through forever. Particle collision treats everything at or below this
+     * Y as solid floor. It is per-storm because every particle simulates at the scene origin (the doll-height
+     * offset is applied only at render): a storm emitting at mid-height must have its floor placed that height
+     * BELOW the origin, or its particles would spawn already inside the slab — fatal for `expire_on_contact`
+     * effects (Aurora Beam / Psybeam impact bursts vanished on spawn before this).
      */
-    fun guiFloorY(): Double
+    fun guiFloorY(storm: ParticleStorm): Double
 
     /**
      * World-space solid box for [storm]'s target (the target block, or the attacker), centred on its live aim

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.pokedex.page
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -82,12 +83,17 @@ class MoveDexView {
 
         private val SUBSTITUTE = cobblemonResource("substitute")
         private val STADIUM_FLOOR = cobblemonResource("textures/gui/pokedex/movedex_stadium_floor.png")
-        // The move's target dummy: a posable target-block-shaped model so it can play the move's real `target`
-        // bedrock animation (throw/squash/recoil) exactly like a battle defender, rather than a static block.
-        private val TARGET = cobblemonResource("targetdummy")
-        // Rendered size of the target dummy (its geo is a 1-block cube). Moves aim at the centre of the face
-        // nearest the attacker, so projectiles strike the front like a real target.
-        private const val TARGET_BLOCK_SIZE = 1.0f
+        // Default actor (the Pokémon performing the move): Smeargle — a real species — rather than the substitute doll.
+        private val DEFAULT_ACTOR = cobblemonResource("smeargle")
+        // The move's target is a substitute doll (a battle defender stand-in), so it can play the move's real
+        // `target` bedrock animation (throw/squash/recoil) exactly like a real defender.
+        private val TARGET = SUBSTITUTE
+        // Render scale + approximate hitbox dims (blocks) of the substitute target, used for aiming and the floor.
+        // Matched to the substitute geo: its `top` locator sits ~16.5px (~1 block) up at scale 1.0, so it's ~1
+        // block tall and ~0.9 wide. (Effects emit from its real geo locators now; these only drive the aim/floor.)
+        private const val TARGET_SCALE = 1.0f
+        private const val TARGET_HEIGHT = 1.0f
+        private const val TARGET_WIDTH = 0.9f
         // Texture-V of each stand pad measured from the floor's centre (the PNG's A/B pads sit at V 0.75/0.25).
         // The floor's Z half-extent is derived from this so the pads always land exactly under the two dolls,
         // however far apart the per-move separation pushes them.
@@ -142,8 +148,9 @@ class MoveDexView {
     private var actorState = FloatingState()
     private val targetState = FloatingState()
     private val scene = MoveDexParticleScene()
-    // The Pokémon performing the move (null = the substitute doll), chosen via the species search box.
-    private var actorSpecies: ResourceLocation? = null
+    // The Pokémon performing the move, chosen via the species search box. Defaults to Smeargle; an empty search
+    // returns to Smeargle, and an unrecognised name keeps the current actor (so it never falls back to nothing).
+    private var actorSpecies: ResourceLocation? = DEFAULT_ACTOR
     private var speciesQuery = ""
     private var speciesFocused = false
     // Timed bedrock animation cues (names, time, isTarget): actor windup + target damage/recoil.
@@ -188,20 +195,20 @@ class MoveDexView {
         playing = false
         speciesQuery = ""
         speciesFocused = false
-        actorSpecies = null
+        actorSpecies = DEFAULT_ACTOR
         // Always start at the default camera angle + zoom; move/species changes never touch them (only drag/scroll).
         sceneYaw = SCENE_YAW
         scenePitch = SCENE_PITCH
         sceneZoom = DEFAULT_ZOOM
     }
 
-    /** The model identifier for the actor doll — the chosen species, or the substitute fallback. */
-    private fun actorIdentifier(): ResourceLocation = actorSpecies ?: SUBSTITUTE
+    /** The model identifier for the actor doll — the chosen species, or the Smeargle default. */
+    private fun actorIdentifier(): ResourceLocation = actorSpecies ?: DEFAULT_ACTOR
 
-    /** Resolves the species search text to a species model (live), falling back to the substitute. */
+    /** Resolves the species search text to a species model (live): empty → Smeargle default, unknown name ignored. */
     private fun resolveSpecies() {
         val query = speciesQuery.trim().lowercase().replace(" ", "")
-        val newSpecies = if (query.isEmpty()) null else PokemonSpecies.getByName(query)?.resourceIdentifier
+        val newSpecies = if (query.isEmpty()) DEFAULT_ACTOR else (PokemonSpecies.getByName(query)?.resourceIdentifier ?: return)
         if (newSpecies != actorSpecies) {
             actorSpecies = newSpecies
             actorState = FloatingState() // fresh state so the new model re-poses cleanly
@@ -225,11 +232,11 @@ class MoveDexView {
         return s.hitbox.height to s.hitbox.width
     }
 
-    /** (height, width) of the target dummy — a 1-block target model, so square in both dims. */
-    private fun targetHW(): Pair<Float, Float> = TARGET_BLOCK_SIZE to TARGET_BLOCK_SIZE
+    /** (height, width) of the substitute target doll in world blocks, used for aiming and floor placement. */
+    private fun targetHW(): Pair<Float, Float> = TARGET_HEIGHT to TARGET_WIDTH
 
-    /** World render scale of the target dummy: its geo is a 16-unit (1-block) cube, so 1.0 renders ~1 block. */
-    private fun targetScale(): Float = TARGET_BLOCK_SIZE
+    /** World render scale of the substitute target doll. */
+    private fun targetScale(): Float = TARGET_SCALE
 
     /** Builds the particle scene for [move] with the current dolls' hitbox dims (used for locator placement). */
     private fun buildScene(move: MoveTemplate) {
@@ -296,6 +303,11 @@ class MoveDexView {
         val projW = max(0.5f, maxSX - minSX)
         val projH = max(0.5f, maxSY - minSY)
         sceneZoom = min((DETAIL_W - 14f) / projW, (VIEW_H - 12f) / projH).coerceIn(4f, 80f)
+        // DIAGNOSTIC (temporary): the measured fit box, pivot and resulting zoom. A wildly large box or off-centre
+        // pivot here = the scene zooms to nothing / pans off-screen, which reads as "the whole viewport is blank".
+        Cobblemon.LOGGER.info("MoveDex fit {}: box=[{}, {}, {} .. {}, {}, {}] pivot=[{}, {}, {}] projW={} projH={} zoom={}",
+            move.name, fitBox[0], fitBox[1], fitBox[2], fitBox[3], fitBox[4], fitBox[5],
+            fixedPivot[0], fixedPivot[1], fixedPivot[2], projW, projH, sceneZoom)
     }
 
     private fun moves(): List<MoveTemplate> {
@@ -510,15 +522,18 @@ class MoveDexView {
         // (mid-height) is the defined aim point.
         val aScale = actorSpecies?.let { PokemonSpecies.getByIdentifier(it)?.baseScale } ?: 1.0f
         val (ahh, _) = actorHW()
-        // The target is the block: its centre height is half its size, and the face the attacker fires at is the
-        // near (+Z) face — half a block toward the attacker from the block's centre at -separation.
-        val targetCentreY = TARGET_BLOCK_SIZE * 0.5f
-        val targetFaceZ = -sceneSeparation.toFloat() + TARGET_BLOCK_SIZE * 0.5f
+        // Aim at the substitute target's centre: mid-height, and the near (+Z) face — half its width toward the
+        // attacker from the doll's centre at -separation.
+        val targetCentreY = TARGET_HEIGHT * 0.5f
+        val targetFaceZ = -sceneSeparation.toFloat() + TARGET_WIDTH * 0.5f
         scene.setAimContext(
             actorState, targetState, aScale, 1.0f,
             sceneSeparation.toFloat(), -sceneSeparation.toFloat(), ahh * 0.5f, targetCentreY, targetFaceZ
         )
-        scene.update(steps, partial)
+        // Guard the particle sim: a misbehaving effect must never throw out of here, or it would skip the ENTIRE
+        // viewport render below (floor + dolls + particles) and blank everything — that's what made Swords Dance
+        // show nothing at all. Logged so the offending move's actual error is visible.
+        runCatching { scene.update(steps, partial) }.onFailure { Cobblemon.LOGGER.warn("MoveDex scene update failed", it) }
 
         // Advance the doll's bedrock animation by the SAME wall-clock delta (in ticks) the particle scene uses,
         // so the model animation and the particle timeline run on one 20 Hz clock and stay in sync (the particles
@@ -533,23 +548,30 @@ class MoveDexView {
         // measured rise; manual zoom (sceneZoom) and rotation stay the base this multiplies/offsets. Smoothed so
         // resting moves (rise≈0) are unaffected, satisfying "static for normal moves, follow the big ones".
         val baseExtentY = max(1f, fitBox[4] - fitBox[1])
-        val rise = dollRiseY.coerceIn(0f, 40f)
+        val rise = if (dollRiseY.isFinite()) dollRiseY.coerceIn(0f, 40f) else 0f
         val desiredFactor = (baseExtentY / (baseExtentY + rise)).coerceIn(0.2f, 1f)
         val desiredPanY = -rise / 2f
         val ease = if (playing) 0.18f else 0.5f
+        // Recover if a prior frame's non-finite rise already poisoned these (NaN is sticky through +=).
+        if (!followZoomFactor.isFinite()) followZoomFactor = 1f
+        if (!followPanY.isFinite()) followPanY = 0f
         followZoomFactor += (desiredFactor - followZoomFactor) * ease
         followPanY += (desiredPanY - followPanY) * ease
 
-        val finalScale = sceneZoom * followZoomFactor
+        val finalScale = (sceneZoom * followZoomFactor).let { if (it.isFinite() && it > 0f) it else sceneZoom }
         // Pan so the (rotated) content pivot (raised by the follow offset) lands at the viewport centre.
         val pv = Vector3f(fixedPivot[0], fixedPivot[1] + followPanY, fixedPivot[2])
         Quaternionf().mul(Axis.XP.rotationDegrees(scenePitch)).mul(Axis.YP.rotationDegrees(sceneYaw)).transform(pv)
         val cx = left + DETAIL_W / 2.0
         val cy = y + VIEW_Y + VIEW_H / 2.0
+        // A non-finite pivot (from a degenerate fit box) would make pose.translate NaN/Inf and blank the ENTIRE
+        // viewport (floor + dolls included). Fall back to no pan so the scene still renders centred.
+        val pvx = if (pv.x.isFinite()) pv.x else 0f
+        val pvy = if (pv.y.isFinite()) pv.y else 0f
 
         val pose = context.pose()
         pose.pushPose()
-        pose.translate(cx - finalScale * pv.x, cy - finalScale * pv.y, 200.0)
+        pose.translate(cx - finalScale * pvx, cy - finalScale * pvy, 200.0)
         pose.scale(finalScale, finalScale, finalScale)
         pose.mulPose(Axis.XP.rotationDegrees(scenePitch))
         pose.mulPose(Axis.YP.rotationDegrees(sceneYaw))
@@ -583,7 +605,9 @@ class MoveDexView {
             MoveDexSceneRenderer.renderModel(context, TARGET, targetState, targetScale(), facingYaw = 180f, partialTicks = advance)
             pose.popPose()
             // Record the largest upward rise of either doll for NEXT frame's follow-camera (1-frame lag is fine).
-            dollRiseY = max(0f, max(actorRise, MoveDexSceneRenderer.lastRootRiseY))
+            // Guard against NaN/Inf from a misbehaving animation: a non-finite rise would poison followZoomFactor
+            // (which then stays NaN every frame) → finalScale NaN → pose.scale(NaN) blanks the ENTIRE viewport.
+            dollRiseY = max(0f, max(actorRise, MoveDexSceneRenderer.lastRootRiseY)).let { if (it.isFinite()) it else 0f }
 
             // Play this frame's due cues on the matching doll, EXACTLY like battle's PlayPosableAnimationHandler:
             // addFirstAnimation across the move's ordered names, first match wins, and NO fallback — if a species
@@ -643,7 +667,7 @@ class MoveDexView {
      */
     private fun renderDebugLocators(context: GuiGraphics, pose: com.mojang.blaze3d.vertex.PoseStack, actorScale: Float) {
         MoveDexSceneRenderer.renderDebugMarker(
-            context, 0f, -(TARGET_BLOCK_SIZE * 0.5f), (-sceneSeparation + TARGET_BLOCK_SIZE * 0.5).toFloat(),
+            context, 0f, -(TARGET_HEIGHT * 0.5f), (-sceneSeparation + TARGET_WIDTH * 0.5f).toFloat(),
             0.07f, 1f, 0.25f, 0.25f
         )
         val root = actorState.locatorStates["root"]?.getOrigin() ?: return

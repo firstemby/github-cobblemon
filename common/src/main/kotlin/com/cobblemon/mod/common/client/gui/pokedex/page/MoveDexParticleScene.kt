@@ -37,6 +37,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewResources
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.BufferUploader
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import com.mojang.blaze3d.vertex.Tesselator
@@ -119,9 +121,14 @@ class MoveDexParticleScene : GuiParticleScene {
             val state = if (atTarget) ctxTargetState else ctxActorState
             val scale = if (atTarget) ctxTargetScale else ctxActorScale
             val sideZ = if (atTarget) ctxTargetZ else ctxUserZ
-            val e = emitAnchor(storm, atTarget, state, scale, sideZ) // real emit anchor [x, up, z]
-            val aimY = if (atTarget) ctxActorMid else ctxTargetMid    // opposing centre height
-            val aimZ = if (atTarget) ctxUserZ else ctxTargetFaceZ     // attacker centre / target block near face
+            val e = emitAnchor(storm, atTarget, state, scale, sideZ) ?: continue // unresolved locator → skip
+            // A keyframe's targetLocators ALWAYS refer to the DEFENDER (battle's TargetsProvider), so the aim is
+            // the target doll regardless of which side emits: for a user-side effect (a beam) that's the opposing
+            // doll; for a DEFENDER-side effect it's the SAME doll — e.g. Draco Meteor's meteors target their own
+            // `root` so they rain down ON the target. Aiming target-side storms at the attacker (the old behavior)
+            // made those meteors land way off near the attacker.
+            val aimY = ctxTargetMid                                  // the target doll's centre height
+            val aimZ = if (atTarget) ctxTargetZ else ctxTargetFaceZ  // self-aim: target centre; incoming: its near face
             holder[0] = origin.add((0f - e[0]).toDouble(), (aimY - e[1]).toDouble(), (aimZ - e[2]).toDouble())
         }
         // Re-evaluate every storm's storm-level target_delta* from the live aim point so TRAVELING emitters
@@ -156,6 +163,12 @@ class MoveDexParticleScene : GuiParticleScene {
     private var targetHeight = 2.0f
     private var targetWidth = 1.0f
 
+    // The locators battle's LocatorAccess auto-generates from the entity bounding box for EVERY entity. A keyframe
+    // requesting one of these always resolves (we approximate it from the hitbox); a keyframe requesting only
+    // model-specific geo locators the doll doesn't define (hand_primary/hand/physical/mouth/...) resolves to
+    // nothing and the storm is skipped — matching battle, where such an effect simply isn't spawned.
+    private val AUTOMATIC_LOCATORS = setOf("root", "target", "special_attack", "middle", "top")
+
     fun clear() {
         storms.clear()
         pending.clear()
@@ -184,9 +197,10 @@ class MoveDexParticleScene : GuiParticleScene {
     }
 
     /**
-     * Body-relative emit offset (height up, distance toward the opponent) reproducing battle's bounding-box
-     * locator approximations (LocatorAccess) from the emitting doll's hitbox: root=base, middle/special_attack
-     * =mid-height, target/special=mid-height + forward, top=head. Falls back to mid-height.
+     * Body-relative emit offset (height up, distance toward the opponent) for one of battle's AUTOMATIC bounding-
+     * box locators (the ones [LocatorAccess] generates from the entity hitbox: root=base, middle=mid-height,
+     * target/special_attack=mid-height + forward, top=head). Only ever called by [emitAnchor] for a name that IS an
+     * automatic locator, so the catch-alls just mirror `middle`.
      */
     private fun locatorOffset(name: String?, atTarget: Boolean): Pair<Float, Float> {
         val h = if (atTarget) targetHeight else actorHeight
@@ -201,8 +215,14 @@ class MoveDexParticleScene : GuiParticleScene {
         }
     }
 
-    /** The dolls stand at [origin]; their feet (and the visual stadium floor) sit at this Y. */
-    override fun guiFloorY(): Double = origin.y
+    /**
+     * Collision floor for [storm]: the dolls' feet, which is the storm's emit HEIGHT below the scene origin. Every
+     * particle simulates at [origin] (the per-locator height is applied only at render via the emit anchor), so a
+     * storm emitting at mid-height (e.g. an impact burst at the `target` locator) must have its floor that height
+     * below the origin — otherwise its particles spawn already touching the slab and any `expire_on_contact` effect
+     * dies instantly. A ground emitter (root, height 0) keeps the floor at the origin, so Bulldoze still settles on it.
+     */
+    override fun guiFloorY(storm: ParticleStorm): Double = origin.y - (locatorOffsetOf[storm]?.first?.toDouble() ?: 0.0)
 
     /**
      * Solid box for [storm]'s target, centred on its live aim point (the holder updated each tick to the target
@@ -242,6 +262,19 @@ class MoveDexParticleScene : GuiParticleScene {
         startTickOf[storm] = nextStartTick
         locatorOffsetOf[storm] = nextLocatorOffset
         locatorNamesOf[storm] = nextLocatorNames
+        if (storm.effect.id.path.contains("rockslide")) {
+            val sp = storm.effect.space; val col = storm.effect.particle.collision
+            runCatching {
+                Cobblemon.LOGGER.info(
+                    "ROCKDBG STORM-ADD id={} side={} startTick={} locOffset={} locNames={} | space[localPos={} localRot={} isLocalSpace={}] | coll[enabled={} radius={} expireOnContact={}] | maxAgeSec={} motion={} stormXYZ=({},{},{}) floorY={}",
+                    storm.effect.id.path, currentSide, nextStartTick, nextLocatorOffset, nextLocatorNames,
+                    sp.localPosition, sp.localRotation, sp.isLocalSpace,
+                    storm.runtime.resolveBoolean(col.enabled), "%.3f".format(storm.runtime.resolveDouble(col.radius)), col.expiresOnContact,
+                    "%.3f".format(storm.runtime.resolveDouble(storm.effect.particle.maxAge)), storm.effect.particle.motion::class.simpleName,
+                    "%.2f".format(storm.getX()), "%.2f".format(storm.getY()), "%.2f".format(storm.getZ()), "%.2f".format(guiFloorY(storm))
+                )
+            }
+        }
         // Battle sets entity_width/height/size/radius/scale from the emitting entity's bounding box; our storms
         // have no entity, so populate them here from the emitting doll's hitbox — otherwise effects sized off the
         // Pokémon (e.g. Dragon Claw's aura disc `radius: v.entity_radius`) collapse to a point. Done for EVERY
@@ -329,13 +362,19 @@ class MoveDexParticleScene : GuiParticleScene {
 
         val wrapper = MatrixWrapper()
         val matrix = PoseStack()
-        matrix.translate(origin.x, origin.y, origin.z)
         // Face the emitter at its opponent, exactly like the battle entity's locator matrix. The effect's local
         // FORWARD is -Z; the user already looks down -Z (target sits there), but the TARGET's opponent (the
         // attacker) is at +Z, so its emitter must be turned 180° — otherwise every "fire forward" effect on the
         // defender (Close Combat's hit burst, Draco Meteor's meteors, etc.) sprays out the BACK of the target.
         if (emitsAtTarget) matrix.mulPose(Axis.YP.rotationDegrees(180f))
+        // The scene origin goes in the wrapper's POSITION, NOT baked into the matrix translation. The particle
+        // engine's position-attachment step (ParticleStorm.tick) sets a storm's emitter position to
+        // attachedMatrix.getOrigin() = origin; if the matrix ALSO carried translate(origin), transformPosition
+        // would add the origin TWICE — sending parametric particles (Swords Dance's swords, Rock Slide's rocks)
+        // to ~2×origin (~666 blocks). Keeping the matrix orientation-only makes that re-add idempotent, matching
+        // how battle's locator matrices behave. getOrigin()/transformPosition still yield the same world values.
         wrapper.updateMatrix(matrix.last().pose())
+        wrapper.updatePosition(origin)
         // The opponent sits along the emitter's FORWARD (-Z) axis (every directional effect is authored against
         // this, e.g. Flamethrower drives speed/rate/direction off v.target_deltaz). We ALSO offset the target in
         // Y by the height difference between the emitter's locator and the opponent's target-locator, so the
@@ -397,9 +436,18 @@ class MoveDexParticleScene : GuiParticleScene {
                 val anchorZ = (if (atTarget) targetLocalZ else userLocalZ) + (if (atTarget) front else -front)
                 for (p in storm.particles) {
                     if (xs.size >= cap) break
-                    xs.add((p.getX() - origin.x).toFloat())
-                    ys.add((-(p.getY() - origin.y) - height).toFloat())
-                    zs.add((p.getZ() - origin.z + anchorZ).toFloat())
+                    val sx = (p.getX() - origin.x).toFloat()
+                    val sy = (-(p.getY() - origin.y) - height).toFloat()
+                    val sz = (p.getZ() - origin.z + anchorZ).toFloat()
+                    // Drop non-finite AND far-flung samples: some moves have a runaway in a particle's parametric/
+                    // dynamic motion that sends MANY particles hundreds of blocks away (Swords Dance's swords hit
+                    // ~666). The Tukey filter only rejects statistical outliers, so when the runaway is the majority
+                    // it survives and blows the fit box up → zoom clamps to 4 → the whole viewport reads as blank.
+                    // Nothing legitimate in this scene is past ±64 blocks, so an absolute clamp keeps framing sane.
+                    if (sx.isFinite() && sy.isFinite() && sz.isFinite() &&
+                        sx > -64f && sx < 64f && sy > -64f && sy < 64f && sz > -64f && sz < 64f) {
+                        xs.add(sx); ys.add(sy); zs.add(sz)
+                    }
                 }
             }
         }
@@ -477,44 +525,56 @@ class MoveDexParticleScene : GuiParticleScene {
      * scaled to the model — falling back to the hitbox approximation otherwise. The locator offset is taken
      * relative to "root", un-flipped from LocatorAccess's ZP(180), facing-rotated, and scaled by [scale].
      */
-    private fun emitAnchor(storm: ParticleStorm, atTarget: Boolean, state: PosableState?, scale: Float, sideZ: Float): FloatArray {
+    private fun emitAnchor(storm: ParticleStorm, atTarget: Boolean, state: PosableState?, scale: Float, sideZ: Float): FloatArray? {
         // Once frozen (after the storm starts firing) the emit point holds steady — see [frozenEmitAnchorOf].
         frozenEmitAnchorOf[storm]?.let { return it }
         val names = locatorNamesOf[storm] ?: emptyList()
         val root = state?.locatorStates?.get("root")
-        val matched = if (state != null) names.firstNotNullOfOrNull { state.getMatchingLocators(it).firstOrNull() } else null
-        val locWrapper = matched?.let { state?.locatorStates?.get(it) }
-        if (state != null && root != null && locWrapper != null) {
-            val loc = locWrapper.getOrigin(); val r = root.getOrigin()
-            // getOrigin() returns the locator's true model-space offset from root (the per-locator ZP180 is a
-            // post-multiplied ROTATION, so it doesn't change the translation we read). X must NOT be negated —
-            // doing so mirrored left/right, e.g. Charizard's "physical" locator (its left hand at x=-21.5) emitted
-            // from the right. Y is negated to match the render's upright flip; Z is forward toward the opponent.
-            var mx = (loc.x - r.x).toFloat(); val my = -(loc.y - r.y).toFloat(); var mz = (loc.z - r.z).toFloat()
-            if (atTarget) { mx = -mx; mz = -mz } // the target doll faces +Z (rendered at facingYaw 180)
-            val anchor = floatArrayOf(scale * mx, scale * my, sideZ + scale * mz)
-            // Lock it the moment this storm starts emitting, so the beam doesn't slide with the head afterwards.
-            if (tickCount >= (startTickOf[storm] ?: 0)) frozenEmitAnchorOf[storm] = anchor
-            logBeamAnchor(storm, matched, names, anchor)
-            return anchor
+        // Resolve the emit locator IN ORDER, exactly like battle (createAtEntity): the first requested name that is
+        // either a real geo locator on this doll OR one of the AUTOMATIC bbox locators (which battle auto-generates
+        // for every entity) wins. A name that is neither — e.g. Fire Punch / Dragon Claw's hand effects asking for
+        // hand_primary/hand/physical on a doll that defines none — does NOT resolve. If NO name resolves we return
+        // null and the renderer SKIPS the storm, because battle wouldn't spawn it there either.
+        for (name in names) {
+            val geoName = if (state != null) state.getMatchingLocators(name).firstOrNull() else null
+            val locWrapper = geoName?.let { state?.locatorStates?.get(it) }
+            if (root != null && locWrapper != null) {
+                val loc = locWrapper.getOrigin(); val r = root.getOrigin()
+                // getOrigin() returns the locator's true model-space offset from root (the per-locator ZP180 is a
+                // post-multiplied ROTATION, so it doesn't change the translation we read). X must NOT be negated —
+                // doing so mirrored left/right, e.g. Charizard's "physical" locator (its left hand at x=-21.5)
+                // emitted from the right. Y is negated to match the render's upright flip; Z is forward.
+                var mx = (loc.x - r.x).toFloat(); val my = -(loc.y - r.y).toFloat(); var mz = (loc.z - r.z).toFloat()
+                if (atTarget) { mx = -mx; mz = -mz } // the target doll faces +Z (rendered at facingYaw 180)
+                val anchor = floatArrayOf(scale * mx, scale * my, sideZ + scale * mz)
+                // Lock it the moment this storm starts emitting, so the beam doesn't slide with the head afterwards.
+                if (tickCount >= (startTickOf[storm] ?: 0)) frozenEmitAnchorOf[storm] = anchor
+                logBeamAnchor(storm, geoName, names, anchor)
+                return anchor
+            }
+            if (AUTOMATIC_LOCATORS.contains(name)) {
+                // Auto bbox locator: approximate it from the doll's hitbox (battle's LocatorAccess does the same).
+                val (height, front) = locatorOffset(name, atTarget)
+                val fb = floatArrayOf(0f, height, sideZ + (if (atTarget) front else -front))
+                logBeamAnchor(storm, "auto:$name", names, fb)
+                return fb
+            }
         }
-        // Fallback: hitbox-based approximation (matches battle's bbox locators when the model defines none).
-        val (height, front) = locatorOffsetOf[storm] ?: (1.0f to 0f)
-        val fb = floatArrayOf(0f, height, sideZ + (if (atTarget) front else -front))
-        logBeamAnchor(storm, "FALLBACK(no-locator)", names, fb)
-        return fb
+        logBeamAnchor(storm, "SKIP(no resolvable locator)", names, floatArrayOf(0f, 0f, 0f))
+        return null
     }
 
-    // DIAGNOSTIC (temporary): for each beam (LOOK_AT_DIRECTION) storm, log once where its start anchor resolved —
-    // which emit locator matched (or FALLBACK), the requested locator names, and the scene-space anchor. This tells
-    // us if Ice/Aurora Beam start "far" because the mouth locator ("special") isn't present in the GUI doll's pose
-    // and it fell back to the forward "target"/hitbox point.
+    // DIAGNOSTIC (temporary): for each storm, log ONCE where its emit anchor resolved — which locator matched (or
+    // FALLBACK), the requested locator names, and the scene-space anchor [x, up, z]. Reveals e.g. Dragon Claw's
+    // effects defaulting to `target` vs landing somewhere unexpected. Soft-capped so emitter-heavy moves don't spam.
     private val loggedBeam = HashSet<ParticleStorm>()
     private fun logBeamAnchor(storm: ParticleStorm, matched: String?, names: List<String>, anchor: FloatArray) {
-        if (storm.effect.particle.cameraMode.type != ParticleCameraModeType.LOOK_AT_DIRECTION) return
-        if (!loggedBeam.add(storm)) return
-        Cobblemon.LOGGER.info("MoveDex beam {} emit locator='{}' (requested {}) anchor=[{}, {}, {}]",
-            storm.effect.id, matched, names, anchor[0], anchor[1], anchor[2])
+        if (loggedBeam.size >= 24 || !loggedBeam.add(storm)) return
+        // particleSimY = the storm's first particle's WORLD-Y minus origin (sim space): >0 means it sits ABOVE the
+        // scene origin (e.g. a Rock Slide rock lofted high by guide2), ~0 means it's at the dolls' feet level.
+        val pY = storm.particles.firstOrNull()?.let { (it.getY() - origin.y) }
+        Cobblemon.LOGGER.info("MoveDex emit {} locator='{}' (requested {}) anchor=[{}, {}, {}] particleSimY={}",
+            storm.effect.id, matched, names, anchor[0], anchor[1], anchor[2], pY)
     }
 
     fun render(
@@ -559,7 +619,7 @@ class MoveDexParticleScene : GuiParticleScene {
                     val state = if (atTarget) targetState else actorState
                     val scale = if (atTarget) targetScale else actorScale
                     val sideZ = if (atTarget) targetLocalZ else userLocalZ
-                    val a = emitAnchor(storm, atTarget, state, scale, sideZ)
+                    val a = emitAnchor(storm, atTarget, state, scale, sideZ) ?: continue // unresolved locator → don't render
                     storm.particles.forEach { it.renderInScene(pose, builder, cameraAngle, cameraYaw, cameraPitch, origin, a[0], a[1], a[2], renderPartial) }
                 }
                 builder.build()?.let { BufferUploader.drawWithShader(it) }
