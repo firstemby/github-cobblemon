@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.RenderType
@@ -29,6 +30,10 @@ import net.minecraft.world.level.block.Blocks
  * supplied facing, so two dolls can stand at opposite ends of a rotated 3D scene like a real battle.
  */
 object MoveDexSceneRenderer {
+
+    /** Scene-space vertical rise (up = +) of the most recently rendered model's animated root. Read by the
+     *  follow-camera right after each renderModel call to keep big-motion moves (e.g. Seismic Toss) in frame. */
+    var lastRootRiseY = 0f
 
     /**
      * Renders the model [identifier] (a species resource id, or the substitute fallback) at the current
@@ -134,6 +139,10 @@ object MoveDexSceneRenderer {
             state.setPoseToFirstSuitable(PoseType.PROFILE)
             state.updatePartialTicks(partialTicks)
             model.applyAnimations(null, state, 0f, 0f, 0f, 0f, 0f)
+            // Capture how far the move animation has translated the model's ROOT vertically (Seismic Toss throws
+            // it way up). rootPart.y is raw bedrock units (÷16 -> blocks) and worldScale is the doll scale, so this
+            // is the scene-space rise the follow-camera uses to keep the action framed. Positive = up.
+            lastRootRiseY = ((model.rootPart as? ModelPart)?.y ?: 0f) / 16f * worldScale
             // Populate the model's real geo-defined locators (target/special/mouth/etc.) into state.locatorStates
             // so the move can emit from the exact spots battle uses. (Entity-null: geo locators still populate.)
             runCatching { model.updateLocators(null, state) }

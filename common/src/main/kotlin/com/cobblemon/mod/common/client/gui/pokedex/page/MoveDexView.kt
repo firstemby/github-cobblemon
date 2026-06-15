@@ -62,7 +62,7 @@ class MoveDexView {
         private const val ROW_H = 13
         private const val VISIBLE_ROWS = 10
         private const val SCALE = 0.5F                  // matches PokedexGUIConstants.SCALE for icon/button blits
-        private const val CATEGORY_BAR_W = 91           // filter portion width; sort buttons sit to its right
+        private const val CATEGORY_BAR_W = 78           // filter portion width; sort buttons sit to its right (5 now)
         private const val SORT_BTN_SIZE = 20            // sort sheet is 20x40; rendered at SORT_BTN_SIZE*SCALE
         private const val SORT_BTN_SPACING = 12
 
@@ -124,8 +124,9 @@ class MoveDexView {
     }
 
     private enum class Filter(val label: String) { ALL("All"), PHYSICAL("Physical"), SPECIAL("Special"), STATUS("Status") }
-    // `tex` is the button_sort_move_<tex>.png suffix; POWER reuses the numeric "level" icon.
-    private enum class Sort(val tex: String) { NAME("name"), TYPE("type"), POWER("level"), DISCOVERED("discovered") }
+    // `tex` is the button_sort_move_<tex>.png suffix; POWER reuses the numeric "level" icon, IMPLEMENTED is the
+    // checkmark button (moves with a built action effect first).
+    private enum class Sort(val tex: String) { NAME("name"), TYPE("type"), POWER("level"), DISCOVERED("discovered"), IMPLEMENTED("implemented") }
     private enum class Tab(val key: String, val label: String) { INFO("tab.info", "Info"), LEARNSET("tab.learnset", "Learnset") }
 
     private var filter = Filter.ALL
@@ -156,7 +157,12 @@ class MoveDexView {
     private var moveSounds: List<Pair<String, Float>> = emptyList() // (soundId, timeSeconds), sorted by time
     private var nextSoundIndex = 0                        // next not-yet-played sound in the cycle
     private var muted = false                             // speaker toggle
-    private var debugLocators = true                      // draw locator/target-spot markers (toggle with L)
+    private var debugLocators = false                     // draw locator/target-spot markers (toggle: L key or button)
+    // Follow-camera state: when a move flings a doll upward (Seismic Toss), the camera pans up and eases the zoom
+    // out just enough to keep the action framed, then settles back — all smoothed so normal moves look static.
+    private var dollRiseY = 0f                            // last frame's max doll vertical rise (scene units)
+    private var followZoomFactor = 1f                     // smoothed multiplicative zoom-out applied to sceneZoom
+    private var followPanY = 0f                           // smoothed vertical pan offset (scene units, up = -Y)
     // Live scene camera: drag rotates (yaw/pitch); scroll sets the single zoom (= scale). Centering is auto.
     private var sceneYaw = SCENE_YAW
     private var scenePitch = SCENE_PITCH
@@ -259,6 +265,9 @@ class MoveDexView {
         fixedPivot[1] = (fitBox[1] + fitBox[4]) * 0.5f
         fixedPivot[2] = (fitBox[2] + fitBox[5]) * 0.5f
 
+        // Reset the follow-camera so the new move starts settled (it eases out/up only if this move flings a doll).
+        dollRiseY = 0f; followZoomFactor = 1f; followPanY = 0f
+
         // Auto-fit the zoom to this move: project the 8 box corners through the view rotation and size so the
         // projected extent fits BOTH viewport dimensions. This is the single sceneZoom value (scroll overrides
         // it); it's what lets a tiny move (Charmander) and a tall one (Thunder) each fill the window sensibly.
@@ -294,6 +303,7 @@ class MoveDexView {
             Sort.TYPE -> filtered.sortedWith(compareBy({ it.elementalType.name }, { it.displayName.string }))
             Sort.POWER -> filtered.sortedWith(compareByDescending<MoveTemplate> { it.power }.thenBy { it.displayName.string })
             Sort.DISCOVERED -> filtered.sortedWith(compareByDescending<MoveTemplate> { MoveDexData.isDiscovered(it) }.thenBy { it.displayName.string })
+            Sort.IMPLEMENTED -> filtered.sortedWith(compareByDescending<MoveTemplate> { MoveDexAnimation.hasActionEffect(it) }.thenBy { it.displayName.string })
         }
     }
 
@@ -393,13 +403,18 @@ class MoveDexView {
                 )
             }
 
+            // Moves we haven't built an action effect for yet get a red ✕ at the FAR right (so it's obvious which
+            // still need a particle animation, e.g. Dig). The power number stays, shifted left to make room.
+            val noEffect = !MoveDexAnimation.hasActionEffect(move)
+            val powerRightX = left + LIST_W - (if (noEffect) 11 else 4)
             if (discovered) {
                 TypeIcon(x = left + 3, y = rowY + 2, type = move.elementalType, small = true).render(context)
                 drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = move.displayName.copy().bold(), x = left + 14, y = rowY + 2, shadow = true)
-                if (move.power > 0) drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = Component.literal(move.power.toInt().toString()).bold(), x = left + LIST_W - 4, y = rowY + 2, shadow = true)
+                if (move.power > 0) drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = Component.literal(move.power.toInt().toString()).bold(), x = powerRightX, y = rowY + 2, shadow = true)
             } else {
                 drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = Component.literal("???").bold(), x = left + 14, y = rowY + 2, shadow = true)
             }
+            if (noEffect) drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = Component.literal("✕").bold(), x = left + LIST_W - 8, y = rowY + 2, colour = 0xFF5555, shadow = true)
         }
     }
 
@@ -415,6 +430,7 @@ class MoveDexView {
         renderDolls(context, left, y, delta)
         renderPlayPause(context, left, y, mouseX, mouseY)
         renderMuteButton(context, left, y, mouseX, mouseY)
+        renderLocatorButton(context, left, y, mouseX, mouseY)
         renderSpeciesBox(context, left, y, mouseX, mouseY)
 
         // Tabs.
@@ -497,10 +513,21 @@ class MoveDexView {
 
         context.enableScissor(left, y + VIEW_Y, left + DETAIL_W, y + VIEW_Y + VIEW_H)
 
-        // Single zoom = scale; the measured centroid (fixedPivot) is panned to centre so everything stays framed.
-        val finalScale = sceneZoom
-        // Pan so the (rotated) content pivot lands at the viewport centre: T = C - finalScale * (R · pivot).
-        val pv = Vector3f(fixedPivot[0], fixedPivot[1], fixedPivot[2])
+        // Follow-camera: ease the pivot up and the zoom out by just enough to keep a doll thrown upward (Seismic
+        // Toss launches the target ~15 blocks up) in frame, then settle back as it returns. Uses LAST frame's
+        // measured rise; manual zoom (sceneZoom) and rotation stay the base this multiplies/offsets. Smoothed so
+        // resting moves (rise≈0) are unaffected, satisfying "static for normal moves, follow the big ones".
+        val baseExtentY = max(1f, fitBox[4] - fitBox[1])
+        val rise = dollRiseY.coerceIn(0f, 40f)
+        val desiredFactor = (baseExtentY / (baseExtentY + rise)).coerceIn(0.2f, 1f)
+        val desiredPanY = -rise / 2f
+        val ease = if (playing) 0.18f else 0.5f
+        followZoomFactor += (desiredFactor - followZoomFactor) * ease
+        followPanY += (desiredPanY - followPanY) * ease
+
+        val finalScale = sceneZoom * followZoomFactor
+        // Pan so the (rotated) content pivot (raised by the follow offset) lands at the viewport centre.
+        val pv = Vector3f(fixedPivot[0], fixedPivot[1] + followPanY, fixedPivot[2])
         Quaternionf().mul(Axis.XP.rotationDegrees(scenePitch)).mul(Axis.YP.rotationDegrees(sceneYaw)).transform(pv)
         val cx = left + DETAIL_W / 2.0
         val cy = y + VIEW_Y + VIEW_H / 2.0
@@ -531,6 +558,7 @@ class MoveDexView {
             pose.translate(0.0, 0.0, sceneSeparation)
             MoveDexSceneRenderer.renderModel(context, actorIdentifier(), actorState, actorScale, facingYaw = 0f, partialTicks = advance)
             pose.popPose()
+            val actorRise = MoveDexSceneRenderer.lastRootRiseY // read before the target render overwrites it
 
             // The target is now a real posable model (a target-block-shaped dummy), so it plays the move's actual
             // `target` bedrock animation exactly like a battle defender — the same shared move animations drive its
@@ -539,6 +567,8 @@ class MoveDexView {
             pose.translate(0.0, 0.0, -sceneSeparation)
             MoveDexSceneRenderer.renderModel(context, TARGET, targetState, targetScale(), facingYaw = 180f, partialTicks = advance)
             pose.popPose()
+            // Record the largest upward rise of either doll for NEXT frame's follow-camera (1-frame lag is fine).
+            dollRiseY = max(0f, max(actorRise, MoveDexSceneRenderer.lastRootRiseY))
 
             // Play this frame's due cues on the matching doll. Both are real models, so each plays the move's
             // bedrock animation (the actor's windup/overlay, the target's hit/throw/squash) just like battle.
@@ -660,6 +690,18 @@ class MoveDexView {
         }
     }
 
+    /** Debug toggle (just right of the speaker): shows/hides the locator + target-spot markers. Also bound to L. */
+    private fun renderLocatorButton(context: GuiGraphics, left: Int, y: Int, mouseX: Int, mouseY: Int) {
+        val bx = left + 30
+        val by = y + VIEW_Y + VIEW_H - 12
+        val hovered = mouseX in bx..(bx + 12) && mouseY in by..(by + 10)
+        context.fill(bx, by, bx + 12, by + 10, if (debugLocators) PLATE_SELECTED else if (hovered) PLATE_HOVER else PLATE)
+        // A tiny crosshair/locator glyph: brighter when active.
+        val c = if (debugLocators) 0xFF3AA0FF.toInt() else 0xFF33586B.toInt()
+        context.fill(bx + 5, by + 2, bx + 7, by + 8, c) // vertical
+        context.fill(bx + 3, by + 4, bx + 9, by + 6, c) // horizontal
+    }
+
     private fun playMoveSound(id: String) {
         runCatching {
             val soundEvent = SoundEvent.createVariableRangeEvent(id.asIdentifierDefaultingNamespace())
@@ -734,8 +776,10 @@ class MoveDexView {
         // controls, or play button) — otherwise the tiny mouse movement while clicking a move in the list
         // would spin the scene. mouseDragged checks this flag.
         val dl = x + DETAIL_X
-        val onPlay = mouseX >= dl + 2 && mouseX <= dl + 14 && mouseY >= y + VIEW_Y + VIEW_H - 12 && mouseY <= y + VIEW_Y + VIEW_H - 2
-        sceneDragArmed = selected != null && !onPlay &&
+        // The bottom-left control strip (play, mute, locator-toggle) sits inside the viewport; pressing any of it
+        // must NOT arm scene-rotation drag.
+        val onControls = mouseX >= dl + 2 && mouseX <= dl + 44 && mouseY >= y + VIEW_Y + VIEW_H - 12 && mouseY <= y + VIEW_Y + VIEW_H - 2
+        sceneDragArmed = selected != null && !onControls &&
             mouseX >= dl && mouseX <= dl + DETAIL_W && mouseY >= y + VIEW_Y && mouseY <= y + VIEW_Y + VIEW_H
 
         // Species box focus (overlaid on the viewport; only present when a move is selected).
@@ -814,6 +858,13 @@ class MoveDexView {
         val mbx = left + 16
         if (mouseX >= mbx && mouseX <= mbx + 12 && mouseY >= pby && mouseY <= pby + 10) {
             muted = !muted
+            return true
+        }
+
+        // Locator-visibility debug toggle (also bound to the L key).
+        val lbx = left + 30
+        if (mouseX >= lbx && mouseX <= lbx + 12 && mouseY >= pby && mouseY <= pby + 10) {
+            debugLocators = !debugLocators
             return true
         }
 
