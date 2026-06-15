@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.api.moves.animations.keyframes.ForkActionEffectK
 import com.cobblemon.mod.common.api.moves.animations.keyframes.ParallelActionEffectKeyframe
 import com.cobblemon.mod.common.api.moves.animations.keyframes.PauseActionEffectKeyframe
 import com.cobblemon.mod.common.api.moves.animations.keyframes.SequenceActionEffectKeyframe
+import com.cobblemon.mod.common.api.snowstorm.ParticleCameraModeType
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
@@ -164,6 +165,7 @@ class MoveDexParticleScene : GuiParticleScene {
         locatorNamesOf.clear()
         targetHolderOf.clear()
         frozenEmitAnchorOf.clear()
+        loggedBeam.clear()
         // Log the previous cycle's storm pressure before wiping it, so one run shows whether the cap drops storms.
         if (spawnTally.isNotEmpty() || dropTally.isNotEmpty()) {
             Cobblemon.LOGGER.info("MoveDex particle cycle: peakStorms={} spawned={} dropped={}", peakStorms, spawnTally, dropTally)
@@ -493,11 +495,26 @@ class MoveDexParticleScene : GuiParticleScene {
             val anchor = floatArrayOf(scale * mx, scale * my, sideZ + scale * mz)
             // Lock it the moment this storm starts emitting, so the beam doesn't slide with the head afterwards.
             if (tickCount >= (startTickOf[storm] ?: 0)) frozenEmitAnchorOf[storm] = anchor
+            logBeamAnchor(storm, matched, names, anchor)
             return anchor
         }
         // Fallback: hitbox-based approximation (matches battle's bbox locators when the model defines none).
         val (height, front) = locatorOffsetOf[storm] ?: (1.0f to 0f)
-        return floatArrayOf(0f, height, sideZ + (if (atTarget) front else -front))
+        val fb = floatArrayOf(0f, height, sideZ + (if (atTarget) front else -front))
+        logBeamAnchor(storm, "FALLBACK(no-locator)", names, fb)
+        return fb
+    }
+
+    // DIAGNOSTIC (temporary): for each beam (LOOK_AT_DIRECTION) storm, log once where its start anchor resolved —
+    // which emit locator matched (or FALLBACK), the requested locator names, and the scene-space anchor. This tells
+    // us if Ice/Aurora Beam start "far" because the mouth locator ("special") isn't present in the GUI doll's pose
+    // and it fell back to the forward "target"/hitbox point.
+    private val loggedBeam = HashSet<ParticleStorm>()
+    private fun logBeamAnchor(storm: ParticleStorm, matched: String?, names: List<String>, anchor: FloatArray) {
+        if (storm.effect.particle.cameraMode.type != ParticleCameraModeType.LOOK_AT_DIRECTION) return
+        if (!loggedBeam.add(storm)) return
+        Cobblemon.LOGGER.info("MoveDex beam {} emit locator='{}' (requested {}) anchor=[{}, {}, {}]",
+            storm.effect.id, matched, names, anchor[0], anchor[1], anchor[2])
     }
 
     fun render(
@@ -519,6 +536,12 @@ class MoveDexParticleScene : GuiParticleScene {
             val lightTexture = Minecraft.getInstance().gameRenderer.lightTexture()
             lightTexture.turnOnLightLayer()
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+            // Occlude particles by the 3D scene: the dolls, floor and target block were drawn into the depth
+            // buffer, so turn depth TESTING on (the particle materials only ever set depthMask, never the test) —
+            // without it every particle drew on top of the models even when behind them. depthMask is forced OFF
+            // below so the transparent particles are hidden by nearer opaque geometry but don't write depth
+            // themselves, which would let them wrongly occlude one another and the 2D GUI drawn afterwards.
+            RenderSystem.enableDepthTest()
             val pose = context.pose()
             // Batch every storm of a given material into ONE begin/build/draw — effects spawn many child
             // storms (trails, sub-bursts), and a draw call per storm per frame is what stutters. Each
@@ -529,24 +552,21 @@ class MoveDexParticleScene : GuiParticleScene {
                 // The GUI scene pose winds the billboard quads back-facing, so the cull-enabled materials
                 // (particles_alpha/opaque — most effects) would cull them away. Force cull off: flat billboards.
                 RenderSystem.disableCull()
+                RenderSystem.depthMask(false) // test against the models' depth, but don't write our own
+
                 for (storm in group) {
                     val atTarget = sideOf[storm] == true
                     val state = if (atTarget) targetState else actorState
                     val scale = if (atTarget) targetScale else actorScale
                     val sideZ = if (atTarget) targetLocalZ else userLocalZ
                     val a = emitAnchor(storm, atTarget, state, scale, sideZ)
-                    // Fixed scene-space target a beam must END on: the opposing centre (Y up = -mid). For a
-                    // user effect that's the target block's near-face centre; for a target effect, the attacker.
-                    // Only storms that actually aim at something get a beam end (others billboard normally).
-                    val beamEnd = if (storm.targetPos != null) {
-                        if (atTarget) floatArrayOf(0f, -ctxActorMid, ctxUserZ) else floatArrayOf(0f, -ctxTargetMid, ctxTargetFaceZ)
-                    } else null
-                    storm.particles.forEach { it.renderInScene(pose, builder, cameraAngle, cameraYaw, cameraPitch, origin, a[0], a[1], a[2], renderPartial, beamEnd) }
+                    storm.particles.forEach { it.renderInScene(pose, builder, cameraAngle, cameraYaw, cameraPitch, origin, a[0], a[1], a[2], renderPartial) }
                 }
                 builder.build()?.let { BufferUploader.drawWithShader(it) }
             }
             // Restore GUI-friendly GL state after the particle materials' setup.
             lightTexture.turnOffLightLayer()
+            RenderSystem.depthMask(true)
             RenderSystem.defaultBlendFunc()
             RenderSystem.enableCull()
         }.onFailure { Cobblemon.LOGGER.warn("MoveDex particle scene render failed", it) }
