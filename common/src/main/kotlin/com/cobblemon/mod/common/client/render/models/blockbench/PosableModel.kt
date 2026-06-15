@@ -206,6 +206,21 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     /**
+     * Like [getAnimation], but if [name] isn't found in the current pose or the global animation map it also
+     * searches EVERY pose's named animations. Some species (e.g. Lapras' JSON poser) register their move
+     * animations (special/status/etc.) ONLY inside battle poses; a GUI doll has no entity, so it can never
+     * satisfy those poses' `isBattle` condition and [getAnimation] (current pose = a UI pose) never finds them.
+     * The MoveDex viewport uses this so move animations resolve for every species regardless of poser layout.
+     */
+    fun getAnimationAcrossPoses(state: PosableState, name: String, runtime: MoLangRuntime): ActiveAnimation? {
+        getAnimation(state, name, runtime)?.let { return it }
+        for (pose in poses.values) {
+            resolveFromAnimationMap(pose.namedAnimations, name, runtime)?.let { return it }
+        }
+        return null
+    }
+
+    /**
      * Animation group : animation name [: primary]
      */
     fun extractAnimation(string: String): ActiveAnimation? {

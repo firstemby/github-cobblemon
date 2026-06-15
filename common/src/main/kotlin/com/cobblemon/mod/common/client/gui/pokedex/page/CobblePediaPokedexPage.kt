@@ -94,13 +94,19 @@ class CobblePediaPokedexPage(
     private var selectedSub: String? = null // null = sub-grid (or direct list if no subs); non-null = a bucket's list
     private var scrollRow = 0
 
-    // WorldDex (replaces the Habitats/Structures categories with a biome-grouped browser)
+    // WorldDex (replaces the Habitats/Structures categories): a category submenu (Habitats/Ruins/
+    // Fossils) leading into a per-category browser.
     private var worldDexMode = false
+    private var worldDexCategory: WorldDexData.Category? = null
     private val worldDexView = WorldDexView()
 
     // BerryDex (opened from the Berries tile)
     private var berryDexMode = false
     private val berryDexView = BerryDexView()
+
+    // MoveDex (comprehensive move browser)
+    private var moveDexMode = false
+    private val moveDexView = MoveDexView()
 
     // Structure preview pane state
     private var selectedEntry: ResourceLocation? = null
@@ -113,9 +119,12 @@ class CobblePediaPokedexPage(
         selectedSub = null
         scrollRow = 0
         worldDexMode = false
+        worldDexCategory = null
         worldDexView.reset()
         berryDexMode = false
         berryDexView.reset()
+        moveDexMode = false
+        moveDexView.reset()
         clearSelectedEntry()
     }
 
@@ -134,12 +143,24 @@ class CobblePediaPokedexPage(
     override fun render(gui: PokedexGUI, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
         if (worldDexMode) {
             renderBackButton(context, x, y, mouseX, mouseY)
-            worldDexView.render(context, x, y, mouseX, mouseY)
+            val cat = worldDexCategory
+            if (cat == null) {
+                renderTileGrid(context, x, y, mouseX, mouseY,
+                    Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"),
+                    WorldDexData.Category.entries.map { Tile(it.label, WorldDexData.count(it)) })
+            } else {
+                worldDexView.render(context, x, y, mouseX, mouseY)
+            }
             return
         }
         if (berryDexMode) {
             renderBackButton(context, x, y, mouseX, mouseY)
             berryDexView.render(context, x, y, mouseX, mouseY)
+            return
+        }
+        if (moveDexMode) {
+            renderBackButton(context, x, y, mouseX, mouseY)
+            moveDexView.render(context, x, y, mouseX, mouseY, delta)
             return
         }
 
@@ -165,7 +186,9 @@ class CobblePediaPokedexPage(
 
     private fun categoryTiles(): List<Tile> =
         tileCategories().map { Tile(categoryName(it), entriesForCategory(it).size) } +
-            Tile(Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"), WorldDexData.totalEntries)
+            Tile(Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"),
+                WorldDexData.Category.entries.sumOf { WorldDexData.count(it) }) +
+            Tile(Component.translatableWithFallback("cobblemon.ui.movedex.title", "MoveDex"), MoveDexData.discoveredCount())
 
     private fun subTiles(category: ScannedDataCategory): List<Tile> =
         subKeys(category).map { sub -> Tile(subName(sub), bucketEntries(category.bucket(sub)).size) }
@@ -301,8 +324,16 @@ class CobblePediaPokedexPage(
 
         if (worldDexMode) {
             if (isBackClicked(x, y, mouseX, mouseY)) {
-                worldDexMode = false
+                // Back from a category returns to the category submenu; from the submenu, exits the WorldDex.
+                if (worldDexCategory != null) worldDexCategory = null else worldDexMode = false
                 worldDexView.reset()
+                return true
+            }
+            if (worldDexCategory == null) {
+                val index = tileIndexAt(x, y, mouseX, mouseY, WorldDexData.Category.entries.size) ?: return false
+                val cat = WorldDexData.Category.entries[index]
+                worldDexCategory = cat
+                worldDexView.open(cat)
                 return true
             }
             return worldDexView.mouseClicked(x, y, mouseX, mouseY)
@@ -315,14 +346,27 @@ class CobblePediaPokedexPage(
             }
             return berryDexView.mouseClicked(x, y, mouseX, mouseY)
         }
+        if (moveDexMode) {
+            if (isBackClicked(x, y, mouseX, mouseY)) {
+                moveDexMode = false
+                moveDexView.reset()
+                return true
+            }
+            return moveDexView.mouseClicked(x, y, mouseX, mouseY)
+        }
 
         val category = selectedCategory
 
         if (category == null) {
             val categories = tileCategories()
-            val index = tileIndexAt(x, y, mouseX, mouseY, categories.size + 1) ?: return false
+            val index = tileIndexAt(x, y, mouseX, mouseY, categories.size + 2) ?: return false
             if (index == categories.size) {
                 worldDexMode = true
+                return true
+            }
+            if (index == categories.size + 1) {
+                moveDexMode = true
+                moveDexView.open()
                 return true
             }
             if (categories[index] == ScannedDataCategory.BERRIES) {
@@ -372,21 +416,24 @@ class CobblePediaPokedexPage(
     }
 
     override fun keyPressed(gui: PokedexGUI, keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (worldDexMode) return worldDexView.keyPressed(keyCode)
+        if (worldDexMode && worldDexCategory != null) return worldDexView.keyPressed(keyCode)
         if (berryDexMode) return berryDexView.keyPressed(keyCode)
+        if (moveDexMode) return moveDexView.keyPressed(keyCode)
         return false
     }
 
     override fun charTyped(gui: PokedexGUI, codePoint: Char, modifiers: Int): Boolean {
-        if (worldDexMode) return worldDexView.charTyped(codePoint)
+        if (worldDexMode && worldDexCategory != null) return worldDexView.charTyped(codePoint)
         if (berryDexMode) return berryDexView.charTyped(codePoint)
+        if (moveDexMode) return moveDexView.charTyped(codePoint)
         return false
     }
 
     override fun mouseDragged(gui: PokedexGUI, mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         if (button != 0) return false
-        if (worldDexMode) return worldDexView.mouseDragged(deltaX, deltaY)
+        if (worldDexMode) return worldDexCategory != null && worldDexView.mouseDragged(deltaX, deltaY)
         if (berryDexMode) return berryDexView.mouseDragged(deltaX, deltaY)
+        if (moveDexMode) return moveDexView.mouseDragged(deltaX, deltaY)
         if (!previewVisible()) return false
         previewYaw += deltaX.toFloat()
         previewPitch = (previewPitch + deltaY.toFloat()).coerceIn(-90f, 90f)
@@ -395,6 +442,7 @@ class CobblePediaPokedexPage(
 
     override fun mouseScrolled(gui: PokedexGUI, mouseX: Double, mouseY: Double, deltaX: Double, deltaY: Double): Boolean {
         if (worldDexMode) {
+            if (worldDexCategory == null) return false
             val wx = (gui.width - BASE_WIDTH) / 2
             val wy = (gui.height - BASE_HEIGHT) / 2
             return worldDexView.mouseScrolled(wx, wy, mouseX, mouseY, deltaY)
@@ -403,6 +451,11 @@ class CobblePediaPokedexPage(
             val bx = (gui.width - BASE_WIDTH) / 2
             val by = (gui.height - BASE_HEIGHT) / 2
             return berryDexView.mouseScrolled(bx, by, mouseX, mouseY, deltaY)
+        }
+        if (moveDexMode) {
+            val mx = (gui.width - BASE_WIDTH) / 2
+            val my = (gui.height - BASE_HEIGHT) / 2
+            return moveDexView.mouseScrolled(mx, my, mouseX, mouseY, deltaY)
         }
         val category = selectedCategory ?: return false
         if (selectedSub == null && hasSubcategories(category)) return false

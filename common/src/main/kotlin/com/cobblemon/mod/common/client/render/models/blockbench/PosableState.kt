@@ -435,6 +435,21 @@ abstract class PosableState : Schedulable {
         }
     }
 
+    /**
+     * Like [addFirstAnimation] but resolves each name across ALL of the model's poses (see
+     * [PosableModel.getAnimationAcrossPoses]), not just the current one. The MoveDex doll sits in a UI pose with
+     * no entity, yet many species register their move animations only inside battle poses — this finds them.
+     */
+    fun addFirstAnimationAcrossPoses(animation: Set<String>) {
+        val model = currentModel ?: return
+        val resolved = animation.firstNotNullOfOrNull { model.getAnimationAcrossPoses(this, it, runtime) } ?: return
+        if (resolved is PrimaryAnimation) {
+            addPrimaryAnimation(resolved)
+        } else {
+            addActiveAnimation(resolved)
+        }
+    }
+
     fun isPosedIn(vararg poses: Pose) = poses.any { it.poseName == currentPose }
     fun isNotPosedIn(vararg poses: Pose) = poses.none { it.poseName == currentPose }
 

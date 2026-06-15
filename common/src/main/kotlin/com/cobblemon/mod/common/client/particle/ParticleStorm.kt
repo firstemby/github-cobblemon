@@ -57,6 +57,13 @@ class ParticleStorm(
     val getParticleColor: () -> Vector4f? = { null },
     val runtime: MoLangRuntime = MoLangRuntime(),
     val entity: Entity? = null,
+    /**
+     * When set, this storm (and any effects it event-spawns) is driven and rendered by an offscreen GUI
+     * scene instead of the world particle engine: [spawn] hands the storm to the scene rather than the
+     * engine, and [spawnParticle] builds particles directly so they never enter the world. Used by the
+     * MoveDex move viewport. Null (the default) is the normal in-world behaviour and is unchanged.
+     */
+    val guiScene: GuiParticleScene? = null,
 ): NoRenderParticle(world, emitterSpaceMatrix.getOrigin().x, emitterSpaceMatrix.getOrigin().y, emitterSpaceMatrix.getOrigin().z) {
     fun spawn() {
         if (entity != null) {
@@ -90,7 +97,16 @@ class ParticleStorm(
             runtime.environment.setSimpleVariable("entity_radius", DoubleValue(longerDiameter / 2))
             runtime.environment.setSimpleVariable("entity_scale", DoubleValue((entity as? PokemonEntity)?.scale ?: 1.0))
         }
-        Minecraft.getInstance().particleEngine.add(this)
+        val scene = guiScene
+        if (scene != null) {
+            // Offscreen GUI storms have no battle entity, but targeted effects still need target_delta* so that
+            // traveling emitters (e.g. Ember's fireball, whose emitter offset lerps toward the target) and beams
+            // work. Children spawned by ParticleEvent inherit this storm's targetPos, so they get it here too.
+            if (targetPos != null) addAttackingFunctions(targetPos)
+            scene.addStorm(this)
+        } else {
+            Minecraft.getInstance().particleEngine.add(this)
+        }
     }
 
     fun addAttackingFunctions(destinationPosSupplier: (() -> Vec3)) {
@@ -111,6 +127,22 @@ class ParticleStorm(
         runtime.environment.setSimpleVariable("target_deltay",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).y * -1))
         runtime.environment.setSimpleVariable("target_deltaz",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).z))
         runtime.environment.setSimpleVariable("target_distance",  DoubleValue(distanceTo(destinationPosSupplier.invoke()).length()))
+    }
+
+    /**
+     * Re-evaluates the storm runtime's `target_delta*` / `target_distance` variables from the LIVE [targetPos].
+     * [addAttackingFunctions] only snapshots them once at spawn, so a traveling emitter (whose offset is driven
+     * by `v.target_deltaz` on the storm runtime, not per-particle) would otherwise keep aiming at wherever the
+     * target was when it spawned. The GUI scene moves the target spot (the block's near-face centre) each tick,
+     * so it calls this every tick to keep emitters tracking it. Per-particle copies are handled by [lockParticleVars].
+     */
+    fun refreshAttackingVariables() {
+        val destinationPos = targetPos?.invoke() ?: return
+        val delta = distanceTo(destinationPos)
+        runtime.environment.setSimpleVariable("target_deltax", DoubleValue(delta.x))
+        runtime.environment.setSimpleVariable("target_deltay", DoubleValue(delta.y * -1))
+        runtime.environment.setSimpleVariable("target_deltaz", DoubleValue(delta.z))
+        runtime.environment.setSimpleVariable("target_distance", DoubleValue(delta.length()))
     }
 
     //These are variables that need to be different per particle instance
@@ -349,6 +381,25 @@ class ParticleStorm(
         val newPosition = getNextParticleSpawnPosition()
         val velocity = getNextParticleVelocity(newPosition)
 
+        if (guiScene != null) {
+            // Offscreen GUI scene: build the particle directly (mirrors SnowstormParticleType.Factory) so it
+            // self-registers in this storm's `particles` list and never enters the world particle engine.
+            val isLocal = effect.space.localPosition
+            val particleRuntime = MoLangRuntime()
+            particleRuntime.environment.query = runtime.environment.query
+            val mapClone = runtime.environment.variable.map.entries.associateBy({ it.key }, { it.value })
+            val varStruct = VariableStruct(mapClone)
+            lockParticleVars(varStruct)
+            particleRuntime.environment.variable = varStruct
+            particleRuntime.environment.context = runtime.environment.context
+            particleRuntime.environment.temp = runtime.environment.temp
+            SnowstormParticle(
+                this, world, newPosition.x, newPosition.y, newPosition.z, velocity, particleRuntime,
+                matrixWrapper = if (isLocal) emitterSpaceMatrix else emitterSpaceMatrix.clone()
+            )
+            return
+        }
+
         contextStorm = this
         world.addParticle(particleEffect, newPosition.x, newPosition.y, newPosition.z, velocity.x, velocity.y, velocity.z)
         contextStorm = null
@@ -374,4 +425,29 @@ class ParticleStorm(
     fun setInvisible() {
         particles.forEach { particle -> particle.invisible = true }
     }
+}
+
+/**
+ * Sink for [ParticleStorm]s that should run offscreen (driven and rendered by a GUI) rather than by the
+ * world particle engine. A storm constructed with a non-null `guiScene` calls [addStorm] from [ParticleStorm.spawn]
+ * instead of registering with the engine; the scene is then responsible for ticking the storm and its
+ * particles and for rendering them. Event-spawned child storms inherit the same scene, so nested effects
+ * (trails, secondary bursts, heal sparkles) stay in the GUI too.
+ */
+interface GuiParticleScene {
+    fun addStorm(storm: ParticleStorm)
+
+    /**
+     * World Y of the scene's virtual ground plane (the dolls' feet). The offscreen scene runs high in empty
+     * sky where there are no real blocks, so ground-collision effects (e.g. Bulldoze) would otherwise fall
+     * through forever. Particle collision treats everything at or below this Y as solid floor.
+     */
+    fun guiFloorY(): Double
+
+    /**
+     * World-space solid box for [storm]'s target (the target block, or the attacker), centred on its live aim
+     * point, or null if the storm has no target. Lets traveling projectiles/beams collide and stop AT the
+     * target instead of flying past it — the aim point is built so it maps exactly onto the target's near face.
+     */
+    fun guiImpactBox(storm: ParticleStorm): net.minecraft.world.phys.AABB?
 }

@@ -130,7 +130,9 @@ class ParticleEvent(
                 getParticleColor = storm.getParticleColor,
                 targetPos = storm.targetPos,
                 runtime = MoLangRuntime().setup(),
-                entity = storm.entity
+                entity = storm.entity,
+                // Inherit the parent's offscreen scene (if any) so nested effects render in the GUI, not the world.
+                guiScene = storm.guiScene
             )
             //The reason this doesn't use the newStorms runtime is that the parent storm can add queries AFTER
             //the child storm spawns in. Say a parent storm has a creation event. The child spawns before the parent

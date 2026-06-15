@@ -51,6 +51,9 @@ object StructurePreviewProcessors {
     /** element/structure location (e.g. `cobblemon:habitats/berry_patch1`) -> processor list id. */
     private val processorListByElement: Map<ResourceLocation, ResourceLocation> by lazy { buildElementIndex() }
 
+    /** The processor list id wired to a given structure element, if any (used to resolve its loot). */
+    fun processorListIdFor(elementLocation: ResourceLocation): ResourceLocation? = processorListByElement[elementLocation]
+
     private val processorListCache = HashMap<ResourceLocation, List<StructureProcessor>>()
 
     /**

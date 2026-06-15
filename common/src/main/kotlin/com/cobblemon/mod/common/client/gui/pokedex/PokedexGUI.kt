@@ -905,13 +905,17 @@ class PokedexGUI private constructor(
     override fun isPauseScreen(): Boolean = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
-            onClose()
+        // Give the active page first crack at the key BEFORE the inventory-key close. Pages with their own text
+        // inputs (the MoveDex/BerryDex/WorldDex search boxes use a custom focus flag, not an EditBox) consume the
+        // keystroke when focused, so typing the inventory letter (default "e") into a search box no longer closes
+        // the GUI. A page only returns true for keys it actually handles, so "e" still closes when nothing's focused.
+        val page = currentPage
+        if (page != null && page !is MainDexPokedexPage && page.keyPressed(this, keyCode, scanCode, modifiers)) {
             return true
         }
 
-        val page = currentPage
-        if (page != null && page !is MainDexPokedexPage && page.keyPressed(this, keyCode, scanCode, modifiers)) {
+        if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
+            onClose()
             return true
         }
 

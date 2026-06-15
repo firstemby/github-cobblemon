@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.ModAPI
+import com.cobblemon.mod.common.api.snowstorm.ParticleCameraModeType
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
@@ -36,6 +37,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.AxisAngle4d
 import org.joml.Quaterniond
+import org.joml.Quaternionf
 import org.joml.Vector3d
 import org.joml.Vector3f
 import kotlin.random.Random
@@ -225,6 +227,127 @@ class SnowstormParticle(
             .setLight(p)
     }
 
+    /**
+     * Renders this particle into a simulated 3D scene inside a GUI [PoseStack] (the MoveDex move viewport),
+     * faithfully reproducing the world render path: it billboards via the effect's real
+     * [com.cobblemon.mod.common.api.snowstorm.ParticleCameraMode] instead of a hand-rolled screen-facing
+     * quad, and reuses every other appearance input (size, UV/flipbook, tint, sprite, local rotation).
+     *
+     * In the world, particle quads are built in world axes oriented by [cameraAngle] (the camera's WORLD
+     * rotation) and the modelview matrix (the camera VIEW rotation = inverse) flattens them to the screen.
+     * Here, the caller's [poseStack] already applies the scene's view rotation, so [cameraAngle] must be
+     * its INVERSE — then the two compose to a screen-facing quad exactly as in battle. Particle positions
+     * are the local-to-emitter coordinates, placed by the same pose, so they share the dolls' 3D space.
+     * Full-bright; the caller supplies a [VertexConsumer] bound to the particle atlas + matching blend.
+     */
+    fun renderInScene(
+        poseStack: com.mojang.blaze3d.vertex.PoseStack,
+        vertexConsumer: VertexConsumer,
+        cameraAngle: Quaternionf,
+        cameraYaw: Float,
+        cameraPitch: Float,
+        sceneOrigin: Vec3,
+        anchorX: Float,
+        anchorY: Float,
+        anchorZ: Float,
+        tickDelta: Float,
+        beamEnd: FloatArray? = null
+    ) {
+        if (invisible) return
+
+        applyRandoms()
+        setParticleAgeInRuntime()
+        storm.effect.curves.forEach { it.apply(runtime) }
+        runtime.execute(storm.effect.particle.renderExpressions)
+
+        // Use the particle's final WORLD position (which already bakes in local-rotation via updatePosition),
+        // relative to the scene's single shared origin, plus the storm's scene-local Z anchor (which doll it
+        // belongs to). This lets the scene batch every storm of a material into one draw without per-storm
+        // pose pushes, while a storm and its event-spawned children still map into one consistent space.
+        val px = (Mth.lerp(tickDelta.toDouble(), xo, x) - sceneOrigin.x).toFloat() + anchorX
+        // Negate the vertical: the GUI scene pose's +Y points down (the doll model flips internally to stand
+        // upright; particles have no such flip), so world-up must be negated here to render up. anchorY is the
+        // upward locator height, so it's subtracted to lift the emit point.
+        val py = (-(Mth.lerp(tickDelta.toDouble(), yo, y) - sceneOrigin.y) - anchorY).toFloat()
+        val pz = (Mth.lerp(tickDelta.toDouble(), zo, z) - sceneOrigin.z + anchorZ).toFloat()
+
+        // Synthesise a camera position far "behind" the particle along the view direction, so distance-based
+        // camera modes (LOOK_AT_DIRECTION, DIRECTION_*) see a near-parallel view like a distant battle camera.
+        val forward = Vector3f(0f, 0f, 1f).rotate(Quaternionf(cameraAngle))
+
+        val xSize = runtime.resolveDouble(storm.effect.particle.sizeX).toFloat() / 1.5f
+        val ySize = runtime.resolveDouble(storm.effect.particle.sizeY).toFloat() / 1.5f
+
+        val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
+        val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
+        val spriteURange = sprite.u1 - sprite.u0
+        val spriteVRange = sprite.v1 - sprite.v0
+        val minU = uvs.startU * spriteURange + sprite.u0
+        val maxU = uvs.endU * spriteURange + sprite.u0
+        val minV = uvs.startV * spriteVRange + sprite.v0
+        val maxV = uvs.endV * spriteVRange + sprite.v0
+        val light = (15 shl 20) or (15 shl 4)
+        val m = poseStack.last().pose()
+
+        // Beam path: a LOOK_AT_DIRECTION beam is drawn as an explicit camera-facing ribbon from the emit point
+        // (px,py,pz) to the FIXED scene target [beamEnd]. The far end is therefore ALWAYS the target-locator
+        // position and never drifts with the actor's head/mouth locator (which only moves the start). The ribbon
+        // length is the real emit->target distance, so the beam connects the two exactly instead of over/under-
+        // shooting like the billboard's fixed size would.
+        if (beamEnd != null && storm.effect.particle.cameraMode.type == ParticleCameraModeType.LOOK_AT_DIRECTION) {
+            val ex = beamEnd[0]; val ey = beamEnd[1]; val ez = beamEnd[2]
+            var ax = ex - px; var ay = ey - py; var az = ez - pz
+            val len = Mth.sqrt(ax * ax + ay * ay + az * az)
+            if (len < 1.0e-4f) return
+            ax /= len; ay /= len; az /= len
+            // right = beamAxis x viewForward → perpendicular to the beam and facing the viewer (a flat ribbon).
+            var rx = ay * forward.z - az * forward.y
+            var ry = az * forward.x - ax * forward.z
+            var rz = ax * forward.y - ay * forward.x
+            var rlen = Mth.sqrt(rx * rx + ry * ry + rz * rz)
+            if (rlen < 1.0e-4f) { rx = 0f; ry = 1f; rz = 0f; rlen = 1f } // beam ~parallel to view: any perpendicular
+            rx /= rlen; ry /= rlen; rz /= rlen
+            val hw = if (ySize > 0f) ySize else 0.05f // half the beam's authored thickness
+            vertexConsumer.addVertex(m, px + rx * hw, py + ry * hw, pz + rz * hw).setUv(minU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            vertexConsumer.addVertex(m, ex + rx * hw, ey + ry * hw, ez + rz * hw).setUv(maxU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            vertexConsumer.addVertex(m, ex - rx * hw, ey - ry * hw, ez - rz * hw).setUv(maxU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            vertexConsumer.addVertex(m, px - rx * hw, py - ry * hw, pz - rz * hw).setUv(minU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+            return
+        }
+
+        val cameraPosition = Vec3(x - forward.x * 64.0, y - forward.y * 64.0, z - forward.z * 64.0)
+        val quaternion = storm.effect.particle.cameraMode.getRotation(
+            matrixWrapper = matrixWrapper,
+            prevAngle = oRoll,
+            angle = roll,
+            deltaTicks = tickDelta,
+            particlePosition = Vec3(x, y, z),
+            cameraPosition = cameraPosition,
+            cameraAngle = Quaternionf(cameraAngle),
+            cameraYaw = cameraYaw,
+            cameraPitch = cameraPitch,
+            viewDirection = viewDirection
+        )
+
+        val particleVertices = arrayOf(
+            Vector3f(xSize, -ySize, 0.0f),
+            Vector3f(xSize, ySize, 0.0f),
+            Vector3f(-xSize, ySize, 0.0f),
+            Vector3f(-xSize, -ySize, 0.0f)
+        )
+        for (vertex in particleVertices) {
+            vertex.rotate(quaternion)
+            vertex.add(px, py, pz)
+        }
+
+        // V is swapped vs the world render: this GUI scene is Y-down (we negate the particle's Y so it rises
+        // correctly), which would otherwise leave the texture vertically flipped. Swapping min/max V un-flips it.
+        vertexConsumer.addVertex(m, particleVertices[0].x, particleVertices[0].y, particleVertices[0].z).setUv(maxU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+        vertexConsumer.addVertex(m, particleVertices[1].x, particleVertices[1].y, particleVertices[1].z).setUv(maxU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+        vertexConsumer.addVertex(m, particleVertices[2].x, particleVertices[2].y, particleVertices[2].z).setUv(minU, maxV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+        vertexConsumer.addVertex(m, particleVertices[3].x, particleVertices[3].y, particleVertices[3].z).setUv(minU, minV).setColor(colour.x, colour.y, colour.z, colour.w).setLight(light)
+    }
+
     fun runExpirationEvents() {
         storm.effect.particle.expirationEvents.forEach { it.trigger(storm, this)}
     }
@@ -392,7 +515,20 @@ class SnowstormParticle(
 
         // Handle easy collision cases
         // If there are no collisions return the unchanged movement. If the particle expires on contact then remove it.
-        val collisions = level.getBlockCollisions(null, box.expandTowards(movement))
+        // In the offscreen GUI scene there are no real blocks (it runs in empty sky), so synthesise a flat ground
+        // slab at the scene's floor Y: this is what lets Bulldoze-style ground effects slide/stop instead of
+        // falling through forever, mirroring the battle floor without touching the world.
+        val worldCollisions = level.getBlockCollisions(null, box.expandTowards(movement))
+        val collisions: Iterable<VoxelShape> = storm.guiScene?.let { scene ->
+            val extra = ArrayList<VoxelShape>()
+            // A thick slab whose TOP face sits exactly at floorY, covering well beyond the particle's reach.
+            val floorY = scene.guiFloorY()
+            val sweep = box.expandTowards(movement)
+            extra.add(Shapes.create(AABB(sweep.minX - 64.0, floorY - 64.0, sweep.minZ - 64.0, sweep.maxX + 64.0, floorY, sweep.maxZ + 64.0)))
+            // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it.
+            scene.guiImpactBox(storm)?.let { extra.add(Shapes.create(it)) }
+            worldCollisions + extra
+        } ?: worldCollisions
         if (collisions.none()) {
             colliding = false
             return movement

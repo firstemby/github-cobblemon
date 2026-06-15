@@ -1,0 +1,13 @@
+{
+  "species": "cobblemon:targetdummy",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:targetdummy",
+      "model": "cobblemon:targetdummy.geo",
+      "texture": "cobblemon:textures/generic/targetdummy.png",
+      "layers": []
+    }
+  ]
+}
