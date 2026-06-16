@@ -408,4 +408,29 @@ class ParticleStorm(
 
     /** 0..1 glow strength from how many particles are currently alive (more particles -> brighter). */
     fun glowIntensity(): Float = (particles.size.toFloat() / GLOW_FULL_PARTICLE_COUNT).coerceIn(0f, 1f)
+
+    /**
+     * Average position of the live (visible) particles, or null if there are none. Used to position
+     * the monochrome dynamic light where the particles actually are (following a beam/AoE) instead of
+     * pinning it to the emitter origin on the Pokémon.
+     */
+    /**
+     * For targeted (beam/projectile) effects, the light segment from the emitter to the target, so the
+     * colored light can illuminate the whole beam path rather than a single point. Null for effects
+     * with no target (bursts/AoE), which fall back to per-particle sampling.
+     */
+    fun beamEndpoints(): Pair<Vec3, Vec3>? {
+        val end = targetPos?.invoke() ?: return null
+        return Vec3(getX(), getY(), getZ()) to end
+    }
+
+    fun liveParticleCentroid(): Vec3? {
+        var n = 0
+        var sx = 0.0; var sy = 0.0; var sz = 0.0
+        for (p in particles) {
+            if (p.invisible) continue
+            sx += p.getX(); sy += p.getY(); sz += p.getZ(); n++
+        }
+        return if (n == 0) null else Vec3(sx / n, sy / n, sz / n)
+    }
 }

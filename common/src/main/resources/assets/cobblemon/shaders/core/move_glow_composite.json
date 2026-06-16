@@ -1,0 +1,18 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "one",
+    "dstrgb": "one",
+    "srcalpha": "one",
+    "dstalpha": "one"
+  },
+  "vertex": "cobblemon:move_glow_light",
+  "fragment": "cobblemon:move_glow_composite",
+  "attributes": [
+    "Position"
+  ],
+  "samplers": [
+    {"name": "GlowSampler"}
+  ],
+  "uniforms": []
+}

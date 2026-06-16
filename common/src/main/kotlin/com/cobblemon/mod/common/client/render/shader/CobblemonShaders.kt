@@ -22,9 +22,11 @@ object CobblemonShaders {
     lateinit var PARTICLE_CUTOUT: ShaderInstance
     // Fullscreen screen-space colored "dynamic light" for glowing moves (see MoveGlowRenderer).
     lateinit var MOVE_GLOW_LIGHT: ShaderInstance
+    // Composites the move-glow accumulation buffer onto the scene (additive).
+    lateinit var MOVE_GLOW_COMPOSITE: ShaderInstance
 
-    /** Whether the move-glow shader has finished loading (it loads with the other core shaders). */
-    fun isMoveGlowLightReady(): Boolean = ::MOVE_GLOW_LIGHT.isInitialized
+    /** Whether the move-glow shaders have finished loading (they load with the other core shaders). */
+    fun isMoveGlowLightReady(): Boolean = ::MOVE_GLOW_LIGHT.isInitialized && ::MOVE_GLOW_COMPOSITE.isInitialized
 
     private fun registerShader(shader: (ResourceProvider) -> ShaderRegistryData, callback: Consumer<ShaderInstance>){
         SHADERS_TO_REGISTER.add(Pair(shader, callback))
@@ -38,6 +40,9 @@ object CobblemonShaders {
         }
         registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("move_glow_light"), DefaultVertexFormat.POSITION) }) {
             MOVE_GLOW_LIGHT = it
+        }
+        registerShader({rm: ResourceProvider -> ShaderRegistryData(rm, cobblemonResource("move_glow_composite"), DefaultVertexFormat.POSITION) }) {
+            MOVE_GLOW_COMPOSITE = it
         }
     }
 }

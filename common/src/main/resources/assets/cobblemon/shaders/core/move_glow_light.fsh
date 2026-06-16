@@ -7,9 +7,10 @@
 
 uniform sampler2D DepthSampler;   // main framebuffer depth (full world depth at this stage)
 uniform mat4 InverseProjMat;      // inverse of the world projection, to rebuild view-space position
-uniform vec3 LightViewPos;        // the move emitter, in view space
+uniform vec3 LightViewPosA;       // light segment start, in view space (== B for a point light)
+uniform vec3 LightViewPosB;       // light segment end, in view space (beams: emitter->target)
 uniform vec3 LightColor;          // the move's color (0..1)
-uniform float LightRadius;        // falloff radius in blocks
+uniform float LightRadius;        // falloff radius around the segment, in blocks
 uniform float Intensity;          // overall strength (0..1)
 
 in vec2 texCoord;
@@ -29,7 +30,13 @@ void main() {
     vec4 viewPos = InverseProjMat * ndc;
     viewPos.xyz /= viewPos.w;
 
-    float dist = distance(viewPos.xyz, LightViewPos);
+    // Distance to the nearest point on the light segment A->B (capsule light). For a point light
+    // A == B, so this reduces to distance-to-point. For a beam it lights all around the whole line.
+    vec3 ab = LightViewPosB - LightViewPosA;
+    float t = clamp(dot(viewPos.xyz - LightViewPosA, ab) / max(dot(ab, ab), 1e-5), 0.0, 1.0);
+    vec3 closest = LightViewPosA + ab * t;
+    float dist = distance(viewPos.xyz, closest);
+
     float atten = clamp(1.0 - dist / LightRadius, 0.0, 1.0);
     atten *= atten; // quadratic falloff reads more like real light
 
