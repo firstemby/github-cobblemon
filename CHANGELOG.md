@@ -301,6 +301,7 @@
 - Resolved Z-Fighting on Pokédex Models
 - Restored Ninjask's ability to do barrel rolls
 - Fixed a crash caused by adding enchanted items to the Resurrection Machine
+- Fixed a crash that could occur when starting a PvN battle with only fainted Pokémon.
 
 ### Fixes
 - Fixed Croagunk's walkspeed
