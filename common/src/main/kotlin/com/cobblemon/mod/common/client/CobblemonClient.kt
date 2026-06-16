@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
+import com.cobblemon.mod.common.client.render.SnowstormShaderBypassRenderer
 import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
@@ -139,6 +140,9 @@ object CobblemonClient {
 
         PlatformEvents.CLIENT_PLAYER_LOGIN.subscribe { onLogin() }
         PlatformEvents.CLIENT_PLAYER_LOGOUT.subscribe { onLogout() }
+
+        // Renders snowstorm particles with a vanilla-identical look when a shaderpack is active.
+        SnowstormShaderBypassRenderer.register()
 
         this.registerBlockEntityRenderers()
         registerBlockRenderTypes()

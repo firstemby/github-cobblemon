@@ -171,6 +171,21 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
             )
         }
 
+        // Fires after the level (and any shaderpack composite) has finished — the only point where a
+        // draw is NOT intercepted by Iris/OptiFine. Used by SnowstormShaderBypassRenderer.
+        WorldRenderEvents.END.register { context -> PlatformEvents.RENDER.post(
+                RenderEvent(
+                    stage = RenderEvent.Stage.POST_LEVEL,
+                    levelRenderer = context.worldRenderer(),
+                    poseStack = context.matrixStack() ?: PoseStack(),
+                    modelViewMatrix = context.positionMatrix(),
+                    projectionMatrix = context.projectionMatrix(),
+                    tickCounter = context.tickCounter(),
+                    camera = context.camera()
+                )
+            )
+        }
+
         CobblemonModelPredicateRegistry.registerPredicates()
     }
 

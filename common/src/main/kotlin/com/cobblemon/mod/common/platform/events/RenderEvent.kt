@@ -32,6 +32,15 @@ data class RenderEvent(
 
     /** Represents when a layer is rendered by [LevelRenderer.renderLevel]. Ordinal corresponds with its render order. */
     enum class Stage {
-        TRANSLUCENT
+        TRANSLUCENT,
+
+        /**
+         * Fired after [LevelRenderer.renderLevel] has fully finished — on a shaderpack, this is after
+         * Iris/OptiFine has composited the world to the main framebuffer and restored vanilla shaders.
+         * Draws here are NOT intercepted by the shaderpack, so they render with vanilla shaders while
+         * still depth-testing against the full (opaque + translucent) world depth. Used to render
+         * Cobblemon's snowstorm particles with a vanilla-identical look under shaders.
+         */
+        POST_LEVEL
     }
 }

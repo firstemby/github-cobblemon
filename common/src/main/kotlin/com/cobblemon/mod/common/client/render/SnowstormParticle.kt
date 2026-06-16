@@ -54,6 +54,15 @@ class SnowstormParticle(
 ) : Particle(world, x, y, z) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
+
+        /**
+         * Every live (non-removed) snowstorm particle, in spawn order. When a shaderpack is active we
+         * pull these out of the vanilla [net.minecraft.client.particle.ParticleEngine] (see
+         * [getRenderType] returning [NO_RENDER]) and redraw them post-composite via
+         * [SnowstormShaderBypassRenderer], so the pack's particle program can't alter their look.
+         * Insertion-ordered; particles use identity equality so a LinkedHashSet is safe.
+         */
+        val activeParticles: MutableSet<SnowstormParticle> = LinkedHashSet()
     }
 
     val sprite = getSpriteFromAtlas()
@@ -127,6 +136,7 @@ class SnowstormParticle(
             }
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
+        activeParticles.add(this)
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -194,16 +204,6 @@ class SnowstormParticle(
         val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
         val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
 
-        // Under an active shaderpack the alpha-composited materials use premultiplied-alpha blending
-        // (see ParticleMaterials.ALPHA), so the color we submit must be premultiplied by its alpha to
-        // match. In vanilla this branch is skipped and the straight-alpha color is sent unchanged, so
-        // the no-shader look is identical. ADD/OPAQUE are never premultiplied.
-        val alpha = colour.w
-        val premultiply = ParticleMaterials.premultipliesUnderShaders(storm.effect.particle.material)
-        val red = if (premultiply) colour.x * alpha else colour.x
-        val green = if (premultiply) colour.y * alpha else colour.y
-        val blue = if (premultiply) colour.z * alpha else colour.z
-
         val spriteURange = sprite.u1 - sprite.u0
         val spriteVRange = sprite.v1 - sprite.v0
 
@@ -216,22 +216,22 @@ class SnowstormParticle(
         vertexConsumer
             .addVertex(particleVertices[0].x, particleVertices[0].y, particleVertices[0].z)
             .setUv(maxU, maxV)
-            .setColor(red, green, blue, alpha)
+            .setColor(colour.x, colour.y, colour.z, colour.w)
             .setLight(p)
         vertexConsumer
             .addVertex(particleVertices[1].x, particleVertices[1].y, particleVertices[1].z)
             .setUv(maxU, minV)
-            .setColor(red, green, blue, alpha)
+            .setColor(colour.x, colour.y, colour.z, colour.w)
             .setLight(p)
         vertexConsumer
             .addVertex(particleVertices[2].x, particleVertices[2].y, particleVertices[2].z)
             .setUv(minU, minV)
-            .setColor(red, green, blue, alpha)
+            .setColor(colour.x, colour.y, colour.z, colour.w)
             .setLight(p)
         vertexConsumer
             .addVertex(particleVertices[3].x, particleVertices[3].y, particleVertices[3].z)
             .setUv(minU, maxV)
-            .setColor(red, green, blue, alpha)
+            .setColor(colour.x, colour.y, colour.z, colour.w)
             .setLight(p)
     }
 
@@ -506,10 +506,15 @@ class SnowstormParticle(
         runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
     }
 
-    override fun getRenderType() = particleTextureSheet
+    // Under an active shaderpack we suppress the vanilla ParticleEngine draw (it would be routed
+    // through the pack's translucent particle program and mangled differently per pack) and instead
+    // redraw post-composite in SnowstormShaderBypassRenderer for a vanilla-identical, pack-agnostic
+    // look. With no shaders this is the normal material sheet, so the majority path is unchanged.
+    override fun getRenderType() = if (ShaderCompat.shadersActive()) NO_RENDER else particleTextureSheet
 
     override fun remove() {
         super.remove()
         storm.particles.remove(this)
+        activeParticles.remove(this)
     }
 }
