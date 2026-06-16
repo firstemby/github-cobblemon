@@ -2,7 +2,7 @@
   "portraitScale": 1.65,
   "portraitTranslation": [-0.10, 0.16, 0],
   "profileScale": 0.63,
-  "profileTranslation": [0.13, 0.64, 0],
+  "profileTranslation": [0, 0.64, 0],
   "rootBone": "dustox",
   "poses": {
 	"battle-standing": {

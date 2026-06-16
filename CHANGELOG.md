@@ -362,7 +362,8 @@
 - Separated all the functions of MoLangFunctions.kt into their own files.
 - Spawn buckets and their base weights are now provided by the spawner, with different base weights for world, fishing, snack, and habitat spawn buckets.
 - Removed "SpawnBucket" class in favour of just storing maps of bucket names to weights.
-- Fixed nicknames not being applied to Pokémon spawned from `spawn_pool_world` files
+- Fixed nicknames not being applied to Pokémon spawned from `spawn_pool_world` files.
+- Added support for `profilePokedexScale`, `profilePokedexTranslation`, `profileSummaryScale`, and `profileSummaryTranslation` in poser files for finer control over profile displays.
 
 ### Molang & Datapacks
 - Added `moveset_builders` datapack folder for different styles of movesets.
