@@ -8,6 +8,8 @@
  *
  */
 
+import java.net.URI
+
 configurations.all {
     resolutionStrategy {
         force(libs.fabric.loader)
@@ -48,6 +50,23 @@ dependencies {
         isTransitive = false
     }
     modLocalRuntime(libs.fabric.debugutils)
+
+    // Shader-compat testing (DEV RUNTIME ONLY — never shipped, never a real dependency).
+    // Lets `runClient` load Iris + Sodium so shaderpacks actually run, which is required to
+    // exercise ParticleMaterials' depthMask branch (see ShaderCompat). isTransitive = false so
+    // these don't drag in a second copy of Fabric API / FLK (already provided above). If you bump
+    // these, keep the Iris<->Sodium pairing valid (Iris 1.8.x needs Sodium 0.6.x for MC 1.21.1).
+    modLocalRuntime("maven.modrinth:iris:1.8.8+1.21.1-fabric") { isTransitive = false }
+    modLocalRuntime("maven.modrinth:sodium:mc1.21.1-0.6.13-fabric") { isTransitive = false }
+    // Iris bundles these as jar-in-jar in production, but loom doesn't add a mod's nested *libraries*
+    // to the dev classpath, so the dev client crashes with NoClassDefFoundError (e.g. org.anarres.cpp
+    // / glsl-transformer) when Iris loads a shaderpack. Supply them as plain dev-runtime libs.
+    // Versions are taken verbatim from iris-1.8.8's META-INF/jars — keep them in lockstep if Iris is
+    // bumped. localRuntime = dev runtime only, not remapped, not exported to the published jar.
+    localRuntime("org.anarres:jcpp:1.4.14")
+    localRuntime("io.github.douira:glsl-transformer:2.0.1")
+    localRuntime("org.antlr:antlr4-runtime:4.13.1")
+
     modImplementation(libs.fabric.loader)
     modApi(libs.fabric.api)
     modApi(libs.bundles.fabric)
@@ -110,6 +129,57 @@ publishing {
 }
 
 tasks {
+    // Downloads the Complementary Unbound shaderpack into the dev client's shaderpacks/ folder and
+    // enables Iris by default, so `runClient` comes up shader-ready with zero manual setup. Both
+    // writes are idempotent: existing files are left untouched, so your in-game shader choice and
+    // any pack you swap in are preserved across runs. Run dir is "runClient" (see platform-conventions).
+    val setupShaderTesting by registering {
+        group = "cobblemon"
+        description = "Provisions the test shaderpacks + enables Iris for the dev runClient."
+        // The four Iris packs we want particles to look correct under. Swap between them in-game
+        // (Video Settings -> Shader Packs) to A/B the premultiplied-alpha fix in ParticleMaterials.
+        // <filename> to <direct Modrinth CDN url>.
+        //
+        // VERSIONS ARE PINNED FOR MC 1.21.1. The newest releases of these packs reference the
+        // BIOME_PALE_GARDEN uniform (Pale Garden is a 1.21.4 biome), which Iris cannot resolve on
+        // 1.21.1 -> hard crash building the render pipeline ("Unknown variable: BIOME_PALE_GARDEN").
+        // Each pin below was confirmed Pale-Garden-free by grepping the archive. If this project ever
+        // targets >= 1.21.4, bump these to the latest versions.
+        val packs = mapOf(
+            "ComplementaryUnbound_r5.3.zip" to "https://cdn.modrinth.com/data/R6NEzAwj/versions/CVu3AGAd/ComplementaryUnbound_r5.3.zip",
+            "ComplementaryReimagined_r5.3.zip" to "https://cdn.modrinth.com/data/HVnmMxH1/versions/71Hn3myZ/ComplementaryReimagined_r5.3.zip",
+            "Bliss_v2.1.2_(Chocapic13_Shaders_edit).zip" to "https://cdn.modrinth.com/data/ZvMtQlho/versions/kC2Y8q1P/Bliss_v2.1.2_%28Chocapic13_Shaders_edit%29.zip",
+            "photon_v1.1.zip" to "https://cdn.modrinth.com/data/lLqFfGNs/versions/6FdrBtKp/photon_v1.1.zip"
+        )
+        val shaderpacksDir = layout.projectDirectory.dir("runClient/shaderpacks")
+        val irisProps = layout.projectDirectory.file("runClient/config/iris.properties")
+        // Default the in-game selection to Complementary Unbound (the originally-reported pack); idempotent.
+        val defaultPack = "ComplementaryUnbound_r5.3.zip"
+        outputs.dir(shaderpacksDir)
+        doLast {
+            packs.forEach { (filename, url) ->
+                val zip = shaderpacksDir.file(filename).asFile
+                if (!zip.exists()) {
+                    zip.parentFile.mkdirs()
+                    logger.lifecycle("Downloading shaderpack -> ${zip.relativeTo(rootProject.projectDir)}")
+                    URI(url).toURL().openStream().use { input ->
+                        zip.outputStream().use { output -> input.copyTo(output) }
+                    }
+                }
+            }
+            val props = irisProps.asFile
+            if (!props.exists()) {
+                props.parentFile.mkdirs()
+                props.writeText("enableShaders=true\nshaderPack=$defaultPack\n")
+                logger.lifecycle("Wrote ${props.relativeTo(rootProject.projectDir)} (Iris auto-enabled with $defaultPack).")
+            }
+        }
+    }
+
+    named("runClient") {
+        dependsOn(setupShaderTesting)
+    }
+
     // The AW file is needed in :fabric project resources when the game is run.
     val copyAccessWidener by registering(Copy::class) {
         from(loom.accessWidenerPath)
