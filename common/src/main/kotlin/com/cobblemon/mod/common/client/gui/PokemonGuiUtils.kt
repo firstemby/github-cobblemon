@@ -33,7 +33,7 @@ import org.joml.Vector3f
 import kotlin.math.atan
 
 enum class ProfileTransformType {
-    DEFAULT,
+    PROFILE,
     NONE,
     POKEDEX,
     SUMMARY,
@@ -47,7 +47,7 @@ fun drawProfilePokemon(
     state: PosableState,
     partialTicks: Float,
     scale: Float = 20F,
-    profileTransformType: ProfileTransformType = ProfileTransformType.DEFAULT,
+    profileTransformType: ProfileTransformType = ProfileTransformType.PROFILE,
     applyBaseScale: Boolean = false,
     r: Float = 1F,
     g: Float = 1F,
@@ -83,7 +83,7 @@ fun drawProfilePokemon(
     state: PosableState,
     partialTicks: Float,
     scale: Float = 20F,
-    profileTransformType: ProfileTransformType = ProfileTransformType.DEFAULT,
+    profileTransformType: ProfileTransformType = ProfileTransformType.PROFILE,
     applyBaseScale: Boolean = false,
     doQuirks: Boolean = false,
     r: Float = 1F,
