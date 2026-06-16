@@ -38,6 +38,7 @@ import org.joml.AxisAngle4d
 import org.joml.Quaterniond
 import org.joml.Vector3d
 import org.joml.Vector3f
+import org.joml.Vector4f
 import kotlin.random.Random
 
 class SnowstormParticle(
@@ -63,6 +64,10 @@ class SnowstormParticle(
     var colliding = false
 
     var texture = storm.effect.particle.texture
+
+    /** The color this particle last rendered with (tint evaluated safely in [render] with the proper
+     *  runtime context). Sampled by [ParticleStorm.glowColor] for the move's dynamic-light color. */
+    var lastColor: Vector4f = Vector4f(1f, 1f, 1f, 1f)
 
     var localX = x - storm.getX()
     var localY = y - storm.getY()
@@ -193,12 +198,15 @@ class SnowstormParticle(
 
         val uvs = storm.effect.particle.uvMode.get(runtime, age / 20.0, lifetime / 20.0, uvDetails)
         val colour = storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
+        lastColor = colour
 
-        // Under an active shaderpack the alpha-composited materials use premultiplied-alpha blending
-        // (see ParticleMaterials.ALPHA), so the color we submit must be premultiplied by its alpha to
-        // match. In vanilla this branch is skipped and the straight-alpha color is sent unchanged, so
-        // the no-shader look is identical. ADD/OPAQUE are never premultiplied.
-        val alpha = colour.w
+        // Per-pack shader treatment (see ShaderCompat.ShaderParticleProfile). With no shaderpack the
+        // profile is VANILLA, so every branch below is a no-op and the look is stock.
+        val profile = ShaderCompat.particleProfile()
+        // minAlpha lifts alpha above a pack's discard floor (e.g. Photon discards alpha < 0.1) so
+        // faded/soft particles aren't culled. 0 for vanilla/most packs.
+        val alpha = maxOf(colour.w, profile.minAlpha)
+        // Premultiplied-alpha materials need the color premultiplied by alpha to match the ONE blend.
         val premultiply = ParticleMaterials.premultipliesUnderShaders(storm.effect.particle.material)
         val red = if (premultiply) colour.x * alpha else colour.x
         val green = if (premultiply) colour.y * alpha else colour.y
@@ -212,6 +220,11 @@ class SnowstormParticle(
         val minV = uvs.startV * spriteVRange + sprite.v0
         val maxV = uvs.endV * spriteVRange + sprite.v0
 
+        // Glow vs non-glow is the effect's own environmentLighting flag: non-environment-lit particles
+        // are full-bright (they read as "glowing", and under packs that relight particles by the
+        // lightmap — Bliss/Photon — full-bright keeps them bright), while environment-lit particles use
+        // world light and read as lit by their surroundings. This preserves the authored distinction
+        // under shaders; per-pack blend correctness is handled in ParticleMaterials.
         val p = if (storm.effect.particle.environmentLighting) getLightColor(tickDelta) else (15 shl 20 or (15 shl 4))
         vertexConsumer
             .addVertex(particleVertices[0].x, particleVertices[0].y, particleVertices[0].z)

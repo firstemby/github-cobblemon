@@ -40,6 +40,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.terraformersmc.com/")
+    maven(url = "https://maven.gegy.dev") // LambDynamicLights + spruceui/pridelib (dev runtime)
 }
 
 dependencies {
@@ -66,6 +67,17 @@ dependencies {
     localRuntime("org.anarres:jcpp:1.4.14")
     localRuntime("io.github.douira:glsl-transformer:2.0.1")
     localRuntime("org.antlr:antlr4-runtime:4.13.1")
+
+    // Dynamic lighting (DEV RUNTIME ONLY). Cobblemon compiles against the LambDynamicLights API
+    // (modCompileOnly, mojmap — see common/build.gradle.kts); this provides the running mod in dev.
+    // Pinned to 4.1.6 to match that API AND fabric-loader 0.17.2 (4.8.9 needs loader >=0.18.4). Loom
+    // does NOT surface a mod's JIJ'd dependency mods to the dev run, so its four bundled deps are
+    // listed explicitly (from gegy + Maven Central). Bump all five together if LDL is updated.
+    modLocalRuntime("maven.modrinth:lambdynamiclights:4.1.6+1.21.1")
+    modLocalRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:4.1.6+1.21.1")
+    modLocalRuntime("dev.lambdaurora:spruceui:6.2.1+1.21")
+    modLocalRuntime("dev.yumi.mc.core:yumi-mc-foundation:1.0.0-alpha.7+1.21.1")
+    modLocalRuntime("io.github.queerbric:pridelib:1.2.1+1.21")
 
     modImplementation(libs.fabric.loader)
     modApi(libs.fabric.api)

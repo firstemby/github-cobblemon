@@ -91,6 +91,9 @@ class ParticleStorm(
             runtime.environment.setSimpleVariable("entity_scale", DoubleValue((entity as? PokemonEntity)?.scale ?: 1.0))
         }
         Minecraft.getInstance().particleEngine.add(this)
+        activeStorms.add(this)
+        // Glow-capable effects get a (monochrome) dynamic light when LambDynamicLights is installed.
+        if (emitsLight) MoveDynamicLights.sink?.register(this)
     }
 
     fun addAttackingFunctions(destinationPosSupplier: (() -> Vec3)) {
@@ -149,6 +152,15 @@ class ParticleStorm(
 
     companion object {
         var contextStorm: ParticleStorm? = null
+
+        /**
+         * Every live particle effect, so [com.cobblemon.mod.common.client.render.MoveGlowRenderer] can
+         * cast a colored glow around the glowing ones. Insertion-ordered; storms use identity equality.
+         */
+        val activeStorms: MutableSet<ParticleStorm> = LinkedHashSet()
+
+        /** Live particle count at which a glowing effect reaches full glow intensity. */
+        const val GLOW_FULL_PARTICLE_COUNT = 20f
 
         fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, position: Vec3): ParticleStorm {
             val wrapper = MatrixWrapper()
@@ -218,6 +230,7 @@ class ParticleStorm(
 
     override fun remove() {
         super.remove()
+        activeStorms.remove(this)
         if (!despawned) {
             effect.emitter.expirationEvents.forEach { it.trigger(this, null) }
             despawned = true
@@ -374,4 +387,25 @@ class ParticleStorm(
     fun setInvisible() {
         particles.forEach { particle -> particle.invisible = true }
     }
+
+    /** True when this effect is glow-capable (self-lit rather than environment-lit), regardless of
+     *  current particle count — used to decide whether to attach a dynamic light at spawn. */
+    val emitsLight: Boolean
+        get() = !effect.particle.environmentLighting
+
+    /** True when this effect is currently glowing (glow-capable AND actively emitting particles). */
+    val isGlowing: Boolean
+        get() = emitsLight && !stopped && particles.isNotEmpty()
+
+    /**
+     * Representative color for the move glow. Uses the color a live particle actually rendered with
+     * (the tint is evaluated safely there, with particle-age context); the explicit particle color is
+     * the fallback, then white. We must NOT call [effect].particle.tinting.getTint here — outside a
+     * particle render the runtime has no age context and a gradient tint throws.
+     */
+    fun glowColor(): Vector4f =
+        particles.firstOrNull()?.lastColor ?: getParticleColor() ?: Vector4f(1f, 1f, 1f, 1f)
+
+    /** 0..1 glow strength from how many particles are currently alive (more particles -> brighter). */
+    fun glowIntensity(): Float = (particles.size.toFloat() / GLOW_FULL_PARTICLE_COUNT).coerceIn(0f, 1f)
 }

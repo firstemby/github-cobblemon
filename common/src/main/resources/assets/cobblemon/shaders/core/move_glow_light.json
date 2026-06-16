@@ -1,0 +1,24 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "one",
+    "dstrgb": "one",
+    "srcalpha": "one",
+    "dstalpha": "one"
+  },
+  "vertex": "cobblemon:move_glow_light",
+  "fragment": "cobblemon:move_glow_light",
+  "attributes": [
+    "Position"
+  ],
+  "samplers": [
+    {"name": "DepthSampler"}
+  ],
+  "uniforms": [
+    {"name": "InverseProjMat", "type": "matrix4x4", "count": 16, "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]},
+    {"name": "LightViewPos", "type": "float", "count": 3, "values": [0.0, 0.0, 0.0]},
+    {"name": "LightColor", "type": "float", "count": 3, "values": [1.0, 1.0, 1.0]},
+    {"name": "LightRadius", "type": "float", "count": 1, "values": [8.0]},
+    {"name": "Intensity", "type": "float", "count": 1, "values": [1.0]}
+  ]
+}
