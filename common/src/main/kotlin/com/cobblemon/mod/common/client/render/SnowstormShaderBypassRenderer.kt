@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.client.render
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.mojang.blaze3d.systems.RenderSystem
@@ -69,7 +70,7 @@ object SnowstormShaderBypassRenderer {
     }
 
     private fun render(event: RenderEvent) {
-        if (!ShaderCompat.shadersActive() || !captured) {
+        if (!Cobblemon.config.shaderParticleBypass || !ShaderCompat.shadersActive() || !captured) {
             captured = false
             return
         }

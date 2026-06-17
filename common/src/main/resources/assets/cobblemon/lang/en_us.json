@@ -2539,6 +2539,8 @@
   "cobblemon.config.ui.summary_pokemon_follow_cursor.tooltip": "Whether or not Pokémon should follow the mouse cursor with their heads in the Summary screen.",
   "cobblemon.config.ui.animate_battle_tiles": "Animate Battle Tiles",
   "cobblemon.config.ui.animate_battle_tiles.tooltip": "Whether or not the battle portraits of Pokemon should be animated.",
+  "cobblemon.config.ui.shader_particle_bypass": "Shader Particle Bypass",
+  "cobblemon.config.ui.shader_particle_bypass.tooltip": "When enabled, Cobblemon particles are redrawn after shaderpack composition so Iris and OptiFine shaderpacks do not alter their appearance.",
   "cobblemon.config.ui.party_portrait_animations": "Party Portrait Animations",
   "cobblemon.config.ui.party_portrait_animations.never_animate": "Never Animate",
   "cobblemon.config.ui.party_portrait_animations.never_animate.tooltip": "No portraits animate",

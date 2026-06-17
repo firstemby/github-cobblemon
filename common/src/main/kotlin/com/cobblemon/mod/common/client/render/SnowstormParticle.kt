@@ -510,7 +510,7 @@ class SnowstormParticle(
     // through the pack's translucent particle program and mangled differently per pack) and instead
     // redraw post-composite in SnowstormShaderBypassRenderer for a vanilla-identical, pack-agnostic
     // look. With no shaders this is the normal material sheet, so the majority path is unchanged.
-    override fun getRenderType() = if (ShaderCompat.shadersActive()) NO_RENDER else particleTextureSheet
+    override fun getRenderType() = if (Cobblemon.config.shaderParticleBypass && ShaderCompat.shadersActive()) NO_RENDER else particleTextureSheet
 
     override fun remove() {
         super.remove()
