@@ -9,8 +9,10 @@
 package com.cobblemon.mod.common.compat.lambdynamiclights;
 
 import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.client.particle.MoveDynamicLights;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsContext;
 import dev.lambdaurora.lambdynlights.api.DynamicLightsInitializer;
+import dev.lambdaurora.lambdynlights.api.behavior.DynamicLightBehaviorManager;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +35,16 @@ public class LambDynamicLightsInitializer implements DynamicLightsInitializer {
         context.entityLightSourceManager().onRegisterEvent().register(ctx -> {
             ctx.register(EntityType.PLAYER, PlayerLuminance.INSTANCE);
         });
+
+        // Attach a monochrome dynamic light to glowing particle effects (moves). Beam-like (targeted)
+        // effects get a segment light covering the whole path; everything else a point light at the
+        // emitter. Each behavior reports isRemoved() when its effect despawns, so the manager cleans it
+        // up automatically. Only effects whose author set lightEmission > 0 are registered (see
+        // ParticleStorm.emitsLight).
+        final DynamicLightBehaviorManager behaviorManager = context.dynamicLightBehaviorManager();
+        MoveDynamicLights.setSink(storm -> behaviorManager.add(
+                storm.isBeam() ? new SnowstormBeamLight(storm) : new SnowstormDynamicLight(storm)
+        ));
     }
 
     @SuppressWarnings({"removal", "UnstableApiUsage"})

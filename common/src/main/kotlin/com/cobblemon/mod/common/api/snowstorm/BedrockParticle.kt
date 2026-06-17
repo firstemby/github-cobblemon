@@ -43,6 +43,8 @@ class BedrockParticle(
     var tinting: ParticleTinting = ExpressionParticleTinting(),
     var collision: ParticleCollision = ParticleCollision(),
     var environmentLighting: Boolean = false,
+    /** Block-light level (0..15) this effect emits into the world via LambDynamicLights. 0 = none. */
+    var lightEmission: Int = 0,
     var creationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var expirationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var timeline: EventTriggerTimeline = EventTriggerTimeline(mutableMapOf())
@@ -113,6 +115,7 @@ class BedrockParticle(
                 ParticleTinting.codec.fieldOf("tinting").forGetter { it.tinting },
                 ParticleCollision.CODEC.fieldOf("collision").forGetter { it.collision },
                 PrimitiveCodec.BOOL.fieldOf("environmentLighting").forGetter { it.environmentLighting },
+                Codec.INT.optionalFieldOf("lightEmission", 0).forGetter { it.lightEmission },
                 EVENT_SET_CODEC.fieldOf("eventSet").forGetter {
                     EventSet(
                         it.creationEvents,
@@ -121,7 +124,7 @@ class BedrockParticle(
                     )
                 }
             ).apply(instance) {
-                    texture, materialStr, uvMode, expressionSet, motion, rotation, viewDirection, cameraMode, tinting, collision, environmentLighting, eventSet ->
+                    texture, materialStr, uvMode, expressionSet, motion, rotation, viewDirection, cameraMode, tinting, collision, environmentLighting, lightEmission, eventSet ->
                 BedrockParticle(
                     texture = texture,
                     material = ParticleMaterial.valueOf(materialStr),
@@ -139,6 +142,7 @@ class BedrockParticle(
                     tinting = tinting,
                     collision = collision,
                     environmentLighting = environmentLighting,
+                    lightEmission = lightEmission,
                     creationEvents = eventSet.creationEvents,
                     expirationEvents = eventSet.expirationEvents,
                     timeline = eventSet.timeline
@@ -164,6 +168,7 @@ class BedrockParticle(
         ParticleTinting.writeToBuffer(buffer, tinting)
         collision.writeToBuffer(buffer)
         buffer.writeBoolean(environmentLighting)
+        buffer.writeVarInt(lightEmission)
         buffer.writeCollection(creationEvents) { _, event -> event.encode(buffer) }
         buffer.writeCollection(expirationEvents) { _, event -> event.encode(buffer) }
         timeline.encode(buffer)
@@ -186,6 +191,7 @@ class BedrockParticle(
         tinting = ParticleTinting.readFromBuffer(buffer)
         collision.readFromBuffer(buffer)
         environmentLighting = buffer.readBoolean()
+        lightEmission = buffer.readVarInt()
         creationEvents = buffer.readList { SimpleEventTrigger("").also { it.decode(buffer) } }
         expirationEvents = buffer.readList { SimpleEventTrigger("").also { it.decode(buffer) } }
         timeline.decode(buffer)
