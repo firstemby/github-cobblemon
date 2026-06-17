@@ -306,7 +306,7 @@
 - Fixed Full Heal block not dropping Full Heals
 - Fixed status cure items not returning an empty bottle when used
 - Fixed Panpour consuming its held item when evolving with a Water Stone
-
+- Fixed Smoked Tail Curry returning a Wooden Bowl when consumed despite it not being included in the recipe
 
 ### Fixes
 - Fixed Croagunk's walkspeed
