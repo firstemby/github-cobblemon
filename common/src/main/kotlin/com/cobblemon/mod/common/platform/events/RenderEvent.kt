@@ -35,6 +35,13 @@ data class RenderEvent(
         TRANSLUCENT,
 
         /**
+         * Fired after the world framebuffer writes are complete but before the level renderer tears
+         * down its camera view transform. Direct draws at [POST_LEVEL] can reuse the matrix captured
+         * here when they need to render after shaderpack composition.
+         */
+        LAST,
+
+        /**
          * Fired after [LevelRenderer.renderLevel] has fully finished — on a shaderpack, this is after
          * Iris/OptiFine has composited the world to the main framebuffer and restored vanilla shaders.
          * Draws here are NOT intercepted by the shaderpack, so they render with vanilla shaders while

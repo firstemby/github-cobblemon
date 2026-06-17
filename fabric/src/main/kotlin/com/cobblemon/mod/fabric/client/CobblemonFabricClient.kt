@@ -171,6 +171,20 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
             )
         }
 
+        // Capture the final in-level camera transform before Fabric unwinds render state.
+        WorldRenderEvents.LAST.register { context -> PlatformEvents.RENDER.post(
+                RenderEvent(
+                    stage = RenderEvent.Stage.LAST,
+                    levelRenderer = context.worldRenderer(),
+                    poseStack = context.matrixStack() ?: PoseStack(),
+                    modelViewMatrix = context.positionMatrix(),
+                    projectionMatrix = context.projectionMatrix(),
+                    tickCounter = context.tickCounter(),
+                    camera = context.camera()
+                )
+            )
+        }
+
         // Fires after the level (and any shaderpack composite) has finished — the only point where a
         // draw is NOT intercepted by Iris/OptiFine. Used by SnowstormShaderBypassRenderer.
         WorldRenderEvents.END.register { context -> PlatformEvents.RENDER.post(

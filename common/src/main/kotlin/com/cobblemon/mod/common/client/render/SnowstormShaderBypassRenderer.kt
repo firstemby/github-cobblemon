@@ -48,29 +48,37 @@ import org.joml.Matrix4f
  */
 object SnowstormShaderBypassRenderer {
 
-    // The world's model-view and projection for the current frame, captured during the in-pipeline
-    // TRANSLUCENT stage (where they are known-good) and reused for the post-composite draw, since
-    // the POST_LEVEL event does not carry a reliable camera transform.
+    // The world's camera view matrix for the current frame, captured at the late in-level stage
+    // where Fabric/NeoForge still have the camera transform applied. POST_LEVEL fires after that
+    // state is unwound, but the bypass draw still needs it because SnowstormParticle.render emits
+    // camera-relative vertices just like vanilla particles do.
     private val modelViewMatrix = Matrix4f()
     private var captured = false
 
     fun register() {
         PlatformEvents.RENDER.subscribe { event ->
             when (event.stage) {
-                RenderEvent.Stage.TRANSLUCENT -> {
-                    modelViewMatrix.set(event.modelViewMatrix)
+                RenderEvent.Stage.LAST -> {
+                    modelViewMatrix.set(RenderSystem.getModelViewMatrix())
                     captured = true
                 }
                 RenderEvent.Stage.POST_LEVEL -> render(event)
+                else -> {}
             }
         }
     }
 
     private fun render(event: RenderEvent) {
-        if (!ShaderCompat.shadersActive() || !captured) return
+        if (!ShaderCompat.shadersActive() || !captured) {
+            captured = false
+            return
+        }
 
         val visible = SnowstormParticle.activeParticles.filter { !it.invisible }
-        if (visible.isEmpty()) return
+        if (visible.isEmpty()) {
+            captured = false
+            return
+        }
 
         val minecraft = Minecraft.getInstance()
         val camera = event.camera
@@ -78,27 +86,32 @@ object SnowstormShaderBypassRenderer {
         val lightTexture = minecraft.gameRenderer.lightTexture()
         val tesselator = Tesselator.getInstance()
 
-        // Re-establish the world's model-view so the camera-relative quads built by render() land in
-        // the right place; projection is still the world's 3D projection at this point in the frame.
+        // Re-establish the world's camera view so the camera-relative quads built by render() land
+        // in the right place; projection is still the world's 3D projection at this point in the frame.
         val modelViewStack = RenderSystem.getModelViewStack()
         modelViewStack.pushMatrix()
         modelViewStack.set(modelViewMatrix)
+        RenderSystem.applyModelViewMatrix()
 
-        lightTexture.turnOnLightLayer()
+        try {
+            lightTexture.turnOnLightLayer()
 
-        // Group by the particle's own render type (ParticleMaterials.ALPHA/ADD/BLEND/OPAQUE). Calling
-        // its begin() sets the IDENTICAL GL state vanilla would use, so the look matches no-shaders.
-        for ((renderType, particles) in visible.groupBy { it.particleTextureSheet }) {
-            val buffer = renderType.begin(tesselator, minecraft.textureManager) ?: continue
-            for (particle in particles) {
-                particle.render(buffer, camera, partialTicks)
+            // Group by the particle's own render type (ParticleMaterials.ALPHA/ADD/BLEND/OPAQUE). Calling
+            // its begin() sets the IDENTICAL GL state vanilla would use, so the look matches no-shaders.
+            for ((renderType, particles) in visible.groupBy { it.particleTextureSheet }) {
+                val buffer = renderType.begin(tesselator, minecraft.textureManager) ?: continue
+                for (particle in particles) {
+                    particle.render(buffer, camera, partialTicks)
+                }
+                val mesh = buffer.build() ?: continue
+                BufferUploader.drawWithShader(mesh)
             }
-            val mesh = buffer.build() ?: continue
-            BufferUploader.drawWithShader(mesh)
+        } finally {
+            lightTexture.turnOffLightLayer()
+            modelViewStack.popMatrix()
+            RenderSystem.applyModelViewMatrix()
+            captured = false
         }
-
-        lightTexture.turnOffLightLayer()
-        modelViewStack.popMatrix()
 
         // Restore neutral GL state so nothing downstream (hand already drawn, GUI next) is affected.
         RenderSystem.depthMask(true)

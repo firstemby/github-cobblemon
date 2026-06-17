@@ -74,6 +74,8 @@ object NeoForgeClientPlatformEventHandler {
     fun onRenderLevelStageEvent(event: RenderLevelStageEvent) {
         val stage = when (event.stage) {
             RenderLevelStageEvent.Stage.AFTER_PARTICLES -> RenderEvent.Stage.TRANSLUCENT
+            RenderLevelStageEvent.Stage.AFTER_WEATHER -> RenderEvent.Stage.LAST
+            RenderLevelStageEvent.Stage.AFTER_LEVEL -> RenderEvent.Stage.POST_LEVEL
             else -> return
         }
 
