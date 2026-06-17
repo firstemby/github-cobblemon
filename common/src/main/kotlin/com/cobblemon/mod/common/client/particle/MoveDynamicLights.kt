@@ -8,21 +8,24 @@
 
 package com.cobblemon.mod.common.client.particle
 
+import com.cobblemon.mod.common.client.render.SnowstormParticle
+
 /**
- * API-free bridge that lets the optional LambDynamicLights integration attach a dynamic light to
- * glowing particle effects without the common particle code referencing the LambDynamicLights API.
+ * API-free bridge that lets the optional LambDynamicLights integration attach a real dynamic light to
+ * individual glowing particles without the common particle code referencing the LambDynamicLights API.
  *
- * When LambDynamicLights is installed, its entrypoint
+ * Each particle whose resolved light level is > 0 (and that wins one of its emitter's limited light
+ * slots) registers its own light through [sink]. When LambDynamicLights is installed, its entrypoint
  * ([com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer]) sets [sink] to a
- * handler that registers a `DynamicLightBehavior` for the storm. When it isn't installed, [sink] stays
- * null and [ParticleStorm.spawn]'s call is a no-op — so there is no hard dependency.
+ * handler that adds a per-particle `DynamicLightBehavior`. When it isn't installed [sink] stays null
+ * and the registration call is a no-op — so there is no hard dependency.
  */
 object MoveDynamicLights {
     @JvmStatic
-    var sink: GlowingStormLightSink? = null
+    var sink: GlowingParticleLightSink? = null
 }
 
-/** Receives glow-capable [ParticleStorm]s so a (monochrome) dynamic light can be attached to them. */
-fun interface GlowingStormLightSink {
-    fun register(storm: ParticleStorm)
+/** Receives an individual glowing [SnowstormParticle] so a real dynamic light can be attached to it. */
+fun interface GlowingParticleLightSink {
+    fun register(particle: SnowstormParticle)
 }

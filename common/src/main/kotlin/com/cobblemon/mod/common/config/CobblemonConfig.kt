@@ -334,6 +334,10 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Interface, lang = "shader_particle_bypass", CLIENT)
     var shaderParticleBypass = true
 
+    @CobblemonConfigField(Category.Interface, lang = "max_lit_particles_per_emitter", CLIENT)
+    @IntConstraint(min = 0, max = 256)
+    var maxLitParticlesPerEmitter = 20
+
     // Disabled as non-tenable for 1.7 until all the posers catch up with this property.
     // @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing", CLIENT)
     var thirdPersonViewBobbing = true

@@ -1,0 +1,208 @@
+{
+  "cobblemon:thunderbolt_actor": { "light_levels": [0, 11, 0, 8, 2, 12, 0, 6, 10, 0, 12] },
+  "cobblemon:thunderbolt_actorbolts": { "light_level": 8 },
+  "cobblemon:thunderbolt_actorsparks": { "light_level": 2 },
+  "cobblemon:thunderbolt_target": { "light_level": 6 },
+  "cobblemon:thunderbolt_targetimpact": { "light_level": 6 },
+  "cobblemon:thunderbolt_targetsparks": { "light_level": 2 },
+
+  "cobblemon:thunder_actor": { "light_level": 8 },
+  "cobblemon:thunder_actorsparks": { "light_level": 6 },
+  "cobblemon:thunder_actorring": { "light_level": 6 },
+  "cobblemon:thunder_target": { "light_level": 8 },
+  "cobblemon:thunder_targetboom": { "light_level": 8 },
+
+  "cobblemon:thundershock_actor": { "light_level": 7 },
+  "cobblemon:thundershock_actorbolts": { "light_level": 8 },
+  "cobblemon:thundershock_actorsparks": { "light_level": 6 },
+  "cobblemon:thundershock_target": { "light_level": 7 },
+  "cobblemon:thundershock_targetbolts": { "light_level": 8 },
+  "cobblemon:thundershock_targetimpact": { "light_level": 6 },
+
+  "cobblemon:thunderpunch_target": { "light_level": 7 },
+  "cobblemon:thunderpunch_targetimpact": { "light_level": 7 },
+  "cobblemon:thunderpunch_targetsparks": { "light_level": 6 },
+
+  "cobblemon:thunderwave_actor": { "light_level": 6 },
+  "cobblemon:thunderwave_sparking": { "light_level": 6 },
+
+  "cobblemon:impact_electric": { "light_level": 7 },
+
+  "cobblemon:ember_actor": { "light_level": 6 },
+  "cobblemon:ember_fire": { "light_level": 6 },
+  "cobblemon:ember_firesparks": { "light_level": 6 },
+  "cobblemon:ember_impact": { "light_level": 6 },
+  "cobblemon:ember_target": { "light_level": 6 },
+
+  "cobblemon:flamethrower_actor": { "light_level": 9 },
+  "cobblemon:flamethrower_target": { "light_level": 8 },
+  "cobblemon:flamethrower_targetburst": { "light_level": 8 },
+  "cobblemon:flamethrower_targetcinder": { "light_level": 6 },
+
+  "cobblemon:fireblast_actor1": { "light_level": 9 },
+  "cobblemon:fireblast_actor2": { "light_level": 9 },
+  "cobblemon:fireblast_actorshoot": { "light_level": 8 },
+  "cobblemon:fireblast_target": { "light_level": 9 },
+  "cobblemon:fireblast_targetcinder": { "light_level": 6 },
+
+  "cobblemon:firespin_actor": { "light_level": 7 },
+  "cobblemon:firespin_actorburst": { "light_level": 7 },
+  "cobblemon:firespin_target": { "light_level": 7 },
+  "cobblemon:firespin_targetburst": { "light_level": 7 },
+
+  "cobblemon:flamewheel_actor": { "light_level": 7 },
+  "cobblemon:flamewheel_actoraura": { "light_level": 6 },
+  "cobblemon:flamewheel_target": { "light_level": 7 },
+
+  "cobblemon:flamecharge_actor": { "light_level": 7 },
+  "cobblemon:flamecharge_actorspiral": { "light_level": 6 },
+  "cobblemon:flamecharge_target": { "light_level": 7 },
+
+  "cobblemon:flameburst_actor": { "light_level": 7 },
+  "cobblemon:flameburst_target": { "light_level": 7 },
+  "cobblemon:flameburst_targetcinders": { "light_level": 6 },
+
+  "cobblemon:firepunch": { "light_level": 7 },
+  "cobblemon:firepunch_hand": { "light_level": 7 },
+  "cobblemon:firepunch_target": { "light_level": 7 },
+  "cobblemon:firepunch_targetburst": { "light_level": 7 },
+
+  "cobblemon:firefang_target": { "light_level": 7 },
+  "cobblemon:firefang_targetburst": { "light_level": 7 },
+
+  "cobblemon:lavaplume_actor": { "light_level": 8 },
+  "cobblemon:lavaplume_actorcinders": { "light_level": 6 },
+  "cobblemon:lavaplume_target": { "light_level": 8 },
+  "cobblemon:lavaplume_targetflame": { "light_level": 8 },
+
+  "cobblemon:eruption_actor": { "light_level": 9 },
+  "cobblemon:eruption_actorburst": { "light_level": 9 },
+  "cobblemon:eruption_actorcinder": { "light_level": 6 },
+  "cobblemon:eruption_actorlava": { "light_level": 9 },
+  "cobblemon:eruption_target": { "light_level": 9 },
+  "cobblemon:eruption_targetburst": { "light_level": 9 },
+  "cobblemon:eruption_targetflame": { "light_level": 9 },
+
+  "cobblemon:mysticalfire_actor": { "light_level": 8 },
+  "cobblemon:mysticalfire_actorbig": { "light_level": 9 },
+  "cobblemon:mysticalfire_actorburst": { "light_level": 8 },
+  "cobblemon:mysticalfire_actorshot": { "light_level": 8 },
+  "cobblemon:mysticalfire_target": { "light_level": 7 },
+
+  "cobblemon:tailflame_small": { "light_level": 6 },
+  "cobblemon:tailflame_medium": { "light_level": 6 },
+  "cobblemon:tailflame_large": { "light_level": 7 },
+
+  "cobblemon:willowisp_actor": { "light_level": 7 },
+  "cobblemon:willowisp_actorwisp": { "light_level": 7 },
+  "cobblemon:willowisp_actorproj": { "light_level": 7 },
+  "cobblemon:willowisp_actorburst": { "light_level": 7 },
+  "cobblemon:willowisp_actorappear": { "light_level": 6 },
+  "cobblemon:willowisp_target": { "light_level": 6 },
+
+  "cobblemon:eggbomb_targetfire": { "light_level": 6 },
+  "cobblemon:impact_fire": { "light_level": 7 },
+  "cobblemon:burn_actor": { "light_level": 8 },
+  "cobblemon:burn_actorresidual": { "light_level": 7 },
+
+  "cobblemon:magcargo_lava_bubble": { "light_level": 6 },
+  "cobblemon:slugma_lava_bubble": { "light_level": 6 },
+  "cobblemon:shiny_magcargo_lava_bubble": { "light_level": 6 },
+  "cobblemon:shiny_slugma_lava_bubble": { "light_level": 6 },
+
+  "cobblemon:icebeam_actor": { "light_level": 8 },
+  "cobblemon:icebeam_actoremit": { "light_level": 7 },
+  "cobblemon:icebeam_actorsparkle": { "light_level": 7 },
+  "cobblemon:icebeam_target": { "light_level": 8 },
+  "cobblemon:icebeam_targetburst": { "light_level": 8 },
+
+  "cobblemon:aurorabeam_actor": { "light_level": 8 },
+  "cobblemon:aurorabeam_actoremit": { "light_level": 7 },
+  "cobblemon:aurorabeam_target": { "light_level": 8 },
+  "cobblemon:aurorabeam_targetburst": { "light_level": 8 },
+  "cobblemon:aurorabeam_targetsparkle": { "light_level": 7 },
+
+  "cobblemon:blizzard_actor": { "light_level": 7 },
+  "cobblemon:blizzard_target": { "light_level": 7 },
+
+  "cobblemon:frostbreath_actor": { "light_level": 6 },
+  "cobblemon:frostbreath_target": { "light_level": 6 },
+
+  "cobblemon:icefang_target": { "light_level": 6 },
+  "cobblemon:icefang_targetburst": { "light_level": 7 },
+
+  "cobblemon:icepunch": { "light_level": 6 },
+  "cobblemon:icepunch_hand": { "light_level": 6 },
+  "cobblemon:icepunch_target": { "light_level": 6 },
+  "cobblemon:icepunch_targetburst": { "light_level": 7 },
+
+  "cobblemon:iceshard_actor": { "light_level": 6 },
+  "cobblemon:iceshard_target": { "light_level": 6 },
+
+  "cobblemon:impact_ice": { "light_level": 7 },
+
+  "cobblemon:psybeam_actor": { "light_level": 9 },
+  "cobblemon:psybeam_actorenergy": { "light_level": 8 },
+  "cobblemon:psybeam_target": { "light_level": 9 },
+  "cobblemon:psybeam_targetburst": { "light_level": 9 },
+
+  "cobblemon:psychic_actor": { "light_level": 8 },
+  "cobblemon:psychic_impact": { "light_level": 8 },
+  "cobblemon:psychic_target": { "light_level": 8 },
+
+  "cobblemon:confusion_actor": { "light_level": 7 },
+  "cobblemon:confusion_impact": { "light_level": 7 },
+  "cobblemon:confusion_target": { "light_level": 7 },
+
+  "cobblemon:impact_psychic": { "light_level": 8 },
+
+  "cobblemon:dracometeor_meteor1": { "light_level": 9 },
+  "cobblemon:dracometeor_meteor2": { "light_level": 9 },
+  "cobblemon:dracometeor_meteor3": { "light_level": 9 },
+  "cobblemon:dracometeor_meteor4": { "light_level": 9 },
+  "cobblemon:dracometeor_meteortrail1": { "light_level": 9 },
+  "cobblemon:dracometeor_meteortrail2": { "light_level": 9 },
+  "cobblemon:dracometeor_meteortrail3": { "light_level": 9 },
+  "cobblemon:dracometeor_meteortrail4": { "light_level": 9 },
+  "cobblemon:dracometeor_bigburst": { "light_level": 10 },
+  "cobblemon:dracometeor_burst": { "light_level": 9 },
+  "cobblemon:dracometeor_actorpulse": { "light_level": 9 },
+  "cobblemon:dracometeor_actorpulseaura": { "light_level": 9 },
+
+  "cobblemon:dragonbreath_actor": { "light_level": 9 },
+  "cobblemon:dragonbreath_target": { "light_level": 9 },
+
+  "cobblemon:dragonrage_actor": { "light_level": 9 },
+  "cobblemon:dragonrage_actorburst": { "light_level": 9 },
+  "cobblemon:dragonrage_target": { "light_level": 9 },
+
+  "cobblemon:dragonclaw_aura": { "light_level": 8 },
+  "cobblemon:dragonclaw_target": { "light_level": 8 },
+
+  "cobblemon:hit_dragon": { "light_level": 9 },
+  "cobblemon:impact_dragon": { "light_level": 9 },
+
+  "cobblemon:disarmingvoice_actor1": { "light_level": 8 },
+  "cobblemon:disarmingvoice_actor2": { "light_level": 8 },
+  "cobblemon:disarmingvoice_target": { "light_level": 8 },
+
+  "cobblemon:fairywind_actorspark": { "light_level": 7 },
+
+  "cobblemon:lightscreen_actoreffect": { "light_level": 7 },
+  "cobblemon:lightscreen_actorborder1": { "light_level": 6 },
+  "cobblemon:lightscreen_actorborder2": { "light_level": 6 },
+
+  "cobblemon:shadowball_actorcharge": { "light_level": 7 },
+
+  "cobblemon:explosion_actorboom": { "light_level": 15 },
+  "cobblemon:explosion_burst_flash": { "light_level": 15 },
+  "cobblemon:explosion_burst_fire": { "light_level": 13 },
+  "cobblemon:explosion_actorfire": { "light_level": 13 },
+  "cobblemon:explosion_charge_light": { "light_level": 11 },
+  "cobblemon:explosion_actorrelease": { "light_level": 9 },
+  "cobblemon:explosion_actororbs": { "light_level": 7 },
+  "cobblemon:explosion_actorbigring": { "light_level": 7 },
+  "cobblemon:explosion_actorrings": { "light_level": 6 },
+  "cobblemon:explosion_charge_accretion": { "light_level": 6 },
+  "cobblemon:explosion_target": { "light_level": 12 }
+}

@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.ModAPI
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
+import com.cobblemon.mod.common.client.particle.MoveDynamicLights
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -116,6 +117,10 @@ class SnowstormParticle(
         runtime.environment.setSimpleVariable("emitter_random_4", DoubleValue(Random.Default.nextDouble()))
     }
 
+    /** True once this particle has claimed one of its emitter's limited light slots. */
+    var litSlot = false
+        private set
+
     init {
         setParticleSpeed(initialVelocity.x, initialVelocity.y, initialVelocity.z)
         roll = -storm.effect.particle.rotation.getInitialRotation(runtime).toFloat()
@@ -137,6 +142,30 @@ class SnowstormParticle(
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
         activeParticles.add(this)
+
+        // If LambDynamicLights is installed and this particle type emits light, give THIS particle its
+        // own real dynamic light — but only if the emitter still has a free light slot (capped by
+        // BedrockParticle.maxLitParticles). A particle existing does not imply light; the level comes
+        // from currentLightLevel(). No-op when the mod is absent (sink stays null).
+        val sink = MoveDynamicLights.sink
+        if (sink != null && storm.effect.particle.emitsLight && storm.reserveLightSlot()) {
+            litSlot = true
+            sink.register(this)
+        }
+    }
+
+    /**
+     * The block-light level (0..15) this particle emits right now. Uses the per-sprite-frame array when
+     * the type defines one (indexed by the current flipbook frame), else the flat level. Invisible
+     * (culled) particles emit nothing.
+     */
+    fun currentLightLevel(): Int {
+        if (invisible) return 0
+        val particle = storm.effect.particle
+        val frames = particle.lightEmissionFrames
+        if (frames.isEmpty()) return particle.lightEmission
+        val frame = particle.uvMode.frameAt(runtime, age / 20.0, lifetime / 20.0)
+        return frames[frame.coerceIn(0, frames.size - 1)]
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -516,5 +545,11 @@ class SnowstormParticle(
         super.remove()
         storm.particles.remove(this)
         activeParticles.remove(this)
+        // Free our dynamic-light slot so another particle of this emitter can light up. The registered
+        // behavior reports isRemoved() via this particle's isAlive(), so the manager drops the light.
+        if (litSlot) {
+            storm.releaseLightSlot()
+            litSlot = false
+        }
     }
 }

@@ -44,6 +44,10 @@ abstract class ParticleUVMode : CodecMapped {
     open var vSize: Expression = NumberExpression(8.0)
 
     abstract fun get(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails
+
+    /** The current sprite-sheet frame index for a particle at this age (0 for non-animated modes).
+     *  Used to look up per-frame light levels (see [BedrockParticle.lightEmissionFrames]). */
+    open fun frameAt(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double): Int = 0
 }
 
 enum class ParticleUVModeType {
@@ -121,6 +125,18 @@ class AnimatedParticleUVMode(
         buffer.writeString(fps.getString())
         buffer.writeBoolean(stretchToLifetime)
         buffer.writeBoolean(loop)
+    }
+
+    override fun frameAt(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double): Int {
+        val maxFrame = moLangRuntime.resolveInt(maxFrame) - 1
+        if (maxFrame <= 0) return 0
+        val frame = if (stretchToLifetime) {
+            if (maxAge <= 0.0) 0 else ((age / maxAge) * maxFrame).toInt()
+        } else {
+            val fps = moLangRuntime.resolveDouble(fps)
+            if (!loop && age * fps >= maxFrame) maxFrame else ((age * fps) % maxFrame).toInt()
+        }
+        return frame.coerceIn(0, maxFrame)
     }
 
     override fun get(runtime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails {

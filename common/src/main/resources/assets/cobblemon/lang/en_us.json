@@ -2541,6 +2541,8 @@
   "cobblemon.config.ui.animate_battle_tiles.tooltip": "Whether or not the battle portraits of Pokemon should be animated.",
   "cobblemon.config.ui.shader_particle_bypass": "Shader Particle Bypass",
   "cobblemon.config.ui.shader_particle_bypass.tooltip": "When enabled, Cobblemon particles are redrawn after shaderpack composition so Iris and OptiFine shaderpacks do not alter their appearance.",
+  "cobblemon.config.ui.max_lit_particles_per_emitter": "Max Lit Particles Per Emitter",
+  "cobblemon.config.ui.max_lit_particles_per_emitter.tooltip": "With LambDynamicLights installed, the most particles from a single effect that may emit real dynamic light at once. Higher looks better but costs more performance; 0 disables particle dynamic lights.",
   "cobblemon.config.ui.party_portrait_animations": "Party Portrait Animations",
   "cobblemon.config.ui.party_portrait_animations.never_animate": "Never Animate",
   "cobblemon.config.ui.party_portrait_animations.never_animate.tooltip": "No portraits animate",

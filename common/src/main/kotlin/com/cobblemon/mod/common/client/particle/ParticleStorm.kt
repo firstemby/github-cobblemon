@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.particle
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.function.LivingEntityMoLangFunctions
@@ -91,9 +92,6 @@ class ParticleStorm(
             runtime.environment.setSimpleVariable("entity_scale", DoubleValue((entity as? PokemonEntity)?.scale ?: 1.0))
         }
         Minecraft.getInstance().particleEngine.add(this)
-        // Glow-capable effects (author-set lightEmission > 0) get a monochrome dynamic light when
-        // LambDynamicLights is installed. No-op otherwise: the sink stays null. See MoveDynamicLights.
-        if (emitsLight) MoveDynamicLights.sink?.register(this)
     }
 
     fun addAttackingFunctions(destinationPosSupplier: (() -> Vec3)) {
@@ -152,9 +150,6 @@ class ParticleStorm(
 
     companion object {
         var contextStorm: ParticleStorm? = null
-
-        /** Live particle count at which a glowing effect reaches full glow intensity. */
-        const val GLOW_FULL_PARTICLE_COUNT = 20f
 
         fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, position: Vec3): ParticleStorm {
             val wrapper = MatrixWrapper()
@@ -381,24 +376,24 @@ class ParticleStorm(
         particles.forEach { particle -> particle.invisible = true }
     }
 
-    // --- LambDynamicLights (monochrome dynamic light) integration -------------------------------
+    // --- LambDynamicLights (per-particle dynamic light) integration -----------------------------
 
-    /** Authored block-light level (0..15) this effect emits into the world. 0 = emits no light. */
-    fun lightEmission(): Int = effect.particle.lightEmission
+    /** How many of this emitter's live particles currently hold a real dynamic light (capped by the
+     *  `maxLitParticlesPerEmitter` Minecraft config). A particle existing does NOT imply a light. */
+    var litParticleCount = 0
+        private set
 
-    /** True when this effect is glow-capable, i.e. the author declared it emits block light. */
-    val emitsLight: Boolean
-        get() = effect.particle.lightEmission > 0
+    /** Tries to claim one of this emitter's limited light slots for a particle. Returns true if a slot
+     *  was available (and reserved); false if the emitter is already at the configured cap. The cap is
+     *  the `maxLitParticlesPerEmitter` config value (0 disables per-particle lights entirely). */
+    fun reserveLightSlot(): Boolean {
+        if (litParticleCount >= Cobblemon.config.maxLitParticlesPerEmitter) return false
+        litParticleCount++
+        return true
+    }
 
-    /** 0..1 presence factor from how many particles are currently alive (more particles -> brighter),
-     *  so the dynamic light ramps in/out with the effect instead of popping on and off. */
-    fun glowIntensity(): Float = (particles.size.toFloat() / GLOW_FULL_PARTICLE_COUNT).coerceIn(0f, 1f)
-
-    /** True when this is a targeted effect (caster -> target), treated as a beam for lighting so the
-     *  light covers the whole path rather than just the emitter. */
-    fun isBeam(): Boolean = targetPos != null
-
-    /** The beam's far endpoint (the target position) when targeted, else null. The near endpoint is
-     *  the emitter at [getX]/[getY]/[getZ]. */
-    fun beamTarget(): Vec3? = targetPos?.invoke()
+    /** Releases a previously reserved light slot (called when a lit particle is removed). */
+    fun releaseLightSlot() {
+        if (litParticleCount > 0) litParticleCount--
+    }
 }

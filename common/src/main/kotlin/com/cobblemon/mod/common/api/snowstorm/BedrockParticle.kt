@@ -43,12 +43,26 @@ class BedrockParticle(
     var tinting: ParticleTinting = ExpressionParticleTinting(),
     var collision: ParticleCollision = ParticleCollision(),
     var environmentLighting: Boolean = false,
-    /** Block-light level (0..15) this effect emits into the world via LambDynamicLights. 0 = none. */
+    /**
+     * Block-light level (0..15) each particle of this type emits into the world via LambDynamicLights.
+     * A particle existing does NOT imply light: only particles whose resolved level is > 0 emit. This
+     * scalar is the flat "hard" level used when [lightEmissionFrames] is empty.
+     */
     var lightEmission: Int = 0,
+    /**
+     * Optional per-sprite-frame light levels (0..15), indexed by the particle's current flipbook frame.
+     * When non-empty it overrides [lightEmission], so a sprite-sheet particle can light differently per
+     * frame (out-of-range frames clamp to the ends). Empty = use the flat [lightEmission].
+     */
+    var lightEmissionFrames: List<Int> = emptyList(),
     var creationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var expirationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var timeline: EventTriggerTimeline = EventTriggerTimeline(mutableMapOf())
 ) {
+    /** True when this particle type emits block light at all (flat level or any per-frame level > 0). */
+    val emitsLight: Boolean
+        get() = lightEmission > 0 || lightEmissionFrames.any { it > 0 }
+
     class ExpressionSet(
         val sizeX: Expression,
         val sizeY: Expression,
@@ -116,6 +130,7 @@ class BedrockParticle(
                 ParticleCollision.CODEC.fieldOf("collision").forGetter { it.collision },
                 PrimitiveCodec.BOOL.fieldOf("environmentLighting").forGetter { it.environmentLighting },
                 Codec.INT.optionalFieldOf("lightEmission", 0).forGetter { it.lightEmission },
+                Codec.INT.listOf().optionalFieldOf("lightEmissionFrames", emptyList()).forGetter { it.lightEmissionFrames },
                 EVENT_SET_CODEC.fieldOf("eventSet").forGetter {
                     EventSet(
                         it.creationEvents,
@@ -124,7 +139,7 @@ class BedrockParticle(
                     )
                 }
             ).apply(instance) {
-                    texture, materialStr, uvMode, expressionSet, motion, rotation, viewDirection, cameraMode, tinting, collision, environmentLighting, lightEmission, eventSet ->
+                    texture, materialStr, uvMode, expressionSet, motion, rotation, viewDirection, cameraMode, tinting, collision, environmentLighting, lightEmission, lightEmissionFrames, eventSet ->
                 BedrockParticle(
                     texture = texture,
                     material = ParticleMaterial.valueOf(materialStr),
@@ -143,6 +158,7 @@ class BedrockParticle(
                     collision = collision,
                     environmentLighting = environmentLighting,
                     lightEmission = lightEmission,
+                    lightEmissionFrames = lightEmissionFrames,
                     creationEvents = eventSet.creationEvents,
                     expirationEvents = eventSet.expirationEvents,
                     timeline = eventSet.timeline
@@ -169,6 +185,7 @@ class BedrockParticle(
         collision.writeToBuffer(buffer)
         buffer.writeBoolean(environmentLighting)
         buffer.writeVarInt(lightEmission)
+        buffer.writeCollection(lightEmissionFrames) { pb, level -> pb.writeVarInt(level) }
         buffer.writeCollection(creationEvents) { _, event -> event.encode(buffer) }
         buffer.writeCollection(expirationEvents) { _, event -> event.encode(buffer) }
         timeline.encode(buffer)
@@ -192,6 +209,7 @@ class BedrockParticle(
         collision.readFromBuffer(buffer)
         environmentLighting = buffer.readBoolean()
         lightEmission = buffer.readVarInt()
+        lightEmissionFrames = buffer.readList { it.readVarInt() }
         creationEvents = buffer.readList { SimpleEventTrigger("").also { it.decode(buffer) } }
         expirationEvents = buffer.readList { SimpleEventTrigger("").also { it.decode(buffer) } }
         timeline.decode(buffer)
