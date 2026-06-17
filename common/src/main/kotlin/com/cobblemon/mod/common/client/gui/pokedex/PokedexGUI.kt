@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.pokedex.page.CobblePediaPokedexPage
 import com.cobblemon.mod.common.client.gui.pokedex.page.MainDexPokedexPage
 import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexGuiPage
 import com.cobblemon.mod.common.client.gui.pokedex.page.PokedexPages
@@ -110,6 +111,13 @@ class PokedexGUI private constructor(
         private const val PAGE_ARROW_WIDTH = 10
         private const val PAGE_ARROW_HEIGHT = 16
         private const val PAGE_SELECTOR_GAP = 7
+
+        // Back button on the main dex (returns to the CobblePedia hub) — same 16x16 two-frame sheet as CobblePedia.
+        private val backButtonIcon = cobblemonResource("textures/gui/pokedex/pokedex_back_button.png")
+        private const val BACK_X = 20
+        private const val BACK_Y = 14
+        private const val BACK_W = 16
+        private const val BACK_H = 8
 
         val arrowUpIcon = cobblemonResource("textures/gui/pokedex/arrow_up.png")
         val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
@@ -206,7 +214,7 @@ class PokedexGUI private constructor(
 
         if (::regionSelectWidgetUp.isInitialized) removeWidget(regionSelectWidgetUp)
         regionSelectWidgetUp = ScaledButton(
-            buttonX = (x + 95).toFloat(),
+            buttonX = (x + 113).toFloat(),
             buttonY = (y + 14.5).toFloat(),
             buttonWidth = 8,
             buttonHeight = 6,
@@ -218,7 +226,7 @@ class PokedexGUI private constructor(
 
         if (::regionSelectWidgetDown.isInitialized) removeWidget(regionSelectWidgetDown)
         regionSelectWidgetDown = ScaledButton(
-            buttonX = (x + 95).toFloat(),
+            buttonX = (x + 113).toFloat(),
             buttonY = (y + 19.5).toFloat(),
             buttonWidth = 8,
             buttonHeight = 6,
@@ -282,7 +290,9 @@ class PokedexGUI private constructor(
         updateFilters(true)
         pages = PokedexPages.resolvePages()
         if (pages.isNotEmpty()) {
-            selectedPageIndex = selectedPageIndex.coerceIn(0, pages.lastIndex)
+            // Open on the CobblePedia hub by default; the main Pokédex / Photo Gallery are reached from its tiles.
+            val hub = pages.indexOfFirst { it is CobblePediaPokedexPage }
+            selectedPageIndex = (if (hub >= 0) hub else 0).coerceIn(0, pages.lastIndex)
             currentPage?.onSelected(this)
         }
     }
@@ -324,11 +334,17 @@ class PokedexGUI private constructor(
             return
         }
 
-        // Region
+        // Back button (main dex → CobblePedia hub), top-left.
+        run {
+            val hovered = mouseX in (x + BACK_X)..(x + BACK_X + BACK_W) && mouseY in (y + BACK_Y)..(y + BACK_Y + BACK_H)
+            blitk(matrixStack = matrices, texture = backButtonIcon, x = x + BACK_X, y = y + BACK_Y, width = BACK_W, height = BACK_H, vOffset = if (hovered) BACK_H else 0, textureHeight = BACK_H * 2)
+        }
+
+        // Region (shifted right to make room for the back button at top-left).
         blitk(
             matrixStack = matrices,
             texture = globeIcon,
-            x = (x + 26) / SCALE,
+            x = (x + 44) / SCALE,
             y = (y + 15) / SCALE,
             width = 14,
             height = 14,
@@ -340,7 +356,7 @@ class PokedexGUI private constructor(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
             text = lang("ui.pokedex.region.${availableRegions[selectedRegionIndex].path}").bold(),
-            x = x + 36,
+            x = x + 54,
             y = y + 14,
             shadow = true
         )
@@ -458,10 +474,16 @@ class PokedexGUI private constructor(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (handlePageNavigationClick(mouseX, mouseY)) return true
         val page = currentPage
         if (page != null && page !is MainDexPokedexPage) {
             return page.mouseClicked(this, mouseX, mouseY, button)
+        }
+        // Main dex back button → return to the CobblePedia hub.
+        val bx0 = (width - BASE_WIDTH) / 2 + BACK_X
+        val by0 = (height - BASE_HEIGHT) / 2 + BACK_Y
+        if (mouseX >= bx0 && mouseX <= bx0 + BACK_W && mouseY >= by0 && mouseY <= by0 + BACK_H) {
+            openPage(CobblePediaPokedexPage::class.java)
+            return true
         }
 
         val canDisplayEntry = true //selectedForm?.unlockForms
@@ -805,36 +827,7 @@ class PokedexGUI private constructor(
             shadow = true,
             centered = true
         )
-
-        if (pages.size <= 1) return
-
-        val leftX = centerX - PAGE_SELECTOR_GAP - PAGE_ARROW_WIDTH
-        val rightX = centerX + PAGE_SELECTOR_GAP
-        val arrowY = y + 13
-        val leftHovered = isInsidePageArrow(mouseX, mouseY, leftX, arrowY)
-        val rightHovered = isInsidePageArrow(mouseX, mouseY, rightX, arrowY)
-
-        blitk(
-            matrixStack = context.pose(),
-            texture = pageArrowLeftIcon,
-            x = leftX,
-            y = arrowY,
-            width = PAGE_ARROW_WIDTH,
-            height = PAGE_ARROW_HEIGHT,
-            vOffset = if (leftHovered) PAGE_ARROW_HEIGHT else 0,
-            textureHeight = PAGE_ARROW_HEIGHT * 2
-        )
-
-        blitk(
-            matrixStack = context.pose(),
-            texture = pageArrowRightIcon,
-            x = rightX,
-            y = arrowY,
-            width = PAGE_ARROW_WIDTH,
-            height = PAGE_ARROW_HEIGHT,
-            vOffset = if (rightHovered) PAGE_ARROW_HEIGHT else 0,
-            textureHeight = PAGE_ARROW_HEIGHT * 2
-        )
+        // Page-switch arrows removed — navigation is via the CobblePedia hub tiles + back buttons.
     }
 
     private fun handlePageNavigationClick(mouseX: Double, mouseY: Double): Boolean {
@@ -858,6 +851,20 @@ class PokedexGUI private constructor(
         }
 
         return false
+    }
+
+    /** Switch to the first top-level page of [pageClass] (used by CobblePedia tiles + the back buttons). */
+    fun openPage(pageClass: Class<out PokedexGuiPage>) {
+        val index = pages.indexOfFirst { pageClass.isInstance(it) }
+        if (index < 0 || index == selectedPageIndex) return
+        val old = currentPage
+        selectedPageIndex = index
+        canDragRender = false
+        isDragging = false
+        setFocused(null)
+        old?.onClose(this)
+        currentPage?.onSelected(this)
+        playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
     }
 
     private fun cyclePage(next: Boolean) {

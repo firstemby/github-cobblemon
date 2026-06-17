@@ -18,7 +18,9 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.render.berry.BerryTreePreviewRenderer
+import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
@@ -45,10 +47,11 @@ class BerryDexView {
         private const val GRID_TOP = 56
         private const val SEARCH_Y = 26
         private const val SEARCH_H = 12
-        private const val COLS = 4
-        private const val TILE_W = 33
-        private const val TILE_H = 34
-        private const val TILE_GAP = 2
+        private const val COLS = 5             // match the main Pokédex grid (5 portrait-tile columns)
+        private const val SLOT = 25            // pokedex_slot.png native tile size
+        private const val COL_STEP = 27        // SLOT + 2px gap
+        private const val ROW_STEP = 34        // SLOT + name label + gap
+        private const val TILE_HIT_H = 33      // clickable cell height (slot + name)
         private const val VISIBLE_TILE_ROWS = 4
         private const val SCROLLBAR_W = 3
         private const val SORT_Y = 42
@@ -62,10 +65,9 @@ class BerryDexView {
         private const val VIEW_Y = 41
         private const val VIEW_H = 90
         private const val ARROW_W = 10
-        private const val TABS_Y = 134
-        private const val TAB_H = 11
-        private const val CONTENT_Y = 148
-        private const val CONTENT_H = 38
+        private const val CONTENT_Y = 134     // content panel now sits directly below the viewport
+        private const val CONTENT_H = 38       // ends ~172, just above the bottom tab row
+        private const val TAB_ROW_Y = 178      // info-tab icon row at the BOTTOM (icons 178-186, arrow 174)
         private const val CONTENT_ROW_H = 9
         private const val CONTENT_VISIBLE_ROWS = 4
 
@@ -77,11 +79,30 @@ class BerryDexView {
         private const val BUTTON_BG_ACTIVE = 0xFFA9DCDC.toInt()
         private const val PREVIEW_BG = 0xC0101010.toInt()
         private const val TEXT_DARK = 0x33586B
+        private const val INFO_TEXT = 0x606B6E   // matches the main Pokédex info-page text colour
         private const val SCROLL_TRACK = 0x6010303A
         private const val SCROLL_THUMB = 0xFF7EE7E5.toInt()
 
         /** The Pokédex's existing "?" slot icon, reused for undiscovered berries. */
         private val UNKNOWN_ICON = cobblemonResource("textures/gui/pokedex/pokedex_slot_unknown.png")
+
+        // Berry tiles reuse the main Pokédex portrait tile button (pokedex_slot.png) + slot_select highlight.
+        private val SLOT_TEXTURE = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
+        private val SLOT_SELECT = cobblemonResource("textures/gui/pokedex/slot_select.png")
+        // Custom right-panel background skin (shared with the WorldDex).
+        private val INFO_BG = cobblemonResource("textures/gui/pokedex/cobblepedia_info_background.png")
+        // Bottom-right info tabs reuse the Pokédex tab-row style + best-fit existing tab icons (swap freely later).
+        private val TAB_SELECT_ARROW = cobblemonResource("textures/gui/pokedex/select_arrow.png")
+        private val TAB_INFO = cobblemonResource("textures/gui/pokedex/tab_info.png")
+        private val TAB_STATS = cobblemonResource("textures/gui/pokedex/tab_stats.png")
+        private val TAB_ABILITIES = cobblemonResource("textures/gui/pokedex/tab_abilities.png")
+        private val TAB_MOVES = cobblemonResource("textures/gui/pokedex/tab_moves.png")
+        private val TAB_LOCATIONS = cobblemonResource("textures/gui/pokedex/tab_locations.png")
+        private const val TAB_ICON_NATIVE = 16
+        private const val TAB_ICON_SCALE = 0.5f
+        private const val TAB_ICON_DISP = 8
+        private const val TAB_ICON_GAP = 22
+        private const val TAB_ICON_X0 = 2
 
         private fun fallback(key: String, text: String) = Component.translatableWithFallback("cobblemon.ui.berrydex.$key", text)
 
@@ -185,9 +206,28 @@ class BerryDexView {
         renderSortButtons(context, x, y, mouseX, mouseY)
         renderGrid(context, x, y, mouseX, mouseY)
         renderDetail(context, x, y, mouseX, mouseY)
+        renderBerryCount(context, x, y)
     }
 
-    private fun searchBarWidth(): Int = COLS * (TILE_W + TILE_GAP) - TILE_GAP
+    /** [discovered] / [total] berries, top-right — mirrors the main Pokédex's caught/total counter. */
+    private fun renderBerryCount(context: GuiGraphics, x: Int, y: Int) {
+        val all = Berries.all()
+        val text = Component.literal("${all.count { discovered(it) }} / ${all.count()}").bold()
+        drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = x + DETAIL_X + DETAIL_W - 4, y = y + 14, colour = INFO_TEXT)
+    }
+
+    private fun searchBarWidth(): Int = COLS * COL_STEP - (COL_STEP - SLOT)
+
+    private fun tabIcon(tab: Tab) = when (tab) {
+        Tab.DESCRIPTION -> TAB_INFO
+        Tab.FLAVOR -> TAB_STATS
+        Tab.CROSSBREED -> TAB_ABILITIES
+        Tab.BAIT -> TAB_MOVES
+        Tab.LOCATION -> TAB_LOCATIONS
+    }
+
+    /** Screen X of bottom tab [index]'s 8x8 icon within the detail panel anchored at [left]. */
+    private fun tabIconX(left: Int, index: Int) = left + TAB_ICON_X0 + index * TAB_ICON_GAP
 
     private fun renderSearchBar(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         val left = x + GRID_X
@@ -248,24 +288,23 @@ class BerryDexView {
             val berry = list[i]
             val col = (i - startIndex) % COLS
             val row = (i - startIndex) / COLS
-            val tileX = x + GRID_X + col * (TILE_W + TILE_GAP)
-            val tileY = y + GRID_TOP + row * (TILE_H + TILE_GAP)
+            val tileX = x + GRID_X + col * COL_STEP
+            val tileY = y + GRID_TOP + row * ROW_STEP
             val isDiscovered = discovered(berry)
-            val hovered = mouseX in tileX..(tileX + TILE_W) && mouseY in tileY..(tileY + TILE_H)
-            val bg = when {
-                berry === selected -> TILE_BG_SELECTED
-                hovered -> TILE_BG_HOVER
-                else -> TILE_BG
+            val hovered = mouseX in tileX..(tileX + SLOT) && mouseY in tileY..(tileY + TILE_HIT_H)
+            // The main Pokédex portrait tile button, with the slot_select highlight (bottom half) on hover/selected.
+            blitk(matrixStack = context.pose(), texture = SLOT_TEXTURE, x = tileX, y = tileY, width = SLOT, height = SLOT)
+            if (berry === selected || hovered) {
+                blitk(matrixStack = context.pose(), texture = SLOT_SELECT, x = tileX, y = tileY, width = SLOT, height = SLOT, vOffset = SLOT, textureHeight = SLOT * 2)
             }
-            context.fill(tileX, tileY, tileX + TILE_W, tileY + TILE_H, bg)
 
             // Item sprite for discovered berries; the Pokédex "?" slot icon for undiscovered ones.
             if (isDiscovered) {
                 berry.item()?.let { item ->
                     renderScaledGuiItemIcon(
                         itemStack = ItemStack(item),
-                        x = (tileX + (TILE_W - 16) / 2).toDouble(),
-                        y = (tileY + 6).toDouble(),
+                        x = (tileX + (SLOT - 16) / 2).toDouble(),
+                        y = (tileY + 4).toDouble(),
                         matrixStack = context.pose(),
                         scale = 1.0
                     )
@@ -274,8 +313,8 @@ class BerryDexView {
                 blitk(
                     matrixStack = context.pose(),
                     texture = UNKNOWN_ICON,
-                    x = tileX + (TILE_W - 8) / 2,
-                    y = tileY + 8,
+                    x = tileX + (SLOT - 8) / 2,
+                    y = tileY + 7,
                     width = 8,
                     height = 10
                 )
@@ -284,8 +323,8 @@ class BerryDexView {
             drawScaledText(
                 context = context,
                 text = Component.literal(if (isDiscovered) displayName(berry) else "????"),
-                x = tileX + TILE_W / 2,
-                y = tileY + TILE_H - 7,
+                x = tileX + SLOT / 2,
+                y = tileY + SLOT + 1,
                 colour = TEXT_DARK,
                 centered = true,
                 scale = 0.5F
@@ -294,9 +333,9 @@ class BerryDexView {
 
         // Scroll bar.
         if (totalRows > VISIBLE_TILE_ROWS) {
-            val trackX = x + GRID_X + COLS * (TILE_W + TILE_GAP)
+            val trackX = x + GRID_X + COLS * COL_STEP
             val trackTop = y + GRID_TOP
-            val trackH = VISIBLE_TILE_ROWS * (TILE_H + TILE_GAP) - TILE_GAP
+            val trackH = VISIBLE_TILE_ROWS * ROW_STEP - (ROW_STEP - SLOT)
             context.fill(trackX, trackTop, trackX + SCROLLBAR_W, trackTop + trackH, SCROLL_TRACK)
             val thumbH = max(8, trackH * VISIBLE_TILE_ROWS / totalRows)
             val thumbY = trackTop + (trackH - thumbH) * scrollRow / max(1, maxScroll)
@@ -308,8 +347,9 @@ class BerryDexView {
         val berry = selected ?: return
         val left = x + DETAIL_X
 
+        // Custom right-panel background skin (header bar + tab-area bars). Drawn first, behind all content.
+        blitk(matrixStack = context.pose(), texture = INFO_BG, x = left, y = y + HEADER_Y, width = DETAIL_W, height = TAB_ROW_Y + TAB_ICON_DISP + 2 - HEADER_Y)
         // Header: berry name.
-        context.fill(left, y + HEADER_Y, left + DETAIL_W, y + HEADER_Y + HEADER_H, TILE_BG)
         drawScaledText(
             context = context,
             text = Component.literal(displayName(berry)).bold(),
@@ -322,7 +362,7 @@ class BerryDexView {
         // Tree viewport + age cycle arrows.
         val viewLeft = left + ARROW_W + 2
         val viewWidth = DETAIL_W - (ARROW_W + 2) * 2
-        context.fill(viewLeft, y + VIEW_Y, viewLeft + viewWidth, y + VIEW_Y + VIEW_H, PREVIEW_BG)
+        // No dark backdrop — the tree renders directly on the panel background texture for a cutout look.
         BerryTreePreviewRenderer.render(context, berry, age, viewLeft, y + VIEW_Y, viewWidth, VIEW_H, yaw, pitch, zoom)
         renderArrow(context, left, y, mouseX, mouseY, right = false)
         renderArrow(context, left + DETAIL_W - ARROW_W, y, mouseX, mouseY, right = true)
@@ -332,29 +372,41 @@ class BerryDexView {
             x = left + DETAIL_W / 2,
             y = y + VIEW_Y + VIEW_H - 8,
             centered = true,
-            shadow = true,
+            colour = INFO_TEXT,
             scale = 0.5F
         )
 
-        // Tabs.
-        val tabW = (DETAIL_W - (Tab.entries.size - 1) * 2) / Tab.entries.size
+        // Info tabs — icon buttons at the BOTTOM, styled exactly like the main Pokédex / MoveDex tab row
+        // (16x32 two-state icon at half scale, bottom half on hover/active, select arrow over the active tab).
         Tab.entries.forEachIndexed { index, tab ->
-            val tx = left + index * (tabW + 2)
-            val hovered = mouseX in tx..(tx + tabW) && mouseY in (y + TABS_Y)..(y + TABS_Y + TAB_H)
-            context.fill(tx, y + TABS_Y, tx + tabW, y + TABS_Y + TAB_H, if (tab == activeTab) BUTTON_BG_ACTIVE else if (hovered) TILE_BG_HOVER else BUTTON_BG)
-            drawScaledText(
-                context = context,
-                text = fallback(tab.key, tab.label),
-                x = tx + tabW / 2,
-                y = y + TABS_Y + 3,
-                colour = TEXT_DARK,
-                centered = true,
-                scale = 0.5F
+            val ix = tabIconX(left, index)
+            val active = tab == activeTab
+            val hovered = mouseX in ix..(ix + TAB_ICON_DISP) && mouseY in (y + TAB_ROW_Y)..(y + TAB_ROW_Y + TAB_ICON_DISP)
+            blitk(
+                matrixStack = context.pose(),
+                texture = tabIcon(tab),
+                x = ix / TAB_ICON_SCALE,
+                y = (y + TAB_ROW_Y) / TAB_ICON_SCALE,
+                width = TAB_ICON_NATIVE,
+                height = TAB_ICON_NATIVE,
+                vOffset = if (hovered || active) TAB_ICON_NATIVE else 0,
+                textureHeight = TAB_ICON_NATIVE * 2,
+                scale = TAB_ICON_SCALE
             )
+            if (active) {
+                blitk(
+                    matrixStack = context.pose(),
+                    texture = TAB_SELECT_ARROW,
+                    x = (ix + 1) / TAB_ICON_SCALE,
+                    y = (y + TAB_ROW_Y - 4) / TAB_ICON_SCALE,
+                    width = 12,
+                    height = 6,
+                    scale = TAB_ICON_SCALE
+                )
+            }
         }
 
-        // Tab content.
-        context.fill(left, y + CONTENT_Y, left + DETAIL_W, y + CONTENT_Y + CONTENT_H, PANEL_BG)
+        // Tab content (no dark box — drawn straight on the background texture).
         when (activeTab) {
             Tab.FLAVOR -> renderFlavorContent(context, left, y, berry)
             Tab.CROSSBREED -> renderCrossbreedContent(context, left, y, berry)
@@ -388,7 +440,7 @@ class BerryDexView {
                 text = Component.literal(prettify(flavour.name.lowercase())),
                 x = left + 4,
                 y = rowY,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.5F
             )
             drawScaledText(
@@ -396,7 +448,7 @@ class BerryDexView {
                 text = Component.literal(value.toString()),
                 x = left + 44,
                 y = rowY,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.5F
             )
             val barWidth = (value * 3).coerceAtMost(95)
@@ -415,7 +467,7 @@ class BerryDexView {
                 x = left + DETAIL_W / 2,
                 y = y + CONTENT_Y + CONTENT_H / 2 - 3,
                 centered = true,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.55F
             )
             return
@@ -433,12 +485,12 @@ class BerryDexView {
                 text = Component.literal(displayName(berry)),
                 x = left + 13,
                 y = rowY + 1,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.5F
             )
-            drawScaledText(context = context, text = Component.literal("+"), x = left + 47, y = rowY + 1, shadow = true, scale = 0.5F)
+            drawScaledText(context = context, text = Component.literal("+"), x = left + 47, y = rowY + 1, colour = INFO_TEXT, scale = 0.5F)
             renderCrossbreedBerry(context, Berries.getByIdentifier(partnerId), left + 53, left + 62, rowY)
-            drawScaledText(context = context, text = Component.literal("->"), x = left + 97, y = rowY + 1, shadow = true, scale = 0.5F)
+            drawScaledText(context = context, text = Component.literal("->"), x = left + 97, y = rowY + 1, colour = INFO_TEXT, scale = 0.5F)
             renderCrossbreedBerry(context, Berries.getByIdentifier(resultId), left + 105, left + 114, rowY)
         }
     }
@@ -459,7 +511,7 @@ class BerryDexView {
             text = Component.literal(if (isDiscovered) displayName(berry) else "????"),
             x = nameX,
             y = rowY + 1,
-            shadow = true,
+            colour = INFO_TEXT,
             scale = 0.5F
         )
     }
@@ -472,7 +524,7 @@ class BerryDexView {
                 x = left + DETAIL_W / 2,
                 y = y + CONTENT_Y + CONTENT_H / 2 - 3,
                 centered = true,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.55F
             )
             return
@@ -484,7 +536,7 @@ class BerryDexView {
                 text = lines[i],
                 x = left + 4,
                 y = y + CONTENT_Y + 2 + (i - contentScroll) * CONTENT_ROW_H,
-                shadow = true,
+                colour = INFO_TEXT,
                 scale = 0.5F
             )
         }
@@ -552,9 +604,9 @@ class BerryDexView {
         for (i in startIndex until endIndex) {
             val col = (i - startIndex) % COLS
             val row = (i - startIndex) / COLS
-            val tileX = x + GRID_X + col * (TILE_W + TILE_GAP)
-            val tileY = y + GRID_TOP + row * (TILE_H + TILE_GAP)
-            if (mouseX >= tileX && mouseX <= tileX + TILE_W && mouseY >= tileY && mouseY <= tileY + TILE_H) {
+            val tileX = x + GRID_X + col * COL_STEP
+            val tileY = y + GRID_TOP + row * ROW_STEP
+            if (mouseX >= tileX && mouseX <= tileX + SLOT && mouseY >= tileY && mouseY <= tileY + TILE_HIT_H) {
                 if (discovered(list[i])) {
                     selected = list[i]
                     age = BerryBlock.FRUIT_AGE
@@ -582,12 +634,11 @@ class BerryDexView {
             }
         }
 
-        // Tabs.
-        if (mouseY >= y + TABS_Y && mouseY <= y + TABS_Y + TAB_H) {
-            val tabW = (DETAIL_W - (Tab.entries.size - 1) * 2) / Tab.entries.size
+        // Tabs (bottom icon row).
+        if (mouseY >= y + TAB_ROW_Y && mouseY <= y + TAB_ROW_Y + TAB_ICON_DISP) {
             Tab.entries.forEachIndexed { index, tab ->
-                val tx = left + index * (tabW + 2)
-                if (mouseX >= tx && mouseX <= tx + tabW) {
+                val ix = tabIconX(left, index)
+                if (mouseX >= ix && mouseX <= ix + TAB_ICON_DISP) {
                     activeTab = tab
                     contentScroll = 0
                     return true

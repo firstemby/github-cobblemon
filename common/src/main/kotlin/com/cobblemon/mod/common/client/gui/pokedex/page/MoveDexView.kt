@@ -15,7 +15,15 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.mojang.blaze3d.systems.RenderSystem
+import org.lwjgl.opengl.GL11
+import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.TypeIcon
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.MOVE_ICON_SIZE
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesAccuracyIconResource
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesEffectIconResource
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesPowerIconResource
+import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -74,11 +82,12 @@ class MoveDexView {
         private const val SPECIES_Y = 37
         private const val VIEW_Y = 50
         private const val VIEW_H = 74
-        private const val TABS_Y = 126
-        private const val TAB_H = 11
-        private const val SUBTAB_Y = 140
+        private const val CONTENT_TOP = 126      // content begins just below the viewport (VIEW_Y+VIEW_H=124)
+        private const val INFO_PANEL_Y = 148     // info_move_background panel top (133x38) — lowered 20px per request
+        private const val SUBTAB_Y = 128         // learnset method sub-filter buttons (near content top)
         private const val SUBTAB_H = 10
-        private const val CONTENT_BOTTOM = 188
+        private const val CONTENT_BOTTOM = 190   // content ends above the bottom tab row
+        private const val TAB_ROW_Y = 196        // tabs follow the lowered panel; icons 196-204 (BASE_HEIGHT=207)
         private const val SPECIES_H = 11
 
         private val SUBSTITUTE = cobblemonResource("substitute")
@@ -98,6 +107,26 @@ class MoveDexView {
         // The floor's Z half-extent is derived from this so the pads always land exactly under the two dolls,
         // however far apart the per-move separation pushes them.
         private const val FLOOR_PAD_V = 0.25f
+
+        // Info tabs reuse the MAIN Pokédex's tab-row look exactly: 16x32 two-state icon sheets (top half = idle,
+        // bottom half = hover/active) drawn at half scale (8px on screen), with the select arrow over the active
+        // tab. Same textures, same scale, same vOffset trick as PokedexGUI's ScaledButton tab row.
+        private val TAB_INFO_ICON = cobblemonResource("textures/gui/pokedex/tab_info.png")
+        private val TAB_LEARNSET_ICON = cobblemonResource("textures/gui/pokedex/tab_moves.png")
+        private val TAB_SELECT_ARROW = cobblemonResource("textures/gui/pokedex/select_arrow.png")
+        private const val TAB_ICON_NATIVE = 16   // texture is 16 wide x 32 tall (two stacked 16px states)
+        private const val TAB_ICON_SCALE = 0.5f  // displayed 8x8 — identical to the main Pokédex tabs
+        private const val TAB_ICON_DISP = 8       // TAB_ICON_NATIVE * TAB_ICON_SCALE (on-screen px)
+        private const val TAB_ICON_GAP = 22       // same inter-tab spacing as the main Pokédex
+        private const val TAB_ICON_X0 = 2         // left indent of the first tab icon within the detail panel
+
+        // Move-info panel reuses the MAIN Pokédex's per-Pokémon move panel assets verbatim (info_move_background
+        // border + the shared power/accuracy/effect icons), so the MoveDex's Move Information tab matches it.
+        private val MOVE_INFO_BACKGROUND = cobblemonResource("textures/gui/pokedex/info_move_background.png")
+        // Custom right-panel background skin for the MoveDex detail side.
+        private val INFO_BG = cobblemonResource("textures/gui/pokedex/movedex_info_background.png")
+        private const val INFO_SCALE = 0.5f       // shared Pokédex move-panel text/icon scale
+        private const val INFO_TEXT_COLOUR = 0x606B6E // dark slate, as in the main Pokédex move panel
 
         // Pokédex move-list assets, reused so the MoveDex list matches the Pokédex info-tab move list.
         private val MOVE_SLOT = cobblemonResource("textures/gui/pokedex/move_slot.png")
@@ -148,11 +177,8 @@ class MoveDexView {
     private var actorState = FloatingState()
     private val targetState = FloatingState()
     private val scene = MoveDexParticleScene()
-    // The Pokémon performing the move, chosen via the species search box. Defaults to Smeargle; an empty search
-    // returns to Smeargle, and an unrecognised name keeps the current actor (so it never falls back to nothing).
+    // The Pokémon performing the move — fixed to Smeargle (the actor can't be changed from the MoveDex).
     private var actorSpecies: ResourceLocation? = DEFAULT_ACTOR
-    private var speciesQuery = ""
-    private var speciesFocused = false
     // Timed bedrock animation cues (names, time, isTarget): actor windup + target damage/recoil.
     private var animEvents: List<Triple<Set<String>, Float, Boolean>> = emptyList()
     private var nextAnimIndex = 0
@@ -193,8 +219,6 @@ class MoveDexView {
         contentScroll = 0
         learnMethodFilter = null
         playing = false
-        speciesQuery = ""
-        speciesFocused = false
         actorSpecies = DEFAULT_ACTOR
         // Always start at the default camera angle + zoom; move/species changes never touch them (only drag/scroll).
         sceneYaw = SCENE_YAW
@@ -204,27 +228,6 @@ class MoveDexView {
 
     /** The model identifier for the actor doll — the chosen species, or the Smeargle default. */
     private fun actorIdentifier(): ResourceLocation = actorSpecies ?: DEFAULT_ACTOR
-
-    /** Resolves the species search text to a species model (live): empty → Smeargle default, unknown name ignored. */
-    private fun resolveSpecies() {
-        val query = speciesQuery.trim().lowercase().replace(" ", "")
-        val newSpecies = if (query.isEmpty()) DEFAULT_ACTOR else (PokemonSpecies.getByName(query)?.resourceIdentifier ?: return)
-        if (newSpecies != actorSpecies) {
-            actorSpecies = newSpecies
-            actorState = FloatingState() // fresh state so the new model re-poses cleanly
-            // Recompute the centroid for the new Pokémon (its hitbox/size changes the bounds) and replay the
-            // move from the start on it — same treatment as choosing a new move. Rotation/zoom are untouched.
-            selected?.let {
-                animTime = 0f
-                lastMs = 0L
-                tickAccumulatorMs = 0f
-                nextSoundIndex = 0
-                nextAnimIndex = 0
-                prepareMove(it)
-                playing = true
-            }
-        }
-    }
 
     /** (height, width) hitbox of the chosen actor species in world blocks; substitute-ish default otherwise. */
     private fun actorHW(): Pair<Float, Float> {
@@ -349,6 +352,13 @@ class MoveDexView {
         renderControls(context, x, y, mouseX, mouseY)
         renderList(context, x, y, mouseX, mouseY)
         renderDetail(context, x, y, mouseX, mouseY, delta)
+        renderMoveCount(context, x, y)
+    }
+
+    /** [discovered] / [total] moves, top-right — mirrors the main Pokédex's caught/total counter. */
+    private fun renderMoveCount(context: GuiGraphics, x: Int, y: Int) {
+        val text = Component.literal("${MoveDexData.discoveredCount()} / ${MoveDexData.totalCount()}").bold()
+        drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = x + DETAIL_X + DETAIL_W - 4, y = y + 14, colour = INFO_TEXT_COLOUR)
     }
 
     private fun renderSearchBar(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
@@ -439,29 +449,60 @@ class MoveDexView {
         }
     }
 
+    private fun tabIcon(tab: Tab) = when (tab) {
+        Tab.INFO -> TAB_INFO_ICON
+        Tab.LEARNSET -> TAB_LEARNSET_ICON
+    }
+
+    /** Screen X of tab [index]'s 8x8 icon within the detail panel anchored at [left]. */
+    private fun tabIconX(left: Int, index: Int) = left + TAB_ICON_X0 + index * TAB_ICON_GAP
+
     private fun renderDetail(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
         val move = selected ?: return
         val left = x + DETAIL_X
 
-        context.fill(left, y + HEADER_Y, left + DETAIL_W, y + HEADER_Y + HEADER_H, PLATE)
-        drawScaledText(context = context, text = move.displayName.copy().bold(), x = left + 4, y = y + HEADER_Y + 3, colour = move.elementalType.hue, scale = 0.75F)
+        // Custom right-panel background skin (header bar + tab-area bars). Drawn first, behind all content.
+        blitk(matrixStack = context.pose(), texture = INFO_BG, x = left, y = y + HEADER_Y, width = DETAIL_W, height = TAB_ROW_Y + TAB_ICON_DISP + 2 - HEADER_Y)
+        // Move name — styled like the main Pokédex species name (DEFAULT_LARGE, dark, not type-coloured).
+        drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = move.displayName.copy().bold(), x = left + 4, y = y + HEADER_Y + 3, colour = INFO_TEXT_COLOUR, scale = 0.75F)
+        // Bigger elemental-type symbol for the selected move, on the right side of the header.
+        TypeIcon(x = left + DETAIL_W - 21, y = y + HEADER_Y - 2, type = move.elementalType, small = false).render(context)
 
-        // Battle-style viewport: the chosen Pokémon (or substitute) performs the move on a substitute target.
-        context.fill(left, y + VIEW_Y, left + DETAIL_W, y + VIEW_Y + VIEW_H, PREVIEW_BG)
+        // Battle-style viewport — no dark backdrop; the scene renders straight on the panel background texture.
         renderDolls(context, left, y, delta)
         renderPlayPause(context, left, y, mouseX, mouseY)
         renderMuteButton(context, left, y, mouseX, mouseY)
         renderLocatorButton(context, left, y, mouseX, mouseY)
-        renderSpeciesBox(context, left, y, mouseX, mouseY)
 
-        // Tabs.
-        val tabs = Tab.entries
-        val tabW = (DETAIL_W - (tabs.size - 1) * 2) / tabs.size
-        tabs.forEachIndexed { index, tab ->
-            val tx = left + index * (tabW + 2)
-            val hovered = mouseX in tx..(tx + tabW) && mouseY in (y + TABS_Y)..(y + TABS_Y + TAB_H)
-            context.fill(tx, y + TABS_Y, tx + tabW, y + TABS_Y + TAB_H, if (tab == activeTab) PLATE_SELECTED else if (hovered) PLATE_HOVER else PLATE)
-            drawScaledText(context = context, text = fallback(tab.key, tab.label), x = tx + tabW / 2, y = y + TABS_Y + 3, colour = TEXT_DARK, centered = true, scale = 0.55F)
+        // Info tabs — drawn exactly like the main Pokédex's tab row (16x32 two-state icon at half scale, bottom
+        // half on hover/active, with the select arrow above the active tab).
+        Tab.entries.forEachIndexed { index, tab ->
+            val ix = tabIconX(left, index)
+            val active = tab == activeTab
+            val hovered = mouseX in ix..(ix + TAB_ICON_DISP) && mouseY in (y + TAB_ROW_Y)..(y + TAB_ROW_Y + TAB_ICON_DISP)
+            blitk(
+                matrixStack = context.pose(),
+                texture = tabIcon(tab),
+                x = ix / TAB_ICON_SCALE,
+                y = (y + TAB_ROW_Y) / TAB_ICON_SCALE,
+                width = TAB_ICON_NATIVE,
+                height = TAB_ICON_NATIVE,
+                vOffset = if (hovered || active) TAB_ICON_NATIVE else 0,
+                textureHeight = TAB_ICON_NATIVE * 2,
+                scale = TAB_ICON_SCALE
+            )
+            if (active) {
+                // 12x6 arrow (shown 6x3) centred over the 8px icon, just above it — same offset as the Pokédex.
+                blitk(
+                    matrixStack = context.pose(),
+                    texture = TAB_SELECT_ARROW,
+                    x = (ix + 1) / TAB_ICON_SCALE,
+                    y = (y + TAB_ROW_Y - 4) / TAB_ICON_SCALE,
+                    width = 12,
+                    height = 6,
+                    scale = TAB_ICON_SCALE
+                )
+            }
         }
 
         when (activeTab) {
@@ -586,8 +627,12 @@ class MoveDexView {
             // differing hitbox volumes push them apart: pad z = ±FLOOR_PAD_V*(2*halfZ) must equal ±separation, so
             // halfZ = separation / (2*FLOOR_PAD_V). This is also the plane the scene collides ground particles
             // (Bulldoze) against, so they visibly come to rest on it.
-            val floorHalfZ = (sceneSeparation / (2.0 * FLOOR_PAD_V)).toFloat()
-            MoveDexSceneRenderer.renderFloor(context, STADIUM_FLOOR, halfX = floorHalfZ * 0.7f, halfZ = floorHalfZ)
+            // The floor is a SQUARE: halfX == halfZ, so the quad stays symmetric about (0,0) (centred) and BOTH the
+            // X and Z extents grow together with the separation — i.e. bigger-hitbox mons (which push the dolls
+            // further apart in Z) enlarge the whole square uniformly while the dolls stay pinned to the same pads,
+            // so they read as being in the same relative spots regardless of size.
+            val floorHalf = (sceneSeparation / (2.0 * FLOOR_PAD_V)).toFloat()
+            MoveDexSceneRenderer.renderFloor(context, STADIUM_FLOOR, halfX = floorHalf, halfZ = floorHalf)
 
             // Dolls are separated along the forward (Z) axis — the same axis directional effects fire along —
             // so beams/sprays travel from the user doll to the target doll. User is nearer (+Z), facing -Z.
@@ -646,6 +691,12 @@ class MoveDexView {
         )
 
         pose.popPose()
+        // The 3D scene (dolls + floor) is drawn at GUI z=200 and WRITES depth, so the control buttons drawn
+        // afterward at the base GUI z would fail the LEQUAL depth test and hide BEHIND the viewport. Clear the
+        // depth buffer now, while the viewport scissor is still bound (glClear respects the scissor box), so only
+        // the preview region is reset — every overlay control (play/pause, mute, locator, species box) then renders
+        // unconditionally on top of the viewport without disturbing the rest of the screen's depth.
+        RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX)
         context.disableScissor()
 
         // Debug readout so tuning values can be reported back (drag = rotate, scroll over viewport = zoom).
@@ -683,20 +734,6 @@ class MoveDexView {
             MoveDexSceneRenderer.renderDebugMarker(context, actorScale * mx, -(actorScale * my), actorScale * mz, 0.05f, 0.3f, 0.7f, 1f)
         }
         pose.popPose()
-    }
-
-    /** Rect of the species search box — its own row between the move header and the viewport. */
-    private fun speciesBoxRect(left: Int, y: Int): IntArray = intArrayOf(left, y + SPECIES_Y, DETAIL_W, SPECIES_H)
-
-    private fun renderSpeciesBox(context: GuiGraphics, left: Int, y: Int, mouseX: Int, mouseY: Int) {
-        val (bx, by, bw, bh) = speciesBoxRect(left, y)
-        val hovered = mouseX in bx..(bx + bw) && mouseY in by..(by + bh)
-        context.fill(bx, by, bx + bw, by + bh, if (speciesFocused || hovered) PLATE_HOVER else PLATE)
-        val text: MutableComponent = when {
-            speciesQuery.isEmpty() && !speciesFocused -> fallback("species", "Pokémon: Substitute")
-            else -> Component.literal(speciesQuery + if (speciesFocused) "_" else "")
-        }
-        drawScaledText(context = context, text = text, x = bx + 3, y = by + 2, colour = TEXT_DARK, scale = 0.6F)
     }
 
     private operator fun IntArray.component1() = this[0]
@@ -748,21 +785,55 @@ class MoveDexView {
     }
 
     private fun renderInfo(context: GuiGraphics, left: Int, y: Int, move: MoveTemplate) {
-        panel(context, left, y, TABS_Y + TAB_H + 1)
-        val top = y + TABS_Y + TAB_H + 3
-        fun line(i: Int, label: String, value: MutableComponent) {
-            drawScaledText(context = context, text = Component.literal(label), x = left + 4, y = top + i * ROW_TEXT_H, shadow = true, scale = 0.6F)
-            drawScaledText(context = context, text = value, x = left + 54, y = top + i * ROW_TEXT_H, shadow = true, scale = 0.6F)
-        }
-        line(0, "Type", Component.literal(WorldDexData.prettify(move.elementalType.name)).withColor(move.elementalType.hue))
-        line(1, "Category", move.damageCategory.displayName.copy())
-        line(2, "Power", Component.literal(if (move.power > 0) move.power.toInt().toString() else "—"))
-        line(3, "Accuracy", Component.literal(if (move.accuracy < 0) "—" else "${move.accuracy.toInt()}%"))
-        line(4, "PP", Component.literal(move.pp.toString()))
+        // Styled identically to the main Pokédex's per-Pokémon move panel (MovesLearnsetWidget.renderDataSection):
+        // the info_move_background border, the move name + PP + category icon, the power/accuracy/effect icon rows,
+        // and the wrapped description on the right. `px`/`py` mirror that widget's pX+3 / pY+109 panel origin.
+        val px = left + (DETAIL_W - 133) / 2     // centre the 133-wide panel in the detail column
+        val py = y + INFO_PANEL_Y
+        blitk(matrixStack = context.pose(), texture = MOVE_INFO_BACKGROUND, x = px, y = py, width = 133, height = 38)
+
+        // Move name (left) + PP (right) + damage-category icon, on the panel's top strip.
+        drawScaledText(context = context, text = move.displayName.copy().bold(), x = px + 2, y = py + 2, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        drawScaledTextJustifiedRight(context = context, text = lang("ui.moves.pp", move.pp), x = px + 117, y = py + 2, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        MoveCategoryIcon(x = px + 121, y = py.toDouble(), category = move.damageCategory, opacity = 1f).render(context)
+
+        // Power / Accuracy / Effect: shared icon + label + right-justified value, one per row.
+        blitk(matrixStack = context.pose(), texture = movesPowerIconResource, x = (px + 2) / INFO_SCALE, y = (py + 11.5f) / INFO_SCALE, width = MOVE_ICON_SIZE, height = MOVE_ICON_SIZE, scale = INFO_SCALE)
+        blitk(matrixStack = context.pose(), texture = movesAccuracyIconResource, x = (px + 2) / INFO_SCALE, y = (py + 21.5f) / INFO_SCALE, width = MOVE_ICON_SIZE, height = MOVE_ICON_SIZE, scale = INFO_SCALE)
+        blitk(matrixStack = context.pose(), texture = movesEffectIconResource, x = (px + 2) / INFO_SCALE, y = (py + 31.5f) / INFO_SCALE, width = MOVE_ICON_SIZE, height = MOVE_ICON_SIZE, scale = INFO_SCALE)
+        drawScaledText(context = context, text = lang("ui.power"), x = px + 9, y = py + 12, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        drawScaledText(context = context, text = lang("ui.accuracy"), x = px + 9, y = py + 22, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        drawScaledText(context = context, text = lang("ui.effect"), x = px + 9, y = py + 32, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        drawScaledTextJustifiedRight(context = context, text = Component.literal(if (move.power > 0) move.power.toInt().toString() else "—"), x = px + 57, y = py + 12, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+        drawScaledTextJustifiedRight(context = context, text = Component.literal(if (move.accuracy < 0) "—" else "${move.accuracy.toInt()}%"), x = px + 57, y = py + 22, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
         val effect = move.effectChances.firstOrNull() ?: 0.0
-        line(5, "Effect", Component.literal(if (effect > 0) "${effect.toInt()}%" else "—"))
-        // Description (single wrapped block at the bottom).
-        drawScaledText(context = context, text = move.description, x = left + 4, y = top + 6 * ROW_TEXT_H + 2, shadow = true, scale = 0.55F, maxCharacterWidth = (DETAIL_W - 8))
+        drawScaledTextJustifiedRight(context = context, text = Component.literal(if (effect > 0) "${effect.toInt()}%" else "—"), x = px + 57, y = py + 32, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
+
+        // SCROLLABLE description in the panel's right column (px+63..px+131 ≈ 68px), wrapped at the panel scale —
+        // mirrors the main Pokédex's MoveDescriptionWidget: the mouse wheel over the content area drives contentScroll
+        // (shared with the Learnset list; reset to 0 on tab switch), and only a window of lines is shown.
+        val font = Minecraft.getInstance().font
+        val descLines = font.split(move.description, (65f / INFO_SCALE).toInt())
+        val descVisible = 6
+        contentScroll = contentScroll.coerceIn(0, max(0, descLines.size - descVisible))
+        val pose = context.pose()
+        pose.pushPose()
+        pose.scale(INFO_SCALE, INFO_SCALE, 1f)
+        val end = (contentScroll + descVisible).coerceAtMost(descLines.size)
+        for (i in contentScroll until end) {
+            context.drawString(font, descLines[i], ((px + 63) / INFO_SCALE).toInt(), ((py + 2 + (i - contentScroll) * 6) / INFO_SCALE).toInt(), INFO_TEXT_COLOUR or 0xFF000000.toInt(), false)
+        }
+        pose.popPose()
+        // Thin scrollbar on the panel's right edge when the description overflows (like the Pokédex description widget).
+        if (descLines.size > descVisible) {
+            val trackX = px + 130
+            val trackTop = py + 2
+            val trackH = descVisible * 6
+            context.fill(trackX, trackTop, trackX + 1, trackTop + trackH, 0x60FFFFFF)
+            val thumbH = max(4, trackH * descVisible / descLines.size)
+            val thumbY = trackTop + (trackH - thumbH) * contentScroll / max(1, descLines.size - descVisible)
+            context.fill(trackX, thumbY, trackX + 1, thumbY + thumbH, 0xFF7EE7E5.toInt())
+        }
     }
 
     private fun renderLearnset(context: GuiGraphics, left: Int, y: Int, move: MoveTemplate, mouseX: Int, mouseY: Int) {
@@ -784,7 +855,7 @@ class MoveDexView {
         panel(context, left, y, contentTop)
         val rows = all.filter { learnMethodFilter == null || it.method == learnMethodFilter }
         if (rows.isEmpty()) {
-            drawScaledText(context = context, text = fallback("no_learners", "Nothing learns this"), x = left + DETAIL_W / 2, y = y + (contentTop + CONTENT_BOTTOM) / 2 - 3, centered = true, shadow = true, scale = 0.6F)
+            drawScaledText(context = context, text = fallback("no_learners", "Nothing learns this"), x = left + DETAIL_W / 2, y = y + (contentTop + CONTENT_BOTTOM) / 2 - 3, centered = true, colour = INFO_TEXT_COLOUR, scale = 0.6F)
             return
         }
         val visible = (CONTENT_BOTTOM - contentTop) / ROW_TEXT_H
@@ -797,14 +868,14 @@ class MoveDexView {
             val nameText = if (seen) {
                 PokemonSpecies.getByIdentifier(entry.speciesId)?.translatedName ?: Component.literal(WorldDexData.prettify(entry.speciesId.path))
             } else Component.literal("???")
-            drawScaledText(context = context, text = nameText, x = left + 4, y = rowY, colour = if (seen) 0xFFFFFF else TEXT_UNKNOWN, shadow = true, scale = 0.6F)
+            drawScaledText(context = context, text = nameText, x = left + 4, y = rowY, colour = if (seen) INFO_TEXT_COLOUR else 0x9AA5AA, scale = 0.6F)
             val methodText = entry.method.fallback + (entry.level?.let { " $it" } ?: "")
-            drawScaledText(context = context, text = Component.literal(methodText), x = left + DETAIL_W - 40, y = rowY, shadow = true, scale = 0.55F)
+            drawScaledText(context = context, text = Component.literal(methodText), x = left + DETAIL_W - 40, y = rowY, colour = INFO_TEXT_COLOUR, scale = 0.55F)
         }
     }
 
     private fun panel(context: GuiGraphics, left: Int, y: Int, contentTop: Int) {
-        context.fill(left, y + contentTop, left + DETAIL_W, y + CONTENT_BOTTOM, PANEL_BG)
+        // No dark box — content draws straight on the panel background texture (kept as a no-op for call sites).
     }
 
     // ---- input ----
@@ -820,16 +891,6 @@ class MoveDexView {
         sceneDragArmed = selected != null && !onControls &&
             mouseX >= dl && mouseX <= dl + DETAIL_W && mouseY >= y + VIEW_Y && mouseY <= y + VIEW_Y + VIEW_H
 
-        // Species box focus (overlaid on the viewport; only present when a move is selected).
-        if (selected != null) {
-            val (pbx, pby, pbw, pbh) = speciesBoxRect(x + DETAIL_X, y)
-            if (mouseX >= pbx && mouseX <= pbx + pbw && mouseY >= pby && mouseY <= pby + pbh) {
-                speciesFocused = true
-                searchFocused = false
-                return true
-            }
-        }
-        speciesFocused = false
 
         // Move-list search bar focus.
         val sLeft = x + LIST_X
@@ -906,13 +967,11 @@ class MoveDexView {
             return true
         }
 
-        // Tabs.
-        val tabs = Tab.entries
-        if (mouseY >= y + TABS_Y && mouseY <= y + TABS_Y + TAB_H) {
-            val tabW = (DETAIL_W - (tabs.size - 1) * 2) / tabs.size
-            tabs.forEachIndexed { index, tab ->
-                val tx = left + index * (tabW + 2)
-                if (mouseX >= tx && mouseX <= tx + tabW) { activeTab = tab; contentScroll = 0; return true }
+        // Tabs (icon buttons at the bottom — hit-tested against the same 8x8 rects renderDetail draws).
+        if (mouseY >= y + TAB_ROW_Y && mouseY <= y + TAB_ROW_Y + TAB_ICON_DISP) {
+            Tab.entries.forEachIndexed { index, tab ->
+                val ix = tabIconX(left, index)
+                if (mouseX >= ix && mouseX <= ix + TAB_ICON_DISP) { activeTab = tab; contentScroll = 0; return true }
             }
         }
 
@@ -936,7 +995,7 @@ class MoveDexView {
                 sceneZoom = (sceneZoom * (1f + deltaY.toFloat() * 0.1f)).coerceIn(4f, 80f)
                 return true
             }
-            if (mouseY >= y + TABS_Y + TAB_H) {
+            if (mouseY >= y + CONTENT_TOP && mouseY < y + TAB_ROW_Y) {
                 contentScroll = (contentScroll - deltaY.toInt()).coerceAtLeast(0)
                 return true
             }
@@ -955,13 +1014,6 @@ class MoveDexView {
     }
 
     fun keyPressed(keyCode: Int): Boolean {
-        if (speciesFocused) {
-            when (keyCode) {
-                GLFW.GLFW_KEY_BACKSPACE -> if (speciesQuery.isNotEmpty()) { speciesQuery = speciesQuery.dropLast(1); resolveSpecies() }
-                GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER -> speciesFocused = false
-            }
-            return true
-        }
         if (searchFocused) {
             when (keyCode) {
                 GLFW.GLFW_KEY_BACKSPACE -> if (searchQuery.isNotEmpty()) { searchQuery = searchQuery.dropLast(1); scrollRow = 0 }
@@ -979,10 +1031,6 @@ class MoveDexView {
     }
 
     fun charTyped(codePoint: Char): Boolean {
-        if (speciesFocused) {
-            if (codePoint.code >= 32) { speciesQuery += codePoint; resolveSpecies() }
-            return true
-        }
         if (!searchFocused) return false
         if (codePoint.code >= 32) { searchQuery += codePoint; scrollRow = 0 }
         return true

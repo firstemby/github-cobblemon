@@ -55,6 +55,9 @@ object MoveDexData {
 
     fun discoveredCount(): Int = discoveredCache?.size ?: 0
 
+    /** Total number of moves in the game — the MoveDex denominator. */
+    fun totalCount(): Int = Moves.all().count()
+
     fun learnedBy(move: MoveTemplate): List<LearnEntry> = reverseIndex[move] ?: emptyList()
 
     /** Whether a species has been seen (has any pokédex record), so its name can be shown un-redacted. */

@@ -52,7 +52,9 @@ object MoveDexSceneRenderer {
         val pose = context.pose()
         val entry = pose.last()
         val matrix = entry.pose()
-        val renderType = RenderType.entityCutoutNoCull(texture)
+        // Translucent (not cutout) so the texture's FULL alpha channel blends — semi-transparent floor pixels
+        // show the panel background through them instead of being hard-clipped at a cutout threshold.
+        val renderType = RenderType.entityTranslucent(texture)
         val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
         val buffer = immediate.getBuffer(renderType)
         val light = LightTexture.pack(15, 15)
@@ -66,6 +68,7 @@ object MoveDexSceneRenderer {
                 .setLight(light)
                 .setNormal(entry, 0f, -1f, 0f)
         }
+        // Single quad (entityTranslucent renders both sides here), so no coplanar Z-fighting.
         vert(-halfX, -halfZ, 0f, 0f)
         vert(-halfX, halfZ, 0f, 1f)
         vert(halfX, halfZ, 1f, 1f)

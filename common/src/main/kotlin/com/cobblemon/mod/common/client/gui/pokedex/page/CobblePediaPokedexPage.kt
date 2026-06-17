@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pokedex.page
 
 import com.cobblemon.mod.common.api.pokedex.scan.ScannedDataCategory
+import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
@@ -18,6 +19,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDT
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewLoader
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewRenderer
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
@@ -47,15 +49,14 @@ class CobblePediaPokedexPage(
         private const val LIST_LINE_HEIGHT = 11
         private const val LIST_VISIBLE_ROWS = 11
         private const val BACK_X = 20
-        private const val BACK_Y = 26
-        private const val BACK_W = 40
-        private const val BACK_H = 14
+        private const val BACK_Y = 14   // raised vertically (was 26)
+        private const val BACK_W = 16   // back-button sheet is 16x16 = two stacked 16x8 frames
+        private const val BACK_H = 8    // one frame: top = idle, bottom = hovered
+        private val BACK_BUTTON = cobblemonResource("textures/gui/pokedex/pokedex_back_button.png")
 
         private const val TILE_BG = 0xCC1A1A1A.toInt()
         private const val TILE_BG_HOVER = 0xCC3A3A3A.toInt()
         private const val TILE_BORDER = 0xFF7EE7E5.toInt()
-        private const val BACK_BG = 0xCC1A1A1A.toInt()
-        private const val BACK_BG_HOVER = 0xCC3A3A3A.toInt()
         private const val BARE_SUB = "" // sentinel sub id for a category's bare bucket
 
         // Right-side structure preview pane (relative to the page origin x,y)
@@ -128,9 +129,11 @@ class CobblePediaPokedexPage(
         clearSelectedEntry()
     }
 
-    /** Categories shown as CobblePedia tiles; Habitats and Structures are folded into the WorldDex. */
+    /** Categories shown as CobblePedia tiles; Habitats/Structures fold into the WorldDex; Eggs/Blocks are hidden. */
     private fun tileCategories(): List<ScannedDataCategory> = ScannedDataCategory.entries.filter {
-        it != ScannedDataCategory.HABITATS && it != ScannedDataCategory.STRUCTURES
+        it != ScannedDataCategory.HABITATS && it != ScannedDataCategory.STRUCTURES &&
+            it != ScannedDataCategory.EGGS && it != ScannedDataCategory.BLOCKS &&
+            it != ScannedDataCategory.RUINS && it != ScannedDataCategory.FOSSILS
     }
 
     private fun clearSelectedEntry() {
@@ -147,7 +150,7 @@ class CobblePediaPokedexPage(
             if (cat == null) {
                 renderTileGrid(context, x, y, mouseX, mouseY,
                     Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"),
-                    WorldDexData.Category.entries.map { Tile(it.label, WorldDexData.count(it)) })
+                    WorldDexData.Category.entries.map { Tile(it.label, WorldDexData.unlockedCount(it)) })
             } else {
                 worldDexView.render(context, x, y, mouseX, mouseY)
             }
@@ -166,7 +169,7 @@ class CobblePediaPokedexPage(
 
         val category = selectedCategory
         if (category == null) {
-            renderTileGrid(context, x, y, mouseX, mouseY, lang("ui.pokedex.page.cobblepedia"), categoryTiles())
+            renderTileGrid(context, x, y, mouseX, mouseY, lang("ui.pokedex.page.cobblepedia"), hubTiles(gui).map { it.first })
             return
         }
 
@@ -184,11 +187,31 @@ class CobblePediaPokedexPage(
 
     private data class Tile(val label: Component, val count: Int)
 
-    private fun categoryTiles(): List<Tile> =
-        tileCategories().map { Tile(categoryName(it), entriesForCategory(it).size) } +
-            Tile(Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"),
-                WorldDexData.Category.entries.sumOf { WorldDexData.count(it) }) +
-            Tile(Component.translatableWithFallback("cobblemon.ui.movedex.title", "MoveDex"), MoveDexData.discoveredCount())
+    /**
+     * The top-level hub tiles in render order, each paired with its click action. Order: the main Pokédex,
+     * the scanned-data categories (Berries/Items/Misc — Eggs/Blocks hidden), WorldDex, MoveDex, Photo Gallery.
+     * A count of -1 renders no count line (used for the page-link tiles). [gui] is needed to switch top-level pages.
+     */
+    private fun hubTiles(gui: PokedexGUI): List<Pair<Tile, () -> Unit>> {
+        val list = ArrayList<Pair<Tile, () -> Unit>>()
+        list += Tile(Component.translatableWithFallback("cobblemon.ui.pokedex.page.pokedex", "Pokédex"), -1) to { gui.openPage(MainDexPokedexPage::class.java) }
+        tileCategories().forEach { cat ->
+            list += Tile(categoryName(cat), entriesForCategory(cat).size) to {
+                if (cat == ScannedDataCategory.BERRIES) {
+                    berryDexMode = true
+                } else {
+                    selectedCategory = cat; selectedSub = null; scrollRow = 0; clearSelectedEntry()
+                }
+            }
+        }
+        list += Tile(Component.translatableWithFallback("cobblemon.ui.worlddex.title", "WorldDex"),
+            WorldDexData.Category.entries.sumOf { WorldDexData.unlockedCount(it) }) to { worldDexMode = true }
+        list += Tile(Component.translatableWithFallback("cobblemon.ui.movedex.title", "MoveDex"), MoveDexData.discoveredCount()) to {
+            moveDexMode = true; moveDexView.open()
+        }
+        list += Tile(Component.translatableWithFallback("cobblemon.ui.pokedex.page.photo_gallery", "Photo Gallery"), -1) to { gui.openPage(PhotoGalleryPokedexPage::class.java) }
+        return list
+    }
 
     private fun subTiles(category: ScannedDataCategory): List<Tile> =
         subKeys(category).map { sub -> Tile(subName(sub), bucketEntries(category.bucket(sub)).size) }
@@ -220,15 +243,17 @@ class CobblePediaPokedexPage(
                 shadow = true,
                 centered = true
             )
-            drawScaledText(
-                context = context,
-                text = lang("ui.pokedex.cobblepedia.count", tile.count),
-                x = tileX + tileW / 2,
-                y = tileY + 22,
-                shadow = true,
-                centered = true,
-                scale = 0.5F
-            )
+            if (tile.count >= 0) {
+                drawScaledText(
+                    context = context,
+                    text = lang("ui.pokedex.cobblepedia.count", tile.count),
+                    x = tileX + tileW / 2,
+                    y = tileY + 22,
+                    shadow = true,
+                    centered = true,
+                    scale = 0.5F
+                )
+            }
         }
     }
 
@@ -304,15 +329,14 @@ class CobblePediaPokedexPage(
         val bx = x + BACK_X
         val by = y + BACK_Y
         val hovered = mouseX in bx..(bx + BACK_W) && mouseY in by..(by + BACK_H)
-        context.fill(bx, by, bx + BACK_W, by + BACK_H, if (hovered) BACK_BG_HOVER else BACK_BG)
-        drawScaledText(
-            context = context,
-            text = lang("ui.pokedex.cobblepedia.back"),
-            x = bx + BACK_W / 2,
-            y = by + 4,
-            shadow = true,
-            centered = true,
-            scale = 0.5F
+        // 16x16 sheet = two vertically-stacked 16x8 frames: top half (vOffset 0) idle, bottom half (vOffset 8) hover.
+        blitk(
+            matrixStack = context.pose(),
+            texture = BACK_BUTTON,
+            x = bx, y = by,
+            width = BACK_W, height = BACK_H,
+            vOffset = if (hovered) BACK_H else 0,
+            textureHeight = BACK_H * 2
         )
     }
 
@@ -358,25 +382,9 @@ class CobblePediaPokedexPage(
         val category = selectedCategory
 
         if (category == null) {
-            val categories = tileCategories()
-            val index = tileIndexAt(x, y, mouseX, mouseY, categories.size + 2) ?: return false
-            if (index == categories.size) {
-                worldDexMode = true
-                return true
-            }
-            if (index == categories.size + 1) {
-                moveDexMode = true
-                moveDexView.open()
-                return true
-            }
-            if (categories[index] == ScannedDataCategory.BERRIES) {
-                berryDexMode = true
-                return true
-            }
-            selectedCategory = categories[index]
-            selectedSub = null
-            scrollRow = 0
-            clearSelectedEntry()
+            val tiles = hubTiles(gui)
+            val index = tileIndexAt(x, y, mouseX, mouseY, tiles.size) ?: return false
+            tiles[index].second()
             return true
         }
 

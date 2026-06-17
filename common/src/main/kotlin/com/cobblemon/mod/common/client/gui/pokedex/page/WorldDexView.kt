@@ -9,9 +9,12 @@
 package com.cobblemon.mod.common.client.gui.pokedex.page
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
+import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.render.drawScaledText
+import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewLoader
 import com.cobblemon.mod.common.client.render.structure.StructurePreviewRenderer
@@ -22,6 +25,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
+import com.cobblemon.mod.common.util.cobblemonResource
 import kotlin.math.max
 
 /**
@@ -51,11 +55,27 @@ class WorldDexView {
         private const val VIEW_Y = 39
         private const val VIEW_H = 72
         private const val ARROW_W = 10
-        private const val TABS_Y = 114
-        private const val TAB_H = 11
-        private const val SUBTAB_Y = 128
+        private const val CONTENT_TOP = 114      // content begins just below the viewport (VIEW_Y+VIEW_H=111)
+        private const val SUBTAB_Y = 114         // Spawns' bucket sub-filter buttons sit at the content top
         private const val SUBTAB_H = 10
-        private const val CONTENT_BOTTOM = 188
+        private const val CONTENT_BOTTOM = 174   // content ends above the bottom tab row
+        private const val TAB_ROW_Y = 178        // info-tab icon row at the BOTTOM (icons 178-186, arrow 174)
+
+        // Bottom-right info tabs reuse the Pokédex tab-row style + best-fit existing tab icons (swap freely later).
+        private val TAB_SELECT_ARROW = cobblemonResource("textures/gui/pokedex/select_arrow.png")
+        private val TAB_SPECIES = cobblemonResource("textures/gui/pokedex/tab_species.png")
+        private val TAB_DROPS = cobblemonResource("textures/gui/pokedex/tab_drops.png")
+        private val TAB_STATS = cobblemonResource("textures/gui/pokedex/tab_stats.png")
+        private val TAB_LOCATIONS = cobblemonResource("textures/gui/pokedex/tab_locations.png")
+        // List items reuse the MoveDex move-slot bar art; the right detail panel gets the custom background skin.
+        private val MOVE_SLOT = cobblemonResource("textures/gui/pokedex/move_slot.png")
+        private val MOVE_SLOT_SELECT = cobblemonResource("textures/gui/pokedex/move_slot_select.png")
+        private val INFO_BG = cobblemonResource("textures/gui/pokedex/cobblepedia_info_background.png")
+        private const val TAB_ICON_NATIVE = 16
+        private const val TAB_ICON_SCALE = 0.5f
+        private const val TAB_ICON_DISP = 8
+        private const val TAB_ICON_GAP = 22
+        private const val TAB_ICON_X0 = 2
         private const val ROW_TEXT_H = 9
 
         private const val PANEL_BG = 0xCC10303A.toInt()
@@ -66,6 +86,7 @@ class WorldDexView {
         private const val BORDER = 0xFF7EE7E5.toInt()
         private const val UNLOCK_DOT = 0xFF49C7C2.toInt()
         private const val TEXT_DARK = 0x33586B
+        private const val INFO_TEXT = 0x606B6E   // matches the main Pokédex info-page text colour
         private const val PREVIEW_BG = 0xC0101010.toInt()
 
         private fun fallback(key: String, text: String) = Component.translatableWithFallback("cobblemon.ui.worlddex.$key", text)
@@ -84,6 +105,16 @@ class WorldDexView {
         WorldDexData.Category.RUINS -> listOf(Tab.LOOT)
         WorldDexData.Category.FOSSILS -> listOf(Tab.LOOT, Tab.SUS)
     }
+
+    private fun tabIcon(tab: Tab) = when (tab) {
+        Tab.SPAWNS -> TAB_SPECIES
+        Tab.LOOT -> TAB_DROPS
+        Tab.SUS -> TAB_STATS
+        Tab.BIOMES -> TAB_LOCATIONS
+    }
+
+    /** Screen X of bottom tab [index]'s 8x8 icon within the detail panel anchored at [left]. */
+    private fun tabIconX(left: Int, index: Int) = left + TAB_ICON_X0 + index * TAB_ICON_GAP
 
     private var category = WorldDexData.Category.HABITATS
     private var scrollRow = 0
@@ -141,6 +172,13 @@ class WorldDexView {
         renderSearchBar(context, x, y, mouseX, mouseY)
         renderList(context, x, y, mouseX, mouseY)
         renderDetail(context, x, y, mouseX, mouseY)
+        renderCount(context, x, y)
+    }
+
+    /** [discovered] / [total] for the current category, top-right — mirrors the Berry/Move dex trackers. */
+    private fun renderCount(context: GuiGraphics, x: Int, y: Int) {
+        val text = Component.literal("${WorldDexData.unlockedCount(category)} / ${WorldDexData.count(category)}").bold()
+        drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = x + DETAIL_X + DETAIL_W - 4, y = y + 14, colour = INFO_TEXT)
     }
 
     private fun renderSearchBar(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
@@ -155,27 +193,27 @@ class WorldDexView {
 
     private fun renderList(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         val list = entries()
+        val unlocked = WorldDexData.unlockedNames(category)
         val maxScroll = max(0, list.size - VISIBLE_ROWS)
         if (scrollRow > maxScroll) scrollRow = maxScroll
         val end = (scrollRow + VISIBLE_ROWS).coerceAtMost(list.size)
         for (i in scrollRow until end) {
             val entry = list[i]
+            val isUnlocked = unlocked.contains(entry.id.path.substringAfterLast('/'))
             val rowY = y + LIST_TOP + (i - scrollRow) * ROW_H
             val left = x + LIST_X
-            val plateLeft = left + 13
-            val plateRight = left + LIST_W - 12
+            val selectedRow = entry === selected
             val hovered = mouseX in left..(left + LIST_W) && mouseY in rowY..(rowY + ROW_H - 2)
-            // icon plate (placeholder) + name plate + unlock dot
-            context.fill(left, rowY, left + 11, rowY + 11, ICON_BG)
-            context.fill(left, rowY, left + 11, rowY + 1, BORDER)
-            context.fill(plateLeft, rowY, plateRight, rowY + 11, when {
-                entry === selected -> PLATE_SELECTED
-                hovered -> PLATE_HOVER
-                else -> PLATE
-            })
-            drawScaledText(context = context, text = Component.literal("%04d".format(i + 1)), x = plateLeft + 2, y = rowY + 3, colour = TEXT_DARK, scale = 0.5F)
-            drawScaledText(context = context, text = entry.name.copy().bold(), x = plateLeft + 22, y = rowY + 3, colour = TEXT_DARK, scale = 0.65F)
-            context.fill(left + LIST_W - 9, rowY + 2, left + LIST_W - 2, rowY + 9, UNLOCK_DOT)
+            // Reuse the MoveDex move-slot bar art for each list item (top half = selected, bottom half = hover).
+            blitk(matrixStack = context.pose(), texture = MOVE_SLOT, x = left, y = rowY, width = LIST_W, height = 13)
+            if (selectedRow || hovered) {
+                blitk(matrixStack = context.pose(), texture = MOVE_SLOT_SELECT, x = left, y = rowY, width = LIST_W, height = 13, textureHeight = 26, vOffset = if (hovered && !selectedRow) 13 else 0)
+            }
+            drawScaledText(context = context, text = Component.literal("%04d".format(i + 1)), x = left + 4, y = rowY + 3, colour = TEXT_DARK, scale = 0.5F)
+            // Undiscovered entries are redacted to "???" (like the BerryDex's undiscovered berries).
+            val name = if (isUnlocked) entry.name.copy().bold() else Component.literal("???").bold()
+            drawScaledText(context = context, text = name, x = left + 20, y = rowY + 3, colour = TEXT_DARK, scale = 0.65F)
+            if (isUnlocked) context.fill(left + LIST_W - 9, rowY + 2, left + LIST_W - 2, rowY + 9, UNLOCK_DOT)
         }
     }
 
@@ -183,40 +221,61 @@ class WorldDexView {
         val entry = selected ?: return
         val left = x + DETAIL_X
 
-        context.fill(left, y + HEADER_Y, left + DETAIL_W, y + HEADER_Y + HEADER_H, PLATE)
+        // Custom right-panel background skin (header bar + tab-area bars). Drawn first, behind all content.
+        blitk(matrixStack = context.pose(), texture = INFO_BG, x = left, y = y + HEADER_Y, width = DETAIL_W, height = TAB_ROW_Y + TAB_ICON_DISP + 2 - HEADER_Y)
         drawScaledText(context = context, text = Component.literal("%04d".format(selectedNumber)).bold(), x = left + 3, y = y + HEADER_Y + 3, colour = TEXT_DARK, scale = 0.65F)
         drawScaledText(context = context, text = entry.name.copy().bold(), x = left + 28, y = y + HEADER_Y + 3, colour = TEXT_DARK, scale = 0.75F)
 
         val variants = entry.variants
         if (variants.isEmpty()) {
-            drawScaledText(context = context, text = fallback("no_preview", "No preview available"), x = left + DETAIL_W / 2, y = y + VIEW_Y + VIEW_H / 2, centered = true, shadow = true, scale = 0.65F)
+            drawScaledText(context = context, text = fallback("no_preview", "No preview available"), x = left + DETAIL_W / 2, y = y + VIEW_Y + VIEW_H / 2, centered = true, colour = INFO_TEXT, scale = 0.65F)
             return
         }
         if (variantIndex >= variants.size) variantIndex = 0
 
         val viewLeft = left + ARROW_W + 2
         val viewWidth = DETAIL_W - (ARROW_W + 2) * 2
-        context.fill(viewLeft, y + VIEW_Y, viewLeft + viewWidth, y + VIEW_Y + VIEW_H, PREVIEW_BG)
+        // No dark backdrop — the structure renders directly on the panel background texture for a cutout look.
         StructurePreviewLoader.forEntry(variants[variantIndex])?.let {
             StructurePreviewRenderer.render(context, it, viewLeft, y + VIEW_Y, viewWidth, VIEW_H, yaw, pitch, zoom)
         }
         if (variants.size > 1) {
             renderArrow(context, left, y, mouseX, mouseY, right = false)
             renderArrow(context, left + DETAIL_W - ARROW_W, y, mouseX, mouseY, right = true)
-            drawScaledText(context = context, text = Component.translatableWithFallback("cobblemon.ui.worlddex.variation", "Variation %s", variantIndex + 1), x = left + DETAIL_W / 2, y = y + VIEW_Y + VIEW_H - 8, centered = true, shadow = true, scale = 0.55F)
+            drawScaledText(context = context, text = Component.translatableWithFallback("cobblemon.ui.worlddex.variation", "Variation %s", variantIndex + 1), x = left + DETAIL_W / 2, y = y + VIEW_Y + VIEW_H - 8, centered = true, colour = INFO_TEXT, scale = 0.55F)
         }
         if (hasGimmighoulChest(variants[variantIndex])) {
             renderScaledGuiItemIcon(chestIconStack(), (left + DETAIL_W - 12).toDouble(), (y + HEADER_Y + 1).toDouble(), matrixStack = context.pose(), scale = 0.65)
         }
 
-        // Category tabs.
+        // Category tabs — icon buttons at the BOTTOM, styled like the main Pokédex / MoveDex tab row.
         val tabs = tabsFor(category)
-        val tabW = (DETAIL_W - (tabs.size - 1) * 2) / tabs.size
         tabs.forEachIndexed { index, tab ->
-            val tx = left + index * (tabW + 2)
-            val hovered = mouseX in tx..(tx + tabW) && mouseY in (y + TABS_Y)..(y + TABS_Y + TAB_H)
-            context.fill(tx, y + TABS_Y, tx + tabW, y + TABS_Y + TAB_H, if (tab == activeTab) PLATE_SELECTED else if (hovered) PLATE_HOVER else PLATE)
-            drawScaledText(context = context, text = fallback(tab.key, tab.label), x = tx + tabW / 2, y = y + TABS_Y + 3, colour = TEXT_DARK, centered = true, scale = 0.55F)
+            val ix = tabIconX(left, index)
+            val active = tab == activeTab
+            val hovered = mouseX in ix..(ix + TAB_ICON_DISP) && mouseY in (y + TAB_ROW_Y)..(y + TAB_ROW_Y + TAB_ICON_DISP)
+            blitk(
+                matrixStack = context.pose(),
+                texture = tabIcon(tab),
+                x = ix / TAB_ICON_SCALE,
+                y = (y + TAB_ROW_Y) / TAB_ICON_SCALE,
+                width = TAB_ICON_NATIVE,
+                height = TAB_ICON_NATIVE,
+                vOffset = if (hovered || active) TAB_ICON_NATIVE else 0,
+                textureHeight = TAB_ICON_NATIVE * 2,
+                scale = TAB_ICON_SCALE
+            )
+            if (active) {
+                blitk(
+                    matrixStack = context.pose(),
+                    texture = TAB_SELECT_ARROW,
+                    x = (ix + 1) / TAB_ICON_SCALE,
+                    y = (y + TAB_ROW_Y - 4) / TAB_ICON_SCALE,
+                    width = 12,
+                    height = 6,
+                    scale = TAB_ICON_SCALE
+                )
+            }
         }
 
         when (activeTab) {
@@ -239,8 +298,8 @@ class WorldDexView {
     private fun renderSpawns(context: GuiGraphics, left: Int, y: Int, entry: WorldDexData.Entry, mouseX: Int, mouseY: Int) {
         val spawns = WorldDexHabitatSpawns.spawnsFor(entry)
         if (spawns.isEmpty()) {
-            panel(context, left, y, TABS_Y + TAB_H + 1)
-            centeredMessage(context, left, y, TABS_Y + TAB_H + 1, fallback("no_spawns_yet", "No spawns yet"))
+            panel(context, left, y, CONTENT_TOP)
+            centeredMessage(context, left, y, CONTENT_TOP, fallback("no_spawns_yet", "No spawns yet"))
             return
         }
         // Rarity bucket sub-buttons.
@@ -264,16 +323,16 @@ class WorldDexView {
         for (i in contentScroll until end) {
             val spawn = bucketSpawns[i]
             val rowY = y + contentTop + 2 + (i - contentScroll) * ROW_TEXT_H
-            drawScaledText(context = context, text = spawn.name, x = left + 4, y = rowY, shadow = true, scale = 0.6F)
+            drawScaledText(context = context, text = spawn.name, x = left + 4, y = rowY, colour = INFO_TEXT, scale = 0.6F)
             val lvl = if (spawn.levelRange.isNotEmpty()) " Lv.${spawn.levelRange}" else ""
-            drawScaledText(context = context, text = Component.literal("%.0f%%%s".format(spawn.weight / totalWeight * 100, lvl)), x = left + DETAIL_W - 52, y = rowY, shadow = true, scale = 0.55F)
+            drawScaledText(context = context, text = Component.literal("%.0f%%%s".format(spawn.weight / totalWeight * 100, lvl)), x = left + DETAIL_W - 52, y = rowY, colour = INFO_TEXT, scale = 0.55F)
         }
     }
 
     private fun renderLoot(context: GuiGraphics, left: Int, y: Int, entry: WorldDexData.Entry, sus: Boolean) {
         val loot = WorldDexLoot.lootFor(entry)
         val items = if (sus) loot.susItems else loot.chestItems
-        val contentTop = TABS_Y + TAB_H + 1
+        val contentTop = CONTENT_TOP
         panel(context, left, y, contentTop)
         if (items.isEmpty()) {
             centeredMessage(context, left, y, contentTop, if (sus) fallback("no_sus", "No suspicious finds") else fallback("no_loot", "No loot data"))
@@ -287,13 +346,13 @@ class WorldDexView {
             val rowY = y + contentTop + 1 + (i - contentScroll) * ROW_TEXT_H
             val stack = ItemStack(BuiltInRegistries.ITEM.get(itemId))
             renderScaledGuiItemIcon(stack, (left + 4).toDouble(), rowY.toDouble(), matrixStack = context.pose(), scale = 0.5)
-            drawScaledText(context = context, text = stack.hoverName.copy(), x = left + 14, y = rowY + 1, shadow = true, scale = 0.6F)
+            drawScaledText(context = context, text = stack.hoverName.copy(), x = left + 14, y = rowY + 1, colour = INFO_TEXT, scale = 0.6F)
         }
     }
 
     private fun renderBiomes(context: GuiGraphics, left: Int, y: Int, entry: WorldDexData.Entry) {
         val tagBiomes = WorldDexBiomes.biomesFor(entry)
-        val contentTop = TABS_Y + TAB_H + 1
+        val contentTop = CONTENT_TOP
         panel(context, left, y, contentTop)
         // Flatten into rows: a tag header followed by its biomes (indented).
         val rows = ArrayList<Pair<MutableComponent, Boolean>>() // text, isHeader
@@ -312,16 +371,16 @@ class WorldDexView {
         for (i in contentScroll until end) {
             val (text, header) = rows[i]
             val rowY = y + contentTop + 2 + (i - contentScroll) * ROW_TEXT_H
-            drawScaledText(context = context, text = text, x = left + (if (header) 4 else 12), y = rowY, shadow = true, scale = 0.55F)
+            drawScaledText(context = context, text = text, x = left + (if (header) 4 else 12), y = rowY, colour = INFO_TEXT, scale = 0.55F)
         }
     }
 
     private fun panel(context: GuiGraphics, left: Int, y: Int, contentTop: Int) {
-        context.fill(left, y + contentTop, left + DETAIL_W, y + CONTENT_BOTTOM, PANEL_BG)
+        // No dark box — content now draws straight on the background texture (kept as a no-op for call sites).
     }
 
     private fun centeredMessage(context: GuiGraphics, left: Int, y: Int, contentTop: Int, text: MutableComponent) {
-        drawScaledText(context = context, text = text, x = left + DETAIL_W / 2, y = y + (contentTop + CONTENT_BOTTOM) / 2 - 3, centered = true, shadow = true, scale = 0.6F)
+        drawScaledText(context = context, text = text, x = left + DETAIL_W / 2, y = y + (contentTop + CONTENT_BOTTOM) / 2 - 3, centered = true, colour = INFO_TEXT, scale = 0.6F)
     }
 
     private fun clampScroll(count: Int, visible: Int) {
@@ -354,6 +413,8 @@ class WorldDexView {
             for (i in scrollRow until end) {
                 val rowY = y + LIST_TOP + (i - scrollRow) * ROW_H
                 if (mouseY >= rowY && mouseY <= rowY + ROW_H - 2) {
+                    // Locked (undiscovered) entries aren't selectable, like the BerryDex.
+                    if (!WorldDexData.isUnlocked(list[i])) return true
                     selected = list[i]
                     selectedNumber = i + 1
                     variantIndex = 0
@@ -380,13 +441,12 @@ class WorldDexView {
             }
         }
 
-        // Category tabs.
+        // Category tabs (bottom icon row).
         val tabs = tabsFor(category)
-        if (mouseY >= y + TABS_Y && mouseY <= y + TABS_Y + TAB_H) {
-            val tabW = (DETAIL_W - (tabs.size - 1) * 2) / tabs.size
+        if (mouseY >= y + TAB_ROW_Y && mouseY <= y + TAB_ROW_Y + TAB_ICON_DISP) {
             tabs.forEachIndexed { index, tab ->
-                val tx = left + index * (tabW + 2)
-                if (mouseX >= tx && mouseX <= tx + tabW) { activeTab = tab; contentScroll = 0; spawnBucket = null; return true }
+                val ix = tabIconX(left, index)
+                if (mouseX >= ix && mouseX <= ix + TAB_ICON_DISP) { activeTab = tab; contentScroll = 0; spawnBucket = null; return true }
             }
         }
 
@@ -418,7 +478,7 @@ class WorldDexView {
                 zoom = (zoom + deltaY.toFloat() * 0.1f).coerceIn(0.25f, 4f)
                 return true
             }
-            if (mouseY >= y + TABS_Y + TAB_H) {
+            if (mouseY >= y + CONTENT_TOP && mouseY < y + TAB_ROW_Y) {
                 contentScroll = (contentScroll - deltaY.toInt()).coerceAtLeast(0)
                 return true
             }

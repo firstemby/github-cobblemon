@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.client.ui.DeletePokedexPhotoPacket
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoMetadata
 import com.cobblemon.mod.common.pokedex.photo.PokedexPhotoRatings
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -43,6 +44,12 @@ class PhotoGalleryPokedexPage(
         private const val GRID_OFFSET_Y = 49
         private const val SEARCH_OFFSET_X = 26
         private const val SEARCH_OFFSET_Y = 28
+        // Back button → CobblePedia hub.
+        private val BACK_BUTTON = cobblemonResource("textures/gui/pokedex/pokedex_back_button.png")
+        private const val BACK_X = 20
+        private const val BACK_Y = 14
+        private const val BACK_W = 16
+        private const val BACK_H = 8
         private const val SEARCH_WIDTH = 120
         private const val SEARCH_HEIGHT = 17
         private const val PREVIEW_OFFSET_X = 218
@@ -98,6 +105,12 @@ class PhotoGalleryPokedexPage(
         val photoStore = CobblemonClient.pokedexPhotoStore
         searchQuery = searchWidget?.value ?: searchQuery
         searchWidget?.render(context, mouseX, mouseY, delta)
+
+        // Back button → CobblePedia hub.
+        run {
+            val hovered = mouseX in (x + BACK_X)..(x + BACK_X + BACK_W) && mouseY in (y + BACK_Y)..(y + BACK_Y + BACK_H)
+            blitk(matrixStack = context.pose(), texture = BACK_BUTTON, x = x + BACK_X, y = y + BACK_Y, width = BACK_W, height = BACK_H, vOffset = if (hovered) BACK_H else 0, textureHeight = BACK_H * 2)
+        }
 
         val allPhotos = photoStore.getPhotos()
         val photos = PokedexPhotoSearch.filterAndSort(allPhotos, searchQuery, sortField, sortDirection)
@@ -286,6 +299,14 @@ class PhotoGalleryPokedexPage(
                 gui.focusPageWidget(widget)
                 return true
             }
+        }
+
+        // Back button → CobblePedia hub.
+        val backX = (gui.width - BASE_WIDTH) / 2 + BACK_X
+        val backY = (gui.height - BASE_HEIGHT) / 2 + BACK_Y
+        if (mouseX >= backX && mouseX <= backX + BACK_W && mouseY >= backY && mouseY <= backY + BACK_H) {
+            gui.openPage(CobblePediaPokedexPage::class.java)
+            return true
         }
 
         if (button != 0 && button != 1) return false

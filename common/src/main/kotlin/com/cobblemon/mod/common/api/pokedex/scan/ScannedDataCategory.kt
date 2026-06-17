@@ -15,6 +15,8 @@ enum class ScannedDataCategory(val id: String) {
     ITEMS("items"),
     STRUCTURES("structures"),
     HABITATS("habitats"),
+    RUINS("ruins"),
+    FOSSILS("fossils"),
     MISC("misc");
 
     /**
