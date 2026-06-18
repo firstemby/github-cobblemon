@@ -474,6 +474,8 @@ object CobblemonClient {
         LOGGER.info("Loading assets...")
         // Particles come first because animations need them.
         BedrockParticleOptionsRepository.loadEffects(resourceManager)
+        // Per-animation emissive light windows (LambDynamicLights, no-op without it).
+        com.cobblemon.mod.common.client.render.PokemonAnimationLight.load(resourceManager)
         // Animations come next because models need them.
         BedrockAnimationRepository.loadAnimations(
             resourceManager = resourceManager,

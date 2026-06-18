@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.compat.lambdynamiclights;
 
+import com.cobblemon.mod.common.client.render.PokemonAnimationLight;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import dev.lambdaurora.lambdynlights.api.entity.luminance.EntityLuminance;
 import dev.lambdaurora.lambdynlights.api.item.ItemLightSourceManager;
@@ -37,7 +38,10 @@ public final class PokemonLuminance extends CustomLuminance implements EntityLum
             int itemLightLevel = item.isEmpty() ? 0 : itemLightSourceManager.getLuminance(item, underwater);
             int formLightLevel = extractFormLightLevel(pokemon.getForm(), underwater).orElse(0);
 
-            return Math.max(itemLightLevel, formLightLevel);
+            // Animation based emissives
+            int animLightLevel = PokemonAnimationLight.luminanceFor(pokemon);
+
+            return Math.max(Math.max(itemLightLevel, formLightLevel), animLightLevel);
         } else {
             return 0;
         }
