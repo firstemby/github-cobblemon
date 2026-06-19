@@ -40,26 +40,15 @@ class PlayerRecallBallRenderer<T : Player>(
 ) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
     companion object {
-        // Visual tuning knobs — adjust in-game to taste.
-        /** Overall size of the held ball. */
         private const val BALL_SCALE = 0.5F
-        /**
-         * Offset from the hand pivot to where the ball sits, in block units. These match the anchor
-         * vanilla uses for a held item in ItemInHandLayer.renderArmWithItem (1/16, 0.125, -0.625),
-         * so the ball lands exactly where the player's held item normally renders.
-         */
+
         private const val HAND_X = 0.0625
         private const val HAND_Y = 0.125
         private const val HAND_Z = -0.625
-        /** Spin of the ball about its own vertical axis so its front faces away from the player. */
+
         private const val BALL_YAW_SPIN = 180F
-        /** Slight uniform upscale so the ball's surface clears the arm and stops z-fighting with it. */
         private const val BALL_INFLATE = 1.08F
-        /**
-         * Nudges where the recall beam starts, relative to the ball's "beam" locator, along the ball's
-         * local X (side), Y (up), and Z (depth). Units are the ball's model units. Flip a sign if a
-         * value moves the wrong direction. All 0 = exactly on the model's beam locator.
-         */
+
         private const val BEAM_X_OFFSET = 0F
         private const val BEAM_Y_OFFSET = 0.18F
         private const val BEAM_Z_OFFSET = -0.30F
@@ -82,16 +71,11 @@ class PlayerRecallBallRenderer<T : Player>(
         headPitch: Float
     ) {
         val anim = RecallArmAnimationTracker.get(player.uuid) ?: return
-
-        // The first-person hand is rendered through a different pipeline; skip it here.
         val mc = Minecraft.getInstance()
         if (player === mc.player && mc.options.cameraType.isFirstPerson) return
 
         matrixStack.pushPose()
-        // Land on the right hand, which has been posed forward by HumanoidModelMixin.
         getParentModel().translateToHand(HumanoidArm.RIGHT, matrixStack)
-        // Orient out of the palm, front of the ball facing away from the player. Mirrors the vanilla
-        // item-in-hand orientation as a starting point.
         matrixStack.mulPose(Axis.XP.rotationDegrees(-90F))
         matrixStack.mulPose(Axis.YP.rotationDegrees(180F))
         matrixStack.translate(HAND_X, HAND_Y, HAND_Z)
@@ -111,28 +95,20 @@ class PlayerRecallBallRenderer<T : Player>(
         val state = anim.ballState
         val ball = anim.ball
         matrixStack.pushPose()
-        // Grow the ball very slightly (about the hand anchor) so its surface clears the arm.
         matrixStack.scale(BALL_INFLATE, BALL_INFLATE, BALL_INFLATE)
-        // The ball model's origin is at its base (it spans 8 model units tall, centre at 4), so it
-        // would sit on top of the hand. Shift it so its centre lands on the anchor (the hand tip),
-        // which is also where the beam originates. 4 units = 4/16 block, then scaled by BALL_SCALE.
         matrixStack.translate(0.0, (-8.0 / 16.0) * BALL_SCALE, 0.0)
         matrixStack.scale(BALL_SCALE, -BALL_SCALE, -BALL_SCALE)
-        // Spin in place so the ball's front faces away from the player (it points back otherwise).
-        // Done here rather than in the outer frame so the ball's position — and the captured beam
-        // origin — stay put.
         matrixStack.mulPose(Axis.YP.rotationDegrees(BALL_YAW_SPIN))
+
         val model = VaryingModelRepository.getPoser(ball.name, state)
         val texture = VaryingModelRepository.getTexture(ball.name, state)
         state.updatePartialTicks(partialTicks)
         model.context = ballContext
         ballContext.put(RenderContext.ASPECTS, state.aspects)
         ballContext.put(RenderContext.POSABLE_STATE, state)
-        // Keep the ball closed (shut pose) — no moveToPose("open").
+
         model.applyAnimations(null, state, 0F, 0F, 0F, 0F, 0F)
-        // Emit the recall beam from the ball model's own "beam" locator (on its front face) so it
-        // always tracks the ball exactly, regardless of the positioning/scale above. applyAnimations
-        // has just populated the locator; project it through the same matrix the ball renders with.
+
         state.locatorStates["beam"]?.let { beamLocator ->
             matrixStack.pushPose()
             matrixStack.mulPose(beamLocator.matrix)

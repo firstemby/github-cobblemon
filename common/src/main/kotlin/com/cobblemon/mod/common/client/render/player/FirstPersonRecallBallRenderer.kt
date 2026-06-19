@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture
  */
 object FirstPersonRecallBallRenderer {
 
-    // Visual tuning knobs — adjust in-game to taste.
     /** Resting position of the ball in view space (right, up, forward). */
     private const val REST_X = 0.45
     private const val REST_Y = -0.55
@@ -50,10 +49,9 @@ object FirstPersonRecallBallRenderer {
         val rise = RecallArmAnimationTracker.raiseFactor(player.uuid)
 
         poseStack.pushPose()
-        // Slide up from below as the recall begins, hold, then drop back down as it ends.
         poseStack.translate(REST_X, REST_Y - RISE_DISTANCE * (1.0 - rise), REST_Z)
         poseStack.scale(BALL_SCALE, -BALL_SCALE, -BALL_SCALE)
-        // Tilt slightly so the ball reads nicely in the corner. Front faces the crosshair.
+
         poseStack.mulPose(Axis.YP.rotationDegrees(180F))
         poseStack.mulPose(Axis.XP.rotationDegrees(15F))
 

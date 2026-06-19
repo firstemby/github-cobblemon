@@ -27,13 +27,12 @@ import net.minecraft.world.phys.Vec3
  * layer, the first-person ball renderer, and the beam origin in PokemonRenderer.
  */
 object RecallArmAnimationTracker {
-    /**
-     * How long the arm stays raised, in seconds. Matches the full recall beam lifetime:
-     * extend (BEAM_EXTEND_TIME) + hold full (BEAM_SHRINK_TIME) + retract (BEAM_EXTEND_TIME) = 0.8s.
-     */
+
+    // How long the arm stays raised in seconds
+
     const val ARM_HOLD_SECONDS = 0.8
 
-    /** Portion of [ARM_HOLD_SECONDS] spent easing the arm up / ball in at the start and down at the end. */
+    // Portion of time spent easing the arm up / ball in at the start and down at the end
     private const val EASE_SECONDS = 0.15
 
     class RecallAnim(
@@ -41,10 +40,7 @@ object RecallArmAnimationTracker {
         val aspects: Set<String>,
         val startTimeMs: Long
     ) {
-        /** Reused render state so the ball model's animation/locator data persists across frames. */
         val ballState = ClientBallDisplay(ball, aspects)
-
-        /** World-space point the recall beam should emit from, captured by the held-ball render layer each frame. */
         var beamOrigin: Vec3? = null
     }
 
@@ -54,7 +50,7 @@ object RecallArmAnimationTracker {
         active[playerUuid] = RecallAnim(ball, aspects, System.currentTimeMillis())
     }
 
-    /** Returns the active recall for the player, or null if there is none / it has expired (lazily evicting). */
+    /** Returns the active recall for the player, or null if there is none / it has expired */
     fun get(playerUuid: UUID): RecallAnim? {
         val anim = active[playerUuid] ?: return null
         if (secondsSince(anim) > ARM_HOLD_SECONDS) {
