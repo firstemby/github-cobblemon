@@ -57,8 +57,8 @@ object BedrockParticleOptionsRepository {
      * components, so a light field inside the particle file would be lost on re-save. A sidecar file is
      * never touched by Snowstorm.
      *
-     * Files live under `assets/<namespace>/particle_light/` (any `.json` file), each a map of
-     * particle-effect id to its light config, e.g.:
+     * Files live under `assets/<namespace>/dynamiclights/particles/` (any `.json` file), each a map
+     * of particle-effect id to its light config, e.g.:
      * ```json
      * {
      *   "cobblemon:thunderbolt_actor": { "light_level": 14 },
@@ -72,26 +72,31 @@ object BedrockParticleOptionsRepository {
     private fun loadLightConfig(resourceManager: ResourceManager) {
         // LambDynamicLights is the only thing that consumes these levels. If it isn't installed, don't
         // even read the sidecar files — the light config is never parsed, applied, or considered.
-        if (!Cobblemon.implementation.isModInstalled("lambdynlights")) return
+        val lambDynamicLightsInstalled = Cobblemon.implementation.isModInstalled("lambdynlights") ||
+                Cobblemon.implementation.isModInstalled("lambdynamiclights")
+        if (!lambDynamicLightsInstalled) return
 
         var applied = 0
-        resourceManager.listResources("particle_light") { path -> path.endsWith(".json") }.forEach { identifier, resource ->
-            try {
-                resource.open().use { stream ->
-                    val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
-                    val root = GSON.fromJson(json, JsonObject::class.java)
-                    for ((key, value) in root.entrySet()) {
-                        val effect = effects[ResourceLocation.parse(key)] ?: continue
-                        val config = value.asJsonObject
-                        config.get("light_level")?.asInt?.let { effect.particle.lightEmission = it.coerceIn(0, 15) }
-                        config.getAsJsonArray("light_levels")?.let { arr ->
-                            effect.particle.lightEmissionFrames = arr.map { it.asInt.coerceIn(0, 15) }
+        val configPaths = listOf("dynamiclights/particles", "particle_light")
+        for (configPath in configPaths) {
+            resourceManager.listResources(configPath) { path -> path.endsWith(".json") }.forEach { identifier, resource ->
+                try {
+                    resource.open().use { stream ->
+                        val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
+                        val root = GSON.fromJson(json, JsonObject::class.java)
+                        for ((key, value) in root.entrySet()) {
+                            val effect = effects[ResourceLocation.parse(key)] ?: continue
+                            val config = value.asJsonObject
+                            config.get("light_level")?.asInt?.let { effect.particle.lightEmission = it.coerceIn(0, 15) }
+                            config.getAsJsonArray("light_levels")?.let { arr ->
+                                effect.particle.lightEmissionFrames = arr.map { it.asInt.coerceIn(0, 15) }
+                            }
+                            applied++
                         }
-                        applied++
                     }
+                } catch (e: Exception) {
+                    LOGGER.error("Failed to load particle light config $identifier", e)
                 }
-            } catch (e: Exception) {
-                LOGGER.error("Failed to load particle light config $identifier", e)
             }
         }
         if (applied > 0) LOGGER.info("Applied dynamic-light config to $applied particle effect(s)")
