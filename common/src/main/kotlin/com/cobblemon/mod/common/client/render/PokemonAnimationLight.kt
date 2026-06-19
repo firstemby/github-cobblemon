@@ -10,8 +10,9 @@ package com.cobblemon.mod.common.client.render
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.endsWith
 import com.google.gson.GsonBuilder
@@ -22,13 +23,14 @@ import net.minecraft.server.packs.resources.ResourceManager
 /**
  * Per-animation emissive light windows for Pokemon whose emissive parts only appear or flare during
  * specific animations (Pikachu cheeks, the Cyndaquil line's flames flaring in battle, Bellibolt's belly,
- * etc.). A Pokemon emits the window's block-light level only while its current animation's elapsed time
- * falls inside one of the windows. Consulted by the LambDynamicLights `PokemonLuminance` (so it only does
- * anything when that mod is installed).
+ * etc.). A Pokemon emits the window's block-light level only while a matching animation's elapsed time
+ * falls inside one of the windows. Consulted by the LambDynamicLights `PokemonLuminance`.
  *
- * Data is loaded from JSON files under `assets/<namespace>/dynamiclights/entity/animations/`: a map of
- * species path -> animation short name -> list of `{ start, end, level }` (start/end in seconds into the
- * animation; looping animations wrap).
+ * Matches three kinds of running animation: the current PRIMARY animation (moves like special/physical/
+ * status), ACTIVE/stateful animations (cry/battle_cry), and the current POSE's idle animations
+ * (battle_idle/air_idle/air_fly etc., which loop continuously). Data is loaded from JSON under
+ * `assets/<namespace>/dynamiclights/entity/animations/`: species path -> animation short name ->
+ * list of `{ start, end, level }` (seconds into the animation; looping/continuous anims wrap).
  */
 object PokemonAnimationLight {
     private val GSON = GsonBuilder().create()
@@ -40,6 +42,7 @@ object PokemonAnimationLight {
         // Only LambDynamicLights consumes these; skip entirely if it isn't installed.
         if (!Cobblemon.implementation.isModInstalled("lambdynlights")) {
             data = emptyMap()
+            Cobblemon.LOGGER.info("[AnimLight] LambDynamicLights not installed; animation lights disabled")
             return
         }
         val loaded = mutableMapOf<String, MutableMap<String, List<Window>>>()
@@ -59,11 +62,11 @@ object PokemonAnimationLight {
                         }
                     }
                 } catch (e: Exception) {
-                    Cobblemon.LOGGER.error("Failed to load animation light config $identifier", e)
+                    Cobblemon.LOGGER.error("[AnimLight] Failed to load animation light config $identifier", e)
                 }
             }
         data = loaded
-        if (loaded.isNotEmpty()) Cobblemon.LOGGER.info("Loaded animation dynamic-light windows for ${loaded.size} species")
+        Cobblemon.LOGGER.info("[AnimLight] loaded animation dynamic-light windows for ${loaded.size} species: ${loaded.keys}")
     }
 
     /** Block light (0..15) this Pokemon's emissive parts emit right now based on its active animation, or 0. */
@@ -74,18 +77,33 @@ object PokemonAnimationLight {
         val state = entity.delegate as? PosableState ?: return 0
         val seconds = state.animationSeconds
         var best = 0
-        fun consider(anim: ActiveAnimation?) {
-            val bedrock = anim as? BedrockActiveAnimation ?: return
-            val windows = perAnim[bedrock.animation.name.substringAfterLast('.')] ?: return
-            var elapsed = seconds - bedrock.startedSeconds
-            val length = bedrock.animation.animationLength.toFloat()
-            if (bedrock.animation.shouldLoop && length > 0f) elapsed = (elapsed % length + length) % length
+
+        // startedSeconds != null -> timed (primary/stateful); null -> continuous pose idle (use the loop clock)
+        fun match(animation: BedrockAnimation?, startedSeconds: Float?) {
+            animation ?: return
+            val windows = perAnim[animation.name.substringAfterLast('.')] ?: return
+            val length = animation.animationLength.toFloat()
+            val elapsed: Float = if (startedSeconds != null && startedSeconds >= 0f) {
+                val e = seconds - startedSeconds
+                if (animation.shouldLoop && length > 0f) (e % length + length) % length else e
+            } else if (length > 0f) {
+                (seconds % length + length) % length
+            } else {
+                Float.NaN // continuous, no length info -> treat as always within its windows
+            }
             for (w in windows) {
-                if (elapsed >= w.start && elapsed <= w.end && w.level > best) best = w.level
+                val inWindow = elapsed.isNaN() || (elapsed >= w.start && elapsed <= w.end)
+                if (inWindow && w.level > best) best = w.level
             }
         }
-        state.primaryAnimation?.let { consider(it.animation) }
-        state.allActiveAnimations.forEach(::consider)
+
+        // Move animations: primary (special/physical/status/volttackle) and stateful (cry/battle_cry).
+        (state.primaryAnimation?.animation as? BedrockActiveAnimation)?.let { match(it.animation, it.startedSeconds) }
+        state.allActiveAnimations.forEach { (it as? BedrockActiveAnimation)?.let { b -> match(b.animation, b.startedSeconds) } }
+        // Pose idle animations (battle_idle / air_idle / air_fly etc.) run continuously off the pose, not as active animations.
+        state.currentModel?.poses?.get(state.currentPose)?.animations?.forEach { poseAnim ->
+            (poseAnim as? BedrockPoseAnimation)?.let { match(it.animation, null) }
+        }
         return best
     }
 }
