@@ -144,10 +144,15 @@ class PokemonRenderer(
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
 
 
+        // While the recall beam is connected, render the Pokémon at full brightness so the red
+        // dematerialisation reads as glowing energy rather than a dim shadow in low light.
+        val recallActive = entity.beamMode == 3 && clientDelegate.secondsSinceBeamEffectStarted > BEAM_EXTEND_TIME
+        val renderLight = if (recallActive) LightTexture.FULL_BRIGHT else packedLight
+
         if (entity.passengers.isNotEmpty()) {
-            renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+            renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, renderLight)
         } else {
-            super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+            super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, renderLight)
         }
 
         // Call rendering for alpha eye trail
@@ -227,10 +232,12 @@ class PokemonRenderer(
         val s = clientDelegate.secondsSinceBeamEffectStarted
         if (beamMode == 3) {
             if (s > BEAM_EXTEND_TIME) {
-                val value = (s - BEAM_EXTEND_TIME) /  BEAM_SHRINK_TIME
-                val colourValue = 1F - min(0.6F, value)
-                modelNow.green = colourValue
-                modelNow.blue = colourValue
+                // As soon as the recall beam connects, drive the whole model to red so it
+                // dematerialises as a solid red silhouette like in the show. The forced red
+                // overlay (see PosablePokemonEntityModel.getOverlayTexture) supplies the bright
+                // energy tint; zeroing green/blue makes the remaining texture contribution red too.
+                modelNow.green = 0F
+                modelNow.blue = 0F
             }
         }
 

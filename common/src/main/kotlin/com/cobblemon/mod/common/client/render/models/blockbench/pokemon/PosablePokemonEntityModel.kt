@@ -10,16 +10,34 @@ package com.cobblemon.mod.common.client.render.models.blockbench.pokemon
 
 import com.cobblemon.mod.common.client.MountedPokemonAnimationRenderController
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.client.entity.PokemonClientDelegate.Companion.BEAM_EXTEND_TIME
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
 class PosablePokemonEntityModel : PosableEntityModel<PokemonEntity>() {
+    /**
+     * While a Pokémon is being recalled (beamMode 3) and the recall beam has connected, force the
+     * vanilla "hurt" overlay so the entity shader blends the whole model toward solid red. This is
+     * what makes the Pokémon dematerialise as a single red silhouette like in the show, regardless
+     * of its actual texture. Outside of recall we defer to the normal overlay (e.g. damage flashes).
+     */
+    override fun getOverlayTexture(entity: Entity?): Int? {
+        if (entity is PokemonEntity && entity.beamMode == 3) {
+            val delegate = entity.delegate as? PokemonClientDelegate
+            if (delegate != null && delegate.secondsSinceBeamEffectStarted > BEAM_EXTEND_TIME) {
+                return OverlayTexture.pack(OverlayTexture.u(0F), OverlayTexture.v(true))
+            }
+        }
+        return super.getOverlayTexture(entity)
+    }
+
     override fun setupEntityTypeContext(entity: Entity?) {
         super.setupEntityTypeContext(entity)
         (entity as? PokemonEntity)?.let {
