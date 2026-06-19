@@ -4,6 +4,6 @@
   "actionEffect": "cobblemon:gold_sense_action",
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
   "cooldownTicks": 20,
-  "accessCondition": "q.pokemon.species == 'gimmighoul'",
+  "accessCondition": "q.pokemon.species.name == 'Gimmighoul'",
   "useCondition": "1"
 }

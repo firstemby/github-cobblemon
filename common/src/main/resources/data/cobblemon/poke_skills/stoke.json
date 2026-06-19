@@ -3,7 +3,7 @@
   "enabled": true,
   "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
   "cooldownTicks": 20,
-  "targetType": "ENTITY",
+  "targetType": "BLOCK",
   "range": 8,
   "targetCondition": "1",
   "grantingMoves": [
