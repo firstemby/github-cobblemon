@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PosableP
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.client.render.player.RecallArmAnimationTracker
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallPosableState
 import com.cobblemon.mod.common.client.render.renderBeaconBeam
 import com.cobblemon.mod.common.client.settings.ServerSettings
@@ -60,6 +61,7 @@ import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.*
 import kotlin.math.*
@@ -69,6 +71,14 @@ class PokemonRenderer(
 ) : MobRenderer<PokemonEntity, PosablePokemonEntityModel>(context, PosablePokemonEntityModel(), 0.5f) {
     companion object {
         val recallBeamColour = Vector4f(1F, 0.1F, 0.1F, 1F)
+        /**
+         * Nudges where the beam starts on the thrown Poké Ball when capturing, relative to its "beam"
+         * locator, along the ball's local X (side), Y (up), Z (depth). Units are the ball's model
+         * units; flip a sign if an axis moves the wrong way. All 0 = exactly on the beam locator.
+         */
+        private const val CAPTURE_BEAM_X_OFFSET = 0.0
+        private const val CAPTURE_BEAM_Y_OFFSET = 0.2
+        private const val CAPTURE_BEAM_Z_OFFSET = 0.45
         fun ease(x: Double): Double {
             return 1 - (1 - x).pow(3)
         }
@@ -323,8 +333,15 @@ class PokemonRenderer(
     fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
-        var beamSourcePosition = if (beamTarget is EmptyPokeBallEntity) {
-            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.getOrigin() ?: beamTarget.position()
+        // If a player is recalling, start the beam from the Poké Ball held in their hand
+        // (captured by PlayerRecallBallRenderer). Null in first person, where we fall back below.
+        val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
+        var beamSourcePosition = if (recallBallOrigin != null) {
+            recallBallOrigin
+        } else if (beamTarget is EmptyPokeBallEntity) {
+            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]
+                ?.transformPosition(Vec3(CAPTURE_BEAM_X_OFFSET, CAPTURE_BEAM_Y_OFFSET, CAPTURE_BEAM_Z_OFFSET))
+                ?: beamTarget.position()
         } else {
             if (beamTarget.uuid == Minecraft.getInstance().player?.uuid) {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()

@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.client.render.player.RecallArmAnimationTracker
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.ease
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
@@ -320,6 +321,13 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         ballOffset = 0f
                         ballRotOffset = 0f
                         sendOutPosition = null
+                        // If a player is recalling, have them hold the matching Poké Ball out in their
+                        // right hand for the duration of the beam (see ourRecallArmAnimationTracker class).
+                        currentEntity.ownerUUID?.let { ownerId ->
+                            if (currentEntity.level().getPlayerByUUID(ownerId) != null) {
+                                RecallArmAnimationTracker.start(ownerId, currentEntity.exposedBall, emptySet())
+                            }
+                        }
                         afterOnClient(seconds = BEAM_EXTEND_TIME) {
                             activeSendoutScale = 1F
 

@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.client.render.player.MountedPlayerRenderer;
+import com.cobblemon.mod.common.client.render.player.RecallArmAnimationTracker;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -95,5 +97,29 @@ public class HumanoidModelMixin {
             MountedPlayerRenderer.shouldApplyRootAnimation = true;
             MountedPlayerRenderer.INSTANCE.animate((HumanoidModel<AbstractClientPlayer>)(Object)this, pokemonEntity, player, netHeadYaw, headPitch, ageInTicks, limbSwing, limbSwingAmount);
         }
+    }
+
+    // Raise the right arm forward while the player is recalling a Pokémon, so the held Poké Ball
+    // (rendered by PlayerRecallBallRenderer) is held out in front of them. Eases in/out via the
+    // tracker's raise factor and holds until the recall beam is finished.
+    @Inject(method = "setupAnim*", at = @At("TAIL"))
+    public void cobblemon$poseRecallArm(
+        LivingEntity entity,
+        float limbSwing,
+        float limbSwingAmount,
+        float ageInTicks,
+        float netHeadYaw,
+        float headPitch,
+        CallbackInfo ci
+    ) {
+        if (!(entity instanceof AbstractClientPlayer player)) return;
+        // Don't fight the mounted-riding arm animation.... this could look weird lol
+        if (entity.getVehicle() instanceof PokemonEntity) return;
+        float raise = RecallArmAnimationTracker.INSTANCE.raiseFactor(player.getUUID());
+        if (raise <= 0f) return;
+        // -90° about X points the arm straight forward.
+        this.rightArm.xRot = Mth.lerp(raise, this.rightArm.xRot, -1.5708f);
+        this.rightArm.yRot = Mth.lerp(raise, this.rightArm.yRot, 0f);
+        this.rightArm.zRot = Mth.lerp(raise, this.rightArm.zRot, 0f);
     }
 }
