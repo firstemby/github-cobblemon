@@ -28,7 +28,7 @@ import net.minecraft.resources.ResourceLocation
  *
  * Numbered/renamed `.nbt` families collapse into one entry (its variations are cycled in the detail
  * pane), and the structure and placed-feature representations of the same thing are deduped by a
- * normalized key. Vanilla content is excluded — this is Cobblemon-only.
+ * normalized key. Vanilla content is excluded; this lists Cobblemon content only.
  */
 object WorldDexData {
 
@@ -71,10 +71,11 @@ object WorldDexData {
     fun count(category: Category): Int = entriesOf(category).size
 
     /**
-     * Bare structure names unlocked for [category] — read from the player's client scanned data (the real
-     * source, exactly like the BerryDex) plus the temporary TestUnlocked* scaffold. Normalised to the last
-     * path segment because the id formats differ (habitats are un-prefixed in the scaffold, structures are
-     * "ruins/x"/"fossils/x", and entry ids are "habitats/x"/"fossils/x") — comparing bare names makes them match.
+     * Bare structure names unlocked for [category], from the player's client scanned data (the same
+     * source as the BerryDex) plus the TestUnlocked* test scaffold. Normalised to the last path segment
+     * because the id formats differ (habitats are un-prefixed in the scaffold, structures are
+     * "ruins/x"/"fossils/x", and entry ids are "habitats/x"/"fossils/x"), so comparing bare names makes
+     * them match.
      */
     fun unlockedNames(category: Category): Set<String> {
         val scannedCategory = when (category) {
@@ -85,7 +86,7 @@ object WorldDexData {
         val scanned = CobblemonClient.clientScannedData.scanned
             .filterKeys { ScannedDataCategory.categoryOfBucket(it) == scannedCategory }
             .values.flatten()
-        // Temporary scaffold: habitats are their own list; the structures list is shared, split by path prefix.
+        // Test scaffold: habitats have their own list; the structures list is shared, split by path prefix.
         val test = when (category) {
             Category.HABITATS -> TestUnlockedHabitats.entries
             Category.RUINS -> TestUnlockedStructures.entries.filter { it.path.startsWith("ruins/") }
@@ -94,11 +95,11 @@ object WorldDexData {
         return (scanned + test).mapTo(HashSet()) { it.path.substringAfterLast('/') }
     }
 
-    /** Whether [entry] has been discovered (client scanned data, or the temporary test scaffold). */
+    /** Whether [entry] has been discovered (client scanned data, or the test scaffold). */
     fun isUnlocked(entry: Entry): Boolean =
         unlockedNames(entry.category).contains(entry.id.path.substringAfterLast('/'))
 
-    /** Discovered-entry count for [category] — the numerator of the WorldDex tracker. */
+    /** Discovered-entry count for [category], the numerator of the WorldDex tracker. */
     fun unlockedCount(category: Category): Int {
         val unlocked = unlockedNames(category)
         return entriesOf(category).count { unlocked.contains(it.id.path.substringAfterLast('/')) }

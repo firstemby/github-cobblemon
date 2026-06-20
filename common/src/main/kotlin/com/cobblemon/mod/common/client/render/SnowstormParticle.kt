@@ -49,37 +49,14 @@ class SnowstormParticle(
     y: Double,
     z: Double,
     initialVelocity: Vec3,
-    //Usually, this will be the storms runtime. But sometimes particles need to have variables different from their emitter, so the VariableStruct will differ
+    // Usually the storm's runtime, but a particle can hold variables distinct from its emitter, so the VariableStruct may differ.
     val runtime: MoLangRuntime,
     val matrixWrapper: MatrixWrapper,
     var invisible: Boolean = false,
 ) : Particle(world, x, y, z) {
     companion object {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
-//        // ---- Rock Slide debug instrumentation (temporary). Capped so a runaway can't flood the log. ----
-//        var dbgLines = 0
-//        const val DBG_CAP = 6000
     }
-
-//    // True only for Rock Slide storms running inside the MoveDex GUI scene — keeps the firehose off battle/other moves.
-//    private val dbgOn: Boolean get() = storm.guiScene != null && storm.effect.id.path.contains("rockslide")
-//
-//    /** Logs one line of everything we know about this particle right now, prefixed [phase]. Gated + capped. */
-//    private fun dbg(phase: String, extra: String = "") {
-//        if (!dbgOn || dbgLines >= DBG_CAP) return
-//        dbgLines++
-//        val floor = storm.guiScene?.guiFloorY(storm) ?: 0.0
-//        Cobblemon.LOGGER.info(
-//            "ROCKDBG#{} {} id={} age={}/{} worldY={} aboveFloor={} pos=({},{},{}) vel=({},{},{}) localSpace={} localPos={} collEnabled={} expireOnContact={} removed={} {}",
-//            dbgLines, "%-16s".format(phase), storm.effect.id.path, age, lifetime,
-//            "%.3f".format(y), "%.3f".format(y - floor),
-//            "%.2f".format(x), "%.2f".format(y), "%.2f".format(z),
-//            "%.4f".format(xd), "%.4f".format(yd), "%.4f".format(zd),
-//            storm.effect.space.isLocalSpace, storm.effect.space.localPosition,
-//            runtime.resolveBoolean(storm.effect.particle.collision.enabled),
-//            storm.effect.particle.collision.expiresOnContact, removed, extra
-//        )
-//    }
 
     val sprite = getSpriteFromAtlas()
 
@@ -125,7 +102,6 @@ class SnowstormParticle(
     }
 
     private fun applyRandoms() {
-        //Will having these emitter randoms not equal the real emitter randoms be a problem?
         runtime.environment.setSimpleVariable("emitter_random_1", DoubleValue(Random.Default.nextDouble()))
         runtime.environment.setSimpleVariable("emitter_random_2", DoubleValue(Random.Default.nextDouble()))
         runtime.environment.setSimpleVariable("emitter_random_3", DoubleValue(Random.Default.nextDouble()))
@@ -152,11 +128,6 @@ class SnowstormParticle(
             }
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
-//        dbg("SPAWN", "initVel=(${"%.3f".format(initialVelocity.x)},${"%.3f".format(initialVelocity.y)},${"%.3f".format(initialVelocity.z)}) " +
-//            "collRadius=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.collision.radius))} " +
-//            "motion=${storm.effect.particle.motion::class.simpleName} maxAgeSec=${"%.3f".format(runtime.resolveDouble(storm.effect.particle.maxAge))} " +
-//            "stormXYZ=(${"%.2f".format(storm.getX())},${"%.2f".format(storm.getY())},${"%.2f".format(storm.getZ())}) " +
-//            "localX/Y/Z=(${"%.2f".format(localX)},${"%.2f".format(localY)},${"%.2f".format(localZ)}) originPos=(${"%.2f".format(originPos.x)},${"%.2f".format(originPos.y)},${"%.2f".format(originPos.z)})")
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {
@@ -264,7 +235,7 @@ class SnowstormParticle(
      * In the world, particle quads are built in world axes oriented by [cameraAngle] (the camera's WORLD
      * rotation) and the modelview matrix (the camera VIEW rotation = inverse) flattens them to the screen.
      * Here, the caller's [poseStack] already applies the scene's view rotation, so [cameraAngle] must be
-     * its INVERSE — then the two compose to a screen-facing quad exactly as in battle. Particle positions
+     * its INVERSE, so that the two compose to a screen-facing quad exactly as in battle. Particle positions
      * are the local-to-emitter coordinates, placed by the same pose, so they share the dolls' 3D space.
      * Full-bright; the caller supplies a [VertexConsumer] bound to the particle atlas + matching blend.
      */
@@ -292,9 +263,9 @@ class SnowstormParticle(
         // belongs to). This lets the scene batch every storm of a material into one draw without per-storm
         // pose pushes, while a storm and its event-spawned children still map into one consistent space.
         val px = (Mth.lerp(tickDelta.toDouble(), xo, x) - sceneOrigin.x).toFloat() + anchorX
-        // Negate the vertical: the GUI scene pose's +Y points down (the doll model flips internally to stand
-        // upright; particles have no such flip), so world-up must be negated here to render up. anchorY is the
-        // upward locator height, so it's subtracted to lift the emit point.
+        // The GUI scene pose's +Y points down (the doll model flips internally to stand upright; particles have
+        // no such flip), so world-up is negated here to render up. anchorY is the upward locator height, so it is
+        // subtracted to lift the emit point.
         val py = (-(Mth.lerp(tickDelta.toDouble(), yo, y) - sceneOrigin.y) - anchorY).toFloat()
         val pz = (Mth.lerp(tickDelta.toDouble(), zo, z) - sceneOrigin.z + anchorZ).toFloat()
 
@@ -316,16 +287,14 @@ class SnowstormParticle(
         val light = (15 shl 20) or (15 shl 4)
         val m = poseStack.last().pose()
 
-        // Orient with the SAME world-space inputs battle feeds getRotation — no munging — so every camera mode
-        // behaves exactly as in battle. The mismatch this scene introduces is purely that it mirrors world-up to
-        // screen-up by negating Y in the particle POSITION (py). We reconcile that below by mirroring the oriented
-        // quad's Y for the world-locked modes, rather than distorting the inputs into getRotation.
+        // Orient with the same world-space inputs battle feeds getRotation, so every camera mode behaves exactly
+        // as in battle. The only mismatch this scene introduces is that it mirrors world-up to screen-up by
+        // negating Y in the particle POSITION (py), reconciled below by mirroring the oriented quad's Y for the
+        // world-locked modes rather than distorting the inputs into getRotation.
         val cameraPosition = Vec3(x - forward.x * 64.0, y - forward.y * 64.0, z - forward.z * 64.0)
-        // ROTATE_Y applies the particle's in-plane spin (roll) in a frame the scene's Y-mirror REVERSES, so an
-        // authored initial_spin comes out rotated the wrong way — Dragon Claw's aura (spin -135°) and Swords Dance's
-        // swords (-45°) looked rotated. Negate the roll for this mode so spun rotate_y sprites match battle. A sprite
-        // with NO spin (Thunder's vertical bolt, roll 0) is unchanged, so this can't re-break it. rotate_xyz applies
-        // roll in screen space (after cameraAngle) and already reads correctly, so it is left alone.
+        // ROTATE_Y applies the particle's in-plane spin (roll) in a frame the scene's Y-mirror reverses, so negate
+        // the roll for this mode so spun rotate_y sprites match battle. A sprite with no spin (roll 0) is unchanged.
+        // rotate_xyz applies roll in screen space (after cameraAngle) and already reads correctly, so it is left alone.
         val rotateY = storm.effect.particle.cameraMode.type == ParticleCameraModeType.ROTATE_Y
         val quaternion = storm.effect.particle.cameraMode.getRotation(
             matrixWrapper = matrixWrapper,
@@ -340,11 +309,10 @@ class SnowstormParticle(
             viewDirection = viewDirection
         )
         // A camera-facing billboard (rotate_xyz/rotate_y/lookat_y/lookat_xyz) is symmetric under the scene's Y
-        // mirror, so its world-space orientation still reads correctly. But a mode that locks the quad to a WORLD
+        // mirror, so its world-space orientation still reads correctly. A mode that locks the quad to a WORLD
         // axis or the particle's velocity (lookat_direction, direction_*, emitter planes) must have its oriented
-        // quad mirrored in Y to match the mirrored position — otherwise the sprite faces against its own travel
-        // (Thunderbolt's bolts) or sits at the wrong tilt. We mirror the QUAD, not getRotation's inputs, so the
-        // shared battle code is reused verbatim.
+        // quad mirrored in Y to match the mirrored position, or the sprite faces against its own travel or sits
+        // at the wrong tilt. The QUAD is mirrored, not getRotation's inputs, so the shared battle code is reused verbatim.
         val worldLocked = when (storm.effect.particle.cameraMode.type) {
             ParticleCameraModeType.LOOK_AT_DIRECTION,
             ParticleCameraModeType.DIRECTION_X,
@@ -391,9 +359,7 @@ class SnowstormParticle(
         runtime.execute(storm.effect.particle.updateExpressions)
         angularVelocity = storm.effect.particle.rotation.getAngularVelocity(runtime, -roll.toDouble(), angularVelocity) / 20
 
-//        dbg("TICK")
         if (age >= lifetime || runtime.resolveBoolean(storm.effect.particle.killExpression)) {
-//            dbg("EXPIRE-AGE/KILL", "ageHit=${age >= lifetime} killExpr=${runtime.resolveBoolean(storm.effect.particle.killExpression)}")
             runExpirationEvents()
             remove()
             return
@@ -426,10 +392,9 @@ class SnowstormParticle(
         oldAxisRotation = axisRotation
         prevRotatedLocal = oldAxisRotation.transform(Vector3d(prevLocalX, prevLocalY, prevLocalZ))
 
-        //This is a bit of a hack. Technically local rotation is supposed to make it so the particle uses
-        //the emitter's rotation - but we've made it so the emitter doesn't actually follow the locators rotation, only position.
-        //So instead of being bound to the emitter, the particle is actually bound to the locator for local rotation.
-        //If you're messing with this - make sure evo particles still rotate with the pokemon
+        // Local rotation nominally means the particle uses the emitter's rotation, but the emitter only follows the
+        // locator's position, not its rotation. So for local rotation the particle is bound to the locator instead of
+        // the emitter. If you change this, make sure evo particles still rotate with the pokemon.
         if (storm.effect.space.localRotation) {
             storm.attachedMatrix.matrix.getRotation(axisRotation)
         }
@@ -462,8 +427,6 @@ class SnowstormParticle(
         var dz = dz
 
         val collEnabled = runtime.resolveBoolean(collision.enabled)
-//        dbg("MOVE", "dxyz=(${"%.4f".format(dx)},${"%.4f".format(dy)},${"%.4f".format(dz)}) collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace} " +
-//            "=> collisionPath=${collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace}")
         if (collEnabled && radius > 0.0 && !storm.effect.space.isLocalSpace) {
             hasPhysics = true
 
@@ -477,37 +440,14 @@ class SnowstormParticle(
             dy = newMovement.y
             dz = newMovement.z
 
-//            if (collidesWithWorld && (dx != 0.0 || dy != 0.0 || dz != 0.0) && dx * dx + dy * dy + dz * dz < 10000) {
-//                val vec3d = Entity.adjustMovementForCollisions(
-//                    null,
-//                    Vec3d(dx, dy, dz),
-//                    boundingBox,
-//                    world,
-//                    listOf()
-//                )
-//
-//            }
-
             if (dx != 0.0 || dy != 0.0 || dz != 0.0) {
                 boundingBox = boundingBox.move(dx, dy, dz)
                 localX += dx
                 localY += dy
                 localZ += dz
             }
-
-//            if (abs(dy) >= 9.999999747378752E-6 && abs(dy) < 9.999999747378752E-6) {
-//                field_21507 = true
-//            }
-//            onGround = dy != dy && e < 0.0
-//            if (d != dx) {
-//                xd = 0.0
-//            }
-//            if (dz != dz) {
-//                zd = 0.0
-//            }
         } else {
             hasPhysics = false
-//            dbg("MOVE-NOCOLLISION", "floor & expire_on_contact are SKIPPED here (collEnabled=$collEnabled radius=${"%.3f".format(radius)} isLocalSpace=${storm.effect.space.isLocalSpace})")
             if (dx != 0.0 || dy != 0.0 || dz != 0.0) {
                 localX += dx
                 localY += dy
@@ -547,26 +487,22 @@ class SnowstormParticle(
         val friction = runtime.resolveDouble(collision.friction)
         val expiresOnContact = collision.expiresOnContact
 
-        // Handle easy collision cases
-        // If there are no collisions return the unchanged movement. If the particle expires on contact then remove it.
-        // In the offscreen GUI scene there are no real blocks (it runs in empty sky), so synthesise a flat ground
-        // slab at the scene's floor Y: this is what lets Bulldoze-style ground effects slide/stop instead of
-        // falling through forever, mirroring the battle floor without touching the world.
+        // If there are no collisions, return the unchanged movement. If the particle expires on contact, remove it.
+        // The offscreen GUI scene has no real blocks (it runs in empty sky), so synthesise a flat ground slab at the
+        // scene's floor Y; this lets ground effects slide/stop instead of falling through forever, mirroring the
+        // battle floor without touching the world.
         val worldCollisions = level.getBlockCollisions(null, box.expandTowards(movement))
         val collisions: Iterable<VoxelShape> = storm.guiScene?.let { scene ->
             val extra = ArrayList<VoxelShape>()
-            // A thick slab whose TOP face sits exactly at floorY, covering well beyond the particle's reach. Only
-            // add it when the particle is NOT moving upward away from it: a particle launched UP off the floor
-            // (Rock Slide's `guide2` ray, which spawns the falling rocks high overhead, spawns AT floor level and
-            // shoots up with expire_on_contact) must not be killed by the floor on its first tick — else the rocks
-            // never spawn above the target. A descending/level particle still collides and settles normally.
-            // CRITICAL: only add a synthesized shape if the swept box ACTUALLY reaches it. The real
-            // level.getBlockCollisions only returns shapes the box truly intersects, and downstream logic
-            // (collisions.none(), the expire_on_contact shortcut) treats "list non-empty" as "colliding". If we
-            // add the floor unconditionally whenever a particle descends, an expire_on_contact particle (Rock
-            // Slide's falling rocks) sees a permanent candidate and breaks in mid-air the instant the spawn grace
-            // ends — never falling to the ground. The floor slab's top is floorY, so the box reaches it only once
-            // its swept minY dips to/below floorY.
+            // A thick slab whose TOP face sits exactly at floorY, covering well beyond the particle's reach. Add it
+            // only when the particle is NOT moving upward away from it, so a particle launched UP off the floor
+            // (with expire_on_contact) is not killed by the floor on its first tick. A descending/level particle
+            // still collides and settles normally.
+            // Only add the synthesized shape if the swept box ACTUALLY reaches it: level.getBlockCollisions returns
+            // only shapes the box truly intersects, and downstream logic (collisions.none(), the expire_on_contact
+            // shortcut) treats a non-empty list as "colliding". Adding the floor unconditionally on descent would
+            // give an expire_on_contact particle a permanent candidate and break it in mid-air. The slab's top is
+            // floorY, so the box reaches it only once its swept minY dips to/below floorY.
             val sweep = box.expandTowards(movement)
             if (movement.y <= 0.0) {
                 val floorY = scene.guiFloorY(storm)
@@ -574,8 +510,8 @@ class SnowstormParticle(
                     extra.add(Shapes.create(AABB(sweep.minX - 64.0, floorY - 64.0, sweep.minZ - 64.0, sweep.maxX + 64.0, floorY, sweep.maxZ + 64.0)))
                 }
             }
-            // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it —
-            // but, like the floor, only when the swept box actually touches it (else it'd be a permanent candidate).
+            // The target's solid box, so traveling effects stop AT the target's face instead of overshooting it,
+            // but like the floor only when the swept box actually touches it (else it would be a permanent candidate).
             scene.guiImpactBox(storm)?.let { ib ->
                 if (sweep.intersects(ib)) { extra.add(Shapes.create(ib)) }
             }
@@ -585,9 +521,8 @@ class SnowstormParticle(
             colliding = false
             return movement
         } else if (expiresOnContact && age <= 2) {
-            // Grace period: an expire_on_contact particle must not break on the tick(s) it spawns. Rock Slide lofts
-            // its rocks into the air with a guide ray and they were breaking instantly at the spawn point instead of
-            // falling to the floor. Let them move a couple ticks to clear the spawn before contact can kill them.
+            // Spawn grace: an expire_on_contact particle must not break on the tick(s) it spawns. Let it move a
+            // couple of ticks to clear the spawn point before contact can kill it (e.g. effects lofted off the floor).
             return movement
         } else if (expiresOnContact) {
             runExpirationEvents()
@@ -595,28 +530,22 @@ class SnowstormParticle(
             return movement
         }
 
-        // Initial particle movement and collision type flags
         var xMovement = movement.x
         var yMovement = movement.y
         var zMovement = movement.z
         var bouncing = false
         var sliding = false
 
-        // Determine which horizontal axis to resolve first by favoring the larger movement
+        // Resolve the horizontal axis holding the larger movement first.
         val mostlyIsZMovement = abs(xMovement) < abs(zMovement)
 
-        /******************************************************************************************************************************/
-        /**
-         * Helper function to resolve a collision along a given axis.
-         */
         fun resolveAxis(
             axis: Direction.Axis,
             axisMovement: Double,
             originalVelocity: Double,
             collisions: Iterable<VoxelShape>
         ): Double {
-
-            // Check for collision on the given axis. If there is no collision then move the box along the axis and return the value of the vector for that axis
+            // No collision on this axis: move the box along it and return that axis' resolved value.
             val resolved = Shapes.collide(axis, box, collisions, axisMovement)
             if (resolved != 0.0) {
                 box = box.move(
@@ -627,7 +556,7 @@ class SnowstormParticle(
                 return resolved
             }
 
-            // If the particle is bouncy and is moving fast enough then "bounce" it on the given axis and return
+            // Bouncy and moving fast enough: bounce on this axis and return.
             if (bounciness > 0.0 && abs(originalVelocity) > MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION) {
                 val bounced = -1 * bounciness * originalVelocity
                 when (axis) {
@@ -639,7 +568,7 @@ class SnowstormParticle(
                 return bounced
             }
 
-            // If the particle is instead slidey then mark the sliding flag for later slide/friction resolution
+            // Slidey: mark for later slide/friction resolution.
             if (friction > 0.0) sliding = true
             when (axis) {
                 Direction.Axis.X -> xd = 0.0
@@ -648,9 +577,8 @@ class SnowstormParticle(
             }
             return 0.0
         }
-        /******************************************************************************************************************************/
 
-        // Resolve y collision first, then horizontal with the axis that holds the largest portion of the movement coming first
+        // Resolve Y first, then the horizontal axes (larger-movement axis first).
         if (yMovement != 0.0)
             yMovement = resolveAxis(Direction.Axis.Y, yMovement, movement.y, collisions)
         if (mostlyIsZMovement) {
@@ -661,19 +589,16 @@ class SnowstormParticle(
             if (zMovement != 0.0) zMovement = resolveAxis(Direction.Axis.Z, zMovement, movement.z, collisions)
         }
 
-        // Grab our current projected movement for the tick and the particles current velocity
         var newMovement = Vec3(xMovement, yMovement, zMovement)
         var velocity = Vec3(xd, yd, zd)
 
-        // If the particle is slidey and not bouncy then perform slide/friction resolution
+        // Slidey and not bouncy: apply slide/friction resolution.
         if (sliding && !bouncing) {
-
-            // If it's moving slower than the friction per second, time to stop
+            // Below friction-per-second, stop.
             if (velocity.length() * 20 < friction) {
                 setParticleSpeed(0.0, 0.0, 0.0)
                 newMovement = Vec3.ZERO
             } else {
-                // Slow down the particle due to friction
                 val reduced = velocity.subtract(velocity.normalize().scale(friction / 20))
                 setParticleSpeed(reduced.x, reduced.y, reduced.z)
                 newMovement = reduced

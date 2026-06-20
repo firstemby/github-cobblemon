@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation
 /**
  * Backing data for the MoveDex: which moves the player has discovered (aggregated across every seen
  * species' learnset, learned TMs, or all moves when the server unlocks the dex), and the reverse
- * learnset — for a given move, which species can learn it and by what method.
+ * learnset (for a given move, which species can learn it and by what method).
  */
 object MoveDexData {
 
@@ -55,7 +55,7 @@ object MoveDexData {
 
     fun discoveredCount(): Int = discoveredCache?.size ?: 0
 
-    /** Total number of moves in the game — the MoveDex denominator. */
+    /** Total number of moves in the game (the MoveDex denominator). */
     fun totalCount(): Int = Moves.all().count()
 
     fun learnedBy(move: MoveTemplate): List<LearnEntry> = reverseIndex[move] ?: emptyList()

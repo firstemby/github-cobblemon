@@ -32,11 +32,9 @@ import kotlin.math.max
  * One WorldDex category page (Habitats, Ruins, or Fossils): a scrollable flat list of that category's
  * entries on the left, and a detail pane on the right with the drag-rotatable .nbt preview (variations
  * cycled with arrows) plus category-specific tabs:
- *  - Habitats: Spawns (per-habitat spawn pool, by rarity bucket) + Biomes.
- *  - Ruins:    Loot + Biomes.
- *  - Fossils:  Loot + Sus (suspicious gravel/sand finds) + Biomes.
- *
- * Placeholder flat-colour styling; real Pokédex textures are a later art pass.
+ *  - Habitats: Spawns (per-habitat spawn pool, by rarity bucket) and Biomes.
+ *  - Ruins:    Loot and Biomes.
+ *  - Fossils:  Loot, Sus (suspicious gravel/sand finds), and Biomes.
  */
 class WorldDexView {
     companion object {
@@ -51,17 +49,16 @@ class WorldDexView {
         private const val DETAIL_X = 166
         private const val DETAIL_W = 160
         private const val HEADER_Y = 24
-        private const val HEADER_H = 12
         private const val VIEW_Y = 39
         private const val VIEW_H = 72
         private const val ARROW_W = 10
-        private const val CONTENT_TOP = 114      // content begins just below the viewport (VIEW_Y+VIEW_H=111)
+        private const val CONTENT_TOP = 114      // content begins just below the viewport (VIEW_Y + VIEW_H)
         private const val SUBTAB_Y = 114         // Spawns' bucket sub-filter buttons sit at the content top
         private const val SUBTAB_H = 10
         private const val CONTENT_BOTTOM = 174   // content ends above the bottom tab row
-        private const val TAB_ROW_Y = 178        // info-tab icon row at the BOTTOM (icons 178-186, arrow 174)
+        private const val TAB_ROW_Y = 178        // info-tab icon row at the bottom
 
-        // Bottom-right info tabs reuse the Pokédex tab-row style + best-fit existing tab icons (swap freely later).
+        // Bottom-right info tabs reuse the Pokédex tab-row style with best-fit existing tab icons.
         private val TAB_SELECT_ARROW = cobblemonResource("textures/gui/pokedex/select_arrow.png")
         private val TAB_SPECIES = cobblemonResource("textures/gui/pokedex/tab_species.png")
         private val TAB_DROPS = cobblemonResource("textures/gui/pokedex/tab_drops.png")
@@ -78,16 +75,12 @@ class WorldDexView {
         private const val TAB_ICON_X0 = 2
         private const val ROW_TEXT_H = 9
 
-        private const val PANEL_BG = 0xCC10303A.toInt()
         private const val PLATE = 0xFFE9F6F6.toInt()
         private const val PLATE_HOVER = 0xFFC8E8E8.toInt()
         private const val PLATE_SELECTED = 0xFFA9DCDC.toInt()
-        private const val ICON_BG = 0xFF2E6F8C.toInt()
-        private const val BORDER = 0xFF7EE7E5.toInt()
         private const val UNLOCK_DOT = 0xFF49C7C2.toInt()
         private const val TEXT_DARK = 0x33586B
         private const val INFO_TEXT = 0x606B6E   // matches the main Pokédex info-page text colour
-        private const val PREVIEW_BG = 0xC0101010.toInt()
 
         private fun fallback(key: String, text: String) = Component.translatableWithFallback("cobblemon.ui.worlddex.$key", text)
     }
@@ -175,7 +168,7 @@ class WorldDexView {
         renderCount(context, x, y)
     }
 
-    /** [discovered] / [total] for the current category, top-right — mirrors the Berry/Move dex trackers. */
+    /** Discovered / total for the current category, shown top-right like the Berry/Move dex trackers. */
     private fun renderCount(context: GuiGraphics, x: Int, y: Int) {
         val text = Component.literal("${WorldDexData.unlockedCount(category)} / ${WorldDexData.count(category)}").bold()
         drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = x + DETAIL_X + DETAIL_W - 4, y = y + 14, colour = INFO_TEXT)
@@ -204,13 +197,13 @@ class WorldDexView {
             val left = x + LIST_X
             val selectedRow = entry === selected
             val hovered = mouseX in left..(left + LIST_W) && mouseY in rowY..(rowY + ROW_H - 2)
-            // Reuse the MoveDex move-slot bar art for each list item (top half = selected, bottom half = hover).
+            // MoveDex move-slot bar art per list item: top half is selected, bottom half is hover.
             blitk(matrixStack = context.pose(), texture = MOVE_SLOT, x = left, y = rowY, width = LIST_W, height = 13)
             if (selectedRow || hovered) {
                 blitk(matrixStack = context.pose(), texture = MOVE_SLOT_SELECT, x = left, y = rowY, width = LIST_W, height = 13, textureHeight = 26, vOffset = if (hovered && !selectedRow) 13 else 0)
             }
             drawScaledText(context = context, text = Component.literal("%04d".format(i + 1)), x = left + 4, y = rowY + 3, colour = TEXT_DARK, scale = 0.5F)
-            // Undiscovered entries are redacted to "???" (like the BerryDex's undiscovered berries).
+            // Undiscovered entries are redacted to "???".
             val name = if (isUnlocked) entry.name.copy().bold() else Component.literal("???").bold()
             drawScaledText(context = context, text = name, x = left + 20, y = rowY + 3, colour = TEXT_DARK, scale = 0.65F)
             if (isUnlocked) context.fill(left + LIST_W - 9, rowY + 2, left + LIST_W - 2, rowY + 9, UNLOCK_DOT)
@@ -221,7 +214,7 @@ class WorldDexView {
         val entry = selected ?: return
         val left = x + DETAIL_X
 
-        // Custom right-panel background skin (header bar + tab-area bars). Drawn first, behind all content.
+        // Background skin first, behind all content.
         blitk(matrixStack = context.pose(), texture = INFO_BG, x = left, y = y + HEADER_Y, width = DETAIL_W, height = TAB_ROW_Y + TAB_ICON_DISP + 2 - HEADER_Y)
         drawScaledText(context = context, text = Component.literal("%04d".format(selectedNumber)).bold(), x = left + 3, y = y + HEADER_Y + 3, colour = TEXT_DARK, scale = 0.65F)
         drawScaledText(context = context, text = entry.name.copy().bold(), x = left + 28, y = y + HEADER_Y + 3, colour = TEXT_DARK, scale = 0.75F)
@@ -235,7 +228,7 @@ class WorldDexView {
 
         val viewLeft = left + ARROW_W + 2
         val viewWidth = DETAIL_W - (ARROW_W + 2) * 2
-        // No dark backdrop — the structure renders directly on the panel background texture for a cutout look.
+        // The structure renders directly on the panel background texture for a cutout look (no dark backdrop).
         StructurePreviewLoader.forEntry(variants[variantIndex])?.let {
             StructurePreviewRenderer.render(context, it, viewLeft, y + VIEW_Y, viewWidth, VIEW_H, yaw, pitch, zoom)
         }
@@ -248,7 +241,7 @@ class WorldDexView {
             renderScaledGuiItemIcon(chestIconStack(), (left + DETAIL_W - 12).toDouble(), (y + HEADER_Y + 1).toDouble(), matrixStack = context.pose(), scale = 0.65)
         }
 
-        // Category tabs — icon buttons at the BOTTOM, styled like the main Pokédex / MoveDex tab row.
+        // Category tabs: icon buttons at the bottom, styled like the main Pokédex / MoveDex tab row.
         val tabs = tabsFor(category)
         tabs.forEachIndexed { index, tab ->
             val ix = tabIconX(left, index)
@@ -302,7 +295,6 @@ class WorldDexView {
             centeredMessage(context, left, y, CONTENT_TOP, fallback("no_spawns_yet", "No spawns yet"))
             return
         }
-        // Rarity bucket sub-buttons.
         val buckets = spawns.map { it.bucket }.distinct().sortedBy { WorldDexHabitatSpawns.bucketOrder(it) }
         val current = spawnBucket?.takeIf { it in buckets } ?: buckets.first()
         val buttonW = (DETAIL_W - (buckets.size - 1) * 2) / buckets.size
@@ -355,7 +347,7 @@ class WorldDexView {
         val contentTop = CONTENT_TOP
         panel(context, left, y, contentTop)
         // Flatten into rows: a tag header followed by its biomes (indented).
-        val rows = ArrayList<Pair<MutableComponent, Boolean>>() // text, isHeader
+        val rows = ArrayList<Pair<MutableComponent, Boolean>>() // (text, isHeader)
         for (tb in tagBiomes) {
             rows.add(tb.tagName.copy().bold() to true)
             if (tb.biomes.isEmpty()) rows.add(fallback("no_biomes", "(none loaded)") to false)
@@ -376,7 +368,7 @@ class WorldDexView {
     }
 
     private fun panel(context: GuiGraphics, left: Int, y: Int, contentTop: Int) {
-        // No dark box — content now draws straight on the background texture (kept as a no-op for call sites).
+        // No-op: content draws straight on the background texture.
     }
 
     private fun centeredMessage(context: GuiGraphics, left: Int, y: Int, contentTop: Int, text: MutableComponent) {

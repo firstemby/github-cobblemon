@@ -36,12 +36,6 @@ object MoveDexSceneRenderer {
     var lastRootRiseY = 0f
 
     /**
-     * Renders the model [identifier] (a species resource id, or the substitute fallback) at the current
-     * pose origin, rotated to [facingYaw] degrees and scaled by [modelScale]. The caller is expected to
-     * have already applied the scene transform (iso rotation, viewport placement) and translated to this
-     * doll's position. Returns true if it rendered, so the caller can fall back to the substitute.
-     */
-    /**
      * Draws the stadium ground plane: a horizontal textured quad at the dolls' feet (pose y = 0), spanning
      * [halfX] left/right and [halfZ] forward/back (blocks, before the scene's zoom). The texture's two stand
      * pads are authored at V=0.75 (attacker A, +Z) and V=0.25 (target B, -Z); with halfZ = 2*separation the
@@ -52,14 +46,14 @@ object MoveDexSceneRenderer {
         val pose = context.pose()
         val entry = pose.last()
         val matrix = entry.pose()
-        // Translucent (not cutout) so the texture's FULL alpha channel blends — semi-transparent floor pixels
+        // Translucent (not cutout) so the texture's full alpha channel blends: semi-transparent floor pixels
         // show the panel background through them instead of being hard-clipped at a cutout threshold.
         val renderType = RenderType.entityTranslucent(texture)
         val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
         val buffer = immediate.getBuffer(renderType)
         val light = LightTexture.pack(15, 15)
         // Pose +Y points down in this scene (particles negate Y to rise, dolls flip to stand upright), so the
-        // floor's up-normal is -Y — matching the dolls so it shades the same under the inventory lighting.
+        // floor's up-normal is -Y, matching the dolls so it shades the same under the inventory lighting.
         fun vert(x: Float, z: Float, u: Float, v: Float) {
             buffer.addVertex(matrix, x, 0f, z)
                 .setColor(255, 255, 255, 255)
@@ -107,7 +101,7 @@ object MoveDexSceneRenderer {
         pose.popPose()
     }
 
-    /** Draws a small wireframe box [half] blocks around (x,y,z) in the current pose — a debug locator marker. */
+    /** Draws a small wireframe box [half] blocks around (x,y,z) in the current pose as a debug locator marker. */
     fun renderDebugMarker(context: GuiGraphics, x: Float, y: Float, z: Float, half: Float, r: Float, g: Float, b: Float) {
         val immediate = Minecraft.getInstance().renderBuffers().bufferSource()
         val buffer = immediate.getBuffer(RenderType.lines())
@@ -142,8 +136,8 @@ object MoveDexSceneRenderer {
             state.setPoseToFirstSuitable(PoseType.PROFILE)
             state.updatePartialTicks(partialTicks)
             model.applyAnimations(null, state, 0f, 0f, 0f, 0f, 0f)
-            // Capture how far the move animation has translated the model's ROOT vertically (Seismic Toss throws
-            // it way up). rootPart.y is raw bedrock units (÷16 -> blocks) and worldScale is the doll scale, so this
+            // Capture how far the move animation has translated the model's root vertically (Seismic Toss throws
+            // it way up). rootPart.y is raw bedrock units (÷16 to blocks) and worldScale is the doll scale, so this
             // is the scene-space rise the follow-camera uses to keep the action framed. Positive = up.
             lastRootRiseY = ((model.rootPart as? ModelPart)?.y ?: 0f) / 16f * worldScale
             // Populate the model's real geo-defined locators (target/special/mouth/etc.) into state.locatorStates
@@ -153,9 +147,9 @@ object MoveDexSceneRenderer {
             val pose = context.pose()
             pose.pushPose()
             pose.mulPose(Axis.YP.rotationDegrees(facingYaw))
-            // Render at the model's TRUE world scale (baseScale, in blocks) — the same as battle — so the model
+            // Render at the model's true world scale (baseScale, in blocks), the same as battle, so the model
             // and the move's particles share one world scale. The scene's auto-fit handles fitting the window;
-            // we must NOT use profileScale here (it normalises model size and would decouple it from particles).
+            // profileScale must not be used here (it normalises model size and would decouple it from particles).
             pose.scale(worldScale, worldScale, worldScale)
 
             val immediate = Minecraft.getInstance().renderBuffers().bufferSource()

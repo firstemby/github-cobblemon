@@ -27,11 +27,11 @@ import com.cobblemon.mod.common.client.render.structure.StructurePreviewResource
 /**
  * Reads a move's action-effect timeline and flattens it into timed cues for the MoveDex viewport.
  *
- * Rather than re-parse the JSON by hand (which diverged from the real format), this deserializes the file with
- * the SAME [ActionEffects] gson the battle system uses, then walks the resulting typed [ActionEffectKeyframe]s —
- * so sequence/parallel/fork nesting, molang `delay`/`pause`, conditions, and `q.play_animation` overlays are all
- * interpreted exactly as in battle. Produces: the cycle duration (for auto-pause/loop), the timed bedrock
- * animation cues (actor windup + target hit/throw, `is_user == false` ⇒ target), and the timed sound cues.
+ * Deserializes the file with the same [ActionEffects] gson the battle system uses, then walks the resulting
+ * typed [ActionEffectKeyframe]s, so sequence/parallel/fork nesting, molang `delay`/`pause`, conditions, and
+ * `q.play_animation` overlays are interpreted exactly as in battle. Produces the cycle duration (for
+ * auto-pause/loop), the timed bedrock animation cues (actor windup plus target hit/throw, where
+ * `is_user == false` means the target), and the timed sound cues.
  */
 object MoveDexAnimation {
 
@@ -39,8 +39,8 @@ object MoveDexAnimation {
     private const val TAIL_SECONDS = 1.5f
 
     // Animation name out of a molang play_animation call: q.bedrock_stateful('seismictoss','actor'). Move-specific
-    // animations live in shared files keyed "animation.<group>.<variant>"; we rebuild "<group>:<key>" so
-    // PosableModel.extractAnimation resolves them against that shared repo (not the species poser).
+    // animations live in shared files keyed "animation.<group>.<variant>"; rebuilding "<group>:<key>" lets
+    // PosableModel.extractAnimation resolve them against that shared repo (not the species poser).
     private val ANIM_RE = Regex("""bedrock(?:_stateful)?\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]""", RegexOption.IGNORE_CASE)
     private val SOUND_RE = Regex("""q\.sound\(\s*['"]([^'"]+)['"]""", RegexOption.IGNORE_CASE)
 
@@ -59,7 +59,7 @@ object MoveDexAnimation {
         runCatching { compute(move) }.getOrElse { Parsed(DEFAULT_SECONDS, emptyList(), emptyList(), false) }
     }
 
-    /** Whether the move actually ships an action effect (timeline). False ⇒ the MoveDex marks it "no animation yet". */
+    /** Whether the move actually ships an action effect (timeline). False means the MoveDex marks it "no animation yet". */
     fun hasActionEffect(move: MoveTemplate): Boolean = parsed(move).hasEffect
 
     /** Estimated cycle length in seconds (timeline end + a tail for trailing/looping particles). */

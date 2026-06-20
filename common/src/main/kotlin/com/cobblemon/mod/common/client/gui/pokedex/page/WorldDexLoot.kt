@@ -15,7 +15,7 @@ import com.google.gson.JsonObject
 import net.minecraft.resources.ResourceLocation
 
 /**
- * Resolves the loot a Ruin/Fossil can yield by reading its structure processor list — the same data
+ * Resolves the loot a Ruin/Fossil can yield by reading its structure processor list, the same data
  * that places the loot in-world. A processor rule that converts a block into a chest/suspicious block
  * attaches an `append_loot` modifier naming a loot table; we collect those, split them by whether the
  * output block is a suspicious (archaeology) block, and expand each loot table into its item ids.

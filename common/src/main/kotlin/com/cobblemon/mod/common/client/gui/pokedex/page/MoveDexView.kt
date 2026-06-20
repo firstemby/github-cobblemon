@@ -53,9 +53,6 @@ import kotlin.math.min
  *  - Info: the move's type/category/power/accuracy/PP/effect/description, like the Pokédex move info.
  *  - Learnset: every species that can learn the move, by method (level/TM/egg/tutor); "???" for species
  *    the player hasn't seen.
- *
- * NOTE: faithful in-battle move particles/animations are a server-driven subsystem; this first pass
- * renders the dolls and play/pause scaffolding, with the action-effect particle playback to follow.
  */
 class MoveDexView {
     companion object {
@@ -71,7 +68,7 @@ class MoveDexView {
         private const val ROW_H = 13
         private const val VISIBLE_ROWS = 10
         private const val SCALE = 0.5F                  // matches PokedexGUIConstants.SCALE for icon/button blits
-        private const val CATEGORY_BAR_W = 78           // filter portion width; sort buttons sit to its right (5 now)
+        private const val CATEGORY_BAR_W = 78           // filter portion width; sort buttons sit to its right
         private const val SORT_BTN_SIZE = 20            // sort sheet is 20x40; rendered at SORT_BTN_SIZE*SCALE
         private const val SORT_BTN_SPACING = 12
 
@@ -79,27 +76,25 @@ class MoveDexView {
         private const val DETAIL_W = 160
         private const val HEADER_Y = 24
         private const val HEADER_H = 12
-        private const val SPECIES_Y = 37
         private const val VIEW_Y = 50
         private const val VIEW_H = 74
         private const val CONTENT_TOP = 126      // content begins just below the viewport (VIEW_Y+VIEW_H=124)
-        private const val INFO_PANEL_Y = 148     // info_move_background panel top (133x38) — lowered 20px per request
+        private const val INFO_PANEL_Y = 148     // info_move_background panel top (133x38)
         private const val SUBTAB_Y = 128         // learnset method sub-filter buttons (near content top)
         private const val SUBTAB_H = 10
         private const val CONTENT_BOTTOM = 190   // content ends above the bottom tab row
-        private const val TAB_ROW_Y = 196        // tabs follow the lowered panel; icons 196-204 (BASE_HEIGHT=207)
-        private const val SPECIES_H = 11
+        private const val TAB_ROW_Y = 196        // bottom tab icon row (BASE_HEIGHT=207)
 
         private val SUBSTITUTE = cobblemonResource("substitute")
         private val STADIUM_FLOOR = cobblemonResource("textures/gui/pokedex/movedex_stadium_floor.png")
-        // Default actor (the Pokémon performing the move): Smeargle — a real species — rather than the substitute doll.
+        // Default actor (the Pokémon performing the move) is Smeargle, a real species rather than the substitute doll.
         private val DEFAULT_ACTOR = cobblemonResource("smeargle")
         // The move's target is a substitute doll (a battle defender stand-in), so it can play the move's real
         // `target` bedrock animation (throw/squash/recoil) exactly like a real defender.
         private val TARGET = SUBSTITUTE
-        // Render scale + approximate hitbox dims (blocks) of the substitute target, used for aiming and the floor.
+        // Render scale and approximate hitbox dims (blocks) of the substitute target, used for aiming and the floor.
         // Matched to the substitute geo: its `top` locator sits ~16.5px (~1 block) up at scale 1.0, so it's ~1
-        // block tall and ~0.9 wide. (Effects emit from its real geo locators now; these only drive the aim/floor.)
+        // block tall and ~0.9 wide. Effects emit from its real geo locators; these only drive the aim and floor.
         private const val TARGET_SCALE = 1.0f
         private const val TARGET_HEIGHT = 1.0f
         private const val TARGET_WIDTH = 0.9f
@@ -108,25 +103,24 @@ class MoveDexView {
         // however far apart the per-move separation pushes them.
         private const val FLOOR_PAD_V = 0.25f
 
-        // Info tabs reuse the MAIN Pokédex's tab-row look exactly: 16x32 two-state icon sheets (top half = idle,
-        // bottom half = hover/active) drawn at half scale (8px on screen), with the select arrow over the active
-        // tab. Same textures, same scale, same vOffset trick as PokedexGUI's ScaledButton tab row.
+        // Info tabs reuse the main Pokédex tab-row look: 16x32 two-state icon sheets (top half = idle, bottom
+        // half = hover/active) drawn at half scale (8px on screen), with the select arrow over the active tab.
         private val TAB_INFO_ICON = cobblemonResource("textures/gui/pokedex/tab_info.png")
         private val TAB_LEARNSET_ICON = cobblemonResource("textures/gui/pokedex/tab_moves.png")
         private val TAB_SELECT_ARROW = cobblemonResource("textures/gui/pokedex/select_arrow.png")
         private const val TAB_ICON_NATIVE = 16   // texture is 16 wide x 32 tall (two stacked 16px states)
-        private const val TAB_ICON_SCALE = 0.5f  // displayed 8x8 — identical to the main Pokédex tabs
+        private const val TAB_ICON_SCALE = 0.5f  // displayed 8x8, identical to the main Pokédex tabs
         private const val TAB_ICON_DISP = 8       // TAB_ICON_NATIVE * TAB_ICON_SCALE (on-screen px)
         private const val TAB_ICON_GAP = 22       // same inter-tab spacing as the main Pokédex
         private const val TAB_ICON_X0 = 2         // left indent of the first tab icon within the detail panel
 
-        // Move-info panel reuses the MAIN Pokédex's per-Pokémon move panel assets verbatim (info_move_background
-        // border + the shared power/accuracy/effect icons), so the MoveDex's Move Information tab matches it.
+        // Move-info panel reuses the main Pokédex per-Pokémon move panel assets (info_move_background border plus
+        // the shared power/accuracy/effect icons), so the MoveDex Info tab matches it.
         private val MOVE_INFO_BACKGROUND = cobblemonResource("textures/gui/pokedex/info_move_background.png")
         // Custom right-panel background skin for the MoveDex detail side.
         private val INFO_BG = cobblemonResource("textures/gui/pokedex/movedex_info_background.png")
         private const val INFO_SCALE = 0.5f       // shared Pokédex move-panel text/icon scale
-        private const val INFO_TEXT_COLOUR = 0x606B6E // dark slate, as in the main Pokédex move panel
+        private const val INFO_TEXT_COLOUR = 0x606B6E // dark slate, matching the main Pokédex move panel
 
         // Pokédex move-list assets, reused so the MoveDex list matches the Pokédex info-tab move list.
         private val MOVE_SLOT = cobblemonResource("textures/gui/pokedex/move_slot.png")
@@ -149,7 +143,7 @@ class MoveDexView {
         private const val SCENE_SEPARATION = 2.5   // base half-gap (blocks) along the forward (Z) axis
         private const val SEP_BASE = 0.8           // separation = SEP_BASE + (actorWidth+targetWidth)*SEP_FACTOR
         private const val SEP_FACTOR = 0.85        // so bigger Pokémon (Wailord) get pushed further apart
-        private const val DEFAULT_ZOOM = 26f       // scale (px per scene block); scroll adjusts, recentre keeps it framed
+        private const val DEFAULT_ZOOM = 26f       // scale (px per scene block); scroll adjusts it
 
         private fun fallback(key: String, text: String) = Component.translatableWithFallback("cobblemon.ui.movedex.$key", text)
     }
@@ -177,7 +171,7 @@ class MoveDexView {
     private var actorState = FloatingState()
     private val targetState = FloatingState()
     private val scene = MoveDexParticleScene()
-    // The Pokémon performing the move — fixed to Smeargle (the actor can't be changed from the MoveDex).
+    // The Pokémon performing the move, fixed to Smeargle (the actor can't be changed from the MoveDex).
     private var actorSpecies: ResourceLocation? = DEFAULT_ACTOR
     // Timed bedrock animation cues (names, time, isTarget): actor windup + target damage/recoil.
     private var animEvents: List<Triple<Set<String>, Float, Boolean>> = emptyList()
@@ -188,7 +182,7 @@ class MoveDexView {
     private var muted = false                             // speaker toggle
     private var debugLocators = false                     // draw locator/target-spot markers (toggle: L key or button)
     // Follow-camera state: when a move flings a doll upward (Seismic Toss), the camera pans up and eases the zoom
-    // out just enough to keep the action framed, then settles back — all smoothed so normal moves look static.
+    // out just enough to keep the action framed, then settles back, all smoothed so normal moves look static.
     private var dollRiseY = 0f                            // last frame's max doll vertical rise (scene units)
     private var followZoomFactor = 1f                     // smoothed multiplicative zoom-out applied to sceneZoom
     private var followPanY = 0f                           // smoothed vertical pan offset (scene units, up = -Y)
@@ -226,7 +220,7 @@ class MoveDexView {
         sceneZoom = DEFAULT_ZOOM
     }
 
-    /** The model identifier for the actor doll — the chosen species, or the Smeargle default. */
+    /** The model identifier for the actor doll: the chosen species, or the Smeargle default. */
     private fun actorIdentifier(): ResourceLocation = actorSpecies ?: DEFAULT_ACTOR
 
     /** (height, width) hitbox of the chosen actor species in world blocks; substitute-ish default otherwise. */
@@ -248,14 +242,9 @@ class MoveDexView {
     }
 
     /**
-     * Builds the move's particle scene and measures the CENTROID of (dolls + the move's full particle volume),
-     * pre-simulating the whole effect once. That centroid is what the camera pans to so everything stays nicely
-     * centred at any zoom/rotation. Scale itself is the single manual [sceneZoom]. Leaves the scene freshly built.
-     */
-    /**
-     * Kills everything in flight on both dolls before a fresh move starts/loops: any active + primary bedrock
+     * Kills everything in flight on both dolls before a fresh move starts or loops: any active and primary bedrock
      * animations, and any queued-but-unplayed animation cues. The particle scene's own [MoveDexParticleScene.clear]
-     * (run by [buildScene]) kills the active emitters and particles. Together this guarantees a new move/cycle
+     * (run by [buildScene]) kills the active emitters and particles. Together this guarantees a new move or cycle
      * never inherits a half-played animation or leftover storm from the previous one.
      */
     private fun resetDolls() {
@@ -272,7 +261,7 @@ class MoveDexView {
         sceneSeparation = SEP_BASE + (aw + tw) * SEP_FACTOR
         val sep = sceneSeparation.toFloat()
         // Seed with the two dolls' bounds. Dolls render in the same "up = -Y" frame as particles (feet at 0,
-        // head toward -Y), so the box goes [-height, small] in Y — not symmetric.
+        // head toward -Y), so the box goes [-height, small] in Y, not symmetric.
         fitBox[0] = -max(aw, tw); fitBox[1] = -max(ah, th); fitBox[2] = -(sep + max(aw, tw) * 0.5f)
         fitBox[3] = max(aw, tw); fitBox[4] = 0.3f; fitBox[5] = sep + max(aw, tw) * 0.5f
 
@@ -289,7 +278,7 @@ class MoveDexView {
 
         // Auto-fit the zoom to this move: project the 8 box corners through the view rotation and size so the
         // projected extent fits BOTH viewport dimensions. This is the single sceneZoom value (scroll overrides
-        // it); it's what lets a tiny move (Charmander) and a tall one (Thunder) each fill the window sensibly.
+        // it), and it lets a tiny move (Charmander) and a tall one (Thunder) each fill the window sensibly.
         val r = Quaternionf().mul(Axis.XP.rotationDegrees(scenePitch)).mul(Axis.YP.rotationDegrees(sceneYaw))
         var minSX = Float.MAX_VALUE; var maxSX = -Float.MAX_VALUE
         var minSY = Float.MAX_VALUE; var maxSY = -Float.MAX_VALUE
@@ -306,8 +295,8 @@ class MoveDexView {
         val projW = max(0.5f, maxSX - minSX)
         val projH = max(0.5f, maxSY - minSY)
         sceneZoom = min((DETAIL_W - 14f) / projW, (VIEW_H - 12f) / projH).coerceIn(4f, 80f)
-        // DIAGNOSTIC (temporary): the measured fit box, pivot and resulting zoom. A wildly large box or off-centre
-        // pivot here = the scene zooms to nothing / pans off-screen, which reads as "the whole viewport is blank".
+        // Logs the measured fit box, pivot, and zoom. A wildly large box or off-centre pivot zooms the scene to
+        // nothing or pans it off-screen, which reads as a blank viewport.
         Cobblemon.LOGGER.info("MoveDex fit {}: box=[{}, {}, {} .. {}, {}, {}] pivot=[{}, {}, {}] projW={} projH={} zoom={}",
             move.name, fitBox[0], fitBox[1], fitBox[2], fitBox[3], fitBox[4], fitBox[5],
             fixedPivot[0], fixedPivot[1], fixedPivot[2], projW, projH, sceneZoom)
@@ -345,8 +334,6 @@ class MoveDexView {
             move.damageCategory.name.lowercase().contains(query)
     }
 
-    // ---- rendering ----
-
     fun render(context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int, delta: Float) {
         renderSearchBar(context, x, y, mouseX, mouseY)
         renderControls(context, x, y, mouseX, mouseY)
@@ -355,7 +342,7 @@ class MoveDexView {
         renderMoveCount(context, x, y)
     }
 
-    /** [discovered] / [total] moves, top-right — mirrors the main Pokédex's caught/total counter. */
+    /** Discovered / total moves, top-right, mirroring the main Pokédex's caught/total counter. */
     private fun renderMoveCount(context: GuiGraphics, x: Int, y: Int) {
         val text = Component.literal("${MoveDexData.discoveredCount()} / ${MoveDexData.totalCount()}").bold()
         drawScaledTextJustifiedRight(context = context, font = CobblemonResources.DEFAULT_LARGE, text = text, x = x + DETAIL_X + DETAIL_W - 4, y = y + 14, colour = INFO_TEXT_COLOUR)
@@ -463,19 +450,19 @@ class MoveDexView {
 
         // Custom right-panel background skin (header bar + tab-area bars). Drawn first, behind all content.
         blitk(matrixStack = context.pose(), texture = INFO_BG, x = left, y = y + HEADER_Y, width = DETAIL_W, height = TAB_ROW_Y + TAB_ICON_DISP + 2 - HEADER_Y)
-        // Move name — styled like the main Pokédex species name (DEFAULT_LARGE, dark, not type-coloured).
+        // Move name, styled like the main Pokédex species name (DEFAULT_LARGE, dark, not type-coloured).
         drawScaledText(context = context, font = CobblemonResources.DEFAULT_LARGE, text = move.displayName.copy().bold(), x = left + 4, y = y + HEADER_Y + 3, colour = INFO_TEXT_COLOUR, scale = 0.75F)
         // Bigger elemental-type symbol for the selected move, on the right side of the header.
         TypeIcon(x = left + DETAIL_W - 21, y = y + HEADER_Y - 2, type = move.elementalType, small = false).render(context)
 
-        // Battle-style viewport — no dark backdrop; the scene renders straight on the panel background texture.
+        // Battle-style viewport with no dark backdrop; the scene renders straight on the panel background texture.
         renderDolls(context, left, y, delta)
         renderPlayPause(context, left, y, mouseX, mouseY)
         renderMuteButton(context, left, y, mouseX, mouseY)
         renderLocatorButton(context, left, y, mouseX, mouseY)
 
-        // Info tabs — drawn exactly like the main Pokédex's tab row (16x32 two-state icon at half scale, bottom
-        // half on hover/active, with the select arrow above the active tab).
+        // Info tabs drawn like the main Pokédex tab row (16x32 two-state icon at half scale, bottom half on
+        // hover/active, with the select arrow above the active tab).
         Tab.entries.forEachIndexed { index, tab ->
             val ix = tabIconX(left, index)
             val active = tab == activeTab
@@ -492,7 +479,7 @@ class MoveDexView {
                 scale = TAB_ICON_SCALE
             )
             if (active) {
-                // 12x6 arrow (shown 6x3) centred over the 8px icon, just above it — same offset as the Pokédex.
+                // 12x6 arrow (shown 6x3) centred over the 8px icon, just above it, same offset as the Pokédex.
                 blitk(
                     matrixStack = context.pose(),
                     texture = TAB_SELECT_ARROW,
@@ -512,171 +499,170 @@ class MoveDexView {
     }
 
     private fun renderDolls(context: GuiGraphics, left: Int, y: Int, delta: Float) {
-        // Advance by REAL wall-clock time at a fixed 20 Hz (50 ms/tick), independent of any screen pause or
-        // game-tick throttling, so the effect plays at exact battle speed. `delta` (the screen's partial-tick)
-        // is ignored for timing; the leftover-ms fraction drives interpolation instead.
-        val nowMs = Util.getMillis()
-        if (lastMs == 0L) lastMs = nowMs
-        val elapsedMs = (nowMs - lastMs).coerceIn(0L, 250L)
-        lastMs = nowMs
+        // Real wall-clock time at a fixed 20 Hz (50 ms/tick), independent of screen pause or game-tick throttling,
+        // so the effect plays at exact battle speed. The leftover-ms fraction drives interpolation.
+        val now = Util.getMillis()
+        if (lastMs == 0L) lastMs = now
+        val elapsedMs = (now - lastMs).coerceIn(0L, 250L)
+        lastMs = now
 
-        var steps = 0
-        if (playing) {
-            tickAccumulatorMs += elapsedMs.toFloat()
-            while (tickAccumulatorMs >= 50f && steps < 10) {
-                tickAccumulatorMs -= 50f
-                steps++
-            }
-            animTime += steps / 20f
-            // Play the move's sound cues as their timeline times arrive (advance the index even when muted so
-            // unmuting mid-cycle doesn't replay past sounds).
-            while (nextSoundIndex < moveSounds.size && moveSounds[nextSoundIndex].second <= animTime) {
-                if (!muted) playMoveSound(moveSounds[nextSoundIndex].first)
-                nextSoundIndex++
-            }
-            // Queue any animation cues now due (actor windup / target hit-recoil); played after the models render
-            // (addFirstAnimation needs currentModel set).
-            while (nextAnimIndex < animEvents.size && animEvents[nextAnimIndex].second <= animTime) {
-                val ev = animEvents[nextAnimIndex]
-                pendingAnims.add(ev.first to ev.third)
-                nextAnimIndex++
-            }
-            // Loop only once EVERYTHING has played — particles gone (scene emptied), every animation/sound cue
-            // fired, AND both dolls' bedrock animations have finished — so a move with trailing cues or a long
-            // doll animation after its last particle (common on longer moves) isn't cut off and restarted early.
-            // This skips only the empty trailing battle pauses. animDuration is the hard fallback cap.
-            val cuesRemain = nextAnimIndex < animEvents.size || nextSoundIndex < moveSounds.size
-            val dollAnimating = actorState.primaryAnimation != null || actorState.activeAnimations.isNotEmpty() ||
-                targetState.primaryAnimation != null || targetState.activeAnimations.isNotEmpty()
-            if (animTime >= animDuration || (animTime > 0.5f && scene.isEmpty && !cuesRemain && !dollAnimating)) {
-                animTime = 0f
-                tickAccumulatorMs = 0f
-                nextSoundIndex = 0
-                nextAnimIndex = 0
-                resetDolls() // clear leftover animations/cues so the next cycle starts clean
-                selected?.let { buildScene(it) } // rebuild kills the previous cycle's emitters/particles
-            }
-        }
+        val steps = if (playing) advancePlayback(elapsedMs) else 0
         val partial = (tickAccumulatorMs / 50f).coerceIn(0f, 1f)
-        // Give the scene the current dolls so it can re-aim moves from the real emit locators toward the
-        // opposing doll's centre (the "target spot"); the substitute target has no locators so its centre
-        // (mid-height) is the defined aim point.
-        val aScale = actorSpecies?.let { PokemonSpecies.getByIdentifier(it)?.baseScale } ?: 1.0f
+        // FloatingState.updatePartialTicks accumulates, so the model animation advances by the same per-frame
+        // wall-clock delta (in ticks) the particle scene uses, keeping models and particles on one clock.
+        val advance = if (playing) elapsedMs.toFloat() / 50f else 0f
+
+        applySceneAim()
+        // A misbehaving effect must never throw out of the sim, or it would skip the entire viewport render.
+        runCatching { scene.update(steps, partial) }.onFailure { Cobblemon.LOGGER.warn("MoveDex scene update failed", it) }
+
+        context.enableScissor(left, y + VIEW_Y, left + DETAIL_W, y + VIEW_Y + VIEW_H)
+        val pose = context.pose()
+        beginScenePose(pose, left, y)
+        renderSceneModels(context, pose, advance)
+        renderSceneParticles(context)
+        pose.popPose()
+        // The scene writes depth at GUI z=200, so the overlay controls drawn afterward at the base z would fail
+        // the LEQUAL test and hide behind it. Clear only the viewport region's depth (the scissor still bounds it).
+        RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX)
+        context.disableScissor()
+        renderViewportDebugText(context, left, y)
+    }
+
+    /**
+     * Advances the playback clock by [elapsedMs], fires due sound and animation cues, and loops when finished.
+     * Returns the number of 20 Hz ticks for the particle sim to step.
+     */
+    private fun advancePlayback(elapsedMs: Long): Int {
+        var steps = 0
+        tickAccumulatorMs += elapsedMs.toFloat()
+        while (tickAccumulatorMs >= 50f && steps < 10) {
+            tickAccumulatorMs -= 50f
+            steps++
+        }
+        animTime += steps / 20f
+        // Advance the sound index even when muted, so unmuting mid-cycle doesn't replay past cues.
+        while (nextSoundIndex < moveSounds.size && moveSounds[nextSoundIndex].second <= animTime) {
+            if (!muted) playMoveSound(moveSounds[nextSoundIndex].first)
+            nextSoundIndex++
+        }
+        // Animation cues are queued now and played after the models render, when addFirstAnimation has a model.
+        while (nextAnimIndex < animEvents.size && animEvents[nextAnimIndex].second <= animTime) {
+            val ev = animEvents[nextAnimIndex]
+            pendingAnims.add(ev.first to ev.third)
+            nextAnimIndex++
+        }
+        loopIfFinished()
+        return steps
+    }
+
+    /** Restarts the cycle once particles, every cue, and both dolls' bedrock animations have finished. animDuration is the hard cap. */
+    private fun loopIfFinished() {
+        val cuesRemain = nextAnimIndex < animEvents.size || nextSoundIndex < moveSounds.size
+        val dollAnimating = actorState.primaryAnimation != null || actorState.activeAnimations.isNotEmpty() ||
+            targetState.primaryAnimation != null || targetState.activeAnimations.isNotEmpty()
+        if (animTime >= animDuration || (animTime > 0.5f && scene.isEmpty && !cuesRemain && !dollAnimating)) {
+            animTime = 0f
+            tickAccumulatorMs = 0f
+            nextSoundIndex = 0
+            nextAnimIndex = 0
+            resetDolls()
+            selected?.let { buildScene(it) }
+        }
+    }
+
+    /** Aims every targeted effect from its real emit locator toward the substitute target's mid-height centre (it has no locators of its own). */
+    private fun applySceneAim() {
         val (ahh, _) = actorHW()
-        // Aim at the substitute target's centre: mid-height, and the near (+Z) face — half its width toward the
-        // attacker from the doll's centre at -separation.
         val targetCentreY = TARGET_HEIGHT * 0.5f
         val targetFaceZ = -sceneSeparation.toFloat() + TARGET_WIDTH * 0.5f
         scene.setAimContext(
-            actorState, targetState, aScale, 1.0f,
+            actorState, targetState, actorBaseScale(), 1.0f,
             sceneSeparation.toFloat(), -sceneSeparation.toFloat(), ahh * 0.5f, targetCentreY, targetFaceZ
         )
-        // Guard the particle sim: a misbehaving effect must never throw out of here, or it would skip the ENTIRE
-        // viewport render below (floor + dolls + particles) and blank everything — that's what made Swords Dance
-        // show nothing at all. Logged so the offending move's actual error is visible.
-        runCatching { scene.update(steps, partial) }.onFailure { Cobblemon.LOGGER.warn("MoveDex scene update failed", it) }
+    }
 
-        // Advance the doll's bedrock animation by the SAME wall-clock delta (in ticks) the particle scene uses,
-        // so the model animation and the particle timeline run on one 20 Hz clock and stay in sync (the particles
-        // fire exactly when the animation reaches that point). FloatingState.updatePartialTicks ACCUMULATES, so
-        // this must be a per-frame delta, not the in-tick fraction. Both reset together on swap/loop.
-        val advance = if (playing) (elapsedMs.toFloat() / 50f) else 0f
+    private fun actorBaseScale(): Float = actorSpecies?.let { PokemonSpecies.getByIdentifier(it)?.baseScale } ?: 1.0f
 
-        context.enableScissor(left, y + VIEW_Y, left + DETAIL_W, y + VIEW_Y + VIEW_H)
-
-        // Follow-camera: ease the pivot up and the zoom out by just enough to keep a doll thrown upward (Seismic
-        // Toss launches the target ~15 blocks up) in frame, then settle back as it returns. Uses LAST frame's
-        // measured rise; manual zoom (sceneZoom) and rotation stay the base this multiplies/offsets. Smoothed so
-        // resting moves (rise≈0) are unaffected, satisfying "static for normal moves, follow the big ones".
+    /**
+     * Eases the follow-camera (lifts the pivot and zooms out just enough to keep an upward-thrown doll in frame,
+     * from last frame's measured rise) and applies the scene pose. Pushes a pose that [renderDolls] later pops.
+     */
+    private fun beginScenePose(pose: com.mojang.blaze3d.vertex.PoseStack, left: Int, y: Int) {
         val baseExtentY = max(1f, fitBox[4] - fitBox[1])
         val rise = if (dollRiseY.isFinite()) dollRiseY.coerceIn(0f, 40f) else 0f
         val desiredFactor = (baseExtentY / (baseExtentY + rise)).coerceIn(0.2f, 1f)
         val desiredPanY = -rise / 2f
         val ease = if (playing) 0.18f else 0.5f
-        // Recover if a prior frame's non-finite rise already poisoned these (NaN is sticky through +=).
+        // NaN is sticky through +=, so recover if a prior frame's non-finite rise already poisoned these.
         if (!followZoomFactor.isFinite()) followZoomFactor = 1f
         if (!followPanY.isFinite()) followPanY = 0f
         followZoomFactor += (desiredFactor - followZoomFactor) * ease
         followPanY += (desiredPanY - followPanY) * ease
 
         val finalScale = (sceneZoom * followZoomFactor).let { if (it.isFinite() && it > 0f) it else sceneZoom }
-        // Pan so the (rotated) content pivot (raised by the follow offset) lands at the viewport centre.
         val pv = Vector3f(fixedPivot[0], fixedPivot[1] + followPanY, fixedPivot[2])
         Quaternionf().mul(Axis.XP.rotationDegrees(scenePitch)).mul(Axis.YP.rotationDegrees(sceneYaw)).transform(pv)
         val cx = left + DETAIL_W / 2.0
         val cy = y + VIEW_Y + VIEW_H / 2.0
-        // A non-finite pivot (from a degenerate fit box) would make pose.translate NaN/Inf and blank the ENTIRE
-        // viewport (floor + dolls included). Fall back to no pan so the scene still renders centred.
+        // A non-finite pivot would make pose.translate NaN and blank the viewport, so fall back to no pan.
         val pvx = if (pv.x.isFinite()) pv.x else 0f
         val pvy = if (pv.y.isFinite()) pv.y else 0f
-
-        val pose = context.pose()
         pose.pushPose()
         pose.translate(cx - finalScale * pvx, cy - finalScale * pvy, 200.0)
         pose.scale(finalScale, finalScale, finalScale)
         pose.mulPose(Axis.XP.rotationDegrees(scenePitch))
         pose.mulPose(Axis.YP.rotationDegrees(sceneYaw))
+    }
 
-        // Render both dolls at their TRUE world scale (baseScale) so model size matches the particle world
-        // scale, exactly like battle. The auto-fit camera handles fitting everything in the window.
-        val actorScale = actorSpecies?.let { PokemonSpecies.getByIdentifier(it)?.baseScale } ?: 1.0f
+    /**
+     * Renders the stadium floor and both dolls at true world scale, records the upward rise for next frame's
+     * follow-camera, and plays this frame's due animation cues.
+     */
+    private fun renderSceneModels(context: GuiGraphics, pose: com.mojang.blaze3d.vertex.PoseStack, advance: Float) {
+        val actorScale = actorBaseScale()
         Lighting.setupForEntityInInventory()
         runCatching {
-            // Stadium floor at the dolls' feet (y=0). Its Z half-extent is derived from the per-move separation so
-            // the texture's A/B pads (at V ±FLOOR_PAD_V from centre) land EXACTLY under each doll however far the
-            // differing hitbox volumes push them apart: pad z = ±FLOOR_PAD_V*(2*halfZ) must equal ±separation, so
-            // halfZ = separation / (2*FLOOR_PAD_V). This is also the plane the scene collides ground particles
-            // (Bulldoze) against, so they visibly come to rest on it.
-            // The floor is a SQUARE: halfX == halfZ, so the quad stays symmetric about (0,0) (centred) and BOTH the
-            // X and Z extents grow together with the separation — i.e. bigger-hitbox mons (which push the dolls
-            // further apart in Z) enlarge the whole square uniformly while the dolls stay pinned to the same pads,
-            // so they read as being in the same relative spots regardless of size.
+            // The floor is a square whose half-extent grows with the separation, so the texture's A/B pads stay
+            // under each doll however far differing hitbox volumes push them apart. Ground particles collide on it.
             val floorHalf = (sceneSeparation / (2.0 * FLOOR_PAD_V)).toFloat()
             MoveDexSceneRenderer.renderFloor(context, STADIUM_FLOOR, halfX = floorHalf, halfZ = floorHalf)
 
-            // Dolls are separated along the forward (Z) axis — the same axis directional effects fire along —
-            // so beams/sprays travel from the user doll to the target doll. User is nearer (+Z), facing -Z.
+            // Dolls are separated along the forward (Z) axis so directional effects travel user (+Z) to target.
             pose.pushPose()
             pose.translate(0.0, 0.0, sceneSeparation)
             MoveDexSceneRenderer.renderModel(context, actorIdentifier(), actorState, actorScale, facingYaw = 0f, partialTicks = advance)
             pose.popPose()
-            val actorRise = MoveDexSceneRenderer.lastRootRiseY // read before the target render overwrites it
+            val actorRise = MoveDexSceneRenderer.lastRootRiseY
 
-            // The target is now a real posable model (a target-block-shaped dummy), so it plays the move's actual
-            // `target` bedrock animation exactly like a battle defender — the same shared move animations drive its
-            // root, giving faithful translate/scale/rotation instead of a procedural guess.
             pose.pushPose()
             pose.translate(0.0, 0.0, -sceneSeparation)
             MoveDexSceneRenderer.renderModel(context, TARGET, targetState, targetScale(), facingYaw = 180f, partialTicks = advance)
             pose.popPose()
-            // Record the largest upward rise of either doll for NEXT frame's follow-camera (1-frame lag is fine).
-            // Guard against NaN/Inf from a misbehaving animation: a non-finite rise would poison followZoomFactor
-            // (which then stays NaN every frame) → finalScale NaN → pose.scale(NaN) blanks the ENTIRE viewport.
+            // Largest upward rise of either doll, for next frame's follow-camera; a non-finite value would poison it.
             dollRiseY = max(0f, max(actorRise, MoveDexSceneRenderer.lastRootRiseY)).let { if (it.isFinite()) it else 0f }
 
-            // Play this frame's due cues on the matching doll, EXACTLY like battle's PlayPosableAnimationHandler:
-            // addFirstAnimation across the move's ordered names, first match wins, and NO fallback — if a species
-            // has no animation for the move (e.g. Charmander has no "physical", so Fire Punch resolves nothing) it
-            // plays no body animation, just like battle. (We resolve across poses because the GUI doll sits in a UI
-            // pose and can't enter the battle pose where those animations are registered.)
-            if (pendingAnims.isNotEmpty()) {
-                pendingAnims.forEach { (names, isTarget) ->
-                    (if (isTarget) targetState else actorState).addFirstAnimationAcrossPoses(names)
-                }
-                pendingAnims.clear()
-            }
-
+            playDueAnimations()
             if (debugLocators) renderDebugLocators(context, pose, actorScale)
         }
         Lighting.setupFor3DItems()
+    }
 
-        // The virtual battle camera is the INVERSE of the scene's view rotation (XP(pitch)·YP(yaw)); feeding
-        // that to each particle's cameraMode makes it billboard to face the viewer, exactly like in-world.
+    /** Plays this frame's queued cues on the matching doll: first registered animation name wins, no fallback, exactly like battle. */
+    private fun playDueAnimations() {
+        if (pendingAnims.isEmpty()) return
+        pendingAnims.forEach { (names, isTarget) ->
+            (if (isTarget) targetState else actorState).addFirstAnimationAcrossPoses(names)
+        }
+        pendingAnims.clear()
+    }
+
+    /** Renders the scene's particles, feeding each the billboard camera (the inverse of the scene's view rotation) so they face the viewer like in-world. */
+    private fun renderSceneParticles(context: GuiGraphics) {
         val cameraAngle = Quaternionf()
             .mul(Axis.XP.rotationDegrees(scenePitch))
             .mul(Axis.YP.rotationDegrees(sceneYaw))
             .conjugate()
-        // Particles share the scene pose; "at target" effects emit at B, others at A.
         scene.render(
             context,
             userLocalZ = sceneSeparation.toFloat(),
@@ -686,20 +672,12 @@ class MoveDexView {
             cameraPitch = -scenePitch,
             actorState = actorState,
             targetState = targetState,
-            actorScale = actorScale,
+            actorScale = actorBaseScale(),
             targetScale = 1.0f
         )
+    }
 
-        pose.popPose()
-        // The 3D scene (dolls + floor) is drawn at GUI z=200 and WRITES depth, so the control buttons drawn
-        // afterward at the base GUI z would fail the LEQUAL depth test and hide BEHIND the viewport. Clear the
-        // depth buffer now, while the viewport scissor is still bound (glClear respects the scissor box), so only
-        // the preview region is reset — every overlay control (play/pause, mute, locator, species box) then renders
-        // unconditionally on top of the viewport without disturbing the rest of the screen's depth.
-        RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX)
-        context.disableScissor()
-
-        // Debug readout so tuning values can be reported back (drag = rotate, scroll over viewport = zoom).
+    private fun renderViewportDebugText(context: GuiGraphics, left: Int, y: Int) {
         drawScaledText(
             context = context,
             text = Component.literal("Yaw ${sceneYaw.toInt()}  Pitch ${scenePitch.toInt()}  Zoom ${"%.1f".format(sceneZoom)}"),
@@ -713,7 +691,7 @@ class MoveDexView {
 
     /**
      * Debug overlay (toggle with L): a red marker at the target block's aim point (the front-face centre every
-     * move fires at and traveling effects now stop on) and blue markers at each of the actor's real geo locators,
+     * move fires at and traveling effects stop on) and blue markers at each of the actor's real geo locators,
      * placed exactly where the move emits from them (un-flipped vs the root locator, scaled, scene up = -Y).
      */
     private fun renderDebugLocators(context: GuiGraphics, pose: com.mojang.blaze3d.vertex.PoseStack, actorScale: Float) {
@@ -726,8 +704,8 @@ class MoveDexView {
         pose.translate(0.0, 0.0, sceneSeparation)
         actorState.locatorStates.forEach { (_, wrapper) ->
             val o = wrapper.getOrigin()
-            // Match emitAnchor: X is the true model offset (NOT negated — negating mirrored left/right), Y negated
-            // for the upright render flip, Z forward. Keeps the markers on the same side as the model's parts.
+            // Match emitAnchor: X is the true model offset (NOT negated, since negating mirrors left/right), Y
+            // negated for the upright render flip, Z forward. Keeps the markers on the same side as the model's parts.
             val mx = (o.x - root.x).toFloat()
             val my = -((o.y - root.y).toFloat())
             val mz = (o.z - root.z).toFloat()
@@ -809,8 +787,8 @@ class MoveDexView {
         val effect = move.effectChances.firstOrNull() ?: 0.0
         drawScaledTextJustifiedRight(context = context, text = Component.literal(if (effect > 0) "${effect.toInt()}%" else "—"), x = px + 57, y = py + 32, scale = INFO_SCALE, colour = INFO_TEXT_COLOUR)
 
-        // SCROLLABLE description in the panel's right column (px+63..px+131 ≈ 68px), wrapped at the panel scale —
-        // mirrors the main Pokédex's MoveDescriptionWidget: the mouse wheel over the content area drives contentScroll
+        // SCROLLABLE description in the panel's right column (px+63..px+131 ≈ 68px), wrapped at the panel scale,
+        // mirroring the main Pokédex's MoveDescriptionWidget: the mouse wheel over the content area drives contentScroll
         // (shared with the Learnset list; reset to 0 on tab switch), and only a window of lines is shown.
         val font = Minecraft.getInstance().font
         val descLines = font.split(move.description, (65f / INFO_SCALE).toInt())
@@ -875,24 +853,35 @@ class MoveDexView {
     }
 
     private fun panel(context: GuiGraphics, left: Int, y: Int, contentTop: Int) {
-        // No dark box — content draws straight on the panel background texture (kept as a no-op for call sites).
+        // No dark box: content draws straight on the panel background texture (kept as a no-op for call sites).
     }
 
-    // ---- input ----
-
     fun mouseClicked(x: Int, y: Int, mouseX: Double, mouseY: Double): Boolean {
-        // Arm scene-rotation dragging ONLY when the press lands inside the 3D viewport (not the move list,
-        // controls, or play button) — otherwise the tiny mouse movement while clicking a move in the list
-        // would spin the scene. mouseDragged checks this flag.
+        armSceneDrag(x, y, mouseX, mouseY)
+        clickSearchBar(x, y, mouseX, mouseY)?.let { return it }
+        clickFilterAndSort(x, y, mouseX, mouseY)?.let { return it }
+        clickMoveList(x, y, mouseX, mouseY)?.let { return it }
+
+        val move = selected ?: return false
+        val left = x + DETAIL_X
+        clickViewportControls(move, left, y, mouseX, mouseY)?.let { return it }
+        clickTabs(left, y, mouseX, mouseY)?.let { return it }
+        clickLearnsetMethods(move, left, y, mouseX, mouseY)?.let { return it }
+        return false
+    }
+
+    /**
+     * Arms scene-rotation dragging only when the press lands inside the viewport, not on the move list or the
+     * control strip, so the small movement while clicking a list row doesn't spin the scene. [mouseDragged] reads it.
+     */
+    private fun armSceneDrag(x: Int, y: Int, mouseX: Double, mouseY: Double) {
         val dl = x + DETAIL_X
-        // The bottom-left control strip (play, mute, locator-toggle) sits inside the viewport; pressing any of it
-        // must NOT arm scene-rotation drag.
         val onControls = mouseX >= dl + 2 && mouseX <= dl + 44 && mouseY >= y + VIEW_Y + VIEW_H - 12 && mouseY <= y + VIEW_Y + VIEW_H - 2
         sceneDragArmed = selected != null && !onControls &&
             mouseX >= dl && mouseX <= dl + DETAIL_W && mouseY >= y + VIEW_Y && mouseY <= y + VIEW_Y + VIEW_H
+    }
 
-
-        // Move-list search bar focus.
+    private fun clickSearchBar(x: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
         val sLeft = x + LIST_X
         val sTop = y + SEARCH_Y
         if (mouseX >= sLeft && mouseX <= sLeft + LIST_W && mouseY >= sTop && mouseY <= sTop + SEARCH_H) {
@@ -900,92 +889,95 @@ class MoveDexView {
             return true
         }
         searchFocused = false
+        return null
+    }
 
-        // Filter bar: click anywhere on it to cycle ALL -> Physical -> Special -> Status.
+    private fun clickFilterAndSort(x: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
         val (fbx, fby, fbw, fbh) = filterBarRect(x, y)
         if (mouseX >= fbx && mouseX <= fbx + fbw && mouseY >= fby && mouseY <= fby + fbh) {
             filter = Filter.entries[(filter.ordinal + 1) % Filter.entries.size]; scrollRow = 0; return true
         }
-        // Sort buttons (10x10 each).
         val scaledSize = (SORT_BTN_SIZE * SCALE).toInt()
         sortButtonRects(x, y).forEachIndexed { i, (bx, by) ->
             if (mouseX >= bx && mouseX <= bx + scaledSize && mouseY >= by && mouseY <= by + scaledSize) { sort = Sort.entries[i]; scrollRow = 0; return true }
         }
+        return null
+    }
 
-        // Move list.
-        if (mouseX >= x + LIST_X && mouseX <= x + LIST_X + LIST_W) {
-            val list = moves()
-            val end = (scrollRow + VISIBLE_ROWS).coerceAtMost(list.size)
-            for (i in scrollRow until end) {
-                val rowY = y + LIST_TOP + (i - scrollRow) * ROW_H
-                if (mouseY >= rowY && mouseY <= rowY + 12) {
-                    if (MoveDexData.isDiscovered(list[i])) {
-                        selected = list[i]
-                        activeTab = Tab.INFO
-                        contentScroll = 0
-                        learnMethodFilter = null
-                        // Auto-play the move once on selection, then pause at the end of the cycle.
-                        animDuration = MoveDexAnimation.durationFor(list[i])
-                        animEvents = MoveDexAnimation.animationEventsFor(list[i])
-                        nextAnimIndex = 0
-                        moveSounds = MoveDexAnimation.soundsFor(list[i])
-                        nextSoundIndex = 0
-                        animTime = 0f
-                        lastMs = 0L
-                        tickAccumulatorMs = 0f
-                        prepareMove(list[i]) // builds the scene + computes the fixed framing
-                        playing = true
-                    }
-                    return true
-                }
+    /** Hit-tests the move list. Returns true on a selectable row, false inside the list column with no row, null otherwise. */
+    private fun clickMoveList(x: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
+        if (mouseX < x + LIST_X || mouseX > x + LIST_X + LIST_W) return null
+        val list = moves()
+        val end = (scrollRow + VISIBLE_ROWS).coerceAtMost(list.size)
+        for (i in scrollRow until end) {
+            val rowY = y + LIST_TOP + (i - scrollRow) * ROW_H
+            if (mouseY >= rowY && mouseY <= rowY + 12) {
+                if (MoveDexData.isDiscovered(list[i])) selectMove(list[i])
+                return true
             }
-            return false
         }
+        return false
+    }
 
-        val move = selected ?: return false
-        val left = x + DETAIL_X
+    /** Selects [move] and auto-plays it once: builds the scene, computes the fixed framing, and resets the clock. */
+    private fun selectMove(move: MoveTemplate) {
+        selected = move
+        activeTab = Tab.INFO
+        contentScroll = 0
+        learnMethodFilter = null
+        animDuration = MoveDexAnimation.durationFor(move)
+        animEvents = MoveDexAnimation.animationEventsFor(move)
+        nextAnimIndex = 0
+        moveSounds = MoveDexAnimation.soundsFor(move)
+        nextSoundIndex = 0
+        animTime = 0f
+        lastMs = 0L
+        tickAccumulatorMs = 0f
+        prepareMove(move)
+        playing = true
+    }
 
-        // Play/pause. Pressing play after a finished cycle restarts it.
-        val pbx = left + 2; val pby = y + VIEW_Y + VIEW_H - 12
+    /** Play/pause (restarts a finished cycle), mute, and the locator-debug toggle, all in the viewport's bottom-left strip. */
+    private fun clickViewportControls(move: MoveTemplate, left: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
+        val pby = y + VIEW_Y + VIEW_H - 12
+        val pbx = left + 2
         if (mouseX >= pbx && mouseX <= pbx + 12 && mouseY >= pby && mouseY <= pby + 10) {
-            if (!playing && animTime >= animDuration) { animTime = 0f; lastMs = 0L; tickAccumulatorMs = 0f; nextSoundIndex = 0; move?.let { buildScene(it) } }
+            if (!playing && animTime >= animDuration) { animTime = 0f; lastMs = 0L; tickAccumulatorMs = 0f; nextSoundIndex = 0; buildScene(move) }
             playing = !playing
             return true
         }
-
-        // Mute toggle (speaker icon).
         val mbx = left + 16
         if (mouseX >= mbx && mouseX <= mbx + 12 && mouseY >= pby && mouseY <= pby + 10) {
             muted = !muted
             return true
         }
-
-        // Locator-visibility debug toggle (also bound to the L key).
         val lbx = left + 30
         if (mouseX >= lbx && mouseX <= lbx + 12 && mouseY >= pby && mouseY <= pby + 10) {
             debugLocators = !debugLocators
             return true
         }
+        return null
+    }
 
-        // Tabs (icon buttons at the bottom — hit-tested against the same 8x8 rects renderDetail draws).
-        if (mouseY >= y + TAB_ROW_Y && mouseY <= y + TAB_ROW_Y + TAB_ICON_DISP) {
-            Tab.entries.forEachIndexed { index, tab ->
-                val ix = tabIconX(left, index)
-                if (mouseX >= ix && mouseX <= ix + TAB_ICON_DISP) { activeTab = tab; contentScroll = 0; return true }
-            }
+    private fun clickTabs(left: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
+        if (mouseY < y + TAB_ROW_Y || mouseY > y + TAB_ROW_Y + TAB_ICON_DISP) return null
+        Tab.entries.forEachIndexed { index, tab ->
+            val ix = tabIconX(left, index)
+            if (mouseX >= ix && mouseX <= ix + TAB_ICON_DISP) { activeTab = tab; contentScroll = 0; return true }
         }
+        return null
+    }
 
-        // Learnset method sub-buttons.
-        if (activeTab == Tab.LEARNSET && mouseY >= y + SUBTAB_Y && mouseY <= y + SUBTAB_Y + SUBTAB_H) {
-            val methods = MoveDexData.learnedBy(move).map { it.method }.distinct().sortedBy { it.order }
-            val options = listOf<MoveDexData.LearnMethod?>(null) + methods
-            val buttonW = (DETAIL_W - (options.size - 1) * 2) / options.size
-            options.forEachIndexed { index, method ->
-                val tx = left + index * (buttonW + 2)
-                if (mouseX >= tx && mouseX <= tx + buttonW) { learnMethodFilter = method; contentScroll = 0; return true }
-            }
+    private fun clickLearnsetMethods(move: MoveTemplate, left: Int, y: Int, mouseX: Double, mouseY: Double): Boolean? {
+        if (activeTab != Tab.LEARNSET || mouseY < y + SUBTAB_Y || mouseY > y + SUBTAB_Y + SUBTAB_H) return null
+        val methods = MoveDexData.learnedBy(move).map { it.method }.distinct().sortedBy { it.order }
+        val options = listOf<MoveDexData.LearnMethod?>(null) + methods
+        val buttonW = (DETAIL_W - (options.size - 1) * 2) / options.size
+        options.forEachIndexed { index, method ->
+            val tx = left + index * (buttonW + 2)
+            if (mouseX >= tx && mouseX <= tx + buttonW) { learnMethodFilter = method; contentScroll = 0; return true }
         }
-        return false
+        return null
     }
 
     fun mouseScrolled(x: Int, y: Int, mouseX: Double, mouseY: Double, deltaY: Double): Boolean {

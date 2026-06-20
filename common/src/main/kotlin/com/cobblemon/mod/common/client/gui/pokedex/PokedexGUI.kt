@@ -93,8 +93,6 @@ class PokedexGUI private constructor(
 
         private val globeIcon = cobblemonResource("textures/gui/pokedex/globe_icon.png")
         private val caughtSeenIcon = cobblemonResource("textures/gui/pokedex/caught_seen_icon.png")
-        private val pageArrowLeftIcon = cobblemonResource("textures/gui/pokedex/forms_arrow_left.png")
-        private val pageArrowRightIcon = cobblemonResource("textures/gui/pokedex/forms_arrow_right.png")
 
         private val categoryBarOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_bar_category.png")
 
@@ -108,11 +106,7 @@ class PokedexGUI private constructor(
             cobblemonResource("textures/gui/pokedex/tab_moves.png")
         )
 
-        private const val PAGE_ARROW_WIDTH = 10
-        private const val PAGE_ARROW_HEIGHT = 16
-        private const val PAGE_SELECTOR_GAP = 7
-
-        // Back button on the main dex (returns to the CobblePedia hub) — same 16x16 two-frame sheet as CobblePedia.
+        // Back button on the main dex returns to the CobblePedia hub, sharing CobblePedia's 16x16 two-frame sheet.
         private val backButtonIcon = cobblemonResource("textures/gui/pokedex/pokedex_back_button.png")
         private const val BACK_X = 20
         private const val BACK_Y = 14
@@ -198,14 +192,12 @@ class PokedexGUI private constructor(
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
 
-        //Info Widget
         if (::pokemonInfoWidget.isInitialized) removeWidget(pokemonInfoWidget)
         pokemonInfoWidget = PokemonInfoWidget(x + 180, y + 28) { newForm -> updateSelectedForm(newForm) }
         addRenderableWidget(pokemonInfoWidget)
 
         setUpTabs()
 
-        //Tab Info Widget
         displaytabInfoElement(tabInfoIndex, false)
 
         if (::searchWidget.isInitialized) removeWidget(searchWidget)
@@ -310,7 +302,6 @@ class PokedexGUI private constructor(
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
 
-        // Render Base Resource
         blitk(
             matrixStack = matrices,
             texture = type.getTexturePath(),
@@ -334,13 +325,12 @@ class PokedexGUI private constructor(
             return
         }
 
-        // Back button (main dex → CobblePedia hub), top-left.
+        // Top-left back button returns the main dex to the CobblePedia hub.
         run {
             val hovered = mouseX in (x + BACK_X)..(x + BACK_X + BACK_W) && mouseY in (y + BACK_Y)..(y + BACK_Y + BACK_H)
             blitk(matrixStack = matrices, texture = backButtonIcon, x = x + BACK_X, y = y + BACK_Y, width = BACK_W, height = BACK_H, vOffset = if (hovered) BACK_H else 0, textureHeight = BACK_H * 2)
         }
 
-        // Region (shifted right to make room for the back button at top-left).
         blitk(
             matrixStack = matrices,
             texture = globeIcon,
@@ -351,7 +341,6 @@ class PokedexGUI private constructor(
             scale = SCALE
         )
 
-        // Region label
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -361,7 +350,6 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
-        // Seen icon
         blitk(
             matrixStack = matrices,
             texture = caughtSeenIcon,
@@ -374,7 +362,6 @@ class PokedexGUI private constructor(
             scale = SCALE
         )
 
-        // Caught icon
         blitk(
             matrixStack = matrices,
             texture = caughtSeenIcon,
@@ -387,7 +374,6 @@ class PokedexGUI private constructor(
             scale = SCALE
         )
 
-        // Seen
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -397,7 +383,6 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
-        // Owned
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
@@ -407,7 +392,6 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
-        // Category filter
         blitk(
             matrixStack = matrices,
             texture = categoryBarOverlay,
@@ -436,9 +420,8 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
-        // Show selected tab pointer if selected Pokémon has tab info to be shown
+        // Only point at the active tab when the selected form has info to show there.
         if (selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true) {
-            // Tab arrow
             blitk(
                 matrixStack = matrices,
                 texture = tabSelectArrow,
@@ -452,7 +435,6 @@ class PokedexGUI private constructor(
 
         super.render(context, mouseX, mouseY, delta)
 
-        // Search type tooltip
         if (searchByTypeButton.isButtonHovered(mouseX, mouseY)) {
             val searchTypeText = lang("ui.pokedex.search.search_by", lang("ui.pokedex.search.type.${selectedSearchByType.name.lowercase()}")).bold()
             renderTooltip(
@@ -827,33 +809,9 @@ class PokedexGUI private constructor(
             shadow = true,
             centered = true
         )
-        // Page-switch arrows removed — navigation is via the CobblePedia hub tiles + back buttons.
     }
 
-    private fun handlePageNavigationClick(mouseX: Double, mouseY: Double): Boolean {
-        if (pages.size <= 1) return false
-
-        val x = (width - BASE_WIDTH) / 2
-        val y = (height - BASE_HEIGHT) / 2
-        val centerX = x + (BASE_WIDTH / 2)
-        val leftX = centerX - PAGE_SELECTOR_GAP - PAGE_ARROW_WIDTH
-        val rightX = centerX + PAGE_SELECTOR_GAP
-        val arrowY = y + 13
-
-        if (isInsidePageArrow(mouseX, mouseY, leftX, arrowY)) {
-            cyclePage(next = false)
-            return true
-        }
-
-        if (isInsidePageArrow(mouseX, mouseY, rightX, arrowY)) {
-            cyclePage(next = true)
-            return true
-        }
-
-        return false
-    }
-
-    /** Switch to the first top-level page of [pageClass] (used by CobblePedia tiles + the back buttons). */
+    /** Switch to the first top-level page of [pageClass] (used by CobblePedia tiles and the back buttons). */
     fun openPage(pageClass: Class<out PokedexGuiPage>) {
         val index = pages.indexOfFirst { pageClass.isInstance(it) }
         if (index < 0 || index == selectedPageIndex) return
@@ -865,29 +823,6 @@ class PokedexGUI private constructor(
         old?.onClose(this)
         currentPage?.onSelected(this)
         playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
-    }
-
-    private fun cyclePage(next: Boolean) {
-        if (pages.size <= 1) return
-        val oldPage = currentPage
-        selectedPageIndex = if (next) {
-            (selectedPageIndex + 1) % pages.size
-        } else {
-            (selectedPageIndex - 1 + pages.size) % pages.size
-        }
-
-        canDragRender = false
-        isDragging = false
-        setFocused(null)
-        oldPage?.onClose(this)
-        currentPage?.onSelected(this)
-        playSound(CobblemonSounds.POKEDEX_CLICK_SHORT)
-    }
-
-    private fun isInsidePageArrow(mouseX: Number, mouseY: Number, x: Int, y: Int): Boolean {
-        val mX = mouseX.toDouble()
-        val mY = mouseY.toDouble()
-        return mX >= x && mX <= (x + PAGE_ARROW_WIDTH) && mY >= y && mY <= (y + PAGE_ARROW_HEIGHT)
     }
 
     fun canSelectTab(tabIndex: Int): Boolean {
@@ -912,10 +847,8 @@ class PokedexGUI private constructor(
     override fun isPauseScreen(): Boolean = false
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        // Give the active page first crack at the key BEFORE the inventory-key close. Pages with their own text
-        // inputs (the MoveDex/BerryDex/WorldDex search boxes use a custom focus flag, not an EditBox) consume the
-        // keystroke when focused, so typing the inventory letter (default "e") into a search box no longer closes
-        // the GUI. A page only returns true for keys it actually handles, so "e" still closes when nothing's focused.
+        // Let the page consume the key before the inventory-key close, so typing the inventory letter into a
+        // page search box (which uses a custom focus flag, not an EditBox) does not close the GUI.
         val page = currentPage
         if (page != null && page !is MainDexPokedexPage && page.keyPressed(this, keyCode, scanCode, modifiers)) {
             return true

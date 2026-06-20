@@ -443,15 +443,15 @@ interface GuiParticleScene {
      * (e.g. Bulldoze) would otherwise fall through forever. Particle collision treats everything at or below this
      * Y as solid floor. It is per-storm because every particle simulates at the scene origin (the doll-height
      * offset is applied only at render): a storm emitting at mid-height must have its floor placed that height
-     * BELOW the origin, or its particles would spawn already inside the slab — fatal for `expire_on_contact`
-     * effects (Aurora Beam / Psybeam impact bursts vanished on spawn before this).
+     * BELOW the origin, or its particles would spawn already inside the slab, which is fatal for `expire_on_contact`
+     * effects (impact bursts would vanish on spawn).
      */
     fun guiFloorY(storm: ParticleStorm): Double
 
     /**
      * World-space solid box for [storm]'s target (the target block, or the attacker), centred on its live aim
      * point, or null if the storm has no target. Lets traveling projectiles/beams collide and stop AT the
-     * target instead of flying past it — the aim point is built so it maps exactly onto the target's near face.
+     * target instead of flying past it; the aim point is built so it maps exactly onto the target's near face.
      */
     fun guiImpactBox(storm: ParticleStorm): net.minecraft.world.phys.AABB?
 }

@@ -49,9 +49,10 @@ class CobblePediaPokedexPage(
         private const val LIST_LINE_HEIGHT = 11
         private const val LIST_VISIBLE_ROWS = 11
         private const val BACK_X = 20
-        private const val BACK_Y = 14   // raised vertically (was 26)
-        private const val BACK_W = 16   // back-button sheet is 16x16 = two stacked 16x8 frames
-        private const val BACK_H = 8    // one frame: top = idle, bottom = hovered
+        private const val BACK_Y = 14
+        // Back-button sheet is 16x16, two stacked 16x8 frames (top idle, bottom hovered).
+        private const val BACK_W = 16
+        private const val BACK_H = 8
         private val BACK_BUTTON = cobblemonResource("textures/gui/pokedex/pokedex_back_button.png")
 
         private const val TILE_BG = 0xCC1A1A1A.toInt()
@@ -59,7 +60,7 @@ class CobblePediaPokedexPage(
         private const val TILE_BORDER = 0xFF7EE7E5.toInt()
         private const val BARE_SUB = "" // sentinel sub id for a category's bare bucket
 
-        // Right-side structure preview pane (relative to the page origin x,y)
+        // Right-side structure preview pane, relative to the page origin x,y.
         private const val PREVIEW_X = 170
         private const val PREVIEW_Y = 42
         private const val PREVIEW_W = 155
@@ -68,7 +69,7 @@ class CobblePediaPokedexPage(
         private const val LIST_ROW_HIGHLIGHT = 0x803A3A3A.toInt()
         private const val LIST_ROW_WIDTH = 130
 
-        // "Refresh" button overlaid at the preview pane's top-right: re-rolls processor substitutions.
+        // Refresh button overlaid at the preview pane's top-right; re-rolls processor substitutions.
         private const val REFRESH_W = 50
         private const val REFRESH_H = 12
         private const val REFRESH_BG = 0xCC1A1A1A.toInt()
@@ -95,8 +96,7 @@ class CobblePediaPokedexPage(
     private var selectedSub: String? = null // null = sub-grid (or direct list if no subs); non-null = a bucket's list
     private var scrollRow = 0
 
-    // WorldDex (replaces the Habitats/Structures categories): a category submenu (Habitats/Ruins/
-    // Fossils) leading into a per-category browser.
+    // WorldDex: a category submenu (Habitats/Ruins/Fossils) leading into a per-category browser.
     private var worldDexMode = false
     private var worldDexCategory: WorldDexData.Category? = null
     private val worldDexView = WorldDexView()
@@ -189,7 +189,7 @@ class CobblePediaPokedexPage(
 
     /**
      * The top-level hub tiles in render order, each paired with its click action. Order: the main Pokédex,
-     * the scanned-data categories (Berries/Items/Misc — Eggs/Blocks hidden), WorldDex, MoveDex, Photo Gallery.
+     * the scanned-data categories (Berries/Items/Misc, with Eggs/Blocks hidden), WorldDex, MoveDex, Photo Gallery.
      * A count of -1 renders no count line (used for the page-link tiles). [gui] is needed to switch top-level pages.
      */
     private fun hubTiles(gui: PokedexGUI): List<Pair<Tile, () -> Unit>> {
@@ -329,7 +329,7 @@ class CobblePediaPokedexPage(
         val bx = x + BACK_X
         val by = y + BACK_Y
         val hovered = mouseX in bx..(bx + BACK_W) && mouseY in by..(by + BACK_H)
-        // 16x16 sheet = two vertically-stacked 16x8 frames: top half (vOffset 0) idle, bottom half (vOffset 8) hover.
+        // Hovered state uses the bottom frame (vOffset = BACK_H).
         blitk(
             matrixStack = context.pose(),
             texture = BACK_BUTTON,
@@ -514,7 +514,7 @@ class CobblePediaPokedexPage(
         val scanned = CobblemonClient.clientScannedData.scanned
             .filterKeys { ScannedDataCategory.categoryOfBucket(it) == category }
             .values.flatten()
-        // TEMPORARY: all habitats and structures are treated as unlocked for testing the page + preview.
+        // Habitats and structures are treated as fully unlocked to exercise the page and preview.
         return when (category) {
             ScannedDataCategory.HABITATS -> (scanned + TestUnlockedHabitats.entries).distinct()
             ScannedDataCategory.STRUCTURES -> (scanned + TestUnlockedStructures.entries).distinct()

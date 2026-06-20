@@ -17,7 +17,7 @@ import net.minecraft.tags.TagKey
 
 /**
  * Resolves a WorldDex entry's biome tags into the concrete biomes they cover, via the client's synced
- * biome registry — so the listing always reflects the loaded datapacks (including modded biomes added
+ * biome registry, so the listing always reflects the loaded datapacks (including modded biomes added
  * to those tags). Used by each detail pane's "Biomes" tab.
  */
 object WorldDexBiomes {
