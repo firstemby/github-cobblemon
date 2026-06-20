@@ -13,7 +13,8 @@ import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.entity.pokemon.PokeSkill
+import com.cobblemon.mod.common.entity.pokemon.pokeskills.PokeSkill
+import com.cobblemon.mod.common.entity.pokemon.pokeskills.PokeSkillTier
 import com.cobblemon.mod.common.net.messages.client.data.PokeSkillsRegistrySyncPacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.adapters.ActionEffectTimelineAdapter
@@ -51,15 +52,28 @@ object CobblemonPokeSkills : JsonDataRegistry<PokeSkill> {
 
     var skills = mapOf<ResourceLocation, PokeSkill>()
 
-    fun getAccessibleSkills(player: Player, pokemon: Pokemon): List<PokeSkill> {
-        return skills.values.filter { it.canAccess(player, pokemon) }
+    fun getAccessiblePokeSkillTiers(player: Player, pokemon: Pokemon): List<PokeSkillTier> {
+        return skills.values.mapNotNull { skill ->
+            skill.tiers.lastOrNull { tier ->
+                tier.canAccess(player, pokemon)
+            }
+        }
     }
 
     override fun reload(data: Map<ResourceLocation, PokeSkill>) {
         data.forEach { (id, skill) -> skill.id = id }
+
         skills = data
+        skills.values.forEach { skill ->
+            skill.tiers.forEachIndexed { index, tier ->
+                tier.initialize(skill, index + 1)
+            }
+        }
+
         observable.emit(this)
-        Cobblemon.LOGGER.info("Loaded ${skills.size} PokéSkills")
+
+        val tiersCount = skills.values.sumOf { it.tiers.size }
+        Cobblemon.LOGGER.info("Loaded ${skills.size} PokéSkills with $tiersCount tiers")
     }
 
     override fun sync(player: ServerPlayer) {

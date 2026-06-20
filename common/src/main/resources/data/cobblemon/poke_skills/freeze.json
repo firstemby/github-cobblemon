@@ -1,24 +1,28 @@
 {
   "name": "cobblemon.poke_skill.freeze.name",
-  "enabled": true,
-  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
-  "cooldownTicks": 20,
-  "targetType": "ENTITY",
-  "range": 16,
-  "grantingMoves": [
-    "powderglow",
-    "iceshard",
-    "icebeam",
-    "blizzard",
-    "frostbreath",
-    "freezedry",
-    "icywind"
-  ],
-  "grantingTypes": [
-    "ice"
-  ],
-  "fallbackActionEffect": "cobblemon:icebeam",
-  "hitDelay": "2.0",
-  "hitEffect": "cobblemon:freeze_entity_hit",
-  "useCondition": "1"
+  "tiers": [
+    {
+      "enabled": true,
+      "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
+      "cooldownTicks": 20,
+      "targetType": "ENTITY",
+      "range": 16,
+      "requiredMoves": [
+        "powderglow",
+        "iceshard",
+        "icebeam",
+        "blizzard",
+        "frostbreath",
+        "freezedry",
+        "icywind"
+      ],
+      "requiredTypes": [
+        "ice"
+      ],
+      "fallbackActionEffect": "cobblemon:icebeam",
+      "hitDelay": "2.0",
+      "hitEffect": "cobblemon:freeze_entity_hit",
+      "useCondition": "1"
+    }
+  ]
 }

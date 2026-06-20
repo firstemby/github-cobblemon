@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.net.messages.client.data
 
 import com.cobblemon.mod.common.CobblemonPokeSkills
-import com.cobblemon.mod.common.entity.pokemon.PokeSkill
+import com.cobblemon.mod.common.entity.pokemon.pokeskills.PokeSkill
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 

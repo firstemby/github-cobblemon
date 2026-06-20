@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation
 import org.joml.Vector3f
 
 data class InteractWheelOption(
-    val iconResource: ResourceLocation,
+    val iconResource: ResourceLocation? = null,
     val secondaryIconResource: ResourceLocation? = null,
     val enabled: () -> Boolean = { true },
     val tooltipText: String?,

@@ -1144,12 +1144,17 @@ open class Pokemon : ShowdownIdentifiable {
     }
 
     fun tickSkillCooldowns() {
-        this.skillCooldownsTicks.entries.forEach { (key, value) ->
-            val newValue = value - 1
-            if (newValue <= 0)
-                this.skillCooldownsTicks -= key
-            else
-                this.skillCooldownsTicks[key] = newValue
+        val iterator = skillCooldownsTicks.entries.iterator()
+
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            val newValue = entry.value - 1
+
+            if (newValue <= 0) {
+                iterator.remove()
+            } else {
+                entry.setValue(newValue)
+            }
         }
     }
 

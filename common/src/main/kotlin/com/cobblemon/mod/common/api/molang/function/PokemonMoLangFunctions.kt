@@ -467,11 +467,12 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
             val status = params.getString(0).asIdentifierDefaultingNamespace()
             return@put DoubleValue(pokemon.status?.status?.name == status)
         }
+        // TODO remove this or figure a way to determine which tier of the pokeskill is being used
         map["add_skill_cooldown"] = put@{ params ->
             val skillId = params.getString(0).asIdentifierDefaultingNamespace()
             val cooldownTicks = params.getIntOrNull(1)
             val skill = CobblemonPokeSkills.skills[skillId] ?: return@put DoubleValue.ZERO
-            pokemon.addSkillCooldown(skillId, cooldownTicks ?: skill.cooldownTicks)
+            pokemon.addSkillCooldown(skillId, cooldownTicks ?: skill.cooldownTicks ?: 0)
             return@put DoubleValue.ONE
         }
 

@@ -1,12 +1,4 @@
-/*
- * Copyright (C) 2023 Cobblemon Contributors
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-package com.cobblemon.mod.common.entity.pokemon
+package com.cobblemon.mod.common.entity.pokemon.pokeskills
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -16,104 +8,125 @@ import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
-import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
+import com.cobblemon.mod.common.entity.pokemon.pokeskills.PokeSkill.Companion.runtime
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.blockRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.codec.EXPRESSION_LIKE_CODEC
 import com.cobblemon.mod.common.util.isInBattle
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.withQueryValue
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
-import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.projectile.ProjectileUtil
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
+import kotlin.collections.set
 
-/**
- * The reference object for a skill that a Pokémon can use in the overworld.
- *
- * Most skills are "wrapper" skills that play a move's action effect at a target and run
- * some MoLang on impact. Custom skills can define a full action effect timeline.
- *
- * Access is auto-derived from grantingMoves/Abilities/Types/Species lists. If none are
- * populated, accessCondition is used as a fallback.
- *
- * @author Hiroku
- * @since August 31st, 2025
- */
-class PokeSkill(
-    val name: String,
-    val enabled: Boolean = true,
-    val actionEffect: ActionEffectTimeline,
-    val icon: ResourceLocation,
-    val cooldownTicks: Int,
-    val accessCondition: ExpressionLike = "true".asExpressionLike(),
-    val useCondition: ExpressionLike = "true".asExpressionLike(),
-    // Targeting
-    val targetType: TargetType? = null,
-    val range: Double? = null,
-    val targetCondition: ExpressionLike? = null,
-    // Granting
-    val grantingMoves: List<String>? = null,
-    val grantingAbilities: List<String>? = null,
-    val grantingTypes: List<String>? = null,
-    val grantingSpecies: List<String>? = null,
-    // Wrapper skill fields
-    val hitDelay: ExpressionLike? = null,
-    val hitEffect: ResourceLocation? = null,
-    val fallbackActionEffect: ResourceLocation? = null
+class PokeSkillTier(
+    @SerializedName("enabled")
+    private val _enabled: Boolean? = null,
+    @SerializedName("actionEffect")
+    private val _actionEffect: ActionEffectTimeline? = null,
+    @SerializedName("icon")
+    private val _icon: ResourceLocation? = null,
+    @SerializedName("cooldownTicks")
+    private val _cooldownTicks: Int? = null,
+    @SerializedName("accessCondition")
+    private val _accessCondition: ExpressionLike? = null,
+    @SerializedName("useCondition")
+    private val _useCondition: ExpressionLike? = null,
+
+    @SerializedName("targetType")
+    private val _targetType: PokeSkillTargetType? = null,
+    @SerializedName("range")
+    private val _range: Double? = null,
+    @SerializedName("targetCondition")
+    private val _targetCondition: ExpressionLike? = null,
+
+    @SerializedName("requiredMoves")
+    private val _requiredMoves: List<String>? = null,
+    @SerializedName("requiredAbilities")
+    private val _requiredAbilities: List<String>? = null,
+    @SerializedName("requiredTypes")
+    private val _requiredTypes: List<String>? = null,
+    @SerializedName("requiredSpecies")
+    private val _requiredSpecies: List<String>? = null,
+
+    @SerializedName("hitDelay")
+    private val _hitDelay: ExpressionLike? = null,
+    @SerializedName("hitEffect")
+    private val _hitEffect: ResourceLocation? = null,
+    @SerializedName("fallbackActionEffect")
+    private val _fallbackActionEffect: ResourceLocation? = null,
 ) {
-    // Enum to determine what this skill will target.
-    enum class TargetType {
-        NONE, SELF, BLOCK, ENTITY, BOTH
+
+    @Transient
+    lateinit var pokeSkill: PokeSkill
+
+    @Transient
+    var tier: Int = -1
+
+    fun initialize(skill: PokeSkill, tier: Int): PokeSkillTier {
+        this.pokeSkill = skill
+        this.tier = tier
+        return this
     }
 
     companion object {
-        val runtime = MoLangRuntime().setup()
-        val CODEC = RecordCodecBuilder.create<PokeSkill> { instance ->
-            instance.group(
-                Codec.STRING.fieldOf("name").forGetter { it.name },
-                Codec.BOOL.fieldOf("enabled").forGetter { it.enabled },
-                Codec.unit<ActionEffectTimeline> { ActionEffectTimeline.NONE }.fieldOf("actionEffect").forGetter { it.actionEffect },
-                ResourceLocation.CODEC.fieldOf("icon").forGetter { it.icon },
-                Codec.INT.fieldOf("cooldownTicks").forGetter { it.cooldownTicks },
-                EXPRESSION_LIKE_CODEC.fieldOf("accessCondition").forGetter { it.accessCondition },
-                EXPRESSION_LIKE_CODEC.fieldOf("useCondition").forGetter { it.useCondition }
-            ).apply(instance, ::PokeSkill)
-        }
-        val PACKET_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC)
         private val DEFAULT_ACTION_EFFECT = cobblemonResource("default_poke_skill")
     }
 
-    @Transient
-    lateinit var id: ResourceLocation
+    val id: ResourceLocation
+        get() = pokeSkill.id
+    val name: String
+        get() = pokeSkill.name
 
+    val enabled: Boolean
+        get() = _enabled ?: pokeSkill.enabled ?: true
+    val actionEffect: ActionEffectTimeline?
+        get() = _actionEffect ?: pokeSkill.actionEffect
+    val icon: ResourceLocation?
+        get() = _icon ?: pokeSkill.icon
+    val cooldownTicks: Int
+        get() = _cooldownTicks ?: pokeSkill.cooldownTicks ?: 0
+    val accessCondition: ExpressionLike
+        get() = _accessCondition ?: pokeSkill.accessCondition ?: "true".asExpressionLike()
+    val useCondition: ExpressionLike
+        get() = _useCondition ?: pokeSkill.useCondition ?: "true".asExpressionLike()
 
-//    fun canAccess(player: Player, pokemon: Pokemon): Boolean {
-//        if (!enabled) {
-//            return false
-//        }
-//
-//        runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
-//        runtime.withQueryValue("pokemon", pokemon.struct)
-//        pokemon.entity?.let { runtime.withQueryValue("entity", it.asMostSpecificMoLangValue()) }
-//        val hasAccess = runtime.resolveBoolean(accessCondition)
-//        return hasAccess
-//    }
+    val targetType: PokeSkillTargetType?
+        get() = _targetType ?: pokeSkill.targetType
+    val range: Double?
+        get() = _range ?: pokeSkill.range
+    val targetCondition: ExpressionLike?
+        get() = _targetCondition ?: pokeSkill.targetCondition
+
+    val requiredMoves: List<String>?
+        get() = _requiredMoves ?: pokeSkill.requiredMoves
+    val requiredAbilities: List<String>?
+        get() = _requiredAbilities ?: pokeSkill.requiredAbilities
+    val requiredTypes: List<String>?
+        get() = _requiredTypes ?: pokeSkill.requiredTypes
+    val requiredSpecies: List<String>?
+        get() = _requiredSpecies ?: pokeSkill.requiredSpecies
+
+    val hitDelay: ExpressionLike?
+        get() = _hitDelay ?: pokeSkill.hitDelay
+    val hitEffect: ResourceLocation?
+        get() = _hitEffect ?: pokeSkill.hitEffect
+    val fallbackActionEffect: ResourceLocation?
+        get() = _fallbackActionEffect ?: pokeSkill.fallbackActionEffect
 
     /**
      * Determines access by checking the pokemons data against the granting lists.
@@ -124,21 +137,29 @@ class PokeSkill(
             return false
         }
 
+        val requiredMoves = requiredMoves
+        val requiredAbilities = requiredAbilities
+        val requiredTypes = requiredTypes
+        val requiredSpecies = requiredSpecies
+
         // Check granting lists — if any are populated, check if the player has any of the listed moves/abilities/types/species
-        val hasGrantingLists = !grantingMoves.isNullOrEmpty() || !grantingAbilities.isNullOrEmpty() ||
-                !grantingTypes.isNullOrEmpty() || !grantingSpecies.isNullOrEmpty()
+        val hasGrantingLists = !requiredMoves.isNullOrEmpty() || !requiredAbilities.isNullOrEmpty() ||
+                !requiredTypes.isNullOrEmpty() || !requiredSpecies.isNullOrEmpty()
 
         if (hasGrantingLists) {
-            val moveMatch = !grantingMoves.isNullOrEmpty() && grantingMoves.any { moveName ->
+            val moveMatch = !requiredMoves.isNullOrEmpty() && requiredMoves.any { moveName ->
                 pokemon.moveSet.any { it.template.name == moveName }
             }
-            val abilityMatch = !grantingAbilities.isNullOrEmpty() && grantingAbilities.any { abilityName ->
+
+            val abilityMatch = !requiredAbilities.isNullOrEmpty() && requiredAbilities.any { abilityName ->
                 pokemon.ability.name == abilityName
             }
-            val typeMatch = !grantingTypes.isNullOrEmpty() && grantingTypes.any { typeName ->
+
+            val typeMatch = !requiredTypes.isNullOrEmpty() && requiredTypes.any { typeName ->
                 pokemon.types.any { it.name.equals(typeName, ignoreCase = true) }
             }
-            val speciesMatch = !grantingSpecies.isNullOrEmpty() && grantingSpecies.any { speciesName ->
+
+            val speciesMatch = !requiredSpecies.isNullOrEmpty() && requiredSpecies.any { speciesName ->
                 pokemon.species.name.equals(speciesName, ignoreCase = true)
             }
 
@@ -150,7 +171,7 @@ class PokeSkill(
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
         runtime.withQueryValue("pokemon", pokemon.struct)
         pokemon.entity?.let { runtime.withQueryValue("entity", it.asMostSpecificMoLangValue()) }
-        return runtime.resolveBoolean(accessCondition ?: "true".asExpressionLike())
+        return runtime.resolveBoolean(accessCondition)
     }
 
     fun canUse(player: Player, pokemon: Pokemon): Boolean {
@@ -166,11 +187,12 @@ class PokeSkill(
 
     /**
      * Resolves which move from the pokemon's moveset grants this skill.
-     * Returns the first matching move name from grantingMoves, or null if none match.
+     * Returns the first matching move name from requiredMoves, or null if none match.
      */
     fun resolveGrantingMove(pokemon: Pokemon): String? {
-        if (grantingMoves.isNullOrEmpty()) return null  // need this guard
-        return grantingMoves.firstOrNull { moveName ->
+        val requiredMoves = requiredMoves
+        if (requiredMoves.isNullOrEmpty()) return null  // need this guard
+        return requiredMoves.firstOrNull { moveName ->
             pokemon.moveSet.any { it.template.name == moveName }
         }
     }
@@ -201,12 +223,14 @@ class PokeSkill(
         if (!canUse(player, pokemon)) return false
         val entity = pokemon.entity ?: return false
         val level = player.level() as? ServerLevel ?: return false
+
         // I think these should be defaulted but making them nullable means I don't have to adjust the
         // other jsons that don't populate them yet...
-        val effectiveTargetType = targetType ?: TargetType.NONE
+        val effectiveTargetType = targetType ?: PokeSkillTargetType.NONE
         val effectiveRange = range ?: 8.0
 
         // Resolve the action effect to run
+        val actionEffect = actionEffect
         val effectTimeline = if (actionEffect != null && actionEffect != ActionEffectTimeline.NONE) {
             actionEffect
         } else {
@@ -228,38 +252,36 @@ class PokeSkill(
 
         // Targeting — raycast based on targetType
         when (effectiveTargetType) {
-            TargetType.SELF -> {
+            PokeSkillTargetType.SELF -> {
                 injectEntityTarget(skillRuntime, player)
                 skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(1.0))
             }
-            TargetType.BLOCK -> {
-                val blockHit = getPlayerLookedBlock(player, effectiveRange)
-                if (blockHit == null) return false
+            PokeSkillTargetType.BLOCK -> {
+                val blockHit = getPlayerLookedBlock(player, effectiveRange) ?: return false
                 injectBlockTarget(skillRuntime, blockHit, level)
                 skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(0.0))
             }
-            TargetType.ENTITY -> {
-                val entityHit = getPlayerLookedEntity(player, effectiveRange)
-                if (entityHit == null) return false
+            PokeSkillTargetType.ENTITY -> {
+                val entityHit = getPlayerLookedEntity(player, effectiveRange) ?: return false
                 injectEntityTarget(skillRuntime, entityHit)
                 skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(1.0))
             }
-            TargetType.BOTH -> {
+            PokeSkillTargetType.BOTH -> {
                 val entityHit = getPlayerLookedEntity(player, effectiveRange)
                 if (entityHit != null) {
                     injectEntityTarget(skillRuntime, entityHit)
                     skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(1.0))
                 } else {
-                    val blockHit = getPlayerLookedBlock(player, effectiveRange)
-                    if (blockHit == null) return false
+                    val blockHit = getPlayerLookedBlock(player, effectiveRange) ?: return false
                     injectBlockTarget(skillRuntime, blockHit, level)
                     skillRuntime.environment.setSimpleVariable("target_is_entity", DoubleValue(0.0))
                 }
             }
-            TargetType.NONE -> {}
+            PokeSkillTargetType.NONE -> {}
         }
 
         // Evaluate target condition
+        val targetCondition = targetCondition
         if (targetCondition != null && !skillRuntime.resolveBoolean(targetCondition)) return false
 
         // Inject wrapper skill variables
@@ -267,9 +289,12 @@ class PokeSkill(
         if (visualEffect != null) {
             skillRuntime.environment.setSimpleVariable("granting_move", StringValue(visualEffect.toString()))
         }
+
         if (hitEffect != null) {
             skillRuntime.environment.setSimpleVariable("hit_effect", StringValue(hitEffect.toString()))
         }
+
+        val hitDelay = hitDelay
         if (hitDelay != null) {
             skillRuntime.environment.setSimpleVariable("hit_delay", hitDelay.resolve(skillRuntime))
         }
@@ -290,7 +315,7 @@ class PokeSkill(
 
         effectTimeline.run(context).thenRun {
             // Auto-apply cooldown after effect completes
-            pokemon.skillCooldownsTicks[id] = cooldownTicks
+            pokemon.skillCooldownsTicks[id] = cooldownTicks ?: 0
         }
 
         return true
@@ -346,7 +371,7 @@ class PokeSkill(
         val searchBox = player.boundingBox.expandTowards(lookVector.scale(range)).inflate(1.0, 1.0, 1.0)
 
         // Filter entities within the search box
-        val entityHitResult = net.minecraft.world.entity.projectile.ProjectileUtil.getEntityHitResult(
+        val entityHitResult = ProjectileUtil.getEntityHitResult(
             player,
             eyePosition,
             reachVector,

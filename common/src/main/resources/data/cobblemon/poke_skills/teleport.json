@@ -2,8 +2,22 @@
   "name": "cobblemon.poke_skill.teleport.name",
   "enabled": true,
   "actionEffect": "cobblemon:teleport_to_spawn",
-  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
-  "cooldownTicks": 18000,
   "accessCondition": "q.pokemon.has_learned('teleport')",
-  "useCondition": "q.player.has_respawn_position && q.player.dimension == q.player.respawn_dimension"
+  "useCondition": "q.player.has_respawn_position && q.player.dimension == q.player.respawn_dimension",
+  "tiers": [
+    {
+      "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
+      "requiredSpecies": [
+        "Abra"
+      ],
+      "cooldownTicks": 18000
+    },
+    {
+      "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_shoulder.png",
+      "requiredSpecies": [
+        "Alakazam"
+      ],
+      "cooldownTicks": 20
+    }
+  ]
 }

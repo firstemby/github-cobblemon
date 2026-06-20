@@ -1,9 +1,13 @@
 {
   "name": "cobblemon.poke_skill.fertilize.name",
-  "enabled": true,
-  "actionEffect": "cobblemon:fertilize_action",
-  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
-  "cooldownTicks": 3600,
-  "accessCondition": "q.pokemon.has_learned('grassterrain') || q.pokemon.has_ability('grassysurge') || q.pokemon.species.primary_type == 'grass'",
-  "useCondition": "1"
+  "tiers": [
+    {
+      "enabled": true,
+      "actionEffect": "cobblemon:fertilize_action",
+      "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_ride.png",
+      "cooldownTicks": 3600,
+      "accessCondition": "q.pokemon.has_learned('grassterrain') || q.pokemon.has_ability('grassysurge') || q.pokemon.species.primary_type == 'grass'",
+      "useCondition": "1"
+    }
+  ]
 }

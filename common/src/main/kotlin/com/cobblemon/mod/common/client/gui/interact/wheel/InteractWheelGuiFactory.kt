@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.interact.InteractPok
 import com.cobblemon.mod.common.net.messages.server.trade.AcceptTradeRequestPacket
 import com.cobblemon.mod.common.net.messages.server.trade.OfferTradePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
@@ -182,18 +183,19 @@ fun createPlayerInteractGui(optionsPacket: PlayerInteractOptionsPacket): Interac
 }
 
 fun createPokeSkillGui(player: AbstractClientPlayer, pokemon: Pokemon): InteractWheelGUI {
-    val accessibleSkills = CobblemonPokeSkills.getAccessibleSkills(player, pokemon)
+    val accessibleSkills = CobblemonPokeSkills.getAccessiblePokeSkillTiers(player, pokemon)
     val options: Multimap<Orientation, InteractWheelOption> = ArrayListMultimap.create()
     for (skill in accessibleSkills) {
         val skillOption = InteractWheelOption(
             iconResource = skill.icon,
             enabled = { skill.id !in pokemon.skillCooldownsTicks },
-            tooltipText = skill.name,
+            tooltipText = "${skill.name.asTranslated().string} ${getRomanNumeral(skill.tier)}",
             onPress = {
                 CobblemonNetwork.sendToServer(UsePokeSkillPacket(skillId = skill.id, pokemonId = pokemon.uuid))
                 closeGUI()
             }
         )
+
         when (options.size()) {
             0 -> options.put(Orientation.NORTH, skillOption)
             1 -> options.put(Orientation.NORTHEAST, skillOption)
@@ -208,6 +210,38 @@ fun createPokeSkillGui(player: AbstractClientPlayer, pokemon: Pokemon): Interact
     }
 
     return PokeSkillWheelGUI(options, Component.translatable("cobblemon.ui.interact.poke_skill"))
+}
+
+private fun getRomanNumeral(number: Int): String {
+    if (number <= 0) return number.toString()
+
+    val numerals = listOf(
+        1000 to "M",
+        900 to "CM",
+        500 to "D",
+        400 to "CD",
+        100 to "C",
+        90 to "XC",
+        50 to "L",
+        40 to "XL",
+        10 to "X",
+        9 to "IX",
+        5 to "V",
+        4 to "IV",
+        1 to "I"
+    )
+
+    var remaining = number
+    val result = StringBuilder()
+
+    for ((value, numeral) in numerals) {
+        while (remaining >= value) {
+            result.append(numeral)
+            remaining -= value
+        }
+    }
+
+    return result.toString()
 }
 
 private fun getLangKey(status: PlayerInteractOptionsPacket.OptionStatus) : String {

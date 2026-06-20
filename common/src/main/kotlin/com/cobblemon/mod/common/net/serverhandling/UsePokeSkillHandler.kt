@@ -19,7 +19,7 @@ object UsePokeSkillHandler : ServerNetworkPacketHandler<UsePokeSkillPacket> {
     override fun handle(packet: UsePokeSkillPacket, server: MinecraftServer, player: ServerPlayer) {
         val party = player.party()
         val pokemon = party[packet.pokemonId] ?: return // Who?
-        val skill = CobblemonPokeSkills.getAccessibleSkills(player, pokemon).firstOrNull { it.id == packet.skillId } ?: return // What skill?
+        val skill = CobblemonPokeSkills.getAccessiblePokeSkillTiers(player, pokemon).firstOrNull { it.id == packet.skillId } ?: return // What skill?
         if (skill.canUse(player, pokemon)) {
             skill.use(player, pokemon)
         }
