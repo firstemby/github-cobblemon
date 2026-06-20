@@ -11,28 +11,26 @@ package com.cobblemon.mod.common.client.render.player
 import com.cobblemon.mod.common.client.battle.ClientBallDisplay
 import com.cobblemon.mod.common.pokeball.PokeBall
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import net.minecraft.util.Mth
 import net.minecraft.world.phys.Vec3
 
 /**
- * Client-side bookkeeping for the "recall pose": when a player recalls a Pokémon we want them to
- * hold the matching Poké Ball out in their right hand and have the recall beam originate from it.
+ * Tracks which players are recalling a Pokémon so we can pose their arm, draw the Poké Ball in their
+ * hand, and start the recall beam from it.
  *
- * Entries are keyed by the recalling player's UUID and self-expire once the beam effect is over, so
- * the arm automatically lowers without anything having to explicitly clear it (and a re-recall just
- * resets the timer).
+ * Keyed by player UUID. Entries time out on their own once the beam is done, and a new recall resets
+ * the timer, so nothing has to clear them.
  *
- * Populated from [com.cobblemon.mod.common.client.entity.PokemonClientDelegate] when a Pokémon
- * enters recall (beamMode 3). Read by the player arm pose (HumanoidModelMixin), the held-ball render
- * layer, the first-person ball renderer, and the beam origin in PokemonRenderer.
+ * Written by PokemonClientDelegate on recall (beamMode 3); read by HumanoidModelMixin, the ball
+ * renderers, and PokemonRenderer.
  */
 object RecallArmAnimationTracker {
 
-    // How long the arm stays raised in seconds
-
+    // How long the arm stays raised, in seconds.
     const val ARM_HOLD_SECONDS = 0.8
 
-    // Portion of time spent easing the arm up / ball in at the start and down at the end
+    // Fraction of the hold spent easing the arm up at the start and down at the end.
     private const val EASE_SECONDS = 0.15
 
     class RecallAnim(
@@ -44,17 +42,17 @@ object RecallArmAnimationTracker {
         var beamOrigin: Vec3? = null
     }
 
-    private val active = mutableMapOf<UUID, RecallAnim>()
+    private val activeRecalls = ConcurrentHashMap<UUID, RecallAnim>()
 
     fun start(playerUuid: UUID, ball: PokeBall, aspects: Set<String>) {
-        active[playerUuid] = RecallAnim(ball, aspects, System.currentTimeMillis())
+        activeRecalls[playerUuid] = RecallAnim(ball, aspects, System.currentTimeMillis())
     }
 
-    /** Returns the active recall for the player, or null if there is none or if it has expired */
+    /** Returns the active recall for the player, or null if there is none or if it has expired. */
     fun get(playerUuid: UUID): RecallAnim? {
-        val anim = active[playerUuid] ?: return null
+        val anim = activeRecalls[playerUuid] ?: return null
         if (secondsSince(anim) > ARM_HOLD_SECONDS) {
-            active.remove(playerUuid)
+            activeRecalls.remove(playerUuid)
             return null
         }
         return anim
@@ -64,17 +62,12 @@ object RecallArmAnimationTracker {
 
     private fun secondsSince(anim: RecallAnim) = (System.currentTimeMillis() - anim.startTimeMs) / 1000.0
 
-    /**
-     * 0..1 ramp for how raised the arm and how risen the ball should be. eases up at the start, holds
-     * at 1, then eases back down at the very end. Returns 0 when the player is not recalling.
-     */
+    /** 0..1 ramp: eases in at the start, holds at 1, eases out at the end. 0 when not recalling. */
     fun raiseFactor(playerUuid: UUID): Float {
         val anim = get(playerUuid) ?: return 0F
         val elapsed = secondsSince(anim)
         val riseIn = Mth.clamp((elapsed / EASE_SECONDS).toFloat(), 0F, 1F)
         val fallOut = Mth.clamp(((ARM_HOLD_SECONDS - elapsed) / EASE_SECONDS).toFloat(), 0F, 1F)
-        return min(riseIn, fallOut)
+        return minOf(riseIn, fallOut)
     }
-
-    private fun min(a: Float, b: Float) = if (a < b) a else b
 }

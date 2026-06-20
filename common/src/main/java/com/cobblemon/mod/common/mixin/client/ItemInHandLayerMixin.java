@@ -22,9 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Hides the item normally held in a player's right hand (third person, for everyone) while they are
- * recalling a Pokémon, so the recall Poké Ball rendered by PlayerRecallBallRenderer takes its place
- * cleanly instead of clipping through the held item.
+ * Hides the player's right-hand item while recalling so it doesn't overlap the recall Poké Ball
+ * drawn by PlayerRecallBallRenderer.
  */
 @Mixin(ItemInHandLayer.class)
 public class ItemInHandLayerMixin {

@@ -19,12 +19,11 @@ import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.texture.OverlayTexture
 
 /**
- * Renders the recalling player's Poké Ball in first person, rising up from the bottom of the screen
- * in place of whatever they were holding. The world-space recall beam still originates near the
- * player's hand (handled by the eye/look fallback in PokemonRenderer) — this is purely cosmetic.
+ * Draws the recalling player's Poké Ball in first person, rising into view from the bottom of the
+ * screen in place of their held item. The world-space beam still starts near the hand (the eye/look
+ * fallback in PokemonRenderer), so this is cosmetic only.
  *
- * Invoked from ItemInHandRendererMixin, which cancels the vanilla main-hand item render while a
- * recall is active.
+ * Called from ItemInHandRendererMixin, which cancels the vanilla main-hand item while recalling.
  */
 object FirstPersonRecallBallRenderer {
 

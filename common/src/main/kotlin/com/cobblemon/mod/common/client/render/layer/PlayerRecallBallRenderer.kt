@@ -27,13 +27,12 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 
 /**
- * Renders the matching Poké Ball in a recalling player's right hand and reports the world-space point
- * the recall beam should emit from. Driven entirely by [RecallArmAnimationTracker]; the right arm is
- * posed forward separately in HumanoidModelMixin so [PlayerModel.translateToHand] lands at the
- * extended hand.
+ * Draws the matching Poké Ball in a recalling player's right hand and records where the recall beam
+ * should start. Driven by [RecallArmAnimationTracker]; the right arm is posed forward in
+ * HumanoidModelMixin so [PlayerModel.translateToHand] lands on the extended hand.
  *
- * The local player in first person is skipped here and handled by the first-person ball renderer
- * (see ItemInHandRendererMixin) instead.
+ * The local player in first person is handled by FirstPersonRecallBallRenderer instead, so it's
+ * skipped here.
  */
 class PlayerRecallBallRenderer<T : Player>(
     renderLayerParent: RenderLayerParent<T, PlayerModel<T>>

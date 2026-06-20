@@ -99,9 +99,7 @@ public class HumanoidModelMixin {
         }
     }
 
-    // Raise the right arm forward while the player is recalling a Pokémon, so the held Poké Ball
-    // (rendered by PlayerRecallBallRenderer) is held out in front of them. Eases in/out via the
-    // tracker's raise factor and holds until the recall beam is finished.
+    // Pose the right arm forward while recalling so the held Poké Ball sits out in front.
     @Inject(method = "setupAnim*", at = @At("TAIL"))
     public void cobblemon$poseRecallArm(
         LivingEntity entity,
@@ -113,12 +111,12 @@ public class HumanoidModelMixin {
         CallbackInfo ci
     ) {
         if (!(entity instanceof AbstractClientPlayer player)) return;
-        // Don't fight the mounted-riding arm animation.... this could look weird lol
+        // Skip while riding so we don't override the mounted-riding arm animation.
         if (entity.getVehicle() instanceof PokemonEntity) return;
         float raise = RecallArmAnimationTracker.INSTANCE.raiseFactor(player.getUUID());
         if (raise <= 0f) return;
-        // -90° about X points the arm straight forward.
-        this.rightArm.xRot = Mth.lerp(raise, this.rightArm.xRot, -1.5708f);
+        float armForwardXRot = (float) (-Math.PI / 2.0);
+        this.rightArm.xRot = Mth.lerp(raise, this.rightArm.xRot, armForwardXRot);
         this.rightArm.yRot = Mth.lerp(raise, this.rightArm.yRot, 0f);
         this.rightArm.zRot = Mth.lerp(raise, this.rightArm.zRot, 0f);
     }
