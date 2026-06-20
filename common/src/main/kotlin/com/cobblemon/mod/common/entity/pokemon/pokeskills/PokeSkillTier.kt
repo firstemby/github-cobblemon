@@ -2,6 +2,7 @@ package com.cobblemon.mod.common.entity.pokemon.pokeskills
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ExpressionLike
@@ -69,6 +70,9 @@ class PokeSkillTier(
     private val _hitEffect: ResourceLocation? = null,
     @SerializedName("fallbackActionEffect")
     private val _fallbackActionEffect: ResourceLocation? = null,
+
+    @SerializedName("variables")
+    private val _variables: Map<String, Any>? = null,
 ) {
 
     @Transient
@@ -127,6 +131,9 @@ class PokeSkillTier(
         get() = _hitEffect ?: pokeSkill.hitEffect
     val fallbackActionEffect: ResourceLocation?
         get() = _fallbackActionEffect ?: pokeSkill.fallbackActionEffect
+
+    val variables: Map<String, Any>?
+        get() = _variables ?: pokeSkill.variables
 
     /**
      * Determines access by checking the pokemons data against the granting lists.
@@ -248,7 +255,7 @@ class PokeSkillTier(
         skillRuntime.environment.setSimpleVariable("skill_id", StringValue(id.toString()))
         skillRuntime.environment.setSimpleVariable("target_type", StringValue(effectiveTargetType.name.lowercase()))
         skillRuntime.environment.query.addFunction("missed") { DoubleValue(0.0) } // move action effects use this to determine if the target particles should play. We want them to always play for skills I believe
-
+        injectVariables(skillRuntime)
 
         // Targeting — raycast based on targetType
         when (effectiveTargetType) {
@@ -299,7 +306,6 @@ class PokeSkillTier(
             skillRuntime.environment.setSimpleVariable("hit_delay", hitDelay.resolve(skillRuntime))
         }
 
-
         // Build providers
         val providers = mutableListOf<Any>(
             UsersProvider(entity)
@@ -315,7 +321,7 @@ class PokeSkillTier(
 
         effectTimeline.run(context).thenRun {
             // Auto-apply cooldown after effect completes
-            pokemon.skillCooldownsTicks[id] = cooldownTicks ?: 0
+            pokemon.skillCooldownsTicks[id] = cooldownTicks
         }
 
         return true
@@ -349,6 +355,15 @@ class PokeSkillTier(
         runtime.environment.setSimpleVariable("target_y", DoubleValue(entityHit.y + entityHit.bbHeight / 2.0))
         runtime.environment.setSimpleVariable("target_z", DoubleValue(entityHit.z))
         runtime.environment.setSimpleVariable("target_entity", entityHit.asMostSpecificMoLangValue())
+    }
+
+    private fun injectVariables(runtime: MoLangRuntime) {
+        variables?.forEach { (key, value) ->
+            runtime.environment.setSimpleVariable(
+                key,
+                value.asMostSpecificMoLangValue()
+            )
+        }
     }
 
     /**

@@ -1,28 +1,31 @@
 {
   "name": "cobblemon.poke_skill.stoke.name",
+  "enabled": true,
+  "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
+  "cooldownTicks": 20,
+  "targetType": "BLOCK",
+  "range": 8,
+  "targetCondition": "1",
+  "fallbackActionEffect": "cobblemon:flamethrower",
+  "hitDelay": "1.25",
+  "hitEffect": "cobblemon:stoke_1_hit",
+  "useCondition": "1",
   "tiers": [
     {
-      "enabled": true,
-      "icon": "cobblemon:textures/gui/interact/interact_wheel_icon_stoke.png",
-      "cooldownTicks": 20,
-      "targetType": "BLOCK",
-      "range": 8,
-      "targetCondition": "1",
       "requiredMoves": [
-        "ember",
-        "flamethrower",
-        "fireblast",
-        "heatwave",
-        "flamecharge",
-        "lavaplume"
+        "ember"
       ],
-      "requiredTypes": [
-        "fire"
+      "variables": {
+        "fuel_quantity": 2400
+      }
+    },
+    {
+      "requiredMoves": [
+        "flamethrower"
       ],
-      "fallbackActionEffect": "cobblemon:flamethrower",
-      "hitDelay": "1.25",
-      "hitEffect": "cobblemon:stoke_1_hit",
-      "useCondition": "1"
+      "variables": {
+        "fuel_quantity": 4800
+      }
     }
   ]
 }

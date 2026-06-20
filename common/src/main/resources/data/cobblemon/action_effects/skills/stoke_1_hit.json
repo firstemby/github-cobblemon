@@ -3,7 +3,7 @@
     {
       "type": "molang",
       "expressions": [
-        "q.entity.world.add_furnace_fuel(v.target_block_x, v.target_block_y, v.target_block_z, 2400);"
+        "q.entity.world.add_furnace_fuel(v.target_block_x, v.target_block_y, v.target_block_z, v.fuel_quantity);"
       ]
     }
   ]

@@ -68,6 +68,8 @@ class PokeSkill(
     val hitEffect: ResourceLocation? = null,
     val fallbackActionEffect: ResourceLocation? = null,
 
+    val variables: Map<String, Any>? = null,
+
     val tiers: List<PokeSkillTier>,
 ) {
     companion object {

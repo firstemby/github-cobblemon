@@ -286,6 +286,15 @@ object MoLangFunctions {
         }
     }
 
+    fun Any.asMostSpecificMoLangValue(): MoValue {
+        return when (this) {
+            is Number -> DoubleValue(this.toDouble())
+            is String -> StringValue(this)
+            is Boolean -> DoubleValue(if (this) 1.0 else 0.0)
+            else -> StringValue(toString())
+        }
+    }
+
     fun <T> Holder<T>.asMoLangValue(key: ResourceKey<Registry<T>>): ObjectValue<Holder<T>> {
         val value = ObjectValue(
             obj = this,
