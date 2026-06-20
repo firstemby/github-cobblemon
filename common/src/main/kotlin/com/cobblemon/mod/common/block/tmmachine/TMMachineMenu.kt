@@ -10,11 +10,13 @@ package com.cobblemon.mod.common.block.tmmachine
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.api.tms.TechnicalMachine
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.block.entity.TMMachineBlockEntity
-import com.cobblemon.mod.common.util.itemRegistry
-import net.minecraft.server.level.ServerLevel
+import com.cobblemon.mod.common.net.messages.client.ui.SynchronizeActiveTMPacket
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.Container
 import net.minecraft.world.SimpleContainer
@@ -35,38 +37,20 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
     var inventory: Container? = null
     var containerData: ContainerData? = null
 
+    var currentlySelectedTM: TechnicalMachine? = null
+    private var lastSelectedTM: TechnicalMachine? = null
+
+    var onSelectedTMUpdate: (TechnicalMachine?) -> Unit = {}
+
     constructor(syncId: Int, playerInventory: Inventory) : this(CobblemonMenuType.TM_MACHINE, syncId) {
         this.playerInventory = playerInventory
         this.inventory = SimpleContainer(5)
         this.containerData = SimpleContainerData(6)
-        this.tmMachineEntity = (inventory as? TMMachineBlockEntity.TMMachineBlockInventory)?.blockEntity
 
         this.addDataSlots(containerData!!)
         inventory?.startOpen(playerInventory.player)
 
-        val startX = 15
-        val startY = 144
-        val slotWidth = 18
-        val slotHeight = 18
-
-        for (row in 0..2) {
-            for (col in 0..8) {
-                this.addSlot(Slot(playerInventory, 9 + (row * 9) + col, startX + (slotWidth * col), startY + (slotHeight * row)))
-            }
-        }
-        for (col in 0..8) {
-            this.addSlot(Slot(playerInventory, col, startX + (slotWidth * col), startY + 58))
-        }
-
-        val container = inventory
-        container?.let {
-            this.addSlot(TMResultSlot(container, RESULT_SLOT, startX + 37, startY - 28)) // Output slot
-            this.addSlot(BlankTMSlot(container, BLANK_TM_SLOT, startX + 90, startY - 28))  // Blank TM
-            for (index in INGREDIENT_SLOTS) {
-                this.addSlot(Slot(container, index, startX + 114 + (18 * (index - INGREDIENT_SLOTS.first)), startY - 28))
-            }
-        }
-        this.addSlotListener(this)
+        initiateSlots()
     }
 
     constructor(syncId: Int, playerInventory: Inventory, inventory: Container, containerData: ContainerData) : this(CobblemonMenuType.TM_MACHINE, syncId) {
@@ -78,6 +62,20 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
         this.addDataSlots(containerData)
         inventory.startOpen(playerInventory.player)
 
+        initiateSlots()
+
+        tmMachineEntity?.let {
+            val move = Moves.getByName(it.activeMove)
+            move.let {
+                currentlySelectedTM = TechnicalMachines.moveToTM[it]
+                synchronizeSelectedTM()
+            }
+        }
+
+        this.addSlotListener(this)
+    }
+
+    private fun initiateSlots() {
         val startX = 15
         val startY = 144
         val slotWidth = 18
@@ -92,7 +90,7 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
             this.addSlot(Slot(playerInventory, col, startX + (slotWidth * col), startY + 58))
         }
 
-        val container = inventory
+        val container = inventory!!
         container.let {
             this.addSlot(TMResultSlot(container, RESULT_SLOT, startX + 37, startY - 28)) // Output slot
             this.addSlot(BlankTMSlot(container, BLANK_TM_SLOT, startX + 90, startY - 28))  // Blank TM
@@ -100,7 +98,6 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
                 this.addSlot(Slot(container, index, startX + 114 + (18 * (index - INGREDIENT_SLOTS.first)), startY - 28))
             }
         }
-        this.addSlotListener(this)
     }
 
     override fun quickMoveStack(player: Player, index: Int): ItemStack {
@@ -206,5 +203,26 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
 
     override fun dataChanged(containerMenu: AbstractContainerMenu, dataSlotIndex: Int, value: Int) {
         broadcastChanges()
+    }
+
+    fun synchronizeSelectedTM() {
+        val serverPlayer = playerInventory?.player as? ServerPlayer ?: return
+        serverPlayer.sendPacket(SynchronizeActiveTMPacket(currentlySelectedTM))
+        lastSelectedTM = currentlySelectedTM
+    }
+
+    override fun sendAllDataToRemote() {
+        super.sendAllDataToRemote()
+        synchronizeSelectedTM()
+    }
+
+    override fun broadcastChanges() {
+        super.broadcastChanges()
+        if (lastSelectedTM != currentlySelectedTM) synchronizeSelectedTM()
+    }
+
+    fun clientSetSelectedTM(tm: TechnicalMachine?) {
+        currentlySelectedTM = tm
+        onSelectedTMUpdate(tm)
     }
 }

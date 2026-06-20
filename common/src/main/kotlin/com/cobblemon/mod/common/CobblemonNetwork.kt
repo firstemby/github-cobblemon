@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SetActiveTMPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SetTMMachineContainerDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
+import com.cobblemon.mod.common.client.net.gui.SynchronizeActiveTMHandler
 import com.cobblemon.mod.common.client.net.habitat.OpenHabitatBlockEditorHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
@@ -147,6 +148,7 @@ import com.cobblemon.mod.common.net.messages.client.ui.PokedexUIPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetActiveTMPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetTMMachineContainerDataPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SummaryUIPacket
+import com.cobblemon.mod.common.net.messages.client.ui.SynchronizeActiveTMPacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengeResponsePacket
 import com.cobblemon.mod.common.net.messages.server.BenchMovePacket
@@ -375,6 +377,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(PlayerInteractOptionsPacket.ID, PlayerInteractOptionsPacket::decode, PlayerInteractOptionsHandler))
         list.add(PacketRegisterInfo(PokedexUIPacket.ID, PokedexUIPacket::decode, PokedexUIPacketHandler))
         list.add(PacketRegisterInfo(ExpGainedDataPacket.ID, ExpGainedDataPacket::decode, ExpGainedDataPacketHandler))
+        list.add(PacketRegisterInfo(SynchronizeActiveTMPacket.ID, SynchronizeActiveTMPacket::decode, SynchronizeActiveTMHandler))
 
         // Starter packets
         list.add(PacketRegisterInfo(OpenStarterUIPacket.ID, OpenStarterUIPacket::decode, StarterUIPacketHandler))
