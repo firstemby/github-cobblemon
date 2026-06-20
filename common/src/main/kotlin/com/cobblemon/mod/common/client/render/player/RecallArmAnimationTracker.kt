@@ -50,7 +50,7 @@ object RecallArmAnimationTracker {
         active[playerUuid] = RecallAnim(ball, aspects, System.currentTimeMillis())
     }
 
-    /** Returns the active recall for the player, or null if there is none / it has expired */
+    /** Returns the active recall for the player, or null if there is none or if it has expired */
     fun get(playerUuid: UUID): RecallAnim? {
         val anim = active[playerUuid] ?: return null
         if (secondsSince(anim) > ARM_HOLD_SECONDS) {
@@ -65,7 +65,7 @@ object RecallArmAnimationTracker {
     private fun secondsSince(anim: RecallAnim) = (System.currentTimeMillis() - anim.startTimeMs) / 1000.0
 
     /**
-     * 0..1 ramp for how raised the arm / how risen the ball should be: eases up at the start, holds
+     * 0..1 ramp for how raised the arm and how risen the ball should be. eases up at the start, holds
      * at 1, then eases back down at the very end. Returns 0 when the player is not recalling.
      */
     fun raiseFactor(playerUuid: UUID): Float {

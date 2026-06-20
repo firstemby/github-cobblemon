@@ -319,8 +319,8 @@ class PokemonRenderer(
     fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
+
         // If a player is recalling, start the beam from the Poké Ball held in their hand
-        // (captured by PlayerRecallBallRenderer). Null in first person, where we fall back below.
         val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
         var beamSourcePosition = if (recallBallOrigin != null) {
             recallBallOrigin
