@@ -69,11 +69,11 @@ dependencies {
     localRuntime("org.antlr:antlr4-runtime:4.13.1")
 
     // Dynamic lighting (DEV RUNTIME ONLY). Cobblemon compiles against the LambDynamicLights API
-    // (modCompileOnly, mojmap — see common/build.gradle.kts); this provides the running mod in dev so
-    // `runClient` actually exercises the move-particle dynamic light. Pinned to 4.1.6 to match that
-    // API AND fabric-loader 0.17.2 (4.8.9 needs loader >=0.18.4). Loom does NOT surface a mod's JIJ'd
-    // dependency mods to the dev run, so its four bundled deps are listed explicitly (from gegy +
-    // Maven Central). Bump all five together if LDL is updated.
+    // (modCompileOnly, mojmap; see common/build.gradle.kts); this provides the running mod in dev so
+    // runClient actually exercises the dynamic lights. Pinned to 4.1.6 to match that API and fabric
+    // loader 0.17.2 (4.8.9 needs loader 0.18.4 or newer). Loom does not surface a mod's bundled
+    // dependency mods to the dev run, so its four are listed explicitly (from gegy + Maven Central).
+    // Bump all five together if LambDynamicLights is updated.
     modLocalRuntime("maven.modrinth:lambdynamiclights:4.1.6+1.21.1")
     modLocalRuntime("dev.lambdaurora.lambdynamiclights:lambdynamiclights-api:4.1.6+1.21.1")
     modLocalRuntime("dev.lambdaurora:spruceui:6.2.1+1.21")

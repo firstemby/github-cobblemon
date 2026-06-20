@@ -18,22 +18,22 @@ import net.minecraft.client.Minecraft
 import org.joml.Matrix4f
 
 /**
- * Renders Cobblemon's snowstorm particles with a vanilla-identical, pack-agnostic look while a
+ * Renders Cobblemon's snowstorm particles so they look like vanilla under any pack while a
  * shaderpack (Iris/OptiFine) is active.
  *
  * ## Why this exists
- * Iris/OptiFine replace the vanilla particle shader with the shaderpack's translucent-particle
+ * Iris/OptiFine replace the vanilla particle shader with the shaderpack's translucent particle
  * program for the duration of the world pass, and every pack composites that program differently —
- * which made our particles render too solid (Complementary), invisible (Photon), or still-darkening
+ * which made our particles render too solid (Complementary), invisible (Photon), or still darkening
  * (Bliss) no matter how we tuned blend/alpha inside the vanilla [net.minecraft.client.particle.ParticleEngine].
  * The pack has final authority there; we cannot win.
  *
  * The one place a shaderpack does NOT intercept a draw is **after** `LevelRenderer.renderLevel`
  * returns: Iris only overrides shaders while `isRenderingWorld` is true, and it flips that off during
- * its final composite (injected at the world-render RETURN). So we:
+ * its final composite (injected at the RETURN of world rendering). So we:
  *  1. suppress the vanilla draw of these particles while shaders are active
  *     ([SnowstormParticle.getRenderType] returns NO_RENDER), and
- *  2. redraw them here at [RenderEvent.Stage.POST_LEVEL] (post-composite) with the exact vanilla GL
+ *  2. redraw them here at [RenderEvent.Stage.POST_LEVEL] (after composite) with the exact vanilla GL
  *     state from [com.cobblemon.mod.common.api.snowstorm.ParticleMaterials] and the unchanged
  *     [SnowstormParticle.render] quad math.
  *
@@ -43,16 +43,16 @@ import org.joml.Matrix4f
  * pack's lighting/fog/bloom, which is exactly the intended "looks like vanilla" result.
  *
  * When no shaderpack is active this renderer does nothing and particles draw normally through the
- * ParticleEngine, so the majority (no-shader) path is completely unchanged.
+ * ParticleEngine, so the majority path (no shaders) is completely unchanged.
  *
  * @author Cobblemon
  */
 object SnowstormShaderBypassRenderer {
 
-    // The world's camera view matrix for the current frame, captured at the late in-level stage
-    // where Fabric/NeoForge still have the camera transform applied. POST_LEVEL fires after that
-    // state is unwound, but the bypass draw still needs it because SnowstormParticle.render emits
-    // camera-relative vertices just like vanilla particles do.
+    // The world's camera view matrix for the current frame, captured at the late stage within the
+    // level pass where Fabric/NeoForge still have the camera transform applied. POST_LEVEL fires after
+    // that state is unwound, but the bypass draw still needs it because SnowstormParticle.render emits
+    // vertices relative to the camera just like vanilla particles do.
     private val modelViewMatrix = Matrix4f()
     private var captured = false
 
@@ -87,8 +87,8 @@ object SnowstormShaderBypassRenderer {
         val lightTexture = minecraft.gameRenderer.lightTexture()
         val tesselator = Tesselator.getInstance()
 
-        // Re-establish the world's camera view so the camera-relative quads built by render() land
-        // in the right place; projection is still the world's 3D projection at this point in the frame.
+        // Restore the world's camera view so the quads built relative to the camera by render()
+        // land in the right place; projection is still the world's 3D projection at this point in the frame.
         val modelViewStack = RenderSystem.getModelViewStack()
         modelViewStack.pushMatrix()
         modelViewStack.set(modelViewMatrix)
@@ -98,7 +98,7 @@ object SnowstormShaderBypassRenderer {
             lightTexture.turnOnLightLayer()
 
             // Group by the particle's own render type (ParticleMaterials.ALPHA/ADD/BLEND/OPAQUE). Calling
-            // its begin() sets the IDENTICAL GL state vanilla would use, so the look matches no-shaders.
+            // its begin() sets the IDENTICAL GL state vanilla would use, so the look matches the no shader path.
             for ((renderType, particles) in visible.groupBy { it.particleTextureSheet }) {
                 val buffer = renderType.begin(tesselator, minecraft.textureManager) ?: continue
                 for (particle in particles) {

@@ -36,10 +36,9 @@ public class LambDynamicLightsInitializer implements DynamicLightsInitializer {
             ctx.register(EntityType.PLAYER, PlayerLuminance.INSTANCE);
         });
 
-        // Attach a real monochrome dynamic light to INDIVIDUAL glowing particles. Each light follows
-        // its particle and reports isRemoved() when the particle dies, so the manager cleans it up. The
-        // per-emitter cap on how many particles may be lit at once is enforced at particle spawn (see
-        // BedrockParticle.maxLitParticles / SnowstormParticle), not here.
+        // Attach a monochrome dynamic light to each glowing particle. The light follows its particle and
+        // reports isRemoved() when the particle dies, so the manager cleans it up. The cap on how many
+        // particles per emitter may be lit at once is enforced at particle spawn, not here.
         final DynamicLightBehaviorManager behaviorManager = context.dynamicLightBehaviorManager();
         MoveDynamicLights.setSink(particle -> behaviorManager.add(new SnowstormParticleLight(particle)));
     }

@@ -37,8 +37,6 @@ public final class PokemonLuminance extends CustomLuminance implements EntityLum
             ItemStack item = pokemon.getShownItem();
             int itemLightLevel = item.isEmpty() ? 0 : itemLightSourceManager.getLuminance(item, underwater);
             int formLightLevel = extractFormLightLevel(pokemon.getForm(), underwater).orElse(0);
-
-            // Animation based emissives
             int animLightLevel = PokemonAnimationLight.luminanceFor(pokemon);
 
             return Math.max(Math.max(itemLightLevel, formLightLevel), animLightLevel);

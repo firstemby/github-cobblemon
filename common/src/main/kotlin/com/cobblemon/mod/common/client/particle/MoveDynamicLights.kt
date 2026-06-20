@@ -11,14 +11,14 @@ package com.cobblemon.mod.common.client.particle
 import com.cobblemon.mod.common.client.render.SnowstormParticle
 
 /**
- * API-free bridge that lets the optional LambDynamicLights integration attach a real dynamic light to
- * individual glowing particles without the common particle code referencing the LambDynamicLights API.
+ * Bridge that lets the optional LambDynamicLights integration attach a dynamic light to individual
+ * glowing particles without the common particle code referencing the LambDynamicLights API directly.
  *
- * Each particle whose resolved light level is > 0 (and that wins one of its emitter's limited light
- * slots) registers its own light through [sink]. When LambDynamicLights is installed, its entrypoint
- * ([com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer]) sets [sink] to a
- * handler that adds a per-particle `DynamicLightBehavior`. When it isn't installed [sink] stays null
- * and the registration call is a no-op — so there is no hard dependency.
+ * Each particle whose resolved light level is above 0 (and that claims one of its emitter's limited
+ * light slots) registers its own light through [sink]. When LambDynamicLights is installed its
+ * entrypoint ([com.cobblemon.mod.common.compat.lambdynamiclights.LambDynamicLightsInitializer]) sets
+ * [sink]; when it is absent [sink] stays null and the registration call does nothing, so there is no
+ * hard dependency.
  */
 object MoveDynamicLights {
     @JvmStatic

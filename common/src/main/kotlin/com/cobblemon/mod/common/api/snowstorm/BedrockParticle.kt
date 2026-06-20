@@ -44,22 +44,22 @@ class BedrockParticle(
     var collision: ParticleCollision = ParticleCollision(),
     var environmentLighting: Boolean = false,
     /**
-     * Block-light level (0..15) each particle of this type emits into the world via LambDynamicLights.
-     * A particle existing does NOT imply light: only particles whose resolved level is > 0 emit. This
-     * scalar is the flat "hard" level used when [lightEmissionFrames] is empty.
+     * Block light level (0..15) each particle of this type emits into the world via LambDynamicLights.
+     * A particle existing does not imply light: only particles whose resolved level is above 0 emit.
+     * This is the flat level, used when [lightEmissionFrames] is empty.
      */
     var lightEmission: Int = 0,
     /**
-     * Optional per-sprite-frame light levels (0..15), indexed by the particle's current flipbook frame.
-     * When non-empty it overrides [lightEmission], so a sprite-sheet particle can light differently per
-     * frame (out-of-range frames clamp to the ends). Empty = use the flat [lightEmission].
+     * Optional light levels (0..15) indexed by the particle's current flipbook frame. When non empty it
+     * overrides [lightEmission] so a particle can light differently per frame; frames beyond the array
+     * clamp to its ends. Empty means use the flat [lightEmission].
      */
     var lightEmissionFrames: List<Int> = emptyList(),
     var creationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var expirationEvents: MutableList<SimpleEventTrigger> = mutableListOf(),
     var timeline: EventTriggerTimeline = EventTriggerTimeline(mutableMapOf())
 ) {
-    /** True when this particle type emits block light at all (flat level or any per-frame level > 0). */
+    /** True when this particle type emits block light at all, via the flat level or any per frame level. */
     val emitsLight: Boolean
         get() = lightEmission > 0 || lightEmissionFrames.any { it > 0 }
 

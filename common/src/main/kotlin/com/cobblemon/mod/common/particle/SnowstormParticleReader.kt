@@ -363,11 +363,11 @@ object SnowstormParticleReader {
             ExpressionParticleTinting()
         }
         val environmentLighting = componentsJson.has("minecraft:particle_appearance_lighting")
-        // NOTE: per-particle dynamic-light levels are intentionally NOT read from the .particle.json.
-        // Snowstorm (the Bedrock particle editor) rebuilds the components block on export and silently
-        // drops any unknown component, so a custom light field here would be lost whenever a file is
-        // re-saved in Snowstorm. Instead light levels live in a separate Cobblemon data file and are
-        // merged onto the effect after load (see BedrockParticleOptionsRepository.loadLightConfig).
+        // Light levels are intentionally not read from the .particle.json. Snowstorm (the Bedrock
+        // particle editor) rebuilds the components block on export and silently drops unknown components,
+        // so a custom light field here would be lost the next time a file is saved. Light levels instead
+        // live in a separate Cobblemon data file, merged onto the effect after load (see
+        // BedrockParticleOptionsRepository.loadLightConfig).
         val collision = collisionJson?.let {
             var collides = true
             val radius = it.get("collision_radius")?.asString?.asExpression() ?: run {

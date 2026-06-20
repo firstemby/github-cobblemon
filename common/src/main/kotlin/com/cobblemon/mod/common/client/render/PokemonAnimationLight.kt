@@ -21,16 +21,16 @@ import java.nio.charset.StandardCharsets
 import net.minecraft.server.packs.resources.ResourceManager
 
 /**
- * Per-animation emissive light windows for Pokemon whose emissive parts only appear or flare during
- * specific animations (Pikachu cheeks, the Cyndaquil line's flames flaring in battle, Bellibolt's belly,
- * etc.). A Pokemon emits the window's block-light level only while a matching animation's elapsed time
- * falls inside one of the windows. Consulted by the LambDynamicLights `PokemonLuminance`.
+ * Light levels emitted by a Pokemon's emissive parts during specific animations, for the optional
+ * LambDynamicLights integration. Some Pokemon only show their emissive geometry at certain moments
+ * (Pikachu's cheeks, the Cyndaquil line's flames flaring in battle, Bellibolt's belly), so the level
+ * applies only while a matching animation's elapsed time falls inside one of its windows.
  *
- * Matches three kinds of running animation: the current PRIMARY animation (moves like special/physical/
- * status), ACTIVE/stateful animations (cry/battle_cry), and the current POSE's idle animations
- * (battle_idle/air_idle/air_fly etc., which loop continuously). Data is loaded from JSON under
- * `assets/<namespace>/dynamiclights/entity/animations/`: species path -> animation short name ->
- * list of `{ start, end, level }` (seconds into the animation; looping/continuous anims wrap).
+ * Windows are matched against the current primary animation (moves such as special, physical, status),
+ * active stateful animations (cry, battle_cry), and the current pose's idle animations (battle_idle,
+ * air_idle, air_fly) which loop continuously. Data lives in JSON under
+ * `assets/<namespace>/dynamiclights/entity/animations/`, mapping species to animation name to a list
+ * of `{ start, end, level }` in seconds.
  */
 object PokemonAnimationLight {
     private val GSON = GsonBuilder().create()

@@ -376,16 +376,14 @@ class ParticleStorm(
         particles.forEach { particle -> particle.invisible = true }
     }
 
-    // --- LambDynamicLights (per-particle dynamic light) integration -----------------------------
-
-    /** How many of this emitter's live particles currently hold a real dynamic light (capped by the
-     *  `maxLitParticlesPerEmitter` Minecraft config). A particle existing does NOT imply a light. */
+    /** How many of this emitter's live particles currently hold a dynamic light, capped by the
+     *  maxLitParticlesPerEmitter config. A particle existing does not imply a light. */
     var litParticleCount = 0
         private set
 
-    /** Tries to claim one of this emitter's limited light slots for a particle. Returns true if a slot
-     *  was available (and reserved); false if the emitter is already at the configured cap. The cap is
-     *  the `maxLitParticlesPerEmitter` config value (0 disables per-particle lights entirely). */
+    /** Claims one of this emitter's limited light slots for a particle. Returns true if a slot was
+     *  free (and reserved), false if the emitter is at the configured cap. A cap of 0 disables the
+     *  particle lights entirely. */
     fun reserveLightSlot(): Boolean {
         if (litParticleCount >= Cobblemon.config.maxLitParticlesPerEmitter) return false
         litParticleCount++

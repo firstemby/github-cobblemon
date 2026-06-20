@@ -47,6 +47,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
@@ -158,49 +159,27 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         ClientPlayConnectionEvents.DISCONNECT.register { _, client -> client.player?.let { PlatformEvents.CLIENT_PLAYER_LOGOUT.post(ClientPlayerEvent.Logout(it)) } }
         ItemTooltipCallback.EVENT.register { stack, context, type, lines -> PlatformEvents.CLIENT_ITEM_TOOLTIP.post(ItemTooltipEvent(stack, context, type, lines)) }
 
-        WorldRenderEvents.AFTER_TRANSLUCENT.register { context -> PlatformEvents.RENDER.post(
-                RenderEvent(
-                    stage = RenderEvent.Stage.TRANSLUCENT,
-                    levelRenderer = context.worldRenderer(),
-                    poseStack = context.matrixStack() ?: PoseStack(),
-                    modelViewMatrix = context.positionMatrix(),
-                    projectionMatrix = context.projectionMatrix(),
-                    tickCounter = context.tickCounter(),
-                    camera = context.camera()
-                )
-            )
-        }
-
-        // Capture the final in-level camera transform before Fabric unwinds render state.
-        WorldRenderEvents.LAST.register { context -> PlatformEvents.RENDER.post(
-                RenderEvent(
-                    stage = RenderEvent.Stage.LAST,
-                    levelRenderer = context.worldRenderer(),
-                    poseStack = context.matrixStack() ?: PoseStack(),
-                    modelViewMatrix = context.positionMatrix(),
-                    projectionMatrix = context.projectionMatrix(),
-                    tickCounter = context.tickCounter(),
-                    camera = context.camera()
-                )
-            )
-        }
-
-        // Fires after the level (and any shaderpack composite) has finished — the only point where a
-        // draw is NOT intercepted by Iris/OptiFine. Used by SnowstormShaderBypassRenderer.
-        WorldRenderEvents.END.register { context -> PlatformEvents.RENDER.post(
-                RenderEvent(
-                    stage = RenderEvent.Stage.POST_LEVEL,
-                    levelRenderer = context.worldRenderer(),
-                    poseStack = context.matrixStack() ?: PoseStack(),
-                    modelViewMatrix = context.positionMatrix(),
-                    projectionMatrix = context.projectionMatrix(),
-                    tickCounter = context.tickCounter(),
-                    camera = context.camera()
-                )
-            )
-        }
+        WorldRenderEvents.AFTER_TRANSLUCENT.register { context -> postRenderStage(RenderEvent.Stage.TRANSLUCENT, context) }
+        // LAST captures the camera transform while it is still applied; POST_LEVEL fires after the level
+        // (and any shaderpack composite) finishes, the only point a draw is NOT intercepted by Iris/OptiFine.
+        WorldRenderEvents.LAST.register { context -> postRenderStage(RenderEvent.Stage.LAST, context) }
+        WorldRenderEvents.END.register { context -> postRenderStage(RenderEvent.Stage.POST_LEVEL, context) }
 
         CobblemonModelPredicateRegistry.registerPredicates()
+    }
+
+    private fun postRenderStage(stage: RenderEvent.Stage, context: WorldRenderContext) {
+        PlatformEvents.RENDER.post(
+            RenderEvent(
+                stage = stage,
+                levelRenderer = context.worldRenderer(),
+                poseStack = context.matrixStack() ?: PoseStack(),
+                modelViewMatrix = context.positionMatrix(),
+                projectionMatrix = context.projectionMatrix(),
+                tickCounter = context.tickCounter(),
+                camera = context.camera()
+            )
+        )
     }
 
     override fun registerLayer(modelLayer: ModelLayerLocation, supplier: Supplier<LayerDefinition>) {

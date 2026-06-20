@@ -14,13 +14,11 @@ import net.minecraft.core.BlockPos;
 
 /**
  * A real, monochrome dynamic light attached to a single Cobblemon particle, so each glowing particle
- * lights the world around it like its own light source (maximum fidelity). The light level is whatever
- * the particle currently emits ({@link SnowstormParticle#currentLightLevel()} — a flat author-set level
- * or a per-sprite-frame value), so a particle that emits 0 contributes nothing even though it exists.
+ * lights the world around it like its own light source. The level is whatever the particle currently
+ * emits ({@link SnowstormParticle#currentLightLevel()}); a particle emitting 0 contributes nothing.
  *
- * <p>The number of these per emitter is capped (see {@code BedrockParticle.maxLitParticles}); the cap
- * is enforced at particle spawn, not here. This follows the particle as it moves and removes itself
- * when the particle dies.</p>
+ * <p>How many of these exist per emitter is capped (by the maxLitParticlesPerEmitter config, enforced
+ * at particle spawn, not here). This follows the particle as it moves and removes itself when it dies.</p>
  *
  * <p>Only instantiated by {@link LambDynamicLightsInitializer} (the LambDynamicLights entrypoint), so
  * it is never loaded unless LambDynamicLights is installed.</p>
@@ -33,7 +31,7 @@ public final class SnowstormParticleLight implements DynamicLightBehavior {
     private int prevY = Integer.MIN_VALUE;
     private int prevZ = Integer.MIN_VALUE;
     private int prevLuminance = -1;
-    /** Level cached each tick in hasChanged() so the per-block lightAtPos stays cheap and consistent. */
+    /** Level cached each tick in hasChanged() so the per block lightAtPos call stays cheap and stable. */
     private double cachedLuminance;
 
     public SnowstormParticleLight(SnowstormParticle particle) {
@@ -49,18 +47,17 @@ public final class SnowstormParticleLight implements DynamicLightBehavior {
         double dy = pos.getY() + 0.5 - particle.getY();
         double dz = pos.getZ() + 0.5 - particle.getZ();
         double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        // Vanilla-style falloff: exactly 1 light level lost per block, so an authored level of N lights
-        // a ~N-block radius just like a Minecraft block-light source. We deliberately IGNORE the
-        // falloffRatio LambDynamicLights passes (15 / MAX_RADIUS ~= 1.94), which would otherwise
-        // compress the falloff into the mod's 7.75-block cap and make every light reach only ~half its
-        // level in blocks (i.e. look dimmer than the number implies). Note: the mod still hard-caps
-        // reach at MAX_RADIUS (~7.75 blocks), so authored levels above ~8 are clipped at that radius.
+        // Lose exactly 1 level per block so an authored level of N lights about N blocks, like vanilla
+        // block light. We intentionally ignore the falloffRatio LambDynamicLights passes (15 / MAX_RADIUS,
+        // about 1.94): applying it would compress the falloff into the mod's 7.75 block cap and make every
+        // light reach only about half its level in blocks, looking dimmer than the number implies. The mod
+        // still limits reach to MAX_RADIUS (about 7.75 blocks), so levels above 8 are clipped there.
         return Math.max(0.0, lum - dist);
     }
 
     @Override
     public DynamicLightBehavior.BoundingBox getBoundingBox() {
-        // The actively-emitting volume is just the particle's block (the API expands by falloff itself).
+        // Report only the emitting volume (the particle's own block); the API expands it by falloff.
         int x = (int) Math.floor(particle.getX());
         int y = (int) Math.floor(particle.getY());
         int z = (int) Math.floor(particle.getZ());

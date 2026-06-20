@@ -14,9 +14,9 @@ import java.lang.reflect.Method
  * Detects whether a shaderpack is currently active, via Iris (Fabric/NeoForge) or OptiFine.
  *
  * Every reference here is reflective and fully guarded: Iris/OptiFine are optional and may be
- * absent at runtime, so we never hard-reference their classes. If neither is present (or their
+ * absent at runtime, so we never reference their classes directly. If neither is present (or their
  * APIs ever change shape) the lookups fail silently during class init and [shadersActive] simply
- * returns `false`. This is the loader-safe contract the rest of the particle code relies on — it
+ * returns `false`. The rest of the particle code relies on this contract staying safe under any loader — it
  * must work identically on Fabric and NeoForge and when no shader mod is installed at all.
  *
  * The reflective handles are resolved once; only the cheap boolean accessor is invoked per call.

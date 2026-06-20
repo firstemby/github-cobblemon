@@ -51,27 +51,26 @@ object BedrockParticleOptionsRepository {
     }
 
     /**
-     * Loads per-particle dynamic-light levels from a separate Cobblemon data location and merges them
-     * onto the already-loaded effects. This is kept OUT of the `.particle.json` on purpose: Snowstorm
-     * (the Bedrock particle editor) rebuilds the components block on export and silently drops unknown
-     * components, so a light field inside the particle file would be lost on re-save. A sidecar file is
-     * never touched by Snowstorm.
+     * Loads particle light levels from a separate Cobblemon data location and merges them onto the
+     * already loaded effects. These are kept out of the `.particle.json` on purpose: Snowstorm (the
+     * Bedrock particle editor) rebuilds the components block on export and silently drops unknown
+     * components, so a light field inside the particle file would be lost the next time it is saved.
+     * A sidecar file is never touched by Snowstorm.
      *
-     * Files live under `assets/<namespace>/dynamiclights/particles/` (any `.json` file), each a map
-     * of particle-effect id to its light config, e.g.:
+     * Files live under `assets/<namespace>/dynamiclights/particles/` (any `.json` file), each a map of
+     * effect id to its light config, e.g.:
      * ```json
      * {
      *   "cobblemon:thunderbolt_actor": { "light_level": 14 },
      *   "cobblemon:flamethrower_actor": { "light_levels": [0, 8, 14, 14, 8] }
      * }
      * ```
-     * `light_level` is a flat 0..15 level every particle emits; the optional `light_levels` array gives
-     * a level per sprite-sheet frame (overrides the flat level). Entries for unknown effect ids are
-     * ignored.
+     * `light_level` is a flat level (0..15) every particle emits; the optional `light_levels` array gives
+     * a level per flipbook frame and overrides the flat level. Entries for unknown effect ids are ignored.
      */
     private fun loadLightConfig(resourceManager: ResourceManager) {
         // LambDynamicLights is the only thing that consumes these levels. If it isn't installed, don't
-        // even read the sidecar files — the light config is never parsed, applied, or considered.
+        // even read the sidecar files; the light config is never parsed, applied, or considered.
         val lambDynamicLightsInstalled = Cobblemon.implementation.isModInstalled("lambdynlights") ||
                 Cobblemon.implementation.isModInstalled("lambdynamiclights")
         if (!lambDynamicLightsInstalled) return

@@ -57,11 +57,11 @@ class SnowstormParticle(
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
 
         /**
-         * Every live (non-removed) snowstorm particle, in spawn order. When a shaderpack is active we
-         * pull these out of the vanilla [net.minecraft.client.particle.ParticleEngine] (see
-         * [getRenderType] returning [NO_RENDER]) and redraw them post-composite via
-         * [SnowstormShaderBypassRenderer], so the pack's particle program can't alter their look.
-         * Insertion-ordered; particles use identity equality so a LinkedHashSet is safe.
+         * Every live snowstorm particle, in spawn order. When a shaderpack is active we pull these out
+         * of the vanilla [net.minecraft.client.particle.ParticleEngine] (see [getRenderType] returning
+         * [NO_RENDER]) and redraw them after composite via [SnowstormShaderBypassRenderer] so the pack's
+         * particle program can't alter their look. Ordered by insertion; particles use identity equality
+         * so a LinkedHashSet is safe.
          */
         val activeParticles: MutableSet<SnowstormParticle> = LinkedHashSet()
     }
@@ -143,10 +143,9 @@ class SnowstormParticle(
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }
         activeParticles.add(this)
 
-        // If LambDynamicLights is installed and this particle type emits light, give THIS particle its
-        // own real dynamic light — but only if the emitter still has a free light slot (capped by
-        // BedrockParticle.maxLitParticles). A particle existing does not imply light; the level comes
-        // from currentLightLevel(). No-op when the mod is absent (sink stays null).
+        // Give this particle its own dynamic light only when LambDynamicLights is present, the type
+        // emits light, and the emitter still has a free light slot. The level comes from
+        // currentLightLevel(); when the mod is absent the sink is null and this does nothing.
         val sink = MoveDynamicLights.sink
         if (sink != null && storm.effect.particle.emitsLight && storm.reserveLightSlot()) {
             litSlot = true
@@ -155,9 +154,9 @@ class SnowstormParticle(
     }
 
     /**
-     * The block-light level (0..15) this particle emits right now. Uses the per-sprite-frame array when
-     * the type defines one (indexed by the current flipbook frame), else the flat level. Invisible
-     * (culled) particles emit nothing.
+     * The block light level (0..15) this particle emits right now. Uses the per frame array when the
+     * type defines one (indexed by the current flipbook frame), otherwise the flat level. Invisible
+     * particles emit nothing.
      */
     fun currentLightLevel(): Int {
         if (invisible) return 0
@@ -535,18 +534,18 @@ class SnowstormParticle(
         runtime.environment.variable.setDirectly("particle_lifetime", DoubleValue(lifetime / 20.0))
     }
 
-    // Under an active shaderpack we suppress the vanilla ParticleEngine draw (it would be routed
-    // through the pack's translucent particle program and mangled differently per pack) and instead
-    // redraw post-composite in SnowstormShaderBypassRenderer for a vanilla-identical, pack-agnostic
-    // look. With no shaders this is the normal material sheet, so the majority path is unchanged.
+    // Under an active shaderpack we suppress the vanilla ParticleEngine draw (it would be routed through
+    // the pack's translucent particle program and mangled differently per pack) and instead redraw after
+    // composite in SnowstormShaderBypassRenderer so the look matches vanilla under any pack. With no
+    // shaders this is the normal material sheet, so the majority path is unchanged.
     override fun getRenderType() = if (Cobblemon.config.shaderParticleBypass && ShaderCompat.shadersActive()) NO_RENDER else particleTextureSheet
 
     override fun remove() {
         super.remove()
         storm.particles.remove(this)
         activeParticles.remove(this)
-        // Free our dynamic-light slot so another particle of this emitter can light up. The registered
-        // behavior reports isRemoved() via this particle's isAlive(), so the manager drops the light.
+        // Free our light slot so another particle of this emitter can light up. The registered behavior
+        // reports isRemoved() via this particle's isAlive(), so the manager drops the light on its own.
         if (litSlot) {
             storm.releaseLightSlot()
             litSlot = false

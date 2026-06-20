@@ -45,8 +45,8 @@ abstract class ParticleUVMode : CodecMapped {
 
     abstract fun get(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails
 
-    /** The current sprite-sheet frame index for a particle at this age (0 for non-animated modes).
-     *  Used to look up per-frame light levels (see [BedrockParticle.lightEmissionFrames]). */
+    /** The current flipbook frame index for a particle at this age (0 for static modes). Used to look
+     *  up per frame light levels (see [BedrockParticle.lightEmissionFrames]). */
     open fun frameAt(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double): Int = 0
 }
 
