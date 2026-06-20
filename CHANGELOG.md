@@ -358,6 +358,7 @@
 - Fixed fished up Pokémon not being added as "seen" to the Pokedex
 - Fixed surprised Gimmighoul encounters not being added as "seen" to the Pokedex
 - Fixed a crash involving berry trees that have been world edited.
+- Fixed visual desync in multiplayer for players mounting Pokémon outside other players' loaded chunks 
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
