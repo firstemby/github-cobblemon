@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.SPAWN_DIRECTION
 import com.cobblemon.mod.common.pokeball.PokeBall
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.isLookingAt
 import com.cobblemon.mod.common.util.lang
@@ -71,6 +72,8 @@ class PokemonRenderer(
 ) : MobRenderer<PokemonEntity, PosablePokemonEntityModel>(context, PosablePokemonEntityModel(), 0.5f) {
     companion object {
         val recallBeamColour = Vector4f(1F, 0.1F, 0.1F, 1F)
+        /** Plain white texture used to render the Pokémon as a fully opaque solid colour during recall. */
+        private val WHITE_TEXTURE = cobblemonResource("textures/misc/white.png")
         /**
          * Nudges where the beam starts on the thrown Poké Ball when capturing, relative to its "beam"
          * locator, along the ball's local X (side), Y (up), Z (depth). Units are the ball's model
@@ -101,7 +104,13 @@ class PokemonRenderer(
     private val heldItemRenderer = HeldItemRenderer()
 
     override fun getTextureLocation(entity: PokemonEntity): ResourceLocation {
-        return VaryingModelRepository.getTexture(entity.pokemon.species.resourceIdentifier, entity.delegate as PokemonClientDelegate)
+        val delegate = entity.delegate as PokemonClientDelegate
+        // Once the recall beam has connected render the base model with a plain white texture so the
+        // red tint is fully opaque
+        if (entity.beamMode == 3 && delegate.secondsSinceBeamEffectStarted > BEAM_EXTEND_TIME) {
+            return WHITE_TEXTURE
+        }
+        return VaryingModelRepository.getTexture(entity.pokemon.species.resourceIdentifier, delegate)
     }
 
     override fun render(
@@ -151,13 +160,15 @@ class PokemonRenderer(
             poseMatrix.translate(0.0, 0.25 * (entity.delegate as PokemonClientDelegate).activeSendoutScale, 0.0)
         }
 
-        modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
-
-
         // While the recall beam is connected, render the Pokémon at full brightness so the red
         // dematerialisation reads as glowing energy rather than a dim shadow in low light.
         val recallActive = entity.beamMode == 3 && clientDelegate.secondsSinceBeamEffectStarted > BEAM_EXTEND_TIME
         val renderLight = if (recallActive) LightTexture.FULL_BRIGHT else packedLight
+
+        // Skip the extra texture layers during recall so the solid white-textured base (tinted red)
+        // isn't overdrawn by patterned/emissive layers showing the real texture.
+        val activeLayers = if (recallActive) emptyList() else VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate)
+        modelNow.setLayerContext(buffer, clientDelegate, activeLayers)
 
         if (entity.passengers.isNotEmpty()) {
             renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, renderLight)
