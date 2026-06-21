@@ -406,7 +406,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
     private fun isBurnActive(): Boolean = (menu.containerData?.get(TMMachineBlockEntity.BURN_ACTIVE_INDEX) ?: 0) == 1
 
-    private fun setScreenFromMode(screen: Int) {
+    fun setScreenFromMode(screen: Int) {
         mode = screen
         when (mode) {
             TYPE_SELECT_MODE -> {
@@ -428,7 +428,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         updateHeldStackMove()
     }
 
-    private fun setMoveList(filter: String? = null, pokemon: Pokemon? = null) {
+    fun setMoveList(filter: String? = null, pokemon: Pokemon? = null) {
         val filteredList = TechnicalMachine.filterTms(
             search = filter,
             type = sortType,

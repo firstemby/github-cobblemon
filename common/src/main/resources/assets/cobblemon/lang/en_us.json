@@ -9475,5 +9475,8 @@
   "stat.cobblemon.riding_liquid": "Distance by Pokémon in Liquid",
 
   "cobblemon.recipeviewer.category.berry_recipe": "Berry Mutations",
-  "cobblemon.recipeviewer.category.cooking_pot_recipe": "Pot Cooking"
+  "cobblemon.recipeviewer.category.cooking_pot_recipe": "Pot Cooking",
+  "cobblemon.recipeviewer.category.tm_recipe": "TM Burning",
+  "cobblemon.recipeviewer.tm_learned": "TM Discovered",
+  "cobblemon.recipeviewer.tm_not_learned": "TM Undiscovered"
 }

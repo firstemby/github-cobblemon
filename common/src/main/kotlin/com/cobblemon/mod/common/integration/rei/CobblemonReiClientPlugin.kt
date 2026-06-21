@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.integration.rei
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerComponentRegistry
 import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import com.cobblemon.mod.common.integration.rei.brewing.ReiCobblemonBrewingDisplay
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin
@@ -59,6 +60,8 @@ open class CobblemonReiClientPlugin: REIClientPlugin {
     }
 
     override fun registerItemComparators(registry: ItemComparatorRegistry) {
-        registry.registerComponents(CobblemonItems.TECHNICAL_MACHINE)
+        RecipeViewerComponentRegistry.register { item, component ->
+            registry.register(CobblemonReiComponentComparator(component), item)
+        }
     }
 }

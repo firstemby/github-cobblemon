@@ -41,8 +41,7 @@ class CobblemonJeiProvider<T: RecipeViewerRecipe>(val originalProvider: RecipeVi
 
     fun registerRecipeTransferHandlers(registration: IRecipeTransferRegistration) {
         originalProvider.recipeHandler().forEach {
-            registration.transferHelper.createUnregisteredRecipeTransferHandler(CobblemonJeiRecipeInfo(this, it))
-            registration.addRecipeTransferHandler(CobblemonJeiRecipeHandler(this, it), recipeType)
+            registration.addRecipeTransferHandler(CobblemonJeiRecipeHandler(this, it, registration), recipeType)
         }
     }
 }

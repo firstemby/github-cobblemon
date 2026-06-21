@@ -36,7 +36,9 @@ class CobblemonEmiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
     }
 
     override fun craft(recipe: EmiRecipe, context: EmiCraftContext<E>): Boolean {
-        (recipe as? CobblemonEmiRecipe<R>)?.let { originalHandler.additionalHandle(recipe.recipe) }
+        (recipe as? CobblemonEmiRecipe<R>)?.let {
+            originalHandler.additionalHandle(recipe.recipe, context.screen.menu, context.screen)
+        }
         return super.craft(recipe, context)
     }
 }

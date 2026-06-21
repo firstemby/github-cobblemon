@@ -8,8 +8,11 @@
 
 package com.cobblemon.mod.common.integration.jei
 
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.jei.brewing.JeiBrewingStandRecipe
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerComponentRegistry
 import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
@@ -20,7 +23,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import mezz.jei.api.registration.IRecipeTransferRegistration
-import mezz.jei.api.runtime.IJeiRuntime
+import mezz.jei.api.registration.ISubtypeRegistration
 import net.minecraft.resources.ResourceLocation
 
 @JeiPlugin
@@ -59,8 +62,10 @@ class CobblemonJeiPlugin : IModPlugin {
         }
     }
 
-    override fun onRuntimeAvailable(jeiRuntime: IJeiRuntime) {
-        CobblemonJeiPlugin.jeiRuntime = jeiRuntime
+    override fun registerItemSubtypes(registration: ISubtypeRegistration) {
+        RecipeViewerComponentRegistry.register { item, component ->
+            registration.registerSubtypeInterpreter(item, CobblemonJeiComponentComparator(component))
+        }
     }
 
     companion object {
@@ -68,15 +73,6 @@ class CobblemonJeiPlugin : IModPlugin {
             CobblemonJeiProvider(it)
         }
 
-        var jeiRuntime: IJeiRuntime? = null
         val ID = cobblemonResource("jei_plugin")
-
-        fun showTypes(id: ResourceLocation) {
-            val jeiProvider = jeiProviders.firstOrNull { it.originalProvider.id == id } ?: return
-
-            jeiRuntime?.recipesGui?.showTypes(
-                listOf(jeiProvider.recipeType)
-            )
-        }
     }
 }

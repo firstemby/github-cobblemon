@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.integration.recipeviewer
 
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.inventory.Slot
@@ -20,5 +21,5 @@ interface RecipeViewerRecipeHandler<T: RecipeViewerRecipe, E: AbstractContainerM
     fun getMenuType(): MenuType<E>
 
     fun isApplicable(recipe: T): Boolean = true
-    fun additionalHandle(recipe: T) {}
+    fun additionalHandle(recipe: T, menu: E, screen: AbstractContainerScreen<E>?) {}
 }

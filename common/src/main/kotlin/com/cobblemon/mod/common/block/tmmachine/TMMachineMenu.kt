@@ -76,7 +76,7 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
     }
 
     private fun initiateSlots() {
-        val startX = 15
+        val startX = 75
         val startY = 144
         val slotWidth = 18
         val slotHeight = 18

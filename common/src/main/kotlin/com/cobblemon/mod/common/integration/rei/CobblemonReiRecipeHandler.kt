@@ -14,6 +14,7 @@ import me.shedaniel.rei.api.client.registry.transfer.TransferHandler
 import me.shedaniel.rei.api.client.registry.transfer.simple.SimpleTransferHandler
 import me.shedaniel.rei.api.common.entry.InputIngredient
 import me.shedaniel.rei.api.common.transfer.info.stack.SlotAccessor
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 
@@ -37,7 +38,9 @@ class CobblemonReiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
     override fun handle(context: TransferHandler.Context): TransferHandler.Result {
         if (context.isActuallyCrafting) {
             val display = context.display as? CobblemonReiDisplay<R>
-            display?.let { originalHandler.additionalHandle(display.recipe) }
+            display?.let {
+                originalHandler.additionalHandle(display.recipe, context.menu as E, context.containerScreen as AbstractContainerScreen<E>)
+            }
         }
         return super.handle(context)
     }

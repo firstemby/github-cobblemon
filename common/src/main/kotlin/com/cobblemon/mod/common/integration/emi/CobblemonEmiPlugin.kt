@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.integration.emi
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.integration.emi.brewing.EmiCobblemonBrewingRecipe
 import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerComponentRegistry
 import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import dev.emi.emi.api.EmiEntrypoint
 import dev.emi.emi.api.EmiPlugin
@@ -36,6 +37,8 @@ class CobblemonEmiPlugin: EmiPlugin {
             registry.addRecipe(EmiCobblemonBrewingRecipe(entry.value, entry.id))
         }
 
-        registry.setDefaultComparison(EmiStack.of(CobblemonItems.TECHNICAL_MACHINE), Comparison.compareComponents())
+        RecipeViewerComponentRegistry.register { item, component ->
+            registry.setDefaultComparison(EmiStack.of(item), Comparison.compareData { it.itemStack.get(component) })
+        }
     }
 }
