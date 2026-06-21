@@ -174,8 +174,8 @@ object TeamManager : RequestManager<TeamManager.TeamRequest>() {
         val existingReceiverTeam = this.getTeam(request.receiverID)
         val existingSenderTeam = this.getTeam(request.senderID)
         if (request.sender.party().none()) {
-            request.notifySender(true, "error.no_pokemon")
-            request.notifyReceiver(true, "error.no_pokemon")
+            request.notifySender(true, "error.missing_pokemon.receiver")
+            request.notifyReceiver(true, "error.missing_pokemon.sender")
         }
         else if (existingReceiverTeam != null) {
             request.notifySender(true, "error.existing_team.other", request.receiver.name.copy().aqua())
