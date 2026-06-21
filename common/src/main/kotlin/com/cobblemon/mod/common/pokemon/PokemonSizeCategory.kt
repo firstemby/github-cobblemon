@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon
 
-import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.client.settings.ServerSettings
 
 enum class PokemonSizeCategory {
     XS,
@@ -21,7 +21,7 @@ enum class PokemonSizeCategory {
         // Find which size category corresponds to the given scale modifier.
         // The scale modifier should be between the intrinsic min and max size.
         fun fromScale(scaleModifier: Float): PokemonSizeCategory {
-            val config = Cobblemon.config
+            val config = ServerSettings //Don't use cobblemon config here as it will be used by server AND client
             val minScale = config.pokemonIntrinsicSizeMin
             val maxScale = config.pokemonIntrinsicSizeMax
             val range = (maxScale - minScale).coerceAtLeast(0.0001F)

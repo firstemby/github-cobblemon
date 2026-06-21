@@ -42,9 +42,8 @@
 - All ruin structures gilded chest loot tables have been updated to include a guaranteed TM not learned naturally by any Pokémon through their level-up moveset. Each ruin gets its own specific TM, so you can now go hunting ruins to complete your move dex!
 - All fossil structures have been transferred over to biome features, allowing for better placement in generation.
 - The prehistoric_underwater_fissure & prehistoric_submerged_impact fossil structures now use the biome tag `#cobblemon:is_temperate_ocean`.
-- A new Biome tag called `#cobblemon:is_stony_beach` has been added.
 - Gimmighoul towers now generate at ground level rather than sinking one block into the ground.
-- 1 New shipwreck cove structure called the "magma_shipwreck_cove" has been added.
+- A new shipwreck cove structure called the "magma_shipwreck_cove" has been added.
 - Shipwreck coves now generate slightly more frequently.
 - Added equipment loot tables for shipwreck cove enemies.
 - Maps from abandoned fishing boats leading to shipwreck coves now will skip explored chunks, allowing the player to find more shipwreck coves easier.
@@ -57,6 +56,7 @@
 - Pokémon cries now play when clicking Pokémon in the summary screen.
 - Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
 - Ice type Pokémon are now immune to Packed Snow
+- Held item visibility can now be controlled by the held_item_visible command argument.
 
 ### New rideable Pokémon
 - Drampa
@@ -300,6 +300,13 @@
 - Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
 - Resolved Z-Fighting on Pokédex Models
 - Restored Ninjask's ability to do barrel rolls
+- Fixed a crash caused by adding enchanted items to the Resurrection Machine
+- Fixed a crash that could occur when starting a PvN battle with only fainted Pokémon.
+- Fixed the Remember Riding Camera config not being respected when dismounting and resolved the incompatibility with the Auto Third Person mod
+- Fixed Full Heal block not dropping Full Heals
+- Fixed status cure items not returning an empty bottle when used
+- Fixed Panpour consuming its held item when evolving with a Water Stone
+- Fixed Smoked Tail Curry returning a Wooden Bowl when consumed despite it not being included in the recipe
 
 ### Fixes
 - Fixed Croagunk's walkspeed
@@ -350,6 +357,7 @@
 - Fixed Guilded chests being more accessible than intended
 - Fixed fished up Pokémon not being added as "seen" to the Pokedex
 - Fixed surprised Gimmighoul encounters not being added as "seen" to the Pokedex
+- Fixed a crash involving berry trees that have been world edited.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
@@ -360,6 +368,8 @@
 - Separated all the functions of MoLangFunctions.kt into their own files.
 - Spawn buckets and their base weights are now provided by the spawner, with different base weights for world, fishing, snack, and habitat spawn buckets.
 - Removed "SpawnBucket" class in favour of just storing maps of bucket names to weights.
+- Fixed nicknames not being applied to Pokémon spawned from `spawn_pool_world` files.
+- Added support for `profilePokedexScale`, `profilePokedexTranslation`, `profileSummaryScale`, and `profileSummaryTranslation` in poser files for finer control over profile displays.
 
 ### Molang & Datapacks
 - Added `moveset_builders` datapack folder for different styles of movesets.

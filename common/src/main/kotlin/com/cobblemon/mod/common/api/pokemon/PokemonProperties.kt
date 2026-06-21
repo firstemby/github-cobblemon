@@ -759,6 +759,7 @@ open class PokemonProperties {
         shiny?.let { json.addProperty(DataKeys.POKEMON_SHINY, it) }
         gender?.let { json.addProperty(DataKeys.POKEMON_GENDER, it.name) }
         species?.let { json.addProperty(DataKeys.POKEMON_SPECIES_TEXT, it) }
+        nickname?.let { json.addProperty(DataKeys.POKEMON_NICKNAME, it.string) }
         form?.let { json.addProperty(DataKeys.POKEMON_FORM_ID, it) }
         friendship?.let { json.addProperty(DataKeys.POKEMON_FRIENDSHIP, it) }
         fullness?.let { json.addProperty(DataKeys.POKEMON_FULLNESS, it) }
@@ -795,6 +796,7 @@ open class PokemonProperties {
         shiny = json.get(DataKeys.POKEMON_SHINY)?.asBoolean
         gender = json.get(DataKeys.POKEMON_GENDER)?.asString?.let { Gender.valueOf(it) }
         species = json.get(DataKeys.POKEMON_SPECIES_TEXT)?.asString
+        nickname = json.get(DataKeys.POKEMON_NICKNAME)?.asString?.let(Component::literal)
         form = json.get(DataKeys.POKEMON_FORM_ID)?.asString
         friendship = json.get(DataKeys.POKEMON_FRIENDSHIP)?.asInt
         fullness = json.get(DataKeys.POKEMON_FULLNESS)?.asInt

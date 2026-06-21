@@ -243,18 +243,6 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokemon, lang = "pokemon_intrinsic_size_max", SERVER)
     var pokemonIntrinsicSizeMax = 1.05F
 
-    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_small_multiplier", SERVER)
-    var alphaPokemonSizeSmallMultiplier = 1.70F
-
-    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_medium_multiplier", SERVER)
-    var alphaPokemonSizeMediumMultiplier = 1.55F
-
-    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_large_multiplier", SERVER)
-    var alphaPokemonSizeLargeMultiplier = 1.40F
-
-    @CobblemonConfigField(Category.Pokemon, lang = "alpha_pokemon_size_extra_large_multiplier", SERVER)
-    var alphaPokemonSizeExtraLargeMultiplier = 1.25F
-
     @CobblemonConfigField(Category.Pokemon, lang = "baby_pokemon_level_duration", SERVER)
     var babyPokemonLevelDuration = 9
 
@@ -347,9 +335,6 @@ class CobblemonConfig {
     // @CobblemonConfigField(Category.Riding, lang = "third_person_view_bobbing", CLIENT)
     var thirdPersonViewBobbing = true
 
-    @CobblemonConfigField(Category.Riding, lang = "invert_roll", CLIENT)
-    var invertRoll = false
-
     @CobblemonConfigField(Category.Riding, lang = "invert_pitch", CLIENT)
     var invertPitch = false
 
@@ -364,9 +349,6 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Riding, lang = "swap_x_and_y_axes", CLIENT)
     var swapXAndYAxes = false
-
-    @CobblemonConfigField(Category.Riding, lang = "automatic_righting_delay", CLIENT)
-    var rightingDelay = -1.0
 
     @CobblemonConfigField(Category.Riding, lang = "disable_roll", CLIENT)
     var disableRoll = false

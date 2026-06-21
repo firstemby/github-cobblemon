@@ -281,7 +281,7 @@
 		},
 		"animation.luvdisc.ground_faint": {
 			"loop": true,
-			"animation_length": 2.5,
+			"animation_length": 3,
 			"bones": {
 				"body": {
 					"rotation": {
