@@ -24,6 +24,7 @@ object ParticleMaterials {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
             RenderSystem.enableCull()
+            RenderSystem.enableDepthTest()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { GameRenderer.getParticleShader() }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
@@ -38,6 +39,7 @@ object ParticleMaterials {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
             RenderSystem.disableCull()
+            RenderSystem.enableDepthTest()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { GameRenderer.getParticleShader() }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
@@ -52,6 +54,7 @@ object ParticleMaterials {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
             RenderSystem.disableCull()
+            RenderSystem.enableDepthTest()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { GameRenderer.getParticleShader() }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
@@ -66,6 +69,7 @@ object ParticleMaterials {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()
             RenderSystem.enableCull()
+            RenderSystem.enableDepthTest()
             RenderSystem.depthMask(true)
             RenderSystem.setShader { GameRenderer.getParticleShader() }
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
@@ -73,6 +77,21 @@ object ParticleMaterials {
             return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE)
         }
 
-        override fun toString() =  "OPAQUE"
+        override fun toString() = "OPAQUE"
+    }
+
+    val XRAY = object : ParticleRenderType {
+        override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
+            RenderSystem.enableBlend()
+            RenderSystem.disableCull()
+            RenderSystem.disableDepthTest()
+            RenderSystem.depthMask(false)
+            RenderSystem.setShader { GameRenderer.getParticleShader() }
+            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES)
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+            return tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE)
+        }
+
+        override fun toString() = "XRAY"
     }
 }

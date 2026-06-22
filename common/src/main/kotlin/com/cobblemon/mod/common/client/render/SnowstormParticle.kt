@@ -124,6 +124,7 @@ class SnowstormParticle(
                 ParticleMaterial.OPAQUE -> ParticleMaterials.OPAQUE
                 ParticleMaterial.BLEND -> ParticleMaterials.BLEND
                 ParticleMaterial.ADD -> ParticleMaterials.ADD
+                ParticleMaterial.XRAY -> ParticleMaterials.XRAY
             }
         }
         storm.effect.particle.creationEvents.forEach { it.trigger(storm, this) }

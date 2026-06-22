@@ -32,6 +32,6 @@ final class ParticleManagerMixin {
     @Inject(at = @At("RETURN"), method = "<clinit>")
     private static void lodestone$addTypes(CallbackInfo ci) {
         RENDER_ORDER = ImmutableList.<ParticleRenderType>builder().addAll(RENDER_ORDER)
-                .add(ParticleMaterials.INSTANCE.getADD(), ParticleMaterials.INSTANCE.getALPHA(), ParticleMaterials.INSTANCE.getBLEND(), ParticleMaterials.INSTANCE.getOPAQUE()).build();
+                .add(ParticleMaterials.INSTANCE.getXRAY(), ParticleMaterials.INSTANCE.getADD(), ParticleMaterials.INSTANCE.getALPHA(), ParticleMaterials.INSTANCE.getBLEND(), ParticleMaterials.INSTANCE.getOPAQUE()).build();
     }
 }

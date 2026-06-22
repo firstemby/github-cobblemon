@@ -12,5 +12,6 @@ enum class ParticleMaterial {
     ALPHA,
     OPAQUE,
     BLEND,
-    ADD
+    ADD,
+    XRAY,
 }
