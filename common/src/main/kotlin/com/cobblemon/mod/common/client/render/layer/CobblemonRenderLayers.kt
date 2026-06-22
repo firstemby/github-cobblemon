@@ -105,4 +105,38 @@ object CobblemonRenderLayers {
             .createCompositeState(false)
     )
 
+    val BLOCK_HIGHLIGHT_SOLID: RenderType = RenderType.create(
+        "cobblemon_xray_solid",
+        DefaultVertexFormat.BLOCK,
+        VertexFormat.Mode.QUADS,
+        786432,
+        true,
+        false,
+        RenderType.CompositeState.builder()
+            .setShaderState(RENDERTYPE_SOLID_SHADER)
+            .setTextureState(BLOCK_SHEET_MIPPED)
+            .setLightmapState(LIGHTMAP)
+            .setDepthTestState(NO_DEPTH_TEST)
+            .setWriteMaskState(COLOR_WRITE)
+            .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(true)
+    )
+
+    val BLOCK_HIGHLIGHT_CUTOUT: RenderType = RenderType.create(
+        "cobblemon_xray_cutout",
+        DefaultVertexFormat.BLOCK,
+        VertexFormat.Mode.QUADS,
+        786432,
+        true,
+        false,
+        RenderType.CompositeState.builder()
+            .setShaderState(RENDERTYPE_CUTOUT_MIPPED_SHADER)
+            .setTextureState(BLOCK_SHEET_MIPPED)
+            .setLightmapState(LIGHTMAP)
+            .setDepthTestState(NO_DEPTH_TEST)
+            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+            .setWriteMaskState(COLOR_WRITE)
+            .setLayeringState(VIEW_OFFSET_Z_LAYERING)
+            .createCompositeState(true)
+    )
 }
