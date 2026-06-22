@@ -32,6 +32,7 @@ data class RenderEvent(
 
     /** Represents when a layer is rendered by [LevelRenderer.renderLevel]. Ordinal corresponds with its render order. */
     enum class Stage {
-        TRANSLUCENT
+        TRANSLUCENT,
+        AFTER_ENTITIES,
     }
 }

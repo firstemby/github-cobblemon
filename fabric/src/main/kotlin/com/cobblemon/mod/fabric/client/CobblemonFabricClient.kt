@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
+import com.cobblemon.mod.common.client.render.BlockHighlightRenderer
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.item.PokedexItem
@@ -158,17 +159,32 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
         ClientPlayConnectionEvents.DISCONNECT.register { _, client -> client.player?.let { PlatformEvents.CLIENT_PLAYER_LOGOUT.post(ClientPlayerEvent.Logout(it)) } }
         ItemTooltipCallback.EVENT.register { stack, context, type, lines -> PlatformEvents.CLIENT_ITEM_TOOLTIP.post(ItemTooltipEvent(stack, context, type, lines)) }
 
-        WorldRenderEvents.AFTER_TRANSLUCENT.register { context -> PlatformEvents.RENDER.post(
-                RenderEvent(
-                    stage = RenderEvent.Stage.TRANSLUCENT,
-                    levelRenderer = context.worldRenderer(),
-                    poseStack = context.matrixStack() ?: PoseStack(),
-                    modelViewMatrix = context.positionMatrix(),
-                    projectionMatrix = context.projectionMatrix(),
-                    tickCounter = context.tickCounter(),
-                    camera = context.camera()
-                )
+        WorldRenderEvents.AFTER_TRANSLUCENT.register { context ->
+            val event = RenderEvent(
+                stage = RenderEvent.Stage.TRANSLUCENT,
+                levelRenderer = context.worldRenderer(),
+                poseStack = context.matrixStack() ?: PoseStack(),
+                modelViewMatrix = context.positionMatrix(),
+                projectionMatrix = context.projectionMatrix(),
+                tickCounter = context.tickCounter(),
+                camera = context.camera()
             )
+
+            PlatformEvents.RENDER.post(event)
+        }
+
+        WorldRenderEvents.AFTER_ENTITIES.register { context ->
+            val event = RenderEvent(
+                stage = RenderEvent.Stage.AFTER_ENTITIES,
+                levelRenderer = context.worldRenderer(),
+                poseStack = context.matrixStack() ?: PoseStack(),
+                modelViewMatrix = context.positionMatrix(),
+                projectionMatrix = context.projectionMatrix(),
+                tickCounter = context.tickCounter(),
+                camera = context.camera()
+            )
+
+            BlockHighlightRenderer.render(event)
         }
 
         CobblemonModelPredicateRegistry.registerPredicates()

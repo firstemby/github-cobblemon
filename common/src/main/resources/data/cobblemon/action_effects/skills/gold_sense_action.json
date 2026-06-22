@@ -21,9 +21,9 @@
     {
       "type": "molang",
       "expressions": [
-        "v.found_gold = (q.entity.find_nearby_block('#GOLD_ORES') != 0);",
-        "v.found_gold ? q.entity.play_sound('cobblemon:shiny/shiny_appear_chime') : 0;",
-        "q.pokemon.add_skill_cooldown(q.skill_id);"
+        "v.found_gold = q.entity.find_nearby_blocks('#GOLD_ORES', 32);",
+        "q.entity.world.highlight_blocks(v.found_gold, '#FFD700', 100);",
+        "v.found_gold > 0 ? q.entity.play_sound('cobblemon:shiny/shiny_appear_chime') : 0;"
       ]
     },
     {

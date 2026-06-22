@@ -25,23 +25,7 @@ import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
-import com.cobblemon.mod.common.util.asArrayValue
-import com.cobblemon.mod.common.util.asExpressionLike
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import com.cobblemon.mod.common.util.asResource
-import com.cobblemon.mod.common.util.asUUID
-import com.cobblemon.mod.common.util.cloneFrom
-import com.cobblemon.mod.common.util.effectiveName
-import com.cobblemon.mod.common.util.getBlockStatesWithPos
-import com.cobblemon.mod.common.util.getBooleanOrNull
-import com.cobblemon.mod.common.util.getDoubleOrNull
-import com.cobblemon.mod.common.util.getIntOrNull
-import com.cobblemon.mod.common.util.getIsSubmerged
-import com.cobblemon.mod.common.util.getOrNull
-import com.cobblemon.mod.common.util.getStringOrNull
-import com.cobblemon.mod.common.util.isStandingOn
-import com.cobblemon.mod.common.util.resolve
-import com.cobblemon.mod.common.util.worldRegistry
+import com.cobblemon.mod.common.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
@@ -56,7 +40,7 @@ import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.CropBlock
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.util.UUID
+import java.util.*
 import kotlin.math.sqrt
 
 object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
@@ -218,12 +202,14 @@ object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
                     StringValue(it)
                 } ?: DoubleValue.ZERO
             },
-            "find_nearby_block" to findNearbyBlock@{ params ->
+            "find_nearby_blocks" to { params ->
                 val input = params.getString(0)
                 val isTag = input.contains("#")
                 val type = input.replace("#", "").asIdentifierDefaultingNamespace(namespace = "minecraft")
+
                 val range = params.getDoubleOrNull(1) ?: 10
-                val blockPos = thisEntity.level().getBlockStatesWithPos(
+
+                val blockPosList = thisEntity.level().getBlockStatesWithPos(
                     AABB.ofSize(
                         thisEntity.position(),
                         range.toDouble(),
@@ -231,28 +217,19 @@ object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
                         range.toDouble()
                     )
                 )
-                    .filter { blockPosPair ->
-                        blockPosPair.first.blockHolder.let {
-                            if (isTag) it.`is`(
-                                TagKey.create(
-                                    Registries.BLOCK,
-                                    type
-                                )
-                            ) else it.`is`(type)
-                        }
+                .filter { blockPosPair ->
+                    blockPosPair.first.blockHolder.let {
+                        if (isTag) it.`is`(
+                            TagKey.create(
+                                Registries.BLOCK,
+                                type
+                            )
+                        ) else it.`is`(type)
                     }
-                    .minByOrNull { it.second.distSqr(thisEntity.blockPosition()) }
-                    ?.second
-                if (blockPos != null) {
-                    return@findNearbyBlock ArrayStruct(
-                        mapOf(
-                            "0" to DoubleValue(blockPos.x),
-                            "1" to DoubleValue(blockPos.y),
-                            "2" to DoubleValue(blockPos.z)
-                        )
-                    )
                 }
-                return@findNearbyBlock DoubleValue.ZERO
+                .map { blockPosPair -> blockPosPair.second }
+
+                blockPosList.map { it.toArrayStruct() }.asArrayValue()
             },
             "get_nearby_entities" to { params ->
                 val distance = params.getDouble(0)
