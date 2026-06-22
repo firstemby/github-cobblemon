@@ -8,45 +8,54 @@
 
 package com.cobblemon.mod.common.integration.jei
 
-import com.cobblemon.mod.common.integration.jei.berry.BerryMutationProvider
-import com.cobblemon.mod.common.integration.jei.brewing.BrewingStandJeiProvider
-import com.cobblemon.mod.common.integration.jei.cooking.CampfirePotJeiProvider
+import com.cobblemon.mod.common.integration.jei.brewing.JeiBrewingStandRecipe
+import com.cobblemon.mod.common.integration.recipeviewer.RecipeViewerCategoryProvider
+import com.cobblemon.mod.common.integration.recipeviewer.brewing.CobblemonBrewingRecipeProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import mezz.jei.api.IModPlugin
 import mezz.jei.api.JeiPlugin
+import mezz.jei.api.constants.RecipeTypes
+import mezz.jei.api.registration.IGuiHandlerRegistration
 import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
+import mezz.jei.api.registration.IRecipeTransferRegistration
 import mezz.jei.api.runtime.IJeiRuntime
 import net.minecraft.resources.ResourceLocation
 
 @JeiPlugin
 class CobblemonJeiPlugin : IModPlugin {
-    private val jeiProviders: Set<CobblemonJeiProvider> = setOf(
-        BerryMutationProvider(),
-        CampfirePotJeiProvider(),
-        BrewingStandJeiProvider()
-    )
-
     override fun getPluginUid(): ResourceLocation {
         return ID
     }
 
     override fun registerCategories(registration: IRecipeCategoryRegistration) {
-        jeiProviders.forEach {
-            it.registerCategory(registration)
-        }
+        jeiProviders.forEach { it.registerCategory(registration) }
     }
 
     override fun registerRecipes(registration: IRecipeRegistration) {
-        jeiProviders.forEach {
-            it.registerRecipes(registration)
+        jeiProviders.forEach { it.registerRecipes(registration) }
+
+        // Cobblemon Brewing Recipes
+        val jeiRecipes = CobblemonBrewingRecipeProvider.getRecipes().map { entry ->
+            JeiBrewingStandRecipe(entry.value, entry.id)
         }
+        registration.addRecipes(RecipeTypes.BREWING, jeiRecipes)
     }
 
     override fun registerRecipeCatalysts(registration: IRecipeCatalystRegistration) {
+        jeiProviders.forEach { it.registerRecipeCatalsysts(registration) }
+    }
+
+    override fun registerGuiHandlers(registration: IGuiHandlerRegistration) {
         jeiProviders.forEach {
-            it.registerRecipeCatalsysts(registration)
+            it.registerGuiHandlers(registration)
+        }
+    }
+
+    override fun registerRecipeTransferHandlers(registration: IRecipeTransferRegistration) {
+        jeiProviders.forEach {
+            it.registerRecipeTransferHandlers(registration)
         }
     }
 
@@ -55,7 +64,19 @@ class CobblemonJeiPlugin : IModPlugin {
     }
 
     companion object {
+        private val jeiProviders = RecipeViewerCategoryProvider.categoriesProviders.map {
+            CobblemonJeiProvider(it)
+        }
+
         var jeiRuntime: IJeiRuntime? = null
         val ID = cobblemonResource("jei_plugin")
+
+        fun showTypes(id: ResourceLocation) {
+            val jeiProvider = jeiProviders.firstOrNull { it.originalProvider.id == id } ?: return
+
+            jeiRuntime?.recipesGui?.showTypes(
+                listOf(jeiProvider.recipeType)
+            )
+        }
     }
 }

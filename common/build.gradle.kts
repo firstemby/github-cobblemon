@@ -32,6 +32,8 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.neoforged.net/releases")
     maven(url = "https://maven.gegy.dev")
+    maven(url = "https://maven.terraformersmc.com/")
+    maven(url = "https://maven.shedaniel.me")
     mavenLocal()
 }
 
@@ -62,6 +64,10 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+
+    modCompileOnlyApi(libs.emi)
+    modCompileOnlyApi(libs.rei.api)
+    modCompileOnlyApi(libs.rei.defaultplugin)
 }
 
 tasks.withType<Test> {
