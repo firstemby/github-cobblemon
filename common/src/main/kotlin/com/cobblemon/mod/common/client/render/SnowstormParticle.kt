@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.api.snowstorm.ParticleMaterial
 import com.cobblemon.mod.common.api.snowstorm.ParticleMaterials
 import com.cobblemon.mod.common.api.snowstorm.UVDetails
 import com.cobblemon.mod.common.client.particle.MoveDynamicLights
+import com.cobblemon.mod.common.client.particle.PhotonicDynamicLights
+import com.cobblemon.mod.common.client.particle.SnowstormPhotonicLight
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.util.math.geometry.transformDirection
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -146,10 +148,15 @@ class SnowstormParticle(
         // Give this particle its own dynamic light only when LambDynamicLights is present, the type
         // emits light, and the emitter still has a free light slot. The level comes from
         // currentLightLevel(); when the mod is absent the sink is null and this does nothing.
-        val sink = MoveDynamicLights.sink
-        if (sink != null && storm.effect.particle.emitsLight && storm.reserveLightSlot()) {
+        // Attach a dynamic light when either dynamic-light integration is active (LambDynamicLights for
+        // the vanilla lightmap, Photonic for raytraced lights), the type emits light, and the emitter
+        // still has a free light slot. When neither mod is present both gates are false and nothing runs.
+        val lambSink = MoveDynamicLights.sink
+        val photonicActive = PhotonicDynamicLights.enabled
+        if ((lambSink != null || photonicActive) && storm.effect.particle.emitsLight && storm.reserveLightSlot()) {
             litSlot = true
-            sink.register(this)
+            lambSink?.register(this)
+            if (photonicActive) PhotonicDynamicLights.register(SnowstormPhotonicLight(this))
         }
     }
 
@@ -165,6 +172,23 @@ class SnowstormParticle(
         if (frames.isEmpty()) return particle.lightEmission
         val frame = particle.uvMode.frameAt(runtime, age / 20.0, lifetime / 20.0)
         return frames[frame.coerceIn(0, frames.size - 1)]
+    }
+
+    /**
+     * The particle's current RGB tint (0..1) used as its dynamic light color for the Photonic
+     * integration. Move particles are usually white sprites tinted at runtime, so the resolved tint —
+     * not the sprite — is the true emitted color.
+     */
+    fun currentLightColor(): org.joml.Vector3f {
+        // getTint evaluates the tinting curve/gradient against the runtime; that can throw before the
+        // particle is fully initialized (e.g. at spawn, when age/lifetime aren't set yet and a gradient
+        // has no resolvable node). Fall back to white rather than crashing the particle engine.
+        val colour = try {
+            storm.getParticleColor() ?: storm.effect.particle.tinting.getTint(runtime)
+        } catch (e: Exception) {
+            return org.joml.Vector3f(1f, 1f, 1f)
+        }
+        return org.joml.Vector3f(colour.x, colour.y, colour.z)
     }
 
     override fun render(vertexConsumer: VertexConsumer, camera: Camera, tickDelta: Float) {

@@ -26,6 +26,17 @@ architectury {
     fabric()
 }
 
+// DEV ONLY: turn on PhotonRT's debug logging in the runClient so we can see its per-tick dynamic-light
+// count ("dynamic lights this tick: N | raytracer active: T/F | max lights: 1000") and confirm Cobblemon's
+// move-particle lights are reaching PhotonRT each gather (vs. being dropped). Remove this block to silence it.
+loom {
+    runs {
+        named("client") {
+            vmArg("-Dphotonrt.debug=true")
+        }
+    }
+}
+
 val generatedResources = file("src/generated/resources")
 
 sourceSets.main {

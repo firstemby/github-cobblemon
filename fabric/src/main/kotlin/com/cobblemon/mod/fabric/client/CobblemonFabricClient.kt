@@ -18,6 +18,7 @@ import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
+import com.cobblemon.mod.common.compat.photonic.PhotonRTIntegration
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
@@ -35,8 +36,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Supplier
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
@@ -80,6 +83,15 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
     override fun onInitializeClient() {
         registerParticleFactory(CobblemonParticles.SNOWSTORM_PARTICLE_TYPE, SnowstormParticleType::Factory)
         CobblemonClient.initialize(this)
+
+        // When the PhotonRT raytracing mod is present, register Cobblemon's block lights + moving
+        // move-particle lights with it after client startup. Gated here so PhotonRTIntegration (which
+        // references PhotonRT API types) is only classloaded when photonrt is actually installed.
+        ClientLifecycleEvents.CLIENT_STARTED.register {
+            if (FabricLoader.getInstance().isModLoaded("photonrt")) {
+                PhotonRTIntegration.register()
+            }
+        }
         ModelLoadingPlugin.register {
             PokeBalls.all().forEach { pokeBall -> it.addModels(pokeBall.model3d) }
             PokedexType.entries.toList().forEach { pokedex ->

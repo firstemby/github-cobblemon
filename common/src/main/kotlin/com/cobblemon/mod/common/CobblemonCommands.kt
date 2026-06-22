@@ -25,6 +25,7 @@ object CobblemonCommands {
         ChangeWalkSpeed.register(dispatcher)
         TransformModelPartCommand.register(dispatcher)
         TestCommand.register(dispatcher)
+        SpawnPikachuBattleCommand.register(dispatcher)
         ReloadShowdownCommand.register(dispatcher)
         ClickTextCommand.register(dispatcher)
         PokemonEditCommand.register(dispatcher)

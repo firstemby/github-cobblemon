@@ -51,6 +51,15 @@ dependencies {
             requireCapability("dev.lambdaurora.lambdynamiclights:api-mojmap")
         }
     }
+    // PhotonRT (our local fork of the Photonic Iris raytracing mod) exposes a dynamic-light injection API
+    // we call from the photonic compat. Consume its published Mojang-mapped API variant from mavenLocal —
+    // it's engine-free (no Iris/Sodium needed on this classpath). Plain compileOnly (NOT modCompileOnly):
+    // the variant is already Mojang-mapped, so Loom would wrongly re-remap a modCompileOnly. The running
+    // mod is the loose remapped jar in runClient/mods. Refresh via PhotonRT's `gradlew publishToMavenLocal`.
+    compileOnly("dev.plasteredcrab:photonrt:0.1.0+1.21.1") {
+        capabilities { requireCapability("dev.plasteredcrab.photonrt:api-mojmap") }
+        isTransitive = false
+    }
     // Flywheel has no common dep so just pick one and don't use any platform specific code in common
     // modCompileOnly(libs.flywheelFabric)
 
