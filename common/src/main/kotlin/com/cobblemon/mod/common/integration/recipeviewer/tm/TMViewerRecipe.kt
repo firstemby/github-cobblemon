@@ -74,7 +74,7 @@ class TMViewerRecipe(val originalTM: TechnicalMachine): RecipeViewerRecipe {
             context = context,
             text = if (recipeKnown()) lang("recipeviewer.tm_learned") else lang("recipeviewer.tm_not_learned").red(),
             x = 0,
-            y = 19,
+            y = 21,
             shadow = true
         )
     }

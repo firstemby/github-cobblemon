@@ -29,7 +29,7 @@ class TMViewerProvider: RecipeViewerCategoryProvider<TMViewerRecipe> {
     override fun getHeight(): Int = HEIGHT
 
     override fun getRecipes(): List<TMViewerRecipe> {
-        return TechnicalMachines.tmMap.values.map { TMViewerRecipe(it) }
+        return TechnicalMachines.tmMap.values.map { TMViewerRecipe(it) }.sortedBy { it.originalTM.type }
     }
 
     override fun getWorkstations(): List<ItemStack> {
