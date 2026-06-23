@@ -11,14 +11,13 @@ package com.cobblemon.mod.common.client.render.layer
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.resources.ResourceLocation
+import java.util.function.BiFunction
+import java.util.function.Function
 import net.minecraft.Util
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderStateShard.*
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.resources.ResourceLocation
-import java.util.*
-import java.util.function.BiFunction
-import java.util.function.Function
 
 object CobblemonRenderLayers {
     val BERRY_LAYER = run {
@@ -87,56 +86,4 @@ object CobblemonRenderLayers {
         )
     };
 
-    val BLOCK_HIGHLIGHT: RenderType = RenderType.create(
-        "block_highlight",
-        DefaultVertexFormat.POSITION_COLOR_NORMAL,
-        VertexFormat.Mode.LINES,
-        256,
-        false,
-        true,
-        RenderType.CompositeState.builder()
-            .setShaderState(RENDERTYPE_LINES_SHADER)
-            .setLineState(LineStateShard(OptionalDouble.of(2.0)))
-            .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-            .setDepthTestState(NO_DEPTH_TEST)
-            .setCullState(NO_CULL)
-            .setWriteMaskState(COLOR_WRITE)
-            .createCompositeState(false)
-    )
-
-    val BLOCK_HIGHLIGHT_SOLID: RenderType = RenderType.create(
-        "cobblemon_xray_solid",
-        DefaultVertexFormat.BLOCK,
-        VertexFormat.Mode.QUADS,
-        786432,
-        true,
-        false,
-        RenderType.CompositeState.builder()
-            .setShaderState(RENDERTYPE_SOLID_SHADER)
-            .setTextureState(BLOCK_SHEET_MIPPED)
-            .setLightmapState(LIGHTMAP)
-            .setDepthTestState(NO_DEPTH_TEST)
-            .setWriteMaskState(COLOR_WRITE)
-            .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-            .createCompositeState(true)
-    )
-
-    val BLOCK_HIGHLIGHT_CUTOUT: RenderType = RenderType.create(
-        "cobblemon_xray_cutout",
-        DefaultVertexFormat.BLOCK,
-        VertexFormat.Mode.QUADS,
-        786432,
-        true,
-        false,
-        RenderType.CompositeState.builder()
-            .setShaderState(RENDERTYPE_CUTOUT_MIPPED_SHADER)
-            .setTextureState(BLOCK_SHEET_MIPPED)
-            .setLightmapState(LIGHTMAP)
-            .setDepthTestState(NO_DEPTH_TEST)
-            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-            .setWriteMaskState(COLOR_WRITE)
-            .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-            .createCompositeState(true)
-    )
 }

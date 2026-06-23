@@ -20,7 +20,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.spawning.TimeRange
-import com.cobblemon.mod.common.client.render.BlockHighlightManager
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormParticlePacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
@@ -308,26 +307,6 @@ object WorldMoLangFunctions : AbstractMoLangFunctionHolder<Holder<Level>>() {
                 }
             }
             return@put spawnedItems
-        }
-        map["highlight_blocks"] = { params ->
-            val blockPosArray = params.get<ArrayStruct>(0)
-            val colorHex = params.getString(1)
-            val durationTicks = params.getDoubleOrNull(2)?.toInt() ?: 60
-
-            blockPosArray.map.values.forEach { entry ->
-                val posStruct = entry as? ArrayStruct ?: return@forEach
-                val x = (posStruct.map["0"] as? DoubleValue)?.value ?: return@forEach
-                val y = (posStruct.map["1"] as? DoubleValue)?.value ?: return@forEach
-                val z = (posStruct.map["2"] as? DoubleValue)?.value ?: return@forEach
-
-                BlockHighlightManager.highlight(
-                    BlockPos(x.toInt(), y.toInt(), z.toInt()),
-                    colorHex,
-                    durationTicks
-                )
-            }
-
-            DoubleValue.ZERO
         }
 
         return map
