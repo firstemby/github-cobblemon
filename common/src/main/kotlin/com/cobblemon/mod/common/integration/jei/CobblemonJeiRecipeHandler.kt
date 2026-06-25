@@ -15,6 +15,9 @@ import mezz.jei.api.recipe.RecipeType
 import mezz.jei.api.recipe.transfer.IRecipeTransferError
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler
 import mezz.jei.api.registration.IRecipeTransferRegistration
+import mezz.jei.api.runtime.IRecipesGui
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.inventory.MenuType
@@ -36,7 +39,13 @@ class CobblemonJeiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
         doTransfer: Boolean
     ): IRecipeTransferError? {
         if (doTransfer) {
-            originalHandler.additionalHandle(recipe, container, null)
+            val screen = Minecraft.getInstance().screen
+            val containerScreen = when (screen) {
+                is IRecipesGui -> if (screen.parentScreen.isPresent) screen.parentScreen.get() as? AbstractContainerScreen<E> else null
+                is AbstractContainerScreen<*> -> screen as? AbstractContainerScreen<E>
+                else -> null
+            }
+            originalHandler.additionalHandle(recipe, container, containerScreen)
         }
         return recipeInfoHandler.transferRecipe(container, recipe, recipeSlots, player, maxTransfer, doTransfer)
     }
