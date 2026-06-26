@@ -33,7 +33,6 @@ import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.PokemonAnimationLight
 import com.cobblemon.mod.common.client.render.SnowstormShaderBypassRenderer
 import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
@@ -475,8 +474,6 @@ object CobblemonClient {
         LOGGER.info("Loading assets...")
         // Particles come first because animations need them.
         BedrockParticleOptionsRepository.loadEffects(resourceManager)
-        // Emissive light windows keyed by animation; does nothing unless LambDynamicLights is installed.
-        PokemonAnimationLight.load(resourceManager)
         // Animations come next because models need them.
         BedrockAnimationRepository.loadAnimations(
             resourceManager = resourceManager,
