@@ -38,7 +38,8 @@ class CobblemonJeiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
         maxTransfer: Boolean,
         doTransfer: Boolean
     ): IRecipeTransferError? {
-        if (doTransfer) {
+        val error = recipeInfoHandler.transferRecipe(container, recipe, recipeSlots, player, maxTransfer, doTransfer)
+        if (doTransfer && error == null) {
             val screen = Minecraft.getInstance().screen
             val containerScreen = when (screen) {
                 is IRecipesGui -> if (screen.parentScreen.isPresent) screen.parentScreen.get() as? AbstractContainerScreen<E> else null
@@ -47,6 +48,6 @@ class CobblemonJeiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
             }
             originalHandler.additionalHandle(recipe, container, containerScreen)
         }
-        return recipeInfoHandler.transferRecipe(container, recipe, recipeSlots, player, maxTransfer, doTransfer)
+        return error
     }
 }

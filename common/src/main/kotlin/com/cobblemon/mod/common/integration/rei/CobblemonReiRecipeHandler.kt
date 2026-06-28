@@ -36,12 +36,13 @@ class CobblemonReiRecipeHandler<E: AbstractContainerMenu, R: RecipeViewerRecipe>
     }
 
     override fun handle(context: TransferHandler.Context): TransferHandler.Result {
-        if (context.isActuallyCrafting) {
+        val result = super.handle(context)
+        if (context.isActuallyCrafting && result.isApplicable && result.isSuccessful) {
             val display = context.display as? CobblemonReiDisplay<R>
             display?.let {
                 originalHandler.additionalHandle(display.recipe, context.menu as E, context.containerScreen as AbstractContainerScreen<E>)
             }
         }
-        return super.handle(context)
+        return result
     }
 }
