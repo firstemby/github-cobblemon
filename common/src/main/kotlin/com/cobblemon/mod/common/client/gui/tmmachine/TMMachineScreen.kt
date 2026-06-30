@@ -493,8 +493,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     fun updateSelectedTM(tm: TechnicalMachine?) {
         if (!initScreen) {
             initScreen = true
-            setScreenFromMode(TM_BURN_MODE)
             tm?.let {
+                setScreenFromMode(TM_BURN_MODE)
                 sortType = ElementalTypes.get(tm.type)
                 setMoveList()
             }
