@@ -59,13 +59,15 @@
 - Held item visibility can now be controlled by the held_item_visible command argument.
 
 ### New rideable Pokémon
-- Drampa
-- Archeops
-- Skarmory
 - Crobat
-- Goodra
-- Hisuian Goodra
+- Skarmory
 - Milotic
+- Archeops
+- Goodra 
+- Goodra (Hisuian Form)
+- Drampa
+- Duraludon
+- Archaludon
 
 ### Pokémon Added
 #### Generation 3
@@ -162,6 +164,7 @@
 - Cofagrigus
 - Tyranitar
 - Turtonator
+- Golett
 - Arbok (New Patterns: Angry, Cartoon, Clown, Comedic, Crow, Grin, Ink, Modern, Rain, Scribble, Silence, Sloth, Suspicious, Will)
 
 #### Model changes to the regional bias resource pack:
@@ -171,6 +174,25 @@
 - Changed models for every existing regional bias
 
 ### Animation updates for the following Pokémon
+
+- Kakuna
+- Nidoran♀ (+ New shoulder mount)
+- Nidorina
+- Nidoran♂ (+ New shoulder mount)
+- Sandshrew
+- Diglett
+- Dugtrio
+- Graveler
+- Happiny
+- Chansey
+- Blissey
+- Poliwhirl
+- Poliwrath
+- Zubat
+- Vulpix
+- Drowzee
+- Hypno
+- Noctowl
 - Skarmory
 - Skitty
 - Flygon
@@ -202,8 +224,16 @@
 - Yamask
 - Cofagrigus
 - Luvdisc
+- Staryu
+- Starmie
+- Togetic
+- Rellor
+- Rabsca
+- Yungoos
+- Gumshoos
 
 #### Added sounds to the following moves
+
 - Absorb
 - Aurora Beam
 - Double Team
@@ -232,10 +262,12 @@
 
 ### Fixes
 - Adjusted Croagunk's walkspeed
+- Adjusted Aerodactyl's walkspeed
 - Fixed Blitzle's base scale being `1` rather than the intended `0.8`
 - Fixed Magnezone's emissive layer for the shiny having the wrong name, thus displaying wrongly
 - Fixed Litleo not blinking
 - Fixed Garchomp T-posing when sleeping while out of battle.
+- Fixed Omanyte and Omastar incorrectly using water animations on land.
 - Sharp Beak can now be crafted
 - Metal Alloy can now be crafted
 - Ability Capsules can now be brewed
