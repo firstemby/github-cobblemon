@@ -414,6 +414,7 @@
 - Added `q.item.is_enchanted()`
 - Added `q.item.has_enchantment(minecraft:sharpness, 3)`
 - Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
+- Added `has_tm_move_unlocked`, `unlock_tm_move`, & `lock_tm_move` as available Molang functions for Players
 - Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for Pokémon
 - Added Data Component support for species drops, eg `"components": {"minecraft:custom_model_data": 123}`
 - Added the new `sortOrder` field to mark entries, (defaults to 0 if not specified) which controls the order in which marks are rendered on the HUD, with higher numbers being rendered on top of lower numbers
