@@ -306,7 +306,7 @@ open class FossilMultiblockEntity(
     private fun unlockTmForPlayer(player: ServerPlayer, stack: ItemStack) {
         if (stack.item !is TechnicalMachineItem) return
         val move = TMMoveComponent.getTMMove(stack) ?: return
-        player.tmList().unlockTMFromMove(move)
+        player.tmList().syncTMFromMove(move)
     }
 
     private fun updateMonitorScreen() {

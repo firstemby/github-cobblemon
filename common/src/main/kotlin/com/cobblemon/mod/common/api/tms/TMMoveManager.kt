@@ -52,22 +52,9 @@ class TMMoveManager(
         learn(listOf(tmId))
     }
 
-    /**
-     * Unlocks a TM for the player whilst returning the [TechnicalMachine] object.
-     */
-    fun unlockTMFromMove(moveTemplate: MoveTemplate): TechnicalMachine? {
-        val tm = TechnicalMachines.moveToTM[moveTemplate] ?: return null
-        learn(listOf(tm.id))
-        return tm
-    }
-
-    /**
-     * Locks a TM for the player whilst returning the [TechnicalMachine] object.
-     */
-    fun lockTMFromMove(moveTemplate: MoveTemplate): TechnicalMachine? {
-        val tm = TechnicalMachines.moveToTM[moveTemplate] ?: return null
-        unlearn(listOf(tm.id))
-        return tm
+    fun syncTMLockFromMove(moveTemplate: MoveTemplate) {
+        val tmId = TechnicalMachines.moveToTM[moveTemplate]?.id ?: return
+        unlearn(listOf(tmId))
     }
 
     fun getLearnableTMsFromPokemon(pokemon: Pokemon): Collection<ResourceLocation> {

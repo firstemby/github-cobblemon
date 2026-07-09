@@ -322,13 +322,15 @@ object PlayerMoLangFunctions : AbstractMoLangFunctionHolder<Player>() {
             }
             map["unlock_tm_move"] = put@{ params ->
                 val move = Moves.getByName(params.getString(0)) ?: return@put DoubleValue.ZERO
-                val tm = player.tmList().unlockTMFromMove(move) ?: return@put DoubleValue.ZERO
+                val tm = TechnicalMachines.moveToTM[move] ?: return@put DoubleValue.ZERO
+                player.tmList().syncTMFromMove(move)
                 DoubleValue(if (player.tmList().learnedTMs.contains(tm.id)) 1.0 else 0.0)
             }
             map["lock_tm_move"] = put@{ params ->
                 val move = Moves.getByName(params.getString(0)) ?: return@put DoubleValue.ZERO
-                player.tmList().lockTMFromMove(move) ?: return@put DoubleValue.ZERO
-                DoubleValue.ONE
+                val tm = TechnicalMachines.moveToTM[move] ?: return@put DoubleValue.ZERO
+                player.tmList().syncTMLockFromMove(move)
+                DoubleValue(if (player.tmList().learnedTMs.contains(tm.id)) 0.0 else 1.0)
             }
             map["start_battle"] = put@{ params ->
                 val opponentValue = params.get<MoValue>(0)
