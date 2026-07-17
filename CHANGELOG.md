@@ -404,6 +404,7 @@
 - Removed "SpawnBucket" class in favour of just storing maps of bucket names to weights.
 - Fixed nicknames not being applied to Pokémon spawned from `spawn_pool_world` files.
 - Added support for `profilePokedexScale`, `profilePokedexTranslation`, `profileSummaryScale`, and `profileSummaryTranslation` in poser files for finer control over profile displays.
+- Fixed riding camera offsets defined on Pokémon forms not being applied
 
 ### Molang & Datapacks
 - Added `moveset_builders` datapack folder for different styles of movesets.
