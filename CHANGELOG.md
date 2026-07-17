@@ -347,6 +347,7 @@
 - Fixed Smoked Tail Curry returning a Wooden Bowl when consumed despite it not being included in the recipe
 - Fixed `/giveallpokemon` not respecting the min and max parameters
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
+- Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
 
 ### Fixes
 - Fixed Croagunk's walkspeed
