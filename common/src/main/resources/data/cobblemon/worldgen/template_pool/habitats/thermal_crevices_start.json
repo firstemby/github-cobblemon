@@ -8,7 +8,7 @@
                 "location": "cobblemon:habitats/thermal_crevice1",
                 "element_type": "minecraft:single_pool_element",
                 "override_liquid_settings": "apply_waterlogging",
-                "processors": "cobblemon:habitats/thermal_crevices_start",
+                "processors": "cobblemon:habitats/thermal_crevice_start",
                 "projection": "rigid"
             }
         },
