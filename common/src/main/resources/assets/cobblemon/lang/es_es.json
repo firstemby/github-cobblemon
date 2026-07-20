@@ -9351,11 +9351,11 @@
     "cobblemon.habitat.natural_lightning_rod.name": "Pararrayos natural",
     "cobblemon.habitat.quartz_spikes.name": "Picos de Cuarzo",
     "cobblemon.subtitle.tm.use": "Máquina Técnica usada",
-    "cobblemon.subtitle.block.tm_machine.craft": "Máquina MT imprime MT",
+    "cobblemon.subtitle.block.tm_machine.craft": "Máquina MT termina de imprimir la MT",
     "cobblemon.subtitle.block.tm_machine.off": "Máquina MT desactivada",
     "cobblemon.subtitle.block.tm_machine.on": "Máquina MT activada",
     "cobblemon.subtitle.block.tm_machine.open": "La tapa de la Máquina MT se abre",
-    "cobblemon.subtitle.block.tm_machine.close": "Ma tapa de la Máquina MT se cierra",
+    "cobblemon.subtitle.block.tm_machine.close": "La tapa de la Máquina MT se cierra",
     "cobblemon.subtitle.block.tm_machine.place_disc": "MT en blanco insertada en la Máquina MT",
     "cobblemon.ui.exp.number": "+%1$s §oEXP",
     "cobblemon.config.ui.award_experience_to_fainted_pokemon": "Da Exp. a Pokémon derrotados",
@@ -9511,5 +9511,9 @@
     "advancements.cobblemon.cook_poke_snack": "Un aroma tentador",
     "advancements.cobblemon.cook_poke_snack.description": "Hornea un Poké Señuelo, un delicioso pastel que atrae a ciertos Pokémon según las bayas que uses",
     "advancements.cobblemon.register_all_tms": "Discografía completa",
-    "advancements.cobblemon.plant_tumblestone.description": "Coloca un guijarro cerca de lava o de magma para que crezca a lo largo del tiempo"
+    "advancements.cobblemon.plant_tumblestone.description": "Coloca un guijarro cerca de lava o de magma para que crezca a lo largo del tiempo",
+    "cobblemon.subtitle.block.tm_machine.burn_loop": "Máquina MT imprime MT",
+    "cobblemon.subtitle.block.tm_machine.start": "Maquina MT empieza a imprimir MT",
+    "cobblemon.subtitle.block.tm_machine.tm_insert": "MT en blanco colocada en la Máquina MT",
+    "cobblemon.subtitle.block.tm_machine.tm_retrieve": "MT retirada de la Máquina MT"
 }

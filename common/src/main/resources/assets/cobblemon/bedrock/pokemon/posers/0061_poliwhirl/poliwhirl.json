@@ -5,12 +5,20 @@
   "profileTranslation": [0, 0.5, 0],
   "rootBone": "poliwhirl",
   "animations": {
-    "cry": "q.bedrock_stateful('poliwhirl', 'cry')"
+    "cry": "q.bedrock_stateful('poliwhirl', 'cry')",
+    "recoil": "q.bedrock_stateful('poliwhirl', 'recoil')"
   },
   "poses": {
     "standing": {
+      "isBattle": false,
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": ["q.bedrock('poliwhirl', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('poliwhirl', 'blink')"]
+    },
+    "battle-standing": {
+      "isBattle": true,
+      "poseTypes": ["STAND"],
+      "animations": ["q.bedrock('poliwhirl', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('poliwhirl', 'blink')"]
     },
     "walking": {
@@ -21,8 +29,6 @@
     "float": {
       "poseTypes": ["FLOAT"],
       "animations": [
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.66, 0.6, 'arm_left', 'arm_right')",
         "q.bedrock('poliwhirl', 'water_idle')"
       ],
       "quirks": ["q.bedrock_quirk('poliwhirl', 'blink')"]
@@ -30,8 +36,6 @@
     "swim": {
       "poseTypes": ["SWIM"],
       "animations": [
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.66, 0.6, 'arm_left', 'arm_right')",
         "q.bedrock('poliwhirl', 'water_swim')"
       ],
       "quirks": ["q.bedrock_quirk('poliwhirl', 'blink')"]
@@ -41,7 +45,7 @@
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
-      "animations": ["q.bedrock('poliwhirl', 'sleep')"]
+      "animations": ["q.bedrock('poliwhirl', 'sleep2')"]
     }
   }
 }

@@ -349,11 +349,12 @@ object BattleBuilder {
             npcPartyStores.add(npcParty)
         }
 
-        if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+        val playerAvailablePokemon = playerActor.pokemonList.count { it.health > 0 }
+        if (playerAvailablePokemon < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = playerActor.pokemonList.size
+                hadCount = playerAvailablePokemon
             )
         }
 

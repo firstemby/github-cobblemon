@@ -17,7 +17,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 class HabitatSettingsDTO() {
-    var numberOfPhases = 1
     var phaseOrder = HabitatPhaseOrder.SIMPLE
     lateinit var levelRange: IntRange
     var modifiers: String = ""
@@ -28,7 +27,6 @@ class HabitatSettingsDTO() {
     var naturalSettings: NaturalHabitatSettingsDTO? = null
 
     constructor(habitatBlockEntity: HabitatBlockEntity) : this() {
-        this.numberOfPhases = habitatBlockEntity.numberOfPhases
         this.phaseOrder = habitatBlockEntity.phaseOrder
         this.levelRange = habitatBlockEntity.levelRange
         this.modifiers = habitatBlockEntity.modifiers.asString()
@@ -44,7 +42,6 @@ class HabitatSettingsDTO() {
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeInt(numberOfPhases)
         buffer.writeEnum(phaseOrder)
         buffer.writeInt(levelRange.first)
         buffer.writeInt(levelRange.last)
@@ -60,7 +57,6 @@ class HabitatSettingsDTO() {
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
-        this.numberOfPhases = buffer.readInt()
         this.phaseOrder = buffer.readEnum(HabitatPhaseOrder::class.java)
         val levelRangeStart = buffer.readInt()
         val levelRangeEnd = buffer.readInt()

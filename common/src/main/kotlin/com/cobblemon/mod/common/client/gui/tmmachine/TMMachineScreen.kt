@@ -120,7 +120,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         fun getLogoResource(langCode: String?): ResourceLocation =
             logoResourceMap.entries.find { it.value.contains(langCode?.substringBefore("_")) }?.key ?: logo
     }
-    var selectedTM: TechnicalMachine? = null
+
     var heldStackMove: MoveTemplate? = null
     var tmList: SettableObservable<MutableList<TechnicalMachine>> = SettableObservable(mutableListOf())
     var output: ItemStack? = null
@@ -159,6 +159,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     var oldIngredientItems: Array<Item> = arrayOf(Items.AIR, Items.AIR, Items.AIR)
     var oldResultTmSlotItem: Item = Items.AIR
 
+    var moveInfoTM: TechnicalMachine? = null
+
     override fun init() {
         imageWidth = WIDTH
         imageHeight = HEIGHT
@@ -170,6 +172,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         logoPosX = leftPos + 1
         logoPosY = topPos + 1
         scanPosY = topPos + 1
+
+        menu.onSelectedTMUpdate = { updateSelectedTM(it) }
 
         partySlotList.clear()
         CobblemonClient.storage.party.forEachIndexed { index, pokemon ->
@@ -226,7 +230,14 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             pX = leftPos + 4,
             pY = topPos + 29,
             tmList,
-            setTM = { tm, clicked -> setSelectedTM(tm, clicked) }
+            setTM = { tm, clicked ->
+                if (clicked) {
+                    if (tm != menu.currentlySelectedTM) SetActiveTMPacket(tm).sendToServer()
+                    setScreenFromMode(TM_BURN_MODE)
+                } else {
+                    updateMoveInformation(tm)
+                }
+            }
         )
         if (!children().contains(movesScrollingList)) addRenderableWidget(movesScrollingList)
 
@@ -252,24 +263,21 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         selectedMoveButton = MoveSlotButton(
             leftPos + 6,
             topPos + 6,
-            move = selectedTM?.moveName,
-            pp = selectedTM?.moveName?.pp ?: 0,
+            move = menu.currentlySelectedTM?.moveName,
+            pp = menu.currentlySelectedTM?.moveName?.pp ?: 0,
             ppAsFraction = false
         ) {
             if ((it as MoveSlotButton).enabled) {
                 if (::movesScrollingList.isInitialized && movesScrollingList.children().isEmpty()) setMoveList()
                 playSound(CobblemonSounds.GUI_CLICK)
                 setScreenFromMode(MOVE_SELECT_MODE)
-
-                // Clear active TM
-                CobblemonNetwork.sendToServer(SetActiveTMPacket(null))
             }
         }
         if (!children().contains(selectedMoveButton)) addRenderableWidget(selectedMoveButton)
 
         startButton = StartButton(leftPos + 5F, topPos + 35F) {
             if (!(it as StartButton).disabled) {
-                selectedTM?.let {
+                menu.currentlySelectedTM?.let {
                     val burnActive = menu.containerData?.get(TMMachineBlockEntity.BURN_ACTIVE_INDEX) ?: 0
                     CobblemonNetwork.sendToServer(SetTMMachineContainerDataPacket(
                         TMMachineBlockEntity.BURN_ACTIVE_INDEX,
@@ -284,17 +292,14 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                         ))
                     }*/
 
-                    CobblemonNetwork.sendToServer(SetActiveTMPacket(it))
+                    //CobblemonNetwork.sendToServer(SetActiveTMPacket(it))
                     if (burnActive != 1) playSound(CobblemonSounds.TM_MACHINE_START)
-                    inventory.setChanged()
-                    menu.broadcastChanges()
                 }
             }
         }
         if (!children().contains(startButton)) addRenderableWidget(startButton)
 
         setScreenFromMode(mode)
-        initScreen = false
 
         updateSlotItemMemory()
     }
@@ -306,7 +311,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (scanPosY + 1 >= (topPos + SCREEN_SAVER_HEIGHT) * 2) scanPosY = 0
 
         if (mode == TM_BURN_MODE) {
-            selectedTM?.let { tm ->
+            menu.currentlySelectedTM?.let { tm ->
                 val resultStack = menu.inventory!!.getItem(TMMachineMenu.RESULT_SLOT)
                 val craftedTmStack = ItemStack(CobblemonItems.TECHNICAL_MACHINE)
                     .also { TMMoveComponent.setTMMove(it, tm.moveName) }
@@ -339,7 +344,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 }
 
                 if (::selectedMoveButton.isInitialized) {
-                    selectedMoveButton.enabled = !isBurnActive() && (heldStackMove == null || heldStackMove == selectedTM?.moveName)
+                    selectedMoveButton.enabled = (heldStackMove == null || heldStackMove == menu.currentlySelectedTM?.moveName)
                 }
 
                 if (isBurnActive()) {
@@ -350,9 +355,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     }
                 }
             }
-        } else {
-            // Check if screen should be switched upon opening UI
-            if (!initScreen) loadBurnScreenData()
         }
 
         if (heldMoveItemChanged) {
@@ -400,32 +402,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return wasScreenSaverActive
     }
 
-    private fun loadBurnScreenData() {
-        var tm: TechnicalMachine? = null
-
-        val blockPos = menu.containerData?.let {
-            val x = it.get(TMMachineBlockEntity.POSITION_X_INDEX)
-            val y = it.get(TMMachineBlockEntity.POSITION_Y_INDEX)
-            val z = it.get(TMMachineBlockEntity.POSITION_Z_INDEX)
-            BlockPos(x, y, z)
-        }
-
-        inventory.player.level().getBlockEntity(blockPos)?.let { blockEntity ->
-            if (blockEntity is TMMachineBlockEntity) {
-                Moves.getByName(blockEntity.activeMove)?.let {
-                    tm = TechnicalMachines.moveToTM[it]
-                }
-            }
-        }
-
-        // If burn currently in progress or if active TM set, set to burn screen
-        if (isBurnActive() || tm != null) {
-            setSelectedTM(tm, true)
-        }
-
-        initScreen = true
-    }
-
     private fun isBurnActive(): Boolean = (menu.containerData?.get(TMMachineBlockEntity.BURN_ACTIVE_INDEX) ?: 0) == 1
 
     private fun setScreenFromMode(screen: Int) {
@@ -467,7 +443,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
     private fun toggleTypeSelect(isVisible: Boolean) {
         if (isVisible) {
-            setSelectedTM(null, false)
             if (::moveSearchWidget.isInitialized) moveSearchWidget.value = ""
             if (selectedPokemon != null) selectedPokemon = null
             sortType = null
@@ -505,7 +480,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     }
 
     private fun toggleTMBurn(isVisible: Boolean) {
-        if (!isVisible) setSelectedTM(null, false)
         if (::selectedMoveButton.isInitialized) selectedMoveButton.visible = isVisible
         if (::startButton.isInitialized) startButton.visible = isVisible
     }
@@ -516,35 +490,40 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return if (learnableMoves.contains(move)) TMPartySlotWidget.CAN_LEARN else TMPartySlotWidget.CANNOT_LEARN
     }
 
-    fun setSelectedTM(tm: TechnicalMachine?, clicked: Boolean) {
-        if (selectedTM != tm) {
-            selectedTM = tm
-            updatePartySlotStatus(tm?.moveName)
+    fun updateSelectedTM(tm: TechnicalMachine?) {
+        if (!initScreen) {
+            initScreen = true
+            tm?.let {
+                setScreenFromMode(TM_BURN_MODE)
+                sortType = ElementalTypes.get(tm.type)
+                setMoveList()
+            }
         }
 
-        if (::movesScrollingList.isInitialized) {
-            movesScrollingList.setSlotHighlighted(if (clicked) null else selectedTM?.id)
+        if (mode == TM_BURN_MODE) updateMoveInformation(tm)
+
+        tm?.let {
+            if (::selectedMoveButton.isInitialized) {
+                selectedMoveButton.apply {
+                    move = it.moveName
+                    pp = it.moveName.pp
+                }
+            }
         }
+    }
+
+    fun updateMoveInformation(tm: TechnicalMachine?) {
+        moveInfoTM = tm
 
         if (::moveDescriptionWidget.isInitialized) {
-            val selectedDescription = selectedTM?.moveName?.description?.string
+            val selectedDescription = tm?.moveName?.description?.string
             moveDescriptionWidget.setText(
                 if (selectedDescription != null) listOf(selectedDescription) else emptyList()
             )
         }
 
-        if (clicked) {
-            CobblemonNetwork.sendToServer(SetActiveTMPacket(tm))
-
-            selectedTM?.let {
-                if (::selectedMoveButton.isInitialized) {
-                    selectedMoveButton.apply {
-                        move = it.moveName
-                        pp = it.moveName.pp
-                    }
-                    setScreenFromMode(TM_BURN_MODE)
-                }
-            }
+        if (::movesScrollingList.isInitialized) {
+            movesScrollingList.setSlotHighlighted(tm?.id)
         }
     }
 
@@ -557,7 +536,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     }
 
     fun renderDiscTypeOverlay(poseStack: PoseStack, isDiscRotating: Boolean, alpha: Float = 1F) {
-        selectedTM?.let {
+        menu.currentlySelectedTM?.let {
             val primaryRgb = it.moveName.elementalType.primaryColor.toRGB()
             val secondaryRgb = it.moveName.elementalType.secondaryColor.toRGB()
             blitk(
@@ -706,7 +685,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
     }
 
     fun renderMoveInfo(context: GuiGraphics, mouseX: Int, mouseY: Int) {
-        val moveTemplate = selectedTM?.moveName
+        val moveTemplate = moveInfoTM?.moveName
 
         blitk(
             matrixStack = context.pose(),
@@ -1057,7 +1036,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 movesScrollingList.setDisabled(true, TechnicalMachines.moveToTM[heldStackMove])
                 if (mode == MOVE_SELECT_MODE) {
                     val heldStackTm = TechnicalMachines.moveToTM[heldStackMove]
-                    setSelectedTM(if (tmList.get().contains(heldStackTm)) heldStackTm else null, false)
+                    updateMoveInformation(if (tmList.get().contains(heldStackTm)) heldStackTm else null)
 
                     // Scroll to move if moves list contains held TM move
                     if (tmList.get().contains(heldStackTm)) {
@@ -1077,8 +1056,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             heldStackMove = null
 
             // Reset selected move on move select screen
-            if (mode == MOVE_SELECT_MODE) setSelectedTM(null, false)
-            updatePartySlotStatus(selectedTM?.moveName)
+            if (mode == MOVE_SELECT_MODE) updateMoveInformation(null)
+            updatePartySlotStatus(menu.currentlySelectedTM?.moveName)
 
             if (::movesScrollingList.isInitialized) {
                 movesScrollingList.setDisabled(false)
@@ -1155,7 +1134,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
             if (searchFocused) { return true }
             else {
-                Minecraft.getInstance().setScreen(null)
+                onClose()
                 return true
             }
         }
@@ -1166,7 +1145,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 this.focused = null
                 return true
             } else {
-                Minecraft.getInstance().setScreen(null)
+                onClose()
                 return true
             }
         }

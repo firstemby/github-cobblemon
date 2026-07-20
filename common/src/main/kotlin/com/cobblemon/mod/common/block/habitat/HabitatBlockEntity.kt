@@ -60,9 +60,11 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
 
     var spawningStyle: HabitatSpawningStyle = ActivatedHabitatSpawning(this)
 
-    var numberOfPhases: Int = 1
     var phaseOrder = HabitatPhaseOrder.SIMPLE
     var currentPhase = 1
+
+    val numberOfPhases: Int
+        get() = pool.getPhaseCount()
 
     var levelRange: IntRange = 1..Cobblemon.config.maxPokemonLevel
     var modifiers: PokemonProperties = PokemonProperties()
@@ -139,7 +141,6 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         val activatedSettings = habitatSettingsDTO.activatedSettings
         val naturalSettings = habitatSettingsDTO.naturalSettings
         val isActivated = habitatSettingsDTO.isActivatedSpawning
-        this.numberOfPhases = habitatSettingsDTO.numberOfPhases
         this.phaseOrder = habitatSettingsDTO.phaseOrder
         this.levelRange = habitatSettingsDTO.levelRange
         this.modifiers = PokemonProperties.parse(habitatSettingsDTO.modifiers)
@@ -169,7 +170,6 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
-        tag.putInt(DataKeys.HABITAT_PHASE_COUNT, numberOfPhases)
         tag.putString(DataKeys.HABITAT_PHASE_ORDER, phaseOrder.toString())
         // Only save the level range when it's a non-trivial one
         if (levelRange.first != 1 || levelRange.last != Cobblemon.config.maxPokemonLevel) {
@@ -201,7 +201,6 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
             return // Client doesn't need to try loading the rest
         }
 
-        numberOfPhases = tag.getInt(DataKeys.HABITAT_PHASE_COUNT)
         phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER))
         levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
         modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()

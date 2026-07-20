@@ -46,9 +46,29 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.7,
+    "height": 2.2,
     "fixed": false
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "5-20",
+          "JUMP": "5-15",
+          "SKILL": "5-25",
+          "SPEED": "25-60",
+          "STAMINA": "40-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "drops": {
     "amount": 1,
@@ -192,6 +212,9 @@
   ],
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.15
+      },
       "swim": {
         "avoidsWater": true
       }
