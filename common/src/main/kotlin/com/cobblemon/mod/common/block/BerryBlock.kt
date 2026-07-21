@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.block
 
 //import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
-import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.berry.Berry
@@ -40,7 +39,11 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.BonemealableBlock
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -128,7 +131,10 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         val newAge = curAge + 1
         if (newAge > FRUIT_AGE) return
         val newState = state.setValue(AGE, newAge)
-        val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
+        val treeEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: run {
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
+            return
+        }
         if (curAge == MATURE_AGE) {
             treeEntity.generateGrowthPoints(world, newState, pos, null)
             determineMutation(world, random, pos, newState)

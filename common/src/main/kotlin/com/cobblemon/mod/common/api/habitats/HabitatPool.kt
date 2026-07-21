@@ -69,7 +69,7 @@ class HabitatPool {
                 pool.spawns = spawns
                 return pool
             } else {
-                return HabitatPools.habitatPoolsById[poolId] ?: HabitatPool.default()
+                return HabitatPools.habitatPoolsById[poolId] ?: default()
             }
         }
     }
@@ -92,6 +92,14 @@ class HabitatPool {
 
     fun createSpawnDetails(habitatBlockEntity: HabitatBlockEntity): List<PokemonSpawnDetail> {
         return spawns.mapNotNull { it.createSpawnDetail(habitatBlockEntity) }
+    }
+
+    fun getPhaseCount(): Int {
+        return spawns
+            .flatMap { it.phases?.ranges?.flatten() ?: emptySet() }
+            .toSet()
+            .count()
+            .coerceAtLeast(1)
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {

@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.ProfileTransformType
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
@@ -348,7 +349,8 @@ class PokemonInfoWidget(val parent: PokedexGUI, val pX: Int, val pY: Int, val up
                     partialTicks = delta,
                     rotation = Quaternionf().fromEulerXYZDegrees(rotationVector),
                     state = state,
-                    blockLight = 15
+                    blockLight = 15,
+                    profileTransformType = ProfileTransformType.POKEDEX,
                 )
 
                 matrices.popPose()

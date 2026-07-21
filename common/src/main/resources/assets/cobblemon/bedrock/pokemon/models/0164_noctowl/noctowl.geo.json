@@ -6,7 +6,7 @@
 				"identifier": "geometry.noctowl",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 6,
+				"visible_bounds_width": 7,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -361,11 +361,19 @@
 					"parent": "wing_open_left2",
 					"pivot": [19, 23.5, 0],
 					"cubes": [
-						{"origin": [19, 10.5, 0], "size": [14, 14, 0], "inflate": 0.02, "uv": [0, 63]},
+						{"origin": [19, 11.5, 0], "size": [7, 13, 0], "inflate": 0.02, "uv": [16, 101]},
 						{"origin": [17, 10.5, 0], "size": [2, 14, 0], "inflate": 0.02, "uv": [56, 92]},
 						{"origin": [19, 17.5, -0.5], "size": [6, 7, 1], "inflate": 0.02, "uv": [84, 25]},
 						{"origin": [19, 17.5, -0.5], "size": [6, 0, 1], "inflate": 0.02, "pivot": [22, 17.5, 0], "rotation": [0.5, 0, 0], "uv": [60, 23]},
 						{"origin": [25, 17.5, -0.5], "size": [0, 7, 1], "inflate": 0.02, "pivot": [25, 21, 0], "rotation": [0, -0.5, 0], "uv": [54, 79]}
+					]
+				},
+				{
+					"name": "wing_open_left4",
+					"parent": "wing_open_left3",
+					"pivot": [25, 23.5, 0],
+					"cubes": [
+						{"origin": [25, 14.5, 0], "size": [8, 9, 0], "inflate": 0.02, "uv": [18, 115]}
 					]
 				},
 				{
@@ -402,11 +410,19 @@
 					"parent": "wing_open_right2",
 					"pivot": [-19, 23.5, 0],
 					"cubes": [
-						{"origin": [-33, 10.5, 0], "size": [14, 14, 0], "inflate": 0.02, "uv": [28, 65]},
+						{"origin": [-26, 11.5, 0], "size": [7, 13, 0], "inflate": 0.02, "uv": [1, 101]},
 						{"origin": [-19, 10.5, 0], "size": [2, 14, 0], "inflate": 0.02, "uv": [68, 92]},
 						{"origin": [-25, 17.5, -0.5], "size": [6, 7, 1], "inflate": 0.02, "uv": [88, 73]},
 						{"origin": [-25, 17.5, -0.5], "size": [6, 0, 1], "inflate": 0.02, "pivot": [-22, 17.5, 0], "rotation": [0.5, 0, 0], "uv": [60, 24]},
 						{"origin": [-25, 17.5, -0.5], "size": [0, 7, 1], "inflate": 0.02, "pivot": [-25, 21, 0], "rotation": [0, 0.5, 0], "uv": [96, 3]}
+					]
+				},
+				{
+					"name": "wing_open_right4",
+					"parent": "wing_open_right3",
+					"pivot": [-25, 23.5, 0],
+					"cubes": [
+						{"origin": [-33, 14.5, 0], "size": [8, 9, 0], "inflate": 0.02, "uv": [1, 115]}
 					]
 				},
 				{

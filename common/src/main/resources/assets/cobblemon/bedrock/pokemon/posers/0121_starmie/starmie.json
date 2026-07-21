@@ -5,7 +5,10 @@
   "profileTranslation": [0, 0.72, 0],
   "rootBone": "starmie",
   "animations": {
-    "cry": "q.bedrock_stateful('starmie', 'cry')"
+    "cry": "q.bedrock_stateful('starmie', 'cry')",
+    "faint": "q.bedrock_primary('starmie', 'faint', q.curve('one'))",
+    "special": "q.bedrock_primary('starmie', 'special', q.curve('symmetrical'))",
+    "recoil": "q.bedrock_stateful('starmie', 'recoil')"
   },
   "poses": {
     "battle_standing": {
@@ -64,18 +67,6 @@
         "q.bedrock('starmie', 'sleep')"
       ]
     },
-    "surface_idle": {
-      "poseTypes": [
-        "STAND",
-        "FLOAT"
-      ],
-      "isTouchingWater": true,
-      "isUnderWater": false,
-      "animations": [
-        "q.look('body')",
-        "q.bedrock('starmie', 'surfacewater_idle')"
-      ]
-    },
     "surface_swim": {
       "poseTypes": [
         "WALK",
@@ -89,9 +80,13 @@
     },
     "float": {
       "poseTypes": [
+        "STAND",
         "FLOAT"
       ],
-      "isUnderWater": true,
+      "isTouchingWater": true,
+      "namedAnimations": {
+        "special": "q.bedrock_primary('starmie', 'water_special', q.curve('symmetrical_wide'))"
+      },
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('body')",

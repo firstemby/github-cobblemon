@@ -275,7 +275,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga1",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1
@@ -285,7 +285,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga2",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1
@@ -295,7 +295,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga3",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1
@@ -305,7 +305,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga4",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1
@@ -315,7 +315,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga5",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1
@@ -325,7 +325,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_taiga6",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_taiga",
         "projection": "rigid"
       },
       "weight": 1

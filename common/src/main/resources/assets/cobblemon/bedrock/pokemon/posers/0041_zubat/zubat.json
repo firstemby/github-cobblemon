@@ -5,7 +5,8 @@
   "profileTranslation": [0,0.7,0],
   "rootBone": "zubat",
   "animations": {
-    "cry": "q.bedrock_stateful('zubat', 'cry')"
+    "cry": "q.bedrock_stateful('zubat', 'cry')",
+    "physical": "q.bedrock_primary('zubat', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "standing": {

@@ -495,6 +495,14 @@
 					}
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "tail",
+					"pivot": [0, 16, 12],
+					"locators": {
+						"seat_1": [0, 16, 12]
+					}
+				},
+				{
 					"name": "legs",
 					"parent": "body",
 					"pivot": [0, 11, 0]

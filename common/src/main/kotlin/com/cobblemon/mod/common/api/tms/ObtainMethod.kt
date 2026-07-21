@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.tms
 
 import com.cobblemon.mod.common.tms.obtain.DefaultObtainMethod
+import com.cobblemon.mod.common.tms.obtain.ImpossibleObtainMethod
 import com.cobblemon.mod.common.tms.obtain.PlayerHasAdvancementObtainMethod
 import com.cobblemon.mod.common.tms.obtain.PlayerYObtainMethod
 import com.cobblemon.mod.common.tms.obtain.UnlockableObtainMethod
@@ -36,6 +37,7 @@ interface ObtainMethod {
             val variant = buffer.readUtf()
             return when (variant) {
                 "cobblemon:unlockable" -> UnlockableObtainMethod()
+                "cobblemon:impossible" -> ImpossibleObtainMethod()
                 "cobblemon:default" -> DefaultObtainMethod()
                 "cobblemon:advancement" -> {
                     val advancement = buffer.readResourceLocation()

@@ -24,11 +24,8 @@
     },
     "walking": {
       "poseTypes": ["WALK"],
-      "isBattle": false,
       "animations": [
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.66, 0.6, 'arm_left1', 'arm_right1')",
-        "q.bedrock('poliwrath', 'ground_idle')"
+        "q.bedrock('poliwrath', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('poliwrath', 'blink')"]
     },

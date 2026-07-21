@@ -17,6 +17,8 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.dialogue.PlayerDialogueFaceProvider
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
@@ -44,6 +46,7 @@ import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.pc
 import com.cobblemon.mod.common.util.pokedex
 import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.tmList
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -311,6 +314,23 @@ object PlayerMoLangFunctions : AbstractMoLangFunctionHolder<Player>() {
                     }
                 }
                 return@put DoubleValue.ZERO
+            }
+            map["has_tm_move_unlocked"] = put@{ params ->
+                val move = Moves.getByName(params.getString(0)) ?: return@put DoubleValue.ZERO
+                val tm = TechnicalMachines.moveToTM[move] ?: return@put DoubleValue.ZERO
+                DoubleValue(if (player.tmList().learnedTMs.contains(tm.id)) 1.0 else 0.0)
+            }
+            map["unlock_tm_move"] = put@{ params ->
+                val move = Moves.getByName(params.getString(0)) ?: return@put DoubleValue.ZERO
+                val tm = TechnicalMachines.moveToTM[move] ?: return@put DoubleValue.ZERO
+                player.tmList().syncTMFromMove(move)
+                DoubleValue(if (player.tmList().learnedTMs.contains(tm.id)) 1.0 else 0.0)
+            }
+            map["lock_tm_move"] = put@{ params ->
+                val move = Moves.getByName(params.getString(0)) ?: return@put DoubleValue.ZERO
+                val tm = TechnicalMachines.moveToTM[move] ?: return@put DoubleValue.ZERO
+                player.tmList().syncTMLockFromMove(move)
+                DoubleValue(if (player.tmList().learnedTMs.contains(tm.id)) 0.0 else 1.0)
             }
             map["start_battle"] = put@{ params ->
                 val opponentValue = params.get<MoValue>(0)

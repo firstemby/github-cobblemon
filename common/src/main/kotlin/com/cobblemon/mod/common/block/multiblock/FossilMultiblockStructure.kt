@@ -630,7 +630,8 @@ class FossilMultiblockStructure (
         result.putInt(DataKeys.ORGANIC_MATERIAL, organicMaterialInside)
         val fossilInv = ListTag()
 
-        fossilInventory.forEach { fossilInv.add(ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, it).orThrow) }
+        val ops = registryLookup.createSerializationContext(NbtOps.INSTANCE)
+        fossilInventory.forEach { fossilInv.add(ItemStack.CODEC.encodeStart(ops, it).getOrThrow()) }
         result.put(DataKeys.FOSSIL_INVENTORY, fossilInv)
         result.putString(DataKeys.CONNECTOR_DIRECTION, tankConnectorDirection?.toString())
 
@@ -669,7 +670,10 @@ class FossilMultiblockStructure (
 
             val fossilInv = if (nbt.contains(DataKeys.FOSSIL_INVENTORY)) { (nbt.get(DataKeys.FOSSIL_INVENTORY) as ListTag) } else ListTag()
             val actualFossilList = mutableListOf<ItemStack>()
-            fossilInv.forEach { ItemStack.parse(registryLookup, it).ifPresent(actualFossilList::add) }
+
+            val ops = registryLookup.createSerializationContext(NbtOps.INSTANCE)
+            fossilInv.forEach { ItemStack.CODEC.parse(ops, it).result().ifPresent(actualFossilList::add) }
+
             result.fossilInventory = actualFossilList
             result.tankConnectorDirection = Direction.byName(nbt.getString(DataKeys.CONNECTOR_DIRECTION))
 
