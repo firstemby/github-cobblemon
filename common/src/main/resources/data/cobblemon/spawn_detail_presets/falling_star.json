@@ -1,0 +1,9 @@
+{
+  "condition": {
+    "canSeeSky": true,
+	"neededNearbyBlocks": [
+	  "#cobblemon:evolution_stone_blocks",
+      "#cobblemon:evolution_stone_ores"
+    ]
+  }
+}

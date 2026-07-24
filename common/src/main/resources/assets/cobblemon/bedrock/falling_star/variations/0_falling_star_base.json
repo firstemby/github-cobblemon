@@ -1,0 +1,13 @@
+{
+  "name": "cobblemon:falling_star",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:falling_star",
+      "model": "cobblemon:falling_star.geo",
+      "texture": "cobblemon:textures/falling_star/falling_star.png",
+      "layers": []
+    }
+  ]
+}

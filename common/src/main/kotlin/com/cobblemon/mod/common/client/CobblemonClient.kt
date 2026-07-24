@@ -52,6 +52,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.repository.Varyi
 import com.cobblemon.mod.common.client.render.npc.NPCRenderer
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallRenderer
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer
+import com.cobblemon.mod.common.client.render.fallingstar.FallingStarRenderer
 import com.cobblemon.mod.common.client.requests.ClientPlayerActionRequests
 import com.cobblemon.mod.common.client.sound.BattleMusicController
 import com.cobblemon.mod.common.client.sound.EntitySoundTracker
@@ -456,6 +457,8 @@ object CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.POKE_BOBBER) { ctx -> PokeBobberEntityRenderer(ctx) }
         LOGGER.info("Registering NPC renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.NPC, ::NPCRenderer)
+        LOGGER.info("Registering Falling Star renderer")
+        this.implementation.registerEntityRenderer(CobblemonEntities.FALLING_STAR, ::FallingStarRenderer)
     }
 
     private fun registerItemColors() {

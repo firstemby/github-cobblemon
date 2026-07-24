@@ -113,6 +113,7 @@ import com.cobblemon.mod.common.net.messages.client.settings.OpenCobblemonConfig
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnGenericBedrockPacket
+import com.cobblemon.mod.common.net.messages.client.spawn.SpawnFallingStarPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnNPCPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokeballPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
@@ -459,6 +460,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SpawnPokemonPacket.ID, SpawnPokemonPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnPokeballPacket.ID, SpawnPokeballPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnGenericBedrockPacket.ID, SpawnGenericBedrockPacket::decode, SpawnExtraDataEntityHandler()))
+        list.add(PacketRegisterInfo(SpawnFallingStarPacket.ID, SpawnFallingStarPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnNPCPacket.ID, SpawnNPCPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(ToastPacket.ID, ToastPacket::decode, ToastPacketHandler))
 

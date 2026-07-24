@@ -1,0 +1,40 @@
+{
+    "enabled": true,
+    "neededInstalledMods": [],
+    "neededUninstalledMods": [],
+    "spawns": [
+        {
+            "id": "falling-star-1",
+            "presets": [
+                "falling_star"
+            ],
+            "type": "falling_star",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "resultType": "MINIOR",
+            "weight": 100.0
+        },
+        {
+            "id": "falling-star-1",
+            "presets": [
+                "falling_star"
+            ],
+            "type": "falling_star",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "resultType": "ITEM",
+            "weight": 700.0
+        },
+        {
+            "id": "falling-star-1",
+            "presets": [
+                "falling_star"
+            ],
+            "type": "falling_star",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "resultType": "POKEMON",
+            "weight": 100.0
+        }
+    ]
+}

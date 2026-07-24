@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.entity.projectile.FallingStarEntity
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.Registry
@@ -93,6 +94,15 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
     val NPC: EntityType<NPCEntity> = create(
         NPC_KEY.path,
         EntityType.Builder.of({ _, world -> NPCEntity(world) }, MobCategory.CREATURE).build("$NPC_KEY")
+    )
+
+    @JvmField
+    val FALLING_STAR_KEY = cobblemonResource("falling_star")
+    @JvmField
+    val FALLING_STAR: EntityType<FallingStarEntity> = create(
+        FALLING_STAR_KEY.path,
+        EntityType.Builder.of(::FallingStarEntity, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(8)
+            .build(FALLING_STAR_KEY.toString())
     )
 
     fun registerAttributes(consumer: (EntityType<out LivingEntity>, AttributeSupplier.Builder) -> Unit) {

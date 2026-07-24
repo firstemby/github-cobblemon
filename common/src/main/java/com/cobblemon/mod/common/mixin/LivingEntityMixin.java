@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffectRegistry;
@@ -18,7 +17,6 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.SubmarineBehav
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate;
 import com.cobblemon.mod.common.client.render.MatrixWrapper;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.server.level.ServerPlayer;

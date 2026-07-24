@@ -85,6 +85,7 @@ object VaryingModelRepository {
         "poke_balls",
         "generic",
         "block_entities",
+        "falling_star"
     )
 
     val poserDirectories: List<Pair<String, Class<out PosableModel>>> = listOf(
@@ -95,6 +96,7 @@ object VaryingModelRepository {
         "bedrock/npcs/posers" to PosableModel::class.java,
         "bedrock/poke_balls/posers" to PosableModel::class.java,
         "bedrock/generic/posers" to PosableModel::class.java,
+        "bedrock/falling_star/posers" to PosableModel::class.java,
     )
 
     val variationDirectories: List<String> = listOf(

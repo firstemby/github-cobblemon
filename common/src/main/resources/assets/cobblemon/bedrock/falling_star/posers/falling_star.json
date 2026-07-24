@@ -1,0 +1,10 @@
+{
+  "poses": {
+    "normal": {
+      "poseName": "normal",
+      "transformTicks": 0,
+      "poseTypes": ["NONE"],
+      "animations": ["q.bedrock('falling_star', 'idle')"]
+    }
+  }
+}

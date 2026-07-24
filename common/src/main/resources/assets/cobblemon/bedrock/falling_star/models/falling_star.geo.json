@@ -1,0 +1,25 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.falling_star",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "falling_star",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-6, 2.6, -6], "size": [12, 12, 12], "uv": [8, 4]},
+						{"origin": [-6, 2.6, -6], "size": [12, 12, 12], "pivot": [0, 8.6, 0], "rotation": [-45, 45, 0], "uv": [8, 4]}
+					]
+				}
+			]
+		}
+	]
+}
