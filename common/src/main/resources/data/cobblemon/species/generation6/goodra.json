@@ -44,14 +44,49 @@
   "catchRate": 45,
   "eggCycles": 40,
   "baseFriendship": 35,
-  "features": [
-    "hisuian"
-  ],
   "baseScale": 0.9,
   "hitbox": {
-    "width": 1.8,
     "height": 3.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "60-70",
+          "JUMP": "45-60",
+          "SKILL": "20-35",
+          "SPEED": "20-35",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.19
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
     "amount": 5,
@@ -198,44 +233,6 @@
     "legacy:swagger"
   ],
   "preEvolution": "sliggoo",
-  "riding": {
-    "behaviours": {
-      "LAND": {
-        "key": "cobblemon:land/horse",
-        "rideSounds": [],
-        "stats": {
-          "ACCELERATION": "40-75",
-          "JUMP": "40-60",
-          "SKILL": "10-40",
-          "SPEED": "30-55",
-          "STAMINA": "45-85"
-        }
-      }
-    },
-    "seats": [
-      {
-        "locator": "seat_1"
-      }
-    ]
-  },
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.19
-      }
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4",
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
-    }
-  },
   "evolutions": [],
   "forms": [
     {
@@ -245,26 +242,6 @@
       "maleRatio": 0.5,
       "height": 17,
       "weight": 3341,
-      "riding": {
-        "behaviours": {
-          "LAND": {
-            "key": "cobblemon:land/horse",
-            "rideSounds": [],
-            "stats": {
-              "ACCELERATION": "40-75",
-              "JUMP": "40-60",
-              "SKILL": "10-40",
-              "SPEED": "30-55",
-              "STAMINA": "45-85"
-            }
-          }
-        },
-        "seats": [
-          {
-            "locator": "seat_1"
-          }
-        ]
-      },
       "pokedex": [
         "cobblemon.species.goodra-hisui.desc"
       ],
@@ -291,9 +268,47 @@
       },
       "baseScale": 1,
       "hitbox": {
-        "width": 2.5,
         "height": 3.6,
-        "fixed": false
+        "fixed": false,
+        "width": 2.5
+      },
+      "riding": {
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "rideSounds": [],
+            "stats": {
+              "ACCELERATION": "50-60",
+              "JUMP": "20-35",
+              "SKILL": "10-25",
+              "SPEED": "10-25",
+              "STAMINA": "70-100"
+            }
+          }
+        },
+        "seats": [
+          {
+            "locator": "seat_1"
+          }
+        ]
+      },
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "moving": {
+          "walk": {
+            "walkSpeed": 0.19
+          }
+        },
+        "resting": {
+          "canSleep": true,
+          "drowsyChance": 0.0333,
+          "light": "0-4",
+          "rouseChance": 0.0042
+        }
       },
       "drops": {
         "amount": 8,
@@ -428,25 +443,10 @@
       ],
       "preEvolution": "sliggoo hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "moving": {
-          "walk": {
-            "walkSpeed": 0.19
-          }
-        },
-        "combat": {
-          "willDefendSelf": true,
-          "willDefendOwner": true,
-          "willFlee": false
-        },
-        "resting": {
-          "canSleep": true,
-          "light": "0-4",
-          "drowsyChance": 0.0333,
-          "rouseChance": 0.0042
-        }
-      }
+      "battleOnly": false
     }
+  ],
+  "features": [
+    "hisuian"
   ]
 }

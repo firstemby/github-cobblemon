@@ -165,7 +165,9 @@
 - Tyranitar
 - Turtonator
 - Golett
+- Corsola
 - Arbok (New Patterns: Angry, Cartoon, Clown, Comedic, Crow, Grin, Ink, Modern, Rain, Scribble, Silence, Sloth, Suspicious, Will)
+- ... and Substitute
 
 #### Model changes to the regional bias resource pack:
 
@@ -176,6 +178,7 @@
 ### Animation updates for the following Pokémon
 
 - Kakuna
+- Grimer
 - Nidoran♀ (+ New shoulder mount)
 - Nidorina
 - Nidoran♂ (+ New shoulder mount)
@@ -231,6 +234,9 @@
 - Rabsca
 - Yungoos
 - Gumshoos
+- Cottonee
+- Whimsicott
+- Corsola
 
 #### Added sounds to the following moves
 
