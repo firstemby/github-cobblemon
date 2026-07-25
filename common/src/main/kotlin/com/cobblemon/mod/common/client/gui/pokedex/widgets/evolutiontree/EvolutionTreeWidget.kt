@@ -28,7 +28,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SL
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
-import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeEvolutionVisitor.RenderEvolutionData
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
@@ -80,8 +79,6 @@ class EvolutionTreeWidget(
 
         private var previousRootPokedexEntry: PokedexEntry? = null
         private var previousRootPokedexForm: PokedexForm? = null
-
-        private val evolutionVisitor = EvolutionTreeEvolutionVisitor()
     }
 
     private var rootTreeDrawingNode: TreeDrawingNode<EvolutionNode>? = null
@@ -202,7 +199,7 @@ class EvolutionTreeWidget(
         val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects)
 
         val evolutions = form?.evolutions ?: species.evolutions
-        val drawData = evolution?.let { evolutionVisitor.visit(evolution) }
+        val drawData = evolution?.let { renderEvolutionData(evolution) }
 
         // TODO: figure out if this works for fakemon
         val children = evolutions.mapNotNull { evolution ->
