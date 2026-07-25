@@ -26,7 +26,6 @@ import net.minecraft.world.item.Items
 data class RenderRequirementData(
     val icon: Item,
     val tooltip: MutableComponent,
-    val label: MutableComponent? = null,
 )
 
 fun renderRequirementData(requirement: Requirement): RenderRequirementData? {
@@ -127,9 +126,8 @@ fun renderFriendshipRequirement(friendshipRequirement: FriendshipRequirement): R
     val icon = CobblemonItems.SOOTHE_BELL
     val friendshipAmountComponent = Component.literal(friendshipRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.friendship.tooltip", friendshipAmountComponent)
-    val label = lang("ui.pokedex.requirement.friendship.label")
 
-    return RenderRequirementData(icon, tooltip, label)
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderHeldItemRequirement(heldItemRequirement: HeldItemRequirement): RenderRequirementData? {
@@ -150,9 +148,7 @@ fun renderLevelRequirement(levelRequirement: LevelRequirement): RenderRequiremen
         else
             lang("ui.pokedex.requirement.level.tooltip.between", Component.literal(minLevel.toString()).green(), Component.literal(maxLevel.toString()).green())
 
-    val label = lang("ui.pokedex.requirement.level.label", minLevel)
-
-    return RenderRequirementData(icon, tooltip, label)
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderMoonPhaseRequirement(moonPhaseRequirement: MoonPhaseRequirement): RenderRequirementData? {
@@ -195,9 +191,8 @@ fun renderMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): RenderR
     }
 
     val tooltip = lang("ui.pokedex.requirement.has_move_type.tooltip", moveTypeRequirement.type.displayName.green())
-    val label = lang("ui.pokedex.requirement.has_move_type.label")
 
-    return RenderRequirementData(icon, tooltip, label)
+    return RenderRequirementData(icon, tooltip)
 }
 
 // TODO test

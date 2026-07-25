@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
-import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.DummyEvolution
@@ -28,7 +27,6 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 
 data class RenderEvolutionData(
-    val label: MutableComponent,
     val icons: List<Item>,
     val tooltips: List<MutableComponent>,
 )
@@ -71,7 +69,6 @@ fun renderDummyEvolution(evolution: Evolution): RenderEvolutionData? {
 }
 
 fun renderItemInteractionEvolution(itemInteractionEvolution: ItemInteractionEvolution): RenderEvolutionData? {
-    val label = lang("ui.pokedex.evolution.item_interact.label").bold()
     val item = itemInteractionEvolution.requiredContext.items.get().first().value()
     val icons = mutableListOf(item)
     val tooltips =
@@ -86,7 +83,7 @@ fun renderItemInteractionEvolution(itemInteractionEvolution: ItemInteractionEvol
         tooltips.add(requirement.tooltip)
     }
 
-    return RenderEvolutionData(label, icons, tooltips)
+    return RenderEvolutionData(icons, tooltips)
 }
 
 fun renderLevelUpEvolution(levelUpEvolution: LevelUpEvolution): RenderEvolutionData? {
@@ -94,15 +91,13 @@ fun renderLevelUpEvolution(levelUpEvolution: LevelUpEvolution): RenderEvolutionD
         resolveRequirementData(requirement)
     }
 
-    val label = requirementsDataList.firstNotNullOfOrNull { requirement -> requirement?.label }
     val icons = requirementsDataList.mapNotNull { requirementData -> requirementData?.icon }
     val tooltips = requirementsDataList.mapNotNull { requirementData -> requirementData?.tooltip }
 
-    return RenderEvolutionData(label ?: Component.literal(""), icons, tooltips)
+    return RenderEvolutionData(icons, tooltips)
 }
 
 fun renderTradeEvolution(tradeEvolution: TradeEvolution): RenderEvolutionData? {
-    val label = lang("ui.pokedex.evolution.trade.label")
     val icons = mutableListOf<Item>(CobblemonItems.LINK_CABLE)
     val tooltips = mutableListOf<MutableComponent>()
 
@@ -124,5 +119,5 @@ fun renderTradeEvolution(tradeEvolution: TradeEvolution): RenderEvolutionData? {
         tooltips.add(requirement.tooltip)
     }
 
-    return RenderEvolutionData(label, icons, tooltips)
+    return RenderEvolutionData(icons, tooltips)
 }
