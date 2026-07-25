@@ -400,6 +400,7 @@
 - Fixed a crash involving berry trees that have been world edited.
 - Fixed visual desync in multiplayer for players mounting Pokémon outside other players' loaded chunks 
 - Fixed Pokémon entities leveled by rare candy not getting stronger as Minecraft entities unless recalled.
+- Fixed a freeze during game load that occurred when multiple mods tried to load Cobblemon API classes at the same time.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
