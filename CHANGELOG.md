@@ -346,6 +346,7 @@
 - Fixed Panpour consuming its held item when evolving with a Water Stone
 - Fixed Smoked Tail Curry returning a Wooden Bowl when consumed despite it not being included in the recipe
 - Fixed `/giveallpokemon` not respecting the min and max parameters
+- Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 
 ### Fixes
 - Fixed Croagunk's walkspeed
