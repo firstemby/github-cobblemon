@@ -123,6 +123,27 @@ object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity>(
                 duration.toLong()
             )
         }
+        map["knockback"] = { params ->
+            // TODO: This is garbage
+//                val x = params.getDouble(0)
+//                val y = params.getDouble(1)
+//                val z = params.getDouble(2)
+            entity.knockback(3.0, 1.0, 1.0)
+            val currentVelocity = entity.deltaMovement
+            entity.deltaMovement = Vec3(
+                currentVelocity.x + 1,
+                currentVelocity.y + 30,
+                currentVelocity.z + 1
+            )
+
+            // Ensures velocity update is processed and synced
+            entity.hasImpulse = true
+            entity.hurtMarked = true
+        }
+        map["ignite_for_ticks"] = { params ->
+            val ticks = params.getInt(0)
+            entity.igniteForTicks(ticks)
+        }
         map["get_wander_control_memory"] = put@{
             val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                 ?: CobblemonWanderControl()

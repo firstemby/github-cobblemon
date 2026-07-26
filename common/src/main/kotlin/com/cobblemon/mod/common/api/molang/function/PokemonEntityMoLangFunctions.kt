@@ -37,6 +37,7 @@ object PokemonEntityMoLangFunctions : AbstractMoLangFunctionHolder<PokemonEntity
         map["in_battle"] = { DoubleValue(pokemonEntity.isBattling) }
         map["is_moving"] = { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
         map["is_flying"] = { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
+        map["is_dancing"] = { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.DANCING)) }
         map["get_riding_state"] = { params ->
             val name = params.getStringOrNull(0)
             pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->

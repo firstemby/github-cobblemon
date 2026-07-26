@@ -92,6 +92,7 @@ object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
             "is_on_fire" to { _ -> DoubleValue(thisEntity.isOnFire) },
             "is_invisible" to { _ -> DoubleValue(thisEntity.isInvisible) },
             "is_riding" to { _ -> DoubleValue(thisEntity.isPassenger) },
+            "light_level" to { _ -> DoubleValue(thisEntity.level().getMaxLocalRawBrightness(thisEntity.blockPosition())) },
             "set_name" to { params ->
                 val name = params.getString(0)
                 thisEntity.customName = name.text()
