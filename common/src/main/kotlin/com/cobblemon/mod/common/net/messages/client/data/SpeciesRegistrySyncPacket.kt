@@ -45,6 +45,8 @@ class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySync
 
     override fun synchronizeDecoded(entries: Collection<Species>) {
         PokemonSpecies.reload(entries.associateBy { it.resourceIdentifier })
+        // Must run after reload, since initialize() resolves preEvolution/evolutions by species identifier
+        entries.forEach(Species::initialize)
     }
 
     companion object {

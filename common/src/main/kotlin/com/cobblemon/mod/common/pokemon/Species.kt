@@ -43,6 +43,9 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.collections.LazySet
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -256,6 +259,8 @@ class Species : ShowdownIdentifiable {
         }
 
         this.riding.encode(buffer)
+        buffer.writeCollection(this.evolutions) { pb, evolution -> pb.writeString(PokemonSpecies.gson.toJson(evolution, Evolution::class.java)) }
+        buffer.writeNullable(this.preEvolution) { pb, preEvolution -> pb.writeString(PokemonSpecies.gson.toJson(preEvolution, PreEvolution::class.java)) }
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -299,7 +304,12 @@ class Species : ShowdownIdentifiable {
             }
         }
         this.riding = RidingProperties.decode(buffer)
-        this.initialize()
+
+        // LazySet defers parsing until accessed, since other species may not be registered yet at this point
+        val evolutionsJson = JsonArray()
+        buffer.readList { _ -> buffer.readString() }.forEach { evolutionsJson.add(JsonParser.parseString(it)) }
+        this.evolutions = LazySet(Evolution::class, evolutionsJson)
+        this.preEvolution = buffer.readNullable { _ -> PokemonSpecies.gson.fromJson(buffer.readString(), PreEvolution::class.java) }
     }
 
     /**

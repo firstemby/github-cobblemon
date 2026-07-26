@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
@@ -201,19 +202,27 @@ class EvolutionTreeWidget(
         val evolutions = form?.evolutions ?: species.evolutions
         val drawData = evolution?.let { renderEvolutionData(evolution) }
 
-        // TODO: figure out if this works for fakemon
         val children = evolutions.mapNotNull { evolution ->
-            val speciesId = cobblemonResource(evolution.result.species!!)
-            val childPokedexEntry =
-                Dexes.findDexEntryBySpeciesId(speciesId)
+            // Avoid evolution.result.create() here: it builds a full battle-ready Pokemon (initializeMovesetFromDefault
+            // etc.) which relies on server-only data like CobblemonMovesetBuilders and crashes on the client
+            val resultProperties = evolution.result
+            val resultSpecies = resultProperties.species
+                ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+                ?: return@mapNotNull null
+
+            // Forms like regional variants (e.g. "raichu alolan") are selected by aspect, not by an explicit
+            // form= property, so resolve the same way Pokemon.updateForm() does rather than matching .form directly
+            val resultForm = resultSpecies.getForm(resultProperties.aspects)
+
+            val speciesId = resultSpecies.resourceIdentifier
+            val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)
 
             if (childPokedexEntry == null) {
                 Cobblemon.LOGGER.warn("Dex entry not found for species: $speciesId")
                 return@mapNotNull null
             }
 
-            val evolutionResult = evolution.result.create()
-            val formEquivalents = Dexes.getFormEquivalents(evolutionResult.form.name.lowercase())
+            val formEquivalents = Dexes.getFormEquivalents(resultForm.name.lowercase())
             val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
 
             return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)

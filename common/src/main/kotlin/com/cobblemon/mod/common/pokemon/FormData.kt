@@ -39,6 +39,9 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.collections.LazySet
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.EntityDimensions
@@ -76,7 +79,7 @@ class FormData(
     @SerializedName("moves")
     private var _moves: Learnset? = null,
     @SerializedName("evolutions")
-    private val _evolutions: MutableSet<Evolution>? = null,
+    private var _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("abilities")
     private var _abilities: AbilityPool? = null,
     @SerializedName("drops")
@@ -84,7 +87,7 @@ class FormData(
     @SerializedName("pokedex")
     private var _pokedex: MutableList<String>? = null,
     @SerializedName("preEvolution")
-    private val _preEvolution: PreEvolution? = null,
+    private var _preEvolution: PreEvolution? = null,
     private var standingEyeHeight: Float? = null,
     private var swimmingEyeHeight: Float? = null,
     private var flyingEyeHeight: Float? = null,
@@ -318,6 +321,10 @@ class FormData(
             }
         }
         buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
+        buffer.writeNullable(this._evolutions) { pb, evolutions ->
+            pb.writeCollection(evolutions) { pb2, evolution -> pb2.writeString(PokemonSpecies.gson.toJson(evolution, Evolution::class.java)) }
+        }
+        buffer.writeNullable(this._preEvolution) { pb, preEvolution -> pb.writeString(PokemonSpecies.gson.toJson(preEvolution, PreEvolution::class.java)) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -355,6 +362,14 @@ class FormData(
             }
         }
         this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
+
+        // LazySet defers parsing until accessed, since other species may not be registered yet at this point
+        this._evolutions = buffer.readNullable { _ ->
+            val evolutionsJson = JsonArray()
+            buffer.readList { _ -> buffer.readString() }.forEach { evolutionsJson.add(JsonParser.parseString(it)) }
+            LazySet(Evolution::class, evolutionsJson)
+        }
+        this._preEvolution = buffer.readNullable { _ -> PokemonSpecies.gson.fromJson(buffer.readString(), PreEvolution::class.java) }
     }
 
     /**
