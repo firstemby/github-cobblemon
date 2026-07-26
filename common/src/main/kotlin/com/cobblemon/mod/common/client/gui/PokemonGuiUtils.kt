@@ -27,9 +27,17 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
+import net.minecraft.world.phys.Vec3
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.atan
+
+enum class ProfileTransformType {
+    PROFILE,
+    NONE,
+    POKEDEX,
+    SUMMARY,
+}
 
 fun drawProfilePokemon(
     renderablePokemon: RenderablePokemon,
@@ -39,7 +47,7 @@ fun drawProfilePokemon(
     state: PosableState,
     partialTicks: Float,
     scale: Float = 20F,
-    applyProfileTransform: Boolean = true,
+    profileTransformType: ProfileTransformType = ProfileTransformType.PROFILE,
     applyBaseScale: Boolean = false,
     r: Float = 1F,
     g: Float = 1F,
@@ -47,6 +55,7 @@ fun drawProfilePokemon(
     a: Float = 1F,
     headYaw: Float = 0f,
     headPitch: Float = 0f,
+    blockLight: Int = 13
 ) = drawProfilePokemon(
     species = renderablePokemon.species.resourceIdentifier,
     matrixStack = matrixStack,
@@ -55,7 +64,7 @@ fun drawProfilePokemon(
     state = state.also { it.currentAspects = renderablePokemon.aspects },
     partialTicks = partialTicks,
     scale = scale,
-    applyProfileTransform = applyProfileTransform,
+    profileTransformType = profileTransformType,
     applyBaseScale = applyBaseScale,
     r = r,
     g = g,
@@ -63,6 +72,7 @@ fun drawProfilePokemon(
     a = a,
     headYaw = headYaw,
     headPitch = headPitch,
+    blockLight = blockLight
 )
 
 fun drawProfilePokemon(
@@ -73,7 +83,7 @@ fun drawProfilePokemon(
     state: PosableState,
     partialTicks: Float,
     scale: Float = 20F,
-    applyProfileTransform: Boolean = true,
+    profileTransformType: ProfileTransformType = ProfileTransformType.PROFILE,
     applyBaseScale: Boolean = false,
     doQuirks: Boolean = false,
     r: Float = 1F,
@@ -82,6 +92,7 @@ fun drawProfilePokemon(
     a: Float = 1F,
     headYaw: Float = 0f,
     headPitch: Float = 0f,
+    blockLight: Int = 13
 ) {
     RenderSystem.applyModelViewMatrix()
     matrixStack.scale(scale, scale, -scale)
@@ -111,18 +122,38 @@ fun drawProfilePokemon(
         state.setPoseToFirstSuitable(poseType)
         state.updatePartialTicks(partialTicks)
 
-        if (applyProfileTransform) {
-            matrixStack.translate(
-                model.profileTranslation.x,
-                model.profileTranslation.y + 1.5 * model.profileScale,
-                model.profileTranslation.z - 4.0
-            )
-            matrixStack.scale(model.profileScale, model.profileScale, 1 / model.profileScale)} else {
+        if (profileTransformType == ProfileTransformType.NONE) {
             matrixStack.translate(0F, 0F, -4.0F)
             if (applyBaseScale) {
                 matrixStack.scale(baseScale, baseScale, 1 / baseScale)
             }
+        } else {
+            var profileScale: Float
+            var profileTranslation: Vec3
+
+            when (profileTransformType) {
+                ProfileTransformType.POKEDEX -> {
+                    profileScale = model.profilePokedexScale ?: model.profileScale
+                    profileTranslation = model.profilePokedexTranslation ?: model.profileTranslation
+                }
+                ProfileTransformType.SUMMARY -> {
+                    profileScale = model.profileSummaryScale ?: model.profileScale
+                    profileTranslation = model.profileSummaryTranslation ?: model.profileTranslation
+                }
+                else -> {
+                    profileScale = model.profileScale
+                    profileTranslation = model.profileTranslation
+                }
+            }
+
+            matrixStack.translate(
+                profileTranslation.x,
+                profileTranslation.y + 1.5 * profileScale,
+                profileTranslation.z - 4.0
+            )
+            matrixStack.scale(profileScale, profileScale, 1 / profileScale)
         }
+
         matrixStack.mulPose(rotation)
 
         model.applyAnimations(null, state, 0F, 0F, 0F, headYaw, headPitch)
@@ -138,7 +169,7 @@ fun drawProfilePokemon(
         val light1 = Vector3f(-1F, 1F, 1.0F)
         val light2 = Vector3f(1.3F, -1F, 1.0F)
         RenderSystem.setShaderLights(light1, light2)
-        val packedLight = LightTexture.pack(11, 7)
+        val packedLight = LightTexture.pack(blockLight, 0)
 
         val colour = toHex(r, g, b, a)
         model.withLayerContext(bufferSource, state, VaryingModelRepository.getLayers(species, state)) {

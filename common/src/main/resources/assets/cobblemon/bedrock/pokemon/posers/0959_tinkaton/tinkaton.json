@@ -1,8 +1,8 @@
 {
   "portraitScale": 1.8,
   "portraitTranslation": [-0.1, -0.35, 0.0],
-  "profileScale": 1,
-  "profileTranslation": [0.0, 0.3, 0.0],
+  "profileScale": 0.72,
+  "profileTranslation": [0.02, 0.62, 0.0],
   "rootBone": "tinkaton",
   "animations": {
     "physical": "q.bedrock_primary('tinkaton', 'physical', q.curve('symmetrical_wide'))",
@@ -28,7 +28,7 @@
       ],
       "quirks": ["q.bedrock_quirk('tinkaton', 'blink')"],
       "namedAnimations": {
-        "cry": "q.bedrock_primary('tinkaton', 'battle_cry')"
+        "cry": "q.bedrock_primary('tinkaton', 'battle_cry', q.curve('symmetrical_wide'))"
       }
     },
     "standing": {

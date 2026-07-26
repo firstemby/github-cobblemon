@@ -12,6 +12,19 @@
     {
       "aspects": ["shiny", "hisuian"],
       "texture": "cobblemon:textures/pokemon/0101_electrode/electrode_hisuian_shiny.png"
+    },
+    {
+      "aspects": [
+        "hisuian",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0101_electrode/electrode_hisuian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -30,7 +30,7 @@ object DebugKeybindings {
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
         ToggleRidingStatsDebugGUIKeybinding(),
-        ToggleAIDebugKeybinding()
+        ToggleAIDebugKeybinding(),
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(

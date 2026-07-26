@@ -87,6 +87,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInLava": true
@@ -453,6 +456,9 @@
           "rouseChance": 0.0042
         },
         "moving": {
+          "walk": {
+            "walkSpeed": 0.2
+          },
           "swim": {
             "avoidsWater": true
           }

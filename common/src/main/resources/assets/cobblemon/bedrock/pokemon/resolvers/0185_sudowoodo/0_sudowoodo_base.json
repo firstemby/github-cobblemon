@@ -10,15 +10,31 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_shiny.png"
     },
     {
-      "aspects": ["cosmetic_item-gold_armor"],
+      "aspects": [
+        "cosmetic_item-gold_armor"
+      ],
       "layers": [
         {
           "name": "golden",
           "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_golden.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.battles.dispatch.GO
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 
 /**
@@ -21,9 +20,6 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
  */
 class UpkeepInstruction : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
-        battle.dispatch {
-            battle.actors.forEach { it.upkeep() }
-            GO
-        }
+        // We could do some updates here like checking field condition state for client side shenanigans
     }
 }

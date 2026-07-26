@@ -130,8 +130,15 @@
 					"parent": "head_angle",
 					"pivot": [0, 28.5, -4.75],
 					"locators": {
-						"head": [0, 28.5, -4.75],
-						"item_hat": [0, 28.5, -4.75]
+						"head": [0, 28.5, -4.75]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "head_angle",
+					"pivot": [0, 28.5, -3.75],
+					"locators": {
+						"item_hat": [0, 28.5, -3.75]
 					}
 				},
 				{
@@ -139,8 +146,15 @@
 					"parent": "head_angle",
 					"pivot": [0, 26, -6.75],
 					"locators": {
-						"face": [0, 26, -6.75],
-						"item_face": [0, 26, -6.75]
+						"face": [0, 26, -6.75]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "head_angle",
+					"pivot": [0, 25.6, -6.75],
+					"locators": {
+						"item_face": [0, 25.6, -6.75]
 					}
 				},
 				{
@@ -149,8 +163,7 @@
 					"pivot": [0, 24.1, -6.75],
 					"locators": {
 						"mouth": [0, 24.1, -6.75],
-						"special": [0, 24.1, -6.75],
-						"item": [0, 24.1, -6.75]
+						"special": [0, 24.1, -6.75]
 					}
 				},
 				{
@@ -324,6 +337,18 @@
 					"pivot": [0, 24, -8.8],
 					"locators": {
 						"jaw1": [0, 24, -8.8]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "beak",
+					"pivot": [0, 23.6, -9],
+					"rotation": [15, 0, 0],
+					"locators": {
+						"item": {
+							"offset": [0, 23.6, -9],
+							"rotation": [0, 45, 0]
+						}
 					}
 				},
 				{

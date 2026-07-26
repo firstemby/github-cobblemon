@@ -1,0 +1,19 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/earthen_hive1",
+            "cobblemon:habitats/earthen_hive2",
+            "cobblemon:habitats/earthen_hive3",
+            "cobblemon:habitats/earthen_hive4",
+            "cobblemon:habitats/earthen_hive5",
+            "cobblemon:habitats/earthen_hive6",
+            "cobblemon:habitats/earthen_hive7",
+            "cobblemon:habitats/earthen_hive8",
+            "cobblemon:habitats/earthen_hive9",
+            "cobblemon:habitats/earthen_hive10",
+            "cobblemon:habitats/earthen_hive11"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/earthen_hive"
+    }
+}

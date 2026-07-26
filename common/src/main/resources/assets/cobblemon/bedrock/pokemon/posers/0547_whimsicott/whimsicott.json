@@ -1,0 +1,98 @@
+{
+  "portraitScale": 2,
+  "portraitTranslation": [0, -0.6, 0],
+  "profileScale": 0.8,
+  "profileTranslation": [0.0, 0.55, 0.0],
+  "rootBone": "whimsicott",
+    "animations": {
+      "faint": "q.bedrock_primary('whimsicott', 'faint', q.curve('one'))",
+      "cry": "q.bedrock_stateful('whimsicott', 'cry')",
+      "recoil": "q.bedrock_stateful('whimsicott', 'recoil')",
+      "special": "q.bedrock_primary('whimsicott', 'special', q.curve('symmetrical_wide'))",
+      "status": "q.bedrock_primary('whimsicott', 'status', q.curve('symmetrical_wide'))"
+    },
+      "poses": {
+      "battle-standing": {
+      "isBattle": true,
+      "poseTypes": [
+        "STAND", "HOVER"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
+        "q.bedrock('whimsicott', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('whimsicott', 'blink')"
+      ],
+        "namedAnimations": {
+            "cry": "q.bedrock_primary('whimsicott', 'battle_cry', q.curve('symmetrical_wide'))"
+          }
+    },
+    "standing": {
+      "isBattle": false,
+      "poseTypes": [
+        "STAND", "PORTRAIT" ,"PROFILE", "NONE"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
+        "q.bedrock('whimsicott', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('whimsicott', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseTypes": [
+        "WALK"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
+        "q.bedrock('whimsicott', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('whimsicott', 'blink')"
+      ]
+    },
+    "hover": {
+      "isBattle": false,
+      "poseTypes": [
+        "HOVER"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
+        "q.bedrock('whimsicott', 'air_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('whimsicott', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
+        "q.bedrock('whimsicott', 'air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('whimsicott', 'blink')"
+      ]
+    },
+      "sleep": {
+        "poseTypes": ["SLEEP"],
+        "isBattle": false,
+        "animations": ["q.bedrock('whimsicott', 'sleep')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+      },
+      "battle-sleep": {
+        "poseTypes": ["SLEEP"],
+        "isBattle": true,
+        "animations": ["q.bedrock('whimsicott', 'battle_sleep')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+      }
+  }
+}

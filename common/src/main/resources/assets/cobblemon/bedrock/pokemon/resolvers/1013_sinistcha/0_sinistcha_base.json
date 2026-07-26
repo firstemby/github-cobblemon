@@ -14,6 +14,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/1013_sinistcha/sinistcha_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/1013_sinistcha/sinistcha_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

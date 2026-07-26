@@ -1,0 +1,42 @@
+{
+    "type": "minecraft:archaeology",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:reaper_cloth",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:kings_rock",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:unremarkable_teacup",
+                    "weight": 5
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:masterpiece_teacup",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:nostalgic_sherd",
+                    "weight": 15
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "cobblemon:helix_sherd",
+                    "weight": 15
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cobblemon:ruins/uncommon/lush_monument_ruins"
+}

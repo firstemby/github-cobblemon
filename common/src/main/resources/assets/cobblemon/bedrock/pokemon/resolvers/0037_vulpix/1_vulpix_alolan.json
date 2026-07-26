@@ -11,6 +11,19 @@
     {
       "aspects": ["alolan", "shiny"],
       "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_shiny.png"
+    },
+    {
+      "aspects": [
+        "alolan",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0037_vulpix/vulpix_alolan_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

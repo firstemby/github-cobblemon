@@ -1,0 +1,39 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [{
+      "type": "neoforge:false"
+    }],
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "cobblemon:pep_up_flower"
+    }
+  ],
+  "result": [
+    {
+      "item": {
+        "count": 2,
+        "id": "minecraft:white_dye"
+      }
+    }
+  ],
+  "tool": {
+    "fabric:type": "fabric:any",
+    "ingredients": [
+      {
+        "fabric:type": "farmersdelight:item_ability",
+        "action": "knife_dig"
+      },
+      {
+        "tag": "c:tools/knife"
+      }
+    ]
+  }
+}

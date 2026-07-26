@@ -32,6 +32,10 @@ object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Regist
 //    @JvmField
 //    val INCENSE_SWEET_KEY = createKey("incense_sweet", CobblemonBlocks.INCENSE_SWEET, 0, 1)
     @JvmField
+    val HABITAT_BLOCK_KEY: ResourceKey<PoiType> = createKey("habitat_block", CobblemonBlocks.HABITAT_BLOCK, 0, 1)
+    @JvmField
+    val HABITAT_BLOCK = create(HABITAT_BLOCK_KEY.location().path, PoiType(getBlockStates(CobblemonBlocks.HABITAT_BLOCK), 0, 1))
+    @JvmField
     val JUKEBOX_KEY = createKey("vanilla_jukebox", Blocks.JUKEBOX, 0, 1)
 
     private fun createKey(string: String, block: Block, maxTickets: Int, validRange: Int ): ResourceKey<PoiType> =

@@ -1,0 +1,19 @@
+{
+  "moveName": "grassyglide",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 5
+    },
+    {
+      "item": "cobblemon:grassy_seed",
+      "count": 1
+    }
+  ]
+}

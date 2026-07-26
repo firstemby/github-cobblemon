@@ -19,11 +19,11 @@ import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class MovesWidget(
     pX: Int, pY: Int,
@@ -37,6 +37,11 @@ class MovesWidget(
 
         private val decimalFormat = DecimalFormat("#.##").also {
             it.roundingMode = RoundingMode.CEILING
+        }
+
+        fun format(input: Double): String {
+            if (input <= 0) return "—"
+            return "${decimalFormat.format(input)}%"
         }
 
         private val movesBaseResource = cobblemonResource("textures/gui/summary/summary_moves_base.png")
@@ -206,11 +211,6 @@ class MovesWidget(
                 slot = CobblemonClient.storage.party.getPosition(summary.selectedPokemon.uuid)
             )
         )
-    }
-
-    fun format(input: Double): String {
-        if (input <= 0) return "—"
-        return "${decimalFormat.format(input)}%"
     }
 
     fun selectMove(move: Move?) {

@@ -12,6 +12,16 @@
     {
       "aspects": ["shiny", "east-sea"],
       "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_east_shiny.png"
+    },
+    {
+      "aspects": ["alpha_eyes", "east-sea"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_east_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

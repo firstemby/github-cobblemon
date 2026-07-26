@@ -38,7 +38,7 @@
           "q.bedrock_quirk('ceruledge', 'blink')"
         ],
         "transitions": {
-          "battle-standing": "q.bedrock_primary('ceruledge', 'battle_intro', q.curve('one'))"
+          "battle-standing": "q.bedrock_primary('ceruledge', 'battle_intro', q.curve('symmetrical_wide'))"
         }
       },
       "walking": {
@@ -52,7 +52,8 @@
       },
       "sleep": {
         "poseTypes": ["SLEEP"],
-        "animations": ["q.bedrock('ceruledge', 'sleep')"]
+        "animations": ["q.bedrock('ceruledge', 'sleep')"],
+        "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
       }
     }
    }

@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.spawning.detail
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.resolveInt
@@ -20,7 +19,7 @@ import com.cobblemon.mod.common.util.resolveInt
  * @author Hiroku
  * @since October 8th, 2023
  */
-class NPCSpawnAction(spawnablePosition: SpawnablePosition, bucket: SpawnBucket, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(spawnablePosition, bucket, detail) {
+class NPCSpawnAction(spawnablePosition: SpawnablePosition, bucket: String, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(spawnablePosition, bucket, detail) {
     override fun createEntity(): NPCEntity {
         val npc = NPCEntity(spawnablePosition.world)
         npc.npc = detail.npcClass

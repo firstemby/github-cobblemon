@@ -45,25 +45,75 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.4,
     "height": 2.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.4
   },
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "avoidsLand": true,
-        "walkSpeed": 0.3
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
       },
-      "swim": {
-        "swimSpeed": 0.3,
-        "canBreatheUnderwater": true
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "40-55",
+          "JUMP": "25-40",
+          "SKILL": "65-90",
+          "SPEED": "45-70",
+          "STAMINA": "45-60"
+        }
       }
     },
-    "resting": {
-      "canSleep": true,
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "herd": {
       "maxSize": "9",
@@ -82,10 +132,20 @@
         }
       ]
     },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "swimSpeed": 0.3
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.3
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

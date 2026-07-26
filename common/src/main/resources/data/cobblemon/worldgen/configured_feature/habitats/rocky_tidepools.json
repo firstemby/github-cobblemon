@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/rocky_tidepool1",
+            "cobblemon:habitats/rocky_tidepool2",
+            "cobblemon:habitats/rocky_tidepool3",
+            "cobblemon:habitats/rocky_tidepool4",
+            "cobblemon:habitats/rocky_tidepool5",
+            "cobblemon:habitats/rocky_tidepool6",
+            "cobblemon:habitats/rocky_tidepool7",
+            "cobblemon:habitats/rocky_tidepool8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/rocky_tidepool"
+    }
+}

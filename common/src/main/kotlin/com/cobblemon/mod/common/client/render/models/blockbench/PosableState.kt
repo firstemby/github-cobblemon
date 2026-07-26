@@ -277,7 +277,7 @@ abstract class PosableState : Schedulable {
         .addFunction("pose") { StringValue(currentPose ?: "") }
         .addFunction("sound") { params ->
             if (params.get<MoValue>(0) !is StringValue) {
-                return@addFunction Unit
+                return@addFunction DoubleValue.ZERO
             }
             val entity = getEntity()
             val soundEvent = SoundEvent.createVariableRangeEvent(params.getString(0).asIdentifierDefaultingNamespace())
@@ -294,17 +294,17 @@ abstract class PosableState : Schedulable {
             }
         }
         .addFunction("render_item") { params ->
-            if (params.get<MoValue>(0) !is StringValue) return@addFunction Unit
+            if (params.get<MoValue>(0) !is StringValue) return@addFunction DoubleValue.ZERO
 
             val item: ItemStack
             try {
-                val client = Minecraft.getInstance().connection ?: return@addFunction Unit
+                val client = Minecraft.getInstance().connection ?: return@addFunction DoubleValue.ZERO
                 val result = ItemParser(client.registryAccess()).parse(StringReader(params.getString(0)))
                 item = ItemStack(result.item)
                 item.applyComponents(result.components)
             }
             catch (_: CommandSyntaxException) {
-                return@addFunction Unit
+                return@addFunction DoubleValue.ZERO
             }
 
             val renderLocation = if (params.contains(1)) params.getString(1) else "item"
@@ -313,7 +313,7 @@ abstract class PosableState : Schedulable {
                 animationItems.put(renderLocation, item)
             } else {
                 if (animationItems.containsKey(renderLocation)) animationItems.remove(renderLocation)
-                return@addFunction Unit
+                return@addFunction DoubleValue.ZERO
             }
         }
         .addFunction("clear_items") { animationItems.clear() }
@@ -331,7 +331,7 @@ abstract class PosableState : Schedulable {
                     addActiveAnimation(animation)
                 }
             }
-            return@addFunction Unit
+            return@addFunction DoubleValue.ZERO
         }
         .addFunction("particle") { params ->
             val particlesParam = params.get<MoValue>(0)
@@ -339,7 +339,7 @@ abstract class PosableState : Schedulable {
             when (particlesParam) {
                 is StringValue -> particles.add(particlesParam.value)
                 is VariableStruct -> particles.addAll(particlesParam.map.values.map { it.asString() })
-                else -> return@addFunction Unit
+                else -> return@addFunction DoubleValue.ZERO
             }
 
             val effectIds = particles.map { it.asIdentifierDefaultingNamespace() }
@@ -475,14 +475,15 @@ abstract class PosableState : Schedulable {
         if (model != null) {
             val poseImpl = model.poses[pose] ?: return
             poseParticles.removeIf { particle ->
-                poseImpl.animations.filterIsInstance<BedrockPoseAnimation>().flatMap { it.particleKeyFrames }.none(particle::isSameAs)
-                        && activeAnimations.filterIsInstance<BedrockActiveAnimation>().flatMap { it.animation.effects.filterIsInstance<BedrockParticleKeyframe>() }.none(particle::isSameAs)
+                poseImpl.animations.asSequence().filterIsInstance<BedrockPoseAnimation>().flatMap { it.particleKeyFrames }.none(particle::isSameAs)
+                        && activeAnimations.asSequence().filterIsInstance<BedrockActiveAnimation>().flatMap { it.animation.effects.asSequence().filterIsInstance<BedrockParticleKeyframe>() }.none(particle::isSameAs)
             }
 
             poseImpl.onTransitionedInto(this)
             val entity = getEntity()
             if (entity != null) {
                 poseImpl.animations
+                    .asSequence()
                     .filterIsInstance<BedrockPoseAnimation>()
                     .flatMap { it.particleKeyFrames }
                     .filter { particle -> particle.seconds == 0F && poseParticles.none(particle::isSameAs) }
@@ -546,6 +547,7 @@ abstract class PosableState : Schedulable {
             val pose = currentPose?.let { model.poses[it] }
             // Effects start playing from pose animations as long as the intensity is above 0.5. Pretty sloppy honestly.
             pose?.animations
+                ?.asSequence()
                 ?.filter { shouldIdleRun(it, 0.5F) && it.condition(this) }
                 ?.forEach { it.applyEffects(entity, this, previousSeconds, newSeconds) }
         }

@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0504_patrat/patrat_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0504_patrat/patrat_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0504_patrat/patrat_alpha.png",
           "emissive": true
         }
       ]

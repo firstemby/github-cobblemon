@@ -102,8 +102,8 @@
         },
         {
             "processor_type": "gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "OCEAN_FLOOR_WG",
+            "offset": -4
         },
         {
             "delegate": {

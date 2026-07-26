@@ -49,9 +49,7 @@ class FoodColourComponent(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is FoodColourComponent &&
-                colours.size == other.colours.size &&
-                colours.mapIndexed { index, value -> value == other.colours[index] }.all { it }
+        return other is FoodColourComponent && colours == other.colours // List == List in kotlin checks for element order and index.
     }
 
     fun getColoursAsARGB(): List<Int> {

@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:sweets"
+    "#cobblemon:sweets",
+    "#cobblemon:candies",
+    "cobblemon:rage_candy_bar"
   ]
 }

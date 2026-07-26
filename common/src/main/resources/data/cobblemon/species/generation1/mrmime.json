@@ -66,87 +66,14 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.6875,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
     "herd": {
       "maxSize": "3"
     },
@@ -154,9 +81,6 @@
       "swim": {
         "avoidsWater": true
       }
-    },
-    "combat": {
-      "willDefendOwner": true
     },
     "resting": {
       "drowsyChance": 0.0333,
@@ -416,6 +340,7 @@
         "fixed": false,
         "width": 0.8
       },
+      "riding": {},
       "drops": {
         "amount": 1,
         "entries": [

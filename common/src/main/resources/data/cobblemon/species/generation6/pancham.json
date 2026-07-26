@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 674,
   "name": "Pancham",
   "primaryType": "fighting",
@@ -42,10 +43,13 @@
   "catchRate": 220,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
+  "standingEyeHeight": 0.65,
+  "swimmingEyeHeight": 0.65,
+  "flyingEyeHeight": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 1.25,
     "fixed": false
   },
   "drops": {

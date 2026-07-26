@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.sliggoo_hisuian",
+				"identifier": "geometry.sliggoo_hisui",
 				"texture_width": 128,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -16,8 +16,13 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "body",
+					"name": "center_pivot",
 					"parent": "sliggoo_hisuian",
+					"pivot": [0, 11.5, -5]
+				},
+				{
+					"name": "body",
+					"parent": "center_pivot",
 					"pivot": [0, 11, -5]
 				},
 				{
@@ -102,6 +107,15 @@
 					]
 				},
 				{
+					"name": "mouth_big",
+					"parent": "head",
+					"pivot": [0, 20.09, -9.41],
+					"cubes": [
+						{"origin": [-3.5, 19.09, -10.41], "size": [7, 3, 0], "uv": [0, 52]},
+						{"origin": [-3.5, 19.09, -10.41], "size": [7, 0, 2], "uv": [13, 30]}
+					]
+				},
+				{
 					"name": "eyes",
 					"parent": "head",
 					"pivot": [0, 24.25, -10.5]
@@ -112,8 +126,39 @@
 					"pivot": [2.25, 24.5, -10.51],
 					"cubes": [
 						{"origin": [1.25, 23, -10.52], "size": [2, 2, 0], "uv": [0, 0]},
-						{"origin": [1.75, 25.5, -10.52], "size": [1, 1, 0], "uv": [4, 0]},
 						{"origin": [1.25, 24.5, -10.51], "size": [2, 1, 0], "uv": [4, 1]}
+					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.25, 24, -10.5],
+					"locators": {
+						"eye2": [2.25, 24, -10.5]
+					}
+				},
+				{
+					"name": "eyelash_left",
+					"parent": "eye_left",
+					"pivot": [2.25, 26, -10.52],
+					"cubes": [
+						{"origin": [1.75, 25.5, -10.52], "size": [1, 1, 0], "uv": [4, 0]}
+					]
+				},
+				{
+					"name": "eye_angry_left",
+					"parent": "eye_left",
+					"pivot": [1.75, 24.75, -10.42],
+					"cubes": [
+						{"origin": [1.25, 24.25, -10.42], "size": [1, 1, 0], "inflate": 0.01, "uv": [4, 3]}
+					]
+				},
+				{
+					"name": "eye_sad_left",
+					"parent": "eye_left",
+					"pivot": [2.75, 25, -10.42],
+					"cubes": [
+						{"origin": [2.25, 24.5, -10.42], "size": [1, 1, 0], "inflate": 0.01, "uv": [4, 4]}
 					]
 				},
 				{
@@ -125,13 +170,60 @@
 					]
 				},
 				{
+					"name": "eyelid_happy_left",
+					"parent": "eye_left",
+					"pivot": [2.25, 23.5, -9.91],
+					"cubes": [
+						{"origin": [0.75, 23, -10.43], "size": [3, 2, 1], "inflate": 0.01, "uv": [44, 24]}
+					]
+				},
+				{
+					"name": "eyelid_recoil_left",
+					"parent": "eye_left",
+					"pivot": [2.25, 23.5, -9.91],
+					"cubes": [
+						{"origin": [1.25, 23, -10.42], "size": [2, 2, 1], "inflate": 0.01, "uv": [15, 42]}
+					]
+				},
+				{
 					"name": "eye_right",
 					"parent": "eyes",
 					"pivot": [-2.25, 24.5, -10.51],
 					"cubes": [
 						{"origin": [-3.25, 23, -10.52], "size": [2, 2, 0], "uv": [0, 2], "mirror": true},
-						{"origin": [-2.75, 25.5, -10.52], "size": [1, 1, 0], "uv": [6, 0], "mirror": true},
 						{"origin": [-3.25, 24.5, -10.51], "size": [2, 1, 0], "uv": [4, 2], "mirror": true}
+					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.25, 24, -10.5],
+					"locators": {
+						"eye1": [-2.25, 24, -10.5]
+					}
+				},
+				{
+					"name": "eyelash_right",
+					"parent": "eye_right",
+					"pivot": [-2.25, 26, -10.52],
+					"cubes": [
+						{"origin": [-2.75, 25.5, -10.52], "size": [1, 1, 0], "uv": [6, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "eye_angry_right",
+					"parent": "eye_right",
+					"pivot": [-1.75, 24.75, -10.42],
+					"cubes": [
+						{"origin": [-2.25, 24.25, -10.42], "size": [1, 1, 0], "inflate": 0.01, "uv": [6, 3], "mirror": true}
+					]
+				},
+				{
+					"name": "eye_sad_right",
+					"parent": "eye_right",
+					"pivot": [-2.75, 25, -10.42],
+					"cubes": [
+						{"origin": [-3.25, 24.5, -10.42], "size": [1, 1, 0], "inflate": 0.01, "uv": [6, 4], "mirror": true}
 					]
 				},
 				{
@@ -140,6 +232,22 @@
 					"pivot": [-2.25, 24.5, -9.81],
 					"cubes": [
 						{"origin": [-3.25, 23, -10.42], "size": [2, 2, 1], "inflate": 0.01, "uv": [0, 21], "mirror": true}
+					]
+				},
+				{
+					"name": "eyelid_happy_right",
+					"parent": "eye_right",
+					"pivot": [-2.25, 23.5, -9.91],
+					"cubes": [
+						{"origin": [-3.75, 23, -10.43], "size": [3, 2, 1], "inflate": 0.01, "uv": [44, 28], "mirror": true}
+					]
+				},
+				{
+					"name": "eyelid_recoil_right",
+					"parent": "eye_right",
+					"pivot": [-2.25, 23.5, -9.91],
+					"cubes": [
+						{"origin": [-3.25, 23, -10.42], "size": [2, 2, 1], "inflate": 0.01, "uv": [15, 46], "mirror": true}
 					]
 				},
 				{

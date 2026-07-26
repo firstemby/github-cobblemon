@@ -28,19 +28,15 @@
       "required": false
     },
     {
-      "id": "byg:crimson_gardens",
+      "id": "netherdescent:crimson_gardens",
       "required": false
     },
     {
-      "id": "byg:embur_bog",
+      "id": "netherdescent:embur_bog",
       "required": false
     },
     {
-      "id": "byg:glowstone_garden",
-      "required": false
-    },
-    {
-      "id": "byg:wailing_garth",
+      "id": "netherdescent:wailing_garth",
       "required": false
     },
     {

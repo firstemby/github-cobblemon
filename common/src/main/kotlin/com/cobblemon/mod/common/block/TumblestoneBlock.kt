@@ -44,7 +44,17 @@ class TumblestoneBlock(
             PrimitiveCodec.INT.fieldOf("xzOffset").forGetter { it.xzOffset },
             Block.CODEC.fieldOf("nextStage").forGetter { it.nextStage }
         ).apply(it, ::TumblestoneBlock) }
+
+        const val STAGE_0 = 0
+        const val STAGE_1 = 1
+        const val STAGE_2 = 2
+        const val STAGE_3 = 3
+
+        const val MAX_STAGE = STAGE_3
+        const val MIN_STAGE = STAGE_0
     }
+
+    override val growthChance = 5
 
     init {
         registerDefaultState(stateDefinition.any()
@@ -52,7 +62,7 @@ class TumblestoneBlock(
             .setValue(WATERLOGGED, false))
     }
 
-    override fun canGrow(pos: BlockPos, world: BlockGetter): Boolean {
+    override fun canGrow(state: BlockState, pos: BlockPos, world: BlockGetter): Boolean {
         if (stage == MAX_STAGE) return false
         val iterator: Iterator<BlockPos> =
             BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))
@@ -65,6 +75,8 @@ class TumblestoneBlock(
 
         return true
     }
+
+    override fun isRandomlyTicking(state: BlockState): Boolean = stage < MAX_STAGE
 
     override fun codec(): MapCodec<out DirectionalBlock> {
         return CODEC

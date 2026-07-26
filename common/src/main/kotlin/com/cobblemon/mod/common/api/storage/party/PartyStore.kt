@@ -49,7 +49,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
 
     val struct = asMoLangValue()
 
-    override fun iterator() = slots.filterNotNull().iterator()
+    override fun iterator() = slots.asSequence().filterNotNull().iterator()
     /** Gets the Pokémon at the specified slot. It will return null if the slot is empty or the given slot is out of bounds. */
     fun get(slot: Int) = slot.takeIf { it < slots.size && it >= 0 }?.let { slots[it] }
     override operator fun get(position: PartyPosition) = get(position.slot)
@@ -85,7 +85,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     fun size() = slots.size
 
     /** The amount of party slots that are occupied by a [Pokemon]. */
-    fun occupied() = slots.filterNotNull().count()
+    fun occupied() = slots.count { it != null }
 
     fun isEmpty() = occupied() == 0
 
@@ -258,17 +258,22 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
 
     @JvmOverloads
     fun toBattleTeam(clone: Boolean = false, healPokemon: Boolean = false, leadingPokemon: UUID? = null) : List<BattlePokemon> {
+        var leadingPokemonId = leadingPokemon
         val result = this.mapNotNull {
             return@mapNotNull if (clone) {
-                BattlePokemon.safeCopyOf(it)
+                BattlePokemon.safeCopyOf(it).also { copy ->
+                    if (leadingPokemon != null && it.uuid == leadingPokemonId) {
+                        leadingPokemonId = copy.uuid
+                    }
+                }
             } else {
                 BattlePokemon.playerOwned(it)
             }.also { if (healPokemon) it.effectedPokemon.heal() }
         }.toMutableList()
 
         // reposition lead to front of the party
-        if (leadingPokemon != null && result.first().uuid != leadingPokemon) {
-            result.find { it.uuid == leadingPokemon }?.let { lead ->
+        if (leadingPokemonId != null && result.first().uuid != leadingPokemonId) {
+            result.find { it.uuid == leadingPokemonId }?.let { lead ->
                 result.remove(lead)
                 result.add(0, lead)
             }

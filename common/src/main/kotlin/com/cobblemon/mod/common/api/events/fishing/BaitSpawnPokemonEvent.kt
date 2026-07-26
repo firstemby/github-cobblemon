@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.events.fishing
 
 import com.cobblemon.mod.common.api.events.Cancelable
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.item.ItemStack
@@ -27,7 +26,7 @@ interface BaitSpawnPokemonEvent {
      */
     data class Pre(
         val bobber: PokeRodFishingBobberEntity, // todo replace this with the bait entity
-        val chosenBucket: SpawnBucket,
+        val chosenBucket: String,
         val rod: ItemStack
     ) : Cancelable(), BobberSpawnPokemonEvent
 
@@ -38,7 +37,7 @@ interface BaitSpawnPokemonEvent {
      * @param pokemon The Pokemon that is modified.
      */
     data class Modify(
-        val chosenBucket: SpawnBucket,
+        val chosenBucket: String,
         val rod: ItemStack,
         val pokemon: PokemonEntity
     ) : BobberSpawnPokemonEvent
@@ -52,7 +51,7 @@ interface BaitSpawnPokemonEvent {
      */
     data class Post(
         val bobber: PokeRodFishingBobberEntity,
-        val chosenBucket: SpawnBucket,
+        val chosenBucket: String,
         val bait: ItemStack,
         val pokemon: PokemonEntity
     ) : BobberSpawnPokemonEvent

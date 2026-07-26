@@ -64,109 +64,33 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.2679115,
-              "y": -0.54321074,
-              "z": 0.2811847
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.16237976,
-              "y": -0.5478424,
-              "z": 0.24229509
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.2679115,
-              "y": -0.54321074,
-              "z": 0.2811847
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.2679115,
-              "y": -0.54321074,
-              "z": 0.2811847
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.16237976,
-              "y": -0.5478424,
-              "z": 0.24229509
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.16237976,
-              "y": -0.5478424,
-              "z": 0.24229509
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.2679115,
-              "y": -0.54321074,
-              "z": 0.2811847
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
       "maxSize": "5"
-    },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4",
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
-    },
-    "walk": {
-      "canWalk": true,
-      "walkSpeed": 0.19
     },
     "moving": {
       "swim": {
         "avoidsWater": true
       }
     },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    },
+    "walk": {
+      "canWalk": true,
+      "walkSpeed": 0.19
     }
   },
   "drops": {

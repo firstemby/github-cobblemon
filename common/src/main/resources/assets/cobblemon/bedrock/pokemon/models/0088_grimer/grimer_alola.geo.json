@@ -16,6 +16,22 @@
 					"pivot": [0, 0, 0]
 				},
 				{
+					"name": "locator_root",
+					"parent": "grimer_alola",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "grimer_alola",
+					"pivot": [0, 21.5, 0],
+					"locators": {
+						"top": [0, 21.5, 0]
+					}
+				},
+				{
 					"name": "body",
 					"parent": "grimer_alola",
 					"pivot": [0, 12, 0],
@@ -277,6 +293,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.77, 20, -9.02],
+					"locators": {
+						"eye2": [2.77, 20, -9.02]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [2.92, 19.5, -7.93],
@@ -334,6 +358,14 @@
 					"cubes": [
 						{"origin": [-3.27, 19.5, -9.03], "size": [1, 1, 0], "uv": [0, 34], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.77, 20, -9.02],
+					"locators": {
+						"eye1": [-2.77, 20, -9.02]
+					}
 				},
 				{
 					"name": "eyelid_right",

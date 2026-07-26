@@ -16,6 +16,11 @@
       "locators": ["target"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.absorb.target');"]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:absorb_actor",
       "locators": ["special", "target"],

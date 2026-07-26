@@ -1,0 +1,17 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/oak_tree1",
+            "cobblemon:fossils/oak_tree2",
+            "cobblemon:fossils/oak_tree3",
+            "cobblemon:fossils/oak_tree4",
+            "cobblemon:fossils/oak_tree5",
+            "cobblemon:fossils/oak_tree6",
+            "cobblemon:fossils/oak_tree7",
+            "cobblemon:fossils/oak_tree8",
+            "cobblemon:fossils/oak_tree9"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_oak_tree"
+    }
+}

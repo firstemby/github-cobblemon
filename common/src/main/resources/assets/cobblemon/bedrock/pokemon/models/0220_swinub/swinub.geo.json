@@ -24,6 +24,32 @@
 					]
 				},
 				{
+					"name": "locator_physical",
+					"parent": "body",
+					"pivot": [0, 6, -5],
+					"locators": {
+						"physical": [0, 6, -5]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "body",
+					"pivot": [0, 6.05, -3.5],
+					"locators": {
+						"item_head": [0, 6.05, -3.5],
+						"head": [0, 6.05, -3.5]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "body",
+					"pivot": [0, 4, -5],
+					"locators": {
+						"face": [0, 4, -5],
+						"item_face": [0, 4, -5]
+					}
+				},
+				{
 					"name": "nose",
 					"parent": "body",
 					"pivot": [0, 1.5, -5.25],
@@ -51,6 +77,16 @@
 					"cubes": [
 						{"origin": [-0.5, 0.1, -4.9], "size": [1, 1, 1], "inflate": 0.01, "uv": [13, 20]}
 					]
+				},
+				{
+					"name": "locator_mouth",
+					"parent": "mouths",
+					"pivot": [0, 0.43492, -5.03372],
+					"locators": {
+						"special": [0, 0.43493, -5.03373],
+						"item": [0, 0.4349, -5.0337],
+						"mouth": [0, 0.43493, -5.03373]
+					}
 				},
 				{
 					"name": "tail",
@@ -107,6 +143,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [1.7331, 3.01287, -5.15],
+					"locators": {
+						"eye2": [1.7331, 3.01287, -5.15]
+					}
+				},
+				{
 					"name": "left_eye_expression",
 					"parent": "eyes",
 					"pivot": [1.75, 3, -4.8]
@@ -145,6 +189,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-1.7331, 3.01287, -5.15],
+					"locators": {
+						"eye1": [-1.7331, 3.01287, -5.15]
+					}
+				},
+				{
 					"name": "right_eye_expression",
 					"parent": "eyes",
 					"pivot": [-1.75, 3, -4.8]
@@ -172,6 +224,22 @@
 					"cubes": [
 						{"origin": [-3.25, 2.5, -4.925], "size": [1, 1, 0], "inflate": 0.01, "uv": [28, 20], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_root",
+					"parent": "swinub",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "swinub",
+					"pivot": [0, 6.35, 0],
+					"locators": {
+						"top": [0, 6.35, 0]
+					}
 				}
 			]
 		}

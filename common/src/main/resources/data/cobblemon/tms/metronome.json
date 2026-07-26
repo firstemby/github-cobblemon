@@ -1,0 +1,19 @@
+{
+  "moveName": "metronome",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "normal",
+  "recipe": [
+    {
+      "item": "cobblemon:normal_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:metronome",
+      "count": 1
+    }
+  ]
+}

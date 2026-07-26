@@ -58,6 +58,9 @@
       "maxSize": "3"
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -68,6 +71,7 @@
       "willFlee": false
     },
     "resting": {
+      "canSleep": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     }

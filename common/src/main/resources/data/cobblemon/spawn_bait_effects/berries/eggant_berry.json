@@ -1,4 +1,11 @@
 {
     "item": "cobblemon:eggant_berry",
-    "effects": [    ]
+    "effects": [
+        {
+            "type": "cobblemon:egg_group",
+            "chance": 1.0,
+            "value": 10.0,
+            "subcategory": "ditto"
+        }
+    ]
   }

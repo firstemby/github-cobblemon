@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "activated_style=false,facing=east,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_natural",
+      "y": 90
+    },
+    "activated_style=false,facing=east,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_natural_replace",
+      "y": 90
+    },
+    "activated_style=false,facing=north,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_natural"
+    },
+    "activated_style=false,facing=north,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_natural_replace"
+    },
+    "activated_style=false,facing=south,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_natural",
+      "y": 180
+    },
+    "activated_style=false,facing=south,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_natural_replace",
+      "y": 180
+    },
+    "activated_style=false,facing=west,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_natural",
+      "y": 270
+    },
+    "activated_style=false,facing=west,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_natural_replace",
+      "y": 270
+    },
+    "activated_style=true,facing=east,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_activate",
+      "y": 90
+    },
+    "activated_style=true,facing=east,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_activate_replace",
+      "y": 90
+    },
+    "activated_style=true,facing=north,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_activate"
+    },
+    "activated_style=true,facing=north,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_activate_replace"
+    },
+    "activated_style=true,facing=south,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_activate",
+      "y": 180
+    },
+    "activated_style=true,facing=south,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_activate_replace",
+      "y": 180
+    },
+    "activated_style=true,facing=west,cancels_regular_spawns=false": {
+      "model": "cobblemon:block/habitat_block_activate",
+      "y": 270
+    },
+    "activated_style=true,facing=west,cancels_regular_spawns=true": {
+      "model": "cobblemon:block/habitat_block_activate_replace",
+      "y": 270
+    }
+  }
+}

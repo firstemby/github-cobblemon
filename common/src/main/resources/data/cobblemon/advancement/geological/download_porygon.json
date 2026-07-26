@@ -1,0 +1,58 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:upgrade"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.download_porygon"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.download_porygon.description"
+    },
+    "hidden": true
+  },
+  "parent": "cobblemon:geological/craft_tm",
+  "criteria": {
+    "upgrade": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:block_state_property",
+            "block": "cobblemon:monitor"
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "cobblemon:upgrade"
+            }
+          }
+        ]
+      }
+    },
+    "dubious": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:block_state_property",
+            "block": "cobblemon:monitor"
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "cobblemon:dubious_disc"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "upgrade",
+      "dubious"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

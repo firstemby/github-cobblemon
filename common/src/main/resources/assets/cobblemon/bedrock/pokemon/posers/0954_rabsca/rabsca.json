@@ -5,29 +5,51 @@
   "profileTranslation": [ 0, 1.07, 0],
   "rootBone": "rabsca",
   "animations": {
-    "cry": "q.bedrock_stateful('rabsca', 'cry')"
+    "cry": "q.bedrock_stateful('rabsca', 'cry')",
+    "physical": "q.bedrock_stateful('rabsca', 'physical')",
+    "special": "q.bedrock_stateful('rabsca', 'special')",
+    "status": "q.bedrock_stateful('rabsca', 'status')"
   },
   "poses": {
+    "battle-standing": {
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "HOVER"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('rabsca', 'battle_idle')",
+        "q.bedrock('rabsca', 'ball_overlay')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('rabsca', 'battle_cry')"
+      }
+    },
     "standing": {
       "poseTypes": [
         "STAND",
         "NONE",
         "FLOAT",
+        "HOVER",
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
+      "isBattle": false,
       "animations": [
-        "q.bedrock('rabsca', 'ground_idle')"
+        "q.bedrock('rabsca', 'ground_idle')",
+        "q.bedrock('rabsca', 'ball_overlay')"
       ]
     },
     "walking": {
       "poseTypes": [
         "WALK",
-        "SWIM"
+        "SWIM",
+        "FLY"
       ],
       "animations": [
-        "q.bedrock('rabsca', 'ground_idle')"
+        "q.bedrock('rabsca', 'ground_walk')",
+        "q.bedrock('rabsca', 'ball_overlay')"
       ]
     }
   }

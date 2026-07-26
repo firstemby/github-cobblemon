@@ -46,12 +46,13 @@
   "features": [
     "galarian"
   ],
-  "baseScale": 0.5,
+  "baseScale": 0.75,
   "hitbox": {
     "width": 1,
     "height": 1.4,
     "fixed": false
   },
+  "standingEyeHeight": 0.6,
   "behaviour": {
     "resting": {
       "canSleep": true,

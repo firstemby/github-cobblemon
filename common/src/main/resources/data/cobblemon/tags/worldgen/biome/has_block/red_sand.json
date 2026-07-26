@@ -3,11 +3,11 @@
   "values": [
     "#minecraft:is_badlands",
     {
-      "id": "byg:atacama_desert",
+      "id": "biomeswevegone:atacama_outback",
       "required": false
     },
     {
-      "id": "byg:red_rock_valley",
+      "id": "biomeswevegone:red_rock_valley",
       "required": false
     },
     {

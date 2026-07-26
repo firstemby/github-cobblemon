@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
+import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
@@ -30,18 +31,12 @@ import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
+import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
 import com.cobblemon.mod.common.client.render.DeferredRenderer
-import com.cobblemon.mod.common.client.render.block.BerryBlockRenderer
-import com.cobblemon.mod.common.client.render.block.CampfireBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
-import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
-import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
-import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
-import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
-import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
+import com.cobblemon.mod.common.client.render.block.*
 import com.cobblemon.mod.common.client.render.boat.CobblemonBoatRenderer
 import com.cobblemon.mod.common.client.render.color.AprijuiceItemColorProvider
 import com.cobblemon.mod.common.client.render.color.PokeBaitItemColorProvider
@@ -71,6 +66,7 @@ import com.cobblemon.mod.common.client.tooltips.FishingRodTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.PokePuffTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
+import com.cobblemon.mod.common.client.tooltips.TechnicalMachineTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TooltipManager
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
@@ -105,6 +101,7 @@ object CobblemonClient {
     var battle: ClientBattle? = null
     var clientPlayerData = ClientGeneralPlayerData()
     var clientPokedexData = ClientPokedexManager(mutableMapOf())
+    var clientTMMoveData = ClientTMMoveManager(mutableSetOf())
 
     /** If true then we won't bother them anymore about choosing a starter even if it's a thing they can do. */
     var checkedStarterScreen = false
@@ -126,6 +123,7 @@ object CobblemonClient {
         teamData = ClientPlayerTeamData()
         biggerBrainDebugData = null
         clientPokedexData = ClientPokedexManager(mutableMapOf())
+        clientTMMoveData = ClientTMMoveManager(mutableSetOf())
         storage.onLogin()
 //        CobblemonDataProvider.canReload = false
     }
@@ -136,6 +134,8 @@ object CobblemonClient {
         battleOverlay.onLogout()
         ClientTaskTracker.clear()
         checkedStarterScreen = false
+        overlay.resetAttachedToast()
+        PartyTutorialToasts.reset()
 //        CobblemonDataProvider.canReload = true
         DeferredRenderer.clearAll()
         ClientPlayerIcon.clear()
@@ -173,13 +173,12 @@ object CobblemonClient {
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
-                var selectedItem = player.inventory.getItem(player.inventory.selected)
+                val selectedItem = player.inventory.getItem(player.inventory.selected)
                 if (pokedexUsageContext.scanningGuiOpen &&
                     !(selectedItem.`is`(CobblemonItemTags.POKEDEX)) &&
                     !(player.offhandItem.`is`(CobblemonItemTags.POKEDEX) &&
-                            player.isUsingItem == true &&
-                            player.usedItemHand == InteractionHand.OFF_HAND
-                            )
+                            player.isUsingItem &&
+                            player.usedItemHand == InteractionHand.OFF_HAND)
                 ) {
                     // Stop using Pokédex in main hand if player switches to a different slot in hotbar
                     pokedexUsageContext.stopUsing(PokedexUsageContext.OPEN_SCANNER_BUFFER_TICKS + 1)
@@ -212,6 +211,7 @@ object CobblemonClient {
         TooltipManager.registerTooltipGenerator(SeasoningTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingRodTooltipGenerator)
         TooltipManager.registerTooltipGenerator(AprijuiceTooltipGenerator)
+        TooltipManager.registerTooltipGenerator(TechnicalMachineTooltipGenerator)
         TooltipManager.registerTooltipGenerator(PokePuffTooltipGenerator)
     }
 
@@ -224,14 +224,17 @@ object CobblemonClient {
     }
 
     fun registerColors() {
-        this.implementation.registerBlockColors(BlockColor { blockState, view, blockPos, tintIndex ->
+        this.implementation.registerBlockColors(BlockColor { _, view, blockPos, _ ->
             blockPos?.let { pos ->
                 view?.getBlockEntity(pos)?.let { blockEntity ->
                     if (blockEntity is TintBlockEntity) return@BlockColor blockEntity.getTint()
                 }
             }
             return@BlockColor 0xFFFFFF
-        }, CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE)
+        }, CobblemonBlocks.POKE_SNACK,
+            CobblemonBlocks.POKE_CAKE,
+            CobblemonBlocks.TM_MACHINE
+        )
     }
 
     private fun registerBlockRenderTypes() {
@@ -277,6 +280,7 @@ object CobblemonClient {
             CobblemonBlocks.HEALING_MACHINE,
             CobblemonBlocks.MEDICINAL_LEEK,
             CobblemonBlocks.HEALING_MACHINE,
+            CobblemonBlocks.MONITOR,
             CobblemonBlocks.RED_MINT,
             CobblemonBlocks.BLUE_MINT,
             CobblemonBlocks.CYAN_MINT,
@@ -303,6 +307,24 @@ object CobblemonClient {
             CobblemonBlocks.MEDIUM_BUDDING_BLACK_TUMBLESTONE,
             CobblemonBlocks.LARGE_BUDDING_BLACK_TUMBLESTONE,
             CobblemonBlocks.BLACK_TUMBLESTONE_CLUSTER,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
+            CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY,
             CobblemonBlocks.SMALL_BUDDING_SKY_TUMBLESTONE,
             CobblemonBlocks.MEDIUM_BUDDING_SKY_TUMBLESTONE,
             CobblemonBlocks.LARGE_BUDDING_SKY_TUMBLESTONE,
@@ -327,7 +349,49 @@ object CobblemonClient {
             CobblemonBlocks.PINK_CAMPFIRE_POT,
             CobblemonBlocks.RED_CAMPFIRE_POT,
             CobblemonBlocks.WHITE_CAMPFIRE_POT,
-            CobblemonBlocks.YELLOW_CAMPFIRE_POT
+            CobblemonBlocks.YELLOW_CAMPFIRE_POT,
+            CobblemonBlocks.WHITE_PLAQUE,
+            CobblemonBlocks.LIGHT_GRAY_PLAQUE,
+            CobblemonBlocks.GRAY_PLAQUE,
+            CobblemonBlocks.BLACK_PLAQUE,
+            CobblemonBlocks.BROWN_PLAQUE,
+            CobblemonBlocks.RED_PLAQUE,
+            CobblemonBlocks.ORANGE_PLAQUE,
+            CobblemonBlocks.YELLOW_PLAQUE,
+            CobblemonBlocks.LIME_PLAQUE,
+            CobblemonBlocks.GREEN_PLAQUE,
+            CobblemonBlocks.CYAN_PLAQUE,
+            CobblemonBlocks.LIGHT_BLUE_PLAQUE,
+            CobblemonBlocks.BLUE_PLAQUE,
+            CobblemonBlocks.PURPLE_PLAQUE,
+            CobblemonBlocks.MAGENTA_PLAQUE,
+            CobblemonBlocks.PINK_PLAQUE,
+            CobblemonBlocks.BLUNDER_POLICY,
+            CobblemonBlocks.WEAKNESS_POLICY,
+            CobblemonBlocks.POTION,
+            CobblemonBlocks.SUPER_POTION,
+            CobblemonBlocks.HYPER_POTION,
+            CobblemonBlocks.MAX_POTION,
+            CobblemonBlocks.FULL_RESTORE,
+            CobblemonBlocks.ANTIDOTE,
+            CobblemonBlocks.AWAKENING,
+            CobblemonBlocks.BURN_HEAL,
+            CobblemonBlocks.ICE_HEAL,
+            CobblemonBlocks.PARALYZE_HEAL,
+            CobblemonBlocks.FULL_HEAL,
+            CobblemonBlocks.ETHER,
+            CobblemonBlocks.MAX_ETHER,
+            CobblemonBlocks.ELIXIR,
+            CobblemonBlocks.MAX_ELIXIR,
+            CobblemonBlocks.DIRE_HIT,
+            CobblemonBlocks.GUARD_SPEC,
+            CobblemonBlocks.X_ACCURACY,
+            CobblemonBlocks.X_ATTACK,
+            CobblemonBlocks.X_DEFENSE,
+            CobblemonBlocks.X_SP_ATK,
+            CobblemonBlocks.X_SP_DEF,
+            CobblemonBlocks.X_SPEED,
+            CobblemonBlocks.TM_MACHINE
         )
 
         this.createBoatModelLayers()
@@ -356,6 +420,7 @@ object CobblemonClient {
 
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
+        MenuScreens.register(CobblemonMenuType.TM_MACHINE, ::TMMachineScreen)
     }
 
     private fun registerBlockEntityRenderers() {
@@ -374,11 +439,13 @@ object CobblemonClient {
             CobblemonBlockEntities.RESTORATION_TANK,
             ::RestorationTankRenderer
         )
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HABITAT_BLOCK, ::HabitatBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISC_SHELF, ::DiscShelfBlockEntityRenderer)
     }
 
     private fun registerEntityRenderers() {
@@ -391,12 +458,7 @@ object CobblemonClient {
         LOGGER.info("Registering Boat renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx -> CobblemonBoatRenderer(ctx, false) }
         LOGGER.info("Registering Boat with Chest renderer")
-        this.implementation.registerEntityRenderer(CobblemonEntities.CHEST_BOAT) { ctx ->
-            CobblemonBoatRenderer(
-                ctx,
-                true
-            )
-        }
+        this.implementation.registerEntityRenderer(CobblemonEntities.CHEST_BOAT) { ctx -> CobblemonBoatRenderer(ctx, true) }
         LOGGER.info("Registering Generic Bedrock renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.GENERIC_BEDROCK_ENTITY, ::GenericBedrockRenderer)
         LOGGER.info("Registering Generic Bedrock Entity renderer")

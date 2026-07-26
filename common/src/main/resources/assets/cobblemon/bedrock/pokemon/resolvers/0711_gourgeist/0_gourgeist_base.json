@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0711_gourgeist/gourgeist_shiny.png",
       "layers": [
         {
           "name": "color",
           "texture": "cobblemon:textures/pokemon/0711_gourgeist/gourgeist_shiny_emissive.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0711_gourgeist/gourgeist_alpha.png",
           "emissive": true
         }
       ]

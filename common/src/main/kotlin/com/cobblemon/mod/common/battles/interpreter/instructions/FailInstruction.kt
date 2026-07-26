@@ -22,8 +22,8 @@ import com.cobblemon.mod.common.util.battleLang
  * @author Hunter
  * @since September 25th, 2022
  */
-class FailInstruction(val message: BattleMessage): InterpreterInstruction {
-
+class FailInstruction(val battle: PokemonBattle, val message: BattleMessage): InterpreterInstruction {
+    val target = message.battlePokemon(0, battle)
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F){
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting

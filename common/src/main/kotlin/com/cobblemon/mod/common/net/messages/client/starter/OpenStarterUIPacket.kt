@@ -25,11 +25,12 @@ class OpenStarterUIPacket internal constructor(val categories: List<RenderableSt
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeInt(categories.size)
-        categories.forEach {
-            buffer.writeString(it.name)
-            buffer.writeString(it.displayName)
-            buffer.writeInt(it.pokemon.size)
-            it.pokemon.forEach { it.saveToBuffer(buffer) }
+        categories.forEach { category ->
+            buffer.writeString(category.name)
+            buffer.writeString(category.displayName)
+            buffer.writeInt(category.order)
+            buffer.writeInt(category.pokemon.size)
+            category.pokemon.forEach { it.saveToBuffer(buffer) }
         }
     }
 
@@ -38,17 +39,19 @@ class OpenStarterUIPacket internal constructor(val categories: List<RenderableSt
         fun decode(buffer: RegistryFriendlyByteBuf): OpenStarterUIPacket {
             val numCategories = buffer.readInt()
             val categories = arrayListOf<RenderableStarterCategory>()
-            for (i in 0 until numCategories) {
+            repeat(numCategories) {
                 val name = buffer.readString()
                 val displayName = buffer.readString()
+                val order = buffer.readInt()
                 val numProperties = buffer.readInt()
                 val renderablePokemon = mutableListOf<RenderablePokemon>()
-                repeat(times = numProperties) {
+                repeat(numProperties) {
                     renderablePokemon.add(RenderablePokemon.loadFromBuffer(buffer))
                 }
                 categories.add(
                     RenderableStarterCategory(
                         name = name,
+                        order = order,
                         displayName = displayName,
                         pokemon = renderablePokemon
                     )

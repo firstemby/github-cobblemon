@@ -63,103 +63,27 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.5104057,
-              "z": -0.3168178
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -2.6898228e-18,
-              "y": -0.5152839,
-              "z": -0.24532038
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.01842716,
-              "y": -1.5648918,
-              "z": 0.62338775
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.01842716,
-              "y": -1.5648918,
-              "z": 0.62338775
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -0.5104057,
-              "z": -0.3168178
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -2.6898228e-18,
-              "y": -0.5152839,
-              "z": -0.24532038
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.01842716,
-              "y": -1.5648918,
-              "z": 0.62338775
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "moving": {
       "swim": {
         "avoidsWater": true
       }
     },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
     "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
       "times": [
         "any"
-      ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
+      ]
     }
   },
   "drops": {

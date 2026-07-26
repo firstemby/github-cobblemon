@@ -3,6 +3,7 @@
     "portraitTranslation": [-0.54,-0.52,0],
     "profileScale": 0.67,
     "profileTranslation": [0,0.74,0],
+  "rootBone": "glameow",
     "poses": {
       "standing": {
         "poseTypes": [

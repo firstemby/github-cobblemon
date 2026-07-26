@@ -1,0 +1,27 @@
+{
+  "species": "cobblemon:stunky",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:stunky",
+      "model": "cobblemon:stunky.geo",
+      "texture": "cobblemon:textures/pokemon/0434_stunky/stunky.png",
+      "layers": []
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0434_stunky/stunky_shiny.png"
+    },
+    {
+      "aspects": ["alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0434_stunky/stunky_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

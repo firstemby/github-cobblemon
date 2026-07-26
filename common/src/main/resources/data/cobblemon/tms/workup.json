@@ -1,0 +1,23 @@
+{
+  "moveName": "workup",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "normal",
+  "recipe": [
+    {
+      "item": "cobblemon:normal_gem",
+      "count": 4
+    },
+    {
+      "item": "cobblemon:red_mint_leaf",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:cyan_mint_leaf",
+      "count": 1
+    }
+  ]
+}

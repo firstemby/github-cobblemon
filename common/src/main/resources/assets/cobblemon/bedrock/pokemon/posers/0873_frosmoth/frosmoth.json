@@ -1,0 +1,82 @@
+{
+  "portraitScale": 1.57,
+  "portraitTranslation": [-0.14, 0.39, 0],
+  "profileScale": 0.61,
+  "profileTranslation": [0.10, 0.82, 0],
+  "rootBone": "frosmoth",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('frosmoth', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('frosmoth', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('frosmoth', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseName": "sleep",
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ]
+	},
+    "hover": {
+      "poseName": "hover",
+      "poseTypes": [
+        "FLOAT",
+        "HOVER",
+        "NONE"
+      ],
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('frosmoth', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseName": "fly",
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.bedrock('frosmoth', 'ground_idle')",
+		"q.bedrock('frosmoth', 'wing_flap')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('frosmoth', 'blink')"
+      ]
+    }
+  }
+ }

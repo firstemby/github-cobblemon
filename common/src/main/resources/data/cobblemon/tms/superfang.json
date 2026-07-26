@@ -1,0 +1,19 @@
+{
+  "moveName": "superfang",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "normal",
+  "recipe": [
+    {
+      "item": "cobblemon:normal_gem",
+      "count": 4
+    },
+    {
+      "item": "cobblemon:razor_fang",
+      "count": 1
+    }
+  ]
+}

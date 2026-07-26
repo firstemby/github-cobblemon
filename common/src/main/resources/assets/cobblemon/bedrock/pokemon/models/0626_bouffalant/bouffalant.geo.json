@@ -101,7 +101,7 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso3",
-					"pivot": [0, 36, -4.5],
+					"pivot": [0, 40, -4.5],
 					"rotation": [7.5, 0, 0],
 					"locators": {
 						"seat_1": [0, 36, -4.5]
@@ -380,15 +380,6 @@
 					}
 				},
 				{
-					"name": "locator_item",
-					"parent": "afro",
-					"pivot": [-1, 37, -15.5],
-					"rotation": [-90, 0, 22.5],
-					"locators": {
-						"item": [-1, 37, -15.5]
-					}
-				},
-				{
 					"name": "afro_hat",
 					"parent": "afro",
 					"pivot": [0, 23, -12.6],
@@ -421,6 +412,14 @@
 							"offset": [0, 12.5, -25.3],
 							"rotation": [-90, 0, 0]
 						}
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "jaw",
+					"pivot": [0, 12.5, -25.75],
+					"locators": {
+						"item": [0, 12.5, -25.75]
 					}
 				},
 				{
