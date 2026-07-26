@@ -44,7 +44,6 @@ internal data class PokemonP3(
     val currentFullness: Int,
     val interactionCooldowns: Map<ResourceLocation, Int>,
     val isAlpha: Boolean,
-    val realTimeMoveCooldowns: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -82,7 +81,6 @@ internal data class PokemonP3(
         other.currentFullness = this.currentFullness
         other.interactionCooldowns = this.interactionCooldowns.toMutableMap()
         other.isAlpha = isAlpha
-        other.realTimeMoveCooldowns = this.realTimeMoveCooldowns.toMutableMap()
         other.recalculateCharacteristic()
         other.updateAspects()
         return other
@@ -107,7 +105,6 @@ internal data class PokemonP3(
                 Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
                 Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha),
-                Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_REAL_TIME_MOVE_COOLDOWNS, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::realTimeMoveCooldowns),
             ).apply(instance) {
               originalTrainerType,
               originalTrainer,
@@ -124,8 +121,7 @@ internal data class PokemonP3(
               rideStamina,
               currentFullness,
               interactionCooldown,
-              isAlpha,
-              realTimeMoveCooldowns -> PokemonP3(
+              isAlpha -> PokemonP3(
                 originalTrainerType,
                 originalTrainer,
                 forcedAspects.toSet(),
@@ -142,7 +138,6 @@ internal data class PokemonP3(
                 currentFullness,
                 interactionCooldown,
                 isAlpha,
-                realTimeMoveCooldowns,
               )
             }
         }
@@ -168,7 +163,6 @@ internal data class PokemonP3(
             pokemon.currentFullness,
             pokemon.interactionCooldowns,
             pokemon.isAlpha,
-            pokemon.realTimeMoveCooldowns,
         )
     }
 }
