@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-
 package com.cobblemon.mod.common.entity
 
 import com.bedrockk.molang.runtime.value.MoValue

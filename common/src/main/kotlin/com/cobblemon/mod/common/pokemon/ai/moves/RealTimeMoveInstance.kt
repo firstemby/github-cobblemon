@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-
 package com.cobblemon.mod.common.pokemon.ai.moves
 
 import com.cobblemon.mod.common.api.types.ElementalType
