@@ -39,9 +39,6 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.collections.LazySet
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.EntityDimensions
@@ -213,6 +210,14 @@ class FormData(
     val evolutions: MutableSet<Evolution>
         get() = _evolutions ?: mutableSetOf()
 
+    /** The evolutions explicitly set on this form, as opposed to [evolutions] which falls back to an empty set. Used to tell whether this form overrides the species' evolutions when syncing. */
+    internal val ownEvolutions: MutableSet<Evolution>?
+        get() = this._evolutions
+
+    /** The preEvolution explicitly set on this form, as opposed to [preEvolution] which falls back to the species'. Used to tell whether this form overrides the species' preEvolution when syncing. */
+    internal val ownPreEvolution: PreEvolution?
+        get() = this._preEvolution
+
     val battleTheme: ResourceLocation
         get() = _battleTheme ?: species.battleTheme
 
@@ -264,13 +269,22 @@ class FormData(
         this.species = species
         this.behaviour.parent = species.behaviour
         Cobblemon.statProvider.provide(this)
-        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
-        this.preEvolution?.species
-        this.preEvolution?.form
-        this.evolutions.size
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         behaviour.herd.initialize()
         return this
+    }
+
+    /**
+     * Applies decoded evolution data onto this form, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
+     * after every species has already been registered.
+     */
+    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>?, preEvolution: PreEvolution?) {
+        this._evolutions = evolutions
+        this._preEvolution = preEvolution
+        // These properties are lazy, force resolution now that every species is guaranteed to be registered
+        this.preEvolution?.species
+        this.preEvolution?.form
+        this.evolutions.size
     }
 
     internal fun resolveEvolutionMoves() {
@@ -321,10 +335,6 @@ class FormData(
             }
         }
         buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
-        buffer.writeNullable(this._evolutions) { pb, evolutions ->
-            pb.writeCollection(evolutions) { pb2, evolution -> pb2.writeString(PokemonSpecies.gson.toJson(evolution, Evolution::class.java)) }
-        }
-        buffer.writeNullable(this._preEvolution) { pb, preEvolution -> pb.writeString(PokemonSpecies.gson.toJson(preEvolution, PreEvolution::class.java)) }
     }
 
     override fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -362,14 +372,6 @@ class FormData(
             }
         }
         this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
-
-        // LazySet defers parsing until accessed, since other species may not be registered yet at this point
-        this._evolutions = buffer.readNullable { _ ->
-            val evolutionsJson = JsonArray()
-            buffer.readList { _ -> buffer.readString() }.forEach { evolutionsJson.add(JsonParser.parseString(it)) }
-            LazySet(Evolution::class, evolutionsJson)
-        }
-        this._preEvolution = buffer.readNullable { _ -> PokemonSpecies.gson.fromJson(buffer.readString(), PreEvolution::class.java) }
     }
 
     /**

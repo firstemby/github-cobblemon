@@ -43,9 +43,6 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.collections.LazySet
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -184,11 +181,20 @@ class Species : ShowdownIdentifiable {
             this.forms.add(0, this.standardForm)
         }
         this.lightingData?.let { this.lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
-        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
+        behaviour.herd.initialize()
+    }
+
+    /**
+     * Applies decoded evolution data onto this species, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
+     * after every species has already been registered.
+     */
+    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>, preEvolution: PreEvolution?) {
+        // Mutate in place rather than reassign: standardForm may have already captured this.evolutions by reference.
+        this.evolutions.clear()
+        this.evolutions.addAll(evolutions)
+        this.preEvolution = preEvolution
         this.preEvolution?.species
         this.preEvolution?.form
-        this.evolutions.size
-        behaviour.herd.initialize()
     }
 
     // Ran after initialize due to us creating a Pokémon here which requires all the properties in #initialize to be present for both this and the results, this is the easiest way to quickly resolve species + form
@@ -259,8 +265,6 @@ class Species : ShowdownIdentifiable {
         }
 
         this.riding.encode(buffer)
-        buffer.writeCollection(this.evolutions) { pb, evolution -> pb.writeString(PokemonSpecies.gson.toJson(evolution, Evolution::class.java)) }
-        buffer.writeNullable(this.preEvolution) { pb, preEvolution -> pb.writeString(PokemonSpecies.gson.toJson(preEvolution, PreEvolution::class.java)) }
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
@@ -304,12 +308,7 @@ class Species : ShowdownIdentifiable {
             }
         }
         this.riding = RidingProperties.decode(buffer)
-
-        // LazySet defers parsing until accessed, since other species may not be registered yet at this point
-        val evolutionsJson = JsonArray()
-        buffer.readList { _ -> buffer.readString() }.forEach { evolutionsJson.add(JsonParser.parseString(it)) }
-        this.evolutions = LazySet(Evolution::class, evolutionsJson)
-        this.preEvolution = buffer.readNullable { _ -> PokemonSpecies.gson.fromJson(buffer.readString(), PreEvolution::class.java) }
+        this.initialize()
     }
 
     /**

@@ -44,6 +44,9 @@ import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.adapters.ElementalTypeAdapter
+import com.cobblemon.mod.common.net.messages.client.data.FormEvolutionOverride
+import com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionEntry
+import com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket
 import com.cobblemon.mod.common.net.messages.client.data.SpeciesRegistrySyncPacket
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
@@ -243,6 +246,18 @@ object PokemonSpecies : JsonDataRegistry<Species> {
 
     override fun sync(player: ServerPlayer) {
         SpeciesRegistrySyncPacket(species.toList()).sendToPlayer(player)
+        // Sent after the species themselves so every species is already registered by the time this is decoded.
+        val evolutionEntries = species.map { singleSpecies ->
+            val formOverrides = singleSpecies.forms.mapNotNull { form ->
+                if (form.ownEvolutions == null && form.ownPreEvolution == null) {
+                    null
+                } else {
+                    FormEvolutionOverride(form.name, form.ownEvolutions, form.ownPreEvolution)
+                }
+            }
+            SpeciesEvolutionEntry(singleSpecies.resourceIdentifier, singleSpecies.evolutions, singleSpecies.preEvolution, formOverrides)
+        }
+        SpeciesEvolutionSyncPacket(evolutionEntries).sendToPlayer(player)
     }
 
     /**
