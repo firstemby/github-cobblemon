@@ -1468,6 +1468,9 @@
 
   "cobblemon.ui.pokedex.requirement.advancement.tooltip": "Player must have %1$s advancement",
   "cobblemon.ui.pokedex.requirement.battle_critical_hits.tooltip": "Must hit %1$s critical-hits in battle",
+  "cobblemon.ui.pokedex.requirement.biome.anticondition.tooltip": "Must not be in the %1$s biome to evolve",
+  "cobblemon.ui.pokedex.requirement.biome.both.tooltip": "Must be in the %1$s biome and not in the %2$s biome to evolve",
+  "cobblemon.ui.pokedex.requirement.biome.tooltip": "Must be in the %1$s biome to evolve",
   "cobblemon.ui.pokedex.requirement.blocks_traveled.tooltip": "Must travel %1$s blocks",
   "cobblemon.ui.pokedex.requirement.damage_taken.tooltip": "Must take %1$s damage in battle without fainting",
   "cobblemon.ui.pokedex.requirement.defeat.tooltip": "Must defeat %1$s in battle to evolve",

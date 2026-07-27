@@ -9,6 +9,9 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
+import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
+import com.cobblemon.mod.common.api.conditional.RegistryLikeTagCondition
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
@@ -22,6 +25,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.biome.Biome
 
 data class RenderRequirementData(
     val icon: Item,
@@ -64,7 +68,8 @@ fun renderRequirementData(requirement: Requirement): RenderRequirementData? {
 
 fun renderAdvancementRequirement(advancementRequirement: AdvancementRequirement): RenderRequirementData? {
     val icon = Items.BOOK
-    val advancementLanguageKey = advancementRequirement.requiredAdvancement.toLanguageKey()
+    val identifier = advancementRequirement.requiredAdvancement
+    val advancementLanguageKey = "${identifier.namespace}.${identifier.path.substringAfterLast('/')}"
     val advancementComponent = Component.translatable("advancements.$advancementLanguageKey").green()
     val tooltip = lang("ui.pokedex.requirement.advancement.tooltip", advancementComponent)
 
@@ -92,7 +97,29 @@ fun renderBattleCriticalHitsRequirement(battleCriticalHitsRequirement: BattleCri
 }
 
 fun renderBiomeRequirement(biomeRequirement: BiomeRequirement): RenderRequirementData? {
-    return null
+    val condition = biomeRequirement.biomeCondition
+    val anticondition = biomeRequirement.biomeAnticondition
+    if (condition == null && anticondition == null) {
+        return null
+    }
+
+    val icon = Items.COMPASS
+    val displayName: (RegistryLikeCondition<Biome>) -> MutableComponent = {
+        when (it) {
+            is RegistryLikeTagCondition -> Component.literal(it.tag.location().path.substringAfterLast('/').split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) })
+            is RegistryLikeIdentifierCondition -> Component.translatable("biome.${it.identifier.namespace}.${it.identifier.path}")
+            else -> Component.literal(it.toString())
+        }
+    }
+    val tooltip = if (condition != null && anticondition != null) {
+        lang("ui.pokedex.requirement.biome.both.tooltip", displayName(condition).green(), displayName(anticondition).green())
+    } else if (condition != null) {
+        lang("ui.pokedex.requirement.biome.tooltip", displayName(condition).green())
+    } else {
+        lang("ui.pokedex.requirement.biome.anticondition.tooltip", displayName(anticondition!!).green())
+    }
+
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderBlocksTraveledRequirement(blocksTraveledRequirement: BlocksTraveledRequirement): RenderRequirementData? {
