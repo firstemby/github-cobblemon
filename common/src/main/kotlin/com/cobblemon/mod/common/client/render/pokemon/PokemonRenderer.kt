@@ -173,11 +173,10 @@ class PokemonRenderer(
             val d: Double = entity.x - entity.xo
             val e: Double = entity.z - entity.zo
             val isMoving =  d * d + e * e > 2.5000003E-7
-            //TODO: drive moving blendtime to current movement speed?
-            val blendTime = if (isMoving) Mth.lerp(Mth.clamp(entity.deltaMovement.lengthSqr() / (0.2 * 0.2), 0.0, 1.0), 0.8,0.3).toFloat()
+            //TODO: drive moving blendtime to current movement speed? Currently having issues not making it look sluggish
+            //TODO: likely could also use some influence with size of mon especially when stationary.
+            val blendTime = if (isMoving) 0.3f//Mth.lerp(Mth.clamp(entity.deltaMovement.lengthSqr() / (0.2 * 0.2), 0.0, 1.0), 0.8,0.3).toFloat()
                 else 0.8f
-//            val
-//            val blendTime = if (isMoving) 0.3f else 0.8f
 
             inertVals.t += dt / blendTime
             clientDelegate.renderYRot = inertVals.offset + smoothstep(inertVals.t, inertVals.s)

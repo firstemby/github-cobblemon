@@ -94,7 +94,8 @@ fun simpleSpringDamperQuat(
 
 
 /**
-* Essentially the same code as found here: https://github.com/orangeduck/Spring-It-On/blob/main/inertialeasing.c
+* Below is essentially the same code as found here: https://github.com/orangeduck/Spring-It-On/blob/main/inertialeasing.c
+ * https://theorangeduck.com/page/inertial-easing <- the blogpost
 */
 
 // Class to hold the "time" along the curve/function and scale of the function currently
