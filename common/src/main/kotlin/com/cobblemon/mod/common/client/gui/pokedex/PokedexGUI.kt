@@ -53,6 +53,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.*
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.debugEvolutionRequirementRendering
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
@@ -61,6 +62,7 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.cobblemon.mod.common.util.lang
+import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.EditBox
@@ -824,6 +826,10 @@ class PokedexGUI private constructor(
             selectedEntry?.speciesId?.let { speciesId ->
                 handleProfileDebugKeys(keyCode, speciesId, pokemonInfoWidget.state)
             }
+        }
+
+        if (tabInfoIndex == TAB_EVOLUTION_TREE && keyCode == InputConstants.KEY_SEMICOLON) {
+            debugEvolutionRequirementRendering()
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers)

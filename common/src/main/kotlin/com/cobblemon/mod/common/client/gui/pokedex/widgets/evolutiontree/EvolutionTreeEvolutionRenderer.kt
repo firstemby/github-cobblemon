@@ -31,7 +31,7 @@ data class RenderEvolutionData(
     val tooltips: List<MutableComponent>,
 )
 
-private fun resolveRequirementData(requirement: Requirement): RenderRequirementData? {
+internal fun resolveRequirementData(requirement: Requirement): RenderRequirementData? {
     val icon = requirement.pokedexIcon?.let {
         Minecraft.getInstance()?.player?.level()?.itemRegistry?.get(it)
     }

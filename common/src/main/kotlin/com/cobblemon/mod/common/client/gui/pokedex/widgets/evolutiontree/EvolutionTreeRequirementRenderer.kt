@@ -26,6 +26,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.structure.Structure
 
 data class RenderRequirementData(
     val icon: Item,
@@ -231,11 +232,23 @@ fun renderOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemReq
 }
 
 fun renderPartyMemberRequirement(partyMemberRequirement: PartyMemberRequirement): RenderRequirementData? {
-    return null
+    val description = describePokemonProperties(partyMemberRequirement.target) ?: return null
+    val icon = CobblemonItems.POKE_BALL
+    val tooltip = if (partyMemberRequirement.contains) {
+        lang("ui.pokedex.requirement.party_member.tooltip", description)
+    } else {
+        lang("ui.pokedex.requirement.party_member.anticondition.tooltip", description)
+    }
+
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderPokemonPropertiesRequirement(pokemonPropertiesRequirement: PokemonPropertiesRequirement): RenderRequirementData? {
-    return null
+    val description = describePokemonProperties(pokemonPropertiesRequirement.target) ?: return null
+    val icon = Items.NAME_TAG
+    val tooltip = lang("ui.pokedex.requirement.pokemon_properties.tooltip", description)
+
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderPropertyRangeRequirement(propertyRangeRequirement: PropertyRangeRequirement): RenderRequirementData? {
@@ -284,7 +297,30 @@ fun renderStatEqualRequirement(statEqualRequirement: StatEqualRequirement): Rend
 }
 
 fun renderStructureRequirement(structureRequirement: StructureRequirement): RenderRequirementData? {
-    return null
+    val condition = structureRequirement.structureCondition
+    val anticondition = structureRequirement.structureAnticondition
+    if (condition == null && anticondition == null) {
+        return null
+    }
+
+    val icon = Items.STRUCTURE_BLOCK
+    val displayName: (RegistryLikeCondition<Structure>) -> MutableComponent = {
+        val path = when (it) {
+            is RegistryLikeTagCondition -> it.tag.location().path
+            is RegistryLikeIdentifierCondition -> it.identifier.path
+            else -> it.toString()
+        }
+        Component.literal(path.substringAfterLast('/').split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) })
+    }
+    val tooltip = if (condition != null && anticondition != null) {
+        lang("ui.pokedex.requirement.structure.both.tooltip", displayName(condition).green(), displayName(anticondition).green())
+    } else if (condition != null) {
+        lang("ui.pokedex.requirement.structure.tooltip", displayName(condition).green())
+    } else {
+        lang("ui.pokedex.requirement.structure.anticondition.tooltip", displayName(anticondition!!).green())
+    }
+
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderTimeRangeRequirement(timeRangeRequirement: TimeRangeRequirement): RenderRequirementData? {
