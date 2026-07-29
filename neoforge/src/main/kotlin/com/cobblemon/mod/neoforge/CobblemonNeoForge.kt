@@ -439,12 +439,8 @@ class CobblemonNeoForge : CobblemonImplementation {
     }
 
     override fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>) {
-        if (type == PackType.SERVER_DATA) {
+        if (type == PackType.SERVER_DATA)
             this.reloadableResources += reloader
-        }
-        else {
-            CobblemonNeoForgeClient.registerResourceReloader(reloader)
-        }
     }
 
     private fun onReload(e: AddReloadListenerEvent) {

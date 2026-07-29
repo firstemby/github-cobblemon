@@ -326,6 +326,22 @@
 - Updated Pokédex Screens item tag to support tagged variants of Redstone and Glowstone Dust
 - Sounds for interacting with various Cobblemon blocks now play from the centre of the block, rather than the corner
 - The `/pc` command no longer plays PC activation sounds
+- Lowered the volume of Blitzle and Zebstrika's cry
+- Fixed Raichu (male) and Alolan Raichu (both genders) not displaying the correct Partner Cap when Pewter Crunchies are in the cosmetic slot.
+- Regional Foods will now prioritize being eaten instead of used for healing Pokémon, shift clicking will use it as healing
+- Resolved Z-Fighting on Pokédex Models
+- Restored Ninjask's ability to do barrel rolls
+- Fixed a crash caused by adding enchanted items to the Resurrection Machine
+- Fixed a crash that could occur when starting a PvN battle with only fainted Pokémon.
+- Fixed the Remember Riding Camera config not being respected when dismounting and resolved the incompatibility with the Auto Third Person mod
+- Fixed Full Heal block not dropping Full Heals
+- Fixed status cure items not returning an empty bottle when used
+- Fixed Panpour consuming its held item when evolving with a Water Stone
+- Fixed Smoked Tail Curry returning a Wooden Bowl when consumed despite it not being included in the recipe
+- Fixed `/giveallpokemon` not respecting the min and max parameters
+- Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
+- Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
+- Fixed a rare set of concurrency bugs related to reloading packs on NeoForge; fixes a ModernFix issue
 
 ### Fixes
 - Fixed Blitzle's base scale being `1` rather than the intended `0.8`

@@ -55,8 +55,10 @@ import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener
+import org.jetbrains.annotations.ApiStatus
 
 object CobblemonDataProvider : DataProvider {
 
@@ -66,6 +68,11 @@ object CobblemonDataProvider : DataProvider {
     private val synchronizedPlayerIds = mutableListOf<UUID>()
 
     private val scheduledActions = mutableMapOf<UUID, MutableList<() -> Unit>>()
+
+    // client is public only so we can use it cross-module. maybe a more elegant solution exists, but this works
+    @ApiStatus.Internal
+    val clientResourceReloader: PreparableReloadListener = SimpleResourceReloader(PackType.CLIENT_RESOURCES)
+    private val serverResourceReloader: PreparableReloadListener = SimpleResourceReloader(PackType.SERVER_DATA)
 
     fun registerDefaults() {
         this.register(CobblemonScripts, reloadable = true)
@@ -119,9 +126,9 @@ object CobblemonDataProvider : DataProvider {
         }
 
         ifClient {
-            Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())
+            Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), clientResourceReloader, PackType.CLIENT_RESOURCES, emptyList())
         }
-        Cobblemon.implementation.registerResourceReloader(cobblemonResource("data_resources"), SimpleResourceReloader(PackType.SERVER_DATA), PackType.SERVER_DATA, emptyList())
+        Cobblemon.implementation.registerResourceReloader(cobblemonResource("data_resources"), serverResourceReloader, PackType.SERVER_DATA, emptyList())
     }
 
     override fun <T : DataRegistry> register(registry: T, reloadable: Boolean): T {
