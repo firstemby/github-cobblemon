@@ -19,11 +19,13 @@ import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.requirements.*
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
@@ -122,6 +124,12 @@ fun renderBiomeRequirement(biomeRequirement: BiomeRequirement): RenderRequiremen
         lang("ui.pokedex.requirement.biome.tooltip", displayName(condition).green())
     } else {
         lang("ui.pokedex.requirement.biome.anticondition.tooltip", displayName(anticondition!!).green())
+    }
+
+    val playerBiome = Minecraft.getInstance()?.player?.let { it.level().getBiome(it.blockPosition()) }
+    if (playerBiome != null) {
+        val isMet = (condition == null || condition.fits(playerBiome)) && (anticondition == null || !anticondition.fits(playerBiome))
+        tooltip.add(if (isMet) Component.literal(" ✔").green() else Component.literal(" ✘").red())
     }
 
     return RenderRequirementData(icon, tooltip)
