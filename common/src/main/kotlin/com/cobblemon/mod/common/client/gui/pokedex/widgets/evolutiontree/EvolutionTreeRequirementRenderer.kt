@@ -13,14 +13,18 @@ import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeTagCondition
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.requirements.*
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Item
@@ -223,7 +227,6 @@ fun renderMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): RenderR
     return RenderRequirementData(icon, tooltip)
 }
 
-// TODO test
 fun renderOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): RenderRequirementData? {
     val item = ownerHoldsItemRequirement.itemCondition.items.get().first().value()
     val tooltip = lang("ui.pokedex.requirement.owner_held_item.tooltip", item.description.plainCopy().green())
@@ -252,7 +255,19 @@ fun renderPokemonPropertiesRequirement(pokemonPropertiesRequirement: PokemonProp
 }
 
 fun renderPropertyRangeRequirement(propertyRangeRequirement: PropertyRangeRequirement): RenderRequirementData? {
-    return null
+    val provider = SpeciesFeatures.getFeature(propertyRangeRequirement.feature) as? IntSpeciesFeatureProvider ?: return null
+    val displayName = provider.display?.name?.takeIf { it.isNotBlank() }?.asTranslated()?.green() ?: return null
+    val icon = provider.itemPoints.keys.firstOrNull()?.let { BuiltInRegistries.ITEM.get(it) } ?: Items.NAME_TAG
+
+    val range = propertyRangeRequirement.range
+    val tooltip = lang(
+        "ui.pokedex.requirement.property_range.tooltip",
+        displayName,
+        Component.literal(range.first.toString()).green(),
+        Component.literal(range.last.toString()).green()
+    )
+
+    return RenderRequirementData(icon, tooltip)
 }
 
 fun renderRecoilRequirement(recoilRequirement: RecoilRequirement): RenderRequirementData? {
