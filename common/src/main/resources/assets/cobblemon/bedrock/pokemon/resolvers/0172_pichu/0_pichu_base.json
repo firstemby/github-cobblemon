@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_shiny.png",
       "layers": [
         {
@@ -29,7 +31,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-rage_candy_bar"],
+      "aspects": [
+        "cosmetic_item-rage_candy_bar"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -39,7 +43,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-pewter_crunchies"],
+      "aspects": [
+        "cosmetic_item-pewter_crunchies"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -49,7 +55,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lava_cookie"],
+      "aspects": [
+        "cosmetic_item-lava_cookie"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -59,7 +67,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-old_gateau"],
+      "aspects": [
+        "cosmetic_item-old_gateau"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -69,7 +79,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-casteliacone"],
+      "aspects": [
+        "cosmetic_item-casteliacone"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -79,7 +91,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-lumiose_galette"],
+      "aspects": [
+        "cosmetic_item-lumiose_galette"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -89,7 +103,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-big_malasada"],
+      "aspects": [
+        "cosmetic_item-big_malasada"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -99,7 +115,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-smoked_tail_curry"],
+      "aspects": [
+        "cosmetic_item-smoked_tail_curry"
+      ],
       "model": "cobblemon:pichu_cap.geo",
       "layers": [
         {
@@ -109,7 +127,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-compass"],
+      "aspects": [
+        "cosmetic_item-compass"
+      ],
       "model": "cobblemon:pichu_captain.geo",
       "layers": [
         {
@@ -119,11 +139,15 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-shears"],
+      "aspects": [
+        "cosmetic_item-shears"
+      ],
       "model": "cobblemon:pichu_fluff.geo"
     },
     {
-      "aspects": ["cosmetic_item-leather_helmet"],
+      "aspects": [
+        "cosmetic_item-leather_helmet"
+      ],
       "model": "cobblemon:pichu_detective.geo",
       "layers": [
         {
@@ -133,7 +157,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-sinister_tea"],
+      "aspects": [
+        "cosmetic_item-sinister_tea"
+      ],
       "model": "cobblemon:pichu_detective.geo",
       "layers": [
         {
@@ -143,7 +169,9 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-cocoa_beans"],
+      "aspects": [
+        "cosmetic_item-cocoa_beans"
+      ],
       "model": "cobblemon:pichu_detective.geo",
       "layers": [
         {
@@ -153,12 +181,26 @@
       ]
     },
     {
-      "aspects": ["cosmetic_item-music"],
+      "aspects": [
+        "cosmetic_item-music"
+      ],
       "model": "cobblemon:pichu_ukulele.geo",
       "layers": [
         {
           "name": "ukulele",
           "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_ukulele.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_alpha.png",
+          "emissive": true
         }
       ]
     }

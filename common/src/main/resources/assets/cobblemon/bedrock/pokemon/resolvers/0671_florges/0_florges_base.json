@@ -78,6 +78,18 @@
           "texture": "cobblemon:textures/pokemon/0671_florges/florges_flower_pink.png"
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0671_florges/florges_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -31,17 +31,17 @@
     "walking": {
       "poseTypes": ["WALK"],
       "animations": ["q.look('head')", "q.bedrock('ninjask', 'ground_walk')"],
-      "quirks": ["q.bedrock_quirk('ninjask', 'blink')"]
+      "quirks": ["q.bedrock_quirk('ninjask', 'blink')", "q.bedrock_quirk('ninjask', 'run_quirk')"]
     },
     "hover": {
       "poseTypes": ["HOVER"],
       "animations": ["q.look('head')", "q.bedrock('ninjask', 'air_idle')"],
-      "quirks": ["q.bedrock_quirk('ninjask', 'blink')"]
+      "quirks": ["q.bedrock_quirk('ninjask', 'blink')", "q.bedrock_quirk('ninjask', 'run_quirk')"]
     },
     "fly": {
       "poseTypes": ["FLY"],
       "animations": ["q.look('head')", "q.bedrock('ninjask', 'air_fly')"],
-      "quirks": ["q.bedrock_quirk('ninjask', 'blink')"]
+      "quirks": ["q.bedrock_quirk('ninjask', 'blink')", "q.bedrock_quirk('ninjask', 'run_quirk')"]
     },
     "sleep": {
       "poseTypes": ["SLEEP"],

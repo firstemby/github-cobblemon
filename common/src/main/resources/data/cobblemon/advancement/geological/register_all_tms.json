@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:disc_shelf"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.register_all_tms"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.register_all_tms.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "cobblemon:geological/obtain_ancient_tm",
+  "criteria": {
+    "register_all_tms": {
+      "trigger": "cobblemon:has_learn_all_tm",
+      "conditions": {}
+    }
+
+  },
+  "requirements": [
+    [
+      "register_all_tms"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  },
+  "sends_telemetry_event": false
+}

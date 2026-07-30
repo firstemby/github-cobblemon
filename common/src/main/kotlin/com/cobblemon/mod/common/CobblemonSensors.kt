@@ -38,6 +38,9 @@ object CobblemonSensors {
     val POKEMON_DEFEND_OWNER = register("pokemon_owner_under_attack", ::DefendOwnerSensor)
 
     @JvmField
+    val ALPHA_LEVEL_MATCHING = register("alpha_level_matching", ::AlphaLevelMatchingSensor)
+
+    @JvmField
     val NEARBY_GROWABLE_CROPS = register("nearby_growable_crops", ::PokemonGrowableCropSensor)
 
     @JvmField

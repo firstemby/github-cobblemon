@@ -10,9 +10,23 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0819_skwovet/skwovet_shiny.png",
       "layers": []
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0819_skwovet/skwovet_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,5 @@
+t.pc = q.player.pc;
+
+q.pokemon.is_alpha ? {
+    t.pc.unlock_wallpaper('cobblemon:pokemon_alpha', 1);
+};

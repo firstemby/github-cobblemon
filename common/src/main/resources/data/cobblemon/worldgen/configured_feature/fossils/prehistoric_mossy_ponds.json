@@ -1,0 +1,10 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/mossy_pond1",
+            "cobblemon:fossils/mossy_pond2"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_mossy_pond"
+    }
+}

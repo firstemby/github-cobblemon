@@ -11,6 +11,16 @@
     {
       "aspects": ["shiny", "tree-oak"],
       "texture": "cobblemon:textures/pokemon/0389_torterra/torterra_oak_shiny.png"
+    },
+    {
+      "aspects": ["alpha_eyes", "tree-oak"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0389_torterra/torterra_oak_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 1011,
   "name": "Dipplin",
   "primaryType": "grass",
@@ -43,6 +44,13 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.6,
+  "hitbox": {
+    "width": 0.6,
+    "height": 0.9,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.8,
   "moves": [
     "1:doublehit",
     "1:withdraw",

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import net.minecraft.CrashReport
 import java.util.*
 import java.util.concurrent.CountDownLatch
 

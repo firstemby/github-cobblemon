@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
 import static com.google.common.primitives.Floats.min;
 import static net.minecraft.util.Mth.lerp;
@@ -85,11 +86,13 @@ public abstract class MouseHandlerMixin {
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(false);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             } else if (i < 0) {
                 accumulatedScrollY -= i;
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(true);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             }
         }
     }
@@ -310,7 +313,7 @@ public abstract class MouseHandlerMixin {
         var playerRotater = (RidePassenger)player;
         playerRotater.cobblemon$setRideXRot(playerRotater.cobblemon$getRideXRot() + f);
         playerRotater.cobblemon$setRideYRot(playerRotater.cobblemon$getRideYRot() + g);
-        playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -90.0F, 90.0F));
+        playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -89.0F, 89.0F));
         playerRotater.cobblemon$setRideYRot(Mth.clamp(playerRotater.cobblemon$getRideYRot(), -105.0F, 105.0F));
         if (player.getVehicle() != null) {
             player.getVehicle().onPassengerTurned(player);

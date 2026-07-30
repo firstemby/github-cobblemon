@@ -1,0 +1,56 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["leafstorm", "special"],
+      "delay": 1.2
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:leafstorm_actorexcess1",
+      "locators": ["special", "target"],
+      "targetLocators": ["middle"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.1
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:leafstorm_actor",
+      "locators": ["special", "target"],
+      "targetLocators": ["middle"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.3
+    },
+    {
+      "type": "entity_particles",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "effect": "cobblemon:leafstorm_target",
+      "locators": ["target"]
+    },
+    {
+      "type": "animation",
+      "animation": ["recoil"],
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false"
+    },
+    {
+      "type": "pause",
+      "pause": 0.6
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.6
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+    "type": "cobblemon:cooking_pot_shapeless",
+    "group": "sweet_heart",
+    "category": "misc",
+    "ingredients": [
+        {
+            "item": "cobblemon:eggant_berry"
+        },
+        {
+            "item": "minecraft:cocoa_beans"
+        },
+        {
+            "item": "minecraft:cocoa_beans"
+        },
+        {
+            "item": "minecraft:sugar"
+        }
+    ],
+    "result": {
+        "id": "cobblemon:sweet_heart"
+    },
+    "seasoningTag": "cobblemon:empty",
+    "seasoningProcessors": []
+}

@@ -84,7 +84,7 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
             InteractionResultHolder.consume(stack)
         } else {
             if (user is ServerPlayer) {
-                super<PokemonSelectingItem>.use(user, stack)
+                super<PokemonSelectingItem>.use(user, stack, false)
             } else {
                 InteractionResultHolder.pass(stack)
             }

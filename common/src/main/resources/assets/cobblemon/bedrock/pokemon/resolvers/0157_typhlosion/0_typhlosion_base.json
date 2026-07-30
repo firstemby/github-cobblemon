@@ -10,15 +10,29 @@
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_fire_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_emissive.png",
           "emissive": true,
           "translucent": true
         }
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

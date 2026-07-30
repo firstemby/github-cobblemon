@@ -4,13 +4,12 @@
   "variations": [
     {
       "aspects": ["region-bias-hisui"],
-      "poser": "cobblemon:cyndaquil_hisui_bias",
       "model": "cobblemon:cyndaquil_hisui_bias.geo",
-      "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil_hisui_bias.png",
+      "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil.png",
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil_hisui_bias_emissives.png",
+          "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil_emissive.png",
           "emissive": true,
           "translucent": true
         }
@@ -18,7 +17,7 @@
     },
     {
       "aspects": ["region-bias-hisui", "shiny"],
-      "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil_hisui_bias_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0155_cyndaquil/cyndaquil_shiny.png"
     }
   ]
 }

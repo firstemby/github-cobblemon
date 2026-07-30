@@ -17,7 +17,7 @@
       {
         "type": "entity_particles",
         "effect": "cobblemon:dragonclaw_hand",
-        "locators": ["hand", "physical"]
+        "locators": ["hand_primary", "hand", "physical"]
       },
       {
         "type": "pause",

@@ -66,87 +66,17 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.00012022187,
-              "y": -3.0589306,
-              "z": -0.023141712
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.021572903,
-              "y": -2.9150364,
-              "z": 0.14381033
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019868314,
-              "y": -3.04766,
-              "z": -0.078835934
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019868314,
-              "y": -3.04766,
-              "z": -0.078835934
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.021572903,
-              "y": -2.9150364,
-              "z": 0.14381033
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.021572903,
-              "y": -2.9150364,
-              "z": 0.14381033
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019868314,
-              "y": -3.04766,
-              "z": -0.078835934
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "fireImmune": true,
     "herd": {
       "maxSize": "2"
     },
@@ -159,16 +89,10 @@
         "walkSpeed": 0.2
       }
     },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
-    },
-    "fireImmune": true
+    }
   },
   "drops": {
     "amount": 2,

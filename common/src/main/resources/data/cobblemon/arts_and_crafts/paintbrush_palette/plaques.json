@@ -1,0 +1,36 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "arts_and_crafts"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "arts_and_crafts"
+    }
+  ],
+    "blocks": "#cobblemon:plaques",
+    "mappings": {
+        "arts_and_crafts:white_paintbrush": "cobblemon:white_plaque",
+        "arts_and_crafts:light_gray_paintbrush": "cobblemon:light_gray_plaque",
+        "arts_and_crafts:gray_paintbrush": "cobblemon:gray_plaque",
+        "arts_and_crafts:black_paintbrush": "cobblemon:black_plaque",
+        "arts_and_crafts:brown_paintbrush": "cobblemon:brown_plaque",
+        "arts_and_crafts:red_paintbrush": "cobblemon:red_plaque",
+        "arts_and_crafts:orange_paintbrush": "cobblemon:orange_plaque",
+        "arts_and_crafts:yellow_paintbrush": "cobblemon:yellow_plaque",
+        "arts_and_crafts:lime_paintbrush": "cobblemon:lime_plaque",
+        "arts_and_crafts:green_paintbrush": "cobblemon:green_plaque",
+        "arts_and_crafts:cyan_paintbrush": "cobblemon:cyan_plaque",
+        "arts_and_crafts:light_blue_paintbrush": "cobblemon:light_blue_plaque",
+        "arts_and_crafts:blue_paintbrush": "cobblemon:blue_plaque",
+        "arts_and_crafts:purple_paintbrush": "cobblemon:purple_plaque",
+        "arts_and_crafts:magenta_paintbrush": "cobblemon:magenta_plaque",
+        "arts_and_crafts:pink_paintbrush": "cobblemon:pink_plaque",
+        "arts_and_crafts:bleachdew_paintbrush": "cobblemon:white_plaque"
+    }
+}

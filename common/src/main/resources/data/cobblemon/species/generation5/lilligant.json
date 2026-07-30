@@ -372,7 +372,13 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "5"
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "lilligant alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "drowsyChance": 0.0333,

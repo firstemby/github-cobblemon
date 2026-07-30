@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.battles.InBattleGimmickMove
 import com.cobblemon.mod.common.battles.InBattleMove
 import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
@@ -127,7 +128,7 @@ class BattleTargetSelection(
         private val isMultiTarget = multiTargetList?.firstOrNull { it.getPNX() == target.getPNX() } != null
         private val isCurrentPokemon = request.activePokemon.battlePokemon?.uuid == target.battlePokemon!!.uuid
 
-        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget)
+        open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget, gimmickID)
         val state = FloatingState()
 
         open val selectable: Boolean get() = isMultiTarget || (responseTarget != null)
@@ -311,6 +312,13 @@ class BattleTargetSelection(
         fun onClick() {
             if (!selectable) return
             targetSelection.playDownSound(Minecraft.getInstance().soundManager)
+            // If a gimmick is used, remove the ability to use it on any pending action requests ahead of it
+            if (response.gimmickID != null) {
+                val gimmick = ShowdownMoveset.Gimmick.entries.first { it.id == response.gimmickID }
+                CobblemonClient.battle?.pendingActionRequests?.forEach {
+                    it.moveSet?.pendingGimmickUsedThisTurn?.add(gimmick)
+                }
+            }
             targetSelection.battleGUI.selectAction(targetSelection.request, response)
         }
     }

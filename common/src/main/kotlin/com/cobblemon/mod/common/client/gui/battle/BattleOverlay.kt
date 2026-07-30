@@ -136,7 +136,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             val isBattleGUIActive = currentScreen is BattleGUI && currentScreen.getCurrentActionSelection() != null
             val selectedPNX = if((battle.battleFormat.battleType.slotsPerActor > 1 || battle.battleFormat.battleType.actorsPerSide > 1) && isBattleGUIActive) battle.getFirstUnansweredRequest()?.activePokemon?.getPNX() else null
 
-            side1.activeClientBattlePokemon.forEachIndexed { index, activeClientBattlePokemon -> drawTile(context, tickDelta, activeClientBattlePokemon, true, index, PokedexEntryProgress.NONE, activeClientBattlePokemon.getPNX() == selectedPNX, false, battle.battleFormat.battleType.pokemonPerSide > 1) }
+            side1.activeClientBattlePokemon.forEachIndexed { index, activeClientBattlePokemon -> drawTile(context, tickDelta, activeClientBattlePokemon, true, index, PokedexEntryProgress.UNREGISTERED, activeClientBattlePokemon.getPNX() == selectedPNX, false, battle.battleFormat.battleType.pokemonPerSide > 1) }
             side2.activeClientBattlePokemon.forEachIndexed { index, activeClientBattlePokemon -> drawTile(context, tickDelta, activeClientBattlePokemon, false, side2.activeClientBattlePokemon.count() - index - 1, battle.knowledge, false, false, battle.battleFormat.battleType.pokemonPerSide > 1) }
         }
 
@@ -360,7 +360,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 blue = b
             )
 
-            if (dexState == PokedexEntryProgress.CAUGHT) {
+            if (dexState == PokedexEntryProgress.OWNED) {
                 blitk(
                     matrixStack = matrixStack,
                     texture = caughtIndicator,
@@ -380,7 +380,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
             text = displayName.bold(),
-            x = infoBoxX + (if (dexState == PokedexEntryProgress.CAUGHT) 7 else 0),
+            x = infoBoxX + (if (dexState == PokedexEntryProgress.OWNED) 7 else 0),
             y = y + if (isCompact) 5 else 7,
             opacity = opacity,
             shadow = true

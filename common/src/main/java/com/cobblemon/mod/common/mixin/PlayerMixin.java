@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.item.LeftoversCreatedEvent;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
+import com.cobblemon.mod.common.api.riding.RidingStyle;
+import com.cobblemon.mod.common.api.riding.behaviour.types.air.HoverBehaviour;
 import com.cobblemon.mod.common.api.storage.party.PartyStore;
 import com.cobblemon.mod.common.api.storage.party.PlayerPartyStore;
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
@@ -59,6 +61,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -167,6 +170,32 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
                 pokemon.recall();
             }
         }
+    }
+
+    @Redirect(
+            method = "getDestroySpeed",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/player/Player;onGround()Z"
+            )
+    )
+    private boolean cobblemon$considerHoverOnGround(Player player) {
+        // If riding a Hover Mount, return true to bypass the 5x slowdown
+        if (player.getVehicle() instanceof PokemonEntity vehicle) {
+
+            var ridingController = vehicle.getRidingController();
+            if (ridingController == null) player.onGround();
+
+            var activeContext = ridingController.getContext();
+            if (activeContext == null) player.onGround();
+
+            if (activeContext.getStyle() == RidingStyle.AIR &&
+                activeContext.getBehaviour().equals(HoverBehaviour.Companion.getKEY())) {
+                return true;
+            }
+        }
+        // Otherwise, return the actual value
+        return player.onGround();
     }
 
     @Inject(

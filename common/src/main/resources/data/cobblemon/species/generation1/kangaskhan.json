@@ -339,7 +339,7 @@
       },
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 7,
           "toleratedLeaders": [
             {
               "pokemon": "kangaskhan mega",

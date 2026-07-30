@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:type_gem",
+  "config": {
+    "state": {
+      "Name": "cobblemon:deepslate_crystal_core"
+    }
+  }
+}

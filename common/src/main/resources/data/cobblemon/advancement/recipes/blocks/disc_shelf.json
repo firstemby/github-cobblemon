@@ -1,0 +1,47 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:disc_shelf"
+    ]
+  },
+  "criteria": {
+    "has_blank_tm": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:blank_tm"
+            ]
+          }
+        ]
+      }
+    },
+    "has_tm": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:technical_machine"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:disc_shelf"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_tm",
+      "has_blank_tm",
+      "has_the_recipe"
+    ]
+  ]
+}

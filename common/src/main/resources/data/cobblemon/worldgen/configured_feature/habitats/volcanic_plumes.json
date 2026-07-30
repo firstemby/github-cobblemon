@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/volcanic_plume1",
+            "cobblemon:habitats/volcanic_plume2",
+            "cobblemon:habitats/volcanic_plume3",
+            "cobblemon:habitats/volcanic_plume4",
+            "cobblemon:habitats/volcanic_plume5",
+            "cobblemon:habitats/volcanic_plume6",
+            "cobblemon:habitats/volcanic_plume7",
+            "cobblemon:habitats/volcanic_plume8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/volcanic_plume"
+    }
+}

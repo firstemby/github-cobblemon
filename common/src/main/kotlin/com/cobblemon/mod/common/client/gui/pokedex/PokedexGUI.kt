@@ -20,28 +20,41 @@ import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokedex.filter.EntryFilter
+import com.cobblemon.mod.common.api.pokedex.filter.PokedexCategoryFilter
+import com.cobblemon.mod.common.api.pokedex.filter.PokedexCategoryFilterType
 import com.cobblemon.mod.common.api.pokedex.filter.SearchByType
 import com.cobblemon.mod.common.api.pokedex.filter.SearchFilter
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.handleProfileDebugKeys
+import com.cobblemon.mod.common.client.gui.logProfileTranslations
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ABILITIES
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_DESCRIPTION
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_DROPS
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_ICON_SIZE
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_MOVES
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
-import com.cobblemon.mod.common.client.gui.pokedex.widgets.*
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.AbilitiesWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.DescriptionWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.DropsScrollingWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.MovesLearnsetWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonInfoWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.SearchWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.SizeWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.StatsWidget
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
@@ -79,8 +92,7 @@ class PokedexGUI private constructor(
         private val globeIcon = cobblemonResource("textures/gui/pokedex/globe_icon.png")
         private val caughtSeenIcon = cobblemonResource("textures/gui/pokedex/caught_seen_icon.png")
 
-        private val arrowUpIcon = cobblemonResource("textures/gui/pokedex/arrow_up.png")
-        private val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
+        private val categoryBarOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_bar_category.png")
 
         private val tabSelectArrow = cobblemonResource("textures/gui/pokedex/select_arrow.png")
         private val tabIcons = arrayOf(
@@ -88,7 +100,18 @@ class PokedexGUI private constructor(
             cobblemonResource("textures/gui/pokedex/tab_abilities.png"),
             cobblemonResource("textures/gui/pokedex/tab_size.png"),
             cobblemonResource("textures/gui/pokedex/tab_stats.png"),
-            cobblemonResource("textures/gui/pokedex/tab_drops.png")
+            cobblemonResource("textures/gui/pokedex/tab_drops.png"),
+            cobblemonResource("textures/gui/pokedex/tab_moves.png")
+        )
+
+        val arrowUpIcon = cobblemonResource("textures/gui/pokedex/arrow_up.png")
+        val arrowDownIcon = cobblemonResource("textures/gui/pokedex/arrow_down.png")
+
+        val categoryFilterIcon = cobblemonResource("textures/gui/pokedex/category_icon.png")
+
+        val looseUnlockTabs = listOf(
+            TAB_DROPS,
+            TAB_MOVES
         )
 
         /**
@@ -127,11 +150,14 @@ class PokedexGUI private constructor(
     private lateinit var regionSelectWidgetUp: ScaledButton
     private lateinit var regionSelectWidgetDown: ScaledButton
     private lateinit var searchByTypeButton: ScaledButton
+    private lateinit var categoryFilterButtonUp: ScaledButton
+    private lateinit var categoryFilterButtonDown: ScaledButton
     private lateinit var scrollScreen: EntriesScrollingWidget
     private lateinit var pokemonInfoWidget: PokemonInfoWidget
     private lateinit var searchWidget: SearchWidget
 
     private var selectedSearchByType: SearchByType = SearchByType.SPECIES
+    private var selectedCategoryFilter: PokedexCategoryFilterType = PokedexCategoryFilterType.ALL
     private val tabButtons: MutableList<ScaledButton> = mutableListOf()
 
     lateinit var tabInfoElement: GuiEventListener
@@ -163,7 +189,7 @@ class PokedexGUI private constructor(
         displaytabInfoElement(tabInfoIndex, false)
 
         if (::searchWidget.isInitialized) removeWidget(searchWidget)
-        searchWidget = SearchWidget(x + 26, y + 28, 128, HEADER_BAR_HEIGHT, update = ::updateFilters)
+        searchWidget = SearchWidget(x + 26, y + 28, 120, HEADER_BAR_HEIGHT, update = ::updateFilters)
         addRenderableWidget(searchWidget)
 
         if (::regionSelectWidgetUp.isInitialized) removeWidget(regionSelectWidgetUp)
@@ -208,7 +234,46 @@ class PokedexGUI private constructor(
         )
         addRenderableWidget(searchByTypeButton)
 
+        if (::categoryFilterButtonUp.isInitialized) removeWidget(categoryFilterButtonUp)
+        categoryFilterButtonUp = ScaledButton(
+            buttonX = (x + 157).toFloat(),
+            buttonY = (y + 181.5).toFloat(),
+            buttonWidth = 8,
+            buttonHeight = 6,
+            scale = SCALE,
+            resource = arrowUpIcon,
+            clickAction = {
+                val filters = PokedexCategoryFilterType.entries
+                val prevIndex = (filters.indexOf(selectedCategoryFilter) - 1 + filters.size) % filters.size
+                selectedCategoryFilter = filters[prevIndex]
+                updateFilters()
+            }
+        )
+        addRenderableWidget(categoryFilterButtonUp)
+
+        if (::categoryFilterButtonDown.isInitialized) removeWidget(categoryFilterButtonDown)
+        categoryFilterButtonDown = ScaledButton(
+            buttonX = (x + 157).toFloat(),
+            buttonY = (y + 186.5).toFloat(),
+            buttonWidth = 8,
+            buttonHeight = 6,
+            scale = SCALE,
+            resource = arrowDownIcon,
+            clickAction = {
+                val filters = PokedexCategoryFilterType.entries
+                val nextIndex = (filters.indexOf(selectedCategoryFilter) + 1) % filters.size
+                selectedCategoryFilter = filters[nextIndex]
+                updateFilters()
+            }
+        )
+        addRenderableWidget(categoryFilterButtonDown)
         updateFilters(true)
+    }
+
+    fun getSufficientlyKnownForms(selectedEntry: PokedexEntry, tabIndex: Int) = if (tabIndex in looseUnlockTabs) {
+        CobblemonClient.clientPokedexData.getEncounteredForms(selectedEntry)
+    } else {
+        CobblemonClient.clientPokedexData.getCaughtForms(selectedEntry)
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -250,12 +315,11 @@ class PokedexGUI private constructor(
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = Component.translatable("cobblemon.ui.pokedex.region.${availableRegions[selectedRegionIndex].path}").bold(),
+            text = lang("ui.pokedex.region.${availableRegions[selectedRegionIndex].path}").bold(),
             x = x + 36,
             y = y + 14,
             shadow = true
         )
-
 
         // Seen icon
         blitk(
@@ -303,14 +367,42 @@ class PokedexGUI private constructor(
             shadow = true
         )
 
+        // Category filter
+        blitk(
+            matrixStack = matrices,
+            texture = categoryBarOverlay,
+            x = x + 26,
+            y = y + 180,
+            width = HALF_OVERLAY_WIDTH,
+            height = HEADER_BAR_HEIGHT
+        )
+
+        blitk(
+            matrixStack = matrices,
+            texture = categoryFilterIcon,
+            x = (x + 29) / SCALE,
+            y = (y + 182) / SCALE,
+            width = 14,
+            height = 14,
+            scale = SCALE
+        )
+
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = lang("ui.pokedex.filter.${selectedCategoryFilter.name.lowercase()}").bold(),
+            x = x + 39,
+            y = y + 181,
+            shadow = true
+        )
+
         // Show selected tab pointer if selected Pokémon has tab info to be shown
-        if (selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true) {
+        if (selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true) {
             // Tab arrow
             blitk(
                 matrixStack = matrices,
                 texture = tabSelectArrow,
-                x = (x + 198 + (25 * tabInfoIndex)) / SCALE,
-                // (x + 191.5 + (22 * tabInfoIndex)) / SCALE for 6 tabs
+                x = (x + 191.5F + (22F * tabInfoIndex)) / SCALE,
                 y = (y + 177) / SCALE,
                 width = 12,
                 height = 6,
@@ -337,6 +429,11 @@ class PokedexGUI private constructor(
     override fun onClose() {
         if (blockPos != null) AdjustBlockEntityViewerCountPacket(blockPos, false).sendToServer()
         playSound(CobblemonSounds.POKEDEX_CLOSE)
+
+        selectedEntry?.speciesId?.let { speciesId ->
+            logProfileTranslations(speciesId, pokemonInfoWidget.state)
+        }
+
         super.onClose()
     }
 
@@ -344,6 +441,7 @@ class PokedexGUI private constructor(
         val canDisplayEntry = true //selectedForm?.unlockForms
 
         if (::pokemonInfoWidget.isInitialized
+            && !pokemonInfoWidget.suppressViewport
             && pokemonInfoWidget.isWithinPortraitSpace(mouseX, mouseY)
             && canDisplayEntry == true
         ) {
@@ -374,8 +472,16 @@ class PokedexGUI private constructor(
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+        // Manually scroll moves widget as its scroll area seems misaligned
+        if (tabInfoIndex == TAB_MOVES) {
+            (tabInfoElement as MovesLearnsetWidget).mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+        }
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+    }
+
     override fun tick() {
-        if (::pokemonInfoWidget.isInitialized) pokemonInfoWidget.tick()
+        if (::pokemonInfoWidget.isInitialized && !pokemonInfoWidget.suppressViewport) pokemonInfoWidget.tick()
     }
 
     fun updatePokedexRegion(nextIndex: Boolean) {
@@ -441,6 +547,7 @@ class PokedexGUI private constructor(
     fun getFilters(): Collection<EntryFilter> {
         val filters: MutableList<EntryFilter> = mutableListOf()
 
+        filters.add(PokedexCategoryFilter(CobblemonClient.clientPokedexData, selectedCategoryFilter))
         filters.add(SearchFilter(CobblemonClient.clientPokedexData, searchWidget.value, selectedSearchByType))
 
         return filters
@@ -462,7 +569,7 @@ class PokedexGUI private constructor(
 
         for (i in tabIcons.indices) {
             tabButtons.add(ScaledButton(
-                x + 197F + (i * 25F), // x + 190.5F + (i * 22F) for 6 tabs
+                x + 190.5F + (i * 22F),
                 y + 181.5F,
                 TAB_ICON_SIZE,
                 TAB_ICON_SIZE,
@@ -475,7 +582,7 @@ class PokedexGUI private constructor(
     }
 
     fun displaytabInfoElement(tabIndex: Int, update: Boolean = true) {
-        val showActiveTab = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
+        val showActiveTab = selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabIndex) } == true
         var statSubIndex = 0
 
         if (tabButtons.isNotEmpty() && tabButtons.size > tabIndex) {
@@ -497,6 +604,9 @@ class PokedexGUI private constructor(
         }
 
         tabInfoIndex = tabIndex
+        if (::pokemonInfoWidget.isInitialized) {
+            pokemonInfoWidget.suppressViewport = tabInfoIndex == TAB_MOVES
+        }
         if (::tabInfoElement.isInitialized) removeWidget(tabInfoElement)
 
         val x = (width - BASE_WIDTH) / 2
@@ -520,10 +630,18 @@ class PokedexGUI private constructor(
             TAB_DROPS -> {
                 tabInfoElement = DropsScrollingWidget(x + 189, y + 135)
             }
+            TAB_MOVES -> {
+                tabInfoElement = MovesLearnsetWidget(x + 180, y + 28)
+            }
         }
         val element = tabInfoElement
         if (element is Renderable && element is NarratableEntry) {
             addRenderableWidget(element)
+        }
+        // Keep tab icons above the moves overlay.
+        if (tabButtons.isNotEmpty()) {
+            tabButtons.forEach { removeWidget(it) }
+            tabButtons.forEach { addRenderableWidget(it) }
         }
         if (update) updateTabInfoElement()
     }
@@ -531,7 +649,7 @@ class PokedexGUI private constructor(
     fun updateTabInfoElement() {
         val species = selectedEntry?.speciesId?.let { PokemonSpecies.getByIdentifier(it) }
         val formName = selectedForm?.displayForm
-        val canDisplay = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
+        val canDisplay = selectedEntry?.let { selectedForm in getSufficientlyKnownForms(it, tabInfoIndex) } == true
         val textToShowInDescription = mutableListOf<String>()
 
         if (canDisplay && species != null) {
@@ -578,9 +696,17 @@ class PokedexGUI private constructor(
                     (tabInfoElement as DropsScrollingWidget).dropTable = form.drops
                     (tabInfoElement as DropsScrollingWidget).setEntries()
                 }
-//                TAB_MOVES -> {
-//                    form.moves.getLevelUpMovesUpTo(100)
-//                }
+                TAB_MOVES -> {
+                    val availableForms = selectedEntry?.let { CobblemonClient.clientPokedexData.getEncounteredForms(it) } ?: emptyList()
+                    val activeForm = this.selectedForm ?: availableForms.firstOrNull()
+                    val fallbackForm = activeForm ?: PokedexForm().apply { displayForm = form.name }
+                    (tabInfoElement as MovesLearnsetWidget).setLearnset(
+                        species = species,
+                        form = form,
+                        availableForms = availableForms,
+                        selectedForm = fallbackForm
+                    ) { next -> cycleSelectedForm(next) }
+                }
             }
         } else {
             if (tabInfoIndex != TAB_DESCRIPTION) displaytabInfoElement(TAB_DESCRIPTION)
@@ -600,6 +726,29 @@ class PokedexGUI private constructor(
         displaytabInfoElement(tabInfoIndex)
     }
 
+    fun cycleSelectedForm(next: Boolean) {
+        val entry = selectedEntry ?: return
+        val forms = CobblemonClient.clientPokedexData.getEncounteredForms(entry)
+        if (forms.isEmpty()) return
+
+        val current = selectedForm ?: forms.first()
+        val currentIndex = forms.indexOfFirst { it.displayForm.equals(current.displayForm, ignoreCase = true) }
+            .let { if (it == -1) 0 else it }
+
+        val nextIndex = if (next) {
+            (currentIndex + 1) % forms.size
+        } else {
+            (currentIndex - 1 + forms.size) % forms.size
+        }
+
+        val newForm = forms[nextIndex]
+        selectedForm = newForm
+        if (::pokemonInfoWidget.isInitialized) {
+            pokemonInfoWidget.setSelectedForm(newForm)
+        }
+        updateTabInfoElement()
+    }
+
     fun canSelectTab(tabIndex: Int): Boolean {
         val selectedForm = this.selectedForm ?: return false
         val selectedEntry = this.selectedEntry ?: return false
@@ -613,6 +762,12 @@ class PokedexGUI private constructor(
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
             onClose()
             return true
+        }
+
+        if (!searchWidget.isFocused) {
+            selectedEntry?.speciesId?.let { speciesId ->
+                handleProfileDebugKeys(keyCode, speciesId, pokemonInfoWidget.state)
+            }
         }
 
         return super.keyPressed(keyCode, scanCode, modifiers)

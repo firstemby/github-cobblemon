@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/chorus_briar1",
+            "cobblemon:habitats/chorus_briar2",
+            "cobblemon:habitats/chorus_briar3",
+            "cobblemon:habitats/chorus_briar4",
+            "cobblemon:habitats/chorus_briar5",
+            "cobblemon:habitats/chorus_briar6",
+            "cobblemon:habitats/chorus_briar7",
+            "cobblemon:habitats/chorus_briar8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/chorus_briar"
+    }
+}

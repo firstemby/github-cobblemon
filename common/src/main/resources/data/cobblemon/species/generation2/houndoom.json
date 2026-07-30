@@ -295,7 +295,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "8",
+          "maxSize": 8,
           "toleratedLeaders": [
             {
               "pokemon": "houndoom mega",

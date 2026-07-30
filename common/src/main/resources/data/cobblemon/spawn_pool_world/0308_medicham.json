@@ -12,7 +12,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "37-41",
+            "level": "37-43",
             "weight": 0.2,
             "weightMultiplier": {
                 "multiplier": 0.25,
@@ -38,7 +38,7 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "37-41",
+            "level": "37-43",
             "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 0.25,

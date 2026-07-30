@@ -132,6 +132,7 @@ class TrackerActor(val uuid: UUID) {
         actor.activePokemon.filter { newActive -> activePokemon.none { it.id == newActive.battlePokemon?.uuid } }.forEach {
             val active = party.firstOrNull { trackMon -> trackMon.id == it.battlePokemon?.uuid } ?: return@forEach
             party.remove(active)
+            active.firstTurn = true // Reset firstTurn when switching in
             activePokemon.add(active)
         }
         val swappedOut = activePokemon.filter { trackMon -> actor.activePokemon.none { it.battlePokemon?.uuid == trackMon.id } }
@@ -145,6 +146,7 @@ class TrackerActor(val uuid: UUID) {
         actor.activePokemon.filter { newActive -> activePokemon.none { it.id == newActive.battlePokemon?.uuid } }.forEach {
             val active = party.firstOrNull { trackMon -> trackMon.id == it.battlePokemon?.uuid } ?: return@forEach
             party.remove(active)
+            active.firstTurn = true // Reset firstTurn when switching in
             activePokemon.add(active)
         }
         val swappedOut = activePokemon.filter { trackMon -> actor.activePokemon.none { it.battlePokemon?.uuid == trackMon.id } }
@@ -161,7 +163,8 @@ class TrackerActor(val uuid: UUID) {
             //we assume that AI knows it all about our allies
             trackerActor.party.addAll(actor.pokemonList.map { createAllied(it) })
             actor.activePokemon.forEach {
-                val active = trackerActor.party.first { trackMon -> trackMon.id == it.battlePokemon!!.uuid }
+                val battlePokemon = it.battlePokemon ?: return@forEach
+                val active = trackerActor.party.first { trackMon -> trackMon.id == battlePokemon.uuid }
                 trackerActor.party.remove(active)
                 trackerActor.activePokemon.add(active)
             }
@@ -174,7 +177,8 @@ class TrackerActor(val uuid: UUID) {
             //only know basics of what we see right now
             trackerActor.party.addAll(actor.pokemonList.map { createOpposing(it) })
             actor.activePokemon.forEach {
-                val active = trackerActor.party.first { trackMon -> trackMon.id == it.battlePokemon!!.uuid }
+                val battlePokemon = it.battlePokemon ?: return@forEach
+                val active = trackerActor.party.first { trackMon -> trackMon.id == battlePokemon.uuid }
                 trackerActor.party.remove(active)
                 trackerActor.activePokemon.add(active)
             }

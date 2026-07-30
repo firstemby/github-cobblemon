@@ -63,8 +63,8 @@ object BattleBuilder {
     ): BattleStartResult {
 
         val adjustLevel = battleFormat.adjustLevel
-        val team1 = partyAccessor(player1).toBattleTeam(clone = cloneParties || adjustLevel > 0,  healPokemon = healFirst, leadingPokemonPlayer1).sortedBy { it.health <= 0 }
-        val team2 = partyAccessor(player2).toBattleTeam(clone = cloneParties || adjustLevel > 0,  healPokemon = healFirst, leadingPokemonPlayer2).sortedBy { it.health <= 0 }
+        val team1 = partyAccessor(player1).toBattleTeam(clone = cloneParties || adjustLevel > 0,  healPokemon = healFirst, leadingPokemonPlayer1)
+        val team2 = partyAccessor(player2).toBattleTeam(clone = cloneParties || adjustLevel > 0,  healPokemon = healFirst, leadingPokemonPlayer2)
 
         val battlePartyStores = mutableListOf<PlayerPartyStore>()
 
@@ -282,9 +282,13 @@ object BattleBuilder {
         }
         playerActor.battleTheme = pokemonEntity.getBattleTheme()
 
+        val finalFormat = if (pokemonEntity.pokemon.isAlpha && BattleRules.WILD_ALPHA !in battleFormat.ruleSet) {
+            BattleFormat.setBattleRules(battleFormat, battleFormat.ruleSet + BattleRules.WILD_ALPHA)
+        } else battleFormat
+
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
-                battleFormat = battleFormat,
+                battleFormat = finalFormat,
                 side1 = BattleSide(playerActor),
                 side2 = BattleSide(wildActor)
             ).ifSuccessful {
@@ -345,11 +349,12 @@ object BattleBuilder {
             npcPartyStores.add(npcParty)
         }
 
-        if (playerActor.pokemonList.size < battleFormat.battleType.slotsPerActor) {
+        val playerAvailablePokemon = playerActor.pokemonList.count { it.health > 0 }
+        if (playerAvailablePokemon < battleFormat.battleType.slotsPerActor) {
             errors.participantErrors[playerActor] += BattleStartError.insufficientPokemon(
                 actorEntity = player,
                 requiredCount = battleFormat.battleType.slotsPerActor,
-                hadCount = playerActor.pokemonList.size
+                hadCount = playerAvailablePokemon
             )
         }
 

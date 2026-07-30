@@ -60,7 +60,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     val poseProvider = PoseProvider<SubmarineSettings, SubmarineState>(PoseType.FLOAT)
         .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 && !state.onSurface.get()})
         .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z <= 0.05 && state.onSurface.get()})
-        .with(PoseOption(PoseType.STAND) { _, state, entity -> state.rideVelocity.get().z > 0.05 && state.onSurface.get()})
+        .with(PoseOption(PoseType.SWIM) { _, state, entity -> state.rideVelocity.get().z > 0.05 && state.onSurface.get()})
 
     override fun isActive(settings: SubmarineSettings, state: SubmarineState, vehicle: PokemonEntity): Boolean {
         return vehicle.isInWater || !vehicle.onGround()
@@ -191,11 +191,17 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
          * Calculate Forward Velocity
          *********************************************/
         val currZVel = state.rideVelocity.get().z
-        val newZVel = when {
+        var newZVel = when {
             driver.zza > 0.0 -> min(topSpeed, currZVel + accel)
-            driver.zza < 0.0 -> max( -strafeSpeed, currZVel - strafeAccel) //TODO: Might need to be applied in addition to the normal braking force?
-            else -> lerp(currZVel, 0.0, 0.05)
+            driver.zza < 0.0 -> max( -strafeSpeed, currZVel - strafeAccel)
+            else -> lerp(currZVel, 0.0, 0.02)
         }
+
+        // If trying to brake then add the friction to the braking force
+        if (driver.zza != 0.0f && driver.zza.sign.toDouble() != newZVel.sign) {
+            newZVel = lerp(newZVel, 0.0, 0.02)
+        }
+
         currVel = Vec3(currVel.x, currVel.y, newZVel)
 
         /*********************************************
@@ -206,14 +212,20 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
         val gravity = (9.8 / ( 20.0)) * 0.2 * 0.4
         val terminalYVel = 2.0
         val driverYInput = if(driver.jumping) 1.0 else if (driver.isShiftKeyDown) -1.0 else 0.0
-        val newYVel = when {
+        var newYVel = when {
             (!vehicle.isInWater) -> max(-terminalYVel, currYVel - gravity)
             //(vehicle.isInWater && !vehicle.isUnderWater && currYVel > 0.001) -> lerp(currYVel, 0.0, 0.1) // Make sure that yVel is above a threshold before doing this otherwise it'll block submerging.
             //driverYInput != 0.0 && currYVel > 0.001 && driverYInput.sign != currYVel.sign -> lerp(currYVel, 0.0, 0.05)
             driverYInput > 0.0 -> min(vertTopSpeed, currYVel + strafeAccel)
             driverYInput < 0.0 -> max(-vertTopSpeed, currYVel - strafeAccel)
-            else -> lerp(currYVel, 0.0, 0.05)
+            else -> lerp(currYVel, 0.0, 0.02)
         }
+
+        // If trying to brake then add the friction to the braking force
+        if (driverYInput != 0.0 && driverYInput != newYVel.sign) {
+            newYVel = lerp(newYVel, 0.0, 0.02)
+        }
+
         currVel = Vec3(currVel.x, newYVel, currVel.z)
 
         /*********************************************
@@ -221,11 +233,17 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
          *********************************************/
         val currXVel = state.rideVelocity.get().x
         val horzTopSpeed = strafeSpeed
-        val newXVel = when {
+        var newXVel = when {
             driver.xxa > 0.0 -> min(horzTopSpeed, currXVel + strafeAccel)
             driver.xxa < 0.0 -> max( -horzTopSpeed, currXVel - strafeAccel)
-            else -> lerp(currXVel, 0.0, 0.01)
+            else -> lerp(currXVel, 0.0, 0.02)
         }
+
+        // If trying to brake then add the friction to the braking force
+        if (driver.xxa != 0.0f && driver.xxa.sign.toDouble() != newZVel.sign) {
+            newXVel = lerp(newXVel, 0.0, 0.02)
+        }
+
         currVel = Vec3(newXVel, currVel.y, currVel.z)
 
         // Set the new velocity
@@ -303,81 +321,6 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
 //        pitchAmount += lerp(controller.pitch.toDouble(), desiredPitch, partialTicks.toDouble()) - controller.pitch
 //        controller.rotatePitch(pitchAmount.toFloat())
 
-    }
-
-    private fun correctOrientation(
-        settings: SubmarineSettings,
-        state: SubmarineState,
-        vehicle: PokemonEntity,
-        controller: OrientationController,
-        driver: Player,
-        deltaTime: Double
-    ) {
-
-// TODO: remove if not needed
-
-//        // Calculate correcting roll force.
-//        // If the ride is moving then have the correction rate be an equal proportion of:
-//        // - how rolled are you
-//        // - how long has it been since last mouse input (higher is stronger correction)
-//        // Also the correction is proportional as a whole to how NOT pitched are you so you don't spin endlessly when looking up or down
-//        val howRolledAmI =  sqrt(abs((cos(controller.roll.toRadians()) - 1.0f) * 0.5f)) // sqrt so it trends towards one pretty quickly
-//        val maxRollCorrectionRate =
-//            if (state.rideVelocity.get().length() < 0.2) 10.0f * abs(cos(controller.pitch.toRadians()))
-//            else 10.0f * cos(controller.pitch.toRadians()).pow(2) * (
-//                    howRolledAmI*1.0f +
-//                            (state.noInputTime.get() - rollCorrectionTimer).coerceIn(0.0, 1.0).pow(2).toFloat()*0.5f
-//                    )
-//        val maxRollForce = maxRollCorrectionRate / 40.0f
-//        val rollArrivalDeg = 60.0f
-//        val desiredRoll = 0.0f
-//
-//        // Calculate the signed error (how far and in what direction)
-//        val rollError = Mth.wrapDegrees(desiredRoll.angleDifference(controller.roll))
-//
-//        // Use the absolute error to     calculate the magnitude of the influence
-//        val influenceMagnitude = (min(rollArrivalDeg, abs(rollError)) / rollArrivalDeg)
-//        val desiredRollForce = maxRollCorrectionRate * influenceMagnitude * -rollError.sign
-//        var steeredRollForce = desiredRollForce - state.currRollCorrectionForce.get()
-//
-//        // Ensure the 'steering' correction force doesn't exceed our maxForce
-//        if (abs(steeredRollForce) > maxRollForce) {
-//            steeredRollForce = steeredRollForce.sign * maxRollForce
-//        }
-//
-//        // Apply the 'steered' force (its really not a steering force I need a better name)
-//        state.currRollCorrectionForce.set(
-//            state.currRollCorrectionForce.get() + steeredRollForce
-//        )
-
-        //Calculate correcting pitch force.
-//        val rollCorrectionTimer = vehicle.runtime.resolveDouble(settings.timeToRollCorrect ?: globalSubmarine.timeToRollCorrect!!)
-//        val maxPitchCorrectionRate = 5.0f * (state.noInputTime.get() - rollCorrectionTimer).coerceIn(0.0, 1.0).pow(2).toFloat()*0.5f
-//        val maxPitchForce = maxPitchCorrectionRate / 40.0f
-//        val pitchArrivalDeg = 45.0f
-//        val desiredPitch = 0.0f
-//
-//        if(state.rideVelocity.get().length() < 0.1 && state.noInputTime.get() > rollCorrectionTimer) {
-//            val pitchErrror = Mth.wrapDegrees(desiredPitch.angleDifference(controller.pitch))
-//            val arrivalInfluence = (min(pitchArrivalDeg,abs(pitchErrror)) / pitchArrivalDeg)
-//            val desiredPitchForce = maxPitchCorrectionRate * arrivalInfluence * -pitchErrror.sign
-//            var steeredPitchForce = desiredPitchForce - state.currPitchCorrectionForce.get()
-//
-//            // Ensure the 'steering' correction force doesn't exceed our maxForce
-//            if (abs(steeredPitchForce) > maxPitchForce) {
-//                steeredPitchForce = steeredPitchForce.sign * maxPitchForce
-//            }
-//
-//            // Apply the 'steered' force (its really not a steering force I need a better name)
-//            state.currPitchCorrectionForce.set(
-//                state.currPitchCorrectionForce.get() + steeredPitchForce
-//            )
-//        } else {
-//            state.currPitchCorrectionForce.set(
-//                //reduce rollCorrection gradually
-//                lerp(state.currPitchCorrectionForce.get(), 0.0, deltaTime * 0.98)
-//            )
-//        }
     }
 
     override fun rotationOnMouseXY(

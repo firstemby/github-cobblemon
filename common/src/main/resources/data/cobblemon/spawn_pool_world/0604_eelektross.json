@@ -9,7 +9,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.01,
             "weightMultipliers": [
                 {
@@ -39,7 +39,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.05,
             "weightMultiplier": {
                 "multiplier": 0.6,
@@ -67,7 +67,7 @@
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.01,
             "weightMultipliers": [
                 {
@@ -102,7 +102,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "common",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.01,
             "condition": {
                 "biomes": [
@@ -120,7 +120,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.048,
             "condition": {
                 "minSkyLight": 0,
@@ -150,7 +150,7 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "common",
-            "level": "36-52",
+            "level": "39-52",
             "weight": 0.03,
             "condition": {
                 "canSeeSky": false,

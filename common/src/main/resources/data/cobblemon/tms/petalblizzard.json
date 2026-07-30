@@ -1,0 +1,19 @@
+{
+  "moveName": "petalblizzard",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 9
+    },
+    {
+      "item": "minecraft:pink_petals",
+      "count": 1
+    }
+  ]
+}

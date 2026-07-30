@@ -337,7 +337,17 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2"
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "zorua alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "zoroark",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "willSleepOnBed": true,

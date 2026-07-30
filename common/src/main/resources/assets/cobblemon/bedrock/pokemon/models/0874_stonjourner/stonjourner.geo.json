@@ -34,6 +34,22 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "head",
+					"pivot": [-3.5, 44.3, -6],
+					"locators": {
+						"eye1": [-3.5, 44.3, -6]
+					}
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "head",
+					"pivot": [2.5, 43.8, -6],
+					"locators": {
+						"eye2": [2.5, 43.8, -6]
+					}
+				},
+				{
 					"name": "eyelids",
 					"parent": "head",
 					"pivot": [-0.5, 44.3, -6]

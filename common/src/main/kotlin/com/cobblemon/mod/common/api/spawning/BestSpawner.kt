@@ -18,12 +18,12 @@ import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
+import com.cobblemon.mod.common.api.spawning.detail.EmptySpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.NPCSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.api.spawning.preset.BestSpawnerConfig
 import com.cobblemon.mod.common.api.spawning.preset.PokemonSpawnDetailPreset
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.api.spawning.spawner.BasicSpawner
+import com.cobblemon.mod.common.api.spawning.spawner.FishingSpawnerFactory
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory
@@ -120,6 +121,7 @@ object BestSpawner {
         SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = EmptySpawnDetail.TYPE, EmptySpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
         loadConfig()
@@ -139,19 +141,6 @@ object BestSpawner {
 
     fun onServerStarted(server: MinecraftServer) {
         CobblemonSpawnPools.onServerLoad(server)
-        fishingSpawner = BasicSpawner(
-            name = "fishing",
-            spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
-        ).also {
-            it.influences.add(
-                BucketMultiplyingInfluence(
-                    multipliers = mapOf(
-                        "uncommon" to 2.25f,
-                        "rare" to 5.5f,
-                        "ultra-rare" to 5.5f,
-                    )
-                )
-            )
-        }
+        fishingSpawner = FishingSpawnerFactory.createSharedSpawner()
     }
 }

@@ -43,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 40,
   "baseFriendship": 35,
-  "baseScale": 0.75,
+  "baseScale": 1,
   "hitbox": {
-    "width": 2.2,
-    "height": 4.15,
+    "width": 2,
+    "height": 3.16,
     "fixed": false
   },
   "behaviour": {
@@ -60,6 +60,9 @@
       "rouseChance": 0.0042
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -333,7 +336,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "5"
+          "maxSize": 5
         },
         "resting": {
           "times": [

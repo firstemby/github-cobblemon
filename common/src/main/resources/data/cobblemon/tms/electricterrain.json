@@ -1,0 +1,19 @@
+{
+  "moveName": "electricterrain",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "electric",
+  "recipe": [
+    {
+      "item": "cobblemon:electric_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:electric_seed",
+      "count": 1
+    }
+  ]
+}

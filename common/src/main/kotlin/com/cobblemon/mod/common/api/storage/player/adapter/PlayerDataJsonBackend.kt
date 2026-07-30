@@ -36,7 +36,8 @@ class PlayerDataJsonBackend: JsonBackedPlayerDataStoreBackend<GeneralPlayerData>
         starterUUID =  null,
         keyItems = Cobblemon.config.defaultKeyItems,
         extraData = mutableMapOf(),
-        battleTheme = CobblemonSounds.PVP_BATTLE.location
+        battleTheme = CobblemonSounds.PVP_BATTLE.location,
+        partySelectTutorialDone = false
     )}
 
     override val gson = GsonBuilder()

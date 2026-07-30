@@ -16,12 +16,26 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0605_elgyem/elgyem_shiny.png",
       "layers": [
         {
           "name": "glow",
           "texture": "cobblemon:textures/pokemon/0605_elgyem/elgyem_emissive_shiny.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0605_elgyem/elgyem_alpha.png",
           "emissive": true
         }
       ]

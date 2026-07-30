@@ -445,7 +445,13 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "3"
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "ninetales alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "times": [

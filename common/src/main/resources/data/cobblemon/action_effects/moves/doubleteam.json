@@ -13,6 +13,11 @@
             "expressions": ["q.play_animation(q.bedrock_stateful('doubleteam', 'actor'))"]
         },
         {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == true",
+            "expressions": ["q.sound('move.doubleteam.actor');"]
+        },
+        {
             "type": "pause",
             "pause": 0.75
         },

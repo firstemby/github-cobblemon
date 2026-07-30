@@ -7,7 +7,8 @@
   "animations": {
     "cry": "q.bedrock_stateful('graveler_alolan', 'cry')",
     "recoil": "q.bedrock_stateful('graveler_alolan', 'recoil')",
-    "status": "q.bedrock_stateful('graveler_alolan', 'status', q.curve('symmetrical_wide'))"
+    "status": "q.bedrock_stateful('graveler_alolan', 'status', q.curve('symmetrical_wide'))",
+    "physical": "q.bedrock_primary('graveler', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "battle-standing": {

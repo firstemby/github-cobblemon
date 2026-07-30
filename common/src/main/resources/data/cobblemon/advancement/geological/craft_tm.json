@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:tm_machine"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.craft_tm"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.craft_tm.description"
+    }
+  },
+  "parent": "cobblemon:geological/plant_type_gem",
+  "criteria": {
+    "tm": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:technical_machine"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tm"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -44,6 +44,12 @@
       "predicate": {
         "custom_model_data": 7
       },
+      "model": "cobblemon:item/alpha_marker"
+    },
+	{
+      "predicate": {
+        "custom_model_data": 8
+      },
       "model": "cobblemon:item/link_cable"
     }
   ]

@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "moonlight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "moonlight"
+    }
+  ],
+  "id": "cobblemon:leek_and_potato_stew",
+  "containers": [
+    {
+      "filled": [
+        "cobblemon:leek_and_potato_stew"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:block/soft_fluids/soup_liquid",
+  "still_texture": "moonlight:block/soft_fluids/soup_liquid",
+  "color": "#FF752B",
+  "food": {
+    "divider": 1,
+    "item": "cobblemon:leek_and_potato_stew"
+  },
+  "translation_key": "item.cobblemon.leek_and_potato_stew"
+}

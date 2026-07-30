@@ -6,7 +6,7 @@
 				"identifier": "geometry.combusken_male",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -186,6 +186,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.4, 21.5, -3.5],
+					"locators": {
+						"eye1": [-2.4, 21.5, -3.5]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_right",
 					"pivot": [0.1, 18.25, 0.1],
@@ -202,6 +210,14 @@
 						{"origin": [1.91, 20.5, -3.52], "size": [1, 2, 1], "uv": [24, 63]},
 						{"origin": [1.51, 21.25, -3.53], "size": [1, 1, 0], "uv": [30, 13]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.4, 21.5, -3.5],
+					"locators": {
+						"eye2": [2.4, 21.5, -3.5]
+					}
 				},
 				{
 					"name": "eyelid_left",

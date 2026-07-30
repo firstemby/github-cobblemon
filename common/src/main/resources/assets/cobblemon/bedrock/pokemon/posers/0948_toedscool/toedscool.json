@@ -3,6 +3,7 @@
   "portraitTranslation": [0.08, 0.74, 0],
   "profileScale": 0.55,
   "profileTranslation": [0.0, 0.92, 0],
+  "rootBone": "toedscool",
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

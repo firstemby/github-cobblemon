@@ -19,11 +19,7 @@
       "required": false
     },
     {
-      "id": "byg:coconino_meadow",
-      "required": false
-    },
-    {
-      "id": "byg:temperate_rainforest",
+      "id": "biomeswevegone:coconino_meadow",
       "required": false
     },
     {

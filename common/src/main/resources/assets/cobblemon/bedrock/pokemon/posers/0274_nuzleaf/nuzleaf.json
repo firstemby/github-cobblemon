@@ -14,7 +14,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
       "animations": [
         "q.look('head')",
         "q.bedrock('nuzleaf', 'ground_idle')"

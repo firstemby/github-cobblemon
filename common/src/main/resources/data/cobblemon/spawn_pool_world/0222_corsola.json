@@ -165,12 +165,12 @@
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "16-41",
-            "weight": 9.0,
+            "weight": 8.4,
             "condition": {
                 "biomes": [
-                    "byg:warped_desert"
+                    "#cobblemon:nether/is_desert"
                 ]
             }
         },

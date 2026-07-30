@@ -49,7 +49,7 @@ object MountedCameraTypeHandler {
             return
         }
         val currentCameraType = mc.options.cameraType
-        if (currentCameraType != unmountedCameraType) {
+        if (Cobblemon.config.rememberRidingCamera && currentCameraType != unmountedCameraType) {
             mc.options.cameraType = unmountedCameraType
         }
         val data = ClientPersistedData.ridingPerspectives

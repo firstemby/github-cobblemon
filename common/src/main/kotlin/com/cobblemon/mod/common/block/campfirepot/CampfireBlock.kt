@@ -151,12 +151,14 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     override fun placeLiquid(level: LevelAccessor, pos: BlockPos, state: BlockState, fluidState: FluidState): Boolean {
         val blockEntity = level.getBlockEntity(pos)
         if (fluidState.type === Fluids.WATER && blockEntity is CampfireBlockEntity) {
-            if (!level.isClientSide) {
-                removePotItem(blockEntity, state, level as Level, pos, null, true)
-                level.playSoundServer(pos.center, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F)
-            }
+            if (level is Level) {
+                if (!level.isClientSide) {
+                    removePotItem(blockEntity, state, level, pos, null, true)
+                    level.playSoundServer(pos.center, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F)
+                }
 
-            if (level.isClientSide) for (i in 0..19) MCCampfireBlock.makeParticles(level as Level, pos, false, true)
+                if (level.isClientSide) for (i in 0..19) MCCampfireBlock.makeParticles(level, pos, false, true)
+            }
 
             level.scheduleTick(pos, fluidState.type, fluidState.type.getTickDelay(level))
             return true

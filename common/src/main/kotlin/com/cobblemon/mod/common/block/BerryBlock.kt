@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.block
 
 //import dev.lambdaurora.lambdynlights.util.SodiumDynamicLightHandler.pos
-import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.berry.Berry
@@ -40,7 +39,11 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.block.*
+import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.BonemealableBlock
+import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -70,7 +73,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
     override fun playerWillDestroy(world: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         if (!player.isCreative && state.getValue(AGE) == FRUIT_AGE) {
             val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
-            treeEntity.harvest(world, state, pos, player).forEach { drop -> Block.popResource(world, pos, drop) }
+            treeEntity.harvest(world, state, pos, player).forEach { drop -> popResource(world, pos, drop) }
         }
         return super.playerWillDestroy(world, pos, state, player)
     }
@@ -81,7 +84,32 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
 
     override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = !this.isMaxAge(state)
 
-    override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, blockWithEntityType: BlockEntityType<T>): BlockEntityTicker<T>? = createTickerHelper(blockWithEntityType, CobblemonBlockEntities.BERRY, BerryBlockEntity.TICKER)
+    // Use Random Tick instead of BlockEntityTicker for performance optimization
+    override fun <T : BlockEntity> getTicker(world: Level, blockState: BlockState, blockWithEntityType: BlockEntityType<T>): BlockEntityTicker<T>? = null
+
+    // Enable Random Tick: only immature and non-rooted berries need to tick
+    override fun isRandomlyTicking(state: BlockState): Boolean {
+        return state.getValue(AGE) < FRUIT_AGE && !state.getValue(IS_ROOTED)
+    }
+
+    // Random Tick handler: uses time compensation to ensure correct growth speed
+    @Deprecated("Deprecated in Java")
+    override fun randomTick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
+        val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity? ?: return
+        
+        // processTick calculates elapsed time and updates timer, returns whether growth is needed
+        if (blockEntity.processTick(world, pos, state) && !world.getBlockTicks().hasScheduledTick(pos, this)) {
+            // Schedule growth for next tick to avoid tick scheduler conflicts during randomTick
+            world.scheduleTick(pos, this, 1)
+        }
+    }
+
+    // Scheduled tick handler: performs the actual growth
+    @Deprecated("Deprecated in Java")
+    override fun tick(state: BlockState, world: ServerLevel, pos: BlockPos, random: RandomSource) {
+        if (state.getValue(IS_ROOTED)) return
+        growHelper(world, random, pos, state)
+    }
 
     init {
         registerDefaultState(stateDefinition.any()
@@ -103,7 +131,10 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         val newAge = curAge + 1
         if (newAge > FRUIT_AGE) return
         val newState = state.setValue(AGE, newAge)
-        val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
+        val treeEntity = world.getBlockEntity(pos) as? BerryBlockEntity? ?: run {
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), UPDATE_CLIENTS)
+            return
+        }
         if (curAge == MATURE_AGE) {
             treeEntity.generateGrowthPoints(world, newState, pos, null)
             determineMutation(world, random, pos, newState)
@@ -121,7 +152,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         for (direction in this.lookupDirections) {
             val redirectedPos = pos.offset(direction.normal)
             val redirectedState = world.getBlockState(redirectedPos)
-            val berryBlock = redirectedState.block as? BerryBlock ?: continue
+            val berryBlock = redirectedState.block as? BerryBlock? ?: continue
             val berry = berryBlock.berry() ?: continue
             val mutation = this.berry()?.mutationWith(berry) ?: continue
             mutations += mutation
@@ -135,7 +166,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
                         treeEntity.decrementMulchDuration(world, pos, state)
                     }
                     val mutation = if (random.nextInt(1000) < mutateChance) mutations.random() else null
-                    (world.getBlockEntity(pos) as? BerryBlockEntity)?.let { blockEntity ->
+                    (world.getBlockEntity(pos) as? BerryBlockEntity?)?.let { blockEntity ->
                         CobblemonEvents.BERRY_MUTATION_RESULT.post(BerryMutationResultEvent(berry, world, state, pos, berryMutationOffer.mutations, mutation)) { berryMutationResult ->
                             berryMutationResult.pickedMutation?.let { mutation -> blockEntity.mutate(mutation) }
                         }
@@ -153,7 +184,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
     ): Boolean {
         val underBlockState = world.getBlockState(pos.below())
         val validSoil = state.getValue(IS_ROOTED) || underBlockState.`is`(CobblemonBlockTags.BERRY_SOIL)
-        val treeEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return false
+        val treeEntity = world.getBlockEntity(pos) as? BerryBlockEntity? ?: return false
         return getMulch(treeEntity) == MulchVariant.NONE && state.getValue(AGE) < FLOWER_AGE && validSoil
     }
 
@@ -178,6 +209,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
     ): InteractionResult {
         val treeEntity = world.getBlockEntity(pos) as BerryBlockEntity
         if (player.getItemInHand(InteractionHand.MAIN_HAND).item is ShovelItem && getMulch(treeEntity) != MulchVariant.NONE) {
+            treeEntity.setMulch(MulchVariant.NONE, world, state, pos)
             treeEntity.setChanged()
             world.playSound(null, pos, CobblemonSounds.MULCH_REMOVE, SoundSource.BLOCKS, 0.6F, 1F)
             this.spawnDestroyParticles(world, player, pos, state.setValue(AGE, 0))
@@ -327,7 +359,7 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
         fun getMulch(entity: BerryBlockEntity) = entity.mulchVariant
 
         fun convertMulchToEntity(world: ServerLevel, state: BlockState, pos: BlockPos) {
-            val entity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return
+            val entity = world.getBlockEntity(pos) as? BerryBlockEntity? ?: return
             if (state.getValue(MULCH) != MulchVariant.NONE && state.getValue(MULCH) != entity.mulchVariant) {
                 entity.mulchVariant = state.getValue(MULCH)
                 world.setBlockAndUpdate(pos, state.setValue(MULCH, MulchVariant.NONE))
@@ -344,9 +376,9 @@ class BerryBlock(private val berryIdentifier: ResourceLocation, settings: Proper
     }
 
     private fun harvestBerry(world: Level, state: BlockState, pos: BlockPos, player: Player? = null): Boolean {
-        val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return false
+        val blockEntity = world.getBlockEntity(pos) as? BerryBlockEntity? ?: return false
         blockEntity.harvest(world, state, pos, player).forEach { drop ->
-            Block.popResource(world, pos, drop)
+            popResource(world, pos, drop)
         }
 
         val sound = if (player != null) CobblemonSounds.BERRY_HARVEST else SoundEvents.SHEEP_SHEAR

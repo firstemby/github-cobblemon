@@ -340,7 +340,37 @@
           "requiredContext": "cobblemon:leaf_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "voltorb",
+              "tier": 1
+            },
+            {
+              "pokemon": "electrode",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

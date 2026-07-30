@@ -10,9 +10,23 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0357_tropius/tropius_shiny.png",
       "layers": []
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0357_tropius/tropius_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

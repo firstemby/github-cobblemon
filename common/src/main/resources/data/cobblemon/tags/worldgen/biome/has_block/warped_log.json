@@ -7,15 +7,11 @@
       "required": false
     },
     {
-      "id": "byg:crimson_gardens",
+      "id": "netherdescent:crimson_gardens",
       "required": false
     },
     {
-      "id": "byg:wailing_garth",
-      "required": false
-    },
-    {
-      "id": "byg:warped_desert",
+      "id": "netherdescent:wailing_garth",
       "required": false
     },
     {

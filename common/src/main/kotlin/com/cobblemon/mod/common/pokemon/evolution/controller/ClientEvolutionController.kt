@@ -82,7 +82,7 @@ class ClientEvolutionController(
     override fun asIntermediate(): Intermediate = Intermediate(this.evolutions)
 
     fun sendPlayerNotification() {
-        if (pokemon.heldItem?.item != CobblemonItems.EVERSTONE) {
+        if (pokemon.heldItem.item != CobblemonItems.EVERSTONE) {
             PartyOverlayDataControl.pokemonGainedEvo(pokemon.uuid, 1)
         }
     }

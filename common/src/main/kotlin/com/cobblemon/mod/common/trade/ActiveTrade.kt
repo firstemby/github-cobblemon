@@ -45,14 +45,15 @@ class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) 
 
     fun performTrade(tradeParticipant: TradeParticipant) {
         val offer = getOpposingOffer(tradeParticipant)
+
         if (offer.accepted && getOffer(tradeParticipant).accepted) {
             TradeManager.performTrade(
+                activeTrade = this,
                 player1 = player1,
                 player2 = player2,
                 pokemon1 = player1Offer.pokemon!!,
                 pokemon2 = player2Offer.pokemon!!
             )
-            completeTrade()
         }
     }
 

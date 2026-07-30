@@ -66,6 +66,7 @@ class GraalShowdownService : ShowdownService {
             .allowArrayAccess(true)
             .allowListAccess(true)
             .allowMapAccess(true)
+            .allowAccessAnnotatedBy(Export::class.java)
             .build()
         context = Context.newBuilder("js")
             .allowIO(true)
@@ -127,6 +128,11 @@ class GraalShowdownService : ShowdownService {
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
         val startBattleFunction = context.getBindings("js").getMember("startBattle")
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
+    }
+
+    override fun endBattle(battle: PokemonBattle) {
+        val endBattleFunction = context.getBindings("js").getMember("endBattle")
+        endBattleFunction.execute(battle.battleId.toString())
     }
 
     override fun send(battleId: UUID, messages: Array<String>) {
