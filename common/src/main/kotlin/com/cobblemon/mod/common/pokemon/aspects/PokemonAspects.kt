@@ -42,13 +42,15 @@ val GENDER_ASPECT = object : AspectProvider {
 }
 
 val COSMETIC_SLOT_ASPECT = object : AspectProvider {
+    val NONE_ASPECT = "cosmetic_item-none"
+
     override fun provide(pokemon: Pokemon): Set<String> {
         val server = server() ?: return emptySet()
         if (pokemon.cosmeticItem.isEmpty) {
-            return emptySet()
+            return setOf(NONE_ASPECT)
         }
         val cosmeticItem = CobblemonCosmeticItems.findValidCosmeticForPokemonAndItem(server.registryAccess(), pokemon, pokemon.cosmeticItem)
-        return cosmeticItem?.aspects?.toSet() ?: emptySet()
+        return cosmeticItem?.aspects?.toSet() ?: setOf(NONE_ASPECT)
     }
 
     override fun provide(properties: PokemonProperties) = emptySet<String>()

@@ -49,6 +49,7 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                     it.unlockForms = mutableSetOf(it.displayForm)
                 }
             }
+            entry.normalizeVariations()
         }
         observable.emit(this)
     }

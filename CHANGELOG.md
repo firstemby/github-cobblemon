@@ -396,6 +396,7 @@
 - Fixed `/giveallpokemon` not respecting the min and max parameters
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 - Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
+- Fixed Pokédex `cosmetic_item-none` variation never being scannable, causing dex entries to default to the wrong cosmetic thumbnail.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
@@ -435,6 +436,7 @@
 - Added a q.failed function to move action effects.
 - Herd spawned Pokémon have their levels controlled differently. The `levelRange` property now acts as a clamp instead of a filter, with a new `herdLevelRange` property to do the filter behaviour.
 - `q.sound` now accepts three parameters (sound event, volume and pitch) instead of just the sound event and pitch.
+- Changed pokedex to not merge seen aspects allowing aspects per form rather than per species, this comes with a new `"forms": ['Alola-Bias', 'my form name', etc]` to allow specifying which forms should get this variation, just add it in the variations section just below aspects in your dex entry or addition. 
 
 ### Particles
 

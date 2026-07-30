@@ -125,6 +125,15 @@ abstract class AbstractPokedexManager {
         return getSpeciesRecord(entry.speciesId)?.getAspects() ?: emptySet()
     }
 
+    fun getSeenAspects(entry: PokedexEntry, form: PokedexForm): Set<String> {
+        val speciesRecord = getSpeciesRecord(entry.speciesId) ?: return emptySet()
+        val perForm = form.unlockForms
+            .flatMap { speciesRecord.getFormRecord(it)?.getAspects() ?: emptySet() }
+            .toSet()
+        if (perForm.isNotEmpty()) return perForm
+        return speciesRecord.getAspects()
+    }
+
     fun getKnowledgeForSpecies(speciesId: ResourceLocation): PokedexEntryProgress {
         return speciesRecords[speciesId]?.getKnowledge() ?: PokedexEntryProgress.UNREGISTERED
     }

@@ -26,22 +26,26 @@ class PokedexCosmeticVariation {
     var displayName: String = "cobblemon.pokedex.variation.cosmetic"
     var icon: ResourceLocation = cobblemonResource("textures/gui/pokedex/variation/cosmetic.png")
     var aspects: Set<String> = emptySet()
+    var forms: Set<String> = emptySet()
 
     fun clone() = PokedexCosmeticVariation().also {
         it.displayName = displayName
         it.icon = icon
         it.aspects = aspects.toSet()
+        it.forms = forms.toSet()
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeString(displayName)
         buffer.writeResourceLocation(icon)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
+        buffer.writeCollection(forms) { _, form -> buffer.writeString(form) }
     }
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
         displayName = buffer.readString()
         icon = buffer.readResourceLocation()
         aspects = buffer.readList { buffer.readString() }.toSet()
+        forms = buffer.readList { buffer.readString() }.toSet()
     }
 }

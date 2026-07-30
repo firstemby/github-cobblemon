@@ -42,8 +42,12 @@ class PokedexEntry(
             }
         }
         other.variations.forEach { variation ->
-            if (variation.displayName !in copy.variations.map { it.displayName }) {
+            val existing = copy.variations.find { it.displayName == variation.displayName }
+            if (existing == null) {
                 copy.variations.add(variation.clone())
+            } else {
+                existing.forms = existing.forms + variation.forms
+                existing.aspects = existing.aspects + variation.aspects
             }
         }
 
@@ -59,8 +63,22 @@ class PokedexEntry(
             }
         }
         addition.variations.forEach { variation ->
-            if (variation.displayName !in variations.map { it.displayName }) {
+            val existing = variations.find { it.displayName == variation.displayName }
+            if (existing == null) {
                 variations.add(variation)
+            } else {
+                existing.forms = existing.forms + variation.forms
+                existing.aspects = existing.aspects + variation.aspects
+            }
+        }
+        normalizeVariations()
+    }
+
+    fun normalizeVariations() {
+        val allDisplayForms = forms.map { it.displayForm }.toSet()
+        variations.forEach { variation ->
+            if (variation.forms.isEmpty()) {
+                variation.forms = allDisplayForms
             }
         }
     }
