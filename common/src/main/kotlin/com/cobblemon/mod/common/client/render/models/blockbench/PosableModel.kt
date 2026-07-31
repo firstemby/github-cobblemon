@@ -256,7 +256,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     fun setLayerContext(buffer: MultiBufferSource, state: PosableState, layers: Iterable<ModelLayer>) {
-        currentLayers = layers
+        currentLayers = layers.sortedBy { it.translucent }
         bufferProvider = buffer
         currentState = state
     }
