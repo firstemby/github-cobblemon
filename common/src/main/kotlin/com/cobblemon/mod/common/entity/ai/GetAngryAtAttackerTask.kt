@@ -25,14 +25,16 @@ object GetAngryAtAttackerTask {
                 Trigger { _, entity, _ ->
                     val hurtByEntity = it.get(hurtByEntity)
                     val angryAt = it.tryGet(angryAt).orElse(null)
-                    if (angryAt == null && hurtByEntity != null) {
-                        (entity as PokemonEntity?)?.playMoodParticle("mood_anger_steam")
-                    }
 
                     if (angryAt != null && angryAt == hurtByEntity.uuid) {
                         return@Trigger false
                     }
+
+                    val becomingAngry = angryAt == null
                     entity.brain.setMemory(MemoryModuleType.ANGRY_AT, hurtByEntity.uuid)
+                    if (becomingAngry) {
+                        (entity as PokemonEntity?)?.playMoodParticle("mood_anger_steam")
+                    }
                     return@Trigger true
                 }
             }

@@ -34,6 +34,9 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
@@ -83,7 +86,6 @@ import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
 import com.cobblemon.mod.common.net.messages.client.OpenBehaviourEditorPacket
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
-import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.InteractPokemonUIPacket
@@ -911,18 +913,17 @@ open class PokemonEntity(
     fun playMoodParticle(particleName: String) {
         if (moodParticleLock) return
 
+        val actionEffect = ActionEffects.actionEffects[cobblemonResource(particleName)] ?: return
+
         cry()
-        SpawnSnowstormEntityParticlePacket(
-            cobblemonResource(particleName),
-            id,
-            listOf("head", "top")
-        ).sendToPlayersAround(
-            x,
-            y,
-            z,
-            64.0,
-            level().dimension()
+
+        val context = ActionEffectContext(
+            actionEffect = actionEffect,
+            providers = mutableListOf(UsersProvider(this)),
+            runtime = runtime,
+            level = level()
         )
+        actionEffect.run(context)
 
         moodParticleLock = true
         after(5.0f) {

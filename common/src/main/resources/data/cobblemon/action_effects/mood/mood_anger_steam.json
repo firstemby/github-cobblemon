@@ -1,0 +1,27 @@
+{
+  "timeline": [
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:mood_anger_steam",
+      "locators": ["head", "top"]
+    },
+    {
+      "type": "loop",
+      "condition": "q.entity.has_memory_value('minecraft:angry_at') || q.entity.has_memory_value('minecraft:attack_target') || q.entity.has_memory_value('cobblemon:nearest_visible_attacker')",
+      "keyframe": {
+        "type": "sequence",
+        "keyframes": [
+          {
+            "type": "entity_particles",
+            "effect": "cobblemon:mood_anger_veins",
+            "locators": ["head", "top"]
+          },
+          {
+            "type": "pause",
+            "pause": 1
+          }
+        ]
+      }
+    }
+  ]
+}

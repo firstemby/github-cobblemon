@@ -1,0 +1,9 @@
+{
+  "timeline": [
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:mood_annoyed",
+      "locators": ["head", "top"]
+    }
+  ]
+}

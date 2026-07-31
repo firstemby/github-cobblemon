@@ -8,24 +8,12 @@
 				"texture": "textures/particles/mood/steam_center_double"
 			}
 		},
-		"events": {
-			"veins": {
-				"particle_effect": {
-					"effect": "cobblemon:mood_anger_veins",
-					"type": "emitter"
-				}
-			}
-		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
 				"num_particles": 1
 			},
-			"minecraft:emitter_lifetime_looping": {
-				"active_time": 1,
-				"sleep_time": 0.25
-			},
-			"minecraft:emitter_lifetime_events": {
-				"creation_event": "veins"
+			"minecraft:emitter_lifetime_once": {
+				"active_time": 1
 			},
 			"minecraft:emitter_shape_point": {
 				"offset": [0, "math.clamp((v.entity_radius*1.2),0.48,0.96)*0.75", 0]

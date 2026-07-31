@@ -44,6 +44,7 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
         ActionEffectKeyframe.register<EntityMoLangActionEffectKeyframe>("entity_molang")
         ActionEffectKeyframe.register<MoLangActionEffectKeyframe>("molang")
         ActionEffectKeyframe.register<ParallelActionEffectKeyframe>("parallel")
+        ActionEffectKeyframe.register<LoopActionEffectKeyframe>("loop")
         ActionEffectKeyframe.register<CanInterruptActionEffectKeyframe>("can_interrupt")
         ActionEffectKeyframe.register<CannotInterruptActionEffectKeyframe>("cannot_interrupt")
         ActionEffectKeyframe.register<RemoveHoldsActionEffectKeyframe>("remove_holds")

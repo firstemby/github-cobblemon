@@ -61,11 +61,11 @@ object AttackHostileMobsTask {
                 }
 
                 if (hostile != null) {
-                    if (currentTarget == null) {
+                    val isNewTarget = currentTarget == null
+                    entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, hostile)
+                    if (isNewTarget) {
                         (entity as? PokemonEntity)?.playMoodParticle("mood_anger_steam")
                     }
-
-                    entity.brain.setMemory(MemoryModuleType.ATTACK_TARGET, hostile)
 
                     true
                 } else {
