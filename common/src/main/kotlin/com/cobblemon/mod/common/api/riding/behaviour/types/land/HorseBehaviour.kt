@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.util.DistanceFieldLayer
+import com.cobblemon.mod.common.api.riding.util.visualizeDistanceField
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
@@ -32,6 +34,7 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
+import org.joml.Vector3f
 import kotlin.math.*
 
 class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
@@ -96,6 +99,24 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         handleSprinting(state, driver)
         inAirCheck(state, vehicle)
         tickStamina(settings, state, vehicle)
+
+        //TODO: should be a config somewhere
+        val debugVisualizeField = true;
+
+        if (debugVisualizeField && !vehicle.level().isClientSide && vehicle.tickCount % 5 == 0) {
+            visualizeDistanceField(
+                referenceEntity = vehicle,
+                center = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0),
+                layers = listOf(
+                    DistanceFieldLayer(isoValue = 0.0f, color = Vector3f(1f, 0.2f, 0.2f)),
+                    DistanceFieldLayer(isoValue = 1.0f, color = Vector3f(0.2f, 0.6f, 1f))
+                ),
+                horizontalRadius = 4.0,
+                verticalRange = 4.0,
+                sampleSpacing = 0.3,
+                marchStep = 0.15
+            )
+        }
     }
 
     fun inAirCheck(

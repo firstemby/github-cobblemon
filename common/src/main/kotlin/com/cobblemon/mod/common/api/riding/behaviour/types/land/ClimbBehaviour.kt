@@ -15,42 +15,31 @@ import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
+import com.cobblemon.mod.common.api.riding.util.DistanceFieldLayer
+import com.cobblemon.mod.common.api.riding.util.visualizeDistanceField
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.api.riding.util.DistanceFieldTuning
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
-import it.unimi.dsi.fastutil.Arrays
-import it.unimi.dsi.fastutil.floats.FloatArrays
-import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.CollisionGetter
-import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.border.WorldBorder
-import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
-import net.minecraft.world.phys.shapes.VoxelShape
-import org.apache.commons.lang3.tuple.Pair
 import org.joml.Matrix3f
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import java.util.function.Consumer
 import kotlin.math.*
 
 class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
@@ -115,6 +104,26 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         handleSprinting(state, driver)
         inAirCheck(state, vehicle)
         tickStamina(settings, state, vehicle)
+
+        //TODO: should be a config somewhere
+        val debugVisualizeField = true;
+
+        if (debugVisualizeField && !vehicle.level().isClientSide && vehicle.tickCount % 5 == 0) {
+            visualizeDistanceField(
+                referenceEntity = vehicle,
+                center = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0),
+                layers = listOf(
+                    DistanceFieldLayer(isoValue = 0.0f, color = Vector3f(1f, 0.2f, 0.2f)),
+                    DistanceFieldLayer(isoValue = 1.0f, color = Vector3f(0.2f, 0.6f, 1f))
+                ),
+                horizontalRadius = 2.0,
+                verticalRange = 2.0,
+                sampleSpacing = 0.35,
+                marchStep = 0.15,
+                tuning = DistanceFieldTuning(smoothingRange = 0.0f)
+            )
+        }
+
     }
 
     fun inAirCheck(
@@ -419,152 +428,61 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         deltaTime: Double
     ): Vec3 {
         if (vehicle !is OrientationControllable) return Vec3.ZERO
-        val vehicleController = (vehicle as OrientationControllable).orientationController
+        val vehicleController = vehicle.orientationController
 
-//        vehicleController.rotateRoll(vehicleController.roll * -1.0f)
-//        vehicleController.rotatePitch(vehicleController.pitch * -1.0f)
-//
         val yawAmount = Mth.wrapDegrees(driver.yRot) * deltaTime.toFloat() * 3
-        //vehicleController.rotateYaw(yawAmount)
         driver.yRot -= yawAmount
 
-        //Smooth out mouse input.
+        // Smooth mouse input before using it
         val smoothingSpeed = 4
-        val xInput = mouseXSmoother.getNewDeltaValue(mouseX * 0.1, deltaTime * smoothingSpeed);
-        val yInput = mouseYSmoother.getNewDeltaValue(mouseY * 0.1, deltaTime * smoothingSpeed);
+        val xInput = mouseXSmoother.getNewDeltaValue(mouseX * 0.1, deltaTime * smoothingSpeed)
+        val yInput = mouseYSmoother.getNewDeltaValue(mouseY * 0.1, deltaTime * smoothingSpeed)
 
+        val turnAmount = calcRotAmount(settings, state, vehicle, driver)
+        val vehicleCenter = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0)
 
-        val turnAmount =  calcRotAmount(settings, state, vehicle, driver)
+        // How far out to look for nearby blocks, and how wide the blend between them is.
+        // collisionsSmoothingRange is in real world units (e.g. 1.25 = ~1.25 block blend).
+        val collisionsInclusionRange = 1.0f
+        val collisionsSmoothingRange = 1.25f
+        val sdfTuning = DistanceFieldTuning(smoothingRange = collisionsSmoothingRange)
+        val inclusionBox = AABB(vehicleCenter.x, vehicleCenter.y, vehicleCenter.z, vehicleCenter.x, vehicleCenter.y, vehicleCenter.z)
+            .inflate(collisionsInclusionRange.toDouble())
 
-        val vehiclePosition = vehicle.position()
-
-        val collisionsInclusionRange = 1.0f;
-        val collisionsSmoothingRange = 1.25f;
-
-        // Vehicle center
-        val vc = vehiclePosition.add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0)
-        val inclusionBox = AABB(vc.x, vc.y, vc.z, vc.x, vc.y, vc.z).inflate(collisionsInclusionRange.toDouble())
-
-        val attachmentPoint: Pair<Vec3?, Vec3?>? = CollisionSmoothingUtil.findClosestPoint(
-            { consumer -> this.forEachCollisonBox(vehicle, inclusionBox, consumer) },
-            vc,
-            state.attachmentNormal.get().scale(-1.0),
-            collisionsSmoothingRange,
-            1.0f,
-            0.001f,
-            20,
-            0.05f,
-            vc
-        )
-
-        val vehicleBox: AABB = vehicle.boundingBox
-
-
-        if(attachmentPoint != null && attachmentPoint.left != null && attachmentPoint.right != null && vehicleController.orientation != null) {
-            state.attachmentPoint.set(attachmentPoint.left!!)
-
-            val targetUp = attachmentPoint.right!!.toVector3f().normalize()
-            val currentUp = vehicleController.upVector
-            // TODO Move this to be a helper function for all ride controllers
-            /************************************************************************/
-//            var end = vc.add(currentUp.toVec3d().scale(25.0))
-//            var start = vc
-//            var density = 5.0
+//        // Find the closest surface point/normal near the vehicle, biased toward the
+//        // surface we were already attached to last tick so it doesn't jump around.
+//        val surfaceContact = SurfaceProjector.projectToNearestSurface(
+//            collisionSource = { consumer ->
+//                consumer?.let { forEachNearbyCollisionBox(vehicle, inclusionBox, it) }
+//            },
+//            biasPlaneOffset = vehicleCenter,
+//            biasPlaneNormal = state.attachmentNormal.get().scale(-1.0),
+//            searchOrigin = vehicleCenter,
+//            tuning = sdfTuning
+//        )
 //
-//            if (!driver.level().isClientSide) return Vec3.ZERO
-//            var direction = end.subtract(start)
-//            var length = direction.length()
-//            var step = direction.normalize().scale(1.0 / density)
-//            var particleCount = (length * density).toInt()
+//        if (surfaceContact != null && vehicleController.orientation != null) {
+//            state.attachmentPoint.set(surfaceContact.point)
 //
-//            for (i in 0 until particleCount) {
-//                val pos = start.add(step.scale(i.toDouble()))
-//                driver.level().addParticle(
-//                    ParticleTypes.CRIT,
-//                    pos.x, pos.y, pos.z,
-//                    0.0, 0.0, 0.0
-//                )
-//            }
-            /************************************************************************/
-            val rotationDifference = Quaternionf().rotationTo(currentUp, targetUp)
+//            // Rotate current "up" toward the new surface normal
+//            val targetUp = surfaceContact.normal.toVector3f().normalize()
+//            val currentUp = vehicleController.upVector
+//            val rotationDifference = Quaternionf().rotationTo(currentUp, targetUp)
+//
+//            val currentOrientation = Quaternionf().setFromUnnormalized(vehicleController.orientation)
+//            val targetOrientation = rotationDifference.mul(currentOrientation, Quaternionf())
+//            currentOrientation.slerp(targetOrientation, min(deltaTime.toFloat() * 20.0f, 1.0f))
+//
+//            val newRenderOrientation = Matrix3f()
+//            currentOrientation.get(newRenderOrientation)
+//            vehicleController.orientation!!.set(newRenderOrientation)
+//            state.attachmentNormal.set(vehicleController.upVector.normalize().toVec3d())
+//        }
 
-            // Grab the current rotation as a Quaternion and rotate about the calculated axis of rotation
-            val currQuat = Quaternionf().setFromUnnormalized(vehicleController.orientation)
-            val destQuat = rotationDifference.mul(currQuat, Quaternionf())
-            currQuat.slerp(destQuat, min(deltaTime.toFloat() * 20.0f, 1.0f))
-            //rotQuat.rotateAxis(angle * min(deltaTime.toFloat() * 5.0f, 1.0f), axOfRot.normalize())
-
-            val newRenderOrientation = Matrix3f()
-            currQuat.get(newRenderOrientation)
-            vehicleController.orientation!!.set(newRenderOrientation)
-            state.attachmentNormal.set(vehicleController.upVector.normalize().toVec3d())
-        }
-
-        //yaw, pitch, roll
+        // yaw, pitch, roll
         return Vec3(yawAmount.toDouble(), 0.0, 0.0)
     }
 
-    private fun forEachCollisonBox(vehicle: PokemonEntity, aabb: AABB, action: Shapes.DoubleLineConsumer?) {
-        val minChunkX = ((Mth.floor(aabb.minX - 1.0E-7) - 1) shr 4)
-        val maxChunkX = ((Mth.floor(aabb.maxX + 1.0E-7) + 1) shr 4)
-        val minChunkZ = ((Mth.floor(aabb.minZ - 1.0E-7) - 1) shr 4)
-        val maxChunkZ = ((Mth.floor(aabb.maxZ + 1.0E-7) + 1) shr 4)
-
-        val width = maxChunkX - minChunkX + 1
-        val depth = maxChunkZ - minChunkZ + 1
-
-        val blockReaderCache = arrayOfNulls<BlockGetter>(width * depth)
-
-        val collisionReader: CollisionGetter = vehicle.level()
-
-        for (cx in minChunkX..maxChunkX) {
-            for (cz in minChunkZ..maxChunkZ) {
-                blockReaderCache[(cx - minChunkX) + (cz - minChunkZ) * width] =
-                    collisionReader.getChunkForCollisions(cx, cz)
-            }
-        }
-
-        val cachedCollisionReader: CollisionGetter = object : CollisionGetter {
-            override fun getHeight(): Int {
-                return vehicle.level().getHeight()
-            }
-
-            override fun getMinBuildHeight(): Int {
-                return vehicle.level().getMinBuildHeight()
-            }
-
-            override fun getBlockEntity(pos: BlockPos?): BlockEntity? {
-                return collisionReader.getBlockEntity(pos)
-            }
-
-            override fun getBlockState(pos: BlockPos?): BlockState {
-                return collisionReader.getBlockState(pos)
-            }
-
-            override fun getFluidState(pos: BlockPos?): FluidState {
-                return collisionReader.getFluidState(pos)
-            }
-
-            override fun getWorldBorder(): WorldBorder {
-                return collisionReader.getWorldBorder()
-            }
-
-
-            override fun getEntityCollisions(entity: Entity?, aabb: AABB?): MutableList<VoxelShape?> {
-                return collisionReader.getEntityCollisions(entity, aabb)
-            }
-
-            override fun getChunkForCollisions(chunkX: Int, chunkZ: Int): BlockGetter? {
-                return blockReaderCache[(chunkX - minChunkX) + (chunkZ - minChunkZ) * width]
-            }
-        }
-
-        //todo:figure out;
-        val shapes = cachedCollisionReader.getBlockCollisions(vehicle, aabb)
-
-        //		StreamSupport.stream(new CollisionSpliterator(cachedCollisionReader, this, aabb, this::canClimbOnBlock), false);
-        shapes.forEach(Consumer { shape: VoxelShape? -> shape!!.forAllBoxes(action) })
-    }
 
     override fun canJump(
         settings: ClimbSettings,
@@ -800,401 +718,5 @@ class ClimbState : RidingBehaviourState() {
     }
 }
 
-// Adapted from nyfaria's code
-//private class BoxConsumer private constructor(private val p: Vec3, private val boxScale: Float) :
-//    Shapes.DoubleLineConsumer {
-//    private var capacity = 16
-//    private var size = 0
-//
-//    private var erx = FloatArray(this.capacity)
-//    private var ery = FloatArray(this.capacity)
-//    private var erz = FloatArray(this.capacity)
-//
-//    private var ecx = FloatArray(this.capacity)
-//    private var ecy = FloatArray(this.capacity)
-//    private var ecz = FloatArray(this.capacity)
-//
-//    override fun consume(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double) {
-//        if (this.size == this.capacity) {
-//            this.capacity = max(
-//                min(this.capacity.toLong() + (this.capacity shr 1), Arrays.MAX_ARRAY_SIZE.toLong()),
-//                this.capacity.toLong()
-//            ).toInt()
-//            this.erx = FloatArrays.forceCapacity(this.erx, this.capacity, this.size)
-//            this.ery = FloatArrays.forceCapacity(this.ery, this.capacity, this.size)
-//            this.erz = FloatArrays.forceCapacity(this.erz, this.capacity, this.size)
-//            this.ecx = FloatArrays.forceCapacity(this.ecx, this.capacity, this.size)
-//            this.ecy = FloatArrays.forceCapacity(this.ecy, this.capacity, this.size)
-//            this.ecz = FloatArrays.forceCapacity(this.ecz, this.capacity, this.size)
-//        }
-//
-//        this.erx[this.size] = 1.0f / ((maxX - minX).toFloat() / 2 * this.boxScale)
-//        this.ery[this.size] = 1.0f / ((maxY - minY).toFloat() / 2 * this.boxScale)
-//        this.erz[this.size] = 1.0f / ((maxZ - minZ).toFloat() / 2 * this.boxScale)
-//
-//        this.ecx[this.size] = ((minX + maxX) / 2 - this.p.x).toFloat()
-//        this.ecy[this.size] = ((minY + maxY) / 2 - this.p.y).toFloat()
-//        this.ecz[this.size] = ((minZ + maxZ) / 2 - this.p.z).toFloat()
-//
-//        this.size++
-//    }
-//}
-
-
-object CollisionSmoothingUtil {
-    private fun invSqrt(x: Float): Float {
-        var x = x
-        val xhalf = 0.5f * x
-        var i = java.lang.Float.floatToIntBits(x)
-        i = 0x5f3759df - (i shr 1)
-        x = java.lang.Float.intBitsToFloat(i)
-        x *= (1.5f - xhalf * x * x)
-        return x
-    }
-
-    private fun sampleSdf(
-        erx: FloatArray,
-        ery: FloatArray,
-        erz: FloatArray,
-        ecx: FloatArray,
-        ecy: FloatArray,
-        ecz: FloatArray,
-        count: Int,
-        px: Float,
-        py: Float,
-        pz: Float,
-        pnx: Float,
-        pny: Float,
-        pnz: Float,
-        x: Float,
-        y: Float,
-        z: Float,
-        smoothingRange: Float,
-        invSmoothingRange: Float
-    ): Float {
-        var sdfDst = 0.0f
-
-        val planeDst = pnx * (x - px) + pny * (y - py) + pnz * (z - pz)
-
-        for (i in 0..<count) {
-            val rsx = x - ecx[i]
-            val rsy = y - ecy[i]
-            val rsz = z - ecz[i]
-
-            //Ellipsoid SDF - https://www.iquilezles.org/www/articles/ellipsoids/ellipsoids.htm
-            val prx = rsx * erx[i]
-            val pry = rsy * ery[i]
-            val prz = rsz * erz[i]
-            //float k1 = MathHelper.sqrt(prx * prx + pry * pry + prz * prz);
-            //float ellipsoidDst = (k1 - 1.0f) * Math.min(Math.min(erx[i], ery[i]), erz[i]);
-            val k1 = invSqrt(prx * prx + pry * pry + prz * prz)
-            var ellipsoidDst = Mth.sqrt(rsx * rsx + rsy * rsy + rsz * rsz) * (1.0f - 1.0f * k1)
-
-            /*float prx2 = rsx * erx[i] * erx[i];
-			float pry2 = rsy * ery[i] * ery[i];
-			float prz2 = rsz * erz[i] * erz[i];
-			float k2 = invSqrt(prx2 * prx2 + pry2 * pry2 + prz2 * prz2);
-			float ellipsoidDst = k1 * (k1 - 1.0f) * k2;*/
-
-            //Smooth intersection - https://iquilezles.org/www/articles/distfunctions/distfunctions.htm
-            var h = Mth.clamp(0.5f - 0.5f * (ellipsoidDst + planeDst) * invSmoothingRange, 0.0f, 1.0f)
-            ellipsoidDst = ellipsoidDst + (-planeDst - ellipsoidDst) * h + smoothingRange * h * (1.0f - h)
-
-            if (i == 0) {
-                sdfDst = ellipsoidDst
-            } else {
-                //Smooth min - https://www.iquilezles.org/www/articles/smin/smin.htm
-                h = Mth.clamp(0.5f + 0.5f * (ellipsoidDst - sdfDst) * invSmoothingRange, 0.0f, 1.0f)
-                sdfDst = ellipsoidDst + (sdfDst - ellipsoidDst) * h - smoothingRange * h * (1.0f - h)
-            }
-        }
-
-        //Smooth intersection - https://iquilezles.org/www/articles/distfunctions/distfunctions.htm
-        val h = Mth.clamp(0.5f - 0.5f * (sdfDst + planeDst) * invSmoothingRange, 0.0f, 1.0f)
-        sdfDst = sdfDst + (-planeDst - sdfDst) * h + smoothingRange * h * (1.0f - h)
-
-        return sdfDst
-    }
-
-    fun findClosestPoint(
-        consumer: Consumer<Shapes.DoubleLineConsumer?>,
-        pp: Vec3,
-        pn: Vec3,
-        smoothingRange: Float,
-        boxScale: Float,
-        dx: Float,
-        iters: Int,
-        threshold: Float,
-        p: Vec3
-    ): Pair<Vec3?, Vec3?>? {
-        val boxConsumer = BoxConsumer(p, boxScale)
-
-        consumer.accept(boxConsumer)
-
-        if (boxConsumer.size == 0) {
-            return null
-        }
-
-        return findClosestPoint(
-            boxConsumer.erx,
-            boxConsumer.ery,
-            boxConsumer.erz,
-            boxConsumer.ecx,
-            boxConsumer.ecy,
-            boxConsumer.ecz,
-            boxConsumer.size,
-            pp,
-            pn,
-            smoothingRange,
-            boxScale,
-            dx,
-            iters,
-            threshold,
-            p
-        )
-    }
-
-    fun findClosestPoint(
-        boxes: MutableList<AABB>,
-        pp: Vec3,
-        pn: Vec3,
-        smoothingRange: Float,
-        boxScale: Float,
-        dx: Float,
-        iters: Int,
-        threshold: Float,
-        p: Vec3
-    ): Pair<Vec3?, Vec3?>? {
-        if (boxes.isEmpty()) {
-            return null
-        }
-
-        val erx = FloatArray(boxes.size)
-        val ery = FloatArray(boxes.size)
-        val erz = FloatArray(boxes.size)
-
-        val ecx = FloatArray(boxes.size)
-        val ecy = FloatArray(boxes.size)
-        val ecz = FloatArray(boxes.size)
-
-        var i = 0
-        for (box in boxes) {
-            erx[i] = 1.0f / ((box.maxX - box.minX).toFloat() / 2 * boxScale)
-            ery[i] = 1.0f / ((box.maxY - box.minY).toFloat() / 2 * boxScale)
-            erz[i] = 1.0f / ((box.maxZ - box.minZ).toFloat() / 2 * boxScale)
-
-            ecx[i] = ((box.minX + box.maxX) / 2 - p.x).toFloat()
-            ecy[i] = ((box.minY + box.maxY) / 2 - p.y).toFloat()
-            ecz[i] = ((box.minZ + box.maxZ) / 2 - p.z).toFloat()
-
-            i++
-        }
-
-        return findClosestPoint(
-            erx,
-            ery,
-            erz,
-            ecx,
-            ecy,
-            ecz,
-            boxes.size,
-            pp,
-            pn,
-            smoothingRange,
-            boxScale,
-            dx,
-            iters,
-            threshold,
-            p
-        )
-    }
-
-    private fun findClosestPoint(
-        erx: FloatArray,
-        ery: FloatArray,
-        erz: FloatArray,
-        ecx: FloatArray,
-        ecy: FloatArray,
-        ecz: FloatArray,
-        count: Int,
-        pp: Vec3,
-        pn: Vec3,
-        smoothingRange: Float,
-        boxScale: Float,
-        dx: Float,
-        iters: Int,
-        threshold: Float,
-        p: Vec3
-    ): Pair<Vec3?, Vec3?>? {
-        val halfThreshold = threshold * 0.5f
-
-        val plx = (pp.x - p.x).toFloat()
-        val ply = (pp.y - p.y).toFloat()
-        val plz = (pp.z - p.z).toFloat()
-        val pnx = pn.x.toFloat()
-        val pny = pn.y.toFloat()
-        val pnz = pn.z.toFloat()
-
-        var px = 0.0f
-        var py = 0.0f
-        var pz = 0.0f
-
-        val invSmoothingRange = 1.0f / smoothingRange
-
-        for (j in 0..<iters) {
-            val dst = sampleSdf(
-                erx,
-                ery,
-                erz,
-                ecx,
-                ecy,
-                ecz,
-                count,
-                plx,
-                ply,
-                plz,
-                pnx,
-                pny,
-                pnz,
-                px,
-                py,
-                pz,
-                smoothingRange,
-                invSmoothingRange
-            )
-
-            val fx1 = sampleSdf(
-                erx,
-                ery,
-                erz,
-                ecx,
-                ecy,
-                ecz,
-                count,
-                plx,
-                ply,
-                plz,
-                pnx,
-                pny,
-                pnz,
-                px + dx,
-                py,
-                pz,
-                smoothingRange,
-                invSmoothingRange
-            )
-            val fy1 = sampleSdf(
-                erx,
-                ery,
-                erz,
-                ecx,
-                ecy,
-                ecz,
-                count,
-                plx,
-                ply,
-                plz,
-                pnx,
-                pny,
-                pnz,
-                px,
-                py + dx,
-                pz,
-                smoothingRange,
-                invSmoothingRange
-            )
-            val fz1 = sampleSdf(
-                erx,
-                ery,
-                erz,
-                ecx,
-                ecy,
-                ecz,
-                count,
-                plx,
-                ply,
-                plz,
-                pnx,
-                pny,
-                pnz,
-                px,
-                py,
-                pz + dx,
-                smoothingRange,
-                invSmoothingRange
-            )
-
-            var gx = dst - fx1
-            var gy = dst - fy1
-            var gz = dst - fz1
-            val m = invSqrt(gx * gx + gy * gy + gz * gz)
-            gx *= m
-            gy *= m
-            gz *= m
-
-            if (java.lang.Float.isNaN(gx) || java.lang.Float.isNaN(gy) || java.lang.Float.isNaN(gz) || java.lang.Double.isNaN(
-                    px.toDouble()
-                ) || java.lang.Double.isNaN(py.toDouble()) || java.lang.Double.isNaN(pz.toDouble())
-            ) {
-                return null
-            }
-
-            val absDst = abs(dst)
-
-            val step = if (absDst >= halfThreshold) dst else sign(dst) * halfThreshold
-
-            px += gx * step
-            py += gy * step
-            pz += gz * step
-
-            if (absDst < threshold) {
-                return Pair.of<Vec3?, Vec3?>(
-                    Vec3(p.x + px, p.y + py, p.z + pz),
-                    Vec3(-gx.toDouble(), -gy.toDouble(), -gz.toDouble()).normalize()
-                )
-            }
-        }
-
-        return null
-    }
-
-    private class BoxConsumer(private val p: Vec3, private val boxScale: Float) : Shapes.DoubleLineConsumer {
-        private var capacity = 16
-        public var size = 0
-
-        public var erx = FloatArray(this.capacity)
-        public var ery = FloatArray(this.capacity)
-        public var erz = FloatArray(this.capacity)
-
-        public var ecx = FloatArray(this.capacity)
-        public var ecy = FloatArray(this.capacity)
-        public var ecz = FloatArray(this.capacity)
-
-        override fun consume(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double) {
-            if (this.size == this.capacity) {
-                this.capacity = max(
-                    min(this.capacity.toLong() + (this.capacity shr 1), Arrays.MAX_ARRAY_SIZE.toLong()),
-                    this.capacity.toLong()
-                ).toInt()
-                this.erx = FloatArrays.forceCapacity(this.erx, this.capacity, this.size)
-                this.ery = FloatArrays.forceCapacity(this.ery, this.capacity, this.size)
-                this.erz = FloatArrays.forceCapacity(this.erz, this.capacity, this.size)
-                this.ecx = FloatArrays.forceCapacity(this.ecx, this.capacity, this.size)
-                this.ecy = FloatArrays.forceCapacity(this.ecy, this.capacity, this.size)
-                this.ecz = FloatArrays.forceCapacity(this.ecz, this.capacity, this.size)
-            }
-
-            this.erx[this.size] = 1.0f / ((maxX - minX).toFloat() / 2 * this.boxScale)
-            this.ery[this.size] = 1.0f / ((maxY - minY).toFloat() / 2 * this.boxScale)
-            this.erz[this.size] = 1.0f / ((maxZ - minZ).toFloat() / 2 * this.boxScale)
-
-            this.ecx[this.size] = ((minX + maxX) / 2 - this.p.x).toFloat()
-            this.ecy[this.size] = ((minY + maxY) / 2 - this.p.y).toFloat()
-            this.ecz[this.size] = ((minZ + maxZ) / 2 - this.p.z).toFloat()
-
-            this.size++
-        }
-    }
-}
-
-
+// The SDF/gradient-descent machinery previously inlined here has moved to
+// see rotationOnMouseXY() above for the call site. Adapted from nyfaria's AWCAPI.
