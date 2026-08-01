@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.ModDependant
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.queryStructOf
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.condition.CompositeSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
@@ -39,9 +38,13 @@ import net.minecraft.server.MinecraftServer
  */
 abstract class SpawnDetail : ModDependant {
     companion object {
+        val pokemonTypes = mutableListOf<String>()
         val spawnDetailTypes = mutableMapOf<String, RegisteredSpawnDetail<*>>()
         fun <T : SpawnDetail> registerSpawnType(name: String, detailClass: Class<T>) {
             spawnDetailTypes[name] = RegisteredSpawnDetail(detailClass)
+            if (detailClass == PokemonSpawnDetail::class.java || detailClass == PokemonHerdSpawnDetail::class.java) {
+                pokemonTypes.add(name)
+            }
         }
     }
 
@@ -50,7 +53,7 @@ abstract class SpawnDetail : ModDependant {
     var displayName: String? = null
     @SerializedName("spawnablePositionType", alternate = ["context"])
     lateinit var spawnablePositionType: SpawnablePositionType<*>
-    var bucket = SpawnBucket("", 0F)
+    var bucket = ""
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
     var compositeCondition: CompositeSpawningCondition? = null
@@ -75,7 +78,7 @@ abstract class SpawnDetail : ModDependant {
         "weight" to { DoubleValue(weight) },
         "percentage" to { DoubleValue(percentage) },
         "id" to { StringValue(id) },
-        "bucket" to { StringValue(bucket.name) },
+        "bucket" to { StringValue(bucket) },
         "width" to { DoubleValue(width.toDouble()) },
         "height" to { DoubleValue(height.toDouble()) },
         "spawnable_position_type" to { StringValue(spawnablePositionType.name) },
@@ -132,6 +135,10 @@ abstract class SpawnDetail : ModDependant {
             containsNullValues = true
             LOGGER.error("Spawn Detail with id $id is invalid as it contains invalid values in its anticonditions (commonly caused by trailing comma in biomes or other arrays)")
         }
+        if (bucket.isBlank()) {
+            containsNullValues = true
+            LOGGER.error("Spawn Detail with id $id is invalid as it does not have a bucket assigned")
+        }
         return super.isModDependencySatisfied() && !containsNullValues
     }
 
@@ -159,7 +166,7 @@ abstract class SpawnDetail : ModDependant {
      */
     fun choose(
         spawnablePosition: SpawnablePosition,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SpawnSelectionData
     ): SpawnAction<*> {
         val action = createSpawnAction(spawnablePosition, bucket, selectionData)
@@ -171,10 +178,10 @@ abstract class SpawnDetail : ModDependant {
         return action
     }
 
-    /** Instantiates an action at the given [SpawnablePosition] for the given [SpawnBucket]. */
+    /** Instantiates an action at the given [SpawnablePosition] for the given spawn bucket. */
     protected abstract fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SpawnSelectionData
     ): SpawnAction<*>
 }

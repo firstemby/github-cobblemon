@@ -1,0 +1,19 @@
+{
+  "moveName": "dig",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "ground",
+  "recipe": [
+    {
+      "item": "cobblemon:ground_gem",
+      "count": 8
+    },
+    {
+      "item": "minecraft:iron_shovel",
+      "count": 1
+    }
+  ]
+}

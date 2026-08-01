@@ -1,0 +1,19 @@
+{
+  "moveName": "seedbomb",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "grass",
+  "recipe": [
+    {
+      "item": "cobblemon:grass_gem",
+      "count": 8
+    },
+    {
+      "tag": "minecraft:chicken_food",
+      "count": 3
+    }
+  ]
+}

@@ -143,10 +143,16 @@ object CobblemonPermissions {
     val CHANGE_BOX_COUNT = this.create("${COMMAND_PREFIX}boxcount", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val SPECTATE_BATTLE = this.create("${COMMAND_PREFIX}spectatebattle", PermissionLevel.ALL_COMMANDS)
+    @JvmStatic
+    val TECHNICAL_MACHINE = this.create("${COMMAND_PREFIX}technicalmachine", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic
     val SEE_HIDDEN_NPCS = this.create("seehiddennpcs", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
+    @JvmStatic
+    val USE_RIDING_STATS_DEBUG = this.create("useridingstatsdebug", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    @JvmStatic
     fun all(): Iterable<Permission> = this.permissions
 
     private fun create(node: String, level: PermissionLevel): Permission {

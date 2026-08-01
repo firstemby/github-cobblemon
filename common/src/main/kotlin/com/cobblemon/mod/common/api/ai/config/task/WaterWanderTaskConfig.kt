@@ -31,8 +31,10 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
+import kotlin.math.ceil
 
 class WaterWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "water_wanders", true).asExpressible()
@@ -97,6 +99,33 @@ class WaterWanderTaskConfig : SingleTaskConfig {
                     }
 
                     if (pos == null || target == null) {
+                        return@Trigger false
+                    }
+
+                    // Move target pos down so that we don't move out of water too much
+                    val requiredDepth = ceil(0.5 + entity.eyeHeight)
+                    // Get the current depth of the block
+                    var depth = 1
+                    var testPos = pos.above()
+                    var blockState = entity.level().getBlockState(testPos)
+                    while (blockState.fluidState.type == Fluids.WATER) {
+                        depth++
+                        testPos = testPos!!.above()
+                        blockState = entity.level().getBlockState(testPos)
+                    }
+
+                    if (depth < requiredDepth) {
+                        // Iterate down until we reach the desired min depth or we reach a non water block
+                        pos = pos.below()
+                        blockState = entity.level().getBlockState(pos)
+                        while (blockState.fluidState.type == Fluids.WATER && depth < requiredDepth) {
+                            depth ++
+                            pos = pos!!.below()
+                            blockState = entity.level().getBlockState(pos)
+                        }
+                    }
+
+                    if (depth < requiredDepth) {
                         return@Trigger false
                     }
 

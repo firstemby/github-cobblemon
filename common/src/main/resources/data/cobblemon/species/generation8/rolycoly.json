@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 837,
   "name": "Rolycoly",
   "primaryType": "rock",
@@ -41,18 +42,17 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.7,
     "fixed": false
   },
   "behaviour": {
-    "fireImmune": true,
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -71,7 +71,19 @@
           "tier": 3
         }
       ]
-    }
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 3,

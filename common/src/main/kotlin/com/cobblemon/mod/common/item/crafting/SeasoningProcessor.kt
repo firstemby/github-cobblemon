@@ -26,7 +26,8 @@ interface SeasoningProcessor {
             FlavourSeasoningProcessor.type to FlavourSeasoningProcessor,
             FoodColourSeasoningProcessor.type to FoodColourSeasoningProcessor,
             FoodSeasoningProcessor.type to FoodSeasoningProcessor,
-            MobEffectSeasoningProcessor.type to MobEffectSeasoningProcessor
+            MobEffectSeasoningProcessor.type to MobEffectSeasoningProcessor,
+            RideBoostsSeasoningProcessor.type to RideBoostsSeasoningProcessor,
         )
     }
 

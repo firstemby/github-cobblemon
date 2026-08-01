@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 838,
   "name": "Carkol",
   "primaryType": "rock",
@@ -42,17 +43,17 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "swim": {
         "avoidsWater": true,
-        "canSwimInWater": false
+        "canSwimInLava": true
       }
     },
     "herd": {
@@ -67,7 +68,18 @@
           "tier": 2
         }
       ]
-    }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -190,5 +202,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "LAND"
+  }
 }

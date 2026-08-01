@@ -52,8 +52,16 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "canWalk": true,
+        "walkSpeed": 0.2
+      },
       "fly": {
-        "canFly": true
+        "canFly": true,
+        "flySpeedHorizontal": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -72,6 +80,14 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {

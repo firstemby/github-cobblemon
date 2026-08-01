@@ -23,11 +23,14 @@ object PastureLinkManager {
     // Maps player UUID
     val links = mutableMapOf<UUID, PastureLink>()
 
+    @JvmStatic
     fun getLinkByPlayerId(playerId: UUID) = links[playerId]
+    @JvmStatic
     fun createLink(playerId: UUID, link: PastureLink) {
         links[playerId] = link
     }
 
+    @JvmStatic
     fun getLinkByPlayer(player: ServerPlayer): PastureLink? {
         val link = getLinkByPlayerId(player.uuid)
         if (link != null) {
@@ -40,6 +43,7 @@ object PastureLinkManager {
         return link
     }
 
+    @JvmStatic
     fun removeAt(world: ServerLevel, pos: BlockPos) {
         links.removeIf { (uuid, pastureLink) ->
             val shouldRemove = world.dimensionTypeRegistration().`is`(pastureLink.dimension) && pastureLink.pos == pos

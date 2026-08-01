@@ -41,16 +41,36 @@
   "catchRate": 35,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "standingEyeHeight": 0.75,
+  "swimmingEyeHeight": 0.75,
+  "flyingEyeHeight": 0.75,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 0.5,
-    "height": 0.6,
+    "width": 0.75,
+    "height": 0.75,
     "fixed": false
   },
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {

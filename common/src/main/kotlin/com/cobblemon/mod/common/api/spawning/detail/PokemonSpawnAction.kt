@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
@@ -26,7 +25,7 @@ import net.minecraft.world.item.ItemStack
  */
 class PokemonSpawnAction(
     spawnablePosition: SpawnablePosition,
-    bucket: SpawnBucket,
+    bucket: String,
     override val detail: SpawnDetail,
     /**
      * The [PokemonProperties] that are about to be used. When using it, a copy will be taken.
@@ -40,9 +39,12 @@ class PokemonSpawnAction(
     override fun createEntity(): PokemonEntity {
         val props = props.copy()
         props.level = levelRange.random()
+
         val sourcePlayer = spawnablePosition.cause.entity as? ServerPlayer
         val entity = props.createEntity(spawnablePosition.world, sourcePlayer)
         entity.spawnCause = spawnablePosition.cause
+        entity.pokemon.setFriendship(entity.pokemon.form.baseFriendship)
+
         SeasonFeatureHandler.updateSeason(entity.pokemon, Cobblemon.seasonResolver(spawnablePosition.world, spawnablePosition.position))
         val heldItem = heldItem
         if (heldItem != ItemStack.EMPTY && heldItem != null) {

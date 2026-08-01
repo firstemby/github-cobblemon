@@ -52,14 +52,23 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "swim": {
         "canBreatheUnderlava": true,
+        "avoidsWater": true,
         "canSwimInLava": true
       }
-    }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 2,
@@ -174,5 +183,9 @@
       "evolutions": [],
       "battleOnly": true
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 15,
+    "liquidGlowMode": "BOTH"
+  }
 }

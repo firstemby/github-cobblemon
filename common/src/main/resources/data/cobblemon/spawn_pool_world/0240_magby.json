@@ -10,9 +10,9 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "11-36",
+            "level": "11-37",
             "weight": 9.0,
             "condition": {
                 "minSkyLight": 8,
@@ -22,7 +22,7 @@
                 ],
                 "isRaining": false,
                 "neededNearbyBlocks": [
-                    "#minecraft:lava",
+                    "minecraft:lava",
                     "minecraft:magma_block"
                 ]
             },
@@ -39,7 +39,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "11-36",
             "weight": 9.0,
@@ -59,7 +59,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "11-36",
             "weight": 9.0,

@@ -5,15 +5,20 @@
   "profileTranslation": [0, 0.9, 0],
   "rootBone": "ursaluna",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.35, 0]
+    "seat_1": [0, 0.45, 0],
+    "seat_2": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.45, 0.5],
+    "seat_1_reverse": [0, 0.45, 0.5],
+    "seat_2": [0, 0.45, 0.5],
+    "seat_2_reverse": [0, 0.45, 0.5]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1.35, 5],
-    "seat_1_reverse": [0, 1.35, 5]
+    "seat_1": [0, 0.45, 0.5],
+    "seat_1_reverse": [0, 0.45, 0.5],
+    "seat_2": [0, 0.45, 0.5],
+    "seat_2_reverse": [0, 0.45, 0.5]
   },
   "animations": {
     "cry": "q.bedrock_stateful('ursaluna', 'cry')",

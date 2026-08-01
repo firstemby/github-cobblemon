@@ -45,9 +45,59 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
     "height": 1,
-    "fixed": false
+    "fixed": false,
+    "width": 1
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/climb",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-85",
+          "JUMP": "25-45",
+          "SKILL": "45-65",
+          "SPEED": "30-45",
+          "STAMINA": "15-30"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": "5"
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    },
+    "walking": {
+      "walkSpeed": 0.18
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
+    }
   },
   "drops": {
     "amount": 7,
@@ -203,40 +253,5 @@
     "special:refresh"
   ],
   "preEvolution": "spinarak",
-  "evolutions": [],
-  "behaviour": {
-    "walking":{
-      "walkSpeed": 0.18
-    },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
-    },
-    "herd": {
-      "maxSize": "5"
-    }
-  },
-  "riding": {
-    "behaviours": {
-      "LAND": {
-        "key": "cobblemon:land/climb",
-        "stats": {
-          "SPEED": "20-70",
-          "ACCELERATION": "90-100",
-          "SKILL": "40-60",
-          "JUMP": "10-30",
-          "STAMINA": "50-70"
-        }
-      }
-    },
-    "seats": [
-      {
-        "offset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
-      }
-    ]
-  }
+  "evolutions": []
 }

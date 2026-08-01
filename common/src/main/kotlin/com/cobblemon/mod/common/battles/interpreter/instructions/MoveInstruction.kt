@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
@@ -31,6 +33,7 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
 import com.cobblemon.mod.common.util.asArrayValue
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
@@ -49,7 +52,7 @@ class MoveInstruction(
 ) : InterpreterInstruction, CauserInstruction {
     val effect = message.effectAt(1) ?: Effect.pure("", "")
     val move = Moves.getByNameOrDummy(effect.id)
-    val actionEffect = move.actionEffect
+    val actionEffect: ActionEffectTimeline? by lazy { ActionEffects.getEffectWithBattleContext(cobblemonResource(move.name), userPokemon) }
     val spreadTargets = message.optionalArgument("spread")?.split(",") ?: emptyList()
 
     var future = CompletableFuture.completedFuture(Unit)
@@ -61,6 +64,8 @@ class MoveInstruction(
     override fun invoke(battle: PokemonBattle) {
         userPokemon = message.battlePokemon(0, battle)!!
         targetPokemon = message.battlePokemon(2, battle)
+
+        val actionEffect = actionEffect ?: ActionEffects.actionEffects["generic_move".asIdentifierDefaultingNamespace()]
         val targetPokemon = targetPokemon // So smart non-null casts can happen
 
         val optionalEffect = message.effect()
@@ -95,6 +100,8 @@ class MoveInstruction(
                     battleLang("used_move", pokemonName, move.displayName)
             }
             battle.broadcastChatMessage(lang)
+            // Notify the actor that one of their Pokemon used a move so they can react (eg. NPC play animation)
+            userPokemon.actor.onUseMove(userPokemon, targetPokemon)
             battle.majorBattleActions[userPokemon.uuid] = message
 
             val runtime = MoLangRuntime().also {
@@ -130,6 +137,8 @@ class MoveInstruction(
 
             val subsequentInstructions = instructionSet.findInstructionsCausedBy(this)
             val missedTargets = subsequentInstructions.filterIsInstance<MissInstruction>().mapNotNull { it.target }
+            val failed = subsequentInstructions.any { it is FailInstruction }
+            val failedTargets = subsequentInstructions.filterIsInstance<FailInstruction>().mapNotNull { it.target }
             val hitCountInstruction = subsequentInstructions.filterIsInstance<HitCountInstruction>().firstOrNull()
 
             runtime.environment.query.addFunction("missed") { params ->
@@ -138,6 +147,15 @@ class MoveInstruction(
                 } else {
                     val entityUUID = params.getString(0)
                     return@addFunction DoubleValue(missedTargets.any { it.entity?.stringUUID == entityUUID })
+                }
+            }
+
+            runtime.environment.query.addFunction("failed") { params ->
+                if (params.params.size == 0) {
+                    return@addFunction DoubleValue(failed)
+                } else {
+                    val entityUUID = params.getString(0)
+                    return@addFunction DoubleValue(failedTargets.any { it.entity?.stringUUID == entityUUID })
                 }
             }
 

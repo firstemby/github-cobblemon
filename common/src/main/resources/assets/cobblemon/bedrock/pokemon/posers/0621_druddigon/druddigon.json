@@ -3,6 +3,7 @@
   "portraitTranslation": [-0.79, 1.43, 0],
   "profileScale": 0.59,
   "profileTranslation": [0.01, 0.81, 0],
+  "rootBone": "druddigon",
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

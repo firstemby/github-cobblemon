@@ -56,12 +56,17 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.41
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "6",
@@ -71,6 +76,9 @@
           "tier": 1
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
@@ -387,13 +395,41 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
             {
-              "pokemon": "raticate alolan",
+              "pokemon": "rattata alpha",
               "tier": 1
+            },
+            {
+              "pokemon": "rattata alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "raticate alpha",
+              "tier": 2
+            },
+            {
+              "pokemon": "raticate alolan",
+              "tier": 2
             }
           ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
         }
       }
     }

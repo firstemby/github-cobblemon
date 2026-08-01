@@ -7,11 +7,40 @@
       "poser": "cobblemon:centiskorch",
       "model": "cobblemon:centiskorch.geo",
       "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch_emissive.png",
+          "translucent": true
+        }
+      ]
     },
     {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch_shiny.png"
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch_emissive_shiny.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0851_centiskorch/centiskorch_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

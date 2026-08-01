@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:link_cable",
+      "components": {
+        "minecraft:custom_model_data": 7
+      }
+    },
+    "title": {
+      "translate": "advancements.cobblemon.first_alpha_catch"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.first_alpha_catch.description"
+    }
+  },
+  "parent": "cobblemon:catching/first_catch",
+  "criteria": {
+    "catch": {
+      "trigger": "cobblemon:catch_alpha_pokemon",
+      "conditions": {
+        "count": 1
+      }
+    }
+  },
+  "requirements": [
+    [
+      "catch"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

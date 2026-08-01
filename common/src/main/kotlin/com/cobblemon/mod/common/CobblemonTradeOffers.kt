@@ -89,7 +89,14 @@ object CobblemonTradeOffers {
      * @return The resulting list.
      */
     fun resolveWanderingTradeOffers(): List<WandererTradeOffer> = listOf(
-        WandererTradeOffer(false, listOf(VillagerTrades.ItemsForEmeralds(CobblemonItems.VIVICHOKE_SEEDS, 24, 1, 1, 6)))
+        WandererTradeOffer(false, listOf(
+            VillagerTrades.ItemsForEmeralds(CobblemonItems.VIVICHOKE_SEEDS, 6, 1, 1, 6),
+            VillagerTrades.ItemsForEmeralds(CobblemonItems.SACCHARINE_SAPLING, 5, 1, 4, 1),
+            VillagerTrades.ItemsForEmeralds(CobblemonItems.HEARTY_GRAINS, 1, 1, 12, 1),
+
+            VillagerTrades.ItemsForEmeralds(CobblemonItems.CHIPPED_POT, 5, 1, 1, 2),
+            VillagerTrades.ItemsForEmeralds(CobblemonItems.MASTERPIECE_TEACUP, 5, 1, 1, 2)
+        ))
     )
 
     /**

@@ -7,11 +7,40 @@
       "poser": "cobblemon:torracat",
       "model": "cobblemon:torracat.geo",
       "texture": "cobblemon:textures/pokemon/0726_torracat/torracat.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0726_torracat/torracat_emissive.png",
+          "translucent": true
+        }
+      ]
     },
     {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0726_torracat/torracat_shiny.png"
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0726_torracat/torracat_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0726_torracat/torracat_emissive_shiny.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0726_torracat/torracat_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

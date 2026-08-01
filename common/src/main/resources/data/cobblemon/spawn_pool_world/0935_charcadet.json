@@ -11,7 +11,7 @@
                 "nether_structures"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-26",
             "weight": 92.0,
@@ -45,7 +45,7 @@
                 "ruined_portal"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-26",
             "weight": 18.4,
@@ -59,7 +59,7 @@
             "id": "charcadet-3",
             "pokemon": "charcadet",
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-26",
             "weight": 9.2,

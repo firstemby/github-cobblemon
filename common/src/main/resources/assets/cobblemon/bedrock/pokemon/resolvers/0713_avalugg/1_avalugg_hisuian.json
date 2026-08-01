@@ -1,0 +1,29 @@
+{
+  "species": "cobblemon:avalugg",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["hisuian"],
+      "poser": "cobblemon:avalugg_hisuian",
+      "model": "cobblemon:avalugg_hisuian.geo",
+      "texture": "cobblemon:textures/pokemon/0713_avalugg/avalugg_hisuian.png",
+      "layers": []
+    },
+    {
+      "aspects": ["hisuian", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0713_avalugg/avalugg_hisuian_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "hisuian"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0713_avalugg/avalugg_hisuian_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "portraitScale": 3.33,
+  "portraitTranslation": [-0.46, -2.91, 0],
+  "profileScale": 0.71,
+  "profileTranslation": [0.03, 0.67, 0],
+  "rootBone": "nymble",
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('nymble', 'ground_idle')"
+      ],
+	  "quirks": [
+        "q.bedrock_quirk('nymble', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('nymble', 'ground_idle')",
+        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+	  "quirks": ["q.bedrock_quirk('nymble', 'blink')"]
+    }
+  }
+ }

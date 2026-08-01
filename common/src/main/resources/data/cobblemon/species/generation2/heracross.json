@@ -45,15 +45,78 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.05,
     "height": 1.55,
-    "fixed": false
+    "fixed": false,
+    "width": 1.05
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/bird",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "40-65",
+          "JUMP": "0-5",
+          "SKILL": "55-85",
+          "SPEED": "35-50",
+          "STAMINA": "35-55"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "55-70",
+          "JUMP": "35-50",
+          "SKILL": "40-65",
+          "SPEED": "15-30",
+          "STAMINA": "35-50"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "moving": {
       "fly": {
         "canFly": true
+      },
+      "swim": {
+        "avoidsWater": true
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042,
+      "times": [
+        "167-11833,13702-22299"
+      ]
     }
   },
   "drops": {
@@ -235,10 +298,31 @@
         "speed": 75
       },
       "baseExperienceYield": 210,
-      "dynamaxBlocked": true,
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true,
+          "willDefendSelf": true,
+          "willFlee": false
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0021,
+          "rouseChance": 0.0042,
+          "times": [
+            "167-11833,13702-22299"
+          ]
+        },
+        "herd": {
+          "maxSize": 4
+        }
+      },
       "evolutions": [],
       "battleOnly": true,
-      "behaviour": {}
+      "dynamaxBlocked": true
     }
   ]
 }

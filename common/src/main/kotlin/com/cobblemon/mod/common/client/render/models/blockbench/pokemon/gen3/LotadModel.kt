@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen3
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.createTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.frame.QuadrupedFrame
+import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.CryProvider
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.ModelPartTransformation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
@@ -42,6 +43,8 @@ class LotadModel (root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
     lateinit var sleep: Pose
 
     val wateroffset = -2
+
+    override val cryAnimation = CryProvider { bedrockStateful("lotad", "cry") }
 
     override fun registerPoses() {
         val blink = quirk { bedrockStateful("lotad", "blink") }

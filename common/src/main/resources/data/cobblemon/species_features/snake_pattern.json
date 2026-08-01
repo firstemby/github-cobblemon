@@ -10,7 +10,21 @@
     "elusive",
     "heart",
     "speed",
-    "sound"
+    "sound",
+    "angry",
+    "cartoon",
+    "clown",
+    "comedic",
+    "crow",
+    "grin",
+    "ink",
+    "modern",
+    "rain",
+    "scribble",
+    "silence",
+    "sloth",
+    "suspicious",
+    "will"
   ],
   "isAspect": true,
   "aspectFormat": "snake-pattern-{{choice}}"

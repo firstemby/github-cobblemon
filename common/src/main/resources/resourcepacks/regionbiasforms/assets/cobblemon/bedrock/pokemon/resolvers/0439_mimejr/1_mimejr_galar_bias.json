@@ -1,0 +1,28 @@
+{
+  "species": "cobblemon:mimejr",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["region-bias-galar"],
+      "model": "cobblemon:mime_jr_galar_bias.geo",
+      "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr.png",
+      "layers": []
+    },
+    {
+      "aspects": ["shiny", "region-bias-galar"],
+      "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "region-bias-galar"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0439_mimejr/mime_jr_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

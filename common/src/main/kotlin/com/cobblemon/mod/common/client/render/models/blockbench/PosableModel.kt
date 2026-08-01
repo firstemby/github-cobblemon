@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
+import com.cobblemon.mod.common.client.render.ScrollingTextureSettings
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
@@ -33,6 +34,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.SimpleQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
+import com.cobblemon.mod.common.client.util.exists
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -48,6 +50,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
+import net.minecraft.Util
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
@@ -113,7 +116,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     open var properties = mutableMapOf<String, String>()
 
     /*
-     * Hello future Hiro, this is past Hiro. You've gotten forgetful in your old age.
+     * Hello future Hiro, this is past Hiro. You've become forgetful in your old age.
      *
      * The profile translation is not actually necessary. The reason why you thought it was necessary
      * is that there is a 1.5 block offset applied by living-entity-renderer-intended models due to
@@ -130,6 +133,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * a good user experience.
      */
     open var profileTranslation = Vec3(0.0, 0.0, 0.0)
+
+    open var profilePokedexScale: Float? = null
+    open var profilePokedexTranslation: Vec3? = null
+    open var profileSummaryScale: Float? = null
+    open var profileSummaryTranslation: Vec3? = null
 
     var red = 1F
     var green = 1F
@@ -453,15 +461,16 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val provider = bufferProvider
         if (provider != null) {
             for (layer in currentLayers) {
-                var renderLayer : RenderType
-                if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
-                    //Handle Interpolation
-                    val texture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
-                    renderLayer = makeLayer(DynamicStateShard(texture), layer.emissive, layer.translucent, layer.translucent_cull)
-                }
-                else {
-                    val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
-                    renderLayer = getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
+                val texture = layer.texture?.invoke(currentState ?: FloatingState()) ?: continue
+                val scrolling = layer.scrolling
+
+                val renderLayer: RenderType = if (scrolling != null) {
+                    getScrollingLayer(texture, scrolling, layer)
+                } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
+                    val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
+                    makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
+                } else {
+                    getLayer(texture, layer.emissive, layer.translucent, layer.translucent_cull)
                 }
                 val consumer = provider.getBuffer(renderLayer)
                 val tint = layer.tint
@@ -500,7 +509,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                     !emissive && translucent && translucentCull -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER
                     !emissive && translucent -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
                     !emissive && !translucent -> RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
-                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER // This one should be changed to maybe a custom shader? Translucent stuffs with things
+                    else -> RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE_SHADER
                 }
             )
             .setTextureState(texture)
@@ -533,6 +542,16 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
+    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings, layer: ModelLayer): RenderType {
+        val gameTime = Util.getMillis().toFloat() / 1000f
+        val offsetU = (gameTime * scrolling.speedU) % 1.0f
+        val offsetV = (gameTime * scrolling.speedV) % 1.0f
+        return if (layer.emissive) {
+            RenderType.energySwirl(texture, offsetU, offsetV)
+        } else {
+            RenderType.breezeWind(texture, offsetU, offsetV)
+        }
+    }
 
     /** Applies the given pose's [ModelPartTransformation]s to the model, if there is a matching pose. */
     fun applyPose(state: PosableState, pose: Pose, intensity: Float) = pose.transformedParts.forEach { it.apply(state, intensity) }
@@ -613,6 +632,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // a change of pose is necessary, if it's going to gradually transition there then we're still going to keep
         // applying our current pose until that process is done.
         val pose = validatePose(entity as? PosableEntity, state)
+        transformedParts.forEach { it.apply(state) }
         // Applies the pose's transformations to the model. This is not the animations.
         applyPose(state, pose, 1F)
 
@@ -743,7 +763,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         var yRot = 0f
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            scale = entity.pokemon.form.baseScale * entity.pokemon.effectiveScale * (entity.delegate as PokemonClientDelegate).activeSendoutScale
             // If scale is 0 we start getting NaNs
             scale.coerceAtLeast(0.01f)
             if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable

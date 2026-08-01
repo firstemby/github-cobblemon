@@ -1,0 +1,43 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "create",
+        "farmersdelight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:and",
+      "values": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "farmersdelight"
+        }
+      ]
+    }
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "cobblemon:hearty_grains"
+    }
+  ],
+  "results": [
+    {
+      "id": "farmersdelight:rice",
+      "count": 1
+    },
+    {
+      "id": "farmersdelight:straw",
+      "count": 1
+    }
+  ],
+  "processing_time": 50
+}

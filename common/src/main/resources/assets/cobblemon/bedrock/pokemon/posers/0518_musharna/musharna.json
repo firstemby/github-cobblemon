@@ -31,6 +31,12 @@
       "animations": [
         "q.bedrock('musharna', 'ground_idle')"
       ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": [
+        "q.bedrock('musharna', 'sleep')"
+      ]
     }
   }
 }

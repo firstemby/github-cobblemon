@@ -10,7 +10,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 1.0,
@@ -27,6 +27,11 @@
                     "#cobblemon:is_mountain",
                     "#cobblemon:is_plains"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_volcanic"
+                ]
             }
         },
         {
@@ -36,7 +41,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
             "weight": 1.0,

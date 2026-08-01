@@ -19,7 +19,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class RattataAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
-    override val rootPart = root.registerChildWithAllChildren("rattata_alolan")
+    override val rootPart = root.registerChildWithAllChildren("rattata")
     override val foreLeftLeg= getPart("leg_front_left")
     override val foreRightLeg = getPart("leg_front_right")
     override val hindLeftLeg = getPart("leg_back_left")
@@ -36,13 +36,13 @@ class RattataAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFra
     lateinit var standing: Pose
     lateinit var walk: Pose
 
-    override val cryAnimation = CryProvider { bedrockStateful("rattata_alolan", "cry") }
+//    override val cryAnimation = CryProvider { bedrockStateful("rattata", "cry") }
 
     override fun registerPoses() {
-        val blink = quirk { bedrockStateful("rattata_alolan", "blink")}
+        val blink = quirk { bedrockStateful("rattata", "blink")}
         sleep = registerPose(
             poseType = PoseType.SLEEP,
-            animations = arrayOf(bedrock("rattata_alolan", "sleep"))
+            animations = arrayOf(bedrock("rattata", "sleep"))
         )
 
         standing = registerPose(
@@ -51,7 +51,7 @@ class RattataAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFra
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("rattata_alolan", "ground_idle")
+                bedrock("rattata", "ground_idle")
             )
         )
 
@@ -60,10 +60,10 @@ class RattataAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFra
             quirks = arrayOf(blink),
             animations = arrayOf(
                 singleBoneLook(),
-                bedrock("rattata_alolan", "ground_walk")
+                bedrock("rattata", "ground_walk")
             )
         )
     }
 
-    override fun getFaintAnimation(state: PosableState) = bedrockStateful("rattata_alolan", "faint")
+    override fun getFaintAnimation(state: PosableState) = bedrockStateful("rattata", "faint")
 }

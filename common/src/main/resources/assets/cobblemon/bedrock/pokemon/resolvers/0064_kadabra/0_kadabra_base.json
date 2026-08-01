@@ -10,13 +10,29 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0064_kadabra/kadabra_shiny.png"
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "poser": "cobblemon:kadabra_female",
       "model": "cobblemon:kadabra_female.geo"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0064_kadabra/kadabra_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -46,73 +46,66 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 2.4,
     "height": 2.8,
-    "fixed": false
+    "fixed": false,
+    "width": 2.4
   },
   "riding": {
     "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
       "LIQUID": {
         "key": "cobblemon:liquid/boat",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
         "stats": {
-          "SPEED": "10-20",
-          "ACCELERATION": "90-100",
-          "SKILL": "15-30",
-          "JUMP": "10-20",
-          "STAMINA": "15-30"
-        }
+          "ACCELERATION": "30-55",
+          "JUMP": "20-30",
+          "SKILL": "50-75",
+          "SPEED": "25-40",
+          "STAMINA": "45-75"
+        },
+        "surfaceLevelOffset": -1.6
       }
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.4,
-          "z": 0.0
-        }
-      },
-      {
-        "offset": {
-          "x": 0.0,
-          "y": 0.7,
-          "z": -1.0
-        }
+        "locator": "seat_1"
       }
-    ],
-    "stats": {
-      "SPEED": {
-        "ranges": "35-60"
-      },
-      "ACCELERATION": {
-        "ranges": "25-50"
-      },
-      "SKILL": {
-        "ranges": "30-60"
-      },
-      "JUMP": {
-        "ranges": "5-10"
-      },
-      "STAMINA": {
-        "ranges": "45-100"
-      }
-    }
+    ]
   },
   "behaviour": {
-    "moving": {
-      "swim": {
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "swimSpeed": 0.3,
-        "canSwimInWater": true,
-        "canSwimInLava": false
-      },
-      "walk": {
-        "walkSpeed": 0.15
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "light": "0-4"
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "herd": {
       "maxSize": "6",
@@ -126,6 +119,23 @@
           "tier": 2
         }
       ]
+    },
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canWalkOnWater": true,
+        "swimSpeed": 0.3
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -319,15 +329,14 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "behaviour": {
         "moving": {
           "swim": {
             "canBreatheUnderwater": true,
-            "canWalkOnWater": true,
-            "swimSpeed": "0.2",
+            "canSwimInLava": false,
             "canSwimInWater": true,
-            "canSwimInLava": false
+            "canWalkOnWater": true,
+            "swimSpeed": "0.2"
           },
           "walk": {
             "walkSpeed": 0.15
@@ -339,7 +348,8 @@
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

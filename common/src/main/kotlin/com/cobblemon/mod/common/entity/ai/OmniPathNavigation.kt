@@ -8,13 +8,16 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.entity.OmniPathingEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
 import com.cobblemon.mod.common.util.toVec3d
 import com.google.common.collect.ImmutableSet
 import net.minecraft.core.BlockPos
+import net.minecraft.tags.BlockTags
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.world.damagesource.DamageSource
@@ -132,7 +135,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         val f = abs(mob.z - targetVec3d.z)
         val closeEnough = d < maxDistanceToWaypoint.toDouble()
                 && f < this.maxDistanceToWaypoint.toDouble()
-                && e < (if (currentNode.type in verticallyPreciseNodeTypes && (mob.isUnderWater || pather.isFlying())) 1.0 else 1.0).toDouble()
+                && e < (if (currentNode.type in verticallyPreciseNodeTypes && (mob.isUnderWater || pather.isFlying())) maxDistanceToWaypoint else 1.0).toDouble()
 
         // Corner cutting is commented out because it makes pokemon and NPCs 'cut' the corner and fall into water or lava
         if (closeEnough) {// || mob.navigation.canCutCorner(path!!.nextNode.type) && shouldTargetNextNodeInDirection(vec3d)) {
@@ -181,7 +184,9 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             target = blockPos
         }
 
-        val path = if (!this.world.getBlockState(target).isSolid) {
+        val blockState = this.world.getBlockState(target)
+        val path = if (!blockState.isSolid
+            || (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && pather.canPathThroughSaccLeaves())) {
             findPath(target, distance)
         } else {
             blockPos = target.above()
@@ -319,17 +324,16 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             val middleNode = path.getNode(i - 1)
             val nextNode = path.getNode(i)
 
-            val directionToMiddle = middleNode.asBlockPos().subtract(firstNode.asBlockPos()).toVec3d().normalize()
             val nodeType = firstNode.type
             if (nodeType != middleNode.type || nodeType != nextNode.type || nodeType == PathType.WALKABLE) {
                 i++
                 continue
             }
-
+            val directionToMiddle = middleNode.asBlockPos().subtract(firstNode.asBlockPos()).toVec3d().normalize()
             val directionToEnd = nextNode.asBlockPos().subtract(middleNode.asBlockPos()).toVec3d().normalize()
 
             // If we'd be making a big (greater than 45 degrees) turn by removing the middle node, that's a bit much, leave it alone.
-            if (acos(directionToMiddle.dot(directionToEnd)) > PI / 3) {
+            if (acos(directionToMiddle.dot(directionToEnd)) > PI / 4) {
                 i++
                 continue
             }

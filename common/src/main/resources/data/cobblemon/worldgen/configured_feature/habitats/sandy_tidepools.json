@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/sandy_tidepool1",
+            "cobblemon:habitats/sandy_tidepool2",
+            "cobblemon:habitats/sandy_tidepool3",
+            "cobblemon:habitats/sandy_tidepool4",
+            "cobblemon:habitats/sandy_tidepool5",
+            "cobblemon:habitats/sandy_tidepool6",
+            "cobblemon:habitats/sandy_tidepool7",
+            "cobblemon:habitats/sandy_tidepool8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/sandy_tidepool"
+    }
+}

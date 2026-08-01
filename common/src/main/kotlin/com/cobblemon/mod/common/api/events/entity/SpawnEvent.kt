@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.api.events.entity
 
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.spawning.BestSpawner
+import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import net.minecraft.world.entity.Entity
 
 /**
@@ -21,4 +23,9 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since April 22nd, 2023
  */
-class SpawnEvent<T : Entity>(val entity: T, val spawnablePosition: SpawnablePosition) : Cancelable()
+class SpawnEvent<T : Entity>(val entity: T, val spawnablePosition: SpawnablePosition) : Cancelable() {
+    val cause: SpawnCause
+        get() = spawnablePosition.cause
+    val spawner: Spawner
+        get() = spawnablePosition.spawner
+}

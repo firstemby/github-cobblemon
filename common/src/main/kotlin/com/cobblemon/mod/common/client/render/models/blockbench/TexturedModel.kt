@@ -267,7 +267,7 @@ class TexturedModel {
                 var counter = 0
                 subParts.forEachIndexed { index, part ->
                     parts[bone.name]!!.addOrReplaceChild(
-                        bone.name + counter++.toString(),
+                        "%" + bone.name + "%" + counter++.toString(),
                         part,
                         modelTransforms[index]
                     )

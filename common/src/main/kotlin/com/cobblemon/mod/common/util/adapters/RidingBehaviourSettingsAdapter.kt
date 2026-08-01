@@ -48,6 +48,7 @@ object RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings
         MinekartBehaviour.KEY to MinekartSettings::class.java,
         HoverBehaviour.KEY to HoverSettings::class.java,
         RocketBehaviour.KEY to RocketSettings::class.java,
+        SubmarineBehaviour.KEY to SubmarineSettings::class.java,
         ClimbBehaviour.KEY to ClimbSettings::class.java,
         CompositeBehaviour.KEY to CompositeSettings::class.java,
 

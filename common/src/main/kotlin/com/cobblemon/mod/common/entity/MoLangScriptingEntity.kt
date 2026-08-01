@@ -90,8 +90,10 @@ interface MoLangScriptingEntity {
         behavioursAreCustom = nbt.getBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM)
         behaviours.clear()
         behaviours.addAll(nbt.getList(DataKeys.SCRIPTED_BEHAVIOURS, ListTag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })
-        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(DataKeys.SCRIPTED_DATA)) as VariableStruct
-        config = if (nbt.contains(DataKeys.SCRIPTED_CONFIG)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(DataKeys.SCRIPTED_CONFIG)) as VariableStruct else VariableStruct()
+        val dataKey = if (nbt.contains(DataKeys.SCRIPTED_DATA)) DataKeys.SCRIPTED_DATA else "Data" // migrate old use of "Data"
+        data = MoLangFunctions.readMoValueFromNBT(nbt.getCompound(dataKey)) as VariableStruct
+        val configKey = if (nbt.contains(DataKeys.SCRIPTED_CONFIG)) DataKeys.SCRIPTED_CONFIG else "Config" // migrate old use of "Config"
+        config = if (nbt.contains(configKey)) MoLangFunctions.readMoValueFromNBT(nbt.getCompound(configKey)) as VariableStruct else VariableStruct()
     }
 
     fun registerFunctionsForScripting(struct: QueryStruct) {

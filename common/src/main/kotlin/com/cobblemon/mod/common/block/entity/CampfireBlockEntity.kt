@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.cooking.getColourMixFromSeasonings
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.item.components.PotComponent
@@ -110,13 +111,18 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 BlockEntitySoundTracker.stop(pos, campfireBlockEntity.ambientSound.location)
             }
 
-            campfireBlockEntity.brothColor =
-                getColourMixFromSeasonings(campfireBlockEntity.getSeasonings())
-                    ?: BASE_BROTH_COLOR
+            val seasonings = campfireBlockEntity.getSeasonings()
+            if (seasonings.size != campfireBlockEntity.lastSeasoningStacks.size || seasonings.any { it !in campfireBlockEntity.lastSeasoningStacks }) {
+                campfireBlockEntity.lastSeasoningStacks = seasonings
 
-            campfireBlockEntity.bubbleColor =
-                getColourMixFromSeasonings(campfireBlockEntity.getSeasonings(), true)
-                    ?: BASE_BROTH_BUBBLE_COLOR
+                campfireBlockEntity.brothColor =
+                    getColourMixFromSeasonings(seasonings)
+                        ?: BASE_BROTH_COLOR
+
+                campfireBlockEntity.bubbleColor =
+                    getColourMixFromSeasonings(seasonings, true)
+                        ?: BASE_BROTH_BUBBLE_COLOR
+            }
 
             if (campfireBlockEntity.particleCooldown > 0) {
                 campfireBlockEntity.particleCooldown--
@@ -133,6 +139,8 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
                 campfireBlockEntity.particleCooldown = 20
             }
+
+            campfireBlockEntity.time++
         }
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, campfireBlockEntity: CampfireBlockEntity) {
@@ -165,7 +173,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
                 val cookedItem = recipe.assemble(craftingInput, level.registryAccess())
                 val resultSlotItem = campfireBlockEntity.getItem(0)
 
-                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings())
+                recipe.applySeasoning(cookedItem, campfireBlockEntity.getSeasonings().filter { it.`is`(recipe.seasoningTag) })
 
                 if (!campfireBlockEntity.blockState.getValue(CampfireBlock.LID)) {
                     campfireBlockEntity.cookingProgress = 0
@@ -236,6 +244,10 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     private var particleCooldown: Int = 0
     var brothColor: Int = BASE_BROTH_COLOR
     var bubbleColor: Int = BASE_BROTH_BUBBLE_COLOR
+    var time: Int = 0
+
+    /** Used to know if we should be changing the colour of the broth or if we can go with the previous colour. */
+    var lastSeasoningStacks = listOf<ItemStack>()
 
     var dataAccess: ContainerData = object : ContainerData {
         override fun get(index: Int): Int {
@@ -310,7 +322,7 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
             consumeItem(i)
         }
         for (i in SEASONING_SLOTS.first..SEASONING_SLOTS.last) {
-            if (recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
+            if (getItem(i).`is`(recipe.seasoningTag) && recipe.seasoningProcessors.any { it.consumesItem(getItem(i)) }) consumeItem(i)
         }
 
         val direction = state.getValue(CampfireBlock.ITEM_DIRECTION)
@@ -334,13 +346,11 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
     fun getSeasonings(): List<ItemStack> =
         items.subList(SEASONING_SLOTS.first, SEASONING_SLOTS.last + 1)
-            .filterNotNull()
-            .filter { !it.isEmpty }
+            .filter { it != null && !it.isEmpty }
 
     fun getIngredients(): List<ItemStack> =
         items.subList(CRAFTING_GRID_SLOTS.first, CRAFTING_GRID_SLOTS.last + 1)
-            .filterNotNull()
-            .filter { !it.isEmpty }
+            .filter { it != null && !it.isEmpty }
 
     override fun getDefaultName(): Component {
         return Component.translatable("cobblemon.container.campfire_pot")
@@ -477,9 +487,10 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
     }
 
     override fun canPlaceItemThroughFace(index: Int, itemStack: ItemStack, direction: Direction?): Boolean {
-        return when (direction) {
-            Direction.UP -> SEASONING_SLOTS.contains(index)
-            else -> CRAFTING_GRID_SLOTS.contains(index)
+        return if(direction == Direction.UP && Seasonings.isSeasoning(itemStack)){
+            SEASONING_SLOTS.contains(index)
+        } else {
+            CRAFTING_GRID_SLOTS.contains(index)
         }
     }
 

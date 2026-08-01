@@ -10,13 +10,17 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
+import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.Blaze3D;
+import kotlin.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
@@ -31,6 +35,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
 import static com.google.common.primitives.Floats.min;
 import static net.minecraft.util.Mth.lerp;
@@ -81,11 +86,13 @@ public abstract class MouseHandlerMixin {
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(false);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             } else if (i < 0) {
                 accumulatedScrollY -= i;
                 CobblemonClient.INSTANCE.getStorage().shiftSelected(true);
                 ci.cancel();
                 PartySendBinding.INSTANCE.actioned();
+                PartyTutorialToasts.INSTANCE.onHoldKeyScrollSwitchedSlot();
             }
         }
     }
@@ -119,8 +126,9 @@ public abstract class MouseHandlerMixin {
         double cursorDeltaY,
         @Local(argsOnly = true) double d,
         @Local(argsOnly = true) double movementTime
-        ) {
+    ) {
         PokedexUsageContext usageContext = CobblemonClient.INSTANCE.getPokedexUsageContext();
+        boolean returnValue = true;
         if (usageContext.getScanningGuiOpen()) {
             this.smoothTurnY.reset();
             this.smoothTurnX.reset();
@@ -130,49 +138,72 @@ public abstract class MouseHandlerMixin {
             var sensitivity = lerp(usageContext.getFovMultiplier(), spyglassSensitivity, lookSensitivity);
             var yRotationFlip = this.minecraft.options.invertYMouse().get() ? -1 : 1;
             player.turn(this.accumulatedDX * sensitivity, (this.accumulatedDY * sensitivity * yRotationFlip));
+            returnValue = false;
         }
 
         var vehicle = player.getVehicle();
+        if (!(vehicle instanceof PokemonEntity)) return returnValue;
 
         // Clamp player rotation if riding and the vehicle demands it
         if (player.isPassenger() && vehicle instanceof PokemonEntity pokeVehicle) {
             pokeVehicle.clampPassengerRotation(player);
         }
 
-        // If the player/passenger is not the driver then return and perform the normal turnPlayer logic
-        if( player.getControlledVehicle() == null) return true;
-
-
         // If the ride is not orientation controllable then return and perform the normal turnPlayer logic
-        if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) return true;
-        var vehicleController = controllableVehicle.getOrientationController();
-
-
-        // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
-        // affect the vehicle orientation when looking around.
-        // TODO: make this a flag for the player. Check if middle is pressed but also if its the controlling passenger
-        // If the client is a passenger it should definitely just return above
-        var lookaroundButtonPressed = Minecraft.getInstance().mouseHandler.isMiddlePressed();
-//        if (lookaroundButtonPressed) {
-//            cursorDeltaX = 0.0;
-//            cursorDeltaY = 0.0;
-//        }else {
-//            // If not looking around but riding then reset to zero rots
-//            player.setXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getXRot()), 0.0f));
-//            player.setYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(player.getYRot()), 0.0f));
-//        }
-
-        if (!vehicleController.isActive()) {
+        if (!(vehicle instanceof OrientationControllable controllableVehicle) || !controllableVehicle.getOrientationController().isActive()) {
             xMouseSmoother.reset();
             yMouseSmoother.reset();
             pitchSmoother.reset();
             rollSmoother.reset();
             yawSmoother.reset();
-            return true;
+            return returnValue;
         }
 
-        // Send mouse input to be interpreted into rotation
-        // deltas by the ride controller
+        var vehicleController = controllableVehicle.getOrientationController();
+        var freeLooking = RidingFreelookBinding.INSTANCE.isDown();
+        Pair<Boolean, Boolean> mouseShouldModifyDriver = ((PokemonEntity) vehicle).ifRidingAvailableSupply(new Pair(false, false), (behaviour, settings, state) -> {
+            return behaviour.mouseModifiesDriverRotation(
+                    settings,
+                    state,
+                    (PokemonEntity) vehicle
+            );
+        });
+
+        //-------------------------------------------------------------------------
+        // If looking around then modify the players orientation instead and zero the mouse deltas so the mouse doesn't
+        // affect the vehicle orientation when looking around.
+        // If the client is a passenger it will modify these rotations and return
+        //-------------------------------------------------------------------------
+        if (freeLooking || player.getControlledVehicle() == null) {
+            // Modify driver rotations
+            cobblemon$setDriverRotations(player, cursorDeltaX, cursorDeltaY);
+
+            // If the player/passenger is not the driver then return and ignore all vehicle rotation logic
+            if (player.getControlledVehicle() == null) return false;
+
+            // Set to zero so that vehicle rotations don't also get affected by movement.
+            cursorDeltaX = 0.0;
+            cursorDeltaY = 0.0;
+        } else if (mouseShouldModifyDriver.getFirst()) { // If not freelooking then check modification per mouse input dimension
+            cobblemon$setDriverRotations(player, cursorDeltaX, 0.0);
+            cursorDeltaX = 0.0;
+        } else if (mouseShouldModifyDriver.getSecond()) {
+            cobblemon$setDriverRotations(player, 0.0, cursorDeltaY);
+            cursorDeltaY = 0.0;
+        }
+
+        //-------------------------------------------------------------------------
+        // Smoothly return driver rotations to zero when needed
+        //-------------------------------------------------------------------------
+        var playerRotater = (RidePassenger)player;
+        if( !freeLooking && !mouseShouldModifyDriver.getFirst()){
+            playerRotater.cobblemon$setRideYRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideYRot()), 0.0f));
+        }
+        if( !freeLooking && !mouseShouldModifyDriver.getSecond()) {
+            playerRotater.cobblemon$setRideXRot(lerp(min(5.0f * (float)movementTime, 1.0f), Mth.wrapDegrees(playerRotater.cobblemon$getRideXRot()), 0.0f));
+        }
+
+        // Send mouse input to be interpreted into rotation deltas by the ride controller
         Vec3 angVecMouse = cobblemon$getRideMouseRotation(cursorDeltaX, cursorDeltaY, movementTime);
 
         // Perform Rotation using mouse influenced rotation deltas.
@@ -186,19 +217,17 @@ public abstract class MouseHandlerMixin {
         var angRot = cobblemon$getAngularVelocity(movementTime);
 
         // Apply smoothing if requested by the controller.
-        // This Might be best if done by the controller itself?
         if(cobblemon$shouldUseAngVelSmoothing()) {
             var yaw = yawSmoother.getNewDeltaValue(angRot.x * 0.5f, d);
             var pitch = pitchSmoother.getNewDeltaValue(angRot.y * 0.5f, d);
             var roll = rollSmoother.getNewDeltaValue(angRot.z * 0.5f, d);
             vehicleController.rotate((float) yaw, (float) pitch, (float) roll);
         }
-        // Otherwise simply apply the smoothing
         else {
             vehicleController.rotate((float) (angRot.x * 10 * d), (float) (angRot.y * 10 * d), (float) (angRot.z * 10 * d));
         }
 
-        return true; //TODO: This was changed to return true to also allow base mc player angles to change. is there a better way to do this?
+        return returnValue;
     }
 
     @Inject(method = "handleAccumulatedMovement", at = @At("HEAD"))
@@ -210,10 +239,11 @@ public abstract class MouseHandlerMixin {
     @Inject(method = "handleAccumulatedMovement", at = @At("TAIL"))
     private void cobblemon$maintainMovementWhenInScreens(CallbackInfo ci) {
         if (minecraft.player == null) return;
-        if (!(minecraft.player instanceof OrientationControllable controllable)) return;
-        if (!controllable.getOrientationController().isActive()) return;
+        if (!(minecraft.player.getVehicle() instanceof OrientationControllable vehicleControllable)) return;
+        if (!(vehicleControllable.getOrientationController() instanceof OrientationController vehicleController)) return;
+        if (vehicleController.getOrientation() == null) return;
         if (minecraft.isPaused()) return;
-        if (isMouseGrabbed()) return;
+        if (this.isMouseGrabbed()) return; // return if turnPlayer() has already run this pass
 
         this.turnPlayer(cobblemon$timeDelta);
     }
@@ -273,6 +303,21 @@ public abstract class MouseHandlerMixin {
     private double cobblemon$getRidingSensitivity() {
         var sensitivity = this.minecraft.options.sensitivity().get() * 0.6000000238418579 + 0.20000000298023224;
         return Math.pow(sensitivity, 3);
+    }
+
+    @Unique
+    private void cobblemon$setDriverRotations(LocalPlayer player, double cursorDeltaX, double cursorDeltaY) {
+        // the vanilla turn() method redone so that it uses rideRotations.
+        float f = (float)cursorDeltaY * 0.15F; // Note: turn() uses xRot for pitch (up/down)
+        float g = (float)cursorDeltaX * 0.15F; // Note: turn() uses yRot for yaw (left/right)
+        var playerRotater = (RidePassenger)player;
+        playerRotater.cobblemon$setRideXRot(playerRotater.cobblemon$getRideXRot() + f);
+        playerRotater.cobblemon$setRideYRot(playerRotater.cobblemon$getRideYRot() + g);
+        playerRotater.cobblemon$setRideXRot(Mth.clamp(playerRotater.cobblemon$getRideXRot(), -89.0F, 89.0F));
+        playerRotater.cobblemon$setRideYRot(Mth.clamp(playerRotater.cobblemon$getRideYRot(), -105.0F, 105.0F));
+        if (player.getVehicle() != null) {
+            player.getVehicle().onPassengerTurned(player);
+        }
     }
 
     @Unique

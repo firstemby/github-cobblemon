@@ -78,6 +78,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerEntity
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.damagesource.DamageSource
@@ -96,7 +97,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.FluidState
 
-class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
+class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
     override val schedulingTracker = SchedulingTracker()
 
     override val struct = this.asMoLangValue()
@@ -308,6 +309,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         const val RECALL_ANIMATION = "recall"
         const val LOSE_ANIMATION = "lose"
         const val WIN_ANIMATION = "win"
+        const val COMMAND_ANIMATION = "command"
     }
 
     override fun brainProvider() = Brain.provider<NPCEntity>(emptySet(), emptySet())
@@ -517,7 +519,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
         this.skill = if (nbt.contains(DataKeys.NPC_SKILL)) nbt.getInt(DataKeys.NPC_SKILL) else null
         val partyNBT = nbt.getCompound(DataKeys.NPC_PARTY)
         if (!partyNBT.isEmpty) {
-            party = NPCPartyStore(this).also { it.loadFromNBT(partyNBT, registryAccess()) }
+            party = NPCPartyStore(this).also {
+                it.loadFromNBT(partyNBT, registryAccess())
+                it.initialize()
+            }
         }
         if (nbt.contains(DataKeys.NPC_PLAYER_TEXTURE)) {
             val textureNBT = nbt.getCompound(DataKeys.NPC_PLAYER_TEXTURE)
@@ -601,7 +606,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     }
 
     override fun isPushable() = isMovable ?: npc.isMovable
-    override fun isInvulnerableTo(source: DamageSource) = isInvulnerable ?: npc.isInvulnerable
+    override fun isInvulnerableTo(source: DamageSource) = (isInvulnerable ?: npc.isInvulnerable) && !source.`is`(BYPASSES_INVULNERABILITY)
     override fun canBeLeashed() = isLeashable ?: npc.isLeashable
     override fun canBeHitByProjectile() = allowProjectileHits ?: npc.allowProjectileHits
 
@@ -705,6 +710,10 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Npc, P
     }
 
     override fun canWalkOnWater(): Boolean {
+        return false
+    }
+
+    override fun canPathThroughSaccLeaves(): Boolean {
         return false
     }
 

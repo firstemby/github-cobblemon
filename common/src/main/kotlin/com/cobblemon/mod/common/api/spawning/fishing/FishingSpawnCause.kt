@@ -12,16 +12,15 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.fishing.BobberSpawnPokemonEvent
-import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.fishing.SpawnBait
+import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
@@ -47,6 +46,8 @@ class FishingSpawnCause(
 ) : SpawnCause(spawner, entity) {
     companion object {
         const val FISHED_ASPECT = "fished"
+        const val DROPS_REROLL_ASPECT = "drops_reroll"
+
         fun shinyReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
             if (pokemonEntity.pokemon.shiny) return
 
@@ -59,6 +60,22 @@ class FishingSpawnCause(
             if (randomNumber <= effect.value.toInt()) {
                 pokemonEntity.pokemon.shiny = true
             }
+        }
+
+        fun alterMarksAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            // This is not needed as markings are only applied when the pokémon gets captured by a player,
+            // but let's leave it here just in case
+            if (pokemonEntity.pokemon.marks.isNotEmpty()) return
+
+            pokemonEntity.pokemon.applyPotentialMarks(1.0 + (effect.value / 100))
+        }
+
+        fun alterSize(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            pokemonEntity.pokemon.scaleModifier *= effect.value.toFloat() / 1000.0f
+        }
+
+        fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
+            pokemonEntity.pokemon.forcedAspects += DROPS_REROLL_ASPECT
         }
 
         fun alterNatureAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
@@ -121,6 +138,20 @@ class FishingSpawnCause(
             return
 
 
+        }
+
+        fun alterAlphaAttempt(pokemonEntity: PokemonEntity) {
+            if (pokemonEntity.pokemon.isAlpha) {
+                return
+            }
+            pokemonEntity.pokemon.isAlpha = true
+            pokemonEntity.pokemon.initializeMovesetFromDefault()
+            if (!pokemonEntity.level().isClientSide) {
+                // Alpha status is applied after entity creation in bait flows, so rebuild the brain
+                // to ensure alpha-only sensors/memories are actually attached.
+                pokemonEntity.remakeBrain()
+            }
+            pokemonEntity.entityData.set(PokemonEntity.IS_ALPHA, true)
         }
 
         fun alterFriendshipAttempt(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {

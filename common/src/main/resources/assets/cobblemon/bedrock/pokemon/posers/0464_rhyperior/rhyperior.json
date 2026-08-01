@@ -1,19 +1,19 @@
 {
   "portraitScale": 1,
   "portraitTranslation": [-0.39, 1.98, 0],
-  "profileScale": 0.35,
-  "profileTranslation": [-0.07, 1.13, 0.0],
+  "profileScale": 0.43,
+  "profileTranslation": [0, 1.08, 0.0],
   "rootBone": "rhyperior",
   "firstPersonCameraOffset": {
-    "seat_1": [0, 0.5, 0]
+    "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0, 1],
-    "seat_1_reverse": [0, 0, 1]
+    "seat_1": [0, 0.6, 1],
+    "seat_1_reverse": [0, 0.6, 1]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 1, 2],
-    "seat_1_reverse": [0, 1, 2]
+    "seat_1": [0, 0.6, 1],
+    "seat_1_reverse": [0, 0.6, 1]
   },
   "animations": {
     "cry": "q.bedrock_stateful('rhyperior', 'cry')",
@@ -75,11 +75,7 @@
       "condition": "!q.in_air",
       "animations": [
         "q.look('head')",
-        "q.bedrock('rhyperior', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('rhyperior', 'ride_ground_walk')"
-        }
+        "q.bedrock('rhyperior', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('rhyperior', 'blink')"

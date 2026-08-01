@@ -26,6 +26,48 @@
 					]
 				},
 				{
+					"name": "locator_item_face",
+					"parent": "body",
+					"pivot": [0, 1, -3],
+					"locators": {
+						"item_face": [0, 1, -3]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "body",
+					"pivot": [0, 1, -3],
+					"locators": {
+						"face": [0, 1, -3]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "body",
+					"pivot": [0, 4, 0.6],
+					"rotation": [-10, 0, 0],
+					"locators": {
+						"item_hat": [0, 4, 0.6]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "body",
+					"pivot": [0, 4, 0.6],
+					"rotation": [-10, 0, 0],
+					"locators": {
+						"item": [0, 4, 0.6]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "body",
+					"pivot": [0, 4.35, -1.35],
+					"locators": {
+						"head": [0, 4.35, -1.35]
+					}
+				},
+				{
 					"name": "left_eye",
 					"parent": "body",
 					"pivot": [1.5, 1, -3],
@@ -34,12 +76,28 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [1.5, 1, -3],
+					"locators": {
+						"eye2": [1.5, 1, -3]
+					}
+				},
+				{
 					"name": "right_eye",
 					"parent": "body",
 					"pivot": [-1.5, 1, -3],
 					"cubes": [
 						{"origin": [-2, 0.5, -3], "size": [1, 1, 0], "inflate": 0.01, "uv": [3, 0]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-1.5, 1, -3],
+					"locators": {
+						"eye1": [-1.5, 1, -3]
+					}
 				},
 				{
 					"name": "right_front_leg",
@@ -108,6 +166,38 @@
 					"cubes": [
 						{"origin": [0.75, -1.5, 1.75], "size": [2, 1, 0], "uv": [0, 6]}
 					]
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 2.25, 0],
+					"locators": {
+						"middle": [0, 2.25, 0]
+					}
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 2, -6],
+					"locators": {
+						"target": [0, 2, -6]
+					}
+				},
+				{
+					"name": "locator_root",
+					"parent": "kabuto",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "kabuto",
+					"pivot": [0, 5.5, 0],
+					"locators": {
+						"top": [0, 5.5, 0]
+					}
 				}
 			]
 		}

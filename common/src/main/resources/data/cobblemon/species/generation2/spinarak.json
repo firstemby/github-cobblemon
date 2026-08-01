@@ -199,12 +199,23 @@
           "variant": "level",
           "minLevel": 22
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "behaviour": {
     "herd": {
-      "walking":{
+      "walking": {
         "walkSpeed": 0.13
       },
       "resting": {
@@ -218,6 +229,27 @@
           "tier": 1
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   }
 }

@@ -11,8 +11,8 @@
         "4": [
           {
             "type": "move_to_owner",
-            "teleportDistance": "q.entity.is_in_party ? 40 : 99999" ,
-            "maxDistance": "q.entity.is_in_party ? 5 : 8"
+            "teleportDistance": "q.entity.is_in_party ? 32 : 99999" ,
+            "maxDistance": "q.entity.behaviour.moving.can_move ? (q.entity.is_in_party ? 5 : 8) : 99999"
           }
         ]
       }

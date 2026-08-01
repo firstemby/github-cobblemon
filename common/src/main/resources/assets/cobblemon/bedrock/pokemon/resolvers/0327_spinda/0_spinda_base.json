@@ -10,12 +10,16 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0327_spinda/spinda_shiny.png",
       "layers": []
     },
     {
-      "aspects": ["face-spots-none"],
+      "aspects": [
+        "face-spots-none"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -25,7 +29,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-1"],
+      "aspects": [
+        "face-spots-1"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -35,7 +41,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-2"],
+      "aspects": [
+        "face-spots-2"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -45,7 +53,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-3"],
+      "aspects": [
+        "face-spots-3"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -55,7 +65,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-4"],
+      "aspects": [
+        "face-spots-4"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -65,7 +77,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-5"],
+      "aspects": [
+        "face-spots-5"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -75,7 +89,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-6"],
+      "aspects": [
+        "face-spots-6"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -85,7 +101,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-7"],
+      "aspects": [
+        "face-spots-7"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -95,7 +113,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-8"],
+      "aspects": [
+        "face-spots-8"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -105,7 +125,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-9"],
+      "aspects": [
+        "face-spots-9"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -115,7 +137,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-10"],
+      "aspects": [
+        "face-spots-10"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -125,7 +149,9 @@
       ]
     },
     {
-      "aspects": ["face-spots-11"],
+      "aspects": [
+        "face-spots-11"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -135,7 +161,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-none"],
+      "aspects": [
+        "face-spots2-none"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -145,7 +173,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-1"],
+      "aspects": [
+        "face-spots2-1"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -155,7 +185,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-2"],
+      "aspects": [
+        "face-spots2-2"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -165,7 +197,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-3"],
+      "aspects": [
+        "face-spots2-3"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -175,7 +209,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-4"],
+      "aspects": [
+        "face-spots2-4"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -185,7 +221,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-5"],
+      "aspects": [
+        "face-spots2-5"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -195,7 +233,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-6"],
+      "aspects": [
+        "face-spots2-6"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -205,7 +245,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-7"],
+      "aspects": [
+        "face-spots2-7"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -215,7 +257,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-8"],
+      "aspects": [
+        "face-spots2-8"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -225,7 +269,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-9"],
+      "aspects": [
+        "face-spots2-9"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -235,7 +281,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-10"],
+      "aspects": [
+        "face-spots2-10"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -245,7 +293,9 @@
       ]
     },
     {
-      "aspects": ["face-spots2-11"],
+      "aspects": [
+        "face-spots2-11"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -255,7 +305,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-none"],
+      "aspects": [
+        "left-ear-spots-none"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -265,7 +317,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-1"],
+      "aspects": [
+        "left-ear-spots-1"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -275,7 +329,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-2"],
+      "aspects": [
+        "left-ear-spots-2"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -285,7 +341,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-3"],
+      "aspects": [
+        "left-ear-spots-3"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -295,7 +353,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-4"],
+      "aspects": [
+        "left-ear-spots-4"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -305,7 +365,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-5"],
+      "aspects": [
+        "left-ear-spots-5"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -315,7 +377,9 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-6"],
+      "aspects": [
+        "left-ear-spots-6"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -325,7 +389,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-none"],
+      "aspects": [
+        "right-ear-spots-none"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -335,7 +401,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-1"],
+      "aspects": [
+        "right-ear-spots-1"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -345,7 +413,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-2"],
+      "aspects": [
+        "right-ear-spots-2"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -355,7 +425,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-3"],
+      "aspects": [
+        "right-ear-spots-3"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -365,7 +437,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-4"],
+      "aspects": [
+        "right-ear-spots-4"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -375,7 +449,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-5"],
+      "aspects": [
+        "right-ear-spots-5"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -385,7 +461,9 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-6"],
+      "aspects": [
+        "right-ear-spots-6"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -395,7 +473,9 @@
       ]
     },
     {
-      "aspects": ["special-spots-1"],
+      "aspects": [
+        "special-spots-1"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -405,7 +485,9 @@
       ]
     },
     {
-      "aspects": ["special-spots-2"],
+      "aspects": [
+        "special-spots-2"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -415,7 +497,9 @@
       ]
     },
     {
-      "aspects": ["special-spots-3"],
+      "aspects": [
+        "special-spots-3"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -425,7 +509,9 @@
       ]
     },
     {
-      "aspects": ["special-spots-4"],
+      "aspects": [
+        "special-spots-4"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -435,7 +521,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-none", "shiny"],
+      "aspects": [
+        "face-spots-none",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -445,7 +534,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-1", "shiny"],
+      "aspects": [
+        "face-spots-1",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -455,7 +547,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-2", "shiny"],
+      "aspects": [
+        "face-spots-2",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -465,7 +560,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-3", "shiny"],
+      "aspects": [
+        "face-spots-3",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -475,7 +573,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-4", "shiny"],
+      "aspects": [
+        "face-spots-4",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -485,7 +586,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-5", "shiny"],
+      "aspects": [
+        "face-spots-5",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -495,7 +599,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-6", "shiny"],
+      "aspects": [
+        "face-spots-6",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -505,7 +612,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-7", "shiny"],
+      "aspects": [
+        "face-spots-7",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -515,7 +625,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-8", "shiny"],
+      "aspects": [
+        "face-spots-8",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -525,7 +638,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-9", "shiny"],
+      "aspects": [
+        "face-spots-9",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -535,7 +651,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-10", "shiny"],
+      "aspects": [
+        "face-spots-10",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -545,7 +664,10 @@
       ]
     },
     {
-      "aspects": ["face-spots-11", "shiny"],
+      "aspects": [
+        "face-spots-11",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots",
@@ -555,7 +677,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-none", "shiny"],
+      "aspects": [
+        "face-spots2-none",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -565,7 +690,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-1", "shiny"],
+      "aspects": [
+        "face-spots2-1",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -575,7 +703,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-2", "shiny"],
+      "aspects": [
+        "face-spots2-2",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -585,7 +716,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-3", "shiny"],
+      "aspects": [
+        "face-spots2-3",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -595,7 +729,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-4", "shiny"],
+      "aspects": [
+        "face-spots2-4",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -605,7 +742,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-5", "shiny"],
+      "aspects": [
+        "face-spots2-5",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -615,7 +755,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-6", "shiny"],
+      "aspects": [
+        "face-spots2-6",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -625,7 +768,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-7", "shiny"],
+      "aspects": [
+        "face-spots2-7",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -635,7 +781,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-8", "shiny"],
+      "aspects": [
+        "face-spots2-8",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -645,7 +794,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-9", "shiny"],
+      "aspects": [
+        "face-spots2-9",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -655,7 +807,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-10", "shiny"],
+      "aspects": [
+        "face-spots2-10",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -665,7 +820,10 @@
       ]
     },
     {
-      "aspects": ["face-spots2-11", "shiny"],
+      "aspects": [
+        "face-spots2-11",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "facespots2",
@@ -675,7 +833,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-none", "shiny"],
+      "aspects": [
+        "left-ear-spots-none",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -685,7 +846,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-1", "shiny"],
+      "aspects": [
+        "left-ear-spots-1",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -695,7 +859,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-2", "shiny"],
+      "aspects": [
+        "left-ear-spots-2",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -705,7 +872,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-3", "shiny"],
+      "aspects": [
+        "left-ear-spots-3",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -715,7 +885,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-4", "shiny"],
+      "aspects": [
+        "left-ear-spots-4",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -725,7 +898,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-5", "shiny"],
+      "aspects": [
+        "left-ear-spots-5",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -735,7 +911,10 @@
       ]
     },
     {
-      "aspects": ["left-ear-spots-6", "shiny"],
+      "aspects": [
+        "left-ear-spots-6",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "leftearspots",
@@ -745,7 +924,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-none", "shiny"],
+      "aspects": [
+        "right-ear-spots-none",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -755,7 +937,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-1", "shiny"],
+      "aspects": [
+        "right-ear-spots-1",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -765,7 +950,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-2", "shiny"],
+      "aspects": [
+        "right-ear-spots-2",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -775,7 +963,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-3", "shiny"],
+      "aspects": [
+        "right-ear-spots-3",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -785,7 +976,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-4", "shiny"],
+      "aspects": [
+        "right-ear-spots-4",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -795,7 +989,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-5", "shiny"],
+      "aspects": [
+        "right-ear-spots-5",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -805,7 +1002,10 @@
       ]
     },
     {
-      "aspects": ["right-ear-spots-6", "shiny"],
+      "aspects": [
+        "right-ear-spots-6",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "rightearspots",
@@ -815,7 +1015,10 @@
       ]
     },
     {
-      "aspects": ["special-spots-1", "shiny"],
+      "aspects": [
+        "special-spots-1",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -825,7 +1028,10 @@
       ]
     },
     {
-      "aspects": ["special-spots-2", "shiny"],
+      "aspects": [
+        "special-spots-2",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -835,7 +1041,10 @@
       ]
     },
     {
-      "aspects": ["special-spots-3", "shiny"],
+      "aspects": [
+        "special-spots-3",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "specialspots",
@@ -845,12 +1054,27 @@
       ]
     },
     {
-      "aspects": ["special-spots-4", "shiny"],
+      "aspects": [
+        "special-spots-4",
+        "shiny"
+      ],
       "layers": [
         {
           "name": "specialspots",
           "texture": "cobblemon:textures/pokemon/0327_spinda/spots_shiny/spinda_spot_special4.png",
           "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0327_spinda/spinda_alpha.png",
+          "emissive": true
         }
       ]
     }

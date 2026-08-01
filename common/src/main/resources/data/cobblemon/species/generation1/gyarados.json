@@ -45,22 +45,103 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 2,
     "height": 3.3,
-    "fixed": false
+    "fixed": false,
+    "width": 2
+  },
+  "riding": {
+    "behaviours": {
+      "AIR": {
+        "key": "cobblemon:air/jet",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "35-60",
+          "JUMP": "20-45",
+          "SKILL": "45-65",
+          "SPEED": "15-50",
+          "STAMINA": "15-55"
+        }
+      },
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "canJump": false,
+        "canSprint": false,
+        "stats": {
+          "ACCELERATION": "10-40",
+          "JUMP": "10-40",
+          "SKILL": "80-100",
+          "SPEED": "10-40",
+          "STAMINA": "10-40"
+        }
+      },
+      "LIQUID": {
+        "key": "cobblemon:liquid/dolphin",
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.water_surface.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.water_surface.mono",
+            "submerged": false,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.underwater.stereo",
+            "submerged": true,
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          }
+        ],
+        "stats": {
+          "ACCELERATION": "40-60",
+          "JUMP": "40-70",
+          "SKILL": "35-65",
+          "SPEED": "30-55",
+          "STAMINA": "45-75"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
-    "moving": {
-      "walk": {
-        "avoidsLand": true
-      },
-      "swim": {
-        "swimSpeed": 0.1,
-        "canBreatheUnderwater": true,
-        "canWalkOnWater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false
-      }
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "herd": {
       "maxSize": "9",
@@ -70,62 +151,26 @@
           "tier": 1
         }
       ]
-    }
-  },
-  "riding": {
-    "behaviours": {
-      "AIR": {
-        "key": "cobblemon:air/jet",
-        "stats": {
-          "SPEED": "30-60",
-          "ACCELERATION": "30-65",
-          "SKILL": "30-60",
-          "JUMP": "30-60",
-          "STAMINA": "35-75"
-        }
+    },
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "swimSpeed": 0.25
       },
-      "LAND": {
-        "key": "cobblemon:land/horse",
-        "stats": {
-          "SPEED": "10-20",
-          "ACCELERATION": "90-100",
-          "SKILL": "15-30",
-          "JUMP": "10-20",
-          "STAMINA": "15-30"
-        }
-      },
-      "LIQUID": {
-        "key": "cobblemon:liquid/dolphin",
-        "stats": {
-          "SPEED": "30-60",
-          "ACCELERATION": "30-65",
-          "SKILL": "30-60",
-          "JUMP": "30-60",
-          "STAMINA": "35-75"
-        }
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.15
       }
     },
-    "seats": [
-      {
-        "offset": {
-          "x": 0,
-          "y": 0.4,
-          "z": 0
-        },
-        "poseOffsets": [
-          {
-            "poseTypes": [
-              "FLY"
-            ],
-            "offset": {
-              "x": 0,
-              "y": 0.0,
-              "z": 0
-            }
-          }
-        ]
-      }
-    ]
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0014,
+      "light": "0-4",
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    }
   },
   "drops": {
     "amount": 3,
@@ -321,23 +366,23 @@
         "speed": 81
       },
       "baseExperienceYield": 224,
-      "dynamaxBlocked": true,
       "behaviour": {
         "moving": {
+          "swim": {
+            "canBreatheUnderwater": true,
+            "canSwimInLava": false,
+            "canSwimInWater": true,
+            "canWalkOnWater": true,
+            "swimSpeed": "0.2"
+          },
           "walk": {
             "avoidsLand": true
-          },
-          "swim": {
-            "swimSpeed": "0.2",
-            "canBreatheUnderwater": true,
-            "canWalkOnWater": true,
-            "canSwimInWater": true,
-            "canSwimInLava": false
           }
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
   ]
 }

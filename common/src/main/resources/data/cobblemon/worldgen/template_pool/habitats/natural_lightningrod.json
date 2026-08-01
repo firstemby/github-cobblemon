@@ -1,0 +1,122 @@
+{
+    "name": "cobblemon:habitats/natural_lightningrod",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_small6",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_large1",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_large2",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_large3",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_large4",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/natural_lightningrod_large5",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/natural_lightningrod_connector",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 6,
+            "element": {
+                "element_type": "minecraft:empty_pool_element"
+            }
+        }
+    ]
+}

@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.tooltips
 
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
@@ -22,6 +23,12 @@ object TooltipManager {
     }
 
     fun generateTooltips(stack: ItemStack, lines: MutableList<Component>, hasShiftDown: Boolean) {
+        // This will need to be changed in 1.21.5 as 25w04a changed the following:
+        // "Removed the hide_tooltip and hide_additional_tooltip components in favor of the new tooltip_display component."
+        if (stack.get(DataComponents.HIDE_ADDITIONAL_TOOLTIP) != null) {
+            return
+        }
+
         val standardLines = tooltipGenerators.flatMap {
             val innerLines = mutableListOf<Component>()
             val regularTooltip = it.generateTooltip(stack, lines)

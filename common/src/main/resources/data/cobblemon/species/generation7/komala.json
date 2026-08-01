@@ -49,16 +49,24 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "swim": {
-        "canSwimInWater": false
+        "avoidsWater": true
       },
       "canLook": false
     },
     "entityInteract": {
       "avoidedByPhantom": true
+    },
+    "resting": {
+      "depth": "comatose",
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0001,
+      "rouseChance": 1.0
+    },
+    "combat": {
+      "willFlee": false
     }
   },
   "drops": {

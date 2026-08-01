@@ -51,11 +51,16 @@
   "behaviour": {
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "moving": {
       "walk": {
         "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true
       }
     },
     "herd": {
@@ -70,11 +75,18 @@
           "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 5,
     "entries": [
+      {
+        "item": "minecraft:sweet_berries",
+        "quantityRange": "2-4"
+      },
       {
         "item": "cobblemon:miracle_seed",
         "percentage": 10.0
@@ -207,7 +219,18 @@
           "variant": "level",
           "minLevel": 32
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraoak",
@@ -227,7 +250,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:oak_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraswamp",
@@ -251,7 +285,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:oak_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterrabirch",
@@ -271,7 +316,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:birch_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterradarkoak",
@@ -291,7 +347,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:dark_oak_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraacacia",
@@ -311,7 +378,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:acacia_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraazalea",
@@ -331,7 +409,18 @@
           "variant": "held_item",
           "itemCondition": "#cobblemon:azalea_tree"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterrajungle",
@@ -351,7 +440,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:jungle_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterraspruce",
@@ -371,7 +471,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:spruce_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterramangrove",
@@ -391,7 +502,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:mangrove_propagule"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "grotle_torterracherry",
@@ -411,7 +533,18 @@
           "variant": "held_item",
           "itemCondition": "minecraft:cherry_sapling"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

@@ -6,13 +6,20 @@
   "rootBone": "happiny",
   "animations": {
     "faint": "q.bedrock_primary('happiny', 'faint', q.curve('one'))",
-    "cry": "q.bedrock_stateful('happiny', 'cry')"
+    "cry": "q.bedrock_stateful('happiny', 'cry')",
+    "recoil": "q.bedrock_stateful('happiny', 'recoil')",
+    "physical": "q.bedrock_primary('happiny', 'physical', q.curve('symmetrical'))",
+    "special": "q.bedrock_primary('happiny', 'special', q.curve('symmetrical'))",
+    "status": "q.bedrock_primary('happiny', 'status', q.curve('symmetrical'))"
   },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": ["q.bedrock('happiny', 'battle_idle')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_primary('happiny', 'battle_cry', q.curve('symmetrical'))"
+      },
       "quirks": [
         "q.bedrock_quirk('happiny', 'blink')",
         "q.bedrock_quirk('happiny', 'hairshake_quirk')"

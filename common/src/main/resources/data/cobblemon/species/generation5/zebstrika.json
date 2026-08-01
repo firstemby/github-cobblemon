@@ -54,97 +54,24 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "55-85",
-          "JUMP": "30-65",
-          "SKILL": "30-65",
-          "SPEED": "55-85",
-          "STAMINA": "10-40"
+          "ACCELERATION": "65-85",
+          "JUMP": "35-45",
+          "SKILL": "45-65",
+          "SPEED": "35-75",
+          "STAMINA": "25-45"
         }
       }
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3598537,
-              "z": 0.11533681
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3450776,
-              "z": 0.05046998
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3482682,
-              "z": 0.10370403
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3482682,
-              "z": 0.10370403
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3598537,
-              "z": 0.11533681
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3450776,
-              "z": 0.05046998
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3482682,
-              "z": 0.10370403
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
     "herd": {
       "maxSize": "9",
       "toleratedLeaders": [
@@ -171,13 +98,18 @@
       ]
     },
     "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
       "walk": {
         "walkSpeed": 0.24
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
     }
   },
   "drops": {

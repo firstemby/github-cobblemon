@@ -2,11 +2,12 @@
   (:require
     [clj-http.client :as client]
     [clojure.data.csv :as csv]
-    [clojure.string :as s :refer [upper-case blank? split trim ends-with? includes? lower-case]]
+    [clojure.string :as s :refer [upper-case blank? split trim lower-case]]
     [clojure.java.io :refer [file]]
     [clojure.data.json :refer [read-str write-str]])
   (:import (com.cobblemon.mod.common.api.pokemon PokemonSpecies)
            (com.cobblemon.mod.common.client.gui PokemonGuiUtilsKt)
+           (com.cobblemon.mod.common.client.gui ProfileTransformType)
            (com.cobblemon.mod.common.client.render.models.blockbench FloatingState)
            (com.cobblemon.mod.common.client.render.pokemon PokemonRenderer)
            (com.cobblemon.mod.common.entity PoseType)
@@ -52,16 +53,36 @@
     (.rotateZ quaternion (float 3.14))
     (.translate pose-stack ^Float (:x translation-offset) ^Float (:y translation-offset) ^Float (:z translation-offset))
     (.setCurrentAspects state (.getAspects renderable))
-    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) false true 1 1 1 1 0 0)
+    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) ProfileTransformType/PROFILE true 1 1 1 1 0 0 13)
     (let [seat-locators (filter #(s/starts-with? % "seat_") (.keySet (.getLocatorStates state)))]
       (when (not-empty seat-locators)
         (into {} (map (fn [x] [x (get-seat-locator state x)]) seat-locators))))))
 
 (def headers
   [:generation :dex-no :species :land-behaviour :liquid-behaviour :air-behaviour :land-ready-to-scrape?
-   :liquid-ready-to-scrape? :air-ready-to-scrape? :missing? :animations-approved? :land-speed :land-acceleration :land-skill :land-jump
+   :liquid-ready-to-scrape? :air-ready-to-scrape? :missing? :animations-approved? :player-pose-type :land-speed :land-acceleration :land-skill :land-jump
    :land-stamina :liquid-speed :liquid-acceleration :liquid-skill :liquid-jump :liquid-stamina :air-speed
    :air-acceleration :air-skill :air-jump :air-stamina])
+
+(def stat-range-headers
+  [:generation :dex-no :species :land-behaviour :liquid-behaviour :air-behaviour
+   :land-speed-min :land-speed-max
+   :land-acceleration-min :land-acceleration-max
+   :land-skill-min :land-skill-max
+   :land-jump-min :land-jump-max
+   :land-stamina-min :land-stamina-max
+
+   :liquid-speed-min :liquid-speed-max
+   :liquid-acceleration-min :liquid-acceleration-max
+   :liquid-skill-min :liquid-skill-max
+   :liquid-jump-min :liquid-jump-max
+   :liquid-stamina-min :liquid-stamina-max
+
+   :air-speed-min :air-speed-max
+   :air-acceleration-min :air-acceleration-max
+   :air-skill-min :air-skill-max
+   :air-jump-min :air-jump-max
+   :air-stamina-min :air-stamina-max])
 
 (def behaviour-keys
   {"Jet"       "cobblemon:air/jet"
@@ -203,13 +224,19 @@
          (:body)
          (csv/read-csv))))
 
+(defn normalize-sound-json [v]
+      (cond
+        (vector? v) v
+        (map? v)    [v]
+        :else       []))
+
 (defn get-sound-mappings []
   (let [data (->> (client/get "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=513653624")
                   (:body)
                   (csv/read-csv)
                   (rest)
                   (into {}))]
-    (update-vals data #(read-str % :key-fn keyword))))
+    (update-vals data #(-> % (read-str :key-fn keyword) normalize-sound-json))))
 
 (def sound-headers
   [:generation :dex-no :species
@@ -226,10 +253,12 @@
        (map #(assoc % :form (or (:form %) "Normal")))))
 
 (defn condense-sound-type [sound-data sound-mappings riding-type]
-  (let [keys (map #(concat-keyword riding-type (str "riding-sound-" %)) [1 2 3 4 5])
-        values (vec (filter not-empty (map #(get sound-data %) keys)))
-        json (map #(get sound-mappings %) values)]
-    (vec json)))
+      (->> (map #(concat-keyword riding-type (str "riding-sound-" %)) [1 2 3 4 5])
+           (map #(get sound-data %))
+           (filter not-empty)
+           (mapcat #(get sound-mappings %))
+           vec))
+
 
 (defn sound-data->json [sound-mappings sound-data riding-type]
   (->> (map #(assoc % :sound-json (condense-sound-type % sound-mappings riding-type)) sound-data)
@@ -282,18 +311,32 @@
              :SPEED (get grade-ranges "C")
              :STAMINA (get grade-ranges "C")}}))
 
+(defn get-defined-range [stat-ranges species form]
+  (let [result (filter #(and (= species (:species %)) (= form (:form %))) stat-ranges)]
+    (first result)))
+
+(defn stat-range->json [stat-ranges species-data behaviour-type]
+  (when-let [all-stats (get-defined-range stat-ranges (:species species-data) (:form species-data))]
+    (when-let [behaviour-stats (get all-stats behaviour-type)]
+      {:stats {:ACCELERATION (:acceleration behaviour-stats)
+               :JUMP (:jump behaviour-stats)
+               :SKILL (:skill behaviour-stats)
+               :SPEED (:speed behaviour-stats)
+               :STAMINA (:stamina behaviour-stats)}})))
+
 (defn behaviour->json
   "Convert a single behaviour map into a JSON-ready structure.
    - Expects `behaviour-data` like {:behaviour \"...\" :stats {:speed \"A\" ...}}.
    - Resolves a stable key via `behaviour-keys`; returns nil if behaviour is unknown.
    - Translates letter grades to numeric ranges via `grade-ranges`."
-  [behaviour-data behaviour-sounds]
+  [species-data behaviour-data behaviour-sounds stat-ranges behaviour-type]
   (let [behaviour (:behaviour behaviour-data)
         behaviour-json (behaviour-type->json behaviour)
         stats (:stats behaviour-data)
-        stats-json (stats->json stats)]
-    (when (and behaviour-json stats-json)
-      (merge stats-json behaviour-json behaviour-sounds))))
+        stats-json-from-range (stat-range->json stat-ranges species-data behaviour-type)
+        stats-json-from-grade (stats->json stats)]
+    (when (and behaviour-json (or stats-json-from-range stats-json-from-grade))
+      (merge (or stats-json-from-range stats-json-from-grade) behaviour-json behaviour-sounds))))
 
 (defn assoc-behaviour
   "Conditionally assoc a behaviour block into the accumulator `map`.
@@ -301,10 +344,10 @@
    - `behaviour` is the keyword to read (e.g., :air).
    - When present and valid, associates under an upper-cased key (e.g., :AIR).
    Returns the updated map or the original map if nothing was added."
-  [map species-data behaviour sounds]
+  [map species-data behaviour sounds stat-ranges]
   (let [behaviour-sounds (get-in sounds [(name behaviour) [(:species species-data) (or (:form species-data) "Normal")]])
         behaviour-data (get species-data behaviour)
-        behaviour-json (behaviour->json behaviour-data {:rideSounds behaviour-sounds})]
+        behaviour-json (behaviour->json species-data behaviour-data {:rideSounds behaviour-sounds} stat-ranges behaviour)]
     (if (and behaviour-data behaviour-json)
       (assoc map (keyword (upper-case (name behaviour))) behaviour-json)
       map)))
@@ -352,12 +395,12 @@
   "Assemble the behaviours section for a species in the expected JSON schema.
    Builds a map of available behaviours (:AIR, :LAND, :LIQUID) using `assoc-behaviour`.
    Wraps the result as {:riding {:behaviours {...}}}. Returns nil when no behaviours exist."
-  [species-data sounds]
+  [species-data sounds stat-ranges]
   (let [behaviours
         (-> {}
-            (assoc-behaviour species-data :air sounds)
-            (assoc-behaviour species-data :land sounds)
-            (assoc-behaviour species-data :liquid sounds))]
+            (assoc-behaviour species-data :air sounds stat-ranges)
+            (assoc-behaviour species-data :land sounds stat-ranges)
+            (assoc-behaviour species-data :liquid sounds stat-ranges))]
     (when (not-empty behaviours)
       {:riding {:behaviours behaviours
                 :seats      (seats->json (:seat-data species-data))}})))
@@ -371,15 +414,15 @@
       (s/replace "é" "e")))
 
 (defn get-file-for-species
-  "Return the first JSON file from `files` whose name matches `species`.
-   - Only considers files whose names end with \".json\"
-   - Selects the first file whose name contains the normalized species token.
+  "Return the JSON file from `files` whose name is exactly the normalized
+   species token followed by \".json\", so species whose names are prefixes of
+   others (e.g. \"pidgeot\" vs \"pidgeotto\") resolve to the correct file.
    Returns a java.io.File or nil if no match is found."
   [species files]
-  (->> files
-       (filter #(ends-with? (.getName %) ".json"))
-       (filter #(includes? (.getName %) (sanitize-species-name species)))
-       (first)))
+  (let [file-name (str (sanitize-species-name species) ".json")]
+    (->> files
+         (filter #(= (.getName %) file-name))
+         (first))))
 
 (defn read-species-json
   "Read a species JSON file from disk and parse it into Clojure data.
@@ -526,12 +569,46 @@
 (defn generate-seat-data
   "Generates per-pose seat data for a species (and optional form)"
   [species-data]
-  (let [species (.getByName PokemonSpecies/INSTANCE (sanitize-species-name (:species species-data)))
+  (let [species (PokemonSpecies/getByName (sanitize-species-name (:species species-data)))
         form (.getFormByName species (sanitize-species-name (or (:form species-data) "Normal")))
         seat-data (map (fn [x] {(.name x) (render-pokemon species form x)}) (remove ignored-poses (PoseType/getEntries)))
         non-nil-seat-data (filter #(val (first %)) seat-data)]
     (when (not-empty non-nil-seat-data)
       (into {} non-nil-seat-data))))
+
+(defn remove-empty-stats [m]
+  (into {}
+        (filter (fn [[_ stats]]
+                  (not-every? #(= "-" %) (vals stats)))
+                m)))
+
+(defn remove-junk-from-stat-ranges [row]
+  (merge (remove-empty-stats
+          {:liquid {:speed (str (:liquid-speed-min row) "-" (:liquid-speed-max row))
+                    :acceleration (str (:liquid-acceleration-min row) "-" (:liquid-acceleration-max row))
+                    :skill (str (:liquid-skill-min row) "-" (:liquid-skill-max row))
+                    :jump (str (:liquid-jump-min row) "-" (:liquid-jump-max row))
+                    :stamina (str (:liquid-stamina-min row) "-" (:liquid-stamina-max row))}
+           :land {:speed (str (:land-speed-min row) "-" (:land-speed-max row))
+                  :acceleration (str (:land-acceleration-min row) "-" (:land-acceleration-max row))
+                  :skill (str (:land-skill-min row) "-" (:land-skill-max row))
+                  :jump (str (:land-jump-min row) "-" (:land-jump-max row))
+                  :stamina (str (:land-stamina-min row) "-" (:land-stamina-max row))}
+           :air {:speed (str (:air-speed-min row) "-" (:air-speed-max row))
+                 :acceleration (str (:air-acceleration-min row) "-" (:air-acceleration-max row))
+                 :skill (str (:air-skill-min row) "-" (:air-skill-max row))
+                 :jump (str (:air-jump-min row) "-" (:air-jump-max row))
+                 :stamina (str (:air-stamina-min row) "-" (:air-stamina-max row))}})
+        (name->species-form (:species row))))
+
+(defn get-ride-stats-from-csv []
+  (->> "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=536460956"
+       (client/get)
+       (:body)
+       (csv/read-csv)
+       (#(csv->map % stat-range-headers 3))
+       (map remove-junk-from-stat-ranges)
+       (filter #(or (:air %) (:land %) (:liquid %)))))
 
 (defn get-file-updates
   "This is the meat of the script.
@@ -548,13 +625,13 @@
    - Collapse the data into just the file and new updates, and group results by :file.
    - Merge all updates into a single text blob
    Returns a map: java.io.File -> string"
-  [csv files sounds]
+  [csv files sounds stat-ranges]
   (let [file-updates (->> csv
                           (#(csv->map % headers 3))
                           (map sanitize-riding-data)
                           (map #(assoc % :seat-data (generate-seat-data %)))
                           (filter #(:seat-data %))
-                          (map #(assoc % :json (behaviours->json % sounds)))
+                          (map #(assoc % :json (behaviours->json % sounds stat-ranges)))
                           (filter #(:json %))
                           (map #(riding-data->cobblemon-json % files))
                           (group-by :file))]
@@ -564,8 +641,9 @@
   (let [path "../../common/src/main/resources/data/cobblemon/species"
         files (file-seq (file path))
         riding-data-csv (fetch-csv)
+        ride-stat-ranges (get-ride-stats-from-csv)
         sounds (get-sounds-map (get-sound-mappings) (get-sounds))
-        updates (get-file-updates riding-data-csv files sounds)]
+        updates (get-file-updates riding-data-csv files sounds ride-stat-ranges)]
     (doseq [[file contents] updates]
       (spit file contents))))
 

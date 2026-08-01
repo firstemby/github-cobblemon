@@ -3,10 +3,10 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.combusken_male",
+				"identifier": "geometry.combusken_female",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -18,7 +18,7 @@
 				{
 					"name": "body",
 					"parent": "combusken",
-					"pivot": [0, 6, 0]
+					"pivot": [0, 14, 0]
 				},
 				{
 					"name": "waist",
@@ -126,7 +126,7 @@
 					"pivot": [0, 25.5, 0.75],
 					"rotation": [-15, 0, 0],
 					"cubes": [
-						{"origin": [-2, 25.5, 0.75], "size": [4, 5, 0], "uv": [0, 64]},
+						{"origin": [-2, 25.5, 0.75], "size": [4, 4, 0], "uv": [0, 65]},
 						{"origin": [-0.5, 27.5, 0.75], "size": [1, 1, 0], "inflate": 0.01, "uv": [32, 13]}
 					]
 				},
@@ -145,7 +145,7 @@
 					"pivot": [-0.25, 25, 0.75],
 					"rotation": [-20, 5, 50],
 					"cubes": [
-						{"origin": [-1.25, 25, 0.75], "size": [3, 4, 0], "uv": [0, 74]}
+						{"origin": [-1.25, 25, 0.75], "size": [3, 4, 0], "uv": [0, 82]}
 					]
 				},
 				{
@@ -163,7 +163,7 @@
 					"pivot": [0.25, 25, 0.75],
 					"rotation": [-20, -5, -50],
 					"cubes": [
-						{"origin": [-1.75, 25, 0.75], "size": [3, 4, 0], "uv": [0, 82]}
+						{"origin": [-1.75, 25, 0.75], "size": [3, 4, 0], "uv": [0, 74]}
 					]
 				},
 				{
@@ -186,6 +186,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.4, 21.5, -3.5],
+					"locators": {
+						"eye1": [-2.4, 21.5, -3.5]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_right",
 					"pivot": [0.1, 18.25, 0.1],
@@ -202,6 +210,14 @@
 						{"origin": [1.91, 20.5, -3.52], "size": [1, 2, 1], "uv": [24, 63]},
 						{"origin": [1.51, 21.25, -3.53], "size": [1, 1, 0], "uv": [30, 13]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.4, 21.5, -3.5],
+					"locators": {
+						"eye2": [2.4, 21.5, -3.5]
+					}
 				},
 				{
 					"name": "eyelid_left",

@@ -125,7 +125,7 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
     ) {
         val seasonings = blockEntity.getSeasonings()
 
-        val gameTime = (blockEntity.level?.gameTime ?: 0) + tickDelta
+        val gameTime = blockEntity.time + tickDelta
         val rotationAngle = (gameTime * ROTATION_SPEED) % 360
 
         seasonings.forEachIndexed { index, seasoning ->

@@ -1,0 +1,23 @@
+{
+  "moveName": "heatwave",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 9
+    },
+    {
+      "item": "cobblemon:charcoal_stick",
+      "count": 1
+    },
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 3
+    }
+  ]
+}

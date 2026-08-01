@@ -8,10 +8,11 @@
 
 package com.cobblemon.mod.common.command
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
-import com.cobblemon.mod.common.api.spawning.CobblemonWorldSpawnerManager
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.prioritizedAreaCalculators
 import com.cobblemon.mod.common.api.spawning.spawner.SpawningZoneInput
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
@@ -24,6 +25,7 @@ import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.command.argument.SpawnBucketArgumentType
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.permission
+import com.cobblemon.mod.common.util.spawner
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
@@ -56,11 +58,11 @@ object CheckSpawnsCommand {
             return 0
         }
 
-        val spawner = CobblemonWorldSpawnerManager.spawnersForPlayers[player.uuid] ?: return Command.SINGLE_SUCCESS
+        val spawner = player.spawner
         val bucket = SpawnBucketArgumentType.getSpawnBucket(context, name = "bucket")
         val cause = SpawnCause(spawner, player)
 
-        val slice = spawner.spawningZoneGenerator.generate(
+        val slice = Cobblemon.spawningZoneGenerator.generate(
             spawner = spawner,
             input = SpawningZoneInput(
                 cause = cause,
@@ -74,9 +76,9 @@ object CheckSpawnsCommand {
             )
         )
 
-        val contexts = spawner.spawnablePositionResolver.resolve(spawner, spawner.spawnablePositionCalculators, slice)
+        val contexts = Cobblemon.areaSpawnablePositionResolver.resolve(spawner, prioritizedAreaCalculators, slice)
 
-        val spawnProbabilities = spawner.getSpawningSelector().getProbabilities(spawner, bucket, contexts)
+        val spawnProbabilities = spawner.selector.getProbabilities(spawner, bucket, contexts)
 
         val spawnNames = mutableMapOf<String, MutableComponent>()
         val namedProbabilities = mutableMapOf<MutableComponent, Float>()

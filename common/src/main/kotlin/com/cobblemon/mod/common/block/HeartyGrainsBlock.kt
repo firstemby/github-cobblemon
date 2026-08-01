@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.*
 import net.minecraft.world.level.block.Block
@@ -30,6 +29,7 @@ import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
@@ -44,7 +44,6 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
         val CODEC = simpleCodec(::HeartyGrainsBlock)
         const val MATURE_AGE = 6
         const val AGE_AFTER_HARVEST = 3 // Last single block stage
-        val WATERLOGGED = BlockStateProperties.WATERLOGGED
         val AGE: IntegerProperty = IntegerProperty.create("age", 0, MATURE_AGE)
         val HALF: EnumProperty<DoubleBlockHalf> = BlockStateProperties.DOUBLE_BLOCK_HALF
 
@@ -175,7 +174,7 @@ class HeartyGrainsBlock(settings: Properties) : CropBlock(settings), SimpleWater
                     UPDATE_CLIENTS
                 )
             }
-            else if (stateAbove.getValue(HALF) == DoubleBlockHalf.UPPER) {
+            else if (stateAbove.hasProperty(HALF) && stateAbove.getValue(HALF) == DoubleBlockHalf.UPPER) {
                 world.setBlock(
                     abovePos,
                     stateAbove.setValue(AGE, newAge),

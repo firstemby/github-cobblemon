@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:minccino",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:minccino",
+      "model": "cobblemon:minccino.geo",
+      "texture": "cobblemon:textures/pokemon/0572_minccino/minccino.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0572_minccino/minccino_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0572_minccino/minccino_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

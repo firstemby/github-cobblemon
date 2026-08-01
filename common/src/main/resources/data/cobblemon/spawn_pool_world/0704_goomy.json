@@ -11,7 +11,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -32,7 +32,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-30",
             "weight": 6.0,
@@ -42,10 +42,8 @@
                 "biomes": [
                     "#cobblemon:is_swamp"
                 ],
-                "isRaining": false
-            },
-            "anticondition": {
-                "isSlimeChunk": true
+                "isRaining": false,
+                "isSlimeChunk": false
             }
         },
         {
@@ -56,7 +54,7 @@
                 "wild"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -74,7 +72,7 @@
             "id": "goomy-4",
             "pokemon": "goomy",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
             "weight": 6.0,
@@ -83,17 +81,15 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_swamp"
-                ]
-            },
-            "anticondition": {
-                "isSlimeChunk": true
+                ],
+                "isSlimeChunk": false
             }
         },
         {
             "id": "goomy-5",
             "pokemon": "goomy",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -110,7 +106,7 @@
             "id": "goomy-6",
             "pokemon": "goomy",
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
             "weight": 6.0,
@@ -139,7 +135,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -159,7 +155,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-30",
             "weight": 6.0,
@@ -170,11 +166,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "neededNearbyBlocks": [
-                    "#minecraft:water"
-                ]
+                    "minecraft:water"
+                ],
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -188,7 +184,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "grounded",
+            "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -214,7 +210,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -237,7 +233,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
             "weight": 1.8,
@@ -264,7 +260,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
             "weight": 6.0,
@@ -273,11 +269,11 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isSlimeChunk": false
             },
             "anticondition": {
                 "minLureLevel": 2,
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -291,7 +287,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -302,10 +298,10 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 2,
-                "maxLureLevel": 2
+                "maxLureLevel": 2,
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -319,7 +315,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
             "weight": 1.8,
@@ -329,10 +325,10 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "minLureLevel": 3
+                "minLureLevel": 3,
+                "isSlimeChunk": false
             },
             "anticondition": {
-                "isSlimeChunk": true,
                 "biomes": [
                     "#cobblemon:is_dripstone",
                     "#cobblemon:is_lush"
@@ -346,7 +342,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
             "weight": 7.5,
@@ -373,7 +369,7 @@
                 "natural"
             ],
             "type": "pokemon",
-            "context": "fishing",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
             "weight": 1.8,

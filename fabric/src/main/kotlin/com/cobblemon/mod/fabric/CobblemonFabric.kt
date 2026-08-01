@@ -11,6 +11,7 @@ package com.cobblemon.mod.fabric
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.predicate.CobblemonEntitySubPredicates
+import com.cobblemon.mod.common.CobblemonMobEffects
 import com.cobblemon.mod.common.api.net.serializers.*
 import com.cobblemon.mod.common.item.group.CobblemonItemGroups
 import com.cobblemon.mod.common.loot.LootInjector
@@ -36,7 +37,6 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.UseBlockCallback
@@ -69,6 +69,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.stats.Stats
 import net.minecraft.tags.TagKey
 import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionResult
@@ -91,6 +92,13 @@ object CobblemonFabric : CobblemonImplementation {
 
     fun initialize() {
         Cobblemon.preInitialize(this)
+
+        Cobblemon.statistics.registerStats()
+        Cobblemon.statistics.stats.forEach { entry ->
+            val cobblemonStat = entry.value
+            Registry.register(BuiltInRegistries.CUSTOM_STAT, cobblemonStat.resourceLocation, cobblemonStat.resourceLocation)
+            Stats.CUSTOM.get(cobblemonStat.resourceLocation, cobblemonStat.formatter)
+        }
 
         Cobblemon.initialize()
         networkManager.registerMessages()
@@ -154,12 +162,17 @@ object CobblemonFabric : CobblemonImplementation {
             CobblemonStructureProcessorListOverrides.register(server)
         }
         ServerLifecycleEvents.SERVER_STARTED.register { server -> PlatformEvents.SERVER_STARTED.post(ServerEvent.Started(server)) }
-        ServerLifecycleEvents.SERVER_STOPPING.register { server -> PlatformEvents.SERVER_STOPPING.post(ServerEvent.Stopping(server)) }
+        ServerLifecycleEvents.SERVER_STOPPING.register { server ->
+            server.playerList.players.forEach { player -> PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(player)) }
+            PlatformEvents.SERVER_STOPPING.post(ServerEvent.Stopping(server))
+        }
         ServerLifecycleEvents.SERVER_STOPPED.register { server -> PlatformEvents.SERVER_STOPPED.post(ServerEvent.Stopped(server)) }
         ServerTickEvents.START_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_PRE.post(ServerTickEvent.Pre(server)) }
         ServerTickEvents.END_SERVER_TICK.register { server -> PlatformEvents.SERVER_TICK_POST.post(ServerTickEvent.Post(server)) }
         ServerPlayConnectionEvents.JOIN.register { handler, _, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGIN.post(ServerPlayerEvent.Login(handler.player)) } }
-        ServerPlayConnectionEvents.DISCONNECT.register { handler, server -> server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) } }
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, server ->
+            if (!server.isStopped) server.executeIfPossible { PlatformEvents.SERVER_PLAYER_LOGOUT.post(ServerPlayerEvent.Logout(handler.player)) }
+        }
         ServerLivingEntityEvents.ALLOW_DEATH.register { entity, _, _ ->
             if (entity is ServerPlayer) {
                 PlatformEvents.PLAYER_DEATH.postThen(
@@ -340,6 +353,12 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerCompostable(item: ItemLike, chance: Float) {
         CompostingChanceRegistry.INSTANCE.add(item, chance)
+    }
+
+    override fun registerMobEffects() {
+        CobblemonMobEffects.register { identifier, effect ->
+            Registry.register(CobblemonMobEffects.registry, identifier, effect)
+        }
     }
 
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {

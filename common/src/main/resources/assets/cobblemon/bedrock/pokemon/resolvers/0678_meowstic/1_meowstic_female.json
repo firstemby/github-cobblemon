@@ -25,6 +25,18 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0678_meowstic/meowstic_female_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

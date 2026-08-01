@@ -78,14 +78,17 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
             return
         }
 
-        if (CobblemonClient.storage.selectedSlot == -1) return
         if (Minecraft.getInstance().screen != null) return
 
-        val selectedPartyPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot) ?: return
+        val selectedPartyPokemon = if (CobblemonClient.storage.selectedSlot >= 0) {
+            CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+        } else {
+            null
+        }
+
         if (isRidingPokemon(player) && canAttemptDismount(player, selectedPartyPokemon)) {
             sendToServer(DismountPokemonPacket())
-        }
-        else if (!isRidingSelectedPokemon(player, selectedPartyPokemon)){
+        } else if (selectedPartyPokemon != null && !isRidingSelectedPokemon(player, selectedPartyPokemon)){
             checkForTargetInteractions(player, selectedPartyPokemon)
         }
     }
@@ -105,8 +108,7 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
             collideBlock = ClipContext.Fluid.NONE)
         if (canSendOutPokemon(player, targetEntity)) {
             sendToServer(SendOutPokemonPacket(CobblemonClient.storage.selectedSlot))
-        }
-        else {
+        } else {
             processEntityTarget(player, selectedPartyPokemon, targetEntity)
         }
     }
@@ -140,20 +142,19 @@ object PartySendBinding : CobblemonBlockingKeyBinding(
         }
     }
 
-    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon: Pokemon): Boolean {
-        if (player.vehicle !is PokemonEntity) return false
-        val vehicle = player.vehicle as PokemonEntity
-        if (player != vehicle.controllingPassenger) {
-            return true
-        }
+    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon: Pokemon?): Boolean {
+        val vehicle = player.vehicle as? PokemonEntity ?: return false
+
+        if (player != vehicle.controllingPassenger) return true
+
         val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
         val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
-        if (isAirRide && hasLandRide) {
+
+        if (!Cobblemon.config.enableInFlightDismounting && isAirRide && hasLandRide) {
             return false
         }
-        else {
-            return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
-        }
+
+        return vehicle.pokemon.uuid == selectedPartyPokemon?.uuid
     }
 
     private fun isRidingPokemon(player: LocalPlayer, ignoreControlling: Boolean = false): Boolean {

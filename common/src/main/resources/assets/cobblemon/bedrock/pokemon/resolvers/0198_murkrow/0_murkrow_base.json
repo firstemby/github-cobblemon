@@ -10,12 +10,28 @@
       "layers": []
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "model": "cobblemon:murkrow_female.geo"
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0198_murkrow/murkrow_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0198_murkrow/murkrow_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

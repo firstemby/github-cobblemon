@@ -2,7 +2,7 @@
   "portraitScale": 1.66,
   "portraitTranslation": [-0.14, -0.92, 0],
   "profileScale": 1.05,
-  "profileTranslation": [-0.05, 0.11, 0.0],
+  "profileTranslation": [0, 0.11, 0.0],
   "rootBone": "shellder",
   "animations": {
     "cry": "q.bedrock_stateful('shellder', 'cry')",
@@ -17,6 +17,9 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
+      "namedAnimations": {
+        "protect": "q.bedrock_primary('shellder', 'protect', q.curve('symmetrical_wide'))"
+      },
       "animations": ["q.bedrock('shellder', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('shellder', 'blink')"]
     },

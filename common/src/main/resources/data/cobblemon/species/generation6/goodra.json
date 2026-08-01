@@ -44,21 +44,60 @@
   "catchRate": 45,
   "eggCycles": 40,
   "baseFriendship": 35,
-  "features": [
-    "hisuian"
-  ],
   "baseScale": 0.9,
   "hitbox": {
-    "width": 1.8,
     "height": 3.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "60-70",
+          "JUMP": "45-60",
+          "SKILL": "20-35",
+          "SPEED": "20-35",
+          "STAMINA": "55-85"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.19
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "light": "0-4",
+      "rouseChance": 0.0042
+    }
   },
   "drops": {
-    "amount": 4,
+    "amount": 5,
     "entries": [
       {
         "item": "minecraft:slime_ball",
         "quantityRange": "0-3"
+      },
+      {
+        "item": "cobblemon:shed_shell",
+        "percentage": 10.0
       },
       {
         "item": "cobblemon:haban_berry",
@@ -229,16 +268,40 @@
       },
       "baseScale": 1,
       "hitbox": {
-        "width": 2.5,
         "height": 3.6,
-        "fixed": false
+        "fixed": false,
+        "width": 2.5
+      },
+      "riding": {
+        "behaviours": {
+          "LAND": {
+            "key": "cobblemon:land/horse",
+            "rideSounds": [],
+            "stats": {
+              "ACCELERATION": "50-60",
+              "JUMP": "20-35",
+              "SKILL": "10-25",
+              "SPEED": "10-25",
+              "STAMINA": "70-100"
+            }
+          }
+        },
+        "seats": [
+          {
+            "locator": "seat_1"
+          }
+        ]
       },
       "drops": {
-        "amount": 7,
+        "amount": 8,
         "entries": [
           {
             "item": "minecraft:slime_ball",
             "quantityRange": "0-3"
+          },
+          {
+            "item": "cobblemon:shed_shell",
+            "percentage": 10.0
           },
           {
             "item": "minecraft:iron_ingot",
@@ -362,8 +425,35 @@
       ],
       "preEvolution": "sliggoo hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "canWalkOnWater": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "goodra alpha",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
-  "behaviour": {}
+  "features": [
+    "hisuian"
+  ]
 }

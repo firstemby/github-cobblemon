@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "moonlight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "moonlight"
+    }
+  ],
+  "id": "cobblemon:berry_juice",
+  "containers": [
+    {
+      "filled": [
+        "cobblemon:berry_juice"
+      ],
+      "empty": "minecraft:bowl",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:block/soft_fluids/milk_liquid",
+  "still_texture": "moonlight:block/soft_fluids/milk_liquid",
+  "color": "#E8B870",
+  "translation_key": "item.cobblemon.berry_juice"
+}

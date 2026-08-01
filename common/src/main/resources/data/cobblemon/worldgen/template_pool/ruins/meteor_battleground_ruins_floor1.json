@@ -1,0 +1,36 @@
+{
+    "name": "cobblemon:ruins/meteor_battleground_ruins_floor1",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/meteor_battleground_ruins_floor1a",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/meteor_battleground_ruins",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/meteor_battleground_ruins_floor1b",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/meteor_battleground_ruins",
+                "projection": "rigid"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/meteor_battleground_ruins_floor1c",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/meteor_battleground_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

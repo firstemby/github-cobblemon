@@ -1,0 +1,19 @@
+{
+  "moveName": "roost",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "flying",
+  "recipe": [
+    {
+      "item": "cobblemon:flying_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:revival_herb",
+      "count": 1
+    }
+  ]
+}

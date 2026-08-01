@@ -45,9 +45,10 @@
   "baseScale": 0.5,
   "hitbox": {
     "width": 1.0,
-    "height": 1.0,
+    "height": 2.1,
     "fixed": false
   },
+  "standingEyeHeight": 0.54,
   "drops": {
     "amount": 2,
     "entries": [
@@ -204,6 +205,19 @@
           "tier": 9
         }
       ]
+    },
+    "resting": {
+      "willSleepOnBed": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
     }
   }
 }

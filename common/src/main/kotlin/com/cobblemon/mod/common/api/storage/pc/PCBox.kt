@@ -31,7 +31,7 @@ import net.minecraft.server.level.ServerPlayer
  * @since April 26th, 2022
  */
 open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
-    override fun iterator() = pokemon.filterNotNull().iterator()
+    override fun iterator() = pokemon.asSequence().filterNotNull().iterator()
 
     val boxChangeEmitter = SimpleObservable<Unit>()
 
@@ -73,7 +73,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         get() = this.pc.boxes.indexOf(this)
 
     val unoccupiedSlots: Int
-        get() = POKEMON_PER_BOX - this.pokemon.filterNotNull().count()
+        get() = POKEMON_PER_BOX - this.pokemon.count { it != null }
 
     fun getFirstAvailablePosition(): PCPosition? {
         for (index in 0 until POKEMON_PER_BOX) {

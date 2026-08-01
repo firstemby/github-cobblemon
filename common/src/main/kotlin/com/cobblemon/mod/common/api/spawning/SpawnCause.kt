@@ -17,16 +17,21 @@ import net.minecraft.world.entity.EntityType
 open class SpawnCause(
     val spawner: Spawner,
     entity: Entity? = null
-): SpawningInfluence {
+) : SpawningInfluence {
     val entityWorldId = entity?.level()?.dimension()
     val entityId = entity?.id
     val entityUUID = entity?.uuid
     val entityType = entity?.type
 
     val entity: Entity?
-        get() = if (entityType == EntityType.PLAYER) {
-            server()?.playerList?.getPlayer(entityUUID!!)
-        } else {
-            server()?.getLevel(entityWorldId!!)?.getEntity(entityId!!)
-        }
+        get() =
+            if (entityType == EntityType.PLAYER) {
+                entityUUID?.let {
+                    server()?.playerList?.getPlayer(it)
+                }
+            } else if (entityWorldId != null && entityId != null) {
+                server()?.getLevel(entityWorldId)?.getEntity(entityId)
+            } else {
+                null
+            }
 }

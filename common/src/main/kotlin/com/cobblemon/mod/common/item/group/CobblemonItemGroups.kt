@@ -11,21 +11,26 @@ package com.cobblemon.mod.common.item.group
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.cooking.Flavour
+import com.cobblemon.mod.common.api.riding.stats.RidingStat
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import com.cobblemon.mod.common.item.AprijuiceItem
-import com.cobblemon.mod.common.item.components.FlavourComponent
+import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.world.level.ItemLike
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.resources.ResourceKey
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.CreativeModeTab.DisplayItemsGenerator
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters
 import net.minecraft.world.item.CreativeModeTab.Output
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.item.component.BlockItemStateProperties
+import net.minecraft.world.item.component.CustomModelData
+import net.minecraft.world.level.ItemLike
 
 @Suppress("unused", "UNUSED_PARAMETER")
 object CobblemonItemGroups {
@@ -66,6 +71,9 @@ object CobblemonItemGroups {
     @JvmStatic val EVOLUTION_ITEMS get() = BuiltInRegistries.CREATIVE_MODE_TAB.get(EVOLUTION_ITEMS_KEY)
 
     @JvmStatic val BUILDING_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("building_blocks")), this::blocksInjections)
+    @JvmStatic val COLORED_BLOCKS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("colored_blocks")), this::coloredBlocksInjections)
+    @JvmStatic val FUNCTIONAL_BLOCKS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("functional_blocks")), this::functionalBlocksInjections)
+    @JvmStatic val REDSTONE_BLOCKS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("redstone_blocks")), this::redstoneBlocksInjections)
     @JvmStatic val FOOD_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("food_and_drinks")), this::foodInjections)
     @JvmStatic val TOOLS_AND_UTILITIES_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("tools_and_utilities")), this::toolsAndUtilitiesInjections)
     @JvmStatic val INGREDIENTS_INJECTIONS = this.inject(ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.parse("ingredients")), this::ingredientsInjections)
@@ -239,15 +247,76 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.DARK_GEM)
         entries.accept(CobblemonItems.STEEL_GEM)
         entries.accept(CobblemonItems.FAIRY_GEM)
+
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_NORMAL)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FIRE)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_WATER)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GRASS)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ELECTRIC)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ICE)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FIGHTING)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_POISON)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GROUND)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FLYING)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_PSYCHIC)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_BUG)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_ROCK)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_GHOST)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_DRAGON)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_DARK)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_STEEL)
+        gemClusterEntries(entries, CobblemonItems.TYPE_GEM_CLUSTER_FAIRY)
+
+        entries.accept(CobblemonItems.TYPE_GEM_CORE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_NORMAL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIRE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_WATER)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ICE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIGHTING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_POISON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GROUND)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FLYING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_PSYCHIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_BUG)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ROCK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GHOST)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DRAGON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DARK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_STEEL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FAIRY)
+    }
+
+    private fun gemClusterEntries(entries: Output, clusterItem: Item) {
+        for (i in TypeGemClusterBlock.STAGE.possibleValues) {
+            val stack = ItemStack(clusterItem)
+            stack.set(
+                DataComponents.BLOCK_STATE,
+                BlockItemStateProperties.EMPTY
+                    .with(TypeGemClusterBlock.STAGE, i)
+                    .with(TypeGemClusterBlock.SHOULD_GROW, false)
+                    .with(TypeGemClusterBlock.STUNTED, false)
+            )
+            stack.set(
+                DataComponents.CUSTOM_MODEL_DATA,
+                CustomModelData(i)
+            )
+            entries.accept(stack)
+        }
     }
 
     private fun blockEntries(displayContext: ItemDisplayParameters, entries: Output) {
         entries.accept(CobblemonItems.RESTORATION_TANK)
         entries.accept(CobblemonItems.FOSSIL_ANALYZER)
         entries.accept(CobblemonItems.MONITOR)
+        entries.accept(CobblemonItems.DAMAGED_MONITOR)
         entries.accept(CobblemonItems.PC)
         entries.accept(CobblemonItems.HEALING_MACHINE)
         entries.accept(CobblemonItems.PASTURE)
+        entries.accept(CobblemonItems.TM_MACHINE)
+        entries.accept(CobblemonItems.DISC_SHELF)
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
 
         entries.accept(CobblemonItems.GILDED_CHEST)
         entries.accept(CobblemonItems.YELLOW_GILDED_CHEST)
@@ -305,6 +374,26 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.BLACK_TUMBLESTONE_BLOCK)
         entries.accept(CobblemonItems.SKY_TUMBLESTONE_BLOCK)
+
+        entries.accept(CobblemonItems.TYPE_GEM_CORE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_NORMAL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIRE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_WATER)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GRASS)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ELECTRIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ICE)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FIGHTING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_POISON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GROUND)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FLYING)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_PSYCHIC)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_BUG)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_ROCK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_GHOST)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DRAGON)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_DARK)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_STEEL)
+        entries.accept(CobblemonItems.TYPE_GEM_BLOCK_FAIRY)
 
         entries.accept(CobblemonItems.POLISHED_TUMBLESTONE)
         entries.accept(CobblemonItems.POLISHED_TUMBLESTONE_STAIRS)
@@ -381,6 +470,23 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.THUNDER_STONE_BLOCK)
         entries.accept(CobblemonItems.WATER_STONE_BLOCK)
 
+        entries.accept(CobblemonItems.WHITE_PLAQUE)
+        entries.accept(CobblemonItems.LIGHT_GRAY_PLAQUE)
+        entries.accept(CobblemonItems.GRAY_PLAQUE)
+        entries.accept(CobblemonItems.BLACK_PLAQUE)
+        entries.accept(CobblemonItems.BROWN_PLAQUE)
+        entries.accept(CobblemonItems.RED_PLAQUE)
+        entries.accept(CobblemonItems.ORANGE_PLAQUE)
+        entries.accept(CobblemonItems.YELLOW_PLAQUE)
+        entries.accept(CobblemonItems.LIME_PLAQUE)
+        entries.accept(CobblemonItems.GREEN_PLAQUE)
+        entries.accept(CobblemonItems.CYAN_PLAQUE)
+        entries.accept(CobblemonItems.LIGHT_BLUE_PLAQUE)
+        entries.accept(CobblemonItems.BLUE_PLAQUE)
+        entries.accept(CobblemonItems.PURPLE_PLAQUE)
+        entries.accept(CobblemonItems.MAGENTA_PLAQUE)
+        entries.accept(CobblemonItems.PINK_PLAQUE)
+
         CobblemonItems.campfire_pots.forEach(entries::accept)
     }
 
@@ -409,12 +515,12 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.PEWTER_CRUNCHIES)
         entries.accept(CobblemonItems.RAGE_CANDY_BAR)
         entries.accept(CobblemonItems.LAVA_COOKIE)
-        entries.accept(CobblemonItems.JUBILIFE_MUFFIN)
         entries.accept(CobblemonItems.OLD_GATEAU)
         entries.accept(CobblemonItems.CASTELIACONE)
         entries.accept(CobblemonItems.LUMIOSE_GALETTE)
         entries.accept(CobblemonItems.BIG_MALASADA)
         entries.accept(CobblemonItems.SMOKED_TAIL_CURRY)
+        entries.accept(CobblemonItems.JUBILIFE_MUFFIN)
         entries.accept(CobblemonItems.OPEN_FACED_SANDWICH)
 
         entries.accept(CobblemonItems.BERRY_JUICE)
@@ -526,10 +632,12 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.ABILITY_CAPSULE)
         entries.accept(CobblemonItems.ABILITY_PATCH)
 
+        entries.accept(CobblemonItems.BLANK_TM)
+
         entries.accept(CobblemonItems.POKE_BAIT)
         entries.accept(CobblemonItems.POKE_SNACK)
         entries.accept(CobblemonItems.POKE_CAKE)
-        entries.accept(CobblemonItems.POKE_PUFF)
+//        entries.accept(CobblemonItems.POKE_PUFF)
 
         entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_RED))
         entries.accept(defaultAprijuice(CobblemonItems.APRIJUICE_YELLOW))
@@ -542,13 +650,13 @@ object CobblemonItemGroups {
 
     private fun defaultAprijuice(item: AprijuiceItem): ItemStack {
         return ItemStack(item).apply {
-            this.set(CobblemonItemComponents.FLAVOUR, FlavourComponent(
+            this.set(CobblemonItemComponents.RIDE_BOOST, RideBoostsComponent(
                 mapOf(
-                    Flavour.SPICY to 10,
-                    Flavour.DRY to 10,
-                    Flavour.SWEET to 10,
-                    Flavour.BITTER to 10,
-                    Flavour.SOUR to 10,
+                    RidingStat.ACCELERATION to 1,
+                    RidingStat.JUMP to 1,
+                    RidingStat.SPEED to 1,
+                    RidingStat.STAMINA to 1,
+                    RidingStat.SKILL to 1
                 )
             ))
         }
@@ -765,6 +873,50 @@ object CobblemonItemGroups {
         }
     }
 
+    private fun coloredBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.WHITE_PLAQUE)
+        injector.putAfter(CobblemonItems.LIGHT_GRAY_PLAQUE, CobblemonItems.WHITE_PLAQUE)
+        injector.putAfter(CobblemonItems.GRAY_PLAQUE, CobblemonItems.LIGHT_GRAY_PLAQUE)
+        injector.putAfter(CobblemonItems.BLACK_PLAQUE, CobblemonItems.GRAY_PLAQUE)
+        injector.putAfter(CobblemonItems.BROWN_PLAQUE, CobblemonItems.BLACK_PLAQUE)
+        injector.putAfter(CobblemonItems.RED_PLAQUE, CobblemonItems.BROWN_PLAQUE)
+        injector.putAfter(CobblemonItems.ORANGE_PLAQUE, CobblemonItems.RED_PLAQUE)
+        injector.putAfter(CobblemonItems.YELLOW_PLAQUE, CobblemonItems.ORANGE_PLAQUE)
+        injector.putAfter(CobblemonItems.LIME_PLAQUE, CobblemonItems.YELLOW_PLAQUE)
+        injector.putAfter(CobblemonItems.GREEN_PLAQUE, CobblemonItems.LIME_PLAQUE)
+        injector.putAfter(CobblemonItems.CYAN_PLAQUE, CobblemonItems.GREEN_PLAQUE)
+        injector.putAfter(CobblemonItems.LIGHT_BLUE_PLAQUE, CobblemonItems.CYAN_PLAQUE)
+        injector.putAfter(CobblemonItems.BLUE_PLAQUE, CobblemonItems.LIGHT_BLUE_PLAQUE)
+        injector.putAfter(CobblemonItems.PURPLE_PLAQUE, CobblemonItems.BLUE_PLAQUE)
+        injector.putAfter(CobblemonItems.MAGENTA_PLAQUE, CobblemonItems.PURPLE_PLAQUE)
+        injector.putAfter(CobblemonItems.PINK_PLAQUE, CobblemonItems.MAGENTA_PLAQUE)
+    }
+
+    private fun functionalBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.DISPLAY_CASE)
+        injector.putAfter(CobblemonItems.MONITOR, CobblemonItems.DISPLAY_CASE)
+        injector.putAfter(CobblemonItems.DAMAGED_MONITOR, CobblemonItems.MONITOR)
+        injector.putAfter(CobblemonItems.DISC_SHELF, CobblemonItems.DAMAGED_MONITOR)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_RED, CobblemonItems.DISC_SHELF)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_YELLOW, CobblemonItems.CAMPFIRE_POT_RED)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_GREEN, CobblemonItems.CAMPFIRE_POT_YELLOW)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_BLUE, CobblemonItems.CAMPFIRE_POT_GREEN)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_PINK, CobblemonItems.CAMPFIRE_POT_BLUE)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_BLACK, CobblemonItems.CAMPFIRE_POT_PINK)
+        injector.putAfter(CobblemonItems.CAMPFIRE_POT_WHITE, CobblemonItems.CAMPFIRE_POT_BLACK)
+        injector.putAfter(CobblemonItems.GILDED_CHEST, CobblemonItems.CAMPFIRE_POT_WHITE)
+        injector.putAfter(CobblemonItems.YELLOW_GILDED_CHEST, CobblemonItems.GILDED_CHEST)
+        injector.putAfter(CobblemonItems.GREEN_GILDED_CHEST, CobblemonItems.YELLOW_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.BLUE_GILDED_CHEST, CobblemonItems.GREEN_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.PINK_GILDED_CHEST, CobblemonItems.BLUE_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.BLACK_GILDED_CHEST, CobblemonItems.PINK_GILDED_CHEST)
+        injector.putAfter(CobblemonItems.WHITE_GILDED_CHEST, CobblemonItems.BLACK_GILDED_CHEST)
+    }
+
+    private fun redstoneBlocksInjections(injector: Injector) {
+        injector.putLast(CobblemonItems.DISC_SHELF)
+    }
+
     private fun foodInjections(injector: Injector) {
         injector.putAfter(CobblemonItems.TART_APPLE, Items.ENCHANTED_GOLDEN_APPLE)
         injector.putAfter(CobblemonItems.SWEET_APPLE, CobblemonItems.TART_APPLE)
@@ -829,6 +981,7 @@ object CobblemonItemGroups {
 
     private fun opBlocksInjections(injector: Injector) {
         injector.putLast(CobblemonItems.NPC_EDITOR)
+        injector.putLast(CobblemonItems.HABITAT_BLOCK)
     }
 
     /**

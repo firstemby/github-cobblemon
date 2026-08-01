@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.SpawnSet
 import com.cobblemon.mod.common.api.spawning.condition.PrecalculationResult
@@ -24,6 +23,7 @@ import com.cobblemon.mod.common.util.server
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 
@@ -33,7 +33,7 @@ import net.minecraft.server.packs.PackType
  * A single spawn pool may be used for many different [Spawner]s. Note that changing the
  * [details] list will change the spawns for any [Spawner] sharing this pool. If you want
  * to make a change for a pool specifically to one spawner, take a copy of the pool using
- * [copy], and change that spawner's pool using [Spawner.setSpawnPool].
+ * [copy], and change that spawner's pool using [Spawner.spawnPool] setters.
  *
  * @author Hiroku
  * @since February 9th, 2022
@@ -60,16 +60,24 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     }
 
     val details = mutableListOf<SpawnDetail>()
+    /** Tracks which buckets are in use by the pool, to prevent spawners for rolling buckets that don't exist. */
+    val buckets = mutableListOf<String>()
     var precalculation: PrecalculationResult<*> = RootPrecalculation.generate(details, emptyList())
     val precalculators = mutableListOf<SpawningPrecalculation<*>>()
 
     override fun iterator() = details.iterator()
 
-
     fun addPrecalculators(vararg precalculators: SpawningPrecalculation<*>): SpawnPool {
         this.precalculators.addAll(precalculators)
         precalculate()
         return this
+    }
+
+    fun onServerLoad(server: MinecraftServer) {
+        for (detail in details) {
+            detail.onServerLoad(server)
+        }
+        precalculate()
     }
 
     /**
@@ -80,6 +88,9 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
      * be slow, especially if there are many precalculators and spawns.
      */
     fun precalculate() {
+        buckets.clear()
+        buckets.addAll(details.asSequence().map(SpawnDetail::bucket).distinct())
+
         if (precalculators.isEmpty()) {
             precalculation = RootPrecalculation.generate(details, emptyList())
         } else {
@@ -95,7 +106,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
      * to leverage the precalculation to get a smaller list of spawns as quickly
      * as possible.
      */
-    fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+    fun retrieve(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
         return precalculation.retrieve(bucket, spawnablePosition)
     }
 

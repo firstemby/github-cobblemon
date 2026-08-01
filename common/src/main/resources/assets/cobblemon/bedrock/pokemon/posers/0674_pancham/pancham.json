@@ -1,0 +1,32 @@
+{
+  "portraitScale": 1.54,
+  "portraitTranslation": [-0.05, -0.02, 1],
+  "profileScale": 0.87,
+  "profileTranslation": [0, 0.5, 1],
+  "rootBone": "pancham",
+  "animations": {
+    "cry": "q.bedrock_stateful('pancham', 'cry')"
+    },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('pancham', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('pancham', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('pancham', 'ground_idle')",
+        "q.biped_walk(0.66, 1.4, 'leg_left', 'leg_right')",
+        "q.bimanual_swing(0.66, 1.4, 'arm_left', 'arm_right')" 
+      ],
+      "quirks": ["q.bedrock_quirk('pancham', 'blink')"]
+    }
+  }
+ }

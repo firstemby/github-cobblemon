@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.evolution.PassiveEvolution
+import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
@@ -21,7 +22,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.util.*
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
 import java.util.*
@@ -154,12 +154,18 @@ open class PlayerPartyStore(
 
                 // Metabolism for Fullness
                 if (pokemon.currentFullness > 0) {
-                    pokemon.tickMetabolism()
+                    pokemon.tickMetabolism(20)
                 }
 
                 // Interaction Cooldown
                 if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
+                    pokemon.tickInteractionCooldown(20)
+                }
+
+                pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.serverLevel(), pokemon, null) }
+
+                if (pokemon.entity?.passengers?.isNotEmpty() != true) {
+                    pokemon.rideStamina += 0.1F // Recover all stamina in 10 seconds, as long as no one's on it
                 }
             }
             // Friendship
@@ -196,7 +202,7 @@ open class PlayerPartyStore(
         val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
         val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
         // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
-        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
+        if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable || pokemon.isAlpha) {
             return false
         }
         player.updateShoulderNbt(pokemon)

@@ -9,19 +9,28 @@
 package com.cobblemon.mod.common.api.riding
 
 import com.bedrockk.molang.Expression
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.api.riding.stats.RidingStatDefinition
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class RidingProperties(
-        val seats: List<Seat> = listOf(),
+        seats: List<Seat> = listOf(),
         val conditions: List<Expression> = listOf(),
         val behaviours: Map<RidingStyle, RidingBehaviourSettings>? = null
 ) {
+
+    /**
+     * If a seats locator name is empty then populate it with the name that it would have
+     * under the legacy logic
+     */
+    val seats: List<Seat> = seats.mapIndexed { index, seat ->
+        if (seat.locator.isEmpty()) {
+            seat.copy(locator = "seat_${index + 1}")
+        } else {
+            seat
+        }
+    }
 
     companion object {
         fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {
@@ -32,10 +41,10 @@ class RidingProperties(
                     { buffer.readEnumConstant(RidingStyle::class.java) },
                     {
                         val key = buffer.readResourceLocation()
-                        val settings = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance()
+                        val behaviour = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance()
                             ?: error("Unknown controller key: $key")
-                        settings.decode(buffer)
-                        settings
+                        behaviour.decode(buffer)
+                        behaviour
                     }
                 )
             }
@@ -51,7 +60,10 @@ class RidingProperties(
             buffer.writeMap(
                 v,
                 { _, style -> buffer.writeEnumConstant(style) },
-                { _, behaviour -> behaviour.encode(buffer) }
+                { _, behaviour ->
+                    buffer.writeResourceLocation(behaviour.key)
+                    behaviour.encode(buffer)
+                }
             )
         }
     }

@@ -1519,6 +1519,14 @@
 					"position": [0, 0, "-q.anim_time*90*0.19"]
 				}
 			}
+		},
+		"animation.kangaskhan.hold_item": {
+			"loop": true,
+			"bones": {
+				"kid_arm_right": {
+					"rotation": [-19.9299, 1.70818, 32.19986]
+				}
+			}
 		}
 	}
 }

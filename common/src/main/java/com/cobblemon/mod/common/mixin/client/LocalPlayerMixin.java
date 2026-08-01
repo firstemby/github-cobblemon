@@ -19,9 +19,12 @@ import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState;
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel;
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository;
 import com.cobblemon.mod.common.duck.PlayerDuck;
+import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdatePassengerPositionPacket;
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -31,11 +34,8 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +56,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
 
     @Unique Matrix3f cobblemon$lastOrientation;
 
+    @Unique float cobblemon$lastRideXRot;
+    @Unique float cobblemon$lastRideYRot;
+    @Unique Vec3  cobblemon$lastRideEyePos;
+
     @Unique boolean cobblemon$isDoubleJumping = false;
 
     @Shadow
@@ -72,15 +76,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
-
-//    @Inject(method = "sendPosition", at = @At("TAIL"))
-//    private void cobblemon$updateRotationMatrix(CallbackInfo ci) {
-//        if (!(this instanceof OrientationControllable controllable)) return;
-//        var controller = controllable.getOrientationController();
-//        if (!controller.isActive() || controller.getOrientation() == cobblemon$lastOrientation) return;
-//        cobblemon$lastOrientation = controller.getOrientation() != null ? new Matrix3f(controller.getOrientation()) : null;
-//        CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateOrientationPacket(controller.getOrientation()));
-//    }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;send(Lnet/minecraft/network/protocol/Packet;)V"))
     private void cobblemon$updateRotationMatrixPassenger(CallbackInfo ci) {
@@ -105,8 +100,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         // This ensures that on transition your camera stays in the same spot
         if (!vehicleController.isActive() && shouldUseCustomOrientation) {
             // Set local to the vehicle x and yrot so
-            driver.setXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
-            driver.setYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
+            var playerRotater = (RidePassenger)driver;
+            playerRotater.cobblemon$setRideXRot(Mth.wrapDegrees(driver.getXRot() - vehicle.getXRot()));
+            playerRotater.cobblemon$setRideYRot(Mth.wrapDegrees(driver.getYRot() - vehicle.getYRot()));
         }
 
         vehicleController.setActive(shouldUseCustomOrientation);
@@ -127,6 +123,48 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
         ((PlayerDuck)this).setLastSentDriverInput(driverInput);
 
         CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateDriverInputPacket(driverInput));
+    }
+
+    @Inject(method = "rideTick", at = @At("HEAD"))
+    private void cobblemon$updateRiderRotationsRideTick(CallbackInfo ci) {
+        if (Minecraft.getInstance().player != (Object)this) return;
+        if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
+
+        var passenger = (LocalPlayer)(Object)this;
+        var playerRotater = (RidePassenger)passenger;
+
+        // Gather Rider Rotation info
+        var rideXRot = playerRotater.cobblemon$getRideXRot();
+        var rideYRot = playerRotater.cobblemon$getRideYRot();
+        var rideEyePos = playerRotater.cobblemon$getRideEyePos();
+
+        // Check for a change in the values before sending them.
+        if (cobblemon$lastRideXRot != rideXRot ||
+            cobblemon$lastRideYRot != rideYRot ||
+            cobblemon$lastRideEyePos != rideEyePos
+            ) {
+
+            // Update 'last' values
+            cobblemon$lastRideXRot = rideXRot;
+            cobblemon$lastRideYRot = rideYRot;
+            cobblemon$lastRideEyePos = rideEyePos;
+
+            CobblemonNetwork.INSTANCE.sendToServer(
+                    new ServerboundUpdateRiderRotationPacket(rideXRot, rideYRot, rideEyePos)
+            );
+        }
+    }
+
+    @Inject(method = "rideTick", at = @At("TAIL"))
+    private void cobblemon$updatePassengerPosition(CallbackInfo ci) {
+        if (Minecraft.getInstance().player != (Object)this) return;
+        if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
+        if (pokemonEntity.getSeatForPassenger(this) == null) return;
+
+        var offset = this.position().subtract(pokemonEntity.position());
+        CobblemonNetwork.INSTANCE.sendToServer(
+                new ServerboundUpdatePassengerPositionPacket(this.getId(), offset)
+        );
     }
 
     @Unique
@@ -175,7 +213,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
                 this.cobblemon$survivalJumpTriggerTime = 0;
             }
             else {
-                this.cobblemon$survivalJumpTriggerTime = 7;
+                this.cobblemon$survivalJumpTriggerTime = 12;
             }
         }
         else if (this.cobblemon$survivalJumpTriggerTime > 0) {
@@ -192,9 +230,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     private void cobblemon$isHandsBusy(CallbackInfoReturnable<Boolean> cir) {
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity) {
-            int seatIndex = pokemonEntity.getPassengers().indexOf(this);
-            Seat seat = pokemonEntity.getSeats().get(seatIndex);
-            cir.setReturnValue(seat.getHandsBusy());
+            Seat seat = pokemonEntity.getSeatForPassenger(this);;
+            if (seat != null) {
+                cir.setReturnValue(seat.getHandsBusy());
+            }
         }
     }
 
@@ -202,33 +241,17 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     public HitResult pick(double hitDistance, float partialTicks, boolean hitFluids) {
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity) {
-            PokemonClientDelegate delegate = (PokemonClientDelegate) pokemonEntity.getDelegate();
-            String locatorName = delegate.getSeatLocator(this);
-            MatrixWrapper locator = delegate.getLocatorStates().get(locatorName);
 
-            if (locator == null) {
-                return super.pick(hitDistance, partialTicks, hitFluids);
-            }
+            // Get player object
+            var passenger = (LocalPlayer)(Object)this;
+            var playerRotater = (RidePassenger)passenger;
 
-            Vec3 locatorOffset = locator != null ? new Vec3(locator.getMatrix().getTranslation(new Vector3f())) : Vec3.ZERO;
-
-            OrientationController controller = this.getOrientationController();
-
-            float currEyeHeight = this.getEyeHeight();
-            Vector3f offset = new Vector3f(new Vector3f(0f, currEyeHeight - (this.getBbHeight() / 2), 0f));
-
-            if (Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
-                PosableModel model = VaryingModelRepository.INSTANCE.getPoser(pokemonEntity.getPokemon().getSpecies().getResourceIdentifier(), new FloatingState());
-                offset.add(cobblemon$getFirstPersonOffset(model, locatorName));
-            }
-
-            Matrix3f orientation = controller.isActive() && controller.getOrientation() != null ? controller.getOrientation() : new Matrix3f();
-            Vec3 rotatedEyeHeight = new Vec3(orientation.transform(offset));
-
-            Vec3 eyePosition = locatorOffset.add(pokemonEntity.position()).add(rotatedEyeHeight);
+            // Gather eye position from stored 1st person camera position calculation
+            var eyePosition = playerRotater.cobblemon$getRideEyePos();
 
             Vec3 viewVector = this.getViewVector(partialTicks);
             Vec3 viewDistanceVector = eyePosition.add(viewVector.x * hitDistance, viewVector.y * hitDistance, viewVector.z * hitDistance);
+
             return this.level()
                     .clip(
                             new ClipContext(

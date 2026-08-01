@@ -1,0 +1,17 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/birch_tree1",
+            "cobblemon:fossils/birch_tree2",
+            "cobblemon:fossils/birch_tree3",
+            "cobblemon:fossils/birch_tree4",
+            "cobblemon:fossils/birch_tree5",
+            "cobblemon:fossils/birch_tree6",
+            "cobblemon:fossils/birch_tree7",
+            "cobblemon:fossils/birch_tree8",
+            "cobblemon:fossils/birch_tree9"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_birch_tree"
+    }
+}

@@ -46,24 +46,50 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.75,
+  "baseScale": 0.62,
   "hitbox": {
-    "width": 1.8,
     "height": 1.95,
-    "fixed": false
+    "fixed": false,
+    "width": 1.8
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "70-90",
+          "JUMP": "0-10",
+          "SKILL": "0-15",
+          "SPEED": "5-10",
+          "STAMINA": "10-20"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true
+    },
     "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "canSwimInWater": false,
+        "swimSpeed": "0.2"
+      },
       "walk": {
         "avoidsLand": true,
         "walkSpeed": "0.2"
-      },
-      "swim": {
-        "canSwimInWater": false,
-        "canSwimInLava": false,
-        "canBreatheUnderwater": true,
-        "swimSpeed": "0.2"
       }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -224,10 +250,38 @@
       "aspects": [
         "east-sea"
       ],
+      "behaviour": {
+        "combat": {
+          "willDefendOwner": true
+        },
+        "moving": {
+          "walk": {
+            "avoidsLand": true,
+            "walkSpeed": "0.2"
+          },
+          "swim": {
+            "canSwimInWater": false,
+            "canBreatheUnderwater": true,
+            "swimSpeed": "0.2"
+          }
+        },
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "gastrodon alpha",
+              "tier": 1
+            }
+          ]
+        }
+      },
       "preEvolution": "shellos",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {}
+      "battleOnly": false
     }
   ]
 }

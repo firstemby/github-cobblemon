@@ -1,0 +1,42 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["drainpunch", "punch", "physical"],
+      "delay": 1.2
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:drainpunch_target",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "locators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.05
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:drainpunch_actor",
+      "locators": ["target"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:megadrain_actorhealtimer",
+      "locators": ["middle"]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.75
+    }
+  ]
+}

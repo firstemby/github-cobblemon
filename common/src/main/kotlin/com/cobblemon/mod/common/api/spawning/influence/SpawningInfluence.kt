@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.spawning.influence
 
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -39,7 +38,16 @@ interface SpawningInfluence {
     /** Applies some influence over the entity that's been spawned. */
     fun affectSpawn(action: SpawnAction<*>, entity: Entity) {}
     /** Applies some influence over the weight of spawn buckets. */
-    fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {}
+    fun affectBucketWeights(bucketWeights: MutableMap<String, Float>) {}
+    /** Normalizes all bucket weights to add up to 100 */
+    fun normalizeBucketWeights(bucketWeights: MutableMap<String, Float>) {
+        val sum = bucketWeights.values.sum()
+        val to100 = 100F / sum
+        bucketWeights.keys.toList().forEach {
+            val weight = bucketWeights[it] ?: return@forEach
+            bucketWeights[it] = weight * to100
+        }
+    }
     /** Filters positions that could be usable for a spawnable position calculator */
     fun isAllowedPosition(world: ServerLevel, pos: BlockPos, spawnablePositionCalculator: SpawnablePositionCalculator<*, *>): Boolean = true
     /**
@@ -47,5 +55,5 @@ interface SpawningInfluence {
      *
      * You should make sure the spawn position satisfies any spawn details that you inject.
      */
-    fun injectSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail>? = null
+    fun injectSpawns(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail>? = null
 }

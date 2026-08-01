@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:equipment",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:loot_table",
+                    "value": "cobblemon:equipment/shipwreck_coves/magma_armor"
+                }
+            ],
+            "rolls": 1.0
+        },
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "enchantments": {
+                                "minecraft:fire_aspect": 2.0,
+                                "minecraft:knockback": 2.0,
+                                "minecraft:sharpness": 4.0
+                            },
+                            "function": "minecraft:set_enchantments"
+                        }
+                    ],
+                    "name": "minecraft:diamond_sword"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "cobblemon:equipment/shipwreck_coves/magma_ominous_zombies"
+}

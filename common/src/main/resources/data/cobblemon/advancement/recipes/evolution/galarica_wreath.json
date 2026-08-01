@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "criteria": {
     "has_nuts": {
       "conditions": {

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import java.util.concurrent.CompletableFuture
 
@@ -21,7 +20,7 @@ import java.util.concurrent.CompletableFuture
  */
 abstract class SpawnAction<R>(
     val spawnablePosition: SpawnablePosition,
-    val bucket: SpawnBucket,
+    val bucket: String,
     open val detail: SpawnDetail
 ) {
     val labels = mutableListOf<String>()
@@ -44,11 +43,7 @@ abstract class SpawnAction<R>(
 
         spawnablePosition.applyInfluences { it.affectAction(this) }
         val result = run()
-        if (result != null) {
-            future.complete(result)
-        } else {
-            future.completeExceptionally(Exception("Nothing was spawned."))
-        }
+        future.complete(result)
 
         return result
     }

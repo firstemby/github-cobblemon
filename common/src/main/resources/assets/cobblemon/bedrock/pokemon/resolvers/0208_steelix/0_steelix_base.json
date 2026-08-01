@@ -5,13 +5,27 @@
     {
       "aspects": [],
       "poser": "cobblemon:steelix",
-      "model": "cobblemon:steelix.geo",
+      "model": "cobblemon:steelix_male.geo",
       "texture": "cobblemon:textures/pokemon/0208_steelix/steelix.png",
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0208_steelix/steelix_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0208_steelix/steelix_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -6,9 +6,9 @@
 				"identifier": "geometry.lugia",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 9,
-				"visible_bounds_height": 4.5,
-				"visible_bounds_offset": [0, 1.75, 0]
+				"visible_bounds_width": 13,
+				"visible_bounds_height": 9,
+				"visible_bounds_offset": [0, 2.5, 0]
 			},
 			"bones": [
 				{
@@ -66,7 +66,7 @@
 					"pivot": [0, 29.5, 16],
 					"rotation": [-90, 0, 0],
 					"locators": {
-						"seat_2": [0, 29.5, 16]
+						"seat2": [0, 29.5, 16]
 					}
 				},
 				{
@@ -186,7 +186,7 @@
 					"pivot": [0, 44.5, 13.5],
 					"rotation": [-60, 0, 0],
 					"locators": {
-						"seat_1": [0, 44.5, 13.5]
+						"seat1": [0, 44.5, 13.5]
 					}
 				},
 				{

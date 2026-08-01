@@ -55,7 +55,12 @@
     "resting": {
       "canSleep": true,
       "willSleepOnBed": true,
-      "light": "0-4"
+      "light": "0-4",
+      "times": [
+        "167-11833,13702-22299"
+      ],
+      "drowsyChance": 0.0021,
+      "rouseChance": 0.0042
     },
     "itemInteract": {
       "desiredItems": [
@@ -80,7 +85,20 @@
           "tier": 1
         }
       ]
-    }
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "ai": [
     {
@@ -421,13 +439,44 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2",
+          "maxSize": 2,
           "toleratedLeaders": [
             {
-              "pokemon": "ninetales",
+              "pokemon": "vulpix alpha",
               "tier": 1
+            },
+            {
+              "pokemon": "vulpix alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "ninetales",
+              "tier": 2
+            },
+            {
+              "pokemon": "ninetales alolan",
+              "tier": 3
             }
           ]
+        },
+        "resting": {
+          "willSleepOnBed": true,
+          "times": [
+            "167-11833,13702-22299"
+          ],
+          "drowsyChance": 0.0021,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "walkSpeed": 0.2
+          },
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
         }
       }
     }

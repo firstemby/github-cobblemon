@@ -1,0 +1,43 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "moonlight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "moonlight"
+    }
+  ],
+  "id": "cobblemon:moomoo_milk",
+  "containers": [
+    {
+      "filled": [
+        "cobblemon:moomoo_milk"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "neoforge:milk",
+    "milk:milk",
+    "milk_lib:milk",
+    "minecraft:milk",
+    "create:milk",
+    "inspirations:milk",
+    "moonlight:milk"
+  ],
+  "food": {
+    "divider": 1,
+    "item": "minecraft:milk_bucket"
+  },
+  "still_texture": "moonlight:block/soft_fluids/milk_liquid",
+  "flowing_texture": "moonlight:block/soft_fluids/milk_liquid",
+  "tint_method": "no_tint",
+  "translation_key": "item.cobblemon.moomoo_milk"
+}

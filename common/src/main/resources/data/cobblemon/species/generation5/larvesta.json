@@ -49,9 +49,32 @@
     "fixed": false
   },
   "behaviour": {
+    "herd": {
+      "maxSize": "4",
+      "toleratedLeaders": [
+        {
+          "pokemon": "larvesta",
+          "tier": 1
+        }
+      ]
+    },
+    "resting": {
+      "times": [
+        "any"
+      ],
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042
+    },
     "moving": {
-      "walk": {"walkSpeed": "0.16"}
-    }
+      "swim": {
+        "avoidsWater": true,
+        "canSwimInLava": true
+      }
+    },
+    "combat": {
+      "willDefendOwner": true
+    },
+    "fireImmune": true
   },
   "drops": {
     "amount": 4,
@@ -178,18 +201,18 @@
           "variant": "level",
           "minLevel": 59
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
-  ],
-  "behaviour": {
-    "herd": {
-      "maxSize": "4",
-      "toleratedLeaders": [
-        {
-          "pokemon": "larvesta",
-          "tier": 1
-        }
-      ]
-    }
-  }
+  ]
 }

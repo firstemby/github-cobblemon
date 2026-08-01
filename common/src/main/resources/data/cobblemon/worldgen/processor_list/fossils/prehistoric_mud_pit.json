@@ -63,7 +63,7 @@
         },
         {
             "processor_type": "gravity",
-            "heightmap": "WORLD_SURFACE_WG",
+            "heightmap": "OCEAN_FLOOR_WG",
             "offset": -10
         },
         {

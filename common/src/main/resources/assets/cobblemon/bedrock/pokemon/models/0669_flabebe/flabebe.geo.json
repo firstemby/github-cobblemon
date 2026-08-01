@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.flabebe",
+				"identifier": "geometry.flabébé",
 				"texture_width": 64,
 				"texture_height": 32,
 				"visible_bounds_width": 3,
@@ -100,6 +100,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [1, 25.25, -2],
+					"locators": {
+						"eye2": [1, 25.25, -2]
+					}
+				},
+				{
 					"name": "pupil_left",
 					"parent": "eye_left",
 					"pivot": [1, 25.85, -2.03],
@@ -122,6 +130,14 @@
 					"cubes": [
 						{"origin": [-1.5, 24.75, -2.02], "size": [1, 1, 0], "uv": [2, 2], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-1, 25.25, -2],
+					"locators": {
+						"eye1": [-1, 25.25, -2]
+					}
 				},
 				{
 					"name": "pupil_right",

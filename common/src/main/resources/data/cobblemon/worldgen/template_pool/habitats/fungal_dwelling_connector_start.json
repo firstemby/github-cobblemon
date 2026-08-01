@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:habitats/fungal_dwelling_connector_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/fungal_dwelling_connector_start",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "minecraft:empty",
+                "projection": "terrain_matching"
+            }
+        }
+    ]
+}

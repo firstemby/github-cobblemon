@@ -212,6 +212,23 @@
   "behaviour": {
     "herd": {
       "maxSize": "6"
+    },
+    "moving": {
+      "walk": {
+        "walkSpeed": 0.189
+      },
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   }
 }

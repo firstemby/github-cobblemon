@@ -5,7 +5,8 @@
   "profileTranslation": [0.01, 0.45, 0],
   "rootBone": "corsola",
   "animations": {
-    "cry": "q.bedrock_stateful('corsola', 'cry')"
+    "cry": "q.bedrock_stateful('corsola', 'cry')",
+    "physical": "q.bedrock_primary('corsola', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "battle-standing": {
@@ -52,7 +53,6 @@
       "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head')",
         "q.bedrock('corsola', 'water_swim')"
       ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]
@@ -78,7 +78,6 @@
       "isUnderWater": false,
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head')",
         "q.bedrock('corsola', 'surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('corsola', 'blink')"]

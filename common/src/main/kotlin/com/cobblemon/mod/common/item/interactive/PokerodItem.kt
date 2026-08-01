@@ -119,7 +119,7 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
 
                     // Add as much as possible
                     if (baitStack != ItemStack.EMPTY) {
-                        if (baitStack.item == itemStack2.item) {
+                        if (ItemStack.isSameItemSameComponents(baitStack, itemStack2)) {
 
                             playAttachSound(player)
                             // Calculate how much bait to add
@@ -251,5 +251,4 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
     private fun playDetachSound(entity: Entity) {
         entity.playSound(CobblemonSounds.FISHING_BAIT_DETACH, 1F, 1F)
     }
-
 }

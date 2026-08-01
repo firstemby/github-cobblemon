@@ -18,6 +18,11 @@
         "locators": ["eye"]
       },
       {
+        "type": "entity_molang",
+        "entityCondition": "q.entity.is_user == true",
+        "expressions": ["q.sound('move.scaryface.actor');"]
+      },
+      {
         "type": "pause",
         "pause": 0.78
       },

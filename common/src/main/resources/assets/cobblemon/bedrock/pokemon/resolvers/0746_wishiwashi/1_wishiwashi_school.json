@@ -3,7 +3,7 @@
   "order": 1,
   "variations": [
     {
-      "aspects": ["schooling"],
+      "aspects": ["school-form"],
       "poser": "cobblemon:wishiwashi_schooling",
       "model": "cobblemon:wishiwashi_school.geo",
       "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_school.png",
@@ -16,13 +16,23 @@
       ]
     },
     {
-      "aspects": ["shiny", "schooling"],
+      "aspects": ["shiny", "school-form"],
       "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_school_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "emissive": true,
           "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_school_shiny_emissive.png"
+        }
+      ]
+    },
+    {
+      "aspects": ["alpha_eyes", "school-form"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_school_alpha.png",
+          "emissive": true
         }
       ]
     }

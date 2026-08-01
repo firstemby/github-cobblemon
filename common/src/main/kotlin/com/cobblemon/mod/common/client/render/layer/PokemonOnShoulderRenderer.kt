@@ -117,7 +117,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             model.context = context
             context.put(RenderContext.SPECIES, shoulderData.species.resourceIdentifier)
             context.put(RenderContext.ASPECTS, shoulderData.aspects)
-            val scale = shoulderData.form.baseScale * shoulderData.scaleModifier
+            val scale = shoulderData.form.baseScale
             val width = shoulderData.form.hitbox.width
             val heightOffset = -1.5 * scale
             val widthOffset = width / 2 - 0.7
@@ -222,7 +222,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                             it.species,
                             it.form,
                             it.aspects,
-                            it.scaleModifier,
+                            it.effectiveScale,
                             it.heldItem
                         )
                     }, { null })

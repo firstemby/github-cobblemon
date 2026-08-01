@@ -16,13 +16,27 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0377_regirock/regirock_shiny.png",
       "layers": [
         {
           "name": "emissive",
           "emissive": true,
           "texture": "cobblemon:textures/pokemon/0377_regirock/regirock_emissive.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0377_regirock/regirock_alpha.png",
+          "emissive": true
         }
       ]
     }

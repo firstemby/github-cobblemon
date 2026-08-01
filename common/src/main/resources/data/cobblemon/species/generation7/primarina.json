@@ -43,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1.7,
-    "height": 1.8,
+    "width": 1.8,
+    "height": 1.9,
     "fixed": false
   },
   "behaviour": {
@@ -56,14 +56,14 @@
       },
       "swim": {
         "canBreatheUnderwater": true,
-        "canSwimInWater": true,
-        "canSwimInLava": false,
         "swimSpeed": "0.2"
       }
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4"
+      "light": "0-4",
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     },
     "herd": {
       "maxSize": "7",
@@ -77,13 +77,22 @@
           "tier": 2
         }
       ]
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false
     }
   },
   "drops": {
-    "amount": 1,
+    "amount": 2,
     "entries": [
       {
         "item": "cobblemon:mystic_water",
+        "percentage": 25.0
+      },
+      {
+        "item": "cobblemon:throat_spray",
         "percentage": 25.0
       }
     ]

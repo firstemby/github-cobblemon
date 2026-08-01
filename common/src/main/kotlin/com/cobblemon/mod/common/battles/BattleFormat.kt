@@ -105,12 +105,18 @@ data class BattleFormat(
     }
 
     fun toFormatJSON(): String {
+        /*
+          Bag clause does not exist in showdown as a rule because showdown simply has no concept of a 'bag'.
+          If we try sending it, the battle will error. So this simply omits that from ever getting sent.
+          If we ever find a case where we are doing this for more than just bag clause, we should make a proper abstraction.
+         */
+        val rulesToSendToShowdown = ruleSet.filter { it != BattleRules.BAG_CLAUSE }
         return """
             {
                 "mod": "$mod",
                 "gameType": "${battleType.name}",
                 "gen": $gen,
-                "ruleset": [${ruleSet.joinToString { "\"$it\"" }}],
+                "ruleset": [${rulesToSendToShowdown.joinToString { "\"$it\"" }}],
                 "effectType": "Format"
             }
         """.trimIndent().replace("\n", "")

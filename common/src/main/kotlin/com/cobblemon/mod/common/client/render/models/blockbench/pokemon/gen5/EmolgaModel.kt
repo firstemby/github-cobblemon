@@ -26,10 +26,10 @@ class EmolgaModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, Bip
     override val rootPart = root.registerChildWithAllChildren("emolga")
     override val head = getPart("head")
 
-    override val leftArm = getPart("leftarm")
-    override val rightArm = getPart("rightarm")
-    override val leftLeg = getPart("leftfoot")
-    override val rightLeg = getPart("rightfoot")
+    override val leftArm = getPart("arm_left")
+    override val rightArm = getPart("arm_right")
+    override val leftLeg = getPart("foot_left")
+    override val rightLeg = getPart("foot_right")
 
     override var portraitScale = 2.2F
     override var portraitTranslation = Vec3(-0.05, -0.8, 0.0)

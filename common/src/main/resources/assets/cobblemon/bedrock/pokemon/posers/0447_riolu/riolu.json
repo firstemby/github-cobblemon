@@ -10,9 +10,27 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
       "animations": [
         "q.look('head')",
-        "q.bedrock('riolu', 'ground_idle')"
+        "q.bedrock('riolu', 'ground_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('riolu', 'hold_item')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('riolu', 'blink')", "q.bedrock_quirk('riolu', 'idle_quirk')"]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isTouchingWater": false,
+      "isBattle": true,
+      "animations": ["q.look('head')",
+        "q.bedrock('riolu', 'battle_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('riolu', 'hold_item')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('riolu', 'blink')"]
     },
@@ -21,11 +39,40 @@
       "isBattle": false,
       "animations": [
         "q.look('head')",
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.66, 0.6, 'arm_left', 'arm_right')",
-        "q.bedrock('riolu', 'ground_idle')"
+        "q.bedrock('riolu', 'ground_walk')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('riolu', 'hold_item')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('riolu', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('riolu', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
+    },
+    "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": ["q.look('head')", "q.bedrock('riolu', 'shoulder_left')"],
+      "quirks": ["q.bedrock_quirk('riolu', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-5, 0, 0]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": ["q.look('head_ai')", "q.bedrock('riolu', 'shoulder_right')"],
+      "quirks": ["q.bedrock_quirk('riolu', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [5, 0, 0]
+        }
+      ]
     }
   }
 }

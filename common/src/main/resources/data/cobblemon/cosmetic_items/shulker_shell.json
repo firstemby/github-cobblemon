@@ -1,9 +1,0 @@
-{
-  "pokemon": ["forretress"],
-  "cosmeticItems": [
-    {
-      "consumedItem": "minecraft:shulker_shell",
-      "aspects": ["cosmetic_item-shulker_shell"]
-    }
-  ]
-}

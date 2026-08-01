@@ -23,6 +23,7 @@ import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.client.sounds.SoundEngine;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -32,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Iterator;
@@ -54,86 +56,6 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
 
     @Shadow
     public abstract boolean isActive(SoundInstance sound);
-
-    @Inject(method = "play",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/sounds/ChannelAccess$ChannelHandle;execute(Ljava/util/function/Consumer;)V"
-            ),
-            cancellable = true
-    )
-    private void cobblemon$overrideChannelExecute(
-            SoundInstance sound,
-            CallbackInfo ci,
-            @Local(name = "h") float h,
-            @Local(name = "i") float i,
-            @Local(name = "g") float g,
-            @Local(name = "bl2") boolean bl2,
-            @Local(name = "bl3") boolean bl3,
-            @Local(name = "bl") boolean bl,
-            @Local(name = "vec3") Vec3 vec3,
-            @Local(name = "channelHandle") ChannelAccess.ChannelHandle handle
-    ) {
-        if (!(sound instanceof RideLoopSound rideSound)) return;
-
-        if (handle == null) return;
-
-        handle.execute((channel) -> {
-            channel.setPitch(i);
-            channel.setVolume(h);
-
-            if (rideSound.getRideAttenuation() == RideAttenuationModel.LINEAR) {
-                channel.linearAttenuation(g);
-            } else if (rideSound.getRideAttenuation() == RideAttenuationModel.EXPONENTIAL){
-                ((ChannelDuck) channel).cobblemon$inverseAttenuation(g);
-            } else {
-                channel.disableAttenuation();
-            }
-
-            // Apply low pass filter if the rideSound dictate that it should be muffled
-            if (rideSound.getShouldMuffle()) {
-                ((ChannelDuck) channel).cobblemon$applyLowPassFilter(1.0f, rideSound.getMuffleAmount());
-            } else {
-                ((ChannelDuck) channel).cobblemon$clearFilters();
-            }
-
-            channel.setLooping(bl2 && !bl3);
-            channel.setSelfPosition(vec3);
-            channel.setRelative(bl);
-        });
-    }
-
-    @Inject(
-            method = "tickNonPaused",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/sounds/ChannelAccess$ChannelHandle;execute(Ljava/util/function/Consumer;)V",
-                    ordinal = 0
-            )
-    )
-    private void cobblemon$tickableSoundTick(
-            CallbackInfo ci,
-            @Local(name = "tickableSoundInstance") TickableSoundInstance instance,
-            @Local(name = "channelHandle", ordinal = 0) ChannelAccess.ChannelHandle handle,
-            @Local(name = "f", ordinal = 0) float volume,
-            @Local(name = "g", ordinal = 0) float pitch,
-            @Local(name = "vec3", ordinal = 0) Vec3 vec3
-    ) {
-        if (!(instance instanceof RideLoopSound rideSound)) return;
-
-        handle.execute(channel -> {
-            channel.setVolume(volume);
-            channel.setPitch(pitch);
-            channel.setSelfPosition(vec3);
-
-            // Apply low pass filter if the rideSound dictate that it should be muffled
-            if (rideSound.getShouldMuffle()) {
-                ((ChannelDuck) channel).cobblemon$applyLowPassFilter(1.0f, rideSound.getMuffleAmount());
-            } else {
-                ((ChannelDuck) channel).cobblemon$clearFilters();
-            }
-        });
-    }
 
     /** Resumes the Source belonging to the queried SoundInstance. */
     private void resume(SoundInstance sound) {
@@ -185,6 +107,17 @@ public abstract class SoundEngineMixin implements SoundEngineDuck {
         if (id == null && category != null) {
             this.instanceBySource.get(category).forEach(this::stop);
             cb.cancel();
+        }
+    }
+
+    /**
+     * TM Shelf can intentionally push note-block pitches above vanilla's 2.0f ceiling for octave-up playback.
+     * Keep vanilla clamping for all other sounds.
+     */
+    @Inject(method = "calculatePitch", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$allowExtendedNoteblockPitch(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
+        if (sound.getLocation().getPath().startsWith("block.note_block.")) {
+            cir.setReturnValue(Mth.clamp(sound.getPitch(), 0.5F, 4.0F));
         }
     }
 
