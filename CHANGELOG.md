@@ -396,6 +396,7 @@
 - Fixed `/giveallpokemon` not respecting the min and max parameters
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 - Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
+- Long config option labels now scroll instead of overflowing
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

@@ -41,6 +41,7 @@ class CobblemonConfigScreen(
         const val WIDGET_HEIGHT = SLOT_HEIGHT - PADDING
         const val LABEL_Y_OFFSET = 4
         const val WIDGET_Y_OFFSET = 0
+        const val LABEL_MAX_WIDTH = SLOT_WIDTH - RESET_SLOT_WIDTH - WIDGET_WIDTH - PADDING * 2
     }
 
     val clonedConfig = Cobblemon.config.clone()
