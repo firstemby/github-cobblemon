@@ -439,11 +439,23 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2",
+          "maxSize": 2,
           "toleratedLeaders": [
             {
-              "pokemon": "ninetales",
+              "pokemon": "vulpix alpha",
               "tier": 1
+            },
+            {
+              "pokemon": "vulpix alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "ninetales",
+              "tier": 2
+            },
+            {
+              "pokemon": "ninetales alolan",
+              "tier": 3
             }
           ]
         },

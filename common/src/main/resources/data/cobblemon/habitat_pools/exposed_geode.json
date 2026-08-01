@@ -3,39 +3,188 @@
   "type": "cobblemon:natural",
   "spawns": [
     {
-      "species": "cobblemon:geodude",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 10
-    },
-    {
-      "species": "cobblemon:zubat",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 9
-    },
-    {
-      "species": "cobblemon:machop",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "36-46",
-      "weight": 8
-    },
-    {
-      "species": "cobblemon:graveler",
+      "species": "Misdreavus",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "19-44",
+      "phases": "1-7"
     },
     {
-      "species": "cobblemon:golbat",
+      "species": "Sableye",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "13-38",
+      "phases": "1-2"
+    },
+    {
+      "species": "Sableye",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 20.0,
+      "levelRange": "13-38",
+      "phases": "3-7"
+    },
+    {
+      "species": "Mismagius",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "39-50",
+      "phases": "1-7"
+    },
+    {
+      "species": "Gible",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "3"
+    },
+    {
+      "species": "Gabite",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "24-47",
+      "phases": "3"
+    },
+    {
+      "species": "Garchomp",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "48-60",
+      "phases": "3"
+    },
+    {
+      "species": "Deino",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "4"
+    },
+    {
+      "species": "Zweilous",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "50-55",
+      "phases": "4"
+    },
+    {
+      "species": "Hydreigon",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "64-69",
+      "phases": "4"
+    },
+    {
+      "species": "Carbink",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "25-50",
+      "phases": "5"
+    },
+    {
+      "species": "Carbink",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "25-50",
+      "phases": "1-4, 6-7"
+    },
+    {
+      "species": "Noibat",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-25",
+      "phases": "6"
+    },
+    {
+      "species": "Noibat",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-25",
+      "phases": "1-5, 7"
+    },
+    {
+      "species": "Noivern",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "48-54",
+      "phases": "6"
+    },
+    {
+      "species": "Noivern",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "48-54",
+      "phases": "1-5, 7"
+    },
+    {
+      "species": "Tinkatink",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "1-7"
+    },
+    {
+      "species": "Tinkatuff",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "24-38",
+      "phases": "1-7"
+    },
+    {
+      "species": "Tinkaton",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "38-51",
+      "phases": "1-7"
+    },
+    {
+      "species": "Glimmet",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "10-35",
+      "phases": "7"
+    },
+    {
+      "species": "Glimmet",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "10-35",
+      "phases": "1-6"
+    },
+    {
+      "species": "Glimmora",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "35-53",
+      "phases": "7"
+    },
+    {
+      "species": "Glimmora",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "35-53",
+      "phases": "1-6"
     }
   ]
 }

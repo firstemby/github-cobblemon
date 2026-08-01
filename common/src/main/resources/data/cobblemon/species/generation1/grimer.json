@@ -409,7 +409,37 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "canWalkOnWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "grimer alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "muk alolan",
+              "tier": 2
+            }
+          ]
+        }
+      }
     }
   ]
 }

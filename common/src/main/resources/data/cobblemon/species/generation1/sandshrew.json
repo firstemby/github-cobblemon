@@ -448,6 +448,19 @@
         },
         "combat": {
           "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "sandshrew alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "sandslash alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "drops": {

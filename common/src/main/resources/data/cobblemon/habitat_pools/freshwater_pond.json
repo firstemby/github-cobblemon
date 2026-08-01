@@ -3,39 +3,706 @@
   "type": "cobblemon:natural",
   "spawns": [
     {
-      "species": "cobblemon:geodude",
+      "species": "Squirtle",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 10
+      "weight": 6.0,
+      "levelRange": "5-31",
+      "phases": "1, 9"
     },
     {
-      "species": "cobblemon:zubat",
+      "species": "Squirtle",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "5-31",
+      "phases": "1, 9"
+    },
+    {
+      "species": "Wartortle",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 9
+      "weight": 3.0,
+      "levelRange": "16-41",
+      "phases": "1, 9"
     },
     {
-      "species": "cobblemon:machop",
+      "species": "Wartortle",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "16-41",
+      "phases": "1, 9"
+    },
+    {
+      "species": "Blastoise",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "36-46",
-      "weight": 8
+      "weight": 1.0,
+      "levelRange": "36-53",
+      "phases": "1, 9"
     },
     {
-      "species": "cobblemon:graveler",
+      "species": "Blastoise",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 1.0,
+      "levelRange": "36-53",
+      "phases": "1, 9"
+    },
+    {
+      "species": "Psyduck",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "7-32",
+      "phases": "1-14"
     },
     {
-      "species": "cobblemon:golbat",
+      "species": "Psyduck",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "7-32",
+      "phases": "1-14"
+    },
+    {
+      "species": "Golduck",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 4.0,
+      "levelRange": "33-50",
+      "phases": "1-14"
+    },
+    {
+      "species": "Golduck",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 4.0,
+      "levelRange": "33-50",
+      "phases": "1-14"
+    },
+    {
+      "species": "Poliwag",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwag",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwag",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Poliwag",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Poliwhirl",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "25-39",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwhirl",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "25-39",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwhirl",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "25-39",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Poliwhirl",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "25-39",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Poliwrath",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 0.25,
+      "levelRange": "34-51",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwrath",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 0.25,
+      "levelRange": "34-51",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Poliwrath",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 0.25,
+      "levelRange": "34-51",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Poliwrath",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 0.25,
+      "levelRange": "34-51",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Farfetchd",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "13-38",
+      "phases": "3, 11",
+      "timeRange": "day"
+    },
+    {
+      "species": "Farfetchd",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 10.0,
+      "levelRange": "13-38",
+      "phases": "3, 11",
+      "timeRange": "day"
+    },
+    {
+      "species": "Farfetchd",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "13-38",
+      "phases": "1-2, 4-10, 12-14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Farfetchd",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 10.0,
+      "levelRange": "13-38",
+      "phases": "1-2, 4-10, 12-14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Goldeen",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "7-32",
+      "phases": "1-14"
+    },
+    {
+      "species": "Seaking",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 4.0,
+      "levelRange": "33-45",
+      "phases": "1-14"
+    },
+    {
+      "species": "Marill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "14-25",
+      "phases": "1-14"
+    },
+    {
+      "species": "Marill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "14-25",
+      "phases": "1-14"
+    },
+    {
+      "species": "Azumarill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "18-42",
+      "phases": "1-14"
+    },
+    {
+      "species": "Azumarill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 1.0,
+      "levelRange": "18-42",
+      "phases": "1-14"
+    },
+    {
+      "species": "Politoed",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 0.75,
+      "levelRange": "34-50",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Politoed",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 0.75,
+      "levelRange": "34-50",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Politoed",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 0.75,
+      "levelRange": "34-50",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Politoed",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 0.75,
+      "levelRange": "34-50",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Lotad",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-22",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Lotad",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "1-22",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Lotad",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-22",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Lotad",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "1-22",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Lombre",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "14-34",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Lombre",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "14-34",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Lombre",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "14-34",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Lombre",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "14-34",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Ludicolo",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "29-48",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Ludicolo",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 1.0,
+      "levelRange": "29-48",
+      "phases": "4, 12"
+    },
+    {
+      "species": "Ludicolo",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "29-48",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Ludicolo",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 1.0,
+      "levelRange": "29-48",
+      "phases": "1-3, 5-11, 13-14"
+    },
+    {
+      "species": "Surskit",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "1-14"
+    },
+    {
+      "species": "Masquerain",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 4.0,
+      "levelRange": "22-45",
+      "phases": "1-14"
+    },
+    {
+      "species": "Azurill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "1-19",
+      "phases": "1-14"
+    },
+    {
+      "species": "Azurill",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 3.0,
+      "levelRange": "1-19",
+      "phases": "1-14"
+    },
+    {
+      "species": "Volbeat",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "3, 5, 11, 13",
+      "timeRange": "night"
+    },
+    {
+      "species": "Volbeat",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "3, 5, 11, 13",
+      "timeRange": "night"
+    },
+    {
+      "species": "Volbeat",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "1-2, 4, 6-10, 12, 14",
+      "timeRange": "night"
+    },
+    {
+      "species": "Volbeat",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "1-2, 4, 6-10, 12, 14",
+      "timeRange": "night"
+    },
+    {
+      "species": "Illumise",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "3, 5, 11, 13",
+      "timeRange": "night"
+    },
+    {
+      "species": "Illumise",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "3, 5, 11, 13",
+      "timeRange": "night"
+    },
+    {
+      "species": "Illumise",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "1-2, 4, 6-10, 12, 14",
+      "timeRange": "night"
+    },
+    {
+      "species": "Illumise",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 5.0,
+      "levelRange": "18-43",
+      "phases": "1-2, 4, 6-10, 12, 14",
+      "timeRange": "night"
+    },
+    {
+      "species": "Corphish",
+      "bucket": "uncommon",
+      "spawnablePositionType": "seafloor",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "1-14"
+    },
+    {
+      "species": "Crawdaunt",
+      "bucket": "uncommon",
+      "spawnablePositionType": "seafloor",
+      "weight": 4.0,
+      "levelRange": "30-47",
+      "phases": "1-14"
+    },
+    {
+      "species": "Basculin",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 10.0,
+      "levelRange": "21-46",
+      "phases": "7"
+    },
+    {
+      "species": "Basculin",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 10.0,
+      "levelRange": "21-46",
+      "phases": "1-6"
+    },
+    {
+      "species": "Basculin",
+      "bucket": "common",
+      "spawnablePositionType": "submerged",
+      "weight": 10.0,
+      "levelRange": "21-46",
+      "modifiers": "bluestriped",
+      "phases": "8"
+    },
+    {
+      "species": "Basculin",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 10.0,
+      "levelRange": "21-46",
+      "modifiers": "bluestriped",
+      "phases": "9-14"
+    },
+    {
+      "species": "Ducklett",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "5, 13",
+      "timeRange": "day"
+    },
+    {
+      "species": "Ducklett",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "5, 13",
+      "timeRange": "day"
+    },
+    {
+      "species": "Ducklett",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "1-4, 6-12, 14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Ducklett",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "1-4, 6-12, 14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Swanna",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "35-47",
+      "phases": "5, 13",
+      "timeRange": "day"
+    },
+    {
+      "species": "Swanna",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 4.0,
+      "levelRange": "35-47",
+      "phases": "5, 13",
+      "timeRange": "day"
+    },
+    {
+      "species": "Swanna",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "35-47",
+      "phases": "1-4, 6-12, 14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Swanna",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 4.0,
+      "levelRange": "35-47",
+      "phases": "1-4, 6-12, 14",
+      "timeRange": "day"
+    },
+    {
+      "species": "Dewpider",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "1-14"
+    },
+    {
+      "species": "Araquanid",
+      "bucket": "uncommon",
+      "spawnablePositionType": "submerged",
+      "weight": 4.0,
+      "levelRange": "22-45",
+      "phases": "1-14"
+    },
+    {
+      "species": "Quaxly",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-31",
+      "phases": "6, 14"
+    },
+    {
+      "species": "Quaxwell",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "16-41",
+      "phases": "6, 14"
+    },
+    {
+      "species": "Quaquaval",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "36-53",
+      "phases": "6, 14"
+    },
+    {
+      "species": "Tadbulb",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Tadbulb",
+      "bucket": "common",
+      "spawnablePositionType": "surface",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Tadbulb",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Tadbulb",
+      "bucket": "uncommon",
+      "spawnablePositionType": "surface",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "1, 3-9, 11-14"
+    },
+    {
+      "species": "Bellibolt",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "22-50",
+      "phases": "2, 10"
+    },
+    {
+      "species": "Bellibolt",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "22-50",
+      "phases": "1, 3-9, 11-14"
     }
   ]
 }

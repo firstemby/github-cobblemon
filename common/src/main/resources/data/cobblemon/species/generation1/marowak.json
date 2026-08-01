@@ -257,7 +257,17 @@
           }
         },
         "herd": {
-          "maxSize": "3"
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "marowak alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "marowak alolan",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "times": [

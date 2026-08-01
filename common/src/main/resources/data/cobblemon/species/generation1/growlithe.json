@@ -360,7 +360,28 @@
         "combat": {
           "willDefendOwner": true
         },
-        "fireImmune": true
+        "fireImmune": true,
+        "herd": {
+          "maxSize": 1,
+          "toleratedLeaders": [
+            {
+              "pokemon": "growlithe alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "arcanine alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "growlithe hisuian",
+              "tier": 1
+            },
+            {
+              "pokemon": "arcanine hisuian",
+              "tier": 2
+            }
+          ]
+        }
       }
     }
   ]

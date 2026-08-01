@@ -364,7 +364,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "7"
+          "maxSize": 8
         },
         "moving": {
           "fly": {

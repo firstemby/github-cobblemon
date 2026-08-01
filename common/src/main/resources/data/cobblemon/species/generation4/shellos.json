@@ -256,6 +256,19 @@
         },
         "combat": {
           "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "shellos alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "gastrodon alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     }

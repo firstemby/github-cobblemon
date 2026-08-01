@@ -222,7 +222,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "diancie mega",

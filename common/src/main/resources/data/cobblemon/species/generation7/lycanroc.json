@@ -409,10 +409,10 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "7",
+          "maxSize": 7,
           "toleratedLeaders": [
             {
-              "pokemon": "lycanroc midnight",
+              "pokemon": "lycanroc alpha",
               "tier": 1
             }
           ]
@@ -605,10 +605,10 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "8",
+          "maxSize": 8,
           "toleratedLeaders": [
             {
-              "pokemon": "lycanroc dusk",
+              "pokemon": "lycanroc alpha",
               "tier": 1
             }
           ]

@@ -166,14 +166,6 @@
       "phases": "3"
     },
     {
-      "species": "Fletchling",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "3-28",
-      "phases": "1, 5"
-    },
-    {
       "species": "Fletchinder",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",

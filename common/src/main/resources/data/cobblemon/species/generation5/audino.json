@@ -265,7 +265,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "3",
+          "maxSize": 4,
           "toleratedLeaders": [
             {
               "pokemon": "audino mega",
