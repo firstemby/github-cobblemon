@@ -35,7 +35,6 @@ import com.cobblemon.mod.common.util.DataKeys;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;

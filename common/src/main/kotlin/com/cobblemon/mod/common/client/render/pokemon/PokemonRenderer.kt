@@ -42,7 +42,6 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
-import com.google.common.primitives.Floats
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting

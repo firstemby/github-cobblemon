@@ -17,9 +17,6 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.FallStrategy
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.JumpStrategy
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.RunStrategy
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseBehaviour
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
-import com.cobblemon.mod.common.api.riding.behaviour.types.land.ClimbBehaviour
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.*
 import com.cobblemon.mod.common.api.riding.behaviour.types.liquid.*
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
