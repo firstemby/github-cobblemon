@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.riding.util
 
+import net.minecraft.world.phys.Vec3
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -137,4 +138,18 @@ fun sampleField(primitives: List<FieldPrimitive>, sampleX: Float, sampleY: Float
         result = if (result == Float.POSITIVE_INFINITY) distance else smoothMinimum(result, distance, tuning.smoothingRange)
     }
     return result
+}
+
+/** Finite-difference gradient of the field at a point - points away from the surface, magnitude ~1 for a clean field. */
+fun estimateGradient(primitives: List<FieldPrimitive>, point: Vec3, tuning: DistanceFieldTuning, epsilon: Float = 0.05f): Vec3 {
+    val px = point.x.toFloat()
+    val py = point.y.toFloat()
+    val pz = point.z.toFloat()
+
+    val dx = sampleField(primitives, px + epsilon, py, pz, tuning) - sampleField(primitives, px - epsilon, py, pz, tuning)
+    val dy = sampleField(primitives, px, py + epsilon, pz, tuning) - sampleField(primitives, px, py - epsilon, pz, tuning)
+    val dz = sampleField(primitives, px, py, pz + epsilon, tuning) - sampleField(primitives, px, py, pz - epsilon, tuning)
+
+    val gradient = Vec3(dx.toDouble(), dy.toDouble(), dz.toDouble())
+    return if (gradient.lengthSqr() > 1e-8) gradient.normalize() else Vec3(0.0, 1.0, 0.0)
 }

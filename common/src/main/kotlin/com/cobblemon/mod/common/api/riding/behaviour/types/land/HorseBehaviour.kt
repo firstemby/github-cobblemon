@@ -23,6 +23,11 @@ import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.riding.util.DistanceFieldLayer
+import com.cobblemon.mod.common.api.riding.util.DistanceFieldTuning
+import com.cobblemon.mod.common.api.riding.util.PrimitiveShape
+import com.cobblemon.mod.common.api.riding.util.collectPrimitivesFromBlocks
+import com.cobblemon.mod.common.api.riding.util.estimateGradient
+import com.cobblemon.mod.common.api.riding.util.sampleField
 import com.cobblemon.mod.common.api.riding.util.visualizeDistanceField
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -45,11 +50,13 @@ import kotlin.math.sqrt
 import net.minecraft.core.Direction
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.Mth
 import net.minecraft.util.SmoothDouble
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
@@ -123,6 +130,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
             inAirCheck(state, vehicle)
             tickStamina(settings, state, vehicle)
             state.walking.set(state.rideVelocity.get().horizontalDistance() > 0.01 || driver.zza != 0.0f)
+            //surfDistCheck(state, vehicle)
         }
 
         //TODO: should be a config somewhere
@@ -133,15 +141,46 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
                 referenceEntity = vehicle,
                 center = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0),
                 layers = listOf(
-                    DistanceFieldLayer(isoValue = 0.0f, color = Vector3f(1f, 0.2f, 0.2f)),
-                    DistanceFieldLayer(isoValue = 1.0f, color = Vector3f(0.2f, 0.6f, 1f))
+                    DistanceFieldLayer(isoValue = 2.5f, color = Vector3f(1f, 0.2f, 0.2f))
                 ),
+                shape = PrimitiveShape.ELLIPSOID,
                 horizontalRadius = 4.0,
                 verticalRange = 4.0,
                 sampleSpacing = 0.3,
-                marchStep = 0.15
+                marchStep = 0.15,
+                tuning = DistanceFieldTuning(smoothingRange = 0.25f)
             )
         }
+    }
+
+    /**
+     * Check how far the vehicle is from the "surface"
+     */
+    fun surfDistCheck(
+        state: HorseState,
+        vehicle: PokemonEntity,
+    ) {
+        val center = vehicle.position()
+        val horizontalRadius = 4.0;
+        val verticalRange = 4.0;
+        val level = vehicle.level()
+
+        //if (level !is ServerLevel) return
+
+        // Take a cubic area around the vehicle and gather SDF primitives from it.
+        val searchBox = AABB(
+            center.x - horizontalRadius, center.y - verticalRange, center.z - horizontalRadius,
+            center.x + horizontalRadius, center.y + verticalRange, center.z + horizontalRadius
+        )
+        val primitives = collectPrimitivesFromBlocks(level,
+            searchBox,
+            PrimitiveShape.ELLIPSOID,
+            includeFluids = true
+        )
+        val sp = center.toVector3f() // Sample Point
+        val tuning = DistanceFieldTuning(smoothingRange = 0.25f)
+        val sd = sampleField(primitives, sp.x, sp.y, sp.z, tuning)
+        state.surfDist.set(sd)
     }
 
     fun inAirCheck(
@@ -158,7 +197,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
 
         // inAir if not on the ground
         val inAir = !(vehicle.deltaMovement.y == 0.0 || standingOnSolid)
-        state.inAir.set(inAir)
+        state.inAir.set(true)
     }
 
     fun handleSprinting(
@@ -370,12 +409,85 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         /******************************************************
          * Gravity logic
          *****************************************************/
-        if (!vehicle.onGround() && state.jumpTicks.get() <= 0) {
-            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
-            val terminalVel = 2.0
+//         if(state.surfDist.get() > 1.6f) {
+//            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
+//            val terminalVel = 2.0
+//            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+//        } else if(state.surfDist.get() > 1.4f && state.surfDist.get() <= 1.6f) {
+//             newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
+//        } else if(state.surfDist.get() <= 1.4f) {
+//             val gravity = -(9.8 / ( 20.0)) * 0.2 * 0.6
+//             val terminalVel = -2.0
+//             newVelocity = Vec3(newVelocity.x, min(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+//        }
+
+        /******************************************************
+         * Hover logic
+         *****************************************************/
+//        val targetHoverDist = 1.0f
+//        val hoverActivationDist = 3.0f
+//        val gravity = (9.8 / 20.0) * 0.2 * 0.6
+//        val terminalVel = 2.0
+////        val repelStrength = 0.05 // tested and was alright
+////        val hoverDamping = 0.15
+//        val repelStrength = 0.20
+//        val hoverDamping = 0.25
+//
+//        val surfDist = state.surfDist.get()
+//
+//        if (surfDist > hoverActivationDist) {
+//            // Free fall - no surface influence yet, same as before.
+//            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+//        } else {
+//            // Getting close - push back toward targetHoverDist, harder the nearer we are.
+//            val closeness = ((hoverActivationDist - surfDist) / (hoverActivationDist - targetHoverDist)).coerceIn(0f, 1.5f)
+//            val repelForce = closeness * repelStrength
+//            val dampingForce = -newVelocity.y * hoverDamping // resists overshoot/bounce
+//
+//            newVelocity = Vec3(newVelocity.x, newVelocity.y + repelForce + dampingForce - gravity * 0.3, newVelocity.z)
+//        }
+
+        /******************************************************
+         * Hover logic - non-predictive: correct against current position
+         *****************************************************/
+        val targetHoverDist = 2.5f
+        val correctionGain = 0.5
+        val maxCorrectionSpeed = 0.3
+        val center = vehicle.position()
+        val horizontalRadius = 4.0;
+        val verticalRange = 4.0;
+        val level = vehicle.level()
+
+        // Take a cubic area around the vehicle and gather SDF primitives from it.
+        val searchBox = AABB(
+            center.x - horizontalRadius, center.y - verticalRange, center.z - horizontalRadius,
+            center.x + horizontalRadius, center.y, center.z + horizontalRadius
+        )
+        val primitives = collectPrimitivesFromBlocks(level,
+            searchBox,
+            PrimitiveShape.ELLIPSOID,
+            includeFluids = true
+        )
+        val tuning = DistanceFieldTuning(smoothingRange = 0.25f)
+
+        val currentPos = vehicle.position()
+        val currentDist = sampleField(primitives, currentPos.x.toFloat(), currentPos.y.toFloat(), currentPos.z.toFloat(), tuning)
+        val normal = estimateGradient(primitives, currentPos, tuning)
+
+        // Only correct when under the hover surface.
+        // Otherwise allow gravity to do its thing
+        if (currentDist < targetHoverDist) {
+            val error = currentDist - targetHoverDist
+            val normalSpeed = newVelocity.dot(normal)
+            val tangentialVelocity = newVelocity.subtract(normal.scale(normalSpeed))
+
+            val correctionSpeed = (-error * correctionGain).coerceIn(-maxCorrectionSpeed, maxCorrectionSpeed)
+            newVelocity = tangentialVelocity.add(normal.scale(correctionSpeed))
+        } else {
+            val hoverCoolnessLowGravFactor = 0.5
+            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6 * hoverCoolnessLowGravFactor
+            val terminalVel = 2.0 * hoverCoolnessLowGravFactor
             newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
-        } else if(vehicle.onGround()) {
-            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
         }
 
 
@@ -664,6 +776,7 @@ class HorseState : RidingBehaviourState() {
     var jumpTicks = ridingState(0, Side.CLIENT)
     var sprintTickTimer = ridingState(0, Side.CLIENT)
     var forwardHeldLastTick = ridingState(false, Side.CLIENT)
+    var surfDist = ridingState(Float.POSITIVE_INFINITY, Side.BOTH)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
@@ -674,6 +787,7 @@ class HorseState : RidingBehaviourState() {
         buffer.writeInt(jumpTicks.get())
         buffer.writeInt(sprintTickTimer.get())
         buffer.writeBoolean(forwardHeldLastTick.get())
+        buffer.writeFloat(surfDist.get())
     }
 
     override fun decode(buffer: FriendlyByteBuf) {
@@ -685,6 +799,7 @@ class HorseState : RidingBehaviourState() {
         jumpTicks.set(buffer.readInt(), forced = true)
         sprintTickTimer.set(buffer.readInt(), forced = true)
         forwardHeldLastTick.set(buffer.readBoolean(), forced = true)
+        surfDist.set(buffer.readFloat(), forced = true)
     }
 
     override fun reset() {
@@ -696,6 +811,7 @@ class HorseState : RidingBehaviourState() {
         jumpTicks.set(0, forced = true)
         sprintTickTimer.set(0, forced = true)
         forwardHeldLastTick.set(false, forced = true)
+        surfDist.set(Float.POSITIVE_INFINITY, forced = true)
     }
 
     override fun copy() = HorseState().also {
@@ -708,6 +824,7 @@ class HorseState : RidingBehaviourState() {
         it.jumpTicks.set(this.jumpTicks.get(), forced = true)
         it.sprintTickTimer.set(this.sprintTickTimer.get(), forced = true)
         it.forwardHeldLastTick.set(this.forwardHeldLastTick.get(), forced = true)
+        it.surfDist.set(this.surfDist.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
@@ -716,6 +833,7 @@ class HorseState : RidingBehaviourState() {
         if (previous.walking.get() != walking.get()) return true
         if (previous.sprintToggleable.get() != sprintToggleable.get()) return true
         if (previous.inAir.get() != inAir.get()) return true
+        if (previous.surfDist.get() != surfDist.get()) return true
         return super.shouldSync(previous)
     }
 }

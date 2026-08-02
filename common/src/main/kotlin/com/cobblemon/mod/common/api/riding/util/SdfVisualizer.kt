@@ -42,11 +42,10 @@ fun visualizeDistanceField(
 
     val searchBox = AABB(
         center.x - horizontalRadius, center.y - verticalRange, center.z - horizontalRadius,
-        center.x + horizontalRadius, center.y + verticalRange, center.z + horizontalRadius
+        center.x + horizontalRadius, center.y, center.z + horizontalRadius
     )
 
-    val primitives = collectPrimitivesFromBlocks(level, searchBox, shape)
-    println("primitives found: ${primitives.size}")
+    val primitives = collectPrimitivesFromBlocks(level, searchBox, shape, includeFluids = true)
     if (primitives.isEmpty()) return
 
     var x = -horizontalRadius

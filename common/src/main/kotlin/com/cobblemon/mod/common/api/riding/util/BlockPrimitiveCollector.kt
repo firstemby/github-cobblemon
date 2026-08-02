@@ -21,7 +21,12 @@ import kotlin.math.floor
  * @since July 27th, 2026
  */
 
-fun collectPrimitivesFromBlocks(level: BlockGetter, searchBox: AABB, shape: PrimitiveShape): List<FieldPrimitive> {
+fun collectPrimitivesFromBlocks(
+    level: BlockGetter,
+    searchBox: AABB,
+    shape: PrimitiveShape,
+    includeFluids: Boolean = false
+): List<FieldPrimitive> {
     val primitives = mutableListOf<FieldPrimitive>()
 
     val minX = floor(searchBox.minX).toInt()
@@ -37,7 +42,10 @@ fun collectPrimitivesFromBlocks(level: BlockGetter, searchBox: AABB, shape: Prim
             for (z in minZ..maxZ) {
                 pos.set(x, y, z)
                 val state = level.getBlockState(pos)
-                if (state.getCollisionShape(level, pos).isEmpty) continue
+
+                val isSolid = !state.getCollisionShape(level, pos).isEmpty
+                val isFluid = includeFluids && !state.fluidState.isEmpty
+                if (!isSolid && !isFluid) continue
 
                 primitives.add(
                     FieldPrimitive(

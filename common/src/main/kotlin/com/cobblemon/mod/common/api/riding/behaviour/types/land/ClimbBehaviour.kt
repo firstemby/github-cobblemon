@@ -538,19 +538,6 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         return false
     }
 
-    override fun useRidingAltPose(
-        settings: ClimbSettings,
-        state: ClimbState,
-        vehicle: PokemonEntity,
-        driver: Player
-    ): ResourceLocation {
-        when {
-            //state.inAir.get() -> return cobblemonResource("in_air")
-            state.sprinting.get() -> return cobblemonResource("sprinting")
-        }
-        return cobblemonResource("no_pose")
-    }
-
     override fun inertia(
         settings: ClimbSettings,
         state: ClimbState,
