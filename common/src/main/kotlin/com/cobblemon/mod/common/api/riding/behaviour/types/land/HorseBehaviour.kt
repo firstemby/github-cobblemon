@@ -48,6 +48,7 @@ import kotlin.math.pow
 import kotlin.math.sign
 import kotlin.math.sqrt
 import net.minecraft.core.Direction
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.server.level.ServerLevel
@@ -328,6 +329,19 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         return rotAmount
     }
 
+    private fun spawnGradientDebugParticles(vehicle: PokemonEntity, normal: Vec3) {
+        val level = vehicle.level()
+        val headPos = vehicle.position().add(0.0, vehicle.bbHeight.toDouble(), 0.0)
+
+        val steps = 20
+        val length = 2.0
+        for (i in 0..steps) {
+            val t = i.toDouble() / steps
+            val point = headPos.add(normal.scale(length * t))
+            level.addParticle(ParticleTypes.END_ROD, point.x, point.y, point.z, 0.0, 0.0, 0.0)
+        }
+    }
+
 
     override fun velocity(
         settings: HorseSettings,
@@ -473,6 +487,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         val currentPos = vehicle.position()
         val currentDist = sampleField(primitives, currentPos.x.toFloat(), currentPos.y.toFloat(), currentPos.z.toFloat(), tuning)
         val normal = estimateGradient(primitives, currentPos, tuning)
+        spawnGradientDebugParticles(vehicle, normal) // LETS SEE IT!
 
         // Only correct when under the hover surface.
         // Otherwise allow gravity to do its thing

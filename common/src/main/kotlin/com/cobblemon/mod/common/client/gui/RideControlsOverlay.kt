@@ -182,6 +182,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
                     showHorizontalMouse = false
                 }
                 VehicleBehaviour.KEY -> {}
+                BoardBehaviour.KEY -> {}
             }
 
             val centerX = minecraft.window.guiScaledWidth / 2

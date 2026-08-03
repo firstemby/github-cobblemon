@@ -36,6 +36,7 @@ object RidingBehaviours {
         register(MinekartBehaviour.KEY, MinekartBehaviour())
         register(HoverBehaviour.KEY, HoverBehaviour())
         register(RocketBehaviour.KEY, RocketBehaviour())
+        register(BoardBehaviour.KEY, BoardBehaviour())
         register(SubmarineBehaviour.KEY, SubmarineBehaviour())
         register(ClimbBehaviour.KEY, ClimbBehaviour())
         register(CompositeBehaviour.KEY, CompositeBehaviour())

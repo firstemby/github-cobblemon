@@ -846,6 +846,14 @@
 					"cubes": [
 						{"origin": [-2, -1, 27], "size": [4, 1, 4], "inflate": -0.01, "uv": [104, 47]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "surfboard",
+					"pivot": [0, 14.5, 3],
+					"locators": {
+						"seat_1": [19, 1.5, 0]
+					}
 				}
 			]
 		}

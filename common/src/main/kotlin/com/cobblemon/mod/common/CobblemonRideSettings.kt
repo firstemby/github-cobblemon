@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.air.HelicopterSetting
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.HoverSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.JetSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.RocketSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.air.BoardSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
@@ -56,6 +57,7 @@ object CobblemonRideSettings : DataRegistry {
     var hover = HoverSettings()
     var jet = JetSettings()
     var rocket = RocketSettings()
+    var board = BoardSettings()
 
     var horse = HorseSettings()
     var minekart = MinekartSettings()
@@ -75,6 +77,7 @@ object CobblemonRideSettings : DataRegistry {
                 hover = hover,
                 jet = jet,
                 rocket = rocket,
+                board = board,
                 horse = horse,
                 minekart = minekart,
                 vehicle = vehicle,
@@ -93,6 +96,7 @@ object CobblemonRideSettings : DataRegistry {
         hover = loadStyle(manager, "hover", HoverSettings::class.java)
         jet = loadStyle(manager, "jet", JetSettings::class.java)
         rocket = loadStyle(manager, "rocket", RocketSettings::class.java)
+        board = loadStyle(manager, "board", BoardSettings::class.java)
         horse = loadStyle(manager, "horse", HorseSettings::class.java)
         minekart = loadStyle(manager, "minekart", MinekartSettings::class.java)
         vehicle = loadStyle(manager, "vehicle", VehicleSettings::class.java)

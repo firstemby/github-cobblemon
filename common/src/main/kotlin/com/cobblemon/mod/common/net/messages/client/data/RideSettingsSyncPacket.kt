@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.types.air.HelicopterSetting
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.HoverSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.JetSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.air.RocketSettings
+import com.cobblemon.mod.common.api.riding.behaviour.types.air.BoardSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.HorseSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.MinekartSettings
 import com.cobblemon.mod.common.api.riding.behaviour.types.land.VehicleSettings
@@ -35,6 +36,7 @@ class RideSettingsSyncPacket(
     val hover: HoverSettings,
     val jet: JetSettings,
     val rocket: RocketSettings,
+    val board: BoardSettings,
     val horse: HorseSettings,
     val minekart: MinekartSettings,
     val vehicle: VehicleSettings,
@@ -52,6 +54,7 @@ class RideSettingsSyncPacket(
         hover.encode(buffer)
         jet.encode(buffer)
         rocket.encode(buffer)
+        board.encode(buffer)
         horse.encode(buffer)
         minekart.encode(buffer)
         vehicle.encode(buffer)
@@ -71,6 +74,7 @@ class RideSettingsSyncPacket(
                 hover = HoverSettings(),
                 jet = JetSettings(),
                 rocket = RocketSettings(),
+                board = BoardSettings(),
                 horse = HorseSettings(),
                 minekart = MinekartSettings(),
                 vehicle = VehicleSettings(),
@@ -85,6 +89,7 @@ class RideSettingsSyncPacket(
                 hover.decode(buffer)
                 jet.decode(buffer)
                 rocket.decode(buffer)
+                board.decode(buffer)
                 horse.decode(buffer)
                 minekart.decode(buffer)
                 vehicle.decode(buffer)
