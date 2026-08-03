@@ -1341,6 +1341,13 @@ open class PokemonEntity(
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return if (super.hurt(source, amount)) {
+            if (brain.hasMemoryValue(CobblemonMemories.HANGING_FROM_CEILING)) {
+                brain.eraseMemory(CobblemonMemories.HANGING_FROM_CEILING)
+                brain.eraseMemory(CobblemonMemories.HANGING_CEILING_ANCHOR)
+                brain.setMemory(CobblemonMemories.RELEASED_FROM_CEILING, true)
+                isNoGravity = getCurrentPoseType() in NO_GRAV_POSES && passengers.isEmpty()
+            }
+
             effects.mockEffect?.takeIf { it is IllusionEffect && this.battleId == null }?.end(this)
 
             if (this.health == 0F) {

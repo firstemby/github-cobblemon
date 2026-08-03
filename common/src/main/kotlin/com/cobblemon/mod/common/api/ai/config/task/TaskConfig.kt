@@ -64,6 +64,7 @@ interface TaskConfig {
             cobblemonResource("go_to_healing_machine") to GoToHealingMachineTaskConfig::class.java,
             cobblemonResource("heal_using_healing_machine") to HealUsingHealingMachineTaskConfig::class.java,
             cobblemonResource("pokemon_wander_control") to PokemonWanderControlTaskConfig::class.java,
+            cobblemonResource("hang_from_ceiling") to HangFromCeilingTaskConfig::class.java,
             cobblemonResource("all_of") to AllOfTaskConfig::class.java,
             cobblemonResource("attack_angry_at") to AttackAngryAtTaskConfig::class.java,
             cobblemonResource("move_to_attack_target") to MoveToAttackTargetTaskConfig::class.java,

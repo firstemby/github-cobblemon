@@ -6,13 +6,8 @@
         {
             "id": "metapod-1",
             "pokemon": "metapod",
-            "presets": [
-                "natural",
-                "foliage",
-                "treetop"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "7-21",
             "weight": 2.0,
@@ -36,12 +31,8 @@
         {
             "id": "metapod-valencian-2",
             "pokemon": "metapod valencian",
-            "presets": [
-                "natural",
-                "treetop"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "7-21",
             "weight": 2.0,
@@ -58,7 +49,7 @@
             "id": "metapod-valencian-3",
             "pokemon": "metapod valencian",
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "7-21",
             "weight": 1.0,

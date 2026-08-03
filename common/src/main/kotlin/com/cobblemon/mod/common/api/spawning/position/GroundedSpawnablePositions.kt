@@ -8,12 +8,16 @@
 
 package com.cobblemon.mod.common.api.spawning.position
 
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.SpawningZone
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.blockRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.world.entity.Entity
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.level.block.Block
@@ -60,6 +64,32 @@ open class GroundedSpawnablePosition(
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : FlooredSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone)
+
+/**
+ * A spawnable position for entities that hang in the air under a ceiling block.
+ */
+open class HangingSpawnablePosition(
+    cause: SpawnCause,
+    world: ServerLevel,
+    position: BlockPos,
+    light: Int,
+    skyLight: Int,
+    canSeeSky: Boolean,
+    influences: MutableList<SpawningInfluence>,
+    height: Int,
+    nearbyBlocks: List<BlockState>,
+    zone: SpawningZone
+) : AreaSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone) {
+    override fun afterSpawn(action: SpawnAction<*>, entity: Entity) {
+        super.afterSpawn(action, entity)
+        if (entity is PokemonEntity && entity.pokemon.isWild()) {
+            entity.brain.setMemory(CobblemonMemories.HANGING_FROM_CEILING, true)
+            entity.brain.setMemory(CobblemonMemories.HANGING_CEILING_ANCHOR, entity.blockPosition())
+            entity.setDeltaMovement(0.0, 0.0, 0.0)
+            entity.isNoGravity = true
+        }
+    }
+}
 
 /**
  * A spawnable position that occurs at the bottom of a body of water.

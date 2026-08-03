@@ -14,6 +14,11 @@ import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePosit
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isLavaCondition
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isSolidCondition
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isWaterCondition
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.BlockTags
+import net.minecraft.tags.TagKey
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 
 /**
@@ -63,6 +68,35 @@ object GroundedSpawnablePositionCalculator : FlooredSpawnablePositionCalculator<
             nearbyBlocks = getNearbyBlocks(input)
         )
     }
+}
+
+object HangingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<HangingSpawnablePosition> {
+    override val name = "hanging"
+    private val commonLeavesTag = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "leaves"))
+
+    override fun fits(input: AreaSpawningInput): Boolean {
+        val belowSpawnSpace = input.zone.getBlockState(input.position)
+        val spawnSpace = input.zone.getBlockState(input.position.above())
+        val ceilingState = input.zone.getBlockState(input.position.above(2))
+        return isAirCondition(belowSpawnSpace) && isAirCondition(spawnSpace) && ceilingState.isLeaves()
+    }
+
+    override fun calculate(input: AreaSpawningInput): HangingSpawnablePosition {
+        return HangingSpawnablePosition(
+            cause = input.cause,
+            world = input.world,
+            position = input.position.immutable(),
+            light = getLight(input),
+            skyLight = getSkyLight(input),
+            canSeeSky = getCanSeeSky(input),
+            influences = input.spawner.copyInfluences(),
+            height = 1,
+            zone = input.zone,
+            nearbyBlocks = getNearbyBlocks(input)
+        )
+    }
+
+    private fun BlockState.isLeaves() = this.`is`(BlockTags.LEAVES) || this.`is`(commonLeavesTag)
 }
 
 /**

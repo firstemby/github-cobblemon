@@ -6,12 +6,8 @@
         {
             "id": "kakuna-1",
             "pokemon": "kakuna",
-            "presets": [
-                "natural",
-                "treetop"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "7-21",
             "weight": 2.0,
@@ -35,7 +31,7 @@
             "id": "kakuna-2",
             "pokemon": "kakuna",
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "7-21",
             "weight": 2.0,

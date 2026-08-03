@@ -92,6 +92,12 @@ object CobblemonMemories {
     val DISABLE_WALK_TO_WANTED_ITEM = register<Boolean>("disable_walk_to_wanted_item")
     @JvmField
     val TIME_TRYING_TO_REACH_WANTED_ITEM = register<Int>("time_trying_to_wanted_item")
+    @JvmField
+    val HANGING_FROM_CEILING = register<Boolean>("hanging_from_ceiling")
+    @JvmField
+    val RELEASED_FROM_CEILING = register<Boolean>("released_from_ceiling")
+    @JvmField
+    val HANGING_CEILING_ANCHOR = register<BlockPos>("hanging_ceiling_anchor")
 
     @JvmStatic
     fun <U> register(id: String, codec: Codec<U>): MemoryModuleType<U> {
