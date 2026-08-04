@@ -9,7 +9,9 @@
 package com.cobblemon.mod.common.entity.projectile
 
 import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.client.entity.FallingStarClientDelegate
@@ -27,7 +29,9 @@ import net.minecraft.server.level.ServerEntity
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.projectile.ThrowableProjectile
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
@@ -95,7 +99,14 @@ class FallingStarEntity(
             val vec3 = result.getLocation().subtract(this.x, this.y, this.z)
             val vec32 = vec3.normalize().scale(0.05)
             this.setPosRaw(this.x - vec32.x, this.y - vec32.y, this.z - vec32.z)
+            // based on our result type we should probably choose the item based on a loot table we make or a list of our spawns (not sure if that exists yet but maybe 🤔)
+            // for now I guess just minior and moon stone for testing
+            when (resultType) {
+                FallingStarResultType.ITEM -> level().addFreshEntity(ItemEntity(level(), result.location.x, result.location.y, result.location.z, ItemStack(CobblemonItems.MOON_STONE)))
+                else -> level().addFreshEntity(PokemonProperties.parse("minior").createEntity(level()).also { it.moveTo(result.location.x, result.location.y, result.location.z) })
+            }
             level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1F, 1F)
+            discard()
         }
     }
 
