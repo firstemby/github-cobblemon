@@ -9,13 +9,20 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.land
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonRideSettings
 import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.orientation.OrientationController.Companion.UP
 import com.cobblemon.mod.common.api.riding.RidingStyle
 import com.cobblemon.mod.common.api.riding.behaviour.*
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.util.DistanceFieldLayer
+import com.cobblemon.mod.common.api.riding.util.FieldPrimitive
+import com.cobblemon.mod.common.api.riding.util.PrimitiveShape
+import com.cobblemon.mod.common.api.riding.util.collectPrimitivesFromBlocks
+import com.cobblemon.mod.common.api.riding.util.estimateGradient
+import com.cobblemon.mod.common.api.riding.util.sampleField
 import com.cobblemon.mod.common.api.riding.util.visualizeDistanceField
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
@@ -25,6 +32,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.core.Direction
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -105,6 +113,14 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         inAirCheck(state, vehicle)
         tickStamina(settings, state, vehicle)
 
+        // attachmentNormal: discrete, physics-facing - which face are we touching, used
+        //   for the sticking force (newDownForce) in velocity().
+        // renderSurfaceNormal: smoothed field-gradient - purely cosmetic, used to slowly
+        //   rotate the model's up vector in angRollVel(). The two are intentionally
+        //   separate and should not be conflated.
+        updateAttachment(state, vehicle)
+        updateRenderSurfaceNormal(state, vehicle)
+
         //TODO: should be a config somewhere
         val debugVisualizeField = true;
 
@@ -120,10 +136,51 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
                 verticalRange = 2.0,
                 sampleSpacing = 0.35,
                 marchStep = 0.15,
-                tuning = DistanceFieldTuning(smoothingRange = 0.0f)
+                tuning = DistanceFieldTuning(smoothingRange = 0.5f)
             )
         }
+    }
 
+    /**
+     * Computes the smoothed field-gradient normal used for rendering only (up-vector
+     * alignment in angRollVel). Cached here at tick rate since collecting primitives
+     * and sampling the field is real work - actually applying the rotation happens
+     * separately at frame rate, same pattern as HorseBehaviour's surfDist/BoardBehaviour's
+     * surfaceNormal.
+     */
+    fun updateRenderSurfaceNormal(state: ClimbState, vehicle: PokemonEntity) {
+        val level = vehicle.level()
+        val center = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0)
+        val horizontalRadius = 1.5
+        val verticalRange = 1.5
+
+        val searchBox = AABB(
+            center.x - horizontalRadius, center.y - verticalRange, center.z - horizontalRadius,
+            center.x + horizontalRadius, center.y + verticalRange, center.z + horizontalRadius
+        )
+
+        val primitives: List<FieldPrimitive> = collectPrimitivesFromBlocks(level, searchBox, PrimitiveShape.ELLIPSOID)
+        if (primitives.isEmpty()) return
+
+        val tuning = DistanceFieldTuning(smoothingRange = 0.5f)
+        val gradient = estimateGradient(primitives, center, tuning)
+        state.renderSurfaceNormal.set(gradient)
+    }
+
+    /** Debug viz: draws a short line of particles from the vehicle out along the current attachment normal. */
+    fun spawnAttachmentNormalParticles(vehicle: PokemonEntity, normal: Vec3) {
+        val level = vehicle.level()
+        if (!level.isClientSide) return
+        if (normal.lengthSqr() < 1e-6) return
+
+        val origin = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0)
+        val length = 1.5
+        val steps = 15
+        for (i in 0..steps) {
+            val t = i.toDouble() / steps
+            val point = origin.add(normal.scale(length * t))
+            level.addParticle(ParticleTypes.END_ROD, point.x, point.y, point.z, 0.0, 0.0, 0.0)
+        }
     }
 
     fun inAirCheck(
@@ -254,29 +311,8 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         driver: Player,
         input: Vec3
     ): Vec3 {
-        val controller = (vehicle as? OrientationControllable)?.orientationController
-        if (controller == null || controller.orientation == null) return Vec3.ZERO
-
-        //Perform ride velocity update
         state.rideVelocity.set(calculateRideSpaceVel(settings, state, vehicle, driver))
-
-        // Convert the local velocity vector into a world vector
-        val localVelVec = Vector3f(
-            state.rideVelocity.get().x.toFloat(),
-            (state.rideVelocity.get().y).toFloat(),
-            state.rideVelocity.get().z.toFloat() * -1.0f // Flip the z axis to make this left handed? orr.. right handed? idk, flip it though
-        )
-
-        // Unrotate preemptively as this vector gets rotate later down the line in MC logic.
-        var worldVelVec = localVelVec.mul(controller.orientation).toVec3d().yRot(vehicle.yRot.toRadians())
-
-        // Add sticking force to stick to walls
-        val attP = state.attachmentPoint.get()
-        val vp = vehicle.position()
-        val stickingForce = if(attP.distanceTo(vp) > 0.1) vp.subtract(attP).normalize().scale(0.1) else Vec3.ZERO
-        worldVelVec = worldVelVec //.add(stickingForce)
-
-        return worldVelVec
+        return state.rideVelocity.get()
     }
 
     private fun calculateRideSpaceVel(
@@ -285,37 +321,32 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         vehicle: PokemonEntity,
         driver: Player
     ): Vec3 {
-        val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint)
-        val canJump = vehicle.runtime.resolveBoolean(settings.canJump)
-        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr) * 0.75
-        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr)
+        val globalHorse: HorseSettings = CobblemonRideSettings.horse
+        val canSprint = vehicle.runtime.resolveBoolean(settings.canSprint ?: globalHorse.canSprint!!)
+        val canJump = vehicle.runtime.resolveBoolean(settings.canJump ?: globalHorse.canJump!!)
+        val jumpForce = vehicle.runtime.resolveDouble(settings.jumpExpr ?: globalHorse.jumpExpr!!) * 0.75
+        val rideTopSpeed = vehicle.runtime.resolveDouble(settings.speedExpr ?: globalHorse.speedExpr!!)
         val walkSpeed = getWalkSpeed(vehicle)
         val topSpeed = if(canSprint && state.sprinting.get()) rideTopSpeed else walkSpeed
-        val accel = topSpeed / (vehicle.runtime.resolveDouble(settings.accelerationExpr) * 20.0)
+        val accelTime = if(state.sprinting.get()) (vehicle.runtime.resolveDouble(settings.accelerationExpr ?: globalHorse.accelerationExpr!!) * 20.0) else 0.5 * 20.0
+        val accel = topSpeed / accelTime
         var activeInput = false
 
         /******************************************************
          * Gather the previous velocity and check for horizontal
          * collisions
          *****************************************************/
-        val dmSpeed = vehicle.deltaMovement.length()
-        val rvSpeed = state.rideVelocity.get().length()
         var newVelocity = state.rideVelocity.get() //.normalize().scale(vehicle.deltaMovement.horizontalDistance())
 
         /******************************************************
          * Gather the previous velocity and check for horizontal
          * collisions
          *****************************************************/
-//        if (dmSpeed > rvSpeed) {
-//            // align the velocity vector to be in local vehicle space
-//            newVelocity = vehicle.deltaMovement
-//            val yawAligned = Matrix3f().rotateY(-vehicle.yRot.toRadians())
-//            newVelocity = (newVelocity.toVector3f().mul(yawAligned)).toVec3d()
-//        }
-
-//        if (vehicle.horizontalCollision) {
-//            newVelocity = newVelocity.normalize().scale(vehicle.deltaMovement.length())
-//        }
+        if (vehicle.horizontalCollision) {
+            var horizontalVec = Vec3(newVelocity.x, 0.0, newVelocity.z)
+            horizontalVec = horizontalVec.normalize().scale(min(horizontalVec.length(), 0.3))
+            newVelocity = Vec3(horizontalVec.x, newVelocity.y, horizontalVec.z)
+        }
 
         /******************************************************
          * Speed up and slow down based on input
@@ -324,7 +355,7 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
 
             // If on a tight turn then do not speed up past half of top speed in order to turn quicker
             // Also determine how fast to be slowing down based on how far turned you are
-            val lookYawLimit = vehicle.runtime.resolveFloat(settings.lookYawLimit)
+            val lookYawLimit = vehicle.runtime.resolveFloat(settings.lookYawLimit ?: globalHorse.lookYawLimit!!)
             val percOfMaxTurnSpeed = abs(Mth.wrapDegrees(driver.yRot - vehicle.yRot) / lookYawLimit) * 100.0f
             val turnPercThresh = 0.0f
             val s = min(((percOfMaxTurnSpeed - turnPercThresh) / (100.0f - turnPercThresh)).pow(1),1.0f)
@@ -354,12 +385,19 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         /******************************************************
          * Gravity logic
          *****************************************************/
-        if (!vehicle.horizontalCollision && !vehicle.verticalCollision && state.jumpTicks.get() <= 0) {
-            val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
-            val terminalVel = 2.0
-            newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
-        } else if(vehicle.onGround()) {
-            newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
+        val isOnTopSurface = state.attachmentNormal.get() == Vec3(0.0, 1.0, 0.0)
+        if (isOnTopSurface) {
+            if (!vehicle.onGround() && state.jumpTicks.get() <= 0) {
+                val gravity = (9.8 / ( 20.0)) * 0.2 * 0.6
+                val terminalVel = 2.0
+                newVelocity = Vec3(newVelocity.x, max(newVelocity.y - gravity, -terminalVel), newVelocity.z)
+            } else if(vehicle.onGround()) {
+                newVelocity = Vec3(newVelocity.x, 0.0, newVelocity.z)
+            }
+        } else {
+            // Wall/ceiling - small constant pull to stay stuck, not real gravity.
+            val stickForce = 0.08
+            newVelocity = Vec3(newVelocity.x, newVelocity.y - stickForce, newVelocity.z)
         }
 
 
@@ -390,7 +428,7 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
             state.jumpTicks.set(state.jumpTicks.get() + 1)
         }
 
-        //Zero out lateral velocity possibly picked up from a controller transition
+        // Zero out lateral velocity possibly picked up from a controller transition
         newVelocity = Vec3(0.0, newVelocity.y, newVelocity.z)
 
 
@@ -412,7 +450,39 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         driver: Player,
         deltaTime: Double
     ): Vec3 {
+        if (vehicle !is OrientationControllable) return Vec3.ZERO
+        val controller = vehicle.orientationController
+
+        // Smoothly rotate the model's up vector toward the (separately computed,
+        // smoothed) field-gradient normal. Purely cosmetic - does not affect attachment
+        // or movement, which are driven by state.attachmentNormal instead.
+        val upAlignmentRatePerTick = 0.2
+        val frameBlend = 1.0 - (1.0 - upAlignmentRatePerTick).pow(deltaTime * 20.0)
+        alignUpToSurfaceNormal(controller, state.renderSurfaceNormal.get(), frameBlend.toFloat())
+
         return Vec3.ZERO
+    }
+
+    /**
+     * Rotates [controller]'s orientation so its up vector moves a fraction of the way
+     * toward [targetUp] - partial per call, not instant, so alignment settles smoothly
+     * rather than snapping every time the target changes.
+     */
+    private fun alignUpToSurfaceNormal(controller: OrientationController, targetUp: Vec3, alignmentBlend: Float) {
+        if (targetUp.lengthSqr() < 1e-6) return
+        val targetUpVec = Vector3f(targetUp.x.toFloat(), targetUp.y.toFloat(), targetUp.z.toFloat()).normalize()
+
+        controller.updateOrientation { current ->
+            val currentUp = current.transform(Vector3f(UP), Vector3f())
+            if (currentUp.lengthSquared() < 1e-6f) return@updateOrientation current
+
+            // Full rotation that would exactly align currentUp to targetUp...
+            val fullCorrection = Quaternionf().rotationTo(currentUp, targetUpVec)
+            // ...but only take a partial step toward it, so alignment is smooth, not instant.
+            val steppedCorrection = Quaternionf().slerp(fullCorrection, alignmentBlend)
+
+            Matrix3f().set(steppedCorrection).mul(current, Matrix3f())
+        }
     }
 
     override fun rotationOnMouseXY(
@@ -430,57 +500,12 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         if (vehicle !is OrientationControllable) return Vec3.ZERO
         val vehicleController = vehicle.orientationController
 
-        val yawAmount = Mth.wrapDegrees(driver.yRot) * deltaTime.toFloat() * 3
-        driver.yRot -= yawAmount
-
-        // Smooth mouse input before using it
         val smoothingSpeed = 4
         val xInput = mouseXSmoother.getNewDeltaValue(mouseX * 0.1, deltaTime * smoothingSpeed)
         val yInput = mouseYSmoother.getNewDeltaValue(mouseY * 0.1, deltaTime * smoothingSpeed)
 
-        val turnAmount = calcRotAmount(settings, state, vehicle, driver)
-        val vehicleCenter = vehicle.position().add(0.0, (vehicle.bbHeight * 0.5f).toDouble(), 0.0)
-
-        // How far out to look for nearby blocks, and how wide the blend between them is.
-        // collisionsSmoothingRange is in real world units (e.g. 1.25 = ~1.25 block blend).
-        val collisionsInclusionRange = 1.0f
-        val collisionsSmoothingRange = 1.25f
-        val sdfTuning = DistanceFieldTuning(smoothingRange = collisionsSmoothingRange)
-        val inclusionBox = AABB(vehicleCenter.x, vehicleCenter.y, vehicleCenter.z, vehicleCenter.x, vehicleCenter.y, vehicleCenter.z)
-            .inflate(collisionsInclusionRange.toDouble())
-
-//        // Find the closest surface point/normal near the vehicle, biased toward the
-//        // surface we were already attached to last tick so it doesn't jump around.
-//        val surfaceContact = SurfaceProjector.projectToNearestSurface(
-//            collisionSource = { consumer ->
-//                consumer?.let { forEachNearbyCollisionBox(vehicle, inclusionBox, it) }
-//            },
-//            biasPlaneOffset = vehicleCenter,
-//            biasPlaneNormal = state.attachmentNormal.get().scale(-1.0),
-//            searchOrigin = vehicleCenter,
-//            tuning = sdfTuning
-//        )
-//
-//        if (surfaceContact != null && vehicleController.orientation != null) {
-//            state.attachmentPoint.set(surfaceContact.point)
-//
-//            // Rotate current "up" toward the new surface normal
-//            val targetUp = surfaceContact.normal.toVector3f().normalize()
-//            val currentUp = vehicleController.upVector
-//            val rotationDifference = Quaternionf().rotationTo(currentUp, targetUp)
-//
-//            val currentOrientation = Quaternionf().setFromUnnormalized(vehicleController.orientation)
-//            val targetOrientation = rotationDifference.mul(currentOrientation, Quaternionf())
-//            currentOrientation.slerp(targetOrientation, min(deltaTime.toFloat() * 20.0f, 1.0f))
-//
-//            val newRenderOrientation = Matrix3f()
-//            currentOrientation.get(newRenderOrientation)
-//            vehicleController.orientation!!.set(newRenderOrientation)
-//            state.attachmentNormal.set(vehicleController.upVector.normalize().toVec3d())
-//        }
-
-        // yaw, pitch, roll
-        return Vec3(yawAmount.toDouble(), 0.0, 0.0)
+        //yaw, pitch, roll
+        return Vec3(xInput, 0.0, 0.0)
     }
 
 
@@ -543,7 +568,7 @@ class ClimbBehaviour : RidingBehaviour<ClimbSettings, ClimbState> {
         state: ClimbState,
         vehicle: PokemonEntity
     ): Double {
-            return 1.0
+        return 1.0
     }
 
     override fun shouldRoll(
@@ -661,8 +686,16 @@ class ClimbState : RidingBehaviourState() {
     var sprinting = ridingState(false, Side.CLIENT)
     var inAir = ridingState(false, Side.CLIENT)
     var jumpTicks = ridingState(0, Side.CLIENT)
+
+    // Discrete, physics-facing: which of the 6 faces we're attached to right now.
+    // Drives newDownForce in velocity(). Set by updateAttachment().
     var attachmentNormal = ridingState(Vec3(0.0, 1.0, 0.0), Side.CLIENT)
     var attachmentPoint = ridingState(Vec3(0.0, 1.0, 0.0), Side.CLIENT)
+
+    // Smoothed, rendering-facing: the field-gradient normal used only to slowly rotate
+    // the model's visual up vector in angRollVel(). Deliberately separate from
+    // attachmentNormal - see comments in tick(). Set by updateRenderSurfaceNormal().
+    var renderSurfaceNormal = ridingState(Vec3(0.0, 1.0, 0.0), Side.CLIENT)
 
     override fun encode(buffer: FriendlyByteBuf) {
         super.encode(buffer)
@@ -685,6 +718,7 @@ class ClimbState : RidingBehaviourState() {
         jumpTicks.set(0, forced = true)
         attachmentNormal.set(Vec3(0.0, 1.0, 0.0), forced = true)
         attachmentPoint.set(Vec3(0.0, 1.0, 0.0), forced = true)
+        renderSurfaceNormal.set(Vec3(0.0, 1.0, 0.0), forced = true)
     }
 
     override fun copy() = ClimbState().also {
@@ -695,6 +729,7 @@ class ClimbState : RidingBehaviourState() {
         it.jumpTicks.set(this.jumpTicks.get(), forced = true)
         it.attachmentNormal.set(this.attachmentNormal.get(), forced = true)
         it.attachmentPoint.set(this.attachmentNormal.get(), forced = true)
+        it.renderSurfaceNormal.set(this.renderSurfaceNormal.get(), forced = true)
     }
 
     override fun shouldSync(previous: RidingBehaviourState): Boolean {
@@ -705,5 +740,44 @@ class ClimbState : RidingBehaviourState() {
     }
 }
 
-// The SDF/gradient-descent machinery previously inlined here has moved to
-// see rotationOnMouseXY() above for the call site. Adapted from nyfaria's AWCAPI.
+fun updateAttachment(state: ClimbState, vehicle: PokemonEntity) {
+    val probeMargin = 0.15
+    val currentFace = AttachmentFace.entries.firstOrNull { it.normal == state.attachmentNormal.get() }
+    val face = determineAttachmentFace(vehicle, currentFace, probeMargin)
+    if (face != null) {
+        state.attachmentNormal.set(face.normal)
+    }
+    // face == null means nothing's currently in reach - leave attachmentNormal as
+    // whatever it last was until the jump/detach state takes over.
+}
+
+enum class AttachmentFace(val normal: Vec3) {
+    UP(Vec3(0.0, 1.0, 0.0)),
+    DOWN(Vec3(0.0, -1.0, 0.0)),
+    NORTH(Vec3(0.0, 0.0, -1.0)),
+    SOUTH(Vec3(0.0, 0.0, 1.0)),
+    EAST(Vec3(1.0, 0.0, 0.0)),
+    WEST(Vec3(-1.0, 0.0, 0.0))
+}
+
+/** Thin slab test on one face of the vehicle's actual bounding box - true if anything solid is touching that side. */
+fun probeFaceContact(vehicle: PokemonEntity, face: AttachmentFace, probeMargin: Double): Boolean {
+    val box = vehicle.boundingBox
+    val testBox = when (face) {
+        AttachmentFace.UP    -> AABB(box.minX, box.maxY, box.minZ, box.maxX, box.maxY + probeMargin, box.maxZ)
+        AttachmentFace.DOWN  -> AABB(box.minX, box.minY - probeMargin, box.minZ, box.maxX, box.minY, box.maxZ)
+        AttachmentFace.NORTH -> AABB(box.minX, box.minY, box.minZ - probeMargin, box.maxX, box.maxY, box.minZ)
+        AttachmentFace.SOUTH -> AABB(box.minX, box.minY, box.maxZ, box.maxX, box.maxY, box.maxZ + probeMargin)
+        AttachmentFace.EAST  -> AABB(box.maxX, box.minY, box.minZ, box.maxX + probeMargin, box.maxY, box.maxZ)
+        AttachmentFace.WEST  -> AABB(box.minX - probeMargin, box.minY, box.minZ, box.minX, box.maxY, box.maxZ)
+    }
+    return !vehicle.level().noCollision(vehicle, testBox)
+}
+
+/** Stays on the current face if it's still touching, otherwise scans for a new one. */
+fun determineAttachmentFace(vehicle: PokemonEntity, currentFace: AttachmentFace?, probeMargin: Double): AttachmentFace? {
+    if (currentFace != null && probeFaceContact(vehicle, currentFace, probeMargin)) {
+        return currentFace
+    }
+    return AttachmentFace.entries.firstOrNull { probeFaceContact(vehicle, it, probeMargin) }
+}
