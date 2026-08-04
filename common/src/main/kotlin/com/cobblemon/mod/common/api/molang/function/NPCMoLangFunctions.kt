@@ -207,7 +207,7 @@ object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity>() {
         map["set_npc_party"] = { params ->
             val party = params.get<MoValue>(0)
             if (party is ObjectValue<*>) {
-                npc.party = party.obj as NPCPartyStore
+                npc.party = party.obj as? NPCPartyStore
             } else {
                 npc.party = null
             }

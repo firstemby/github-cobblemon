@@ -29,7 +29,7 @@ object PokemonStoreMoLangFunctions: AbstractMoLangFunctionHolder<PokemonStore<*>
         map["uuid"] = { StringValue(store.uuid.toString()) }
         map["add"] = { params ->
             val pokemon = params.get<ObjectValue<Pokemon>>(0)
-            DoubleValue(store.add(pokemon.obj))
+            DoubleValue(store.add(pokemon.obj ?: return@map DoubleValue.ZERO))
         }
         map["add_by_properties"] = { params ->
             val props = params.getString(0).toProperties()

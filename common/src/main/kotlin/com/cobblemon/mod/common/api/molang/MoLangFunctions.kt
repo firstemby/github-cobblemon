@@ -293,11 +293,11 @@ object MoLangFunctions {
         )
         value.functions["is_in"] = Function put@{ params: MoParams ->
             val tag = TagKey.create(key, ResourceLocation.parse(params.getString(0).replace("#", "")))
-            return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
+            return@put DoubleValue(if (value.obj?.`is`(tag) == true) 1.0 else 0.0)
         }
         value.functions["is_of"] = Function put@{ params: MoParams ->
             val identifier = ResourceLocation.parse(params.getString(0))
-            return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
+            return@put DoubleValue(if (value.obj?.`is`(identifier) == true) 1.0 else 0.0)
         }
         return value
     }

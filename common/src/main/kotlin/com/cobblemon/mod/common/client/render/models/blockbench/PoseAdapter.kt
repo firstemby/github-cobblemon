@@ -98,8 +98,9 @@ class PoseAdapter(
         ).also {
             it.transitions.putAll(
                 pose.transitions
-                    .mapNotNull<JsonPose.JsonPoseTransition, Pair<String, (Pose, Pose) -> ActiveAnimation>> {
-                        it.to to { _, _ -> it.animation.resolveObject(model.runtime).obj as ActiveAnimation }
+                    .mapNotNull<JsonPose.JsonPoseTransition, Pair<String, (Pose, Pose) -> ActiveAnimation>> { transition ->
+                        val anim = transition.animation.resolveObject(model.runtime).obj as? ActiveAnimation ?: return@mapNotNull null
+                        transition.to to { _, _ -> anim }
                     }.toMap()
             )
         }

@@ -67,12 +67,12 @@ object PokedexMoLangFunctions : AbstractMoLangFunctionHolder<AbstractPokedexMana
         if (pokedex is PokedexManager) {
             map["player_id"] = { StringValue(pokedex.uuid.toString()) }
             map["see"] = put@{ params ->
-                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj ?: return@put DoubleValue.ZERO
                 pokedex.encounter(pokemon)
                 return@put DoubleValue.ONE
             }
             map["catch"] = put@{ params ->
-                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj ?: return@put DoubleValue.ZERO
                 pokedex.obtain(pokemon)
                 return@put DoubleValue.ONE
             }

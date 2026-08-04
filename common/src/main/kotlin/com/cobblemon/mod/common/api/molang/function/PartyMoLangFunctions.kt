@@ -25,7 +25,7 @@ object PartyMoLangFunctions: AbstractMoLangFunctionHolder<PartyStore>() {
         }
         map["set_pokemon"] = { params ->
             val index = params.getInt(0)
-            val pokemon = params.get<ObjectValue<Pokemon>>(1).obj
+            val pokemon = params.get<ObjectValue<Pokemon>>(1).obj ?: return@map DoubleValue.ZERO
             party.set(index, pokemon)
             DoubleValue.ONE
         }

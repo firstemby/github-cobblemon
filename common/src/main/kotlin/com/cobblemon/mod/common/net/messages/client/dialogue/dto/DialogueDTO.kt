@@ -41,7 +41,7 @@ class DialogueDTO : Encodable, Decodable {
             val face = if (value.face is ExpressionLikeDialogueFaceProvider) {
                 val resolved = activeDialogue.runtime.resolve(value.face.providerExpression)
                 if (resolved is ObjectValue<*> && resolved.obj is DialogueFaceProvider) {
-                    resolved.obj as DialogueFaceProvider
+                    resolved.obj as? DialogueFaceProvider ?: return@mapNotNull null
                 } else {
                     return@mapNotNull null
                 }

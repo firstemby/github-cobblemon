@@ -258,7 +258,7 @@ object Cobblemon {
             storage.onPlayerDisconnect(it.player)
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
-            serverPlayerStructs.remove(it.player.uuid)
+            serverPlayerStructs.remove(it.player.uuid)?.invalidate()
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)

@@ -320,7 +320,7 @@ abstract class PosableState : Schedulable {
         .addFunction("play_animation") { params ->
             val animationParameter = params.get<MoValue>(0)
             val animation = if (animationParameter is ObjectValue<*>) {
-                animationParameter.obj as BedrockActiveAnimation
+                animationParameter.obj as? BedrockActiveAnimation
             } else {
                 currentModel?.getAnimation(this, animationParameter.asString(), runtime)
             }

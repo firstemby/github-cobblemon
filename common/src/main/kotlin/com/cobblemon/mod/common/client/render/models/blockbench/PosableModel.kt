@@ -200,7 +200,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 "faint" -> getFaintAnimation(state)
                 else -> {
                     try {
-                        name.asExpressionLike().resolveObject(runtime).obj as ActiveAnimation
+                        name.asExpressionLike().resolveObject(runtime).obj as? ActiveAnimation
                     } catch (_: Exception) {
                         extractAnimation(name)
                     }
@@ -235,7 +235,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     ): ActiveAnimation? {
         val animationExpression = map[name] ?: return null
         return try {
-            animationExpression.resolveObject(runtime).obj as ActiveAnimation
+            animationExpression.resolveObject(runtime).obj as? ActiveAnimation
         } catch (e: Exception) {
             Cobblemon.LOGGER.error("Failed to create animation by name $name, most likely something wrong in the MoLang")
             e.printStackTrace()

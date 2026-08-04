@@ -56,7 +56,7 @@ class NPCServerDelegate : NPCSideDelegate {
             .addFunction("is_in_battle_with") { params ->
                 val opponentValue = params.get<MoValue>(0)
                 val opponent = if (opponentValue is ObjectValue<*>) {
-                    opponentValue.obj as ServerPlayer
+                    opponentValue.obj as? ServerPlayer ?: return@addFunction DoubleValue.ZERO
                 } else {
                     val paramString = opponentValue.asString()
                     val playerUUID = paramString.asUUID
@@ -72,7 +72,7 @@ class NPCServerDelegate : NPCSideDelegate {
             .addFunction("start_battle") { params ->
                 val opponentValue = params.get<MoValue>(0)
                 val opponent = if (opponentValue is ObjectValue<*>) {
-                    opponentValue.obj as ServerPlayer
+                    opponentValue.obj as? ServerPlayer ?: return@addFunction DoubleValue.ZERO
                 } else {
                     val paramString = opponentValue.asString()
                     val playerUUID = paramString.asUUID
@@ -118,7 +118,7 @@ class NPCServerDelegate : NPCSideDelegate {
             .addFunction("run_dialogue") { params ->
                 val playerValue = params.get<MoValue>(0)
                 val player = if (playerValue is ObjectValue<*>) {
-                    playerValue.obj as ServerPlayer
+                    playerValue.obj as? ServerPlayer ?: return@addFunction DoubleValue.ZERO
                 } else {
                     val paramString = playerValue.asString()
                     val playerUUID = paramString.asUUID
@@ -146,7 +146,7 @@ class NPCServerDelegate : NPCSideDelegate {
                 return@addFunction DoubleValue.ONE
             }
             .addFunction("was_hurt_by") { params ->
-                val entity = params.get<ObjectValue<LivingEntity>>(0).obj
+                val entity = params.get<ObjectValue<LivingEntity>>(0).obj ?: return@addFunction DoubleValue.ZERO
                 val hurtByEntity = this.entity.brain.getMemorySafely(MemoryModuleType.HURT_BY_ENTITY).orElse(null)
                 return@addFunction DoubleValue(hurtByEntity == entity)
             }

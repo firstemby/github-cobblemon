@@ -117,11 +117,13 @@ class BehaviourConfigurationContext {
                 }
             }
             .addFunction("set_core_activities") { params ->
-                behaviourConfigurationContext.coreActivities = params.params.map { (it as ObjectValue<ActivityConfigurationContext>).obj.activity }.toSet()
+                behaviourConfigurationContext.coreActivities = params.params.mapNotNull { (it as? ObjectValue<ActivityConfigurationContext>)?.obj?.activity }.toSet()
                 return@addFunction DoubleValue.ONE
             }
             .addFunction("set_default_activity") { params ->
-                behaviourConfigurationContext.defaultActivity = params.get<ObjectValue<ActivityConfigurationContext>>(0).obj.activity
+                params.get<ObjectValue<ActivityConfigurationContext>>(0).obj?.activity?.let {
+                    behaviourConfigurationContext.defaultActivity = it
+                }
                 return@addFunction DoubleValue.ONE
             }
     }
@@ -132,7 +134,7 @@ class BehaviourConfigurationContext {
             .addFunction("add_task") { params ->
                 val priority = params.getInt(0)
                 val task = params.get(1) as ObjectValue<BehaviorControl<in LivingEntity>>
-                activityConfigurationContext.tasks.add(Pair(priority, task.obj))
+                task.obj?.let { activityConfigurationContext.tasks.add(Pair(priority, it)) }
             }
         return struct
     }

@@ -90,7 +90,7 @@ object ClientMoLangFunctions {
                         if (obj is ExcludedLabels) {
                             excludedLabels.addAll(obj.labels)
                         } else {
-                            curve = param.obj as WaveFunction
+                            (param.obj as? WaveFunction)?.let { curve = it }
                         }
                         continue
                     }
@@ -289,7 +289,7 @@ object ClientMoLangFunctions {
                         if (obj is ExcludedLabels) {
                             excludedLabels.addAll(obj.labels)
                         } else {
-                            curve = param.obj as WaveFunction
+                            (param.obj as? WaveFunction)?.let { curve = it }
                         }
                         continue
                     }
@@ -344,7 +344,7 @@ object ClientMoLangFunctions {
                 for (index in 5 until params.params.size) {
                     val param = params.get<MoValue>(index)
                     if (param is ObjectValue<*>) {
-                        curve = param.obj as WaveFunction
+                        (param.obj as? WaveFunction)?.let { curve = it }
                         continue
                     }
 

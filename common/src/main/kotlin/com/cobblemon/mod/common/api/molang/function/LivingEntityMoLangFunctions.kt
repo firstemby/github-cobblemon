@@ -98,7 +98,7 @@ object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity>(
             val maxDistance = params.getDoubleOrNull(1)?.toFloat() ?: 2.0F
 
             val entity = if (targetEntity is ObjectValue<*> && targetEntity.obj is Entity) {
-                targetEntity.obj as Entity
+                targetEntity.obj as? Entity ?: return@put DoubleValue.ZERO
             } else {
                 return@put DoubleValue.ZERO
             }
