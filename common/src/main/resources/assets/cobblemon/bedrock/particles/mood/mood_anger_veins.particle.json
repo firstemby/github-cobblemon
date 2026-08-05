@@ -12,9 +12,8 @@
 			"minecraft:emitter_initialization": {
 				"creation_expression": "v.particle_size = math.clamp((v.entity_radius*0.75),0.15,0.4);"
 			},
-			"minecraft:emitter_rate_steady": {
-				"spawn_rate": 1,
-				"max_particles": 1
+			"minecraft:emitter_rate_instant": {
+				"num_particles": 1
 			},
 			"minecraft:emitter_lifetime_once": {
 				"active_time": 1
