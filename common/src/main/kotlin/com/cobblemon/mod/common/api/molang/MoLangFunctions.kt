@@ -125,7 +125,7 @@ object MoLangFunctions {
             if (existing.obj == this) {
                 return existing
             } else {
-                Cobblemon.serverPlayerStructs.remove(uuid)
+                Cobblemon.serverPlayerStructs.remove(uuid)?.invalidate()
             }
         }
 
