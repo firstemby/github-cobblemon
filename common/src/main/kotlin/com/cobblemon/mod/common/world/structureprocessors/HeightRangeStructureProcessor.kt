@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.RandomState
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
+import org.slf4j.LoggerFactory
 
 class HeightRangeStructureProcessor(
 	val minOffset: Int,
@@ -43,7 +44,14 @@ class HeightRangeStructureProcessor(
 		val referenceY = reference.getY(chunkGenerator, heightAccessor, randomState, pos)
 		val minY = referenceY + minOffset
 		val maxY = referenceY + maxOffset
-		return pos.y in minY..maxY
+		val valid = pos.y in minY..maxY
+
+		LOGGER.info(
+			"[HeightRangeVeto] isValidPlacement pos={} reference={} referenceY={} minY={} maxY={} pos.y={} -> valid={}",
+			pos, reference, referenceY, minY, maxY, pos.y, valid
+		)
+
+		return valid
 	}
 
 	override fun processBlock(
@@ -105,6 +113,8 @@ class HeightRangeStructureProcessor(
 	}
 
 	companion object {
+		private val LOGGER = LoggerFactory.getLogger("Cobblemon/HeightRangeStructureProcessor")
+
 		val CODEC: MapCodec<HeightRangeStructureProcessor> = RecordCodecBuilder.mapCodec { instance ->
 			instance.group(
 				Codec.INT.fieldOf("min_offset").forGetter { it.minOffset },

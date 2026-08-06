@@ -20,6 +20,8 @@ import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,6 +32,9 @@ import java.util.Optional;
 
 @Mixin(JigsawPlacement.class)
 public class JigsawPlacementMixin {
+
+	@Unique
+	private static final Logger cobblemon$LOGGER = LoggerFactory.getLogger("Cobblemon/HeightRangeVeto");
 
 	@Inject(
 			method = "addPieces(Lnet/minecraft/world/level/levelgen/structure/Structure$GenerationContext;Lnet/minecraft/core/Holder;Ljava/util/Optional;ILnet/minecraft/core/BlockPos;ZLjava/util/Optional;ILnet/minecraft/world/level/levelgen/structure/pools/alias/PoolAliasLookup;Lnet/minecraft/world/level/levelgen/structure/pools/DimensionPadding;Lnet/minecraft/world/level/levelgen/structure/templatesystem/LiquidSettings;)Ljava/util/Optional;",
@@ -54,18 +59,30 @@ public class JigsawPlacementMixin {
 		if (result.isEmpty()) {
 			return;
 		}
+
 		BlockPos spawnPos = result.get().position();
-		boolean canPlace = cobblemon$canAnyStartElementPlace(context, startPool, spawnPos);
+		String poolId = startPool.unwrapKey().map(key -> key.location().toString()).orElse("unknown");
+		boolean canPlace = cobblemon$canStructurePlace(context, startPool, spawnPos);
+
+		cobblemon$LOGGER.info(
+				"[HeightRangeVeto] addPieces evaluated requestedPos={} spawnPos={} startPool={} -> canPlace={}",
+				pos, spawnPos, poolId, canPlace
+		);
 
 		if (canPlace) {
 			return;
 		}
 
+		cobblemon$LOGGER.info(
+				"[HeightRangeVeto] Vetoing structure start at {} (startPool={})",
+				spawnPos, poolId
+		);
+
 		cir.setReturnValue(Optional.empty());
 	}
 
 	@Unique
-	private static boolean cobblemon$canAnyStartElementPlace(
+	private static boolean cobblemon$canStructurePlace(
 			Structure.GenerationContext generationContext,
 			Holder<StructureTemplatePool> startPool,
 			BlockPos startPos
@@ -74,7 +91,7 @@ public class JigsawPlacementMixin {
 			Optional<HeightRangeStructureProcessor> heightRangeProcessor = cobblemon$getHeightRangeProcessor(element);
 
 			if (heightRangeProcessor.isEmpty()) {
-				return true;
+				continue;
 			}
 
 			HeightRangeStructureProcessor processor = heightRangeProcessor.get();
@@ -85,12 +102,17 @@ public class JigsawPlacementMixin {
 					startPos
 			);
 
-			if (valid) {
-				return true;
+			cobblemon$LOGGER.info(
+					"[HeightRangeVeto] template={} pos={} valid={}",
+					element, startPos, valid
+			);
+
+			if (!valid) {
+				return false;
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	@Unique
