@@ -26,9 +26,9 @@
 				{
 					"name": "locator_root",
 					"parent": "pidgeot",
-					"pivot": [0, 32, 0],
+					"pivot": [0, 0, 0],
 					"locators": {
-						"root": [0, 32, 0]
+						"root": [0, 0, 0]
 					}
 				},
 				{

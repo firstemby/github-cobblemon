@@ -24,8 +24,9 @@
       "isBattle": false,
       "condition": "!q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'ground_idle')"
       ],
       "transformedParts": [
@@ -54,31 +55,14 @@
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'battle_idle')"
       ],
       "namedAnimations": {
         "cry": "q.bedrock_primary('pidgeot', 'battle_cry', q.curve('symmetrical_wide'))"
       },
-      "transformedParts": [
-        {
-          "part": "wing_open_left",
-          "isVisible": false
-        },
-        {
-          "part": "wing_open_right",
-          "isVisible": false
-        },
-        {
-          "part": "wing_closed_left",
-          "isVisible": true
-        },
-        {
-          "part": "wing_closed_right",
-          "isVisible": true
-        }
-      ],
       "quirks": [
         "q.bedrock_quirk('pidgeot', 'blink')"
       ]
@@ -87,8 +71,9 @@
       "poseTypes": ["WALK"],
       "condition": "!q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'ground_walk')"
       ],
       "transformedParts": [
@@ -118,8 +103,9 @@
       "condition": "!q.is_ridden",
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'air_idle')"
       ],
       "transformedParts": [
@@ -263,8 +249,9 @@
       "poseTypes": ["STAND"],
       "isBattle": false,
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'mount_ground_idle')"
       ],
       "condition": "q.has_entity && q.is_ridden && !q.in_air",
@@ -293,8 +280,9 @@
       "isBattle": false,
       "condition": "q.is_ridden && !q.is_air && q.has_entity",
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'ride_ground_walk')",
         "q.bedrock('pidgeot', 'mount_ground_walk')"
       ],
@@ -322,8 +310,9 @@
       "poseTypes": ["HOVER"],
       "condition": "!q.is_gliding && q.is_ridden && q.has_entity",
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'ride_air_idle')",
         "q.bedrock('pidgeot', 'mount_air_idle')"
       ],
@@ -353,8 +342,9 @@
       "poseTypes": ["FLY"],
       "condition": "!q.is_gliding && q.is_ridden && q.has_entity",
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'ride_air_fly')",
         "q.bedrock('pidgeot', 'mount_air_fly')"
       ],
@@ -385,8 +375,9 @@
       "condition": "q.is_gliding",
       "isBattle": false,
       "animations": [
-        "q.look('head_ai')",
-        "q.look('hair3', -1, 1, 30, -60, 0, 0)",
+        "q.look('neck2', 1, 1, 12.5, -15, 10, -10)",
+        "q.look('head_ai', 1, 1, 1, -7.5, 2.5, -2.5)",
+        "q.look('hair3', -1, 1, 10, -20, 0, 0)",
         "q.bedrock('pidgeot', 'air_glide')",
         {
           "condition": "q.is_ridden",

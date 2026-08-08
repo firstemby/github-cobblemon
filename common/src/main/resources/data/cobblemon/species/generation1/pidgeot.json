@@ -45,10 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "height": 1.5,
+    "height": 1.7,
     "fixed": false,
-    "width": 0.75
+    "width": 0.85
   },
+  "standingEyeHeight": 1,
   "riding": {
     "behaviours": {
       "AIR": {
@@ -146,7 +147,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "walkSpeed": 0.22
+        "walkSpeed": 0.27
       }
     },
     "resting": {

@@ -12,7 +12,8 @@
     "standing": {
       "poseTypes": ["PORTRAIT", "PROFILE", "STAND", "NONE"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 35, -12.5, 7.5, -7.5)",
+        "q.look('head_ai', 1, 1, 1.5, -12.5, 2.5, -2.5)",
         "q.bedrock('pidgey', 'ground_idle')"
       ],
       "transformedParts": [
@@ -41,7 +42,8 @@
     "walk": {
       "poseTypes": ["WALK"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 35, -12.5, 7.5, -7.5)",
+        "q.look('head_ai', 1, 1, 1.5, -12.5, 2.5, -2.5)",
         "q.bedrock('pidgey', 'ground_walk')"
       ],
       "transformedParts": [
@@ -70,7 +72,8 @@
       "poseTypes": ["HOVER", "FLOAT"],
       "animations": [
         "q.pitch_tilt('body')",
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 35, -12.5, 7.5, -7.5)",
+        "q.look('head_ai', 1, 1, 1.5, -12.5, 2.5, -2.5)",
         "q.bedrock('pidgey', 'air_idle')"
       ],
       "transformedParts": [
@@ -182,7 +185,8 @@
     "shoulder_left": {
       "poseTypes": ["SHOULDER_LEFT"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 35, -12.5, 7.5, -7.5)",
+        "q.look('head_ai', 1, 1, 1.5, -12.5, 2.5, -2.5)",
         "q.bedrock('pidgey', 'shoulder_left')"],
       "quirks": ["q.bedrock_quirk('pidgey', 'blink')"],
       "transformedParts": [
@@ -211,7 +215,8 @@
     "shoulder_right": {
       "poseTypes": ["SHOULDER_RIGHT"],
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 35, -12.5, 7.5, -7.5)",
+        "q.look('head_ai', 1, 1, 1.5, -12.5, 2.5, -2.5)",
         "q.bedrock('pidgey', 'shoulder_right')"],
       "quirks": ["q.bedrock_quirk('pidgey', 'blink')"],
       "transformedParts": [

@@ -74,14 +74,19 @@
 					"name": "neck",
 					"parent": "torso2",
 					"pivot": [0, 5.25, -7.5],
-					"rotation": [52.5, 0, 0],
+					"rotation": [52.5, 0, 0]
+				},
+				{
+					"name": "neck_ai",
+					"parent": "neck",
+					"pivot": [0, 5.25, -7.5],
 					"cubes": [
 						{"origin": [-2.5, 4.75, -9], "size": [5, 5, 5], "inflate": -0.01, "uv": [22, 32]}
 					]
 				},
 				{
 					"name": "head",
-					"parent": "neck",
+					"parent": "neck_ai",
 					"pivot": [0, 10, -6.5]
 				},
 				{

@@ -368,7 +368,6 @@ object VaryingModelRepository {
         inbuilt("magcargo", ::MagcargoModel)
         inbuilt("slugma_shiny", ::SlugmaShinyModel)
         inbuilt("magcargo_shiny", ::MagcargoShinyModel)
-        inbuilt("chinchou", ::ChinchouModel)
         inbuilt("clamperl", ::ClamperlModel)
         inbuilt("huntail", ::HuntailModel)
         inbuilt("gorebyss", ::GorebyssModel)

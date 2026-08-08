@@ -26,15 +26,17 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
-      "animations": ["q.bedrock('lanturn', 'battle_idle')"],
+      "isTouchingWater": false,
+      "animations": ["q.bedrock('lanturn', 'ground_battle_idle')"],
       "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "water-battle-standing": {
       "poseTypes": ["FLOAT"],
       "isBattle": true,
+      "isTouchingWater": true,
       "animations": ["q.bedrock('lanturn', 'water_battle_idle')"],
       "namedAnimations": {
-        "sleep": "q.bedrock('lanturn', 'water_faint', q.curve('one'))"
+        "faint": "q.bedrock('lanturn', 'water_faint', q.curve('one'))"
       },
       "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
@@ -42,42 +44,49 @@
       "poseTypes": ["STAND", "WALK"],
       "condition": "q.in_air",
       "animations": ["q.bedrock('lanturn', 'water_swim')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"],
       "transformTicks": 3,
       "transformToTicks": 3
     },
     "standing": {
       "poseTypes": ["STAND", "NONE"],
       "isTouchingWater": false,
-      "animations": ["q.bedrock('lanturn', 'water_idle')"]
+      "animations": ["q.bedrock('lanturn', 'water_idle')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK"],
       "isTouchingWater": false,
-      "animations": ["q.bedrock('lanturn', 'water_swim')"]
+      "animations": ["q.bedrock('lanturn', 'water_swim')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "surface-floating": {
       "poseTypes": ["STAND"],
       "isTouchingWater": true,
       "isUnderWater": false,
-      "animations": ["q.bedrock('lanturn', 'water_idle')"]
+      "animations": ["q.bedrock('lanturn', 'water_idle')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "surface-swimming": {
       "poseTypes": ["WALK"],
       "isTouchingWater": true,
       "isUnderWater": false,
-      "animations": ["q.bedrock('lanturn', 'water_swim')"]
+      "animations": ["q.bedrock('lanturn', 'water_swim')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "floating": {
       "poseTypes": ["FLOAT"],
       "isTouchingWater": true,
       "isUnderWater": true,
-      "animations": ["q.bedrock('lanturn', 'water_idle')"]
+      "animations": ["q.bedrock('lanturn', 'water_idle')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "swimming": {
       "poseTypes": ["SWIM"],
       "isTouchingWater": true,
       "isUnderWater": true,
-      "animations": ["q.bedrock('lanturn', 'water_swim')"]
+      "animations": ["q.bedrock('lanturn', 'water_swim')"],
+      "quirks": ["q.bedrock_quirk('lanturn', 'blink')"]
     },
     "water-sleeping": {
       "poseTypes": ["SLEEP"],

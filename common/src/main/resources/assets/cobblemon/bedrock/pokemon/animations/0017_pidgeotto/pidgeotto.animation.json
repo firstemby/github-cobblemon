@@ -152,6 +152,9 @@
 				},
 				"claw_outer_right": {
 					"rotation": [10, 0, 0]
+				},
+				"wings_open": {
+					"scale": 0
 				}
 			}
 		},
