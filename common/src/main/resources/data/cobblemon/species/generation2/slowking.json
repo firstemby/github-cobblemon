@@ -353,6 +353,19 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "slowbro alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "slowking alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "drops": {

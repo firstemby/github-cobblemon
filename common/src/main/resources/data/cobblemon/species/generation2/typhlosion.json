@@ -431,7 +431,13 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "7"
+          "maxSize": 7,
+          "toleratedLeaders": [
+            {
+              "pokemon": "typhlosion alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "times": [

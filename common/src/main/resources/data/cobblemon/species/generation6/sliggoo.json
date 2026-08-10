@@ -334,17 +334,30 @@
       ],
       "battleOnly": false,
       "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
         "moving": {
-          "walk": {
-            "walkSpeed": 0.15
+          "swim": {
+            "canWalkOnWater": true
           }
         },
         "combat": {
           "willDefendOwner": true
         },
-        "resting": {
-          "drowsyChance": 0.0333,
-          "rouseChance": 0.0042
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "sliggoo alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "goodra alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     }

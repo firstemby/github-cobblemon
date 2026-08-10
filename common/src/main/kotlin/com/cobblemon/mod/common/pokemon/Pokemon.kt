@@ -327,7 +327,6 @@ open class Pokemon : ShowdownIdentifiable {
             if (experienceGroup.getLevel(experience) != boundedValue || value == Cobblemon.config.maxPokemonLevel) {
                 experience = experienceGroup.getExperience(boundedValue)
             }
-//            _level.emit(value)
 
             currentHealth = ceil(hpRatio * maxHealth).coerceIn(0..maxHealth)
         }

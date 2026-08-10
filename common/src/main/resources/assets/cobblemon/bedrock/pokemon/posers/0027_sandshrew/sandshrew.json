@@ -5,11 +5,13 @@
   "profileTranslation": [0.0, 0.5, 0.0],
   "rootBone": "sandshrew",
   "animations": {
-    "cry": "q.bedrock_stateful('sandshrew', 'cry')"
+    "cry": "q.bedrock_stateful('sandshrew', 'cry')",
+    "physical": "q.bedrock_primary('sandshrew', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "standing": {
       "poseName": "standing",
+      "isBattle": false,
       "poseTypes": [
         "PORTRAIT",
         "PROFILE",
@@ -22,6 +24,12 @@
       ],
       "quirks": [
         "q.bedrock_quirk('sandshrew', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "ball",
+          "isVisible": false
+        }
       ]
     },
     "walk": {
@@ -35,7 +43,22 @@
       ],
       "quirks": [
         "q.bedrock_quirk('sandshrew', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "ball",
+          "isVisible": false
+        }
       ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('sandshrew', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('sandshrew', 'blink')"]
     }
   }
 }

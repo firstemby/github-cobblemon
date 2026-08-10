@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.CommandBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -80,11 +81,13 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
-        if (!level.isClientSide) {
-            val be = level.getBlockEntity(pos) as? HabitatBlockEntity ?: return InteractionResult.PASS
-            return be.onUse(player, hitResult)
+        val blockEntity = level.getBlockEntity(pos)
+        val be = level.getBlockEntity(pos) as? HabitatBlockEntity ?: return InteractionResult.PASS
+        return if (blockEntity is HabitatBlockEntity && player.canUseGameMasterBlocks()) {
+            be.onUse(player, hitResult)
+        } else {
+            InteractionResult.PASS
         }
-        return InteractionResult.SUCCESS
     }
 
     override fun getDrops(state: BlockState, params: LootParams.Builder): MutableList<ItemStack> {

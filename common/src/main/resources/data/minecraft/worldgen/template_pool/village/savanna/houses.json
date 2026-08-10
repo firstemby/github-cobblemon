@@ -371,7 +371,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna1",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1
@@ -381,7 +381,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna2",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1
@@ -391,7 +391,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna3",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1
@@ -401,7 +401,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna4",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1
@@ -411,7 +411,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna5",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1
@@ -421,7 +421,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_savanna6",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_savanna",
         "projection": "rigid"
       },
       "weight": 1

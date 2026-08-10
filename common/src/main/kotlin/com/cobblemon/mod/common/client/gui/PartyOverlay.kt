@@ -130,18 +130,23 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         val party = CobblemonClient.storage.party
         val matrices = context.pose()
         if (party.slots.none { it != null }) {
-            if (CobblemonClient.clientPlayerData.promptStarter &&
+            if (!this.attachedToast &&
+                CobblemonClient.clientPlayerData.promptStarter &&
                 !CobblemonClient.clientPlayerData.starterLocked &&
                 !CobblemonClient.clientPlayerData.starterSelected &&
                 !CobblemonClient.checkedStarterScreen
             ) {
-                if (!this.attachedToast) {
-                    // Adding starter toast on start and connect of client to server.
-                    minecraft.toasts.addToast(this.starterToast)
-                    this.attachedToast = true
-                }
+                // Adding starter toast on start and connect of client to server.
+                minecraft.toasts.addToast(this.starterToast)
+                this.attachedToast = true
             }
             return // Don't render the stuff below if no Pokémon in party
+        }
+
+        // Without this simply capturing a Pokémon instead of opening the starter screen won't dismiss the toast
+        if (!CobblemonClient.checkedStarterScreen) {
+            CobblemonClient.checkedStarterScreen = true
+            starterToast.nextVisibility = Toast.Visibility.HIDE
         }
 
         val totalHeight = party.slots.size * SLOT_HEIGHT

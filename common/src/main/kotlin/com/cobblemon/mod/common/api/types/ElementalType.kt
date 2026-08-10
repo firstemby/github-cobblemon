@@ -42,10 +42,12 @@ class ElementalType(
 
     companion object {
         @JvmStatic
-        val BY_STRING_CODEC: Codec<ElementalType> = CodecUtils.createByStringCodec(
-            ElementalTypes::get,
-            {it.showdownId}
-        ) { id -> "No ElementalType for ID $id" }
+        val BY_STRING_CODEC: Codec<ElementalType> by lazy {
+            CodecUtils.createByStringCodec(
+                ElementalTypes::get,
+                { it.showdownId }
+            ) { id -> "No ElementalType for ID $id" }
+        }
     }
 
 }

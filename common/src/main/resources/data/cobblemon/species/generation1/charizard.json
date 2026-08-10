@@ -438,7 +438,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "moving": {
           "fly": {
@@ -559,7 +559,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "moving": {
           "fly": {

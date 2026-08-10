@@ -3,39 +3,212 @@
   "type": "cobblemon:natural",
   "spawns": [
     {
-      "species": "cobblemon:geodude",
+      "species": "Lickitung",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 10
+      "weight": 6.0,
+      "levelRange": "14-39",
+      "phases": "1"
     },
     {
-      "species": "cobblemon:zubat",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 9
-    },
-    {
-      "species": "cobblemon:machop",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "36-46",
-      "weight": 8
-    },
-    {
-      "species": "cobblemon:graveler",
+      "species": "Lickitung",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "14-39",
+      "phases": "2-6"
     },
     {
-      "species": "cobblemon:golbat",
+      "species": "Snorlax",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "34-54",
+      "phases": "1-6"
+    },
+    {
+      "species": "Shuckle",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "16-51",
+      "phases": "1-6"
+    },
+    {
+      "species": "Zigzagoon",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-24",
+      "phases": "2"
+    },
+    {
+      "species": "Linoone",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "20-42",
+      "phases": "2"
+    },
+    {
+      "species": "Plusle",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "16-41",
+      "phases": "1-6"
+    },
+    {
+      "species": "Minun",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 5.0,
+      "levelRange": "16-41",
+      "phases": "1-6"
+    },
+    {
+      "species": "Turtwig",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-32",
+      "phases": "3"
+    },
+    {
+      "species": "Grotle",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "18-41",
+      "phases": "3"
+    },
+    {
+      "species": "Torterra",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "32-53",
+      "phases": "3"
+    },
+    {
+      "species": "Pachirisu",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "16-41",
+      "phases": "1-6"
+    },
+    {
+      "species": "Munchlax",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-39",
+      "phases": "1-6"
+    },
+    {
+      "species": "Lickilicky",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "34-52",
+      "phases": "1"
+    },
+    {
+      "species": "Lickilicky",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "34-52",
+      "phases": "2-6"
+    },
+    {
+      "species": "Tepig",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-31",
+      "phases": "4"
+    },
+    {
+      "species": "Pignite",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "17-42",
+      "phases": "4"
+    },
+    {
+      "species": "Emboar",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "36-53",
+      "phases": "4"
+    },
+    {
+      "species": "Chespin",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-31",
+      "phases": "5"
+    },
+    {
+      "species": "Quilladin",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "16-41",
+      "phases": "5"
+    },
+    {
+      "species": "Chesnaught",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "36-53",
+      "phases": "5"
+    },
+    {
+      "species": "Togedemaru",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "19-44",
+      "phases": "1-6"
+    },
+    {
+      "species": "Skwovet",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "3-28",
+      "phases": "1-6"
+    },
+    {
+      "species": "Greedent",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-46",
+      "phases": "1-6"
+    },
+    {
+      "species": "Morpeko",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "19-44",
+      "phases": "6"
+    },
+    {
+      "species": "Morpeko",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "19-44",
+      "phases": "1-5"
     }
   ]
 }

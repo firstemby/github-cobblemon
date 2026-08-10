@@ -355,7 +355,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "7",
+          "maxSize": 7,
           "toleratedLeaders": [
             {
               "pokemon": "latias mega",

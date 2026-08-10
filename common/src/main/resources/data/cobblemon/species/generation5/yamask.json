@@ -373,6 +373,19 @@
         },
         "combat": {
           "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "yamask alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "runerigus alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     }

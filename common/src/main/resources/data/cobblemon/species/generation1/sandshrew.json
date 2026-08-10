@@ -54,7 +54,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.29
+        "walkSpeed": 0.2
       },
       "swim": {
         "avoidsWater": true
@@ -448,6 +448,19 @@
         },
         "combat": {
           "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "sandshrew alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "sandslash alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "drops": {

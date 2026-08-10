@@ -320,7 +320,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "5"
+          "maxSize": 5
         },
         "moving": {
           "swim": {

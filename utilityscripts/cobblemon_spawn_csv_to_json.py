@@ -261,8 +261,8 @@ def process_herds(herds_df, herd_pokemon_df):
                 "weight": row['Weight']
             }
 
-            if pd.notna(row['Min Dist']):
-                spawn_data["minDistanceBetweenSpawns"] = int(row['Min Dist'])
+            #if pd.notna(row['Min Dist']):
+            #    spawn_data["minDistanceBetweenSpawns"] = int(row['Min Dist'])
 
             if len(presets) == 0:
                 del spawn_data['presets']
@@ -606,16 +606,16 @@ def handle_common_conditions(column_name, current_id, invalid_biome_tags, row, s
         if parsed_biomes:
             condition['biomes'] = parsed_biomes
 
-    # check if Time column is day, night, dawn, dusk, or any
+    # check if Time column is day, night, dawn, dusk, etc.
+    valid_times = ['day', 'night', 'dawn', 'dusk', 'noon', 'morning', 'afternoon', 'evening', 'midnight', 'predawn', 'twilight']
     if pd.notna(row['Time']):
-        if row['Time'].lower() == 'day':
+        if row['Time'].lower() in valid_times:
             condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'night':
-            condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'dawn':
-            condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'dusk':
-            condition['timeRange'] = row['Time'].lower()
+        elif row['Time'].lower() == 'any':
+            pass
+        else:
+            print(f"Unrecognized time value: {row['Time'].lower()}")
+
 
     # check if Weather column is clear or rain or any
     if pd.notna(row['Weather']):
@@ -623,6 +623,8 @@ def handle_common_conditions(column_name, current_id, invalid_biome_tags, row, s
             condition['isRaining'] = False
         elif row['Weather'].lower() == 'rain':
             condition['isRaining'] = True
+        elif row['Weather'].lower() == 'storm':
+            condition['isThundering'] = True
 
     return condition
 
