@@ -248,6 +248,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val BIG_ROOT = this.create("big_root", BigRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.BIG_ROOT_SOUNDS)))
     @JvmField
     val REVIVAL_HERB = this.create("revival_herb", RevivalHerbBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).mapColor(MapColor.PLANT).ignitedByLava().noCollission().instabreak().sound(CobblemonSounds.REVIVAL_HERB_SOUNDS)))
+    @JvmField
+    val SILK_THREAD = this.create("silk_thread", SilkThreadBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.WOOL).noCollission().instabreak().sound(SoundType.WOOL)))
 
     @JvmField
     val POKE_CAKE = this.create("poke_cake", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY).lightLevel { if (it.getValue(BlockStateProperties.LIT)) 3 else 0 }, false))
@@ -957,7 +959,8 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
             Triple(SACCHARINE_FENCE, 5, 20),
             Triple(SACCHARINE_FENCE_GATE, 5, 20),
             Triple(SACCHARINE_SLAB, 5, 20),
-            Triple(SACCHARINE_STAIRS, 5, 20)
+            Triple(SACCHARINE_STAIRS, 5, 20),
+            Triple(SILK_THREAD, 30, 60)
 
         ).onEach{ data -> setFlammable(data.first, data.second, data.third) }
     }

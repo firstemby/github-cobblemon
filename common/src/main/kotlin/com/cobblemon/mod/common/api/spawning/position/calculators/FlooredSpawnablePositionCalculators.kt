@@ -14,11 +14,8 @@ import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePosit
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isLavaCondition
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isSolidCondition
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isWaterCondition
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.BlockTags
-import net.minecraft.tags.TagKey
-import net.minecraft.world.level.block.Block
+import com.cobblemon.mod.common.block.SilkThreadBlock
+import net.minecraft.core.Direction
 import net.minecraft.world.level.block.state.BlockState
 
 /**
@@ -70,15 +67,27 @@ object GroundedSpawnablePositionCalculator : FlooredSpawnablePositionCalculator<
     }
 }
 
+/**
+ * The spawnable position calculator used for [HangingSpawnablePosition]s. Requires an air pocket
+ * beneath leaves, with at most [SilkThreadBlock.MAX_LENGTH] air blocks of thread gap between them.
+ * SilkThreadBlock currently only accepts leaves.... but maybe if we find other mons that hang from
+ * string we can expand it to a tag json (might maybe it should be anyways....) or expand it to a
+ * system where things can hang without string and use this same method (like bats maybe)
+ */
 object HangingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<HangingSpawnablePosition> {
     override val name = "hanging"
-    private val commonLeavesTag = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "leaves"))
 
     override fun fits(input: AreaSpawningInput): Boolean {
-        val belowSpawnSpace = input.zone.getBlockState(input.position)
-        val spawnSpace = input.zone.getBlockState(input.position.above())
-        val ceilingState = input.zone.getBlockState(input.position.above(2))
-        return isAirCondition(belowSpawnSpace) && isAirCondition(spawnSpace) && ceilingState.isLeaves()
+        if (!isAirCondition(input.zone.getBlockState(input.position))) return false
+        if (!isAirCondition(input.zone.getBlockState(input.position.above()))) return false
+        for (offset in 2..SilkThreadBlock.MAX_LENGTH + 1) {
+            val state = input.zone.getBlockState(input.position.above(offset))
+            when {
+                SilkThreadBlock.isValidAnchor(state) -> return true
+                !isAirCondition(state) -> return false
+            }
+        }
+        return false
     }
 
     override fun calculate(input: AreaSpawningInput): HangingSpawnablePosition {
@@ -95,8 +104,43 @@ object HangingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<Hang
             nearbyBlocks = getNearbyBlocks(input)
         )
     }
+}
 
-    private fun BlockState.isLeaves() = this.`is`(BlockTags.LEAVES) || this.`is`(commonLeavesTag)
+/**
+ * The spawnable position calculator used for [ClingingSpawnablePosition]s. Requires an air block
+ * for the Pokemon with at least one solid neighbouring block to attach to.
+ */
+object ClingingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<ClingingSpawnablePosition> {
+    override val name = "clinging"
+
+    override fun fits(input: AreaSpawningInput): Boolean {
+        if (!isAirCondition(input.zone.getBlockState(input.position.above()))) return false
+        return findAttachments(input).isNotEmpty()
+    }
+
+    override fun calculate(input: AreaSpawningInput): ClingingSpawnablePosition {
+        return ClingingSpawnablePosition(
+            cause = input.cause,
+            world = input.world,
+            position = input.position.immutable(),
+            light = getLight(input),
+            skyLight = getSkyLight(input),
+            canSeeSky = getCanSeeSky(input),
+            influences = input.spawner.copyInfluences(),
+            height = 1,
+            zone = input.zone,
+            nearbyBlocks = getNearbyBlocks(input),
+            attachments = findAttachments(input)
+        )
+    }
+
+    private fun findAttachments(input: AreaSpawningInput): Map<Direction, BlockState> {
+        val monPos = input.position.above()
+        return Direction.entries
+            .map { it to input.zone.getBlockState(monPos.relative(it)) }
+            .filter { (_, state) -> isSolidCondition(state) }
+            .toMap()
+    }
 }
 
 /**

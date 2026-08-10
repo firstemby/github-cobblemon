@@ -28,6 +28,34 @@
             }
         },
         {
+            "id": "kakuna-cling-1",
+            "pokemon": "kakuna",
+            "type": "pokemon",
+            "spawnablePositionType": "clinging",
+            "bucket": "common",
+            "level": "7-21",
+            "weight": 2.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "attachedTo": [
+                    "#minecraft:logs"
+                ],
+                "faces": [
+                    "sides"
+                ],
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_jungle"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
             "id": "kakuna-2",
             "pokemon": "kakuna",
             "type": "pokemon",

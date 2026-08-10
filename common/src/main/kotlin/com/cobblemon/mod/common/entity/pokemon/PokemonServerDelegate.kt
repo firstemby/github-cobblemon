@@ -390,6 +390,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         val poseType = when {
             isPassenger -> PoseType.STAND
+            entity.isHangingFromThread -> PoseType.HANG
+            entity.clingingFace != null -> PoseType.CLING
             isSleeping -> PoseType.SLEEP
             isMoving && isUnderwater  -> PoseType.SWIM
             isUnderwater -> PoseType.FLOAT

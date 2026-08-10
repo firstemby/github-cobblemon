@@ -68,6 +68,7 @@ import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleBuilder
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.SuccessfulBattleStart
+import com.cobblemon.mod.common.block.SilkThreadBlock
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
@@ -423,6 +424,10 @@ open class PokemonEntity(
 
     var tickSpawned = 0
 
+    var isHangingFromThread = false
+
+    var clingingFace: Direction? = null
+
     var occupiedSeats = mutableMapOf<Seat, Entity>()
 
     init {
@@ -701,6 +706,10 @@ open class PokemonEntity(
             evolutionEntity!!.setPos(pokemon.entity!!.x, pokemon.entity!!.y, pokemon.entity!!.z)
             pokemon.entity!!.navigation.stop()
         }
+        if (!level().isClientSide) {
+            tickThreadHanging()
+            tickClinging()
+        }
         delegate.tick(this)
         ticksLived++
 
@@ -943,6 +952,10 @@ open class PokemonEntity(
         if (!enablePoseTypeRecalculation) {
             nbt.putBoolean(DataKeys.POKEMON_RECALCULATE_POSE, enablePoseTypeRecalculation)
         }
+        if (isHangingFromThread) {
+            nbt.putBoolean(DataKeys.POKEMON_HANGING_FROM_THREAD, true)
+        }
+        clingingFace?.let { nbt.putByte(DataKeys.POKEMON_CLINGING_FACE, it.get3DDataValue().toByte()) }
         val dataResult = this.brain.serializeStart(NbtOps.INSTANCE)
         dataResult.resultOrPartial(::error).ifPresent { brain ->
             nbt.put("Brain", brain)
@@ -1035,6 +1048,12 @@ open class PokemonEntity(
         }
         if (nbt.contains(DataKeys.POKEMON_COUNTS_TOWARDS_SPAWN_CAP)) {
             countsTowardsSpawnCap = nbt.getBoolean(DataKeys.POKEMON_COUNTS_TOWARDS_SPAWN_CAP)
+        }
+        isHangingFromThread = nbt.getBoolean(DataKeys.POKEMON_HANGING_FROM_THREAD)
+        clingingFace = if (nbt.contains(DataKeys.POKEMON_CLINGING_FACE)) {
+            Direction.from3DDataValue(nbt.getByte(DataKeys.POKEMON_CLINGING_FACE).toInt())
+        } else {
+            null
         }
         if (nbt.contains(DataKeys.POKEMON_RECALCULATE_POSE)) {
             enablePoseTypeRecalculation = nbt.getBoolean(DataKeys.POKEMON_RECALCULATE_POSE)
@@ -1341,12 +1360,8 @@ open class PokemonEntity(
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return if (super.hurt(source, amount)) {
-            if (brain.hasMemoryValue(CobblemonMemories.HANGING_FROM_CEILING)) {
-                brain.eraseMemory(CobblemonMemories.HANGING_FROM_CEILING)
-                brain.eraseMemory(CobblemonMemories.HANGING_CEILING_ANCHOR)
-                brain.setMemory(CobblemonMemories.RELEASED_FROM_CEILING, true)
-                isNoGravity = getCurrentPoseType() in NO_GRAV_POSES && passengers.isEmpty()
-            }
+            releaseFromThread()
+            releaseFromClinging()
 
             effects.mockEffect?.takeIf { it is IllusionEffect && this.battleId == null }?.end(this)
 
@@ -1358,6 +1373,77 @@ open class PokemonEntity(
             }
             true
         } else false
+    }
+
+    fun startHangingFromThread() {
+        isHangingFromThread = true
+        isNoGravity = true
+        setDeltaMovement(Vec3.ZERO)
+        navigation.stop()
+    }
+
+    fun releaseFromThread() {
+        if (!isHangingFromThread) return
+        isHangingFromThread = false
+        breakThreadColumn()
+        isNoGravity = false
+    }
+
+    private fun tickThreadHanging() {
+        if (!isHangingFromThread) return
+        if (isEvolving || !level().getBlockState(blockPosition()).`is`(CobblemonBlocks.SILK_THREAD)) {
+            releaseFromThread()
+            return
+        }
+        setDeltaMovement(Vec3.ZERO)
+        navigation.stop()
+        brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+    }
+
+    private fun breakThreadColumn() {
+        val world = level() as? ServerLevel ?: return
+        var pos = blockPosition()
+        repeat(SilkThreadBlock.MAX_LENGTH) {
+            if (world.getBlockState(pos).`is`(CobblemonBlocks.SILK_THREAD)) {
+                world.destroyBlock(pos, true)
+            }
+            pos = pos.above()
+        }
+    }
+
+    fun startClinging(face: Direction) {
+        clingingFace = face
+        isNoGravity = true
+        setDeltaMovement(Vec3.ZERO)
+        navigation.stop()
+        faceClingedBlock(face)
+    }
+
+    fun releaseFromClinging() {
+        if (clingingFace == null) return
+        clingingFace = null
+        isNoGravity = false
+    }
+
+    private fun tickClinging() {
+        val face = clingingFace ?: return
+        val supportPos = blockPosition().relative(face)
+        if (isEvolving || !level().getBlockState(supportPos).isFaceSturdy(level(), supportPos, face.opposite)) {
+            releaseFromClinging()
+            return
+        }
+        setDeltaMovement(Vec3.ZERO)
+        navigation.stop()
+        brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+        faceClingedBlock(face)
+    }
+
+    private fun faceClingedBlock(face: Direction) {
+        if (!face.axis.isHorizontal) return
+        val yaw = face.toYRot()
+        yRot = yaw
+        yBodyRot = yaw
+        yHeadRot = yaw
     }
 
     override fun shouldBeSaved(): Boolean {
@@ -1791,6 +1877,10 @@ open class PokemonEntity(
         subscriptions.forEach(ObservableSubscription<*>::unsubscribe)
         removalObservable.emit(reason)
         this.brain.clearMemories()
+
+        if (reason.shouldDestroy()) {
+            releaseFromThread()
+        }
 
         if (reason.shouldDestroy() && pokemon.tetheringId != null) {
             pokemon.tetheringId = null

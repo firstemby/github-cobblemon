@@ -36,6 +36,9 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val DISC_SHELF: BlockEntityType<DiscShelfBlockEntity> = this.create("disc_shelf", BlockEntityType.Builder.of(::DiscShelfBlockEntity, CobblemonBlocks.DISC_SHELF).build(null))
 
     @JvmField
+    val SILK_THREAD: BlockEntityType<SilkThreadBlockEntity> = this.create("silk_thread", BlockEntityType.Builder.of(::SilkThreadBlockEntity, CobblemonBlocks.SILK_THREAD).build(null))
+
+    @JvmField
     val BERRY = this.create("berry", BlockEntityType.Builder.of(::BerryBlockEntity, *CobblemonBlocks.berries().values.toTypedArray()).build(null))
 
     @JvmField

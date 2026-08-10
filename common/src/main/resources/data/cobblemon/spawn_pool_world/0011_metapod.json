@@ -29,6 +29,35 @@
             }
         },
         {
+            "id": "metapod-cling-1",
+            "pokemon": "metapod",
+            "type": "pokemon",
+            "spawnablePositionType": "clinging",
+            "bucket": "common",
+            "level": "7-21",
+            "weight": 2.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "attachedTo": [
+                    "#minecraft:logs"
+                ],
+                "faces": [
+                    "sides"
+                ],
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_plains"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing",
+                    "#cobblemon:is_spooky"
+                ]
+            }
+        },
+        {
             "id": "metapod-valencian-2",
             "pokemon": "metapod valencian",
             "type": "pokemon",

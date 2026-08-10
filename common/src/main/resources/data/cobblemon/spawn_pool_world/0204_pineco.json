@@ -6,12 +6,8 @@
         {
             "id": "pineco-1",
             "pokemon": "pineco",
-            "presets": [
-                "natural",
-                "treetop"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "hanging",
             "bucket": "common",
             "level": "4-29",
             "weight": 9.0,

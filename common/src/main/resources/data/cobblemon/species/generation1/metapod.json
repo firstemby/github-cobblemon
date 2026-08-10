@@ -74,14 +74,6 @@
       "willFlee": false
     }
   },
-  "ai": [
-    {
-      "type": "apply_behaviours",
-      "behaviours": [
-        "cobblemon:pokemon_hangs_from_leaves"
-      ]
-    }
-  ],
   "drops": {
     "amount": 3,
     "entries": [
