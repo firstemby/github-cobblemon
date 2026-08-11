@@ -8,11 +8,15 @@
 
 package com.cobblemon.mod.common.integration.recipeviewer
 
+import net.minecraft.world.item.ItemStack
+
 data class RecipeSlot(
     val x: Int,
     val y: Int,
     val type: SlotType,
-    val ingredient: RecipeIngredient
+    val ingredient: RecipeIngredient,
+    val watchIngredient: Boolean = false,
+    val generatedStack: ((List<ItemStack>) -> ItemStack)? = null
 )
 
 enum class SlotType {

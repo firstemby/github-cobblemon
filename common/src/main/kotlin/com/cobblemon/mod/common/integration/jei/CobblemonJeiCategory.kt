@@ -15,6 +15,7 @@ import mezz.jei.api.constants.VanillaTypes
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder
 import mezz.jei.api.gui.drawable.IDrawable
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView
 import mezz.jei.api.recipe.IFocusGroup
 import mezz.jei.api.recipe.RecipeIngredientRole
@@ -25,6 +26,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
+import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrNull
 
 class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRecipeCategoryRegistration, val categoryProvider: CobblemonJeiProvider<T>):
     IRecipeCategory<T> {
@@ -67,5 +70,34 @@ class CobblemonJeiCategory<T: RecipeViewerRecipe>(private val registration: IRec
     ) {
         val delta = Minecraft.getInstance().timer.realtimeDeltaTicks
         recipe.renderRecipe( guiGraphics, mouseX.toInt(), mouseY.toInt(), delta)
+    }
+
+    override fun onDisplayedIngredientsUpdate(
+        recipe: T,
+        recipeSlots: List<IRecipeSlotDrawable?>,
+        focuses: IFocusGroup
+    ) {
+        val watchedItems = mutableListOf<ItemStack>()
+        val baseSlots = recipe.getSlots()
+        baseSlots.forEachIndexed { index, slot ->
+            if (slot.watchIngredient && slot.generatedStack == null) {
+                val ingredient = recipeSlots[index]!!.displayedIngredient
+                if (ingredient.isEmpty) {
+                    watchedItems.add(ItemStack.EMPTY)
+                } else {
+                    watchedItems.add(ingredient.get().itemStack.getOrDefault(ItemStack.EMPTY))
+                }
+            }
+        }
+
+        //Apply generations
+        baseSlots.forEachIndexed { index, slot ->
+            if (slot.generatedStack != null) {
+                val stack = slot.generatedStack(watchedItems)
+                recipeSlots[index]!!.let {
+                    it.createDisplayOverrides().addItemStack(stack)
+                }
+            }
+        }
     }
 }

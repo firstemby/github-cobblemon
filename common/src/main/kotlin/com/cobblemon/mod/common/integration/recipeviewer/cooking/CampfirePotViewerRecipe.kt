@@ -26,7 +26,7 @@ import com.cobblemon.mod.common.integration.recipeviewer.SlotType
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 
-class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: CookingPotRecipeBase): RecipeViewerRecipe {
+open class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: CookingPotRecipeBase): RecipeViewerRecipe {
     companion object {
         val EXAMPLE_SEASONINGS = BuiltInRegistries.ITEM.map { it.defaultInstance }.filter { Seasonings.isSeasoning(it) }
 
@@ -59,6 +59,7 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 SlotType.INPUT, RecipeIngredient(ingredient)))
         }
 
+        var outputGenerator: ((List<ItemStack>) -> ItemStack)? = null
         if (originalRecipe.seasoningProcessors.isNotEmpty()) {
             val processedSeasonings = generateProperSeasoningList()
 
@@ -67,12 +68,16 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
                 val y = 1
 
                 slots.add(RecipeSlot(x, y,
-                    SlotType.CATALYST, RecipeIngredient(Ingredient.of(*processedSeasonings.shuffled().toTypedArray()))))
+                    SlotType.CATALYST, RecipeIngredient(Ingredient.of(*processedSeasonings.shuffled().toTypedArray())),
+                    true))
             }
+
+            outputGenerator = { handleSeasoningProcessors(it) }
         }
 
         slots.add(RecipeSlot(111, 38,
-            SlotType.OUTPUT, RecipeIngredient(Ingredient.of(originalRecipe.getResultItem(registryAccess)))))
+            SlotType.OUTPUT, RecipeIngredient(Ingredient.of(originalRecipe.getResultItem(registryAccess))),
+            generatedStack = outputGenerator))
 
         return slots
     }
@@ -102,5 +107,11 @@ class CampfirePotViewerRecipe(val theId: ResourceLocation, val originalRecipe: C
             valid
         }
         return processedSeasonings
+    }
+
+    private fun handleSeasoningProcessors(seasonings: List<ItemStack>): ItemStack {
+        val stack = originalRecipe.result.copy()
+        originalRecipe.applySeasoning(stack, seasonings)
+        return stack
     }
 }
