@@ -188,7 +188,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
     val variationButtons = mutableListOf<VariationButtonWrapper>()
 
-    private val genderButton: ScaledButton = ScaledButton(
+    val genderButton: ScaledButton = ScaledButton(
         pX + 114F,
         pY + 27F,
         20,
@@ -200,7 +200,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         }
     ).apply { addWidget(this) }
 
-    private val shinyButton: ScaledButton = ScaledButton(
+    val shinyButton: ScaledButton = ScaledButton(
         (pX + 126F),
         (pY + 27F),
         20,
@@ -638,12 +638,12 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         type = arrayOf(form.primaryType, form.secondaryType)
     }
 
-    private fun playCry() {
+    fun playCry() {
         state.activeAnimations.clear()
         state.addFirstAnimation(setOf("cry"))
     }
 
-    private fun switchForm(nextIndex: Boolean) {
+    fun switchForm(nextIndex: Boolean) {
         if (visibleForms.isEmpty() || currentEntry == null) {
             return
         }
@@ -664,7 +664,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         updateAspects()
     }
 
-    private fun switchPose(nextIndex: Boolean) {
+    fun switchPose(nextIndex: Boolean) {
         if (nextIndex) {
             if (selectedPoseIndex < poseList.lastIndex) selectedPoseIndex++
             else selectedPoseIndex = 0

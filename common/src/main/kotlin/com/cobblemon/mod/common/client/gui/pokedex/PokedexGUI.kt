@@ -286,7 +286,7 @@ class PokedexGUI private constructor(
 
         fun hasKnowledge(): Boolean {
             val currentEntry = pokemonInfoWidget.currentEntry
-            return currentEntry != null && CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
+            return currentEntry != null && CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.UNREGISTERED
         }
 
         controllerComponentManager.componentList["search"] = ControllerComponent().also {
@@ -356,7 +356,7 @@ class PokedexGUI private constructor(
                 } else if (it.currentSelectedComponent == "pokemon_render") {
                     val currentEntry = pokemonInfoWidget.currentEntry
                     if (currentEntry != null) {
-                        val hasKnowledge = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.NONE
+                        val hasKnowledge = CobblemonClient.clientPokedexData.getKnowledgeForSpecies(currentEntry.speciesId) != PokedexEntryProgress.UNREGISTERED
                         val showableForms = CobblemonClient.clientPokedexData.getEncounteredForms(currentEntry)
                         if (hasKnowledge && showableForms.size > 1 && showableForms.size > pokemonInfoWidget.selectedFormIndex) {
                             pokemonInfoWidget.switchForm(nextTab)

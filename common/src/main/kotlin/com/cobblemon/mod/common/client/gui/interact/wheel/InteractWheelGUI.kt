@@ -32,7 +32,7 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    private val buttons = mutableListOf<InteractWheelButton>()
+    val buttons = mutableListOf<InteractWheelButton>()
     private var maxPage = 1
     private var currentPage = 0
 
