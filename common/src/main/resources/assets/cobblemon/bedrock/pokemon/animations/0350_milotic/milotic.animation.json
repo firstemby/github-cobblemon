@@ -835,6 +835,113 @@
 				}
 			}
 		},
+		"animation.milotic.ride_water_swim": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": ["-q.r.pitch_change(0)*30", 0, "q.r.yaw_change(0)*-10"]
+				},
+				"neck": {
+					"rotation": ["-q.r.pitch_change(0)*15", "-q.r.yaw_change(0)*-5", "q.r.yaw_change(0)*5"]
+				},
+				"neck2": {
+					"rotation": ["-q.r.pitch_change(1)*15", 0, "q.r.yaw_change(1)*-10"]
+				},
+				"neck3": {
+					"rotation": ["-q.r.pitch_change(2)*15", 0, "q.r.yaw_change(2)*-10"]
+				},
+				"neck4": {
+					"rotation": ["-q.r.pitch_change(3)*15", 0, "q.r.yaw_change(3)*-10"]
+				},
+				"head": {
+					"rotation": [0, 0, "q.r.yaw_change(4)*-10"]
+				},
+				"hair_left1": {
+					"rotation": ["-q.r.pitch_change(0)*-11.6413", "-0.1125+math.min((q.r.pitch_change(0)*50),15)", "-2.9884+math.clamp((q.r.yaw_change(0)*10),-10,5)"]
+				},
+				"hair_left2": {
+					"rotation": [0, "-math.min((q.r.pitch_change(2)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(4))*0.5", 0, 0]
+				},
+				"hair_left3": {
+					"rotation": [0, "-math.min((q.r.pitch_change(4)*20),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(4))*0.5", 0, 0]
+				},
+				"hair_left4": {
+					"rotation": [0, "-math.min((q.r.pitch_change(6)*20),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(6))*0.5", 0, 0]
+				},
+				"hair_left5": {
+					"rotation": [0, "-math.min((q.r.pitch_change(8)*25),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(8))*0.6", 0, 0]
+				},
+				"hair_left6": {
+					"rotation": [0, "-math.min((q.r.pitch_change(10)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(10))*0.5", 0, 0]
+				},
+				"hair_left7": {
+					"rotation": [0, "-math.min((q.r.pitch_change(12)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-10,5)"],
+					"position": ["-0-math.abs(q.r.pitch_change(12))*0.75", 0, 0]
+				},
+				"hair_right1": {
+					"rotation": ["-q.r.pitch_change(0)*-11.6413", "0.1125-math.min((q.r.pitch_change(0)*50),15)", "2.9884+math.clamp((q.r.yaw_change(0)*10),-5,10)"]
+				},
+				"hair_right2": {
+					"rotation": [0, "math.min((q.r.pitch_change(2)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(4))*0.5", 0, 0]
+				},
+				"hair_right3": {
+					"rotation": [0, "math.min((q.r.pitch_change(4)*20),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(4))*0.5", 0, 0]
+				},
+				"hair_right4": {
+					"rotation": [0, "math.min((q.r.pitch_change(6)*20),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(6))*0.5", 0, 0]
+				},
+				"hair_right5": {
+					"rotation": [0, "math.min((q.r.pitch_change(8)*25),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(8))*0.6", 0, 0]
+				},
+				"hair_right6": {
+					"rotation": [0, "math.min((q.r.pitch_change(10)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(10))*0.5", 0, 0]
+				},
+				"hair_right7": {
+					"rotation": [0, "math.min((q.r.pitch_change(12)*30),10)", "math.clamp((q.r.yaw_change(0)*10),-5,10)"],
+					"position": ["0+math.abs(q.r.pitch_change(12))*0.75", 0, 0]
+				},
+				"torso": {
+					"rotation": ["-q.r.pitch_change(0)*-5", "-q.r.yaw_change(0)*5", 0]
+				},
+				"tail1": {
+					"rotation": ["-q.r.pitch_change(2)*-15", 0, "q.r.yaw_change(2)*10"]
+				},
+				"tail2": {
+					"rotation": ["-q.r.pitch_change(4)*-15", 0, "q.r.yaw_change(4)*10"]
+				},
+				"tail3": {
+					"rotation": ["-q.r.pitch_change(6)*-15", 0, "q.r.yaw_change(6)*10"]
+				},
+				"tail4": {
+					"rotation": ["-q.r.pitch_change(8)*-15", 0, "q.r.yaw_change(8)*10"]
+				},
+				"tail5": {
+					"rotation": ["-q.r.pitch_change(10)*-15", 0, "q.r.yaw_change(10)*10"]
+				},
+				"tail6": {
+					"rotation": ["-q.r.pitch_change(12)*-15", 0, "q.r.yaw_change(12)*10"]
+				},
+				"tail7": {
+					"rotation": ["-q.r.pitch_change(14)*-10", 0, "q.r.yaw_change(14)*10"]
+				},
+				"tail8": {
+					"rotation": ["-q.r.pitch_change(16)*-15", 0, "q.r.yaw_change(16)*10"]
+				},
+				"tail_fins": {
+					"rotation": ["-q.r.pitch_change(18)*-15", 0, "q.r.yaw_change(18)*10"]
+				}
+			}
+		},
 		"animation.milotic.blink": {
 			"animation_length": 0.1667,
 			"bones": {

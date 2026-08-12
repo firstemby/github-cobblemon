@@ -1,0 +1,19 @@
+{
+  "moveName": "dive",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 6
+    },
+    {
+      "item": "cobblemon:deep_sea_scale",
+      "count": 1
+    }
+  ]
+}

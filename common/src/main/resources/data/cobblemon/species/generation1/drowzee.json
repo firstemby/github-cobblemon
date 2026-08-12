@@ -44,14 +44,14 @@
   "baseFriendship": 50,
   "baseScale": 0.85,
   "hitbox": {
-    "width": 0.7,
-    "height": 1.1,
+    "width": 0.9,
+    "height": 1.35,
     "fixed": false
   },
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.22
+        "walkSpeed": 0.19
       },
       "swim": {
         "avoidsWater": true

@@ -54,7 +54,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == false",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "expressions": ["q.sound('move.seismictoss.target');"]
     },
     {

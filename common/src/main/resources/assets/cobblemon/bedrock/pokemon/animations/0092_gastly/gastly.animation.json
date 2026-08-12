@@ -22,7 +22,7 @@
 					"rotation": [-2.5, 0, 0],
 					"position": [0, 0.01308, -0.24966]
 				},
-				"tougue": {
+				"tongue": {
 					"position": [0, 0, 3],
 					"scale": 0
 				}
@@ -51,7 +51,7 @@
 						"1.25*math.sin(q.anim_time*90*3)*0.4-1.*math.sin(q.anim_time*90*3-30)*0.4+1*math.sin(q.anim_time*90*3-60)*0.4-1.25*math.sin(q.anim_time*90*3-90)*0.4"
 					]
 				},
-				"tougue": {
+				"tongue": {
 					"position": [0, 0, 3],
 					"scale": 0
 				}
@@ -194,7 +194,7 @@
 						"1.5": [25.4, 0, 0]
 					}
 				},
-				"tougue": {
+				"tongue": {
 					"rotation": {
 						"0.0": [0, 0, 0],
 						"0.75": {
@@ -235,7 +235,7 @@
 						"1.5": [1, 1, 1]
 					}
 				},
-				"tougue3": {
+				"tongue3": {
 					"position": {
 						"0.0": [0, 0, 0],
 						"0.75": [0, 0, 2],
@@ -245,7 +245,7 @@
 						"1.5": [0, 0.03, 0]
 					}
 				},
-				"tougue5": {
+				"tongue5": {
 					"position": {
 						"0.0": [0, 0, 0],
 						"0.75": [0, -0.09475, 0.68537],
@@ -323,7 +323,7 @@
 						}
 					}
 				},
-				"tougue2": {
+				"tongue2": {
 					"rotation": {
 						"0.0": [0, 0, 0],
 						"0.75": [0, 0, 0],
@@ -338,7 +338,7 @@
 						"1.5": [0, 0.14942, -0.32043]
 					}
 				},
-				"tougue4": {
+				"tongue4": {
 					"rotation": {
 						"0.0": [0, 0, 0],
 						"0.75": [-8.75, 0, 0],
@@ -367,7 +367,7 @@
 				"left_pupil": {
 					"position": [-1, 0.5, 0]
 				},
-				"tougue": {
+				"tongue": {
 					"rotation": [20, 0, 0],
 					"position": [0.02603, 0.03264, 0.35213]
 				},
@@ -377,10 +377,10 @@
 				"mouth_tongue_full_open": {
 					"position": [0, -0.25, -0.1]
 				},
-				"tougue2": {
+				"tongue2": {
 					"rotation": [29.87229, -22.01609, -12.15123]
 				},
-				"tougue4": {
+				"tongue4": {
 					"rotation": [27.29815, -21.67393, -11.20487]
 				}
 			}
@@ -397,13 +397,13 @@
 				"mouth_tongue_full_open": {
 					"position": [0, -0.75, -0.1]
 				},
-				"tougue": {
+				"tongue": {
 					"rotation": [-15, 0, 0]
 				},
-				"tougue3": {
+				"tongue3": {
 					"position": [0, 0, -6]
 				},
-				"tougue5": {
+				"tongue5": {
 					"position": [0, 0, -6]
 				}
 			}

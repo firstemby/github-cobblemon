@@ -10,6 +10,7 @@ package com.cobblemon.mod.common
 
 
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
+import com.cobblemon.mod.common.block.tmmachine.TMMachineMenu
 import com.cobblemon.mod.common.platform.PlatformRegistry
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -19,7 +20,8 @@ import net.minecraft.world.inventory.MenuType
 
 object CobblemonMenuType : PlatformRegistry<Registry<MenuType<*>>, ResourceKey<Registry<MenuType<*>>>, MenuType<*>>() {
 
-    val COOKING_POT = MenuType.register("cooking_pot", ::CookingPotMenu)
+    val COOKING_POT = MenuType.register("cooking_pot_menu", ::CookingPotMenu)
+    val TM_MACHINE = MenuType.register("tm_machine_menu", ::TMMachineMenu)
 
     override val registry: Registry<MenuType<*>>
         get() = BuiltInRegistries.MENU

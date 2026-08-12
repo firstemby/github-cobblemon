@@ -87,6 +87,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true,
         "canSwimInLava": true
@@ -436,11 +439,23 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2",
+          "maxSize": 2,
           "toleratedLeaders": [
             {
-              "pokemon": "ninetales",
+              "pokemon": "vulpix alpha",
               "tier": 1
+            },
+            {
+              "pokemon": "vulpix alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "ninetales",
+              "tier": 2
+            },
+            {
+              "pokemon": "ninetales alolan",
+              "tier": 3
             }
           ]
         },
@@ -453,6 +468,9 @@
           "rouseChance": 0.0042
         },
         "moving": {
+          "walk": {
+            "walkSpeed": 0.2
+          },
           "swim": {
             "avoidsWater": true
           }

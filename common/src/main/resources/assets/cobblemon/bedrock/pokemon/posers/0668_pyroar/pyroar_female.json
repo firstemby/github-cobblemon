@@ -2,7 +2,7 @@
   "portraitScale": 1.98,
   "portraitTranslation": [-0.96, 1.39, 0],
   "profileScale": 0.59,
-  "profileTranslation": [0.13, 0.82, 0],
+  "profileTranslation": [0, 0.84, 0],
   "rootBone": "pyroar_female",
   "animations": {
     "cry": "q.bedrock_stateful('pyroar_female', 'cry')"

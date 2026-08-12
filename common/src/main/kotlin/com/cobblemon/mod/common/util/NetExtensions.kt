@@ -70,12 +70,13 @@ fun <K, V> ByteBuf.writeMapK(size: IntSize = IntSize.U_BYTE, map: Map<K, V>, ent
     map.entries.forEach(entryWriter)
 }
 
-fun <K, V> ByteBuf.readMapK(size: IntSize = IntSize.U_BYTE, map: MutableMap<K, V>, entryReader: () -> Pair<K, V>) {
+fun <K, V> ByteBuf.readMapK(size: IntSize = IntSize.U_BYTE, map: MutableMap<K, V>, entryReader: () -> Pair<K, V>): MutableMap<K, V> {
     val times = readSizedInt(size)
     repeat(times) {
         val (key, value) = entryReader()
         map[key] = value
     }
+    return map
 }
 
 fun ByteBuf.writeVec3d(vec3d: Vec3) {

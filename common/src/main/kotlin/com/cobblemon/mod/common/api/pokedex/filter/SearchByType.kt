@@ -11,5 +11,6 @@ package com.cobblemon.mod.common.api.pokedex.filter
 enum class SearchByType {
     SPECIES,
     ABILITIES,
+    MOVES,
     DROPS;
 }

@@ -41,6 +41,19 @@
           "translucent_cull": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "galarian",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0222_corsola/corsola_galarian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -473,8 +473,12 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
+            {
+              "pokemon": "exeggutor alpha",
+              "tier": 1
+            },
             {
               "pokemon": "exeggutor alolan",
               "tier": 1

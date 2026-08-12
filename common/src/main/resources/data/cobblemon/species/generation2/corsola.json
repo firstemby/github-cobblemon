@@ -71,7 +71,7 @@
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canSwimInWater": false,
+        "canSwimInWater": true,
         "canBreatheUnderwater": true
       }
     },
@@ -293,7 +293,7 @@
           "rouseChance": 0.0042
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "corsola galarian",

@@ -51,6 +51,7 @@ class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : Inte
 
             preamble.thenAccept {
                 faintingPokemon.effectedPokemon.currentHealth = 0
+                faintingPokemon.faintedAt = battle.faintCounter++
                 faintingPokemon.sendUpdate()
                 CobblemonEvents.BATTLE_FAINTED.post(BattleFaintedEvent(battle, pokemon, context, pnx))
                 battle.getActorAndActiveSlotFromPNX(pnx).second.battlePokemon = null

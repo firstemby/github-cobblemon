@@ -14,9 +14,11 @@ import com.cobblemon.mod.common.api.item.ability.AbilityChanger
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
 
 open class AbilityChangeItem<T : PotentialAbility>(
@@ -33,6 +35,7 @@ open class AbilityChangeItem<T : PotentialAbility>(
     override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
         if (this.changer.performChange(entity.pokemon)) {
             stack.consume(1, player)
+            if (changer == AbilityChanger.COMMON_ABILITY) player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
             val feedback = lang(
                 "ability_changer.changed",
                 entity.pokemon.getDisplayName(),

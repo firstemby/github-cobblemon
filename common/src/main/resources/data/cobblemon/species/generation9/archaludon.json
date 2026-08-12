@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 1018,
   "name": "Archaludon",
   "primaryType": "steel",
@@ -43,6 +44,54 @@
   "catchRate": 10,
   "eggCycles": 30,
   "baseFriendship": 50,
+  "baseScale": 1.1,
+  "hitbox": {
+    "height": 2.5,
+    "fixed": false,
+    "width": 1.6
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "45-70",
+          "JUMP": "25-30",
+          "SKILL": "5-25",
+          "SPEED": "5-10",
+          "STAMINA": "50-90"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    }
+  },
   "moves": [
     "1:electroshot",
     "1:leer",
@@ -141,24 +190,5 @@
     "legacy:stompingtantrum"
   ],
   "preEvolution": "duraludon",
-  "evolutions": [],
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "avoidsWater": true
-      }
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "times": [
-        "any"
-      ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
-    }
-  }
+  "evolutions": []
 }

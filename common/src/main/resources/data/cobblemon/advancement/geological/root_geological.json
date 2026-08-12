@@ -1,0 +1,73 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:dawn_stone"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.root_geological"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.root_geological.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "parent": "cobblemon:root",
+  "criteria": {
+    "core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:deepslate_crystal_core"
+          }
+        ]
+      }
+    },
+    "fossils": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#cobblemon:fossils"
+          }
+        ]
+      }
+    },
+    "tumblestones": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#cobblemon:tumblestones"
+          }
+        ]
+      }
+    },
+    "evolution_stones": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#cobblemon:evolution_stones"
+          }
+        ]
+      }
+    },
+    "type_gems": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#cobblemon:type_gems"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "core", "fossils", "tumblestones", "evolution_stones", "type_gems"
+    ]
+  ]
+}

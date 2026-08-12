@@ -21,7 +21,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class PersianAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
-    override val rootPart = root.registerChildWithAllChildren("persian_alolan")
+    override val rootPart = root.registerChildWithAllChildren("persian")
     override val head = getPart("head")
 
     override val foreLeftLeg= getPart("leg_front_left1")

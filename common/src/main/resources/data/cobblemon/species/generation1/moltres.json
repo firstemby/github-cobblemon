@@ -96,11 +96,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
+        "locator": "seat_1"
       }
     ]
   },
@@ -417,7 +413,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2",
+          "maxSize": 3,
           "toleratedLeaders": [
             {
               "pokemon": "moltres galarian",

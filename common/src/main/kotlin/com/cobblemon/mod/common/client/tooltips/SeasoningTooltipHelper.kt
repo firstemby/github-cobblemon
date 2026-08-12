@@ -160,8 +160,9 @@ fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component
             val effectSubcategory = effect.subcategory?.path
             val effectChance = effect.chance * 100
             var effectValue = when (effectType) {
-                "bite_time" -> (effect.value * 100).toInt()
-                "shiny_reroll" -> (effect.value + 1).toInt()
+                SpawnBait.Effects.BITE_TIME.path -> (effect.value * 100).toInt()
+                SpawnBait.Effects.SHINY_REROLL.path -> (effect.value + 1).toInt()
+                SpawnBait.Effects.SIZE.path -> (effect.value / 100.0).toDouble()
                 else -> effect.value.toInt()
             }
 

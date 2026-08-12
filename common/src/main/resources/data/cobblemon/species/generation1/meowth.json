@@ -480,6 +480,19 @@
         },
         "combat": {
           "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "meowth galarian=false alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "persian galarian=false alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     },
@@ -543,6 +556,19 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "meowth galarian alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "persian galarian alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "drops": {

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 838,
   "name": "Carkol",
   "primaryType": "rock",
@@ -42,10 +43,10 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 1.5,
     "fixed": false
   },
   "behaviour": {

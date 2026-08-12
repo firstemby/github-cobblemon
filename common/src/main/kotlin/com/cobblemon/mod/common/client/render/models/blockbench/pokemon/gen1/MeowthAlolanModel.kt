@@ -24,7 +24,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class MeowthAlolanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BimanualFrame {
-    override val rootPart = root.registerChildWithAllChildren("meowth_alolan")
+    override val rootPart = root.registerChildWithAllChildren("meowth")
     override val head = getPart("head")
 
     override val leftLeg = getPart("leg_left")

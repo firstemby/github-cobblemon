@@ -408,8 +408,12 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
+            {
+              "pokemon": "farfetchd alpha",
+              "tier": 1
+            },
             {
               "pokemon": "farfetchd galarian",
               "tier": 1

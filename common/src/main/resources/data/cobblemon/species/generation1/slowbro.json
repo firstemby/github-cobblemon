@@ -78,12 +78,8 @@
     }
   },
   "drops": {
-    "amount": 4,
+    "amount": 3,
     "entries": [
-      {
-        "item": "cobblemon:tasty_tail",
-        "quantityRange": "0-1"
-      },
       {
         "item": "cobblemon:kings_rock",
         "percentage": 5.0
@@ -397,6 +393,19 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "slowbro alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "slowking alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "moves": [
@@ -558,12 +567,8 @@
       "evolutions": [],
       "battleOnly": false,
       "drops": {
-        "amount": 5,
+        "amount": 4,
         "entries": [
-          {
-            "item": "cobblemon:tasty_tail",
-            "quantityRange": "0-1"
-          },
           {
             "item": "cobblemon:galarica_nuts",
             "quantityRange": "0-2"

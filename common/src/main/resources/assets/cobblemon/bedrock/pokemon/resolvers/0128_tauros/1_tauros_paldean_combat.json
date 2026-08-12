@@ -12,6 +12,19 @@
     {
       "aspects": ["paldean","shiny"],
       "texture": "cobblemon:textures/pokemon/0128_tauros/tauros_paldean_combat_shiny.png"
+    },
+    {
+      "aspects": [
+        "paldean",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0128_tauros/tauros_paldean_combat_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

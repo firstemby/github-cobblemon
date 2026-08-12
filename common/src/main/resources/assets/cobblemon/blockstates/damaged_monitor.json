@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=south,screen=off": {
+      "model": "cobblemon:block/monitor_damaged"
+    },
+    "facing=north,screen=off": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 180
+    },
+    "facing=west,screen=off": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 90
+    },
+    "facing=east,screen=off": {
+      "model": "cobblemon:block/monitor_damaged",
+      "y": 270
+    },
+    "facing=south,screen=glitching": {
+      "model": "cobblemon:block/monitor_damaged_glitching"
+    },
+    "facing=north,screen=glitching": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 180
+    },
+    "facing=west,screen=glitching": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 90
+    },
+    "facing=east,screen=glitching": {
+      "model": "cobblemon:block/monitor_damaged_glitching",
+      "y": 270
+    }
+  }
+}

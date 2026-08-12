@@ -51,15 +51,11 @@
       "required": false
     },
     {
+      "id": "biomeswevegone:pumpkin_valley",
+      "required": false
+    },
+    {
       "id": "blooming_biosphere:autumnal_forest",
-      "required": false
-    },
-    {
-      "id": "byg:autumnal_forest",
-      "required": false
-    },
-    {
-      "id": "byg:autumnal_taiga",
       "required": false
     },
     {

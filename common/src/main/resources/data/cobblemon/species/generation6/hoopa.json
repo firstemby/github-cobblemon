@@ -374,7 +374,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "3"
+          "maxSize": 4
         },
         "moving": {
           "swim": {

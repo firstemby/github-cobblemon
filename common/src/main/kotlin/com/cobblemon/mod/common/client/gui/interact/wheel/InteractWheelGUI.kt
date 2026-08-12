@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.interact.wheel
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isInventoryKeyPressed
 import com.google.common.collect.Multimap
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -23,9 +24,18 @@ class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelO
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }
 
-    val buttons = mutableListOf<InteractWheelButton>()
-    var maxPage = 1
-    var currentPage = 0
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (isInventoryKeyPressed(minecraft, keyCode, scanCode)) {
+            onClose()
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    private val buttons = mutableListOf<InteractWheelButton>()
+    private var maxPage = 1
+    private var currentPage = 0
+
     override fun renderBlurredBackground(delta: Float) { }
     override fun renderMenuBackground(context: GuiGraphics) {}
 

@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/blocks",
   "rewards": {
     "recipes": [
       "cobblemon:chiseled_polished_black_tumblestone_from_polished_black_tumblestone_in_stonecutter"

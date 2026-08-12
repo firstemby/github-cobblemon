@@ -94,7 +94,18 @@
           "variant": "properties",
           "target": "gender=female"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "burmy_mothim",
@@ -113,7 +124,18 @@
           "variant": "properties",
           "target": "gender=male"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "forms": [
@@ -150,7 +172,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         },
         {
           "id": "burmy_mothim",
@@ -169,10 +202,48 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "wormadam alpha",
+              "tier": 1
+            }
+          ]
+        }
+      }
     },
     {
       "name": "Trash",
@@ -207,7 +278,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         },
         {
           "id": "burmy_mothim",
@@ -226,10 +308,48 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "herd": {
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "wormadam alpha",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "behaviour": {

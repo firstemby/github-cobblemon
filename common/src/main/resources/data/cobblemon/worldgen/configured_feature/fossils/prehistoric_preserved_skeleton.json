@@ -1,0 +1,12 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/preserved_skeleton1",
+            "cobblemon:fossils/preserved_skeleton2",
+            "cobblemon:fossils/preserved_skeleton3",
+            "cobblemon:fossils/preserved_skeleton4"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_preserved_skeleton"
+    }
+}

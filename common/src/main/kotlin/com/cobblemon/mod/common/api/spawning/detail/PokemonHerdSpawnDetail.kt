@@ -8,13 +8,17 @@
 
 package com.cobblemon.mod.common.api.spawning.detail
 
+import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 import com.cobblemon.mod.common.util.weightedSelection
 import com.google.gson.annotations.SerializedName
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 
 /**
  * A spawn detail that spawns a herd of Pokémon. This relies on the same [PokemonSpawnAction]s as
@@ -49,10 +53,13 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         var pokemon: PokemonProperties = PokemonProperties()
         val levelRange: IntRange? = null
         var levelRangeOffset: IntRange? = null
+        val herdLevelRange: IntRange? = null
         var dropTable: DropTable? = null
-        var isLeader: Boolean? = null
+        var isLeader: Boolean = false
+        var isFollower: Boolean = true
         var weight: Float = 1F
         var maxTimes = 10
+        var heldItem: ResourceLocation? = null
     }
 
     override fun isValid() = super.isValid() && herdablePokemon.all { it.pokemon.hasSpecies() && it.weight > 0F && it.maxTimes > 0 }
@@ -77,7 +84,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         val herdable = getValidHerdMembers(selectionData)
         val herdCounts = getHerdMemberCounts(selectionData)
 
-        val leaderIsPossible = herdable.any { it.levelRange?.contains(level) != false && it.isLeader == true }
+        val leaderIsPossible = herdable.any { it.herdLevelRange?.contains(level) != false && it.isLeader }
         val leaderIsSelected = herdCounts.any { it.key?.isLeader == true && it.value > 0 }
         return leaderIsPossible && !leaderIsSelected
     }
@@ -92,14 +99,16 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
 
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
-        bucket: SpawnBucket,
+        bucket: String,
         selectionData: SpawnSelectionData
     ): PokemonSpawnAction {
         val validHerdMembers = getValidHerdMembers(selectionData)
+        var searchedForLeader = false
         val herdable = if (lacksPossibleLeader(selectionData)) {
-            validHerdMembers.filter { it.isLeader == true }
+            searchedForLeader = true
+            validHerdMembers.filter { it.isLeader }
         } else {
-            validHerdMembers
+            validHerdMembers.filter { it.isFollower }
         }.weightedSelection { it.weight } ?: herdablePokemon[0]
 
         val level = selectionData.context[herdLevelKey] as? Int ?: 1
@@ -109,16 +118,26 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             min..max
         } ?: level..level
 
+        val heldItem = herdable.heldItem?.let { heldItemId ->
+            val item = spawnablePosition.world.registryAccess().registryOrThrow(Registries.ITEM).get(heldItemId)
+            if (item == Items.AIR) {
+                LOGGER.error("Unable to find matching herd held item for ID: $heldItemId")
+                null
+            } else {
+                ItemStack(item, 1)
+            }
+        }
+
         return PokemonSpawnAction(
             spawnablePosition = spawnablePosition,
             bucket = bucket,
             detail = this,
             props = herdable.pokemon,
             drops = herdable.dropTable,
-            heldItem = null,
+            heldItem = heldItem,
             levelRange = levelRange
         ).also {
-            if (herdable.isLeader == true) {
+            if (herdable.isLeader && searchedForLeader) {
                 it.labels += HERD_LEADER
             }
         }
@@ -137,7 +156,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             val count = counts[herdable] ?: 0
             return@filter when {
                 count >= herdable.maxTimes -> false
-                herdable.levelRange != null && level !in herdable.levelRange -> false
+                herdable.herdLevelRange != null && level !in herdable.herdLevelRange -> false
                 else -> true
             }
         }

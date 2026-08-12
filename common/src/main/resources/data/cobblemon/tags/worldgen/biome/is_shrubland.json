@@ -42,6 +42,14 @@
       "required": false
     },
     {
+      "id": "biomeswevegone:firecracker_chaparral",
+      "required": false
+    },
+    {
+      "id": "biomeswevegone:sierra_badlands",
+      "required": false
+    },
+    {
       "id": "blooming_biosphere:chaparral",
       "required": false
     },

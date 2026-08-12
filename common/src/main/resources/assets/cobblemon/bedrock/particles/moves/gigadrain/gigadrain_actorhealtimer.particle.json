@@ -26,7 +26,12 @@
 					"effect": "cobblemon:megadrain_actoraccent",
 					"type": "emitter"
 				}
-			}
+			},
+            "soundEffect": {
+                "sound_effect": {
+                    "event_name": "move.gigadrain.actor"
+                }
+            }
 		},
 		"components": {
 			"minecraft:emitter_rate_instant": {
@@ -38,6 +43,7 @@
 			"minecraft:emitter_lifetime_events": {
 				"timeline": {
 					"0.90": "healEffect",
+                    "0.91": "soundEffect",
 					"0.92": "healEffectAccent",
 					"0.94": "healEffectAccent",
 					"0.96": "healEffectBig"

@@ -15,7 +15,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0938_tadbulb/tadbulb_shiny.png",
       "layers": [
         {
@@ -23,7 +25,18 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0938_tadbulb/tadbulb_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }
-

@@ -295,7 +295,13 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "4"
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "rotom alpha",
+              "tier": 1
+            }
+          ]
         },
         "fireImmune": true
       },
@@ -445,7 +451,13 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "4"
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "rotom alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "lightingData": {
@@ -594,7 +606,13 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "4"
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "rotom alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "lightingData": {
@@ -743,7 +761,13 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "4"
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "rotom alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "lightingData": {
@@ -892,7 +916,13 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "4"
+          "maxSize": 4,
+          "toleratedLeaders": [
+            {
+              "pokemon": "rotom alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "lightingData": {

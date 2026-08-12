@@ -377,7 +377,57 @@
       ],
       "preEvolution": "koffing",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "trubbish",
+              "tier": 1
+            },
+            {
+              "pokemon": "grimer alolan=false",
+              "tier": 2
+            },
+            {
+              "pokemon": "garbodor=3",
+              "tier": 1
+            },
+            {
+              "pokemon": "muk alolan=false",
+              "tier": 4
+            },
+            {
+              "pokemon": "weezing",
+              "tier": 5
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

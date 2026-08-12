@@ -1,9 +1,4 @@
 {
   "replace": false,
-  "values": [
-    {
-      "id": "byg:subzero_hypogeal",
-      "required": false
-    }
-  ]
+  "values": []
 }

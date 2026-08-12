@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 884,
   "name": "Duraludon",
   "primaryType": "steel",
@@ -45,9 +46,51 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
-    "fixed": false
+    "height": 2.2,
+    "fixed": false,
+    "width": 1.7
+  },
+  "riding": {
+    "behaviours": {
+      "LAND": {
+        "key": "cobblemon:land/horse",
+        "rideSounds": [],
+        "stats": {
+          "ACCELERATION": "35-60",
+          "JUMP": "20-25",
+          "SKILL": "5-25",
+          "SPEED": "10-20",
+          "STAMINA": "40-80"
+        }
+      }
+    },
+    "seats": [
+      {
+        "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    }
   },
   "drops": {
     "amount": 1,
@@ -155,15 +198,15 @@
   ],
   "evolutions": [
     {
-      "id": "duraludon_archaludon",
-      "variant": "item_interact",
-      "result": "archaludon",
       "consumeHeldItem": false,
+      "id": "duraludon_archaludon",
       "learnableMoves": [
         "electroshot"
       ],
+      "requiredContext": "cobblemon:metal_alloy",
       "requirements": [],
-      "requiredContext": "cobblemon:metal_alloy"
+      "result": "archaludon",
+      "variant": "item_interact"
     }
   ],
   "forms": [
@@ -184,28 +227,9 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
-  ],
-  "behaviour": {
-    "moving": {
-      "swim": {
-        "avoidsWater": true
-      }
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "times": [
-        "any"
-      ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
-    }
-  }
+  ]
 }

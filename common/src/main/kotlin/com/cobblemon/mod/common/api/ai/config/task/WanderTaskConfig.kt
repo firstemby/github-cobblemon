@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.ai.CobblemonRandomSurfacePos
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
@@ -183,6 +184,12 @@ class WanderTaskConfig : SingleTaskConfig {
                         } ?: continue
 
                         if (targetVec == null) continue
+
+                        // Ignore pathing targets outside of the pasture zone if the pokemon is pastured.
+                        val tethering = (entity as? PokemonEntity)?.tethering
+                        if (tethering?.canRoamTo(BlockPos.containing(targetVec)) == false) {
+                            continue
+                        }
 
                         pos = applyHeightConstraints(
                             pos = BlockPos.containing(targetVec),

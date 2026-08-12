@@ -1,0 +1,28 @@
+{
+  "species": "cobblemon:lycanroc",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:lycanroc_midday",
+      "model": "cobblemon:lycanroc_midday.geo",
+      "texture": "cobblemon:textures/pokemon/0745_lycanroc/lycanroc_midday.png",
+      "layers": []
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0745_lycanroc/lycanroc_midday_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": ["alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0745_lycanroc/lycanroc_midday_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

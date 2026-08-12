@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 421,
   "name": "Cherrim",
   "primaryType": "grass",
@@ -255,7 +256,31 @@
         "tutor:worryseed"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "willSleepOnBed": true,
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          }
+        },
+        "combat": {
+          "willDefendOwner": true
+        },
+        "herd": {
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "cherrim alpha",
+              "tier": 1
+            }
+          ]
+        }
+      }
     }
   ],
   "behaviour": {

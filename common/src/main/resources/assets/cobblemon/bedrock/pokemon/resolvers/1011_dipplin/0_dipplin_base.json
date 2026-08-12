@@ -1,0 +1,27 @@
+{
+    "species": "cobblemon:dipplin",
+    "order": 0,
+    "variations": [
+      {
+        "aspects": [],
+        "poser": "cobblemon:dipplin",
+        "model": "cobblemon:dipplin.geo",
+        "texture": "cobblemon:textures/pokemon/1011_dipplin/dipplin.png"
+        },
+      {
+        "aspects": ["shiny"],
+        "texture": "cobblemon:textures/pokemon/1011_dipplin/dipplin_shiny.png"  
+      },
+	  {
+      "aspects": [
+        "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/1011_dipplin/dipplin_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+    ]
+  }

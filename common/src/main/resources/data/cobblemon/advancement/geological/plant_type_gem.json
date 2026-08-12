@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:deepslate_crystal_core"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.plant_type_gem"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.plant_type_gem.description"
+    }
+  },
+  "parent": "cobblemon:geological/root_geological",
+  "criteria": {
+    "plant_type_gem": {
+      "trigger": "cobblemon:plant_type_gem"
+    }
+  },
+  "requirements": [
+    [
+      "plant_type_gem"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

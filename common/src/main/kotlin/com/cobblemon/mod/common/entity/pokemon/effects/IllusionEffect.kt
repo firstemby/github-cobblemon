@@ -39,7 +39,7 @@ class IllusionEffect(
 
     constructor(disguise: Pokemon) : this(
         mock = disguise.createPokemonProperties(PokemonPropertyExtractor.ILLUSION),
-        scale = disguise.form.baseScale * disguise.scaleModifier
+        scale = disguise.form.baseScale * disguise.effectiveScale
     )
 
     override fun apply(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {

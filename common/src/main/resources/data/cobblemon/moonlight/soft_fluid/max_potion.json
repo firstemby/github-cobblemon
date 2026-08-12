@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "moonlight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "moonlight"
+    }
+  ],
+  "id": "cobblemon:max_potion",
+  "containers": [
+    {
+      "filled": [
+        "cobblemon:max_potion"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "flowing_texture": "moonlight:block/soft_fluids/potion_still",
+  "still_texture": "moonlight:block/soft_fluids/potion_still",
+  "color": "#869EEE",
+  "translation_key": "item.cobblemon.max_potion"
+}

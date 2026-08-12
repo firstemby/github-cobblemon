@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:technical_machine"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.learn_vacuum_wave_tm"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.learn_vacuum_wave_tm.description"
+    }
+  },
+  "parent": "cobblemon:learn_first_tm",
+  "criteria": {
+    "learn_tm": {
+      "trigger": "cobblemon:has_learn_specific_tm",
+      "conditions": {
+        "tm": "cobblemon:vacuumwave"
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

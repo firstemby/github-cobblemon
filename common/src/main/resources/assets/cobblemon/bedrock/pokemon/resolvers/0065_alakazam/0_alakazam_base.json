@@ -10,20 +10,38 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam_shiny.png"
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "poser": "cobblemon:alakazam_female",
       "model": "cobblemon:alakazam_female.geo"
     },
     {
-      "aspects": ["color-black"],
+      "aspects": [
+        "color-black"
+      ],
       "layers": [
         {
           "name": "pokemopolis",
           "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam_pokemopolis.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0065_alakazam/alakazam_alpha.png",
+          "emissive": true
         }
       ]
     }

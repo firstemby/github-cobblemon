@@ -58,7 +58,6 @@
 				"collision_radius": 0.01,
 				"expire_on_contact": true
 			},
-			"minecraft:particle_appearance_lighting": {},
 			"minecraft:particle_appearance_tinting": {
 				"color": {
 					"interpolant": "v.particle_age / v.particle_lifetime",

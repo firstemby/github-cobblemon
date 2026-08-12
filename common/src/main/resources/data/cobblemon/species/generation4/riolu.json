@@ -49,6 +49,7 @@
     "height": 1.3,
     "fixed": false
   },
+  "shoulderMountable": true,
   "behaviour": {
     "entityInteract": {
       "avoidedBySkeleton": true
@@ -67,11 +68,15 @@
       ]
     },
     "resting": {
+      "canSleep": true,
       "willSleepOnBed": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }

@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/treasure_hoard1",
+            "cobblemon:habitats/treasure_hoard2",
+            "cobblemon:habitats/treasure_hoard3",
+            "cobblemon:habitats/treasure_hoard4",
+            "cobblemon:habitats/treasure_hoard5",
+            "cobblemon:habitats/treasure_hoard6",
+            "cobblemon:habitats/treasure_hoard7",
+            "cobblemon:habitats/treasure_hoard8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/treasure_hoard"
+    }
+}

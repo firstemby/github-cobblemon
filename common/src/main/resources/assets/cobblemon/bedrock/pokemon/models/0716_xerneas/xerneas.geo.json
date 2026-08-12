@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.xerneas",
+				"identifier": "geometry.xerneas_active",
 				"texture_width": 256,
 				"texture_height": 128,
 				"visible_bounds_width": 6,
@@ -589,6 +589,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [3, 50, -17.25],
+					"rotation": [0, -40, 0],
+					"locators": {
+						"eye2": [3, 50, -17.25]
+					}
+				},
+				{
 					"name": "eyelid_left",
 					"parent": "eye_left",
 					"pivot": [2.51, 50, -16.26],
@@ -603,6 +612,15 @@
 					"cubes": [
 						{"origin": [-3.01, 49, -17.76], "size": [1, 2, 3], "uv": [91, 91]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-3, 50, -17.25],
+					"rotation": [0, 40, 0],
+					"locators": {
+						"eye1": [-3, 50, -17.25]
+					}
 				},
 				{
 					"name": "eyelid_right",

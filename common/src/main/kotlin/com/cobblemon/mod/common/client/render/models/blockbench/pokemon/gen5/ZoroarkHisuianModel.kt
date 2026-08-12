@@ -19,7 +19,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class ZoroarkHisuianModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BimanualFrame {
-    override val rootPart = root.registerChildWithAllChildren("zoroark_hisuian")
+    override val rootPart = root.registerChildWithAllChildren("zoroark")
     override val head = getPart("head")
 
     override val leftLeg = getPart("leg_left")

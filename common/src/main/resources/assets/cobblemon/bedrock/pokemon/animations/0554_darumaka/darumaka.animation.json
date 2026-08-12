@@ -815,7 +815,7 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "0554_darumaka_cry"
+					"effect": "pokemon.darumaka.cry"
 				}
 			}
 		},
