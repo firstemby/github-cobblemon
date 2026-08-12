@@ -63,11 +63,27 @@
     "resting": {
       "canSleep": true,
       "light": "0-4",
+      "canSeeSky": false,
       "times": [
-        "any"
+        "day"
       ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
+      "drowsyChance": 0.5,
+      "rouseChance": 0.002,
+      "places": [
+        {
+          "faces": ["ceiling"],
+          "onlyAir": true
+        },
+        {
+          "faces": ["ceiling"],
+          "blocks": ["#minecraft:leaves"],
+          "onlyAir": true,
+          "light": "0-15"
+        }
+      ]
+    },
+    "clinging": {
+      "yOffset": -0.2
     },
     "herd": {
       "maxSize": "9",

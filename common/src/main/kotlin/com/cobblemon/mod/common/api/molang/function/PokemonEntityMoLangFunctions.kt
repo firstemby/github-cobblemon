@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cloneFrom
 import com.cobblemon.mod.common.util.getStringOrNull
 import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.core.Direction
 
 object PokemonEntityMoLangFunctions : AbstractMoLangFunctionHolder<PokemonEntity>() {
     override fun PokemonEntity.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
@@ -37,6 +38,10 @@ object PokemonEntityMoLangFunctions : AbstractMoLangFunctionHolder<PokemonEntity
         map["in_battle"] = { DoubleValue(pokemonEntity.isBattling) }
         map["is_moving"] = { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
         map["is_flying"] = { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
+        map["cling_face"] = {
+            val face = pokemonEntity.entityData.get(PokemonEntity.CLINGING_FACE)
+            StringValue(if (face == Direction.DOWN) "none" else face.getName())
+        }
         map["get_riding_state"] = { params ->
             val name = params.getStringOrNull(0)
             pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->

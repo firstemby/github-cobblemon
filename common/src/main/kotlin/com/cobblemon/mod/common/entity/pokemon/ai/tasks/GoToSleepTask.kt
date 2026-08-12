@@ -29,6 +29,7 @@ object GoToSleepTask {
                 it.registered(CobblemonMemories.POKEMON_DROWSY)
             ).apply(it) { _, pokemonDrowsy ->
                 Trigger { _, entity, _ ->
+                    if (entity.isSettlingToSleep || entity.clingingFace != null) return@Trigger false
                     val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
                     if (entity.behaviour.resting.canSleep && ((it.tryGet(pokemonDrowsy).orElse(false) && entity.canSleepAt(entity.blockPosition().below())) || hasSleepStatus)) {
                         if (!hasSleepStatus) {

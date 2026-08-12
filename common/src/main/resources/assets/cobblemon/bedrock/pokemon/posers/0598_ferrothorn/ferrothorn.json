@@ -1,11 +1,18 @@
 {
   "portraitScale": 1.07,
-  "portraitTranslation": [-0.41,0.55,0],
+  "portraitTranslation": [
+    -0.41,
+    0.55,
+    0
+  ],
   "profileScale": 0.39,
-  "profileTranslation": [-0.08,0.9,-6],
+  "profileTranslation": [
+    -0.08,
+    0.9,
+    -6
+  ],
   "rootBone": "ferrothorn",
-  "animations": {
-  },
+  "animations": {},
   "poses": {
     "battle-standing": {
       "poseTypes": [
@@ -56,6 +63,14 @@
       ],
       "animations": [
         "q.bedrock('ferrothorn', 'sleep')"
+      ]
+    },
+    "cling_ceiling": {
+      "poseTypes": [
+        "CLING_CEILING"
+      ],
+      "animations": [
+        "q.bedrock('ferrothorn', 'cling_ceiling')"
       ]
     }
   }

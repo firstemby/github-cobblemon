@@ -37,10 +37,25 @@ class MetapodModel(root: ModelPart) : PokemonPosableModel(root) {
             animations = arrayOf(bedrock("metapod", "sleep"))
         )
 
+        registerPose(
+            poseType = PoseType.HANG,
+            animations = arrayOf(bedrock("metapod", "hang"))
+        )
+
+        registerPose(
+            poseType = PoseType.CLING,
+            animations = arrayOf(bedrock("metapod", "cling_side"))
+        )
+
+        registerPose(
+            poseType = PoseType.CLING_CEILING,
+            animations = arrayOf(bedrock("metapod", "cling_ceiling"))
+        )
+
         standing = registerPose(
             poseName = "standing",
             quirks = arrayOf(blink),
-            poseTypes = ALL_POSES - PoseType.SLEEP,
+            poseTypes = ALL_POSES - PoseType.SLEEP - PoseType.HANG - PoseType.CLING - PoseType.CLING_CEILING,
             animations = arrayOf(bedrock("metapod", "ground_idle"))
         )
     }

@@ -10,7 +10,25 @@
         "5": [
           {
             "type": "find_resting_place",
-            "condition": "!q.entity.is_in_party"
+            "condition": "!q.entity.is_in_party",
+            "verticalSearchDistance": "16"
+          },
+          {
+            "type": "go_to_sleep",
+            "onlyFromStatus": "q.entity.is_in_party"
+          }
+        ]
+      }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "cobblemon:pokemon_herd",
+      "tasksByPriority": {
+        "5": [
+          {
+            "type": "find_resting_place",
+            "condition": "!q.entity.is_in_party",
+            "verticalSearchDistance": "16"
           },
           {
             "type": "go_to_sleep",

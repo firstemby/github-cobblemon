@@ -1,97 +1,98 @@
 {
-    "enabled": true,
-    "neededInstalledMods": [],
-    "neededUninstalledMods": [],
-    "spawns": [
-        {
-            "id": "metapod-1",
-            "pokemon": "metapod",
-            "type": "pokemon",
-            "spawnablePositionType": "hanging",
-            "bucket": "common",
-            "level": "7-21",
-            "weight": 2.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_plains",
-                    "aether:skyroot_forest",
-                    "aether:skyroot_woodland"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing",
-                    "#cobblemon:is_spooky"
-                ]
-            }
-        },
-        {
-            "id": "metapod-cling-1",
-            "pokemon": "metapod",
-            "type": "pokemon",
-            "spawnablePositionType": "clinging",
-            "bucket": "common",
-            "level": "7-21",
-            "weight": 2.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "attachedTo": [
-                    "#minecraft:logs"
-                ],
-                "faces": [
-                    "sides"
-                ],
-                "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_plains"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing",
-                    "#cobblemon:is_spooky"
-                ]
-            }
-        },
-        {
-            "id": "metapod-valencian-2",
-            "pokemon": "metapod valencian",
-            "type": "pokemon",
-            "spawnablePositionType": "hanging",
-            "bucket": "common",
-            "level": "7-21",
-            "weight": 2.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_tropical_island"
-                ]
-            }
-        },
-        {
-            "id": "metapod-valencian-3",
-            "pokemon": "metapod valencian",
-            "type": "pokemon",
-            "spawnablePositionType": "hanging",
-            "bucket": "common",
-            "level": "7-21",
-            "weight": 1.0,
-            "condition": {
-                "biomes": [
-                    "the_bumblezone:floral_meadow"
-                ]
-            },
-            "anticondition": {
-                "structures": [
-                    "#the_bumblezone:sempiternal_sanctums"
-                ]
-            }
-        }
-    ]
+  "enabled": true,
+  "neededInstalledMods": [],
+  "neededUninstalledMods": [],
+  "spawns": [
+    {
+      "id": "metapod-1",
+      "pokemon": "metapod",
+      "type": "pokemon",
+      "spawnablePositionType": "hanging",
+      "bucket": "common",
+      "level": "7-21",
+      "weight": 2.0,
+      "condition": {
+        "minSkyLight": 8,
+        "maxSkyLight": 15,
+        "biomes": [
+          "#cobblemon:is_forest",
+          "#cobblemon:is_plains",
+          "aether:skyroot_forest",
+          "aether:skyroot_woodland"
+        ]
+      },
+      "anticondition": {
+        "biomes": [
+          "#cobblemon:is_freezing",
+          "#cobblemon:is_spooky"
+        ]
+      }
+    },
+    {
+      "id": "metapod-cling-1",
+      "pokemon": "metapod",
+      "type": "pokemon",
+      "spawnablePositionType": "clinging",
+      "bucket": "common",
+      "level": "7-21",
+      "weight": 2.0,
+      "condition": {
+        "minSkyLight": 8,
+        "maxSkyLight": 15,
+        "attachedTo": [
+          "#minecraft:logs"
+        ],
+        "faces": [
+          "sides",
+          "ceiling"
+        ],
+        "biomes": [
+          "#cobblemon:is_forest",
+          "#cobblemon:is_plains"
+        ]
+      },
+      "anticondition": {
+        "biomes": [
+          "#cobblemon:is_freezing",
+          "#cobblemon:is_spooky"
+        ]
+      }
+    },
+    {
+      "id": "metapod-valencian-2",
+      "pokemon": "metapod valencian",
+      "type": "pokemon",
+      "spawnablePositionType": "hanging",
+      "bucket": "common",
+      "level": "7-21",
+      "weight": 2.0,
+      "condition": {
+        "minSkyLight": 8,
+        "maxSkyLight": 15,
+        "biomes": [
+          "#cobblemon:is_jungle",
+          "#cobblemon:is_tropical_island"
+        ]
+      }
+    },
+    {
+      "id": "metapod-valencian-3",
+      "pokemon": "metapod valencian",
+      "type": "pokemon",
+      "spawnablePositionType": "hanging",
+      "bucket": "common",
+      "level": "7-21",
+      "weight": 1.0,
+      "condition": {
+        "biomes": [
+          "the_bumblezone:floral_meadow"
+        ]
+      },
+      "anticondition": {
+        "structures": [
+          "#the_bumblezone:sempiternal_sanctums"
+        ]
+      }
+    }
+  ]
 }

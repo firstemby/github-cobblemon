@@ -1,8 +1,16 @@
 {
   "portraitScale": 2.18,
-  "portraitTranslation": [-0.07,0.08,0],
+  "portraitTranslation": [
+    -0.07,
+    0.08,
+    0
+  ],
   "profileScale": 0.7,
-  "profileTranslation": [0,0.7,0],
+  "profileTranslation": [
+    0,
+    0.7,
+    0
+  ],
   "rootBone": "zubat",
   "animations": {
     "cry": "q.bedrock_stateful('zubat', 'cry')",
@@ -104,7 +112,9 @@
       ]
     },
     "sleep": {
-      "poseTypes": ["SLEEP"],
+      "poseTypes": [
+        "SLEEP"
+      ],
       "animations": [
         "q.bedrock('zubat', 'sleep')"
       ],
@@ -122,13 +132,35 @@
         }
       ]
     },
+    "roost": {
+      "poseTypes": [
+        "CLING_CEILING"
+      ],
+      "animations": [
+        "q.bedrock('zubat', 'roost')"
+      ],
+      "transformedParts": [
+        {
+          "part": "wings_folded",
+          "isVisible": true
+        },
+        {
+          "part": "wings_open",
+          "isVisible": false
+        }
+      ]
+    },
     "shoulder_left": {
-      "poseTypes": ["SHOULDER_LEFT"],
+      "poseTypes": [
+        "SHOULDER_LEFT"
+      ],
       "animations": [
         "q.look('body')",
         "q.bedrock('zubat', 'shoulder_left')"
       ],
-      "quirks": ["q.bedrock_quirk('zubat', 'eartwitch')"],
+      "quirks": [
+        "q.bedrock_quirk('zubat', 'eartwitch')"
+      ],
       "transformedParts": [
         {
           "part": "wings_folded",
@@ -141,12 +173,16 @@
       ]
     },
     "shoulder_right": {
-      "poseTypes": ["SHOULDER_RIGHT"],
+      "poseTypes": [
+        "SHOULDER_RIGHT"
+      ],
       "animations": [
         "q.look('body')",
         "q.bedrock('zubat', 'shoulder_right')"
       ],
-      "quirks": ["q.bedrock_quirk('zubat', 'eartwitch')"],
+      "quirks": [
+        "q.bedrock_quirk('zubat', 'eartwitch')"
+      ],
       "transformedParts": [
         {
           "part": "wings_folded",
@@ -157,6 +193,6 @@
           "isVisible": false
         }
       ]
-    } 
+    }
   }
 }

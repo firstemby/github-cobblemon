@@ -15,7 +15,9 @@ import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePosit
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isSolidCondition
 import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.isWaterCondition
 import com.cobblemon.mod.common.block.SilkThreadBlock
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.level.EmptyBlockGetter
 import net.minecraft.world.level.block.state.BlockState
 
 /**
@@ -108,7 +110,7 @@ object HangingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<Hang
 
 /**
  * The spawnable position calculator used for [ClingingSpawnablePosition]s. Requires an air block
- * for the Pokemon with at least one solid neighbouring block to attach to.
+ * for the Pokemon with at least one solid neighbouring block the mon is allowed to attach to
  */
 object ClingingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<ClingingSpawnablePosition> {
     override val name = "clinging"
@@ -138,7 +140,9 @@ object ClingingSpawnablePositionCalculator : AreaSpawnablePositionCalculator<Cli
         val monPos = input.position.above()
         return Direction.entries
             .map { it to input.zone.getBlockState(monPos.relative(it)) }
-            .filter { (_, state) -> isSolidCondition(state) }
+            .filter { (direction, state) ->
+                isSolidCondition(state) && state.isFaceSturdy(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, direction.opposite)
+            }
             .toMap()
     }
 }

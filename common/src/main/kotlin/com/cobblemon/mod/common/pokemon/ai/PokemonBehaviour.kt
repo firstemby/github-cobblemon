@@ -20,6 +20,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  */
 open class PokemonBehaviour(
     val resting: RestBehaviour = RestBehaviour(),
+    val clinging: ClingBehaviour = ClingBehaviour(),
+    val hanging: HangBehaviour = HangBehaviour(),
     var moving: MoveBehaviour = MoveBehaviour(),
     val idle: IdleBehaviour = IdleBehaviour(),
     val fireImmune: Boolean = false,
@@ -36,6 +38,8 @@ open class PokemonBehaviour(
     @Transient
     val struct = ObjectValue<PokemonBehaviour>(this).also {
         it.addFunction("resting") { resting.struct }
+        it.addFunction("clinging") { clinging.struct }
+        it.addFunction("hanging") { hanging.struct }
         it.addFunction("moving") { moving.struct }
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }

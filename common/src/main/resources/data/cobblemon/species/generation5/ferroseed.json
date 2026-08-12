@@ -70,6 +70,10 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "clinging": {
+      "canClingToWalls": true,
+      "xOffset": 0.15
     }
   },
   "drops": {

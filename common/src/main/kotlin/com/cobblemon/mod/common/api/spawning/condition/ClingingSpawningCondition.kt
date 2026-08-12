@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Block
  * Base type for a spawning condition that applies to some kind of [ClingingSpawnablePosition].
  *
  * The [attachedTo] list restricts which blocks the Pokemon may attach to, and [faces] restricts
- * which faces of those blocks are usable: "sides", "top", or "bottom".
+ * which faces of those blocks are usable: "floor", "sides", or "ceiling".
  */
 abstract class ClingingTypeSpawningCondition<T : ClingingSpawnablePosition> : AreaTypeSpawningCondition<T>() {
     var attachedTo: MutableList<RegistryLikeCondition<Block>>? = null
@@ -37,8 +37,8 @@ abstract class ClingingTypeSpawningCondition<T : ClingingSpawnablePosition> : Ar
 
     private fun faceMatches(face: String, direction: Direction): Boolean = when (face.lowercase()) {
         "sides" -> direction.axis.isHorizontal
-        "top" -> direction == Direction.DOWN
-        "bottom" -> direction == Direction.UP
+        "floor", "top" -> direction == Direction.DOWN
+        "ceiling", "bottom" -> direction == Direction.UP
         else -> false
     }
 
@@ -56,9 +56,6 @@ abstract class ClingingTypeSpawningCondition<T : ClingingSpawnablePosition> : Ar
     }
 }
 
-/**
- * A spawning condition for a [ClingingSpawnablePosition].
- */
 class ClingingSpawningCondition : ClingingTypeSpawningCondition<ClingingSpawnablePosition>() {
     override fun spawnablePositionClass() = ClingingSpawnablePosition::class.java
     companion object {

@@ -46,6 +46,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.commands.arguments.item.ItemParser
+import net.minecraft.core.Direction
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
@@ -274,6 +275,12 @@ abstract class PosableState : Schedulable {
         .addFunction("current_aspects") { ArrayStruct(currentAspects.mapIndexed { index, s -> "$index" to StringValue(s)}.toMap())}
         .addFunction("has_aspect") { params -> DoubleValue(params.get<MoValue>(0).asString() in currentAspects) }
         .addFunction("has_entity") { DoubleValue(getEntity() != null) }
+        .addFunction("entity_id") { DoubleValue(getEntity()?.id?.toDouble() ?: 0.0) }
+        .addFunction("cling_face") {
+            val pokemon = getEntity() as? PokemonEntity ?: return@addFunction StringValue("none")
+            val face = pokemon.entityData.get(PokemonEntity.CLINGING_FACE)
+            StringValue(if (face == Direction.DOWN) "none" else face.getName())
+        }
         .addFunction("pose") { StringValue(currentPose ?: "") }
         .addFunction("sound") { params ->
             if (params.get<MoValue>(0) !is StringValue) {

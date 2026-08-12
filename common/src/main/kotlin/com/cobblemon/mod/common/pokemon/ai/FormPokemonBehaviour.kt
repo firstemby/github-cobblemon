@@ -26,6 +26,12 @@ class FormPokemonBehaviour {
     @SerializedName("resting")
     private val _resting: RestBehaviour? = null
 
+    @SerializedName("clinging")
+    private val _clinging: ClingBehaviour? = null
+
+    @SerializedName("hanging")
+    private val _hanging: HangBehaviour? = null
+
     @SerializedName("moving")
     private val _moving: MoveBehaviour? = null
 
@@ -66,6 +72,12 @@ class FormPokemonBehaviour {
     val resting: RestBehaviour
         get() = _resting ?: parent.resting
 
+    val clinging: ClingBehaviour
+        get() = _clinging ?: parent.clinging
+
+    val hanging: HangBehaviour
+        get() = _hanging ?: parent.hanging
+
     val moving: MoveBehaviour
         get() = _moving ?: parent.moving
 
@@ -105,6 +117,8 @@ class FormPokemonBehaviour {
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("resting") { resting.struct }
+        it.addFunction("clinging") { clinging.struct }
+        it.addFunction("hanging") { hanging.struct }
         it.addFunction("moving") { moving.struct }
         it.addFunction("idle") { idle.struct }
         it.addFunction("entity_interact") { entityInteract.struct }

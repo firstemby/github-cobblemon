@@ -55,6 +55,10 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },
+    "clinging": {
+      "canClingToWalls": true,
+      "xOffset": 0.3
+    },
     "moving": {
       "walk": {
         "canWalk": false

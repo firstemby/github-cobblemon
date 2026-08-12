@@ -172,12 +172,20 @@
   "evolutions": [],
   "behaviour": {
     "resting": {
+      "canSleep": true,
       "willSleepOnBed": true,
       "times": [
         "day"
       ],
       "drowsyChance": 0.0033,
-      "rouseChance": 0.0042
+      "rouseChance": 0.0042,
+      "places": [
+        {
+          "faces": ["sides"],
+          "blocks": ["#minecraft:logs"],
+          "light": "0-15"
+        }
+      ]
     },
     "moving": {
       "swim": {

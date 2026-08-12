@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
@@ -391,7 +392,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val poseType = when {
             isPassenger -> PoseType.STAND
             entity.isHangingFromThread -> PoseType.HANG
-            entity.clingingFace != null -> PoseType.CLING
+            entity.clingingFace == Direction.UP -> PoseType.CLING_CEILING
+            entity.clingingFace?.axis?.isHorizontal == true -> PoseType.CLING
             isSleeping -> PoseType.SLEEP
             isMoving && isUnderwater  -> PoseType.SWIM
             isUnderwater -> PoseType.FLOAT

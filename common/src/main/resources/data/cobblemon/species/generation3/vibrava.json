@@ -54,7 +54,16 @@
       "canSleep": true,
       "light": "0-4",
       "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
+      "rouseChance": 0.0042,
+      "places": [
+        {
+          "faces": ["sides"],
+          "light": "0-15"
+        }
+      ]
+    },
+    "clinging": {
+      "xOffset": -0.1
     },
     "moving": {
       "fly": {

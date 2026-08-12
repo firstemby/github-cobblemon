@@ -43,6 +43,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeature
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.feature.StringSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.ObservableSubscription
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.riding.Rideable
@@ -213,6 +214,7 @@ open class PokemonEntity(
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
         @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val CLINGING_FACE = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.DIRECTION)
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
@@ -222,6 +224,7 @@ open class PokemonEntity(
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
 
+        const val CLING_SPACE_BLOCKS = 2
         const val FALL_DAMAGE_MULT_FLYINGTYPE = 0.5f
         const val FALL_DAMAGE_MULT_MOVEMENT_FLY = 0.2f
 
@@ -428,6 +431,12 @@ open class PokemonEntity(
 
     var clingingFace: Direction? = null
 
+    /** Whether the current cling attachment is a chosen sleeping place, released on waking. */
+    var isSleepClinging = false
+
+    /** Whether a sleep task is currently walking or ascending towards a sleeping place. */
+    var isSettlingToSleep = false
+
     var occupiedSeats = mutableMapOf<Seat, Entity>()
 
     init {
@@ -467,6 +476,7 @@ open class PokemonEntity(
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
         builder.define(EVOLUTION_STARTED, false)
+        builder.define(CLINGING_FACE, Direction.DOWN)
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
@@ -956,6 +966,9 @@ open class PokemonEntity(
             nbt.putBoolean(DataKeys.POKEMON_HANGING_FROM_THREAD, true)
         }
         clingingFace?.let { nbt.putByte(DataKeys.POKEMON_CLINGING_FACE, it.get3DDataValue().toByte()) }
+        if (isSleepClinging) {
+            nbt.putBoolean(DataKeys.POKEMON_SLEEP_CLINGING, true)
+        }
         val dataResult = this.brain.serializeStart(NbtOps.INSTANCE)
         dataResult.resultOrPartial(::error).ifPresent { brain ->
             nbt.put("Brain", brain)
@@ -1054,6 +1067,14 @@ open class PokemonEntity(
             Direction.from3DDataValue(nbt.getByte(DataKeys.POKEMON_CLINGING_FACE).toInt())
         } else {
             null
+        }
+        entityData.set(CLINGING_FACE, clingingFace ?: Direction.DOWN)
+        isSleepClinging = nbt.getBoolean(DataKeys.POKEMON_SLEEP_CLINGING)
+        // The saved pose can be stale for attached mons so try to it from the attachment
+        when {
+            isHangingFromThread -> entityData.set(POSE_TYPE, PoseType.HANG)
+            clingingFace == Direction.UP -> entityData.set(POSE_TYPE, PoseType.CLING_CEILING)
+            clingingFace?.axis?.isHorizontal == true -> entityData.set(POSE_TYPE, PoseType.CLING)
         }
         if (nbt.contains(DataKeys.POKEMON_RECALCULATE_POSE)) {
             enablePoseTypeRecalculation = nbt.getBoolean(DataKeys.POKEMON_RECALCULATE_POSE)
@@ -1391,13 +1412,30 @@ open class PokemonEntity(
 
     private fun tickThreadHanging() {
         if (!isHangingFromThread) return
-        if (isEvolving || !level().getBlockState(blockPosition()).`is`(CobblemonBlocks.SILK_THREAD)) {
+        val isSupported = if (behaviour.hanging.usesThread) {
+            level().getBlockState(blockPosition()).`is`(CobblemonBlocks.SILK_THREAD)
+        } else {
+            hasHangAnchorAbove()
+        }
+        if (isEvolving || !isSupported) {
             releaseFromThread()
             return
         }
         setDeltaMovement(Vec3.ZERO)
         navigation.stop()
         brain.eraseMemory(MemoryModuleType.WALK_TARGET)
+    }
+
+    private fun hasHangAnchorAbove(): Boolean {
+        var pos = blockPosition().above()
+        repeat(CLING_SPACE_BLOCKS) {
+            val state = level().getBlockState(pos)
+            if (!state.isAir) {
+                return SilkThreadBlock.isValidAnchor(state)
+            }
+            pos = pos.above()
+        }
+        return false
     }
 
     private fun breakThreadColumn() {
@@ -1413,29 +1451,96 @@ open class PokemonEntity(
 
     fun startClinging(face: Direction) {
         clingingFace = face
+        entityData.set(CLINGING_FACE, face)
         isNoGravity = true
         setDeltaMovement(Vec3.ZERO)
         navigation.stop()
+        val column = blockPosition()
+        val cling = behaviour.clinging
+        val newY = if (face == Direction.UP) (findCeilingFaceY() ?: column.above().y.toDouble()) - bbHeight + cling.yOffset else y
+        setPos(
+            column.x + 0.5 + face.stepX * cling.xOffset,
+            newY,
+            column.z + 0.5 + face.stepZ * cling.xOffset
+        )
         faceClingedBlock(face)
+    }
+
+    /** The block above the feet is not the ceiling for mons taller than a block, so the snap
+     * scans up from the head for the first collision block available */
+    private fun findCeilingFaceY(): Double? {
+        var pos = BlockPos.containing(x, y + bbHeight, z)
+        repeat(CLING_SPACE_BLOCKS + 1) {
+            if (!level().getBlockState(pos).getCollisionShape(level(), pos).isEmpty) {
+                return pos.y.toDouble()
+            }
+            pos = pos.above()
+        }
+        return null
     }
 
     fun releaseFromClinging() {
         if (clingingFace == null) return
         clingingFace = null
-        isNoGravity = false
+        isSleepClinging = false
+        entityData.set(CLINGING_FACE, Direction.DOWN)
+        if (behaviour.moving.fly.canFly) {
+            setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
+        } else {
+            isNoGravity = false
+        }
+    }
+
+    fun canClingTo(face: Direction, state: BlockState): Boolean {
+        val cling = behaviour.clinging
+        val isFaceAllowed = when {
+            face == Direction.UP -> cling.canClingToCeilings
+            face.axis.isHorizontal -> cling.canClingToWalls
+            else -> false
+        }
+        if (!isFaceAllowed) return false
+        return cling.blocks.isEmpty() || cling.blocks.any { it.fits(state.block, level().blockRegistry) }
     }
 
     private fun tickClinging() {
         val face = clingingFace ?: return
-        val supportPos = blockPosition().relative(face)
-        if (isEvolving || !level().getBlockState(supportPos).isFaceSturdy(level(), supportPos, face.opposite)) {
+        val isSupported = if (face == Direction.UP) {
+            hasClingCeilingAbove()
+        } else {
+            val supportPos = blockPosition().relative(face)
+            val state = level().getBlockState(supportPos)
+            state.isFaceSturdy(level(), supportPos, face.opposite) && (isSleepClinging || canClingTo(face, state))
+        }
+        val isSleepOver = isSleepClinging && pokemon.status?.status != Statuses.SLEEP
+        if (isEvolving || !isSupported || isSleepOver) {
+            if (isSleepOver) {
+                brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
+                brain.useDefaultActivity()
+            }
             releaseFromClinging()
             return
+        }
+        if (isSleepClinging && !brain.getMemorySafely(CobblemonMemories.POKEMON_SLEEPING).orElse(false)) {
+            brain.setMemory(CobblemonMemories.POKEMON_SLEEPING, true)
+            brain.setActiveActivityToFirstValid(listOf(CobblemonActivities.POKEMON_SLEEPING_ACTIVITY))
         }
         setDeltaMovement(Vec3.ZERO)
         navigation.stop()
         brain.eraseMemory(MemoryModuleType.WALK_TARGET)
         faceClingedBlock(face)
+    }
+
+    private fun hasClingCeilingAbove(): Boolean {
+        var pos = BlockPos.containing(x, y + bbHeight, z)
+        repeat(CLING_SPACE_BLOCKS) {
+            val state = level().getBlockState(pos)
+            if (!state.getCollisionShape(level(), pos).isEmpty) {
+                if (isSleepClinging) return true
+                return state.isFaceSturdy(level(), pos, Direction.DOWN) && canClingTo(Direction.UP, state)
+            }
+            pos = pos.above()
+        }
+        return false
     }
 
     private fun faceClingedBlock(face: Direction) {
@@ -2072,6 +2177,7 @@ open class PokemonEntity(
     }
 
     override fun isPushable(): Boolean {
+        if (isSettlingToSleep || isHangingFromThread || clingingFace != null) return false
         return beamMode != 3 && super.isPushable()
     }
 

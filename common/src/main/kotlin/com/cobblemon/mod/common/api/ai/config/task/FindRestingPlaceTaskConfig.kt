@@ -45,6 +45,7 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
         behaviourConfigurationContext.addMemories(
             CobblemonMemories.PATH_COOLDOWN,
             CobblemonMemories.POKEMON_DROWSY,
+            CobblemonMemories.POKEMON_SLEEPING,
             MemoryModuleType.WALK_TARGET
         )
         behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)

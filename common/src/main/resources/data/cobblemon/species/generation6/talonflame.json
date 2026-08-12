@@ -76,8 +76,16 @@
       "willFlee": false
     },
     "resting": {
+      "canSleep": true,
       "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
+      "rouseChance": 0.0042,
+      "places": [
+        {
+          "faces": ["floor"],
+          "blocks": ["#minecraft:leaves"],
+          "light": "0-15"
+        }
+      ]
     },
     "fireImmune": true
   },

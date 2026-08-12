@@ -67,6 +67,10 @@
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
     },
+    "hanging": {
+      "usesThread": false,
+      "yOffset": -0.6
+    },
     "combat": {
       "willDefendOwner": true
     }

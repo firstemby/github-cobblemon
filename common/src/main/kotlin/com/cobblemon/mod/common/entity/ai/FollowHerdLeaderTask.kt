@@ -13,8 +13,6 @@ import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
-import com.cobblemon.mod.common.pokemon.status.PersistentStatus
-import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.toBlockPos
 import com.google.common.collect.ImmutableMap
@@ -56,6 +54,15 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
 
     override fun tick(level: ServerLevel, entity: PokemonEntity, gameTime: Long) {
         val leader = leader ?: return
+
+        if (entity.isSleepClinging || entity.isSettlingToSleep) {
+            return // Settled or settling sleepers stay put until they wake on their own
+        }
+
+        // Drowsy followers break off to find a sleeping place
+        if (entity.brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false)) {
+            return
+        }
 
         if (entity.brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             return // We're busy goin' n' shit
@@ -135,16 +142,12 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
                 )
             )
         } else if (leader.getCurrentPoseType() == PoseType.SLEEP) {
-            // Leader is sleeping, if I'm drowsy and can sleep here then I will sleep too.
-            if (entity.canSleepAt(entity.blockPosition().offset(0, -1, 0)) && entity.brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false)) {
-                if (entity.random.nextFloat() < 1 / 40F) {
-                    applySleep(entity)
-                }
-            }
-        } else if (entity.brain.getMemorySafely(CobblemonMemories.POKEMON_SLEEPING).orElse(false)) {
-            // Leader is awake, so we should be awake too.
-            if (entity.random.nextFloat() < 1 / 15F) {
-                removeSleep(entity)
+            // Leader is sleeping, so followers get drowsy faster and settle via the usual sleep tasks.
+            if (entity.behaviour.resting.canSleep &&
+                !entity.brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false) &&
+                entity.random.nextFloat() < 1 / 40F
+            ) {
+                entity.brain.setMemory(CobblemonMemories.POKEMON_DROWSY, true)
             }
         }
     }
@@ -168,11 +171,6 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         return offset
     }
 
-    fun applySleep(entity: PokemonEntity) {
-        entity.brain.setMemory(CobblemonMemories.POKEMON_SLEEPING, true)
-        entity.pokemon.status = PersistentStatusContainer(Statuses.SLEEP)
-    }
-
     fun removeSleep(entity: PokemonEntity) {
         if (entity.brain.hasMemoryValue(CobblemonMemories.POKEMON_SLEEPING)) {
             entity.brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
@@ -180,6 +178,9 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
             if (status != null && status.status == Statuses.SLEEP) {
                 entity.pokemon.status = null
             }
+            // Without this the woken follower stays in the sleeping activity, where neither the
+            // wake task (blocked while drowsy) nor the settle task (not registered there) can run.
+            entity.brain.useDefaultActivity()
         }
     }
 }

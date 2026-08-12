@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.client.render.renderBeaconBeam
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -54,6 +55,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.ItemRenderer
 import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
@@ -301,6 +303,30 @@ class PokemonRenderer(
     override fun scale(pEntity: PokemonEntity, pPoseStack: PoseStack, pPartialTickTime: Float) {
         val scale = pEntity.pokemon.form.baseScale * pEntity.pokemon.effectiveScale * (pEntity.delegate as PokemonClientDelegate).activeSendoutScale
         pPoseStack.scale(scale, scale, scale)
+    }
+
+    override fun setupRotations(entity: PokemonEntity, poseStack: PoseStack, bob: Float, yBodyRot: Float, partialTick: Float, scale: Float) {
+        super.setupRotations(entity, poseStack, bob, yBodyRot, partialTick, scale)
+        applyDefaultClingRotation(entity, poseStack, yBodyRot)
+    }
+
+    private fun applyDefaultClingRotation(entity: PokemonEntity, poseStack: PoseStack, yBodyRot: Float) {
+        val poseType = entity.getCurrentPoseType()
+        if (poseType != PoseType.CLING && poseType != PoseType.CLING_CEILING) return
+        val matched = model.posableModel.getPose(poseType)
+        if (matched != null && PoseType.STAND !in matched.poseTypes) return
+        val pivot = entity.bbHeight / 2.0
+        if (poseType == PoseType.CLING) {
+            val face = entity.entityData.get(PokemonEntity.CLINGING_FACE)
+            if (face.axis.isHorizontal) {
+                poseStack.mulPose(Axis.YP.rotationDegrees(yBodyRot - face.toYRot()))
+            }
+            val wallDistance = 0.5 - entity.behaviour.clinging.xOffset
+            poseStack.translate(0.0, 0.0, -(wallDistance - pivot))
+        }
+        poseStack.translate(0.0, pivot, 0.0)
+        poseStack.mulPose(Axis.XP.rotationDegrees(if (poseType == PoseType.CLING) 90F else 180F))
+        poseStack.translate(0.0, -pivot, 0.0)
     }
 
     /**

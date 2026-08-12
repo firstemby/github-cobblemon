@@ -31,6 +31,8 @@ enum class PoseType {
     HANG,
     /** A pose for clinging to the face of an adjacent block. Maybe we want monke to cling to trees or from leaves */
     CLING,
+    /** A pose for clinging to the underside of a block above, different from thread hanging. */
+    CLING_CEILING,
     /** A pose for rendering on the left shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
     SHOULDER_LEFT,
     /** A pose for rendering on the right shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
@@ -53,7 +55,7 @@ enum class PoseType {
         val UI_POSES = EnumSet.of(PROFILE, PORTRAIT)
         val MOVING_POSES = EnumSet.of(WALK, SWIM, FLY)
         val STATIONARY_POSES = EnumSet.of(STAND, FLOAT, HOVER)
-        val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, SWIM, HANG, CLING)
+        val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, SWIM, HANG, CLING, CLING_CEILING)
 
         fun identified() : List<ResourceLocation> {
             return ALL_POSES.stream()

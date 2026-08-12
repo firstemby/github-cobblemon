@@ -569,7 +569,19 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * If none exists, return the first pose. Only possible with bad configuration, though.
      */
     fun getFirstSuitablePose(state: PosableState, poseType: PoseType?): Pose {
-        return poses.values.firstOrNull { (poseType == null || poseType in it.poseTypes) && it.isSuitable(state) } ?: poses.values.first()
+        val exact = poses.values.firstOrNull { (poseType == null || poseType in it.poseTypes) && it.isSuitable(state) }
+        if (exact != null) {
+            return exact
+        }
+        // Clinging mons without a dedicated pose use their ground idle, which the renderer
+        // rotates against the surface, rather than whatever pose happens to be first.
+        if (poseType == PoseType.CLING || poseType == PoseType.CLING_CEILING) {
+            val standing = poses.values.firstOrNull { PoseType.STAND in it.poseTypes && it.isSuitable(state) }
+            if (standing != null) {
+                return standing
+            }
+        }
+        return poses.values.first()
     }
 
     /**
