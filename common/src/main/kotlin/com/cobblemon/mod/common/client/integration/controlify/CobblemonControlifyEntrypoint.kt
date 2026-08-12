@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.client.gui.summary.Summary
 import com.cobblemon.mod.common.client.gui.trade.TradeGUI
 import com.cobblemon.mod.common.client.integration.controlify.gui.CobblemonGUIProcessor
 import com.cobblemon.mod.common.client.integration.controlify.gui.InteractWheelProcessor
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinds
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -95,6 +96,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
 
         bindings.registerBindContext(HAS_POKEMON)
         bindings.registerBindContext(INTERACT_WHEEL_SCREEN)
+        bindings.registerBindContext(COBBLEMON_CONTROLLER_SCREEN)
 
         RIDING_UP =
             bindings.registerBinding { builder: InputBindingBuilder ->
@@ -247,7 +249,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .id(cobblemonResource("gui_secondary_next_tab"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.gui_secondary_next_tab"))
-                    .allowedContexts(BindContext.ANY_SCREEN)
+                    .allowedContexts(COBBLEMON_CONTROLLER_SCREEN)
             }
 
         GUI_SECONDARY_PREV_TAB =
@@ -256,7 +258,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .id(cobblemonResource("gui_secondary_prev_tab"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.gui_secondary_prev_tab"))
-                    .allowedContexts(BindContext.ANY_SCREEN)
+                    .allowedContexts(COBBLEMON_CONTROLLER_SCREEN)
             }
 
         GUI_START =
@@ -265,7 +267,7 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
                     .id(cobblemonResource("gui_start"))
                     .category(Component.translatable("controlify.category.cobblemon.cobblemon"))
                     .name(Component.translatable("controlify.bind.cobblemon.gui_start"))
-                    .allowedContexts(BindContext.ANY_SCREEN)
+                    .allowedContexts(COBBLEMON_CONTROLLER_SCREEN)
             }
 
 
@@ -345,6 +347,13 @@ class CobblemonControlifyEntrypoint : ControlifyEntrypoint {
         val INTERACT_WHEEL_SCREEN: BindContext = BindContext(
             cobblemonResource("wheel_screen"),
             { it.screen is InteractWheelGUI}
+        )
+
+        val COBBLEMON_CONTROLLER_SCREEN: BindContext = BindContext(
+            cobblemonResource("cobblemon_controller_screen"),
+            { mc: Minecraft ->
+                mc.screen is ControllerScreen
+            }
         )
 
         fun controllerActive(): Boolean {

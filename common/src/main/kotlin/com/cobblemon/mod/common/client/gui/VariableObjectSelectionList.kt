@@ -68,25 +68,23 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
     }
 
     override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
-        var stackHeight = -scrollAmount.toInt()
         guiGraphics.enableScissor(x, y, x + width, y + height)
         children.forEachIndexed { index, entry ->
-            if (stackHeight in 1..<height || stackHeight + entry.height in 1..<height) {
-                entry.render(guiGraphics, index, x, y + stackHeight, mouseX, mouseY, partialTick)
+            val yTop = getRowTop(entry)
+            if (yTop + entry.height > y || yTop < y + height) {
+                entry.render(guiGraphics, index, x, yTop, mouseX, mouseY, partialTick)
             }
-            stackHeight += entry.height
         }
         guiGraphics.disableScissor()
     }
 
     fun getEntryAtPosition(mouseX: Int, mouseY: Int): Entry? {
         if (mouseX in x..(x + width) && mouseY in y..(y + height)) {
-            var stackHeight = -scrollAmount
             children.forEach {
-                if (mouseY.toDouble() in (y + stackHeight)..(y + stackHeight + it.height)) {
+                val yTop = getRowTop(it)
+                if (mouseY in (yTop)..(yTop + it.height)) {
                     return it
                 }
-                stackHeight += it.height
             }
         }
         return null
@@ -94,10 +92,16 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
 
     fun ensureVisible(index: Int) {
         val entry = children[index]
-        if (entry.scrolledY - scrollAmount < 0) {
+        ensureVisible(entry)
+    }
+
+    open fun ensureVisible(entry: Entry) {
+        if (entry !in children) return
+        val yTop = entry.scrolledY - scrollAmount.toInt()
+        if (yTop < 0) {
             setScroll(entry.scrolledY.toDouble())
-        } else if (entry.scrolledY + entry.height > height) {
-            setScroll(entry.scrolledY.toDouble() + entry.height)
+        } else if (yTop + entry.height > height) {
+            setScroll((entry.scrolledY + entry.height - height).toDouble())
         }
     }
 
@@ -121,14 +125,12 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
     }
 
     fun getRowTop(entry: Entry): Int {
-        var stackHeight = -scrollAmount.toInt()
-        children.forEach {
-            if (it == entry) {
-                return y + stackHeight
-            }
-            stackHeight += it.height
-        }
-        return y
+        if (entry !in children) return -1
+        return y + entry.scrolledY - scrollAmount.toInt()
+    }
+
+    fun getLeft(): Int {
+        return x
     }
 
     override fun defaultButtonNarrationText(pNarrationElementOutput: NarrationElementOutput) {}
@@ -136,6 +138,7 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
 
     abstract inner class Entry(var height: Int): GuiEventListener {
         var scrolledY: Int = 0
+
         private var widgetFocused = false
 
         override fun setFocused(focused: Boolean) {
@@ -145,6 +148,14 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         override fun isFocused(): Boolean = widgetFocused
 
         abstract fun render(guiGraphics: GuiGraphics, index: Int, x: Int, y: Int, mouseX: Int, mouseY: Int, partialTick: Float)
+
+        fun getRowTop(): Int {
+            return getRowTop(this)
+        }
+
+        fun getRowLeft(): Int {
+            return getLeft()
+        }
     }
 
     inner class EmptySeparator(height: Int): Entry(height) {

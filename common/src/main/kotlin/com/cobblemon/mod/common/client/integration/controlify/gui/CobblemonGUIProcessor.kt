@@ -116,35 +116,29 @@ open class CobblemonGUIProcessor(open val screen: Screen) : ScreenProcessor<Scre
             val guiNaviUp = ControlifyBindings.GUI_SECONDARY_NAVI_UP.on(controller)
             val guiNaviDown = ControlifyBindings.GUI_SECONDARY_NAVI_DOWN.on(controller)
 
-            if (guiNaviRight.digitalNow()) {
-                componentManager.onRHorizontalHeld.invoke(true)
-                if (!guiNaviRight.digitalPrev() || repeatAvailable) {
-                    holdRepeatHelper.reset()
-                    componentManager.onRHorizontal.invoke(true)
-                }
-            } else if (guiNaviLeft.digitalNow()) {
-                componentManager.onRHorizontalHeld.invoke(false)
-                if (!guiNaviLeft.digitalPrev() || repeatAvailable) {
-                    holdRepeatHelper.reset()
-                    componentManager.onRHorizontal.invoke(false)
-                }
+            if (guiNaviRight.digitalNow() && (!guiNaviRight.digitalPrev() || repeatAvailable)) {
+                holdRepeatHelper.reset()
+                componentManager.onRHorizontal.invoke(true)
+            } else if (guiNaviLeft.digitalNow() && (!guiNaviLeft.digitalPrev() || repeatAvailable)) {
+                holdRepeatHelper.reset()
+                componentManager.onRHorizontal.invoke(false)
             }
-            if (guiNaviUp.digitalNow()) {
-                componentManager.onRVerticalHeld.invoke(true)
-                if (!guiNaviUp.digitalPrev() || repeatAvailable) {
-                    holdRepeatHelper.reset()
-                    componentManager.onRVertical.invoke(true)
-                }
-            } else if (guiNaviDown.digitalNow()) {
-                componentManager.onRVerticalHeld.invoke(false)
-                if (!guiNaviDown.digitalPrev() || repeatAvailable) {
-                    holdRepeatHelper.reset()
-                    componentManager.onRVertical.invoke(false)
-                }
+            if (guiNaviUp.digitalNow() && (!guiNaviUp.digitalPrev() || repeatAvailable)) {
+                holdRepeatHelper.reset()
+                componentManager.onRVertical.invoke(true)
+            } else if (guiNaviDown.digitalNow() && (!guiNaviDown.digitalPrev() || repeatAvailable)) {
+                holdRepeatHelper.reset()
+                componentManager.onRVertical.invoke(false)
             }
+            componentManager.rHorizontalState = if (guiNaviRight.digitalNow()) 1 else if (guiNaviLeft.digitalNow()) -1 else 0
+            componentManager.rVerticalState = if (guiNaviUp.digitalNow()) 1 else if (guiNaviDown.digitalNow()) -1 else 0
+
             //Handle Navigation
             handleNavigation(controller, componentManager)
         } else {
+            componentManager.rHorizontalState = 0
+            componentManager.rVerticalState = 0
+
             handleScreenVMouse(controller, Controlify.instance().virtualMouseHandler())
         }
 

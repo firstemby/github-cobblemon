@@ -396,16 +396,6 @@ class PokedexGUI private constructor(
                     }
                 }
             }
-            it.onRHorizontalHeld = { right ->
-                if (it.currentSelectedComponent == "pokemon_render") {
-                    pokemonInfoWidget.rotationY = ((pokemonInfoWidget.rotationY + if (right) -5F else 5F ) % 360 + 360) % 360
-                }
-            }
-            it.onRVerticalHeld = { up ->
-                if (it.currentSelectedComponent == "info_widget") {
-                    (tabInfoElement as? InfoTextScrollWidget)?.scroll(if (up) -3 else 3)
-                }
-            }
             it.onRHorizontal = { right ->
                 if (it.currentSelectedComponent == "info_widget") {
                     (tabInfoElement as? StatsWidget)?.let { widget ->
@@ -710,6 +700,7 @@ class PokedexGUI private constructor(
         if (isDragging && canDragRender) {
             val dragOffsetY = (oldDragPosX - mouseX).toFloat()
             pokemonInfoWidget.rotationY = (((pokemonInfoWidget.rotationY + dragOffsetY) % 360 + 360) % 360)
+            pokemonInfoWidget.lastRotationY = pokemonInfoWidget.rotationY
         }
         oldDragPosX = mouseX
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
@@ -725,6 +716,18 @@ class PokedexGUI private constructor(
 
     override fun tick() {
         if (::pokemonInfoWidget.isInitialized && !pokemonInfoWidget.suppressViewport) pokemonInfoWidget.tick()
+
+        //Controller
+        if (controllerComponentManager.rHorizontalState != 0) {
+            if (controllerComponentManager.currentSelectedComponent == "pokemon_render") {
+                pokemonInfoWidget.rotationY = ((pokemonInfoWidget.rotationY + 5F * controllerComponentManager.rHorizontalState) % 360 + 360) % 360
+            }
+        }
+        if (controllerComponentManager.rVerticalState != 0) {
+            if (controllerComponentManager.currentSelectedComponent == "info_widget") {
+                (tabInfoElement as? InfoTextScrollWidget)?.scroll(-3 * controllerComponentManager.rVerticalState)
+            }
+        }
     }
 
     fun updatePokedexRegion(nextIndex: Boolean) {

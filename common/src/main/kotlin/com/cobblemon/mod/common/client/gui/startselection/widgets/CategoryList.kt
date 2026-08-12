@@ -59,9 +59,12 @@ class CategoryList(
         const val CONTAINER_WIDTH = 89
     }
 
+    val generatedCategoriesWidgets = mutableListOf<Category>()
+
     init {
         addEntry(EmptySeparator(MARGIN))
         createEntries().forEach {
+            generatedCategoriesWidgets.add(it)
             addEntry(it)
             addEntry(EmptySeparator(MARGIN))
         }
@@ -73,7 +76,19 @@ class CategoryList(
         Category(category, height)
     }
 
-    inner class Category(private val category: RenderableStarterCategory, height: Int) : Entry(height) {
+    override fun ensureVisible(entry: Entry) {
+        if (entry !in children) return
+        val yTop = entry.scrolledY - scrollAmount.toInt()
+        if (yTop - MARGIN < 0) {
+            setScroll((entry.scrolledY - MARGIN).toDouble())
+        } else if (yTop + entry.height + MARGIN > height) {
+            setScroll((entry.scrolledY + entry.height - height + MARGIN).toDouble())
+        }
+    }
+
+    inner class Category(val category: RenderableStarterCategory, height: Int) : Entry(height) {
+        var controllerButtonSelected = -1
+
         override fun render(
             guiGraphics: GuiGraphics,
             index: Int,
@@ -169,7 +184,7 @@ class CategoryList(
                     width = CONTAINER_BUTTON_SIZE,
                     height = CONTAINER_BUTTON_SIZE,
                     textureHeight = CONTAINER_BUTTON_SIZE * 2,
-                    vOffset = if (hovered) CONTAINER_BUTTON_SIZE else 0
+                    vOffset = if (hovered || controllerButtonSelected == index) CONTAINER_BUTTON_SIZE else 0
                 )
 
                 matrices.pushPose()

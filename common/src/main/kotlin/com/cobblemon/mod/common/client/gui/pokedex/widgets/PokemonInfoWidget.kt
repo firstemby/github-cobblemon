@@ -56,6 +56,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.util.Mth
 import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.io.FileNotFoundException
@@ -123,6 +124,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
 
     var state = FloatingState()
     var rotationY = 30F
+    var lastRotationY = rotationY // Used to smooth out rotation for controllers
 
     var ticksElapsed = 0
     var pokeBallBackgroundFrame = 0
@@ -261,6 +263,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     ).apply { addWidget(this) }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        val realDetla = Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(true)
+
         val currentEntry = this.currentEntry ?: return
 
         val hasKnowledge =
@@ -378,7 +382,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
                     1000.0 // Prevent model from clipping into background
                 )
                 matrices.scale(scaleAmount, scaleAmount, scaleAmount)
-                val rotationVector = Vector3f(13F, rotationY, 0F)
+                val rotationVector = Vector3f(13F, Mth.rotLerp(realDetla, lastRotationY, rotationY), 0F)
 
                 drawProfilePokemon(
                     renderablePokemon = renderablePokemon!!,
@@ -756,6 +760,8 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         val delay = 3
         if (ticksElapsed % delay == 0) pokeBallBackgroundFrame++
         if (pokeBallBackgroundFrame == 16) pokeBallBackgroundFrame = 0
+
+        lastRotationY = rotationY
     }
 
     fun isWithinPortraitSpace(mouseX: Double, mouseY: Double): Boolean =

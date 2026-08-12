@@ -46,7 +46,7 @@ class SelectionButton(
             width = BUTTON_WIDTH,
             height = BUTTON_HEIGHT,
             textureHeight = BUTTON_HEIGHT * 2,
-            vOffset = if (isHovered) BUTTON_HEIGHT else 0
+            vOffset = if (isHovered || isFocused) BUTTON_HEIGHT else 0
         )
 
         drawScaledText(

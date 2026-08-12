@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.client.gui.VariableObjectSelectionScrollbar
 import com.cobblemon.mod.common.client.gui.startselection.widgets.CategoryList
 import com.cobblemon.mod.common.client.gui.startselection.widgets.SelectionButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
+import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponent
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerComponentManager
 import com.cobblemon.mod.common.client.integration.controlify.gui.component.ControllerScreen
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
@@ -75,7 +76,8 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     private lateinit var currentPokemon: RenderablePokemon
 
     val controllerComponentManager = ControllerComponentManager(this)
-    var lastSelectedCategoryIndex = 0
+    var lastSelectedCategory = 0
+    var lastSelectedButton = 0
 
     override fun getComponentManager(): ControllerComponentManager {
         return controllerComponentManager
@@ -160,50 +162,91 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             height = 145
         ))
 
-        /*controllerComponentManager.componentList["select"] = ControllerComponent().also {
+
+        controllerComponentManager.componentList["select"] = ControllerComponent().also {
             it.associatedGUIElement = selectionButton
-            it.left = { controllerComponentManager.componentList["category_${lastSelectedCategoryIndex}"] }
+            it.right = { controllerComponentManager.componentList["pokemon_${lastSelectedCategory}_${lastSelectedButton}"] }
         }
-        categoryWidget.children().forEachIndexed { index, category ->
-            controllerComponentManager.componentList["category_${index}"] = ControllerComponent().also {
-                it.associatedGUIElement = category
-                it.right = { controllerComponentManager.componentList["select"] }
-                if (index - 1 >= 0) it.up = { controllerComponentManager.componentList["category_${index-1}"] }
-                if (index + 1 <= categoryWidget.children().size - 1) it.down = { controllerComponentManager.componentList["category_${index+1}"] }
-                it.onPress = {
-                    changeCategory(category.category)
-                    playSound(CobblemonSounds.GUI_CLICK)
+        categoryList.generatedCategoriesWidgets.forEachIndexed { categoryIndex, category ->
+            for (buttonIndex in 0..<category.category.pokemon.size) {
+                val column = buttonIndex % 3
+                controllerComponentManager.componentList["pokemon_${categoryIndex}_${buttonIndex}"] = ControllerComponent().also {
+                    it.associatedGUIElement = category
+                    it.right = {
+                        if (column < 2) controllerComponentManager.componentList["pokemon_${categoryIndex}_${buttonIndex+1}"]
+                        else null
+                    }
+                    it.left = {
+                        if (column > 0) controllerComponentManager.componentList["pokemon_${categoryIndex}_${buttonIndex-1}"]
+                        else controllerComponentManager.componentList["select"]
+                    }
+                    it.up = {
+                        if (buttonIndex-3 < 0) {
+                            var returnVal: ControllerComponent? = null
+                            var index = categoryIndex
+                            while (index-1 >= 0) {
+                                val lastCategory = categoryList.generatedCategoriesWidgets[index-1]
+                                val row = (lastCategory.category.pokemon.size - 1) / 3 + if ((lastCategory.category.pokemon.size - 1) % 3 < column) -1 else 0
+                                if (row >= 0) {
+                                    returnVal = controllerComponentManager.componentList["pokemon_${index-1}_${row*3+column}"]
+                                    break
+                                }
+                                index -= 1
+                            }
+                            returnVal
+                        }
+                        else controllerComponentManager.componentList["pokemon_${categoryIndex}_${buttonIndex-3}"]
+                    }
+                    it.down = {
+                        if (buttonIndex+3 >= category.category.pokemon.size) {
+                            var returnVal: ControllerComponent? = null
+                            var index = categoryIndex
+                            while (index+1 < categoryList.generatedCategoriesWidgets.size) {
+                                val nextCategory = categoryList.generatedCategoriesWidgets[index+1]
+                                if (nextCategory.category.pokemon.size > column) {
+                                    returnVal = controllerComponentManager.componentList["pokemon_${index+1}_${column}"]
+                                    break
+                                }
+                                index += 1
+                            }
+                            returnVal
+                        }
+                        else controllerComponentManager.componentList["pokemon_${categoryIndex}_${buttonIndex+3}"]
+                    }
+                    it.onPress = {
+                        selectPokemon(category.category, buttonIndex)
+                        playSound(CobblemonSounds.GUI_CLICK)
+                    }
+                    it.onSelect = {
+                        lastSelectedCategory = categoryIndex
+                        lastSelectedButton = buttonIndex
+                    }
+                    it.onFocus = {
+                        category.controllerButtonSelected = buttonIndex
+                        categoryList.ensureVisible(category)
+                    }
+                    it.onUnfocus = {
+                        category.controllerButtonSelected = -1
+                    }
                 }
-                it.onSelect = {
-                    lastSelectedCategoryIndex = index
-                    categoryWidget.ensureVisible(category)
-                }
-                it.onFocus = { category.controllerSelected = true }
-                it.onUnfocus = { category.controllerSelected = false }
             }
         }
         controllerComponentManager.let {
             it.focused = controllerComponentManager.componentList["select"]
-            it.onTabNav = { nextTab ->
-                if (nextTab) right() else left()
-            }
-            it.buttonGuides.add(ControllerComponentManager.ButtonGuide(
-                ControllerComponentManager.ButtonGuideType.TAB,
-                { true },
-                Component.translatable("cobblemon.controller.starter.cycle_starter")
-            ))
-        }*/
+        }
     }
 
-    /*override fun getSelectionPosAndSize(): Vector4i? {
-        val data = super.getSelectionPosAndSize()
-        if (controllerComponentManager.currentSelectedComponent.startsWith("category_")) {
-            val category = controllerComponentManager.focused?.associatedGUIElement as? CategoryList.Category
-            return Vector4i(categoryWidget.rowLeft + 1, categoryWidget.getRowTop(categoryWidget.children().indexOf(category)) - 2,
-                CategoryList.CATEGORY_BUTTON_WIDTH.toInt() + 4, CategoryList.CATEGORY_BUTTON_HEIGHT.toInt() + 4)
+    override fun getSelectionPosAndSize(): Vector4i? {
+        if (controllerComponentManager.currentSelectedComponent.startsWith("pokemon_")) {
+            val category = controllerComponentManager.focused?.associatedGUIElement as? CategoryList.Category ?: return null
+            val row = category.controllerButtonSelected / 3
+            val column = category.controllerButtonSelected % 3
+            val x = category.getRowLeft() + (CategoryList.CONTAINER_BUTTON_SIZE + 2) * column + CategoryList.MARGIN + 3
+            val y = category.getRowTop() + (CategoryList.CONTAINER_BUTTON_SIZE + CategoryList.BUTTON_SEPERATION) * row + CategoryList.HEADER_HEIGHT + CategoryList.BUTTON_SEPERATION - 1
+            return Vector4i(x, y, CategoryList.CONTAINER_BUTTON_SIZE + 4, CategoryList.CONTAINER_BUTTON_SIZE + 4)
         }
-        return data
-    }*/
+        return super.getSelectionPosAndSize()
+    }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()

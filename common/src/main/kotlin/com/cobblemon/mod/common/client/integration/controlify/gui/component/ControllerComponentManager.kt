@@ -65,11 +65,11 @@ class ControllerComponentManager(val screen: Screen) {
 
     var onNoneSelected: () -> Boolean = { false }
 
-    var onRHorizontalHeld: (Boolean) -> Unit = {}
-    var onRVerticalHeld: (Boolean) -> Unit = {}
-
     var onRHorizontal: (Boolean) -> Unit = {}
     var onRVertical: (Boolean) -> Unit = {}
+
+    var rHorizontalState: Int = 0
+    var rVerticalState: Int = 0
 
     var openKeyboard: (EditBox) -> Unit = {}
     val buttonGuides = mutableListOf<ButtonGuide>()
