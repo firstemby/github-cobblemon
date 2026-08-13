@@ -2,7 +2,7 @@
   "moveName": "quash",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "dark",

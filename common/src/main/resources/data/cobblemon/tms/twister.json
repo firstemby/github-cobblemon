@@ -2,7 +2,7 @@
   "moveName": "twister",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "dragon",

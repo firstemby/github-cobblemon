@@ -2,7 +2,7 @@
   "moveName": "torment",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "dark",

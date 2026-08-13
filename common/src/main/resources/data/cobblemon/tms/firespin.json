@@ -2,7 +2,7 @@
   "moveName": "firespin",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "fire",

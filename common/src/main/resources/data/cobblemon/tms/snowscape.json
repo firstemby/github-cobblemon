@@ -2,7 +2,7 @@
   "moveName": "snowscape",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "ice",

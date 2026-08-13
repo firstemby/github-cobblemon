@@ -2,7 +2,7 @@
   "moveName": "magicalleaf",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "grass",

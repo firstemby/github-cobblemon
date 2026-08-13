@@ -2,7 +2,7 @@
   "moveName": "charm",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "fairy",

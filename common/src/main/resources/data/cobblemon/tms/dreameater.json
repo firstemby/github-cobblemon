@@ -2,7 +2,7 @@
   "moveName": "dreameater",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "psychic",

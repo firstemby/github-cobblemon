@@ -2,7 +2,7 @@
   "moveName": "corrosivegas",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "poison",

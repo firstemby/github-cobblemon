@@ -2,7 +2,7 @@
   "moveName": "covet",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "normal",

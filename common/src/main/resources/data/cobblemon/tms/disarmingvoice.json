@@ -2,7 +2,7 @@
   "moveName": "disarmingvoice",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "fairy",

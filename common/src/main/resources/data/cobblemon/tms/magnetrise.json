@@ -2,7 +2,7 @@
   "moveName": "magnetrise",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "electric",

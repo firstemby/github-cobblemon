@@ -2,7 +2,7 @@
   "moveName": "endure",
   "obtainMethods": [
     {
-      "variant": "cobblemon:default"
+      "variant": "cobblemon:unlockable"
     }
   ],
   "type": "normal",
