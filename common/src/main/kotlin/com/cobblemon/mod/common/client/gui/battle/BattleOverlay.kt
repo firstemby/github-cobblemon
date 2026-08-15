@@ -115,6 +115,10 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
     override val schedulingTracker = SchedulingTracker()
 
     override fun render(context: GuiGraphics, tickCounter: DeltaTracker) {
+        val matrixStack = context.pose()
+        matrixStack.pushPose()
+        matrixStack.translate(0.0, 0.0, -50.0) // Push back so controlify gui renders infront
+
         val tickDelta = tickCounter.realtimeDeltaTicks.takeIf { !Minecraft.getInstance()!!.isPaused } ?: 0F
         schedulingTracker.update(tickDelta / 20F)
         passedSeconds += tickDelta / 20
@@ -166,6 +170,8 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             messagePane.opacity = 0.3F
             messagePane.render(context, 0, 0, 0F)
         }
+
+        matrixStack.popPose()
     }
 
     fun drawTile(context: GuiGraphics, tickDelta: Float, activeBattlePokemon: ActiveClientBattlePokemon, left: Boolean, rank: Int, dexState: PokedexEntryProgress, hasCommand: Boolean = false, isHovered: Boolean = false, isCompact: Boolean = false) {
@@ -303,10 +309,11 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             (y + portraitDiameter + portraitOffsetY).toInt(),
         )
         matrixStack.pushPose()
+        matrixStack.scale(1F, 1F, 0.2F)
         matrixStack.translate(
             portraitStartX + portraitDiameter / 2.0,
             y.toDouble() + portraitOffsetY - if (isCompact) 15.0 else 5.0,
-            0.0
+            -50.0
         )
 
         if (ballState != null && ballState.currentPose != "shut")  {
