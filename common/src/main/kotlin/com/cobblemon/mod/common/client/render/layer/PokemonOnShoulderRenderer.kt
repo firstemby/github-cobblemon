@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
+import java.util.Locale
 import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.PlayerModel
@@ -34,11 +35,12 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
-import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.ItemStack
@@ -124,8 +126,9 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             val width = shoulderData.form.hitbox.width
             val heightOffset = -1.5 * scale
             val widthOffset = width / 2 - 0.7
-            val armorHeightOffset = if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).item is ArmorItem) {
-                Cobblemon.config.shoulderMountArmorHeightOffset
+            val chestItem = livingEntity.getItemBySlot(EquipmentSlot.CHEST)
+            val armorHeightOffset = if (chestItem.item is ArmorItem && !isArmorOffsetBlacklisted(chestItem)) {
+                ARMOR_HEIGHT_OFFSET
             } else {
                 0F
             }
@@ -210,7 +213,25 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
     companion object {
 
+        private const val ARMOR_HEIGHT_OFFSET = 1F / 16F
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
+        private var cachedArmorOffsetBlacklistConfig = ""
+        private var cachedArmorOffsetBlacklist = emptySet<String>()
+
+        private fun isArmorOffsetBlacklisted(itemStack: ItemStack): Boolean {
+            val configuredBlacklist = Cobblemon.config.shoulderMountArmorOffsetBlacklist
+            if (configuredBlacklist != cachedArmorOffsetBlacklistConfig) {
+                cachedArmorOffsetBlacklistConfig = configuredBlacklist
+                cachedArmorOffsetBlacklist = configuredBlacklist
+                    .split(',')
+                    .map { it.trim().lowercase(Locale.ROOT) }
+                    .filter { it.isNotEmpty() }
+                    .toSet()
+            }
+
+            val itemIdentifier = BuiltInRegistries.ITEM.getKey(itemStack.item)
+            return itemIdentifier.namespace in cachedArmorOffsetBlacklist || itemIdentifier.toString() in cachedArmorOffsetBlacklist
+        }
 
         private fun extractUuid(shoulderNbt: CompoundTag): UUID {
             if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {
