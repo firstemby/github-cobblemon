@@ -2456,6 +2456,8 @@
   "cobblemon.config.ui.display_name_for_unknown_pokemon.tooltip": "Whether to display the name above a Pokémon if it has not been scanned with the Pokédex yet.",
   "cobblemon.config.ui.display_entity_labels_when_crouching_only": "Display Entity Labels When Crouching Only",
   "cobblemon.config.ui.display_entity_labels_when_crouching_only.tooltip": "Whether to display the name above a Pokémon only when crouching or at all times.",
+  "cobblemon.config.ui.shoulder_mount_armor_height_offset": "Shoulder Mount Armor Height Offset",
+  "cobblemon.config.ui.shoulder_mount_armor_height_offset.tooltip": "Moves all shoulder mounted Pokémon upward by this many blocks while chest armor is equipped. Vanilla chest armor expands by 0.0625 blocks.",
   "cobblemon.config.ui.shiny_rate": "Shiny Rate",
   "cobblemon.config.ui.shiny_rate.tooltip": "The chance for a spawned Pokémon to be shiny. If 0 no spawned Pokémon will be shiny. Calculated as 1/x.",
   "cobblemon.config.ui.fossil_machine_alpha_chance": "Fossil Machine Alpha Chance",

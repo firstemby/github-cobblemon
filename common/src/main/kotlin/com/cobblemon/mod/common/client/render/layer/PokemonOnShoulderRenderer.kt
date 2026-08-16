@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.layer
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
@@ -36,8 +37,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.ItemStack
 
 class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
@@ -121,6 +124,11 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             val width = shoulderData.form.hitbox.width
             val heightOffset = -1.5 * scale
             val widthOffset = width / 2 - 0.7
+            val armorHeightOffset = if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).item is ArmorItem) {
+                Cobblemon.config.shoulderMountArmorHeightOffset
+            } else {
+                0F
+            }
             // If they're sneaking, the pokemon needs to rotate a little bit and push forward
             // Shoulders move a bit when sneaking which is why the translation is necessary.
             // Shoulder exact rotation according to testing (miasmus) is 0.4 radians, the -0.15 is eyeballed though.
@@ -130,7 +138,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             }
             matrixStack.translate(
                 if (pLeftShoulder) -widthOffset else widthOffset,
-                (if (livingEntity.isCrouching) heightOffset + 0.2 else heightOffset),
+                (if (livingEntity.isCrouching) heightOffset + 0.2 else heightOffset) - armorHeightOffset,
                 0.0
             )
 
