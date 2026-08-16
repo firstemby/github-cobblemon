@@ -24,7 +24,6 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import java.util.Locale
 import java.util.UUID
 import net.minecraft.client.Minecraft
@@ -132,16 +131,10 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             } else {
                 0F
             }
-            // If they're sneaking, the pokemon needs to rotate a little bit and push forward
-            // Shoulders move a bit when sneaking which is why the translation is necessary.
-            // Shoulder exact rotation according to testing (miasmus) is 0.4 radians, the -0.15 is eyeballed though.
-            if (livingEntity.isCrouching) {
-                matrixStack.mulPose(Axis.XP.rotation(0.4F))
-                matrixStack.translate(0F, 0F, -0.15F)
-            }
+            parentModel.body.translateAndRotate(matrixStack)
             matrixStack.translate(
                 if (pLeftShoulder) -widthOffset else widthOffset,
-                (if (livingEntity.isCrouching) heightOffset + 0.2 else heightOffset) - armorHeightOffset,
+                heightOffset - armorHeightOffset,
                 0.0
             )
 
