@@ -43,6 +43,7 @@
     "client.StringRenderOutputMixin",
     "client.snapshots.SnapshotWarningMixin",
     "invoker.ClientPlayNetworkHandlerInvoker",
+    "invoker.AbstractContainerScreenInvoker",
     "riding.JetMixin"
   ],
   "mixins": [

@@ -1,0 +1,23 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "parameters": { "total_donated": "string" },
+  "actions": ["donate", "close"],
+  "variables": { "v.quantity": 1, "v.feedback_type": 0 },
+  "root": {
+    "type": "panel", "anchor": "center", "size": [220, 180],
+    "controls": [
+      { "bg": { "type": "fill", "size": ["100%", "100%"], "color": "0xDD1a1a2e" } },
+      { "title": { "type": "label", "anchor": "top_center", "offset": [0, 8], "text": "Donation Box", "alignment": "center", "color": "0xFFFFD700" } },
+      { "total": { "type": "label", "anchor": "top_center", "offset": [0, 42], "size": [200, 10], "text": { "molang": "'Total donated: ' + q.total_donated + ' emeralds'" }, "alignment": "center", "color": "0xFF88FF88" } },
+      { "minus": { "type": "button", "anchor": "top_center", "offset": [-40, 72], "size": [24, 24], "text": "-", "on_click_client": { "molang": "v.quantity = math.max(1, v.quantity - 1)" } } },
+      { "amount": { "type": "label", "anchor": "top_center", "offset": [0, 78], "size": [60, 12], "text": { "molang": "q.format(v.quantity, 0)" }, "alignment": "center" } },
+      { "plus": { "type": "button", "anchor": "top_center", "offset": [40, 72], "size": [24, 24], "text": "+", "on_click_client": { "molang": "v.quantity = math.min(64, v.quantity + 1)" } } },
+      { "donate": { "type": "button", "anchor": "top_center", "offset": [0, 108], "size": [140, 22], "text": "Donate", "on_click": { "action": "donate", "parameters": { "amount": { "molang": "v.quantity" } } } } },
+      { "close": { "type": "button", "anchor": "top_center", "offset": [0, 138], "size": [140, 22], "text": "Close", "on_click": { "action": "close" } } },
+      { "feedback": { "type": "label", "anchor": "bottom_center", "offset": [0, -6], "text": "Thank you!", "visible": { "molang": "v.feedback_type == 1" }, "color": "0xFF00FF00" } }
+    ]
+  }
+}

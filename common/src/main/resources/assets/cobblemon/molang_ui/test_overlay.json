@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "overlay",
+  "blocks_input": false,
+  "parameters": { "count": "number", "test_arg": "string" },
+  "variables": { "v.click_count": 0 },
+  "root": {
+    "type": "panel", "anchor": "bottom_center", "size": ["100%", 60],
+    "on_click_client": { "molang": "v.click_count = v.click_count + 1" },
+    "controls": [
+      { "bg": { "type": "fill", "size": ["100%", "100%"], "color": "0x80000000" } },
+      { "title": { "type": "label", "anchor": "top_center", "offset": [0, 5], "text": { "molang": "q.test_arg" }, "alignment": "center" } },
+      { "clicks": { "type": "label", "anchor": "bottom_right", "offset": [-70, -20], "text": { "molang": "'Clicks: ' + q.to_string(v.click_count)" } } }
+    ]
+  }
+}

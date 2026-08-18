@@ -1,0 +1,18 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "actions": ["smelt"],
+  "root": {
+    "type": "panel", "size": [176, 166], "anchor": "center", "color": "0xFF8B8B8B",
+    "controls": [
+      { "title": { "type": "label", "text": "Example Furnace", "offset": [8, 6], "color": "0xFF404040" } },
+      { "input_slot": { "type": "slot_grid", "offset": [56, 17], "collection_name": "input", "grid_dimensions": [1, 1] } },
+      { "output_slot": { "type": "slot_grid", "offset": [116, 35], "collection_name": "output", "grid_dimensions": [1, 1] } },
+      { "smelt": { "type": "button", "offset": [76, 35], "size": [30, 18], "text": "Smelt", "on_click": { "action": "smelt" } } },
+      { "player_inv": { "type": "slot_grid", "offset": [8, 84], "collection_name": "player_inventory", "grid_dimensions": [9, 3] } },
+      { "player_hotbar": { "type": "slot_grid", "offset": [8, 142], "collection_name": "player_hotbar", "grid_dimensions": [9, 1] } }
+    ]
+  }
+}

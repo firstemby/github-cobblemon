@@ -1,0 +1,13 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "parameters": {
+    "total_donated": { "type": "string", "required": false, "default": "0" }
+  },
+  "actions": {
+    "donate": { "handler": "cobblemon:donation_box_donate", "parameters": { "amount": "number" } },
+    "close": { "handler": "cobblemon:donation_box_close", "parameters": {} }
+  }
+}

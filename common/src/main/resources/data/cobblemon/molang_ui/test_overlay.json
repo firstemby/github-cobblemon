@@ -1,0 +1,10 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "overlay",
+  "blocks_input": false,
+  "parameters": {
+    "count": { "type": "number", "required": false, "default": 3 },
+    "test_arg": { "type": "string", "required": false, "default": "Hello World" }
+  }
+}

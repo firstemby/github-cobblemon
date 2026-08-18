@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "cobblemon:block/functional/vending_machine_front",
+    "side": "cobblemon:block/functional/vending_machine_side",
+    "top": "cobblemon:block/functional/vending_machine_top"
+  }
+}

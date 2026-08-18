@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "collections": {
+    "input": { "size": 1, "allowed_items": ["minecraft:diamond"], "layout": { "offset": [56, 17], "grid_dimensions": [1, 1] } },
+    "output": { "size": 1, "take_only": true, "layout": { "offset": [116, 35], "grid_dimensions": [1, 1] } }
+  },
+  "shift_click_rules": [
+    { "from": ["output"], "to": ["player_inventory", "player_hotbar"] },
+    { "from": ["player_inventory", "player_hotbar"], "to": ["input"] },
+    { "from": ["input"], "to": ["player_inventory", "player_hotbar"] }
+  ],
+  "on_close_items": "return",
+  "actions": { "smelt": { "handler": "cobblemon:example_furnace_smelt", "parameters": {} } }
+}

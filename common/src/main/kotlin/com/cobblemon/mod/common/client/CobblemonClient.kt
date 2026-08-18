@@ -29,6 +29,10 @@ import com.cobblemon.mod.common.client.gui.RideControlsOverlay
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
 import com.cobblemon.mod.common.client.gui.cookingpot.CookingPotScreen
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts
+import com.cobblemon.mod.common.api.molangui.MolangUiRegistry
+import com.cobblemon.mod.common.client.gui.molangui.MolangUiClientManager
+import com.cobblemon.mod.common.client.gui.molangui.renderer.WidgetRendererRegistry
+import com.cobblemon.mod.common.client.net.molangui.MolangUiCompatibilityRequestHandler
 import com.cobblemon.mod.common.client.gui.tmmachine.TMMachineScreen
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon
@@ -121,6 +125,8 @@ object CobblemonClient {
     }
 
     fun onLogout() {
+        MolangUiClientManager.cleanup()
+        MolangUiCompatibilityRequestHandler.reset()
         storage.onLogout()
         battle = null
         battleOverlay.onLogout()
@@ -162,6 +168,7 @@ object CobblemonClient {
         }
 
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
+        WidgetRendererRegistry.registerDefaults()
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
@@ -392,12 +399,15 @@ object CobblemonClient {
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
         val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
-        if (battle == null) {
-            overlay.render(context, partialDeltaTicks)
-        } else {
-            battleOverlay.render(context, partialDeltaTicks)
+        if (!MolangUiClientManager.hasExclusiveOverlay()) {
+            if (battle == null) {
+                overlay.render(context, partialDeltaTicks)
+            } else {
+                battleOverlay.render(context, partialDeltaTicks)
+            }
+            rideControlsOverlay.render(context, partialDeltaTicks)
         }
-        rideControlsOverlay.render(context, partialDeltaTicks)
+        MolangUiClientManager.renderOverlays(context, partialDeltaTicks.getGameTimeDeltaPartialTick(false))
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -411,6 +421,10 @@ object CobblemonClient {
 
     private fun registerMenuScreens() {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
+        MenuScreens.register(CobblemonMenuType.MOLANG_UI) { menu, playerInventory, _ ->
+            MolangUiClientManager.createContainerScreen(menu, playerInventory)
+                ?: throw IllegalStateException("No prepared Molang UI container screen")
+        }
         MenuScreens.register(CobblemonMenuType.TM_MACHINE, ::TMMachineScreen)
     }
 
@@ -479,6 +493,8 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
+        MolangUiRegistry.reload(resourceManager)
+        MolangUiClientManager.onResourceReload()
         LOGGER.info("Loaded assets")
     }
 

@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.habitats.HabitatPools
 import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.molangui.MolangUiActionRegistry
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculators
@@ -69,6 +70,7 @@ import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveNbtBackend
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.api.vending.VendingMachinePageHandler
 import com.cobblemon.mod.common.battles.BagItems
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
@@ -259,6 +261,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            com.cobblemon.mod.common.api.molangui.MolangUiService.closeAllForPlayer(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -320,6 +323,11 @@ object Cobblemon {
 
         // Start up the data provider.
         CobblemonDataProvider.registerDefaults()
+
+        MolangUiActionRegistry.register(
+            VendingMachinePageHandler.ACTION,
+            VendingMachinePageHandler
+        )
 
         SHINY_ASPECT.register()
         GENDER_ASPECT.register()
@@ -450,6 +458,7 @@ object Cobblemon {
         }
 
         PlatformEvents.SERVER_STOPPED.subscribe {
+            com.cobblemon.mod.common.api.molangui.MolangUiService.closeAll()
             storage.unregisterAll(it.server.registryAccess())
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()

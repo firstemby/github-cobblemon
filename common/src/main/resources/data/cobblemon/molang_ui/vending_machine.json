@@ -1,0 +1,31 @@
+{
+  "format_version": 1,
+  "contract_version": "1.1.0",
+  "mode": "screen",
+  "blocks_input": true,
+  "parameters": {
+    "page": { "type": "number", "required": false, "default": 0 },
+    "page_count": { "type": "number", "required": false, "default": 1 },
+    "page_text": { "type": "string", "required": false, "default": "1/1" },
+    "row0_item": { "type": "string", "required": false, "default": "" },
+    "row1_item": { "type": "string", "required": false, "default": "" },
+    "row2_item": { "type": "string", "required": false, "default": "" },
+    "row0_price": { "type": "string", "required": false, "default": "" },
+    "row1_price": { "type": "string", "required": false, "default": "" },
+    "row2_price": { "type": "string", "required": false, "default": "" }
+  },
+  "collections": {
+    "payment": { "size": 1, "allowed_items": ["cobblemon:relic_coin"], "layout": { "offset": [141, 22], "grid_dimensions": [1, 1] } },
+    "output": { "size": 1, "take_only": true, "layout": { "offset": [141, 62], "grid_dimensions": [1, 1] } }
+  },
+  "shift_click_rules": [
+    { "from": ["output"], "to": ["player_inventory", "player_hotbar"] },
+    { "from": ["player_inventory", "player_hotbar"], "to": ["payment"] },
+    { "from": ["payment"], "to": ["player_inventory", "player_hotbar"] }
+  ],
+  "on_close_items": "return",
+  "actions": {
+    "buy": { "handler": "cobblemon:vending_machine_buy", "parameters": { "choice": "number" } },
+    "vending_page": { "parameters": { "page": "number" } }
+  }
+}

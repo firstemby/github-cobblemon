@@ -1,0 +1,25 @@
+{
+  "templates": {
+    "panel": { "inputs": {}, "type": "panel", "color": "0x00000000" },
+    "label": {
+      "inputs": {
+        "text": { "type": "string", "default": "" },
+        "color": { "type": "string", "default": "0xFFFFFFFF" }
+      },
+      "type": "label", "text": "$text", "color": "$color", "shadow": false
+    },
+    "button": {
+      "inputs": { "text": { "type": "string", "default": "" } },
+      "type": "button", "size": [120, 20], "text": "$text", "color": "0xFF555555",
+      "hover": { "color": "0xFF777777" }, "transition": { "color": 0.1 }
+    },
+    "progress_bar": {
+      "inputs": {
+        "value": { "type": "expression", "default": { "molang": "0" } },
+        "max": { "type": "expression", "default": { "molang": "100" } },
+        "color": { "type": "string", "default": "0xFF00FF00" }
+      },
+      "type": "progress_bar", "value": "$value", "max": "$max", "color": "$color", "background_color": "0xFF333333"
+    }
+  }
+}
