@@ -2,6 +2,7 @@
 ## [1.8.0 (MONTH Xth, 2026)](#1-8-0)
 
 ### Additions
+- Added `/locatefeature` command, a `/locate` equivalent for placed features such as fossil sites, habitats, and ruins. It finds candidate chunks in unexplored terrain by replaying the world seed's decoration randomness, then confirms each one by really generating it and observing the placement, so every reported site is one where the feature genuinely generated. Reports up to 5 nearest sites as clickable teleport coordinates; an optional radius argument (in chunks, up to 512) adjusts the default 400-chunk search. Placements are also remembered as chunks generate while the server runs, so repeated searches stay consistent and cover explored terrain. Terrain generated in earlier sessions or before this update is answered with seed-based predictions, which are exact as long as the world's generation config hasn't changed since that terrain generated
 - Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
 - Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
 - Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
