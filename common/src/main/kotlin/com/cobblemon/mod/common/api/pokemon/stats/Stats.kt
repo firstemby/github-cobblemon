@@ -61,12 +61,6 @@ enum class Stats(override val identifier: ResourceLocation, override val display
             else -> ACCURACY
         }
 
-        /** Gets the permanent [Stat] matching the given identifier path or Showdown id, if any. */
-        fun getPermanentStat(statKey: String): Stat? {
-            val key = statKey.lowercase()
-            return PERMANENT.firstOrNull { it.identifier.path == key || it.showdownId == key }
-        }
-
         /** Gets the severity lang key from the respective boost/unboost stage. */
         fun getSeverity(stages: Int) = when(stages) {
             0 -> "cap.single"

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.requirements
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -21,8 +22,8 @@ class StatCompareRequirement : Requirement {
     val lowStat = Stats.DEFENCE.identifier.path
 
     override fun check(pokemon: Pokemon): Boolean {
-        val high = Stats.getPermanentStat(highStat) ?: return false
-        val low = Stats.getPermanentStat(lowStat) ?: return false
+        val high = Cobblemon.statProvider.permanentFromName(highStat) ?: return false
+        val low = Cobblemon.statProvider.permanentFromName(lowStat) ?: return false
         return pokemon.getStat(high) > pokemon.getStat(low)
     }
 }

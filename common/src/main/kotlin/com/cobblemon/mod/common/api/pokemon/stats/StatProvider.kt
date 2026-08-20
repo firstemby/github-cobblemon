@@ -50,6 +50,17 @@ interface StatProvider {
     fun ofType(type: Stat.Type): Collection<Stat>
 
     /**
+     * Provides the [Stat] of type [Stat.Type.PERMANENT] matching the given identifier path or Showdown id.
+     *
+     * @param name The identifier path or Showdown id being queried.
+     * @return The [Stat] if existing otherwise null.
+     */
+    fun permanentFromName(name: String): Stat? {
+        val key = name.lowercase()
+        return this.ofType(Stat.Type.PERMANENT).firstOrNull { it.identifier.path == key || it.showdownId == key }
+    }
+
+    /**
      * Populate a [Species] with base stats during initialization.
      * This should only provide stats with the type of [Stat.Type.PERMANENT].
      *

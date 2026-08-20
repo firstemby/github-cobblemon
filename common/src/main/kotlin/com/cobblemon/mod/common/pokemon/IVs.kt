@@ -45,7 +45,7 @@ class IVs : PokemonStats() {
 
     // Used to get the value that should be used for stat calculation.
     fun getEffectiveBattleIV(stat: Stat): Int {
-        return (this.hyperTrainedIVs[stat] ?: this[stat]) as Int
+        return this.hyperTrainedIVs[stat] ?: this.getOrDefault(stat)
     }
 
     fun getEffectiveBattleTotal(): Int {
