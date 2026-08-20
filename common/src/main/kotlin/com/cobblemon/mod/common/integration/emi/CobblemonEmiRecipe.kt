@@ -63,7 +63,7 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
         val ingredient = ingredientHash.getOrPut(mySlot.ingredient.ingredient) { EmiIngredient.of(mySlot.ingredient.ingredient, mySlot.ingredient.count.toLong()) }
 
         if (mySlot.generatedStack != null) { // Mutually Exclusive
-            slot = GeneratedSlotWidget({r -> EmiStack.of(mySlot.generatedStack(calculateWatchedData(r).map { it.itemStack }))},
+            slot = GeneratedSlotWidget({r -> EmiStack.of(mySlot.generatedStack(calculateWatchedData(r).map { it.displayed.itemStack }))},
                 uniq, mySlot.x - 1, mySlot.y - 1)
         } else if (mySlot.watchIngredient) {
             watchedData.add(ingredient)
@@ -81,16 +81,16 @@ class CobblemonEmiRecipe<T: RecipeViewerRecipe>(val provider: CobblemonEmiProvid
         return slot
     }
 
-    private fun calculateWatchedData(r: Random): List<EmiStack> {
-        val list = mutableListOf<EmiStack>()
+    private fun calculateWatchedData(r: Random): List<CobblemonEmiIngredient<EmiStack>> {
+        val list = mutableListOf<CobblemonEmiIngredient<EmiStack>>()
         watchedData.forEach {
             val stack = it.emiStacks[r.nextInt(it.emiStacks.size)]
-            list.add(stack)
+            list.add(CobblemonEmiIngredient(it, stack))
         }
         return list
     }
 
-    private fun getWatchedDataStack(r: Random, i: Int): EmiStack {
+    private fun getWatchedDataStack(r: Random, i: Int): CobblemonEmiIngredient<EmiStack> {
         return calculateWatchedData(r)[i]
     }
 }
