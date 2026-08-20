@@ -397,6 +397,8 @@
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 - Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
 - Long config option labels now scroll instead of overflowing
+- Fixed the `stat_compare` and `stat_equal` evolution requirements crashing the server when configured with the `special_attack` or `special_defence` stats
+- A malformed evolution requirement now logs an error and is treated as unmet instead of crashing the server tick loop
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

@@ -17,10 +17,12 @@ class StatEqualRequirement : Requirement {
         const val ADAPTER_VARIANT = "stat_equal"
     }
 
-    val statOne = Stats.ATTACK.name
-    val statTwo = Stats.DEFENCE.name
+    val statOne = Stats.ATTACK.identifier.path
+    val statTwo = Stats.DEFENCE.identifier.path
 
     override fun check(pokemon: Pokemon): Boolean {
-        return pokemon.getStat(Stats.getStat(statOne)) == pokemon.getStat(Stats.getStat(statTwo))
+        val one = Stats.getPermanentStat(statOne) ?: return false
+        val two = Stats.getPermanentStat(statTwo) ?: return false
+        return pokemon.getStat(one) == pokemon.getStat(two)
     }
 }

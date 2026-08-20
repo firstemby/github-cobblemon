@@ -86,6 +86,7 @@ object CobblemonStatProvider : StatProvider {
     }
 
     override fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int {
+        require(stat.type == Stat.Type.PERMANENT) { "${stat.identifier} is not a permanent stat and cannot be resolved for a Pokemon" }
         val iv = pokemon.ivs.getEffectiveBattleIV(stat)
         val base = pokemon.form.baseStats[stat]!!
         val ev = pokemon.evs.getOrDefault(stat)

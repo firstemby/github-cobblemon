@@ -17,10 +17,12 @@ class StatCompareRequirement : Requirement {
         const val ADAPTER_VARIANT = "stat_compare"
     }
 
-    val highStat = Stats.ATTACK.name
-    val lowStat = Stats.DEFENCE.name
+    val highStat = Stats.ATTACK.identifier.path
+    val lowStat = Stats.DEFENCE.identifier.path
 
     override fun check(pokemon: Pokemon): Boolean {
-        return pokemon.getStat(Stats.getStat(highStat)) > pokemon.getStat(Stats.getStat(lowStat))
+        val high = Stats.getPermanentStat(highStat) ?: return false
+        val low = Stats.getPermanentStat(lowStat) ?: return false
+        return pokemon.getStat(high) > pokemon.getStat(low)
     }
 }
