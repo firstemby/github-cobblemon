@@ -287,6 +287,7 @@
 - Factor in the weight of Pokémon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
+- Indexed party/PC stores by UUID so lookups no longer scan the whole store, reducing MSPT with many pastured Pokémon
 - Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
 - Wild Pokémon now reliably have at least one offensive move if they can have offensive moves at that level.
 - Data Monitor can accept Disks (TMs, Music Disks, Upgrade, Dubious Disk, etc.) to change what's being displayed on the screen
