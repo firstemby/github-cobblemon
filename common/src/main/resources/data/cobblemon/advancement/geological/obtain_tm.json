@@ -4,10 +4,10 @@
       "id": "cobblemon:tm_machine"
     },
     "title": {
-      "translate": "advancements.cobblemon.craft_tm"
+      "translate": "advancements.cobblemon.obtain_tm"
     },
     "description": {
-      "translate": "advancements.cobblemon.craft_tm.description"
+      "translate": "advancements.cobblemon.obtain_tm.description"
     }
   },
   "parent": "cobblemon:geological/plant_type_gem",
