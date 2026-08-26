@@ -401,6 +401,7 @@
 - Eggant Berries can now be composted properly on NeoForge
 - Composting chances are now the same on NeoForge as on Fabric
 - Fixed problem where furnaces which had smelted Revival Herbs into Heal Powder in older versions would glitch out on trying to get the experience out of the block
+- Fixed the Battle AI not recognizing Surging Strikes as a multistrike move
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
