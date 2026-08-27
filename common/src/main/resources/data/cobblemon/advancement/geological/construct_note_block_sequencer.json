@@ -10,7 +10,7 @@
             "translate": "advancements.cobblemon.construct_note_block_sequencer.description"
         }
     },
-    "parent": "cobblemon:geological/craft_tm",
+    "parent": "cobblemon:geological/obtain_tm",
     "criteria": {
         "note_block_last": {
         "trigger": "minecraft:placed_block",
