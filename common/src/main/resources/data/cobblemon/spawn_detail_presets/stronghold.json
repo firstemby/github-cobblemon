@@ -1,8 +1,5 @@
 {
   "condition": {
-	"structures": [
-	  "minecraft:stronghold"
-    ],
 	"maxY": 62,
 	"neededBaseBlocks": [
       "#minecraft:stone_bricks"
