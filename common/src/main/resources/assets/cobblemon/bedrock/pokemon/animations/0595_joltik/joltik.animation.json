@@ -178,7 +178,7 @@
 			},
 			"sound_effects": {
 				"0.125": {
-					"effect": "joltik_cry"
+					"effect": "pokemon.joltik.cry"
 				}
 			}
 		},

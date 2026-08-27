@@ -350,6 +350,14 @@
 					"position": [0.1, 0, -0.1]
 				}
 			}
-		}
+		},
+      "animation.lycanroc_midnight.cry": {
+        "animation_length": 1.5,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.lycanroc_midnight.cry"
+          }
+        }
+      }
 	}
 }

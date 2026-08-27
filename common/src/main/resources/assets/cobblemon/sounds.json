@@ -6380,6 +6380,9 @@
   "pokemon.cherrim.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/cherrim/cherrim_cry", "volume": 0.8 } ]
   },
+  "pokemon.cherrim_sunshine.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/cherrim/cherrim_sunshine_cry", "volume": 0.8 } ]
+  },
   "pokemon.shellos.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/shellos/shellos_cry", "volume": 0.8 } ]
   },
@@ -7403,8 +7406,14 @@
   "pokemon.rockruff.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rockruff/rockruff_cry", "volume": 0.8 } ]
   },
-  "pokemon.lycanroc.cry": {
-    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_cry", "volume": 0.8 } ]
+  "pokemon.lycanroc_midday.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_midday_cry", "volume": 0.8 } ]
+  },
+  "pokemon.lycanroc_midnight.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_midnight_cry", "volume": 0.8 } ]
+  },
+  "pokemon.lycanroc_dusk.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_dusk_cry", "volume": 0.8 } ]
   },
   "pokemon.wishiwashi.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/wishiwashi/wishiwashi_cry", "volume": 0.8 } ]

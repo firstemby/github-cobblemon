@@ -402,6 +402,11 @@
 - Composting chances are now the same on NeoForge as on Fabric
 - Fixed problem where furnaces which had smelted Revival Herbs into Heal Powder in older versions would glitch out on trying to get the experience out of the block
 - Fixed the Battle AI not recognizing Surging Strikes as a multistrike move
+- Fixed some z-fighting and clipping on Dewott
+- Fixed multiple Pokémon having their cries missing
+- Fixed Tentacool not using its swim animation when on water surface
+- Fixed Eevee using its left shoulder pose when in battle
+- The Magikarp and Gyarados Jump Pattern resourcepacks should now stop replacing shiny textures of addons targeting Magikarp or Gyarados.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

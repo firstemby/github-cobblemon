@@ -437,11 +437,11 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "locator_seat1",
+					"name": "locator_seat_1",
 					"parent": "body_locators",
 					"pivot": [0, -10, -6],
 					"locators": {
-						"seat1": [0, -10, -6]
+						"seat_1": [0, -10, -6]
 					}
 				},
 				{

@@ -10,7 +10,6 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "isBattle": false,
       "animations": ["q.look('head_ai')", "q.bedrock('servine', 'ground_idle')"],
       "quirks": ["q.bedrock_quirk('servine', 'blink')"]
     },
