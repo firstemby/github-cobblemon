@@ -55,15 +55,11 @@
       "avoidedBySkeleton": true
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
-          "pokemon": "lycanroc wolf_form=midday",
+          "pokemon": "lycanroc alpha",
           "tier": 1
-        },
-        {
-          "pokemon": "lycanroc dusk",
-          "tier": 2
         }
       ]
     },

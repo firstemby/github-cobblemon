@@ -13,7 +13,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 10.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_deep_ocean"
@@ -32,7 +32,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "24-49",
-            "weight": 20.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -50,7 +50,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 10.0,
+            "weight": 50.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -73,7 +73,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 20.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_deep_ocean"
@@ -90,7 +90,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -111,7 +111,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -129,9 +129,9 @@
             "pokemon": "relicanth",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
-            "bucket": "uncommon",
+            "bucket": "rare",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 100.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -153,9 +153,9 @@
             "pokemon": "relicanth",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -189,7 +189,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "24-49",
-            "weight": 20.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -206,7 +206,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -231,7 +231,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 10.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -251,7 +251,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 20.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -274,7 +274,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "24-49",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {

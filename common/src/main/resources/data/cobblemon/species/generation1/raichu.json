@@ -58,7 +58,8 @@
         "walkSpeed": 0.21
       },
       "swim": {
-        "avoidsWater": true
+        "avoidsWater": true,
+        "canWalkOnWater": true
       }
     },
     "resting": {
@@ -68,11 +69,27 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
-          "pokemon": "raichu",
+          "pokemon": "raichu alpha",
           "tier": 1
+        },
+        {
+          "pokemon": "raichu megax=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "raichu megay=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "raichu megax",
+          "tier": 2
+        },
+        {
+          "pokemon": "raichu megay",
+          "tier": 2
         }
       ]
     },

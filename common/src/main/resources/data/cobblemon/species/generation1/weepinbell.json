@@ -69,6 +69,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "weepinbell alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "victreebel alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

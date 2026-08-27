@@ -4,13 +4,13 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "eelektrik-4",
+            "id": "eelektrik-1",
             "pokemon": "eelektrik",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -34,13 +34,13 @@
             }
         },
         {
-            "id": "eelektrik-5",
+            "id": "eelektrik-2",
             "pokemon": "eelektrik",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.95,
+            "weight": 9.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -62,13 +62,13 @@
             }
         },
         {
-            "id": "eelektrik-6",
+            "id": "eelektrik-3",
             "pokemon": "eelektrik",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -91,77 +91,6 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
-            }
-        },
-        {
-            "id": "eelektrik-1",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "39-41",
-            "weight": 0.19,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "maxY": 48
-            }
-        },
-        {
-            "id": "eelektrik-2",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "39-41",
-            "weight": 0.712,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "maxY": 48
-            },
-            "anticondition": {
-                "structures": [
-                    "#cobblemon:shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13,
-                "biomes": [
-                    "#cobblemon:is_lush"
-                ]
-            }
-        },
-        {
-            "id": "eelektrik-3",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "39-41",
-            "weight": 0.57,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13
             }
         }
     ]

@@ -88,6 +88,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dudunsparce alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

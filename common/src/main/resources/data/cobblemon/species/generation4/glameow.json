@@ -68,6 +68,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "glameow alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "purugly alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

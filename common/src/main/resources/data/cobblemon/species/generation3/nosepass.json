@@ -70,7 +70,17 @@
       "canLook": false
     },
     "herd": {
-      "maxSize": "2"
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "nosepass alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "probopass alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendOwner": true

@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 30.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
@@ -31,7 +31,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 37.5,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
@@ -48,7 +48,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 37.5,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -64,7 +64,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
-            "weight": 1.68,
+            "weight": 8.4,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -83,7 +83,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 37.5,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

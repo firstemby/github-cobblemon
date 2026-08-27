@@ -69,10 +69,14 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "floette eternal=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "floette mega=false",
           "tier": 1
         },
         {
@@ -86,6 +90,10 @@
         {
           "pokemon": "florges",
           "tier": 3
+        },
+        {
+          "pokemon": "floette mega",
+          "tier": 4
         }
       ]
     },

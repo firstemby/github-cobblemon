@@ -13,7 +13,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "38-50",
-            "weight": 0.32,
+            "weight": 2.56,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -39,7 +39,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "38-50",
-            "weight": 0.32,
+            "weight": 2.56,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -69,7 +69,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "38-50",
-            "weight": 0.32,
+            "weight": 2.56,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -102,7 +102,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -136,7 +136,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -174,7 +174,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -215,7 +215,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -251,7 +251,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -291,7 +291,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -335,7 +335,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "38-50",
-            "weight": 0.32,
+            "weight": 2.56,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -360,7 +360,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "38-50",
-            "weight": 0.32,
+            "weight": 2.56,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -388,7 +388,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-50",
-            "weight": 1.0,
+            "weight": 8.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_toxic"

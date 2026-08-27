@@ -77,6 +77,23 @@
     },
     "combat": {
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "slowpoke alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "slowbro alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "slowking alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

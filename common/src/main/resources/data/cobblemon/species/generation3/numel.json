@@ -67,7 +67,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "numel",

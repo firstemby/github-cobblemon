@@ -59,19 +59,23 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "tatsugiri",
+          "pokemon": "tatsugiri mega=false",
           "tier": 1
         },
         {
-          "pokemon": "dondozo",
+          "pokemon": "tatsugiri mega",
           "tier": 2
         },
         {
-          "pokemon": "manaphy",
+          "pokemon": "dondozo",
           "tier": 3
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 4
         }
       ]
     },

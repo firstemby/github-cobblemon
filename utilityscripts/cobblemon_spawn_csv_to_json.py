@@ -110,6 +110,7 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
     habitats_df = download_excel_data(habitats_sheet_url, {'Habitat': str, 'Pokémon': str, 'Entry': str})#, 'No.': int})
     herds_df = download_excel_data(herds_sheet_url, {'Herd ID': str, 'Herd Pokémon': str})
     herd_pokemon_df = download_excel_data(herd_pokemon_sheet_url, {'Entry ID': str, 'No.': str})
+    herds_df['Sees Sky'] = herds_df['Sees Sky'].apply(lambda x: str(x).lower())
 
     # Verify all biome tags are valid
     invalid_biome_tags = [] # verify_biome_tags() I don't know that this provides much value except to restrict the machines the script can run on
@@ -214,7 +215,7 @@ def process_herds(herds_df, herd_pokemon_df):
     # At the top level the columns are:
     # File, Herd ID, Herd Pokémon, Max Size, Lv. Min, Lv. Max, Bucket, Weight, Biomes, Excluded Biomes, Time, Weather, Multipliers, Context, Presets, Conditions, Anticonditions, Sky Light Min, Sky Light Max, Sees Sky, Min Dist, Enabled
     # This is fairly similar to the regular spawn data for the most part. First let's create the details ignoring the contents of Herd Pokémon.
-    herds_df = herds_df[herds_df['Enabled'] != False]
+    herds_df = herds_df[herds_df['Enabled'] != 'FALSE']
     herd_groups = herds_df.groupby('File')
 
     herd_pokemon = herd_pokemon_df.set_index('Entry ID')
@@ -299,7 +300,7 @@ def process_herds(herds_df, herd_pokemon_df):
                     "levelRange": f"{herd_pokemon_row['Lv. Min']}-{herd_pokemon_row['Lv. Max']}",
                     "levelRangeOffset": offset,
                     "maxTimes": max_times,
-                    "isLeader": herd_pokemon_row['Leader'] == 'yes',
+                    "isLeader": herd_pokemon_row['Leader'] != 'no',
                     "isFollower": herd_pokemon_row['Leader'] != 'only'
                 }
 
@@ -734,6 +735,8 @@ def parse_biomes(biomes_str, invalid_biome_tags):
     biomes = []
     for biome in biomes_str.split(','):
         biome = biome.lower().strip()
+        if biome == '':
+            continue
 
         # Verify that the biome is not in the invalid_biome_tags list
         if invalid_biome_tags and biome_dictionary[biome] in invalid_biome_tags:

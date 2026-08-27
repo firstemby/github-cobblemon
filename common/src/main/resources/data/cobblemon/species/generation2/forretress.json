@@ -110,6 +110,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "forretress alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

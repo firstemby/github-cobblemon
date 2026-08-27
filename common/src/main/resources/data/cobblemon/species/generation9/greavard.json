@@ -167,8 +167,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "greavard alpha",
+          "tier": 1
+        },
         {
           "pokemon": "houndstone",
           "tier": 1

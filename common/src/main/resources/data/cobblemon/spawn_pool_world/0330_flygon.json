@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "45-52",
-            "weight": 0.25,
+            "weight": 1.25,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {

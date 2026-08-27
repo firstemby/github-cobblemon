@@ -53,34 +53,39 @@ open class AreaSpawnablePosition(
      */
     open fun isSafeSpace(world: ServerLevel, pos: BlockPos, state: BlockState): Boolean = !state.isSolid
 
+    fun hasSpace(width: Int, height: Int): Boolean {
+        val sizeX = width.takeIf { it > 0 } ?: 1
+        val sizeY = height.takeIf { it > 0 } ?: 1
+
+        val minX = floor(position.x + 0.5 - (sizeX - 1) / 2F).toInt() - 1
+        val maxX = ceil(position.x + 0.5 + (sizeX + 1) / 2F).toInt() + 1
+
+        val maxY = ceil(position.y + (sizeY + 1) / 2F).toInt() + 1
+
+        val minZ = floor(position.z + 0.5 - (sizeX - 1) / 2F).toInt() - 1
+        val maxZ = ceil(position.z + 0.5 + (sizeX + 1) / 2F).toInt() + 1
+
+        val mutable = BlockPos.MutableBlockPos()
+        for (x in minX until maxX) {
+            for (y in (position.y + 1)..maxY) {
+                for (z in minZ until maxZ) {
+                    val state = zone.getBlockState(mutable.set(x, y, z))
+                    if (!isSafeSpace(world, mutable, state)) {
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
     override fun postFilter(detail: SpawnDetail): Boolean {
         if (!super.postFilter(detail)) {
             return false
         }
 
         if (detail.width > 1 || detail.height > 1) {
-            val sizeX = detail.width.takeIf { it > 0 } ?: 1
-            val sizeY = detail.height.takeIf { it > 0 } ?: 1
-
-            val minX = floor(position.x + 0.5 - (sizeX - 1) / 2F).toInt() - 1
-            val maxX = ceil(position.x + 0.5 + (sizeX + 1) / 2F).toInt() + 1
-
-            val maxY = ceil(position.y + (sizeY + 1) / 2F).toInt() + 1
-
-            val minZ = floor(position.z + 0.5 - (sizeX - 1) / 2F).toInt() - 1
-            val maxZ = ceil(position.z + 0.5 + (sizeX + 1) / 2F).toInt() + 1
-
-            val mutable = BlockPos.MutableBlockPos()
-            for (x in minX until maxX) {
-                for (y in (position.y + 1)..maxY) {
-                    for (z in minZ until maxZ) {
-                        val state = zone.getBlockState(mutable.set(x, y, z))
-                        if (!isSafeSpace(world, mutable, state)) {
-                            return false
-                        }
-                    }
-                }
-            }
+            return hasSpace(detail.width, detail.height)
         }
 
         return true

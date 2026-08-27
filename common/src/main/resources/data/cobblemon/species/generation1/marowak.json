@@ -479,7 +479,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "marowak alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

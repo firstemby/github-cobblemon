@@ -13,7 +13,7 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.5,
+            "weight": 28.5,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -32,7 +32,7 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "6-31",
-            "weight": 5.7,
+            "weight": 9.5,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -53,7 +53,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.5,
+            "weight": 95.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -76,7 +76,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "6-31",
-            "weight": 1.9,
+            "weight": 19.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -113,7 +113,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.5,
+            "weight": 95.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -138,7 +138,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "6-31",
-            "weight": 1.9,
+            "weight": 19.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -180,7 +180,7 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "6-31",
-            "weight": 5.7,
+            "weight": 9.5,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -200,7 +200,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.5,
+            "weight": 95.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

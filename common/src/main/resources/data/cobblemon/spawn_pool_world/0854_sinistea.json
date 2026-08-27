@@ -10,7 +10,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "6-31",
-            "weight": 9.108,
+            "weight": 72.864,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -50,7 +50,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "6-31",
-            "weight": 0.092,
+            "weight": 0.736,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -90,7 +90,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "6-31",
-            "weight": 9.108,
+            "weight": 72.864,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_floral",
@@ -129,7 +129,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "6-31",
-            "weight": 0.092,
+            "weight": 0.736,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_floral",
@@ -171,7 +171,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.405,
+            "weight": 75.24,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -189,7 +189,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
-            "weight": 0.095,
+            "weight": 0.76,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

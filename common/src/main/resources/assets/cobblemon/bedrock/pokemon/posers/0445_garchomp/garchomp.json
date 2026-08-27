@@ -363,24 +363,9 @@
     },
     "sleeping": {
       "poseTypes": ["SLEEP"],
-      "isBattle": false,
       "namedAnimations": {
         "cry": "q.bedrock_stateful('dummy', 'cry')"
       },
-      "animations": [
-        "q.bedrock('garchomp', 'battle_sleep')",
-        {
-          "condition": "q.is_holding_item",
-          "animation": "q.bedrock('garchomp', 'hold_item')"
-        }
-      ]
-    },
-    "battle-sleep": {
-      "poseTypes": ["SLEEP"],
-      "namedAnimations": {
-        "cry": "q.bedrock_stateful('dummy', 'cry')"
-      },
-      "isBattle": true,
       "animations": [
         "q.bedrock('garchomp', 'battle_sleep')",
         {

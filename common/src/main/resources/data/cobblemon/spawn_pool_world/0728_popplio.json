@@ -7,32 +7,13 @@
             "id": "popplio-1",
             "pokemon": "popplio",
             "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "ultra-rare",
-            "level": "5-32",
-            "weight": 6.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            }
-        },
-        {
-            "id": "popplio-2",
-            "pokemon": "popplio",
-            "presets": [
                 "water"
             ],
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 30.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -41,13 +22,13 @@
             }
         },
         {
-            "id": "popplio-3",
+            "id": "popplio-2",
             "pokemon": "popplio",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -63,7 +44,7 @@
             }
         },
         {
-            "id": "popplio-4",
+            "id": "popplio-3",
             "pokemon": "popplio",
             "presets": [
                 "water"
@@ -72,7 +53,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 30.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -83,13 +64,13 @@
             }
         },
         {
-            "id": "popplio-5",
+            "id": "popplio-4",
             "pokemon": "popplio",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,

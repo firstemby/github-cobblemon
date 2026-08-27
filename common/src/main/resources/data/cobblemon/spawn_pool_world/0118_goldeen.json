@@ -6,29 +6,11 @@
         {
             "id": "goldeen-1",
             "pokemon": "goldeen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "7-32",
-            "weight": 9.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_river"
-                ]
-            }
-        },
-        {
-            "id": "goldeen-2",
-            "pokemon": "goldeen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -46,33 +28,13 @@
             }
         },
         {
-            "id": "goldeen-3",
-            "pokemon": "goldeen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "7-32",
-            "weight": 9.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_river"
-                ]
-            }
-        },
-        {
-            "id": "goldeen-4",
+            "id": "goldeen-2",
             "pokemon": "goldeen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,

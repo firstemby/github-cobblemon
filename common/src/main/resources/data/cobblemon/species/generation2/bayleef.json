@@ -64,23 +64,27 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "bayleef",
           "tier": 1
         },
         {
-          "pokemon": "meganium",
+          "pokemon": "meganium mega=false",
           "tier": 2
         },
         {
-          "pokemon": "tropius",
+          "pokemon": "meganium mega",
           "tier": 3
         },
         {
-          "pokemon": "aurorus",
+          "pokemon": "tropius",
           "tier": 4
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 5
         }
       ]
     },

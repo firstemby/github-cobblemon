@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 2.16,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -42,7 +42,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 2.16,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -72,7 +72,7 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 2.16,
+            "weight": 10.8,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -95,7 +95,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 2.16,
+            "weight": 21.6,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -122,7 +122,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "50-55",
-            "weight": 2.16,
+            "weight": 21.6,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {

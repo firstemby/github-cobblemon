@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "26-46",
-            "weight": 0.32,
+            "weight": 11.84,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -38,7 +38,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "26-46",
-            "weight": 0.32,
+            "weight": 11.84,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -65,7 +65,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "26-46",
-            "weight": 0.2,
+            "weight": 12.8,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -74,7 +74,7 @@
             }
         },
         {
-            "id": "mrmime-galarian-1",
+            "id": "mrmime-galarian-4",
             "pokemon": "mrmime galarian",
             "presets": [
                 "natural",
@@ -84,7 +84,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "26-46",
-            "weight": 0.288,
+            "weight": 11.424,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -94,7 +94,7 @@
             }
         },
         {
-            "id": "mrmime-galarian-2",
+            "id": "mrmime-galarian-5",
             "pokemon": "mrmime galarian",
             "presets": [
                 "natural"
@@ -103,7 +103,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "26-46",
-            "weight": 0.288,
+            "weight": 11.424,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

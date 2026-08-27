@@ -62,7 +62,13 @@
       }
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "decidueye alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

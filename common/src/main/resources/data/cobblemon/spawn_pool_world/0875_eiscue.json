@@ -7,13 +7,13 @@
             "id": "eiscue-1",
             "pokemon": "eiscue",
             "presets": [
-                "natural"
+                "water"
             ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "22-47",
-            "weight": 6.0,
+            "weight": 10.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -25,30 +25,11 @@
         {
             "id": "eiscue-2",
             "pokemon": "eiscue",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "common",
-            "level": "22-47",
-            "weight": 2.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "eiscue-3",
-            "pokemon": "eiscue",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "22-47",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

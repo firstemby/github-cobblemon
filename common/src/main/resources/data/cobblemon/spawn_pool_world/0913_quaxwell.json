@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "16-41",
-            "weight": 3.6,
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -39,7 +39,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "16-41",
-            "weight": 3.6,
+            "weight": 36.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -62,7 +62,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "16-41",
-            "weight": 3.6,
+            "weight": 36.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

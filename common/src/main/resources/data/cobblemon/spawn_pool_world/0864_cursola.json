@@ -4,13 +4,104 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "cursola-1",
+            "pokemon": "cursola",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "38-51",
+            "weight": 2.56,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_beach"
+                ]
+            }
+        },
+        {
+            "id": "cursola-2",
+            "pokemon": "cursola",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "38-51",
+            "weight": 8.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:dead_coral"
+                ]
+            }
+        },
+        {
+            "id": "cursola-3",
+            "pokemon": "cursola",
+            "type": "pokemon",
+            "spawnablePositionType": "seafloor",
+            "bucket": "common",
+            "level": "38-51",
+            "weight": 8.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "#cobblemon:dead_coral"
+                ]
+            }
+        },
+        {
+            "id": "cursola-4",
+            "pokemon": "cursola",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "38-51",
+            "weight": 7.68,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:nether/is_quartz"
+                ],
+                "neededBaseBlocks": [
+                    "minecraft:quartz_block"
+                ]
+            }
+        },
+        {
+            "id": "cursola-5",
+            "pokemon": "cursola",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "38-51",
+            "weight": 12.8,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:nether/is_desert"
+                ]
+            }
+        },
+        {
             "id": "cursola-6",
             "pokemon": "cursola",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "38-51",
-            "weight": 0.32,
+            "weight": 3.2,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -29,7 +120,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-51",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -52,7 +143,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "38-51",
-            "weight": 0.32,
+            "weight": 3.2,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -73,7 +164,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "38-51",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -89,97 +180,6 @@
                     "#cobblemon:is_warm_ocean"
                 ],
                 "minLureLevel": 1
-            }
-        },
-        {
-            "id": "cursola-1",
-            "pokemon": "cursola",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "38-51",
-            "weight": 0.32,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_beach"
-                ]
-            }
-        },
-        {
-            "id": "cursola-2",
-            "pokemon": "cursola",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "38-51",
-            "weight": 1.0,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "neededNearbyBlocks": [
-                    "#cobblemon:dead_coral"
-                ]
-            }
-        },
-        {
-            "id": "cursola-3",
-            "pokemon": "cursola",
-            "type": "pokemon",
-            "spawnablePositionType": "seafloor",
-            "bucket": "common",
-            "level": "38-51",
-            "weight": 1.0,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "neededNearbyBlocks": [
-                    "#cobblemon:dead_coral"
-                ]
-            }
-        },
-        {
-            "id": "cursola-4",
-            "pokemon": "cursola",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "38-51",
-            "weight": 0.96,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:nether/is_quartz"
-                ],
-                "neededBaseBlocks": [
-                    "minecraft:quartz_block"
-                ]
-            }
-        },
-        {
-            "id": "cursola-5",
-            "pokemon": "cursola",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "38-51",
-            "weight": 1.6,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:nether/is_desert"
-                ]
             }
         }
     ]

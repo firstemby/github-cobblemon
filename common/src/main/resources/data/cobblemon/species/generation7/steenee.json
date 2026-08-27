@@ -174,8 +174,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "steenee alpha",
+          "tier": 1
+        },
         {
           "pokemon": "tsareena",
           "tier": 1

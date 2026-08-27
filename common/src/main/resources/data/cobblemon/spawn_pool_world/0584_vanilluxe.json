@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "47-54",
-            "weight": 0.02,
+            "weight": 0.16,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -38,7 +38,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "47-54",
-            "weight": 0.096,
+            "weight": 0.768,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -58,7 +58,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "47-54",
-            "weight": 0.06,
+            "weight": 0.48,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_frozen"

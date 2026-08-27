@@ -78,7 +78,7 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bastiodon",

@@ -68,6 +68,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mewtwo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "mew alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

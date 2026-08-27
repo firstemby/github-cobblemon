@@ -292,33 +292,7 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 5,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     },
     {
       "name": "Trash",
@@ -455,33 +429,7 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 5,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "behaviour": {
@@ -499,6 +447,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wormadam alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

@@ -13,14 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-41",
-            "weight": 1.0,
+            "weight": 8.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_grassland"
-                ],
-                "timeRange": "night"
+                ]
             },
             "anticondition": {
                 "biomes": [
@@ -38,7 +37,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-41",
-            "weight": 1.0,
+            "weight": 8.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -63,105 +62,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "20-41",
-            "weight": 1.6,
+            "weight": 12.8,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
                 "minY": 0
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_dark"
-                ]
-            }
-        },
-        {
-            "id": "raticate-alolan-4",
-            "pokemon": "raticate alolan",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "20-41",
-            "weight": 1.0,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "maxY": 0
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_dark"
-                ]
-            }
-        },
-        {
-            "id": "raticate-alolan-5",
-            "pokemon": "raticate alolan",
-            "presets": [
-                "derelict"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "20-41",
-            "weight": 1.6,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "maxY": 0
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_deep_dark"
-                ]
-            }
-        },
-        {
-            "id": "raticate-alolan-6",
-            "pokemon": "raticate alolan",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "20-41",
-            "weight": 1.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_spooky"
-                ],
-                "timeRange": "night"
-            }
-        },
-        {
-            "id": "raticate-alolan-7",
-            "pokemon": "raticate alolan",
-            "presets": [
-                "derelict"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "20-41",
-            "weight": 1.6,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_spooky"
-                ]
             },
             "anticondition": {
                 "biomes": [

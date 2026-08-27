@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-21",
-            "weight": 9.0,
+            "weight": 43.2,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {

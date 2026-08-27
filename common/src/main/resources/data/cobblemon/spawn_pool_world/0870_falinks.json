@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "22-47",
-            "weight": 2.0,
+            "weight": 16.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -39,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "22-47",
-            "weight": 100.0,
+            "weight": 800.0,
             "condition": {
                 "biomes": [
                     "#minecraft:is_nether"

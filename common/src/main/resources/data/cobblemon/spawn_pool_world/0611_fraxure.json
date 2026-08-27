@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "38-41",
-            "weight": 3.6,
+            "weight": 18.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_mountain"

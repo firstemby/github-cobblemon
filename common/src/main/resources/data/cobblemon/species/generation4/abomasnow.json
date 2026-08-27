@@ -264,7 +264,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "abomasnow alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

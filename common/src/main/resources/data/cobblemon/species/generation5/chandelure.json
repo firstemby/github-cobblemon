@@ -75,7 +75,13 @@
       }
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "chandelure alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

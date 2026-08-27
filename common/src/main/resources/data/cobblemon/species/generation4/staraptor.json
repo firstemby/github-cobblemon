@@ -121,7 +121,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "staraptor alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {

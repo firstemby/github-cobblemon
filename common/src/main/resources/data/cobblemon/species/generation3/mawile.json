@@ -69,6 +69,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mawile alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

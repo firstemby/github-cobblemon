@@ -306,8 +306,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "eevee alpha",
+          "tier": 1
+        },
         {
           "pokemon": "vaporeon",
           "tier": 1

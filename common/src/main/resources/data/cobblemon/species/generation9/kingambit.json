@@ -182,7 +182,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "kingambit alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

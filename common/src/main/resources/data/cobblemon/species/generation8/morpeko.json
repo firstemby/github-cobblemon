@@ -239,7 +239,8 @@
           "pokemon": "raichu",
           "tier": 3
         }
-      ]
+      ],
+      "maxSize": 3
     },
     "resting": {
       "willSleepOnBed": true,

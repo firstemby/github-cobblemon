@@ -63,8 +63,16 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "oddish alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "bellossom alpha",
+          "tier": 1
+        },
         {
           "pokemon": "gloom",
           "tier": 1

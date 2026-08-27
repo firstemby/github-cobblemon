@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-50",
-            "weight": 0.05,
+            "weight": 0.4,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 0,
@@ -39,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "36-50",
-            "weight": 0.048,
+            "weight": 0.384,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -62,7 +62,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-50",
-            "weight": 0.05,
+            "weight": 0.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -82,7 +82,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-50",
-            "weight": 0.05,
+            "weight": 0.4,
             "condition": {
                 "biomes": [
                     "#minecraft:is_nether"

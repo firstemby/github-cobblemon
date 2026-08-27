@@ -118,18 +118,21 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "drampa",
+          "pokemon": "drampa mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "drampa mega",
+          "tier": 2
         }
       ]
     },
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.25
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true
@@ -140,7 +143,6 @@
     },
     "resting": {
       "canSleep": true,
-      "depth": "normal",
       "drowsyChance": 0.0333,
       "light": "0-15",
       "rouseChance": 0.0042

@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-43",
-            "weight": 0.9,
+            "weight": 7.2,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_mountain"
@@ -39,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "32-43",
-            "weight": 0.9,
+            "weight": 7.2,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

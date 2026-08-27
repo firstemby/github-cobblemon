@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-22",
-            "weight": 1.8,
+            "weight": 9.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -39,7 +39,7 @@
             "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "1-22",
-            "weight": 5.4,
+            "weight": 9.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -51,11 +51,38 @@
         {
             "id": "lotad-3",
             "pokemon": "lotad",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "surface",
+            "bucket": "common",
+            "level": "1-22",
+            "weight": 9.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "minecraft:lily_pad"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "lotad-4",
+            "pokemon": "lotad",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-22",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -74,13 +101,13 @@
             }
         },
         {
-            "id": "lotad-4",
+            "id": "lotad-5",
             "pokemon": "lotad",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-22",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

@@ -53,8 +53,7 @@
   "behaviour": {
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.18
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true
@@ -64,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "hoppip",

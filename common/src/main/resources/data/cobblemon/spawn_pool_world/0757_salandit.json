@@ -4,8 +4,8 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "salandit-1",
-            "pokemon": "salandit",
+            "id": "salandit-male-1",
+            "pokemon": "salandit male",
             "presets": [
                 "natural"
             ],
@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 9.9,
+            "weight": 87.5,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_volcanic"
@@ -21,8 +21,8 @@
             }
         },
         {
-            "id": "salandit-2",
-            "pokemon": "salandit",
+            "id": "salandit-male-2",
+            "pokemon": "salandit male",
             "presets": [
                 "natural"
             ],
@@ -30,7 +30,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 9.9,
+            "weight": 87.5,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -49,8 +49,8 @@
             }
         },
         {
-            "id": "salandit-3",
-            "pokemon": "salandit",
+            "id": "salandit-male-3",
+            "pokemon": "salandit male",
             "presets": [
                 "natural"
             ],
@@ -58,7 +58,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 9.9,
+            "weight": 87.5,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_basalt"
@@ -66,8 +66,8 @@
             }
         },
         {
-            "id": "salandit-4",
-            "pokemon": "salandit",
+            "id": "salandit-male-4",
+            "pokemon": "salandit male",
             "presets": [
                 "natural"
             ],
@@ -75,7 +75,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 5.94,
+            "weight": 52.5,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_desert"

@@ -4,6 +4,9 @@
   "profileScale": 0.64,
   "profileTranslation": [0.00, 0.80, 0],
   "rootBone": "audino",
+  "animations": {
+    "cry": "q.bedrock_stateful('audino', 'cry')"
+  },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

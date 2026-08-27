@@ -288,7 +288,13 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "banette alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

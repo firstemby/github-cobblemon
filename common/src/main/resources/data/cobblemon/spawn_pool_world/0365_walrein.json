@@ -7,32 +7,13 @@
             "id": "walrein-1",
             "pokemon": "walrein",
             "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "44-53",
-            "weight": 0.06,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "walrein-2",
-            "pokemon": "walrein",
-            "presets": [
                 "water"
             ],
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "44-53",
-            "weight": 0.06,
+            "weight": 0.3,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -41,13 +22,13 @@
             }
         },
         {
-            "id": "walrein-3",
+            "id": "walrein-2",
             "pokemon": "walrein",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "44-53",
-            "weight": 0.02,
+            "weight": 0.1,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -72,7 +53,7 @@
             }
         },
         {
-            "id": "walrein-4",
+            "id": "walrein-3",
             "pokemon": "walrein",
             "presets": [
                 "water"
@@ -81,7 +62,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "44-53",
-            "weight": 0.06,
+            "weight": 0.3,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -92,13 +73,13 @@
             }
         },
         {
-            "id": "walrein-5",
+            "id": "walrein-4",
             "pokemon": "walrein",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "44-53",
-            "weight": 0.02,
+            "weight": 0.1,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

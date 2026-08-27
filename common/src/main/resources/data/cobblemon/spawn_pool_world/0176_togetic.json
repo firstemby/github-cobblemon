@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-41",
-            "weight": 2.375,
+            "weight": 32.15,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -42,7 +42,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-41",
-            "weight": 2.375,
+            "weight": 32.15,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -59,7 +59,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-41",
-            "weight": 2.375,
+            "weight": 32.15,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"

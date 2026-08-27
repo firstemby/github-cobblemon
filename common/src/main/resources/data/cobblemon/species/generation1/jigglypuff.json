@@ -60,7 +60,17 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "jigglypuff alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "wigglytuff alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

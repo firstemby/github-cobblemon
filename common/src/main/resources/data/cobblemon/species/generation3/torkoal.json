@@ -63,7 +63,16 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "torkoal alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 5,

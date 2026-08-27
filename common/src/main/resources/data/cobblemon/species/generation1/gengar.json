@@ -59,7 +59,13 @@
       }
     },
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gengar alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

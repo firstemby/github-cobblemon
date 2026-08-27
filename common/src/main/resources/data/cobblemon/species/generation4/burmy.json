@@ -216,34 +216,7 @@
           }
         }
       ],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "willSleepOnBed": true,
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 4,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     },
     {
       "name": "Trash",
@@ -322,34 +295,7 @@
           }
         }
       ],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "willSleepOnBed": true,
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 4,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "behaviour": {
@@ -368,6 +314,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wormadam alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

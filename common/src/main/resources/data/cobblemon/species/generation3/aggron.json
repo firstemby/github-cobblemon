@@ -57,7 +57,13 @@
       }
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "aggron alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

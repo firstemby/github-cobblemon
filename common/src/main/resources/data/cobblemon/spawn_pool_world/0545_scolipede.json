@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-49",
-            "weight": 0.02,
+            "weight": 0.2,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -35,7 +35,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-49",
-            "weight": 0.06,
+            "weight": 0.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -55,7 +55,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-49",
-            "weight": 0.02,
+            "weight": 0.2,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -82,7 +82,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-49",
-            "weight": 0.06,
+            "weight": 0.6,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_forest",
@@ -100,7 +100,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-49",
-            "weight": 0.02,
+            "weight": 0.2,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

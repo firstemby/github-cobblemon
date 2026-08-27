@@ -69,7 +69,17 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "8"
+      "maxSize": 8,
+      "toleratedLeaders": [
+        {
+          "pokemon": "poliwrath alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "politoed",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

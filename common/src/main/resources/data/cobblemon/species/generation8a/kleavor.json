@@ -65,6 +65,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "scizor alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "kleavor alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

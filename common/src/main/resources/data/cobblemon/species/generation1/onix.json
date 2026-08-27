@@ -73,7 +73,20 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "onix alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "steelix alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 6,

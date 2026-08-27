@@ -65,6 +65,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "pineco alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "forretress alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

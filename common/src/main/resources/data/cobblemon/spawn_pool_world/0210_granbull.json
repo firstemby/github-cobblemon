@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-45",
-            "weight": 0.6,
+            "weight": 4.8,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -38,7 +38,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-45",
-            "weight": 0.6,
+            "weight": 4.8,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -65,7 +65,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-45",
-            "weight": 0.6,
+            "weight": 4.8,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

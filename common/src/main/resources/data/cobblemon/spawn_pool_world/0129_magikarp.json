@@ -6,87 +6,27 @@
         {
             "id": "magikarp-1",
             "pokemon": "magikarp",
-            "presets": [
-                "water"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "submerged",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-20",
-            "weight": 9.9,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_ocean"
+                    "#aether:is_aether",
+                    "#cobblemon:is_overworld"
                 ]
             }
         },
         {
             "id": "magikarp-2",
             "pokemon": "magikarp",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "uncommon",
-            "level": "1-20",
-            "weight": 1.84,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "magikarp-3",
-            "pokemon": "magikarp",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-20",
-            "weight": 9.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#aether:is_aether",
-                    "#cobblemon:is_overworld"
-                ]
-            }
-        },
-        {
-            "id": "magikarp-4",
-            "pokemon": "magikarp",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "1-20",
-            "weight": 9.9,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "magikarp-5",
-            "pokemon": "magikarp",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "1-20",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -98,13 +38,13 @@
             }
         },
         {
-            "id": "magikarp-skelly-6",
+            "id": "magikarp-skelly-3",
             "pokemon": "magikarp magikarp_jump=skelly",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -123,13 +63,13 @@
             }
         },
         {
-            "id": "magikarp-skelly-7",
+            "id": "magikarp-skelly-4",
             "pokemon": "magikarp magikarp_jump=skelly",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -141,13 +81,13 @@
             }
         },
         {
-            "id": "magikarp-skelly-8",
+            "id": "magikarp-skelly-5",
             "pokemon": "magikarp magikarp_jump=skelly",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -168,13 +108,13 @@
             }
         },
         {
-            "id": "magikarp-calico-orange-white-9",
+            "id": "magikarp-calico-orange-white-6",
             "pokemon": "magikarp magikarp_jump=calico-orange-white",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -204,13 +144,13 @@
             }
         },
         {
-            "id": "magikarp-calico-orange-white-black-9",
+            "id": "magikarp-calico-orange-white-black-6",
             "pokemon": "magikarp magikarp_jump=calico-orange-white-black",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -240,13 +180,13 @@
             }
         },
         {
-            "id": "magikarp-calico-white-orange-9",
+            "id": "magikarp-calico-white-orange-6",
             "pokemon": "magikarp magikarp_jump=calico-white-orange",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -276,13 +216,13 @@
             }
         },
         {
-            "id": "magikarp-calico-orange-gold-10",
+            "id": "magikarp-calico-orange-gold-7",
             "pokemon": "magikarp magikarp_jump=calico-orange-gold",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -310,13 +250,13 @@
             }
         },
         {
-            "id": "magikarp-orange-two-tone-11",
+            "id": "magikarp-orange-two-tone-8",
             "pokemon": "magikarp magikarp_jump=orange-two-tone",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -348,13 +288,13 @@
             }
         },
         {
-            "id": "magikarp-orange-orca-11",
+            "id": "magikarp-orange-orca-8",
             "pokemon": "magikarp magikarp_jump=orange-orca",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -386,13 +326,13 @@
             }
         },
         {
-            "id": "magikarp-orange-dapples-11",
+            "id": "magikarp-orange-dapples-8",
             "pokemon": "magikarp magikarp_jump=orange-dapples",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -424,13 +364,13 @@
             }
         },
         {
-            "id": "magikarp-pink-two-tone-12",
+            "id": "magikarp-pink-two-tone-9",
             "pokemon": "magikarp magikarp_jump=pink-two-tone",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -461,13 +401,13 @@
             }
         },
         {
-            "id": "magikarp-pink-orca-12",
+            "id": "magikarp-pink-orca-9",
             "pokemon": "magikarp magikarp_jump=pink-orca",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -498,13 +438,13 @@
             }
         },
         {
-            "id": "magikarp-pink-dapples-12",
+            "id": "magikarp-pink-dapples-9",
             "pokemon": "magikarp magikarp_jump=pink-dapples",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -535,13 +475,13 @@
             }
         },
         {
-            "id": "magikarp-gray-bubbles-13",
+            "id": "magikarp-gray-bubbles-10",
             "pokemon": "magikarp magikarp_jump=gray-bubbles",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -572,13 +512,13 @@
             }
         },
         {
-            "id": "magikarp-gray-diamonds-13",
+            "id": "magikarp-gray-diamonds-10",
             "pokemon": "magikarp magikarp_jump=gray-diamonds",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -609,13 +549,13 @@
             }
         },
         {
-            "id": "magikarp-gray-patches-13",
+            "id": "magikarp-gray-patches-10",
             "pokemon": "magikarp magikarp_jump=gray-patches",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -646,13 +586,13 @@
             }
         },
         {
-            "id": "magikarp-purple-bubbles-14",
+            "id": "magikarp-purple-bubbles-11",
             "pokemon": "magikarp magikarp_jump=purple-bubbles",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -683,13 +623,13 @@
             }
         },
         {
-            "id": "magikarp-purple-diamonds-14",
+            "id": "magikarp-purple-diamonds-11",
             "pokemon": "magikarp magikarp_jump=purple-diamonds",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -720,13 +660,13 @@
             }
         },
         {
-            "id": "magikarp-purple-patches-14",
+            "id": "magikarp-purple-patches-11",
             "pokemon": "magikarp magikarp_jump=purple-patches",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -757,13 +697,13 @@
             }
         },
         {
-            "id": "magikarp-apricot-tiger-15",
+            "id": "magikarp-apricot-tiger-12",
             "pokemon": "magikarp magikarp_jump=apricot-tiger",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -794,13 +734,13 @@
             }
         },
         {
-            "id": "magikarp-apricot-zebra-15",
+            "id": "magikarp-apricot-zebra-12",
             "pokemon": "magikarp magikarp_jump=apricot-zebra",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -831,13 +771,13 @@
             }
         },
         {
-            "id": "magikarp-apricot-stripes-15",
+            "id": "magikarp-apricot-stripes-12",
             "pokemon": "magikarp magikarp_jump=apricot-stripes",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -868,13 +808,13 @@
             }
         },
         {
-            "id": "magikarp-brown-tiger-16",
+            "id": "magikarp-brown-tiger-13",
             "pokemon": "magikarp magikarp_jump=brown-tiger",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -905,13 +845,13 @@
             }
         },
         {
-            "id": "magikarp-brown-zebra-16",
+            "id": "magikarp-brown-zebra-13",
             "pokemon": "magikarp magikarp_jump=brown-zebra",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -942,13 +882,13 @@
             }
         },
         {
-            "id": "magikarp-brown-stripes-16",
+            "id": "magikarp-brown-stripes-13",
             "pokemon": "magikarp magikarp_jump=brown-stripes",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -979,13 +919,13 @@
             }
         },
         {
-            "id": "magikarp-orange-forehead-17",
+            "id": "magikarp-orange-forehead-14",
             "pokemon": "magikarp magikarp_jump=orange-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -1007,13 +947,13 @@
             }
         },
         {
-            "id": "magikarp-orange-mask-17",
+            "id": "magikarp-orange-mask-14",
             "pokemon": "magikarp magikarp_jump=orange-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -1035,13 +975,13 @@
             }
         },
         {
-            "id": "magikarp-orange-forehead-18",
+            "id": "magikarp-orange-forehead-15",
             "pokemon": "magikarp magikarp_jump=orange-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -1053,13 +993,13 @@
             }
         },
         {
-            "id": "magikarp-orange-mask-18",
+            "id": "magikarp-orange-mask-15",
             "pokemon": "magikarp magikarp_jump=orange-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -1071,13 +1011,13 @@
             }
         },
         {
-            "id": "magikarp-orange-forehead-19",
+            "id": "magikarp-orange-forehead-16",
             "pokemon": "magikarp magikarp_jump=orange-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -1101,13 +1041,13 @@
             }
         },
         {
-            "id": "magikarp-orange-mask-19",
+            "id": "magikarp-orange-mask-16",
             "pokemon": "magikarp magikarp_jump=orange-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -1131,13 +1071,13 @@
             }
         },
         {
-            "id": "magikarp-black-forehead-20",
+            "id": "magikarp-black-forehead-17",
             "pokemon": "magikarp magikarp_jump=black-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1167,13 +1107,13 @@
             }
         },
         {
-            "id": "magikarp-black-mask-20",
+            "id": "magikarp-black-mask-17",
             "pokemon": "magikarp magikarp_jump=black-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1203,13 +1143,13 @@
             }
         },
         {
-            "id": "magikarp-black-forehead-21",
+            "id": "magikarp-black-forehead-18",
             "pokemon": "magikarp magikarp_jump=black-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -1221,13 +1161,13 @@
             }
         },
         {
-            "id": "magikarp-black-mask-21",
+            "id": "magikarp-black-mask-18",
             "pokemon": "magikarp magikarp_jump=black-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -1239,13 +1179,13 @@
             }
         },
         {
-            "id": "magikarp-black-forehead-22",
+            "id": "magikarp-black-forehead-19",
             "pokemon": "magikarp magikarp_jump=black-forehead",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1277,13 +1217,13 @@
             }
         },
         {
-            "id": "magikarp-black-mask-22",
+            "id": "magikarp-black-mask-19",
             "pokemon": "magikarp magikarp_jump=black-mask",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1315,13 +1255,13 @@
             }
         },
         {
-            "id": "magikarp-blue-saucy-23",
+            "id": "magikarp-blue-saucy-20",
             "pokemon": "magikarp magikarp_jump=blue-saucy",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1351,13 +1291,13 @@
             }
         },
         {
-            "id": "magikarp-blue-raindrops-23",
+            "id": "magikarp-blue-raindrops-20",
             "pokemon": "magikarp magikarp_jump=blue-raindrops",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1387,13 +1327,13 @@
             }
         },
         {
-            "id": "magikarp-violet-saucy-24",
+            "id": "magikarp-violet-saucy-21",
             "pokemon": "magikarp magikarp_jump=violet-saucy",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -1422,13 +1362,13 @@
             }
         },
         {
-            "id": "magikarp-violet-raindrops-24",
+            "id": "magikarp-violet-raindrops-21",
             "pokemon": "magikarp magikarp_jump=violet-raindrops",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "1-20",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

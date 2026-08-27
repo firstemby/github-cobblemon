@@ -68,6 +68,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "delcatty alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -6,20 +6,23 @@
         {
             "id": "lanturn-1",
             "pokemon": "lanturn",
-            "presets": [
-                "water"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "submerged",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-46",
-            "weight": 0.6,
+            "weight": 10.0,
+            "weightMultiplier": {
+                "multiplier": 0.6,
+                "condition": {
+                    "minLureLevel": 0,
+                    "maxLureLevel": 1
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ],
-                "maxY": 48
+                    "#cobblemon:is_ocean"
+                ]
             }
         },
         {
@@ -29,7 +32,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-46",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -38,7 +41,9 @@
                 }
             },
             "condition": {
-                "canSeeSky": true,
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
@@ -47,79 +52,11 @@
         {
             "id": "lanturn-3",
             "pokemon": "lanturn",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "27-46",
-            "weight": 0.6,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_deep_ocean"
-                ],
-                "maxY": 48
-            }
-        },
-        {
-            "id": "lanturn-4",
-            "pokemon": "lanturn",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-46",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 0.6,
-                "condition": {
-                    "minLureLevel": 0,
-                    "maxLureLevel": 1
-                }
-            },
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "lanturn-5",
-            "pokemon": "lanturn",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "27-46",
-            "weight": 0.6,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13
-            }
-        },
-        {
-            "id": "lanturn-6",
-            "pokemon": "lanturn",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "27-46",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

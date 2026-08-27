@@ -7,32 +7,13 @@
             "id": "primarina-1",
             "pokemon": "primarina",
             "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "ultra-rare",
-            "level": "34-53",
-            "weight": 0.4,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ]
-            }
-        },
-        {
-            "id": "primarina-2",
-            "pokemon": "primarina",
-            "presets": [
                 "water"
             ],
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 0.4,
+            "weight": 3.2,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -41,13 +22,13 @@
             }
         },
         {
-            "id": "primarina-3",
+            "id": "primarina-2",
             "pokemon": "primarina",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 0.4,
+            "weight": 4.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -63,7 +44,7 @@
             }
         },
         {
-            "id": "primarina-4",
+            "id": "primarina-3",
             "pokemon": "primarina",
             "presets": [
                 "water"
@@ -72,7 +53,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 0.4,
+            "weight": 3.2,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -83,13 +64,13 @@
             }
         },
         {
-            "id": "primarina-5",
+            "id": "primarina-4",
             "pokemon": "primarina",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 0.4,
+            "weight": 4.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,

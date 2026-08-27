@@ -65,8 +65,16 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "lampent alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "chandelure alpha",
+          "tier": 1
+        },
         {
           "pokemon": "litwick",
           "tier": 1

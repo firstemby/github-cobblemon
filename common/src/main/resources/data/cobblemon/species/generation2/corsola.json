@@ -71,12 +71,12 @@
       },
       "swim": {
         "swimSpeed": 0.2,
-        "canSwimInWater": true,
+        "canSwimInWater": false,
         "canBreatheUnderwater": true
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "corsola galarian=false",

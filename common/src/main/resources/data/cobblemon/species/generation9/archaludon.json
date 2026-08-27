@@ -90,6 +90,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "archaludon alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

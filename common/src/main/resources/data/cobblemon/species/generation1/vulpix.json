@@ -78,8 +78,12 @@
       ]
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "vulpix alpha",
+          "tier": 1
+        },
         {
           "pokemon": "ninetales",
           "tier": 1

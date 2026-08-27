@@ -6,48 +6,11 @@
         {
             "id": "barboach-1",
             "pokemon": "barboach",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "4-29",
-            "weight": 9.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ]
-            }
-        },
-        {
-            "id": "barboach-2",
-            "pokemon": "barboach",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 8.4,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ]
-            }
-        },
-        {
-            "id": "barboach-3",
-            "pokemon": "barboach",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -66,13 +29,13 @@
             }
         },
         {
-            "id": "barboach-4",
+            "id": "barboach-2",
             "pokemon": "barboach",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -82,33 +45,13 @@
             }
         },
         {
-            "id": "barboach-5",
-            "pokemon": "barboach",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "4-29",
-            "weight": 9.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ]
-            }
-        },
-        {
-            "id": "barboach-6",
+            "id": "barboach-3",
             "pokemon": "barboach",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,

@@ -13,7 +13,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 12.8,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -37,7 +37,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-51",
-            "weight": 6.0,
+            "weight": 48.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -53,7 +53,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -74,7 +74,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-51",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -102,7 +102,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-51",
-            "weight": 6.0,
+            "weight": 60.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -131,7 +131,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 12.8,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -157,7 +157,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-51",
-            "weight": 6.0,
+            "weight": 48.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -175,7 +175,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -198,7 +198,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-51",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -228,7 +228,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-51",
-            "weight": 6.0,
+            "weight": 60.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -259,7 +259,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 12.8,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -279,7 +279,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "39-51",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -302,7 +302,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-51",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

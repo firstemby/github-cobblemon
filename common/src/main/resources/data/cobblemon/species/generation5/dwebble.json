@@ -201,6 +201,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewbble alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "crustle alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

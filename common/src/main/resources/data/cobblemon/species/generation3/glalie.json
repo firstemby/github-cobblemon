@@ -64,8 +64,12 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "froslass alpha",
+          "tier": 1
+        },
         {
           "pokemon": "glalie mega",
           "tier": 1

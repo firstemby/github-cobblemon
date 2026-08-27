@@ -207,6 +207,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "spiritomb alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "lightingData": {

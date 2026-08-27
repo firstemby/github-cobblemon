@@ -288,6 +288,7 @@
 - Factor in the weight of Pokémon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
+- Indexed party/PC stores by UUID so lookups no longer scan the whole store, reducing MSPT with many pastured Pokémon
 - Changed the bait effects of the following items: (Vanilla) Sweet & Glow Berries, Golden & Enchanted Golden Apples (Cobblemon) Custap, Eggant, Hopo & Micle Berries, Sweet Hearts
 - Wild Pokémon now reliably have at least one offensive move if they can have offensive moves at that level.
 - Data Monitor can accept Disks (TMs, Music Disks, Upgrade, Dubious Disk, etc.) to change what's being displayed on the screen
@@ -398,6 +399,15 @@
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 - Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
 - Long config option labels now scroll instead of overflowing
+- Eggant Berries can now be composted properly on NeoForge
+- Composting chances are now the same on NeoForge as on Fabric
+- Fixed problem where furnaces which had smelted Revival Herbs into Heal Powder in older versions would glitch out on trying to get the experience out of the block
+- Fixed the Battle AI not recognizing Surging Strikes as a multistrike move
+- Fixed some z-fighting and clipping on Dewott
+- Fixed multiple Pokémon having their cries missing
+- Fixed Tentacool not using its swim animation when on water surface
+- Fixed Eevee using its left shoulder pose when in battle
+- The Magikarp and Gyarados Jump Pattern resourcepacks should now stop replacing shiny textures of addons targeting Magikarp or Gyarados.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

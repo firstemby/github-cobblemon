@@ -11,9 +11,9 @@
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
+            "bucket": "rare",
             "level": "4-29",
-            "weight": 1.68,
+            "weight": 12.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,7 +32,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 1.68,
+            "weight": 13.44,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"

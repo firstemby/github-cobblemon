@@ -16,7 +16,6 @@
         "PROFILE",
         "FLOAT"
       ],
-      "isBattle": false,
       "animations": [
         "q.look('head', 1, 1, 70, -45, 45, -45)",
         "q.bedrock('eevee', 'ground_idle')"

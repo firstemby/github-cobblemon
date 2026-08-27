@@ -213,7 +213,17 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gothorita alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gothitelle alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "willSleepOnBed": true,

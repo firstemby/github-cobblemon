@@ -380,40 +380,18 @@
       ],
       "preEvolution": "zorua hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "combat": {
-          "willDefendSelf": true,
-          "willDefendOwner": true,
-          "willFlee": false
-        },
-        "herd": {
-          "maxSize": 3,
-          "toleratedLeaders": [
-            {
-              "pokemon": "zoroark alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "zoroark alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

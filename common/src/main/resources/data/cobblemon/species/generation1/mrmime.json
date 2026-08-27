@@ -75,7 +75,13 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mrmime alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

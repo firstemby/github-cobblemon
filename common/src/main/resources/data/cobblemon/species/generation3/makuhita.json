@@ -219,8 +219,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "makuhita alpha",
+          "tier": 1
+        },
         {
           "pokemon": "hariyama",
           "tier": 1

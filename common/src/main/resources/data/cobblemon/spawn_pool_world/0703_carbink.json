@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-50",
-            "weight": 100.0,
+            "weight": 800.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -40,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "25-50",
-            "weight": 10.0,
+            "weight": 80.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_quartz"
@@ -57,7 +57,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-50",
-            "weight": 10.0,
+            "weight": 80.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:crystal_canyon"

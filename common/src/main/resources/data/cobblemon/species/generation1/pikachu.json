@@ -73,7 +73,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "pikachu",
@@ -84,8 +84,20 @@
           "tier": 1
         },
         {
-          "pokemon": "raichu",
+          "pokemon": "raichu megax=false",
           "tier": 2
+        },
+        {
+          "pokemon": "raichu megay=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "raichu megax",
+          "tier": 3
+        },
+        {
+          "pokemon": "raichu megay",
+          "tier": 3
         }
       ]
     },

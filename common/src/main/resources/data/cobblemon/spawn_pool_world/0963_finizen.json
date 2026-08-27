@@ -6,29 +6,11 @@
         {
             "id": "finizen-1",
             "pokemon": "finizen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "7-32",
-            "weight": 5.04,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "finizen-2",
-            "pokemon": "finizen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "7-32",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -40,13 +22,13 @@
             }
         },
         {
-            "id": "finizen-3",
+            "id": "finizen-2",
             "pokemon": "finizen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -62,33 +44,13 @@
             }
         },
         {
-            "id": "finizen-4",
-            "pokemon": "finizen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "7-32",
-            "weight": 5.04,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "finizen-5",
+            "id": "finizen-3",
             "pokemon": "finizen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "7-32",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -102,13 +64,13 @@
             }
         },
         {
-            "id": "finizen-6",
+            "id": "finizen-4",
             "pokemon": "finizen",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "7-32",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {

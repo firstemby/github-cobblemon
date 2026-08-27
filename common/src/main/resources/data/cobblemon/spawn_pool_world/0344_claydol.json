@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "36-50",
-            "weight": 0.96,
+            "weight": 7.68,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -40,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-50",
-            "weight": 6.0,
+            "weight": 48.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -56,7 +56,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-50",
-            "weight": 0.6,
+            "weight": 4.8,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

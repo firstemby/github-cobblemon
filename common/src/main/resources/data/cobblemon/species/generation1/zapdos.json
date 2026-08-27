@@ -110,8 +110,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "lugia alpha",
+          "tier": 1
+        },
         {
           "pokemon": "zapdos galarian=false",
           "tier": 1

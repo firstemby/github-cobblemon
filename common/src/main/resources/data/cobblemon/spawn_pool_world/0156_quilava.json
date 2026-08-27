@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -37,7 +37,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -57,7 +57,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_crimson",

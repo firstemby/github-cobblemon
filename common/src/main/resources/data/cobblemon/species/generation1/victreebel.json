@@ -71,6 +71,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "victreebel alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

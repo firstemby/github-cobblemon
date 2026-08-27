@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 45.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -23,32 +23,13 @@
             }
         },
         {
-            "id": "bergmite-2",
-            "pokemon": "bergmite",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "common",
-            "level": "5-30",
-            "weight": 9.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "bergmite-3",
+            "id": "bergmite-1",
             "pokemon": "bergmite",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -64,30 +45,32 @@
             }
         },
         {
-            "id": "bergmite-4",
+            "id": "bergmite-2",
             "pokemon": "bergmite",
             "presets": [
-                "natural"
+                "water"
             ],
             "type": "pokemon",
-            "spawnablePositionType": "grounded",
+            "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 45.0,
             "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:nether/is_frozen"
+                    "#cobblemon:is_frozen_ocean"
                 ]
             }
         },
         {
-            "id": "bergmite-5",
+            "id": "bergmite-2",
             "pokemon": "bergmite",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -101,6 +84,42 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
+                ]
+            }
+        },
+        {
+            "id": "bergmite-3",
+            "pokemon": "bergmite",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "5-30",
+            "weight": 45.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:nether/is_frozen"
+                ]
+            }
+        },
+        {
+            "id": "bergmite-hisui-4",
+            "pokemon": "bergmite region_bias=hisui",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "5-30",
+            "weight": 45.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_glacial"
                 ]
             }
         }

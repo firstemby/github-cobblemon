@@ -72,6 +72,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "liepard alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

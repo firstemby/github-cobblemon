@@ -56,7 +56,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "nidorina",

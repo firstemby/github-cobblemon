@@ -201,7 +201,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "tangrowth alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

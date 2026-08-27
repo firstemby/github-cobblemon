@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-49",
-            "weight": 0.2,
+            "weight": 1.6,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -39,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-49",
-            "weight": 0.2,
+            "weight": 1.6,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -67,7 +67,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-49",
-            "weight": 1.0,
+            "weight": 8.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_toxic"
@@ -84,7 +84,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-49",
-            "weight": 0.2,
+            "weight": 1.6,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -109,7 +109,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "35-49",
-            "weight": 0.2,
+            "weight": 1.6,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {

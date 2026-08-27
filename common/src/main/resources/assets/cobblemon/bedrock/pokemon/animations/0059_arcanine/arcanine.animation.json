@@ -2630,7 +2630,7 @@
 						"0.5": [-7.69971, -17.84044, 12.03862]
 					}
 				},
-				"locator_seat1": {
+				"locator_seat_1": {
 					"rotation": ["-2.5-math.sin(q.anim_time*90*8*2)*7", 0, 0]
 				},
 				"chest_fluff_left": {

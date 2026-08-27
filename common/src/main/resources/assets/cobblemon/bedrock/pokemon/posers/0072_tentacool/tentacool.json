@@ -20,6 +20,7 @@
     "float": {
       "poseTypes": ["FLOAT", "PORTRAIT", "PROFILE"],
       "isTouchingWater": true,
+      "isUnderWater": true,
       "animations": [
         "q.bedrock('tentacool', 'water_idle')"
       ],
@@ -30,6 +31,7 @@
     "swim": {
       "poseTypes": ["SWIM"],
       "isTouchingWater": true,
+      "isUnderWater": true,
       "animations": [
         "q.bedrock('tentacool', 'water_swim')"
       ],

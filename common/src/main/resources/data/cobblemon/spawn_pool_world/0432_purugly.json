@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -46,7 +46,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -82,7 +82,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -108,7 +108,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -137,7 +137,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-45",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

@@ -10,7 +10,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 80.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -23,6 +23,7 @@
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_island",
+                    "#cobblemon:is_river",
                     "#cobblemon:is_sky"
                 ]
             },
@@ -42,13 +43,14 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 80.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_coast",
                     "#cobblemon:is_island",
+                    "#cobblemon:is_river",
                     "#cobblemon:is_sky"
                 ],
                 "timeRange": "day"
@@ -60,19 +62,20 @@
             }
         },
         {
-            "id": "cramorant-4",
+            "id": "cramorant-3",
             "pokemon": "cramorant",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_ocean",
+                    "#cobblemon:is_river"
                 ],
                 "timeRange": "day"
             },
@@ -84,13 +87,13 @@
             }
         },
         {
-            "id": "cramorant-5",
+            "id": "cramorant-4",
             "pokemon": "cramorant",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "23-48",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -102,7 +105,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_ocean",
+                    "#cobblemon:is_river"
                 ],
                 "timeRange": "day",
                 "minLureLevel": 1
@@ -114,13 +118,13 @@
             }
         },
         {
-            "id": "cramorant-6",
+            "id": "cramorant-5",
             "pokemon": "cramorant",
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 80.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -133,7 +137,7 @@
             }
         },
         {
-            "id": "cramorant-7",
+            "id": "cramorant-6",
             "pokemon": "cramorant",
             "presets": [
                 "water"
@@ -142,7 +146,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 80.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -152,13 +156,13 @@
             }
         },
         {
-            "id": "cramorant-8",
+            "id": "cramorant-7",
             "pokemon": "cramorant",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "23-48",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -171,13 +175,13 @@
             }
         },
         {
-            "id": "cramorant-9",
+            "id": "cramorant-8",
             "pokemon": "cramorant",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "23-48",
-            "weight": 2.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {

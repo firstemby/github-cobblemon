@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "9-34",
-            "weight": 5.7,
+            "weight": 28.5,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -35,7 +35,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "9-34",
-            "weight": 9.2,
+            "weight": 46.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_overgrowth"

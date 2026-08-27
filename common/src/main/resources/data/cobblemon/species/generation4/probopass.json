@@ -72,7 +72,13 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "probopass alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

@@ -67,6 +67,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "grimer alolan=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "muk alolan=false",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

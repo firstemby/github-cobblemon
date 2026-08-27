@@ -7,32 +7,13 @@
             "id": "spheal-1",
             "pokemon": "spheal",
             "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "4-29",
-            "weight": 5.4,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "spheal-2",
-            "pokemon": "spheal",
-            "presets": [
                 "water"
             ],
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "4-29",
-            "weight": 5.4,
+            "weight": 27.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -41,13 +22,13 @@
             }
         },
         {
-            "id": "spheal-3",
+            "id": "spheal-2",
             "pokemon": "spheal",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 1.8,
+            "weight": 9.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -72,7 +53,7 @@
             }
         },
         {
-            "id": "spheal-4",
+            "id": "spheal-3",
             "pokemon": "spheal",
             "presets": [
                 "water"
@@ -81,7 +62,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "4-29",
-            "weight": 5.4,
+            "weight": 27.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -92,13 +73,13 @@
             }
         },
         {
-            "id": "spheal-5",
+            "id": "spheal-4",
             "pokemon": "spheal",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 1.8,
+            "weight": 9.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

@@ -69,6 +69,15 @@
     },
     "blockInteract": {
       "immuneToCobwebBlock": true
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "araquanid alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
