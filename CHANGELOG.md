@@ -57,6 +57,7 @@
 - Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
 - Ice type Pokémon are now immune to Packed Snow
 - Held item visibility can now be controlled by the held_item_visible command argument.
+- Added config option to disable Pokémon spawning on a per-world basis
 
 ### New rideable Pokémon
 - Crobat

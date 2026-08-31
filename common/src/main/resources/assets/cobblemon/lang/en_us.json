@@ -2382,6 +2382,8 @@
   "cobblemon.config.ui.minimum_level_range_max.tooltip": "The value considered to be the highest party Pokémon level when a player's party is empty or extremely low level. The higher this value, the higher the levels of Pokémon can be around players with no or very weak Pokémon.",
   "cobblemon.config.ui.enable_spawning": "Enable Spawning",
   "cobblemon.config.ui.enable_spawning.tooltip": "Whether to allow Pokémon to spawn.",
+  "cobblemon.config.ui.world_spawning_blocklist": "Per-World Spawning Blocklist",
+  "cobblemon.config.ui.world_spawning_blocklist.tooltip": "Worlds to disable Pokémon spawning logic in.",
   "cobblemon.config.ui.minimum_distance_between_entities": "Minimum Distance Between Entities",
   "cobblemon.config.ui.minimum_distance_between_entities.tooltip": "The minimum block distance between spawning Pokémon and existing Entities in the World. This prevents clustered Pokémon spawning.",
   "cobblemon.config.ui.max_nearby_blocks_horizontal_range": "Max Nearby Blocks Horizontal Range",
