@@ -1,7 +1,7 @@
-q.pokemon.size_category == 'XS' ? {
-    q.pokemon.add_marks('cobblemon:mark_mini');
+(q.pokemon_entity.size_category == 'XS' && !q.pokemon_entity.is_alpha) ? {
+    q.pokemon_entity.add_marks('cobblemon:mark_mini');
 };
 
-(q.pokemon.size_category == 'XL' || q.pokemon.is_alpha) ? {
-    q.pokemon.add_marks('cobblemon:mark_jumbo');
+(q.pokemon_entity.size_category == 'XL' || q.pokemon_entity.is_alpha) ? {
+    q.pokemon_entity.add_marks('cobblemon:mark_jumbo');
 };
