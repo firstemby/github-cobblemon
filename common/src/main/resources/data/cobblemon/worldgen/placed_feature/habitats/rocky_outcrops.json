@@ -1,5 +1,5 @@
 {
-    "feature": "cobblemon:habitats/chorus_briars",
+    "feature": "cobblemon:habitats/rocky_outcrops",
     "placement": [
         {
             "type": "minecraft:count",
@@ -7,7 +7,7 @@
         },
         {
             "type": "minecraft:rarity_filter",
-            "chance": 50
+            "chance": 30
         },
         {
             "type": "minecraft:height_range",
