@@ -10,5 +10,5 @@
   "mouseInputMult": "q.get_ride_stats('SKILL', 'LIQUID', 1.2, 0.8)",
   "speedExpr": "q.get_ride_stats('SPEED', 'LIQUID', 24.0, 2.0)",
   "accelerationExpr": "q.get_ride_stats('ACCELERATION', 'LIQUID', 0.1, 8.0)",
-  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 20.0, 2.0)"
+  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 40.0, 4.0)"
 }
