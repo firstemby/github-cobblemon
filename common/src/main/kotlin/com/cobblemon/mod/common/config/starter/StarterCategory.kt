@@ -16,16 +16,18 @@ data class StarterCategory(
     val name: String,
     val order: Int = 0, // fallback for old behavior
     val displayName: String,
-    val pokemon: List<PokemonProperties>
+    val pokemon: List<PokemonProperties>,
+    val randomStarter: Boolean = false // Decides if includes random starter
 ) {
-    fun asRenderableStarterCategory() = RenderableStarterCategory(name, order, displayName, pokemon.map { it.asRenderablePokemon() })
+    fun asRenderableStarterCategory() = RenderableStarterCategory(name, order, displayName, pokemon.map { it.asRenderablePokemon() }, randomStarter)
 }
 
 data class RenderableStarterCategory(
     val name: String,
     val order: Int = 0, // fallback for old behavior
     val displayName: String,
-    val pokemon: List<RenderablePokemon>
+    val pokemon: List<RenderablePokemon>,
+    val randomStarter: Boolean = false
 ) {
     val displayNameText = displayName.asTranslated()
 }

@@ -144,7 +144,8 @@ class StarterConfig {
             pokemon = mutableListOf(
                 PokemonProperties.parse("Pikachu level=10"),
                 PokemonProperties.parse("Eevee level=10")
-            )
+            ),
+            randomStarter = true
         )
     )
 }
