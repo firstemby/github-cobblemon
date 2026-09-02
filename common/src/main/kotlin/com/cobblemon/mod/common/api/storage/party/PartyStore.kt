@@ -280,7 +280,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
             }
         }
 
-        return result
+        return result.sortedBy { it.health <= 0 }
     }
     fun clearParty() {
         forEach {

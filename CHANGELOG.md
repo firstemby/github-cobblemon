@@ -410,6 +410,9 @@
 - The Magikarp and Gyarados Jump Pattern resourcepacks should now stop replacing shiny textures of addons targeting Magikarp or Gyarados.
 - Fixed Dudunsparce and Maushold always having the same form instead of having the 1 in 100 chance of being different.
 - Fixed bird mounts rapidly switching between their flying and gliding animations when flying at low speed
+- Fixed some battles being startable with fainted Pokémon in the initial sendout. 
+- Fixed random gender selection for forms with strict gender divides (such as Meowstic and Oinkalogne) never choosing female (that's sexist).
+- Fixed the "Press R to battle" prompt not disappearing after you finish your first battle, at least until you relogged.
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
