@@ -3,7 +3,7 @@
   "terminalVelocity": "-2.0",
   "rotatePokemonHead": "true",
   "stamReplenishTimeSeconds": "15.0",
-  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 60.0, 4.0)",
+  "staminaExpr": "q.get_ride_stats('STAMINA', 'LIQUID', 60.0, 2.0)",
   "rotationSpeedModifierExpr": "q.get_ride_stats('SKILL', 'LIQUID', 0.8, 0.1)",
   "jumpStrengthExpr": "q.get_ride_stats('JUMP', 'LIQUID', 1.6, 0.8)",
   "speedExpr": "q.get_ride_stats('SPEED', 'LIQUID', 0.75, 0.08)",
