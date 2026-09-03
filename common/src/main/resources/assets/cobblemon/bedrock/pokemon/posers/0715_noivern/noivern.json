@@ -111,6 +111,14 @@
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
       ]
+    },
+    "cling_ceiling": {
+      "poseTypes": [
+        "CLING_CEILING"
+      ],
+      "animations": [
+        "q.bedrock('noivern', 'cling_ceiling')"
+      ]
     }
   }
 }

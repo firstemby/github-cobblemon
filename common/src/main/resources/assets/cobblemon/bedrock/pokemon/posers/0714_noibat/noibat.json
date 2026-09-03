@@ -62,6 +62,14 @@
       "quirks": [
         "q.bedrock_quirk('riolu', 'blink')"
       ]
+    },
+    "cling_ceiling": {
+      "poseTypes": [
+        "CLING_CEILING"
+      ],
+      "animations": [
+        "q.bedrock('noibat', 'cling_ceiling')"
+      ]
     }
   }
 }

@@ -31,6 +31,9 @@ object GoToSleepTask {
                 Trigger { _, entity, _ ->
                     if (entity.isSettlingToSleep || entity.clingingFace != null) return@Trigger false
                     val hasSleepStatus = entity.pokemon.status?.status === Statuses.SLEEP
+                    val wantsPlace = entity.behaviour.resting.places.isNotEmpty() &&
+                            !entity.brain.hasMemoryValue(CobblemonMemories.POKEMON_SLEEP_SEARCH_FAILED)
+                    if (!hasSleepStatus && wantsPlace) return@Trigger false
                     if (entity.behaviour.resting.canSleep && ((it.tryGet(pokemonDrowsy).orElse(false) && entity.canSleepAt(entity.blockPosition().below())) || hasSleepStatus)) {
                         if (!hasSleepStatus) {
                             if (onlyFromStatus) {

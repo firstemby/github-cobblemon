@@ -116,6 +116,24 @@
           ]
         }
       ]
+    },
+    "hang": {
+      "poseTypes": [
+        "HANG"
+      ],
+      "condition": "math.mod(q.entity_id, 2) == 0",
+      "animations": [
+        "q.bedrock('spinarak', 'hang')"
+      ]
+    },
+    "hang2": {
+      "poseTypes": [
+        "HANG"
+      ],
+      "condition": "math.mod(q.entity_id, 2) == 1",
+      "animations": [
+        "q.bedrock('spinarak', 'hang2')"
+      ]
     }
   }
 }

@@ -49,6 +49,8 @@ object CobblemonMemories {
     @JvmField
     val PATH_COOLDOWN = register<Boolean>("path_cooldown")
     @JvmField
+    val POKEMON_SLEEP_SEARCH_FAILED = register<Boolean>("pokemon_sleep_search_failed")
+    @JvmField
     val TARGETED_BATTLE_POKEMON = register<UUID>("targeted_battle_pokemon")
     @JvmField
     val NEAREST_VISIBLE_ATTACKER = register<LivingEntity>("nearest_visible_attacker")

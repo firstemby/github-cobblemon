@@ -138,11 +138,30 @@
       }
     },
     "resting": {
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042,
+      "canSleep": true,
+      "light": "0-4",
+      "canSeeSky": false,
+      "willSleepOnBed": true,
       "times": [
-        "any"
+        "day"
+      ],
+      "drowsyChance": 0.5,
+      "rouseChance": 0.002,
+      "places": [
+        {
+          "faces": ["ceiling"],
+          "onlyAir": true
+        },
+        {
+          "faces": ["ceiling"],
+          "blocks": ["#minecraft:leaves"],
+          "onlyAir": true,
+          "light": "0-15"
+        }
       ]
+    },
+    "clinging": {
+      "yOffset": -0.5
     }
   },
   "drops": {

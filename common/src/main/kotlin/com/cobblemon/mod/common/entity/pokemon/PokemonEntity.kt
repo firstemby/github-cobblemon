@@ -63,6 +63,7 @@ import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.SpawnCause
+import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.BagItems
@@ -80,6 +81,7 @@ import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
+import com.cobblemon.mod.common.entity.pokemon.ai.SleepDebug
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
 import com.cobblemon.mod.common.entity.pokemon.effects.IllusionEffect
@@ -431,10 +433,8 @@ open class PokemonEntity(
 
     var clingingFace: Direction? = null
 
-    /** Whether the current cling attachment is a chosen sleeping place, released on waking. */
     var isSleepClinging = false
 
-    /** Whether a sleep task is currently walking or ascending towards a sleeping place. */
     var isSettlingToSleep = false
 
     var occupiedSeats = mutableMapOf<Seat, Entity>()
@@ -719,6 +719,9 @@ open class PokemonEntity(
         if (!level().isClientSide) {
             tickThreadHanging()
             tickClinging()
+            if (tickCount % 20 == 0) {
+                SleepDebug.status(this)
+            }
         }
         delegate.tick(this)
         ticksLived++
@@ -1381,6 +1384,9 @@ open class PokemonEntity(
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return if (super.hurt(source, amount)) {
+            if (clingingFace != null || isHangingFromThread) {
+                SleepDebug.log(this, "hurt by ${source.msgId} while attached")
+            }
             releaseFromThread()
             releaseFromClinging()
 
@@ -1457,7 +1463,11 @@ open class PokemonEntity(
         navigation.stop()
         val column = blockPosition()
         val cling = behaviour.clinging
-        val newY = if (face == Direction.UP) (findCeilingFaceY() ?: column.above().y.toDouble()) - bbHeight + cling.yOffset else y
+        val faceY = findCeilingFaceY()
+        // Things get a bit weird with mons of different sizes so we try to get the size ratio to make the adjustment right on the clingg
+        val sizeRatio = bbHeight / (exposedForm.hitbox.height * exposedForm.baseScale)
+        val newY = if (face == Direction.UP) (faceY ?: column.above().y.toDouble()) - bbHeight + cling.yOffset * sizeRatio else y
+        SleepDebug.log(this, "startClinging face=$face faceY=$faceY bbHeight=$bbHeight yOffset=${cling.yOffset} sizeRatio=$sizeRatio newY=$newY fromY=$y")
         setPos(
             column.x + 0.5 + face.stepX * cling.xOffset,
             newY,
@@ -1511,9 +1521,16 @@ open class PokemonEntity(
             val state = level().getBlockState(supportPos)
             state.isFaceSturdy(level(), supportPos, face.opposite) && (isSleepClinging || canClingTo(face, state))
         }
-        val isSleepOver = isSleepClinging && pokemon.status?.status != Statuses.SLEEP
+        val isRoused = !brain.getMemorySafely(CobblemonMemories.POKEMON_DROWSY).orElse(false) &&
+                pokemon.storeCoordinates.get()?.store !is PartyStore
+        val isSleepOver = isSleepClinging && (pokemon.status?.status != Statuses.SLEEP || isRoused)
         if (isEvolving || !isSupported || isSleepOver) {
+            SleepDebug.log(this, "released from clinging: supported=$isSupported sleepOver=$isSleepOver roused=$isRoused evolving=$isEvolving")
             if (isSleepOver) {
+                // we want to make sure we clear the sleep from the mon (might happen already somewhere else so this might not be needed)
+                if (pokemon.status?.status == Statuses.SLEEP) {
+                    pokemon.status = null
+                }
                 brain.eraseMemory(CobblemonMemories.POKEMON_SLEEPING)
                 brain.useDefaultActivity()
             }
