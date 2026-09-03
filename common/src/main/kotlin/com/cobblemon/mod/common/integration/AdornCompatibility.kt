@@ -8,16 +8,14 @@
 
 package com.cobblemon.mod.common.integration
 
-import com.cobblemon.mod.common.Cobblemon
 import juuxel.adorn.block.variant.BlockVariant
-import juuxel.adorn.block.variant.CompatBlockVariantSet
+import juuxel.adorn.block.variant.BlockVariantSet
 
-class AdornCompatibility : CompatBlockVariantSet() {
+class AdornCompatibility: BlockVariantSet {
     override fun getWoodVariants(): List<BlockVariant?>? {
-        return this.createVariants({ BlockVariant.Wood(it) }, "apricorn", "saccharine")
-    }
-
-    override fun getModId(): String? {
-        return Cobblemon.MODID
+        val result: MutableList<BlockVariant> = mutableListOf()
+        result.add(BlockVariant.Wood("cobblemon/apricorn"))
+        result.add(BlockVariant.Wood("cobblemon/saccharine"))
+        return result
     }
 }
