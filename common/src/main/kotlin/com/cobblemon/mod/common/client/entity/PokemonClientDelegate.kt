@@ -470,7 +470,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 val random = currentEntity.level().random
                 when (particleData) {
                     is ParticleData.SnowstormParticle -> {
-                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }.filter(::isLocatorVisible)
+                        val locators = particleData.locatorResolver(locatorStates).filter(::isLocatorVisible)
                         if (particleData.chance > random.nextDouble()) {
                             locators.forEach { locator ->
                                 repeat(particleData.amount) {
