@@ -518,15 +518,14 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         }
     }
 
-    fun getSeatLocator(passenger: Entity): String {
-        val seat = this.getEntity().occupiedSeats.entries
+    fun getSeatLocator(passenger: Entity): String? {
+        return this.getEntity().occupiedSeats.entries
             .firstOrNull { it.value == passenger }?.key
-            ?: throw IllegalArgumentException("Entity is not currently riding a seat")
-        return seat.locator
+            ?.locator
     }
 
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
-        val locatorName = getSeatLocator(passenger)
+        val locatorName = getSeatLocator(passenger) ?: return
         val locator = this.locatorStates[locatorName] ?: return
 
         val locatorOffset = locator.matrix.getTranslation(Vector3f())
