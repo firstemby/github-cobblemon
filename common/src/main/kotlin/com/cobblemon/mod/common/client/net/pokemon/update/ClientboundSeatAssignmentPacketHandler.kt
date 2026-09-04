@@ -26,11 +26,5 @@ object ClientboundSeatAssignmentPacketHandler : ClientNetworkPacketHandler<Clien
         assignments.forEach { (seat, passenger) ->
             vehicle.occupiedSeats[seat] = passenger
         }
-
-        assignments.forEach { (_, passenger) ->
-            if (!vehicle.hasPassenger(passenger)) {
-                passenger.startRiding(vehicle, true)
-            }
-        }
     }
 }
