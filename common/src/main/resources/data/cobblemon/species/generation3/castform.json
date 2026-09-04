@@ -195,7 +195,7 @@
         "cobblemon.species.castform-sunny.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "sunny-form"
@@ -254,7 +254,7 @@
         "cobblemon.species.castform-rainy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "rainy-form"
@@ -281,7 +281,7 @@
         "cobblemon.species.castform-snowy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "snowy-form"

@@ -117,7 +117,6 @@
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:playrough",
     "tm:protect",
@@ -163,6 +162,7 @@
     "legacy:doubleteam",
     "legacy:frustration",
     "legacy:hiddenpower",
+    "legacy:naturalgift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
@@ -296,7 +296,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": 9,
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "deerling",

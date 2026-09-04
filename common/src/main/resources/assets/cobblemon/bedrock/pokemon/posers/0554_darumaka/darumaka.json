@@ -17,7 +17,7 @@
          ],
          "quirks": [
             "q.bedrock_quirk('darumaka', 'blink')",
-            "q.bedrock_quirk('darumaka', 'qurik', 15, 100, 1)"
+            "q.bedrock_quirk('darumaka', 'quirk', 15, 100, 1)"
          ]
       },
       "standing": {
@@ -29,8 +29,8 @@
          ],
          "quirks": [
             "q.bedrock_quirk('darumaka', 'blink')",
-            "q.bedrock_quirk('darumaka', 'qurik', 15, 100, 1)",
-            "q.bedrock_quirk('darumaka', 'qurik2', 20, 360, 1)"
+            "q.bedrock_quirk('darumaka', 'quirk', 15, 100, 1)",
+            "q.bedrock_quirk('darumaka', 'quirk2', 20, 360, 1)"
          ]
       },
       "walking": {
@@ -41,7 +41,7 @@
          ],
          "quirks": [
             "q.bedrock_quirk('darumaka', 'blink')",
-            "q.bedrock_quirk('darumaka', 'qurik', 15, 100, 1)"
+            "q.bedrock_quirk('darumaka', 'quirk', 15, 100, 1)"
          ]
       },
       "sleep": {

@@ -44,10 +44,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 0.85,
     "fixed": false
   },
+  "standingEyeHeight": 0.5,
   "behaviour": {
     "moving": {
       "walking": {
@@ -143,7 +144,6 @@
     "tm:blizzard",
     "tm:bounce",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:confuseray",
@@ -205,6 +205,7 @@
     "tutor:tailwind",
     "tutor:twister",
     "tutor:waterpulse",
+    "legacy:captivate",
     "legacy:confide",
     "legacy:doubleteam",
     "legacy:frustration",

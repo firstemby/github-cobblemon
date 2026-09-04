@@ -1,0 +1,16 @@
+{
+  "species": "cobblemon:rufflet",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["region-bias-hisui"],
+      "model": "cobblemon:rufflet_hisui_bias.geo",
+      "texture": "cobblemon:textures/pokemon/0627_rufflet/rufflet.png",
+      "layers": []
+    },
+    {
+      "aspects": ["region-bias-hisui", "shiny"],
+      "texture": "cobblemon:textures/pokemon/0627_rufflet/rufflet_shiny.png"
+    }
+  ]
+}

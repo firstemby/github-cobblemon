@@ -399,6 +399,7 @@
 - Fixed the choose starter toast not disappearing when capturing a Pokémon instead of opening the starter selection screen
 - Fixed an issue where certain Sinister Tea seasonings were only applying as instant effects and would not apply over time
 - Long config option labels now scroll instead of overflowing
+- Fixed some z-fighting and clipping on Dewott and Hisui Bias Dewott
 - Eggant Berries can now be composted properly on NeoForge
 - Composting chances are now the same on NeoForge as on Fabric
 - Fixed problem where furnaces which had smelted Revival Herbs into Heal Powder in older versions would glitch out on trying to get the experience out of the block
@@ -408,11 +409,21 @@
 - Fixed Tentacool not using its swim animation when on water surface
 - Fixed Eevee using its left shoulder pose when in battle
 - The Magikarp and Gyarados Jump Pattern resourcepacks should now stop replacing shiny textures of addons targeting Magikarp or Gyarados.
+- Fixed Combee's pollinated texture overwriting the shiny and female textures
+- Fixed a coloring error with Dracovish's shiny
+- Fixed Togedemaru's back spikes z-fighting
+- Fixed Sliggoo (+ Hisuian) evolving in the Nether and End, where it can't rain
+- Corrected the scales, hitbox sizes , and eye heights for Ariados, Cetoddle, Durant, Galvantula, Klink, Lanturn, Lumineon, Mantine, Mantyke, Mudbray, Numel, Staravia, and Torkoal
+- Fixed Torkoal's walk speed not matching its animation. He will no longer move faster than Bunnelby and Buneary
+- Fixed Lanturn t-posing due to missing ground walk and sleep animations. 
+- Fixed Oshawott and Dewott using their sleep animation in unintended scenarios. 
 - Fixed Dudunsparce and Maushold always having the same form instead of having the 1 in 100 chance of being different.
 - Fixed bird mounts rapidly switching between their flying and gliding animations when flying at low speed
 - Fixed some battles being startable with fainted Pokémon in the initial sendout. 
 - Fixed random gender selection for forms with strict gender divides (such as Meowstic and Oinkalogne) never choosing female (that's sexist).
 - Fixed the "Press R to battle" prompt not disappearing after you finish your first battle, at least until you relogged.
+- Fixed the composter block being listed as "composer" in the cosmetic items species feature
+- Fixed Castform's forms being tagged as introduced in generation 4 instead of 3
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

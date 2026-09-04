@@ -128,7 +128,6 @@
     "tm:lightscreen",
     "tm:magicalleaf",
     "tm:megahorn",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:playrough",
@@ -187,6 +186,7 @@
     "legacy:doubleteam",
     "legacy:frustration",
     "legacy:hiddenpower",
+    "legacy:naturalgift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
@@ -260,7 +260,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": 9,
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "stantler",
