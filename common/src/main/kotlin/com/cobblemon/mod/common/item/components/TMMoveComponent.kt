@@ -23,23 +23,23 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
 
-data class TMMoveComponent(val move: MoveTemplate) {
+data class TMMoveComponent(val moveName: String) {
     companion object {
         // Codec to serialize/deserialize TMMoveComponent
         val CODEC: Codec<TMMoveComponent> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.STRING.fieldOf("move").forGetter { it.move.name } // Serialize the move's name
-            ).apply(instance) { moveName -> TMMoveComponent(Moves.getByNameOrDummy(moveName)) }
+                Codec.STRING.fieldOf("move").forGetter { it.moveName } // Serialize the move's name
+            ).apply(instance) { moveName -> TMMoveComponent(moveName) }
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, TMMoveComponent> = ByteBufCodecs.fromCodec(CODEC)
 
         fun getTMMove(stack: ItemStack): MoveTemplate? {
-            return stack.get(CobblemonItemComponents.TM_MOVE)?.move
+            return stack.get(CobblemonItemComponents.TM_MOVE)?.moveName?.let(Moves::getByNameOrDummy)
         }
 
         fun setTMMove(stack: ItemStack, move: MoveTemplate): ItemStack {
-            stack.set(CobblemonItemComponents.TM_MOVE, TMMoveComponent(move))
+            stack.set(CobblemonItemComponents.TM_MOVE, TMMoveComponent(move.name))
             return stack
         }
 
@@ -58,4 +58,9 @@ data class TMMoveComponent(val move: MoveTemplate) {
         }
 
     }
+
+    constructor(move: TMMoveComponent): this(move.moveName)
+
+    val move: MoveTemplate
+        get() = Moves.getByNameOrDummy(moveName)
 }
