@@ -424,6 +424,9 @@
 - Fixed the "Press R to battle" prompt not disappearing after you finish your first battle, at least until you relogged.
 - Fixed the composter block being listed as "composer" in the cosmetic items species feature
 - Fixed Castform's forms being tagged as introduced in generation 4 instead of 3
+- Fixed the `stat_compare` and `stat_equal` evolution requirements crashing the server when configured with the `special_attack` or `special_defence` stats
+- A malformed evolution requirement now logs an error and is treated as unmet instead of crashing the server tick loop
+- Fixed reading a Pokémon's effective battle IV throwing when that stat has no IV entry, instead of falling back to the default
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters

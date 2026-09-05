@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.pokemon.requirements
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -17,10 +18,12 @@ class StatEqualRequirement : Requirement {
         const val ADAPTER_VARIANT = "stat_equal"
     }
 
-    val statOne = Stats.ATTACK.name
-    val statTwo = Stats.DEFENCE.name
+    val statOne = Stats.ATTACK.identifier.path
+    val statTwo = Stats.DEFENCE.identifier.path
 
     override fun check(pokemon: Pokemon): Boolean {
-        return pokemon.getStat(Stats.getStat(statOne)) == pokemon.getStat(Stats.getStat(statTwo))
+        val one = Cobblemon.statProvider.permanentFromName(statOne) ?: return false
+        val two = Cobblemon.statProvider.permanentFromName(statTwo) ?: return false
+        return pokemon.getStat(one) == pokemon.getStat(two)
     }
 }

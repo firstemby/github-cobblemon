@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokemon.evolution
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.playerDataManager
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonSounds
@@ -38,6 +39,9 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
+import java.util.concurrent.ConcurrentHashMap
+
+private val erroredEvolutions = ConcurrentHashMap.newKeySet<String>()
 
 /**
  * Represents an evolution of a [Pokemon], this is the server side counterpart of [EvolutionDisplay].
@@ -92,7 +96,14 @@ interface Evolution : EvolutionLike {
      * @return If the [Evolution] can start.
      */
     fun test(pokemon: Pokemon): Boolean {
-        val result = this.requirements.all { requirement -> requirement.check(pokemon) }
+        val result = try {
+            this.requirements.all { requirement -> requirement.check(pokemon) }
+        } catch (e: Exception) {
+            if (erroredEvolutions.add(this.id)) {
+                Cobblemon.LOGGER.error("Evolution {} threw while testing its requirements and will be treated as unmet", this.id, e)
+            }
+            false
+        }
         val event = EvolutionTestedEvent(pokemon, this, result, result)
         CobblemonEvents.EVOLUTION_TESTED.post(event)
         return event.result
