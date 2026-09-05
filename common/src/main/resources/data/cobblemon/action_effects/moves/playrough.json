@@ -21,7 +21,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "expressions": ["q.sound('move.playrough.actor_2');"]
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "type": "pause",
-      "pause": 0.55
+      "pause": 0.625
     },
     {
       "type": "entity_molang",
