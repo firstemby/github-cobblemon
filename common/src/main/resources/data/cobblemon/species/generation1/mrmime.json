@@ -296,7 +296,7 @@
     "legacy:takedown",
     "legacy:teleport",
     "legacy:toxic",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
     "special:followme"
   ],
   "preEvolution": "mimejr",
