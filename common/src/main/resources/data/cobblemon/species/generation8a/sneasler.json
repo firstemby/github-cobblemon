@@ -220,7 +220,6 @@
     "tutor:lashout",
     "tutor:lowkick",
     "tutor:poisonjab",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -232,7 +231,8 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:powershift"
   ],
   "preEvolution": "sneasel hisuian",
   "evolutions": []
