@@ -277,7 +277,7 @@
             },
             {
               "variant": "biome",
-              "biomeAntiondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
             }
           ]
         }
