@@ -27,11 +27,12 @@ object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> 
 
         menu.tmMachineEntity?.let { blockEntity ->
             blockEntity.activeMove = packet.tm?.moveName?.name ?: ""
-            blockEntity.setChanged()
-            player.level().sendBlockUpdated(blockEntity.blockPos, blockEntity.blockState, blockEntity.blockState, Block.UPDATE_CLIENTS)
 
             blockEntity.burnActive = false
             blockEntity.burnProgress = 0
+
+            blockEntity.setChanged()
+            player.level().sendBlockUpdated(blockEntity.blockPos, blockEntity.blockState, blockEntity.blockState, Block.UPDATE_CLIENTS)
 
             player.level().players().forEach { thePlayer -> //Update all players with matching menu/blockentity
                 val tmmMenu = thePlayer.containerMenu as? TMMachineMenu ?: return@forEach
