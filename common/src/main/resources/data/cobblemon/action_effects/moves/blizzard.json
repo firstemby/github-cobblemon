@@ -16,6 +16,11 @@
       "targetLocators": ["middle"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.blizzard.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.3
     },
@@ -27,7 +32,16 @@
     },
     {
       "type": "pause",
-      "pause": 0.85
+      "pause": 0.2
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.blizzard.target');"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.65
     },
     {
       "type": "entity_particles",
