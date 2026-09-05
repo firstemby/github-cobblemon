@@ -86,7 +86,6 @@
     "tm:mysticalfire",
     "tm:outrage",
     "tm:playrough",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:psychup",
@@ -129,7 +128,8 @@
     "tutor:tailwind",
     "tutor:twister",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:powershift"
   ],
   "evolutions": [],
   "forms": [

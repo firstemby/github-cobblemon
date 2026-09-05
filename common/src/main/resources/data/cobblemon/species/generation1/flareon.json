@@ -137,7 +137,6 @@
     "tm:naturalgift",
     "tm:overheat",
     "tm:payday",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -196,6 +195,7 @@
     "legacy:hiddenpower",
     "legacy:leer",
     "legacy:mimic",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:reflect",
     "legacy:return",
@@ -205,7 +205,7 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:zapcannon",
+    "legacy:zapcannon"
     "special:celebrate",
     "special:sing"
   ],

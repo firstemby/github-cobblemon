@@ -174,7 +174,6 @@
     "tm:nastyplot",
     "tm:poisonjab",
     "tm:poisontail",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -233,7 +232,8 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:powershift"
   ],
   "preEvolution": "sneasel hisuian",
   "evolutions": []

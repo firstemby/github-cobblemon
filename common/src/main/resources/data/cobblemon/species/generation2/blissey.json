@@ -180,7 +180,6 @@
     "tm:megapunch",
     "tm:metronome",
     "tm:naturalgift",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -280,6 +279,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:mudslap",
+    "legacy:powershift",
     "legacy:psywave",
     "legacy:rage",
     "legacy:reflect",
@@ -294,7 +294,7 @@
     "legacy:toxic",
     "legacy:uproar",
     "legacy:watergun",
-    "legacy:zapcannon",
+    "legacy:zapcannon"
     "special:sweetscent",
     "special:wish"
   ],

@@ -304,7 +304,6 @@
     "tm:poltergeist",
     "tm:pounce",
     "tm:powergem",
-    "tm:powershift",
     "tm:powerswap",
     "tm:poweruppunch",
     "tm:powerwhip",
@@ -602,6 +601,7 @@
     "legacy:megadrain",
     "legacy:mimic",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:psywave",
     "legacy:rage",
     "legacy:razorwind",
@@ -614,7 +614,7 @@
     "legacy:teleport",
     "legacy:watergun",
     "legacy:whirlwind",
-    "legacy:zapcannon",
+    "legacy:zapcannon"
     "special:fakeout",
     "special:feintattack",
     "special:hypnosis"

@@ -189,7 +189,6 @@
     "tm:mysticalfire",
     "tm:nastyplot",
     "tm:payback",
-    "tm:powershift",
     "tm:powerswap",
     "tm:poweruppunch",
     "tm:protect",
@@ -284,6 +283,7 @@
     "legacy:hiddenpower",
     "legacy:naturalgift",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:return",
     "legacy:round",
@@ -296,7 +296,7 @@
     "legacy:takedown",
     "legacy:teleport",
     "legacy:toxic",
-    "legacy:zapcannon",
+    "legacy:zapcannon"
     "special:followme"
   ],
   "preEvolution": "mimejr",

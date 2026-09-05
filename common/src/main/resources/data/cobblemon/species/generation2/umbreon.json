@@ -140,7 +140,6 @@
     "tm:naturalgift",
     "tm:payback",
     "tm:payday",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:psychup",
@@ -211,6 +210,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:return",
     "legacy:round",
@@ -218,7 +218,7 @@
     "legacy:skullbash",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:zapcannon",
+    "legacy:zapcannon"
     "special:celebrate",
     "special:sing"
   ],
