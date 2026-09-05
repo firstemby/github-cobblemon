@@ -4583,6 +4583,9 @@
 				}
 			},
 			"sound_effects": {
+				"0.6667": {
+					"effect": "pokemon.duraludon.bonk"
+				},
 				"1.1667": {
 					"effect": "pokemon.duraludon.cry"
 				}

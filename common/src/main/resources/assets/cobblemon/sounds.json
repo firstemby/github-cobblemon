@@ -7865,6 +7865,9 @@
   "pokemon.duraludon.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/duraludon/duraludon_cry", "volume": 0.8 } ]
   },
+  "pokemon.duraludon.bonk": {
+    "sounds": [ { "name": "cobblemon:pokemon/duraludon/duraludon_bonk", "volume": 0.8 } ]
+  },
   "pokemon.dreepy.cry": {
     "sounds": [ {  "name": "cobblemon:pokemon/dreepy/dreepy_cry", "volume": 0.8 } ]
   },
