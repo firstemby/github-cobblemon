@@ -85,6 +85,7 @@ abstract class RealTimeMove(
             cobblemonResource("projectile") to ProjectileMove::class.java,
             cobblemonResource("raycast") to RayCastMove::class.java,
             cobblemonResource("dash") to DashMove::class.java,
+            cobblemonResource("aoe") to AreaOfEffectMove::class.java,
             )
     }
 }

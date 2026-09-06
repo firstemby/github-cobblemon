@@ -9,9 +9,20 @@
   "spreadDegrees": 2.0,
   "speed": 0.3,
   "hasGravity": true,
+  "gravity": 0.1,
   "piercing": true,
   "targetOpponent": false,
   "minRange": 0,
   "maxRange": 7,
-  "effect": "q.target.ignite_for_ticks(30)"
+  "collisionEvents": [
+    {
+      "collisionType": "BLOCK",
+      "actions": [
+        {
+          "type": "createmove",
+          "moveId": "cobblemon:super_sludge_bomb_b"
+        }
+      ]
+    }
+  ]
 }

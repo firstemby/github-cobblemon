@@ -17,6 +17,8 @@ import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMoveInstance.Companion.
 import com.cobblemon.mod.common.util.isServerSide
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.withQueryValue
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.*
@@ -40,7 +42,8 @@ class RealtimeMoveProjectile : ThrowableProjectile {
 
     private var hitEntities = mutableSetOf<UUID>()
     private var realTimeMoveInstance: ProjectileMoveInstance? = null // TODO make non-nullable
-
+    var syncedGravity = 0.1
+    var syncedHasGravity = true
 
     constructor(
         level: Level,
@@ -55,10 +58,27 @@ class RealtimeMoveProjectile : ThrowableProjectile {
         REALTIME_MOVE_PROJECTILE_ENTITY, owner, level
     ) {
         this.realTimeMoveInstance = projectileMoveInstance
+        entityData.set(HAS_GRAVITY, projectileMoveInstance.projectileMove.hasGravity)
+        entityData.set(GRAVITY, if (projectileMoveInstance.projectileMove.hasGravity) projectileMoveInstance.projectileMove.gravity.toFloat() else 0.0f)
     }
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        // TODO
+        builder.define(GRAVITY, 0f)
+        builder.define(HAS_GRAVITY, true)
+
+    }
+
+    override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
+        if (GRAVITY == data) {
+            val f = entityData.get(GRAVITY) as Float
+            this.syncedGravity = f.toDouble()
+        }
+        if (HAS_GRAVITY == data) {
+            val b = entityData.get(HAS_GRAVITY) as Boolean
+            this.syncedHasGravity = b
+        }
+
+        super.onSyncedDataUpdated(data)
     }
 
     override fun tick() {
@@ -123,7 +143,6 @@ class RealtimeMoveProjectile : ThrowableProjectile {
         } else {
             this.discard()
         }
-
     }
 
     fun damageEntity(targetEntity: Entity) {
@@ -132,15 +151,7 @@ class RealtimeMoveProjectile : ThrowableProjectile {
         val projectileMove = realTimeMoveInstance!!.projectileMove
         val piercingMultiplier = if (projectileMove.piercing)
             projectileMove.piercingMultiplier.toDouble().pow(hitEntities.count().toDouble()) else 1.0
-        val damage = getDamageMultiplier(
-            owner as PokemonEntity,
-            targetEntity,
-            projectileMove.elementalType
-        ) * projectileMove.power
-        targetEntity.hurt(
-            damageSources().mobProjectile(this, owner as LivingEntity?),
-            (damage * piercingMultiplier).toFloat()
-        )
+        realTimeMoveInstance!!.dealDamage(targetEntity, piercingMultiplier.toFloat())
         if (Math.random() < projectileMove.effectChance) {
             val runtime =
                 mainThreadRuntime.withQueryValue("entity", owner?.asMostSpecificMoLangValue() ?: MoValue.of(null))
@@ -152,12 +163,12 @@ class RealtimeMoveProjectile : ThrowableProjectile {
 
 
     override fun isNoGravity(): Boolean {
-        if (realTimeMoveInstance == null) return false
+        if (realTimeMoveInstance == null) return !this.syncedHasGravity
         return !realTimeMoveInstance!!.projectileMove.hasGravity
     }
 
     override fun getDefaultGravity(): Double {
-        return realTimeMoveInstance?.projectileMove?.gravity ?: 0.3
+        return realTimeMoveInstance?.projectileMove?.gravity ?: this.syncedGravity
     }
 
 
@@ -169,6 +180,13 @@ class RealtimeMoveProjectile : ThrowableProjectile {
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
         return false
+    }
+
+    companion object {
+        val GRAVITY: EntityDataAccessor<Float?> =
+            SynchedEntityData.defineId(RealtimeMoveProjectile::class.java, EntityDataSerializers.FLOAT)
+        val HAS_GRAVITY: EntityDataAccessor<Boolean?> =
+            SynchedEntityData.defineId(RealtimeMoveProjectile::class.java, EntityDataSerializers.BOOLEAN)
     }
 
 }

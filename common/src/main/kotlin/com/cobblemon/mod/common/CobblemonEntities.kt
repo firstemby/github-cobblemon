@@ -27,6 +27,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import com.cobblemon.mod.common.entity.RealtimeMoveProjectile
+import com.example.mod.entity.RealtimeMoveAreaEffect
 
 object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
 
@@ -95,6 +96,15 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
         REALTIME_MOVE_PROJECTILE_ENTITY_KEY.path,
         EntityType.Builder.of({ _, world -> RealtimeMoveProjectile(world) }, MobCategory.MISC)
             .build(REALTIME_MOVE_PROJECTILE_ENTITY_KEY.toString())
+    )
+
+    @JvmField
+    val REALTIME_MOVE_PROJECTILE_AOE_KEY = cobblemonResource("realtime_move_aoe")
+    @JvmField
+    val REALTIME_MOVE_PROJECTILE_AOE: EntityType<RealtimeMoveAreaEffect> = this.create(
+        REALTIME_MOVE_PROJECTILE_AOE_KEY.path,
+        EntityType.Builder.of({ _, world -> RealtimeMoveAreaEffect(world) }, MobCategory.MISC)
+            .build(REALTIME_MOVE_PROJECTILE_AOE_KEY.toString())
     )
 
 

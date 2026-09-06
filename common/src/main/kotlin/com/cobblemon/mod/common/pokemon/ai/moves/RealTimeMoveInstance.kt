@@ -8,9 +8,14 @@
 
 package com.cobblemon.mod.common.pokemon.ai.moves
 
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.AIUtility
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.mainThreadRuntime
+import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
@@ -39,6 +44,30 @@ abstract class RealTimeMoveInstance(
 
     open fun end() {
         completed = true
+    }
+
+    open fun dealDamage(targetEntity: Entity, damageMultiplier: Float? = null) {
+        // Dish out the damage
+        // TODO: Respect minecraft status effect modifiers
+        val damage =
+            getDamageMultiplier(pokemonEntity, targetEntity, move.elementalType) * move.power * (damageMultiplier ?: 1.0f)
+        targetEntity.hurt(
+            pokemonEntity.damageSources().mobAttack(pokemonEntity),
+            damage
+        )
+        // if hit succeeded, apply additional effect
+        val runtime = mainThreadRuntime.withQueryValue("entity", pokemonEntity.asMostSpecificMoLangValue())
+            .withQueryValue("target", targetEntity.asMostSpecificMoLangValue())
+        runtime.execute(move.effect)
+        var attackTargetData = pokemonEntity.biggerBrain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
+        if (attackTargetData != null) {
+            attackTargetData.hitsLanded += 1
+
+        } else {
+            attackTargetData = CobblemonAttackTargetData()
+            attackTargetData.hitsLanded = 1
+        }
+        pokemonEntity.biggerBrain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
     }
 
 

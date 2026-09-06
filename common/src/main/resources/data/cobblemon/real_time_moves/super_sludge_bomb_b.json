@@ -1,0 +1,16 @@
+{
+  "name": "Super Sludge Bomb b",
+  "type": "aoe",
+  "elementalType": "Poison",
+  "priority": 2,
+  "power": 1,
+  "cooldownTicks": 0,
+  "targetOpponent": false,
+  "radius": 1.3,
+  "height": 0.5,
+  "minRange": 0,
+  "maxRange": 7,
+  "durationTicks": 120,
+  "damageTickRate": 5,
+  "effect": "q.target.add_effect('minecraft:poison', 1, 0, true)"
+}

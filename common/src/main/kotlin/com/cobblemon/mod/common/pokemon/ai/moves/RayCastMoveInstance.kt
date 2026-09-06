@@ -38,7 +38,9 @@ class RayCastMoveInstance(
     var hitCount = 0
 
     override fun start() {
-        pokemonEntity.navigation.stop()
+        if (parentEntity is PokemonEntity) {
+            pokemonEntity.navigation.stop()
+        }
     }
 
 
@@ -57,7 +59,7 @@ class RayCastMoveInstance(
                 // Raycasts Center, top, bottom
                 var collisionResult = pokemonEntity.level().clip(
                     ClipContext(
-                        pokemonEntity.position().add(Vec3(0.0, pokemonEntity.bbHeight / 2.0, 0.0)), // start position
+                        (parentEntity ?: pokemonEntity).position().add(Vec3(0.0, pokemonEntity.bbHeight / 2.0, 0.0)), // start position
                         Vec3(
                             targetEntity.x,
                             targetEntity.y + targetEntity.bbHeight / 2.0,
@@ -98,29 +100,7 @@ class RayCastMoveInstance(
                 }
 
                 if (collisionResult.type != HitResult.Type.BLOCK && pokemonEntity.doHurtTarget(targetEntity)) {
-                    // Dish out the damage
-                    // TODO: Respect minecraft status effect modifiers
-                    val damage =
-                        getDamageMultiplier(pokemonEntity, targetEntity, move.elementalType) * rayCastMove.power
-                    targetEntity.hurt(
-                        pokemonEntity.damageSources().mobAttack(pokemonEntity),
-                        damage
-                    )
-                    pokemonEntity.swing(InteractionHand.MAIN_HAND)
-                    // if hit succeeded, apply additional effect
-                    val runtime = mainThreadRuntime.withQueryValue("entity", pokemonEntity.asMostSpecificMoLangValue())
-                        .withQueryValue("target", targetEntity.asMostSpecificMoLangValue())
-                    runtime.execute(rayCastMove.effect)
-                    var attackTargetData = pokemonEntity.biggerBrain.getMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                    if (attackTargetData != null) {
-                        attackTargetData.hitsLanded += 1
-
-                    } else {
-                        attackTargetData = CobblemonAttackTargetData()
-                        attackTargetData.hitsLanded = 1
-                    }
-                    pokemonEntity.biggerBrain.setMemory(CobblemonMemories.ATTACK_TARGET_DATA, attackTargetData)
-                    // Successful strike
+                    dealDamage(targetEntity)
                     hitCount++
                 }
             }

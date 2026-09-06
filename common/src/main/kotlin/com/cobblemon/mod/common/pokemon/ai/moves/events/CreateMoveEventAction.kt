@@ -27,7 +27,7 @@ class CreateMoveEventAction(
             ?: throw IllegalArgumentException("Missing realTimeMove. A move has an event with an unresolvable realTimeMove identifier: $moveId")
         val moveInstance = realTimeMove.createInstance(owner, target, parentEntity)
         // Set Position and orientation
-        moveInstance. positionOffset = positionOffset
+        moveInstance.positionOffset = positionOffset
 
         var dir: Vec3 = parentEntity.lookAngle.normalize()
         dir = dir.yRot(Math.toRadians(rotationDegrees.x).toFloat())

@@ -97,14 +97,15 @@ class ProjectileMoveInstance(
             )
             projectile.setPos(startPos)
             projectile.deltaMovement = velocity.scale(projectileMove.speed.toDouble())
-            val yaw =
-                (atan2(projectile.deltaMovement.z, projectile.deltaMovement.x) * 180.0 / Math.PI).toFloat() - 90.0f
 
-            // TODO clean this up
+
+            val yaw = (atan2(projectile.deltaMovement.z, projectile.deltaMovement.x) * 180.0 / Math.PI).toFloat() - 90.0f
+
             val pitch = (-(atan2(
                 projectile.deltaMovement.y,
                 sqrt(projectile.deltaMovement.x * projectile.deltaMovement.x + projectile.deltaMovement.z * projectile.deltaMovement.z)
             ) * 180.0 / Math.PI)).toFloat()
+
             projectile.yRotO = yaw
             projectile.xRotO = pitch
             projectile.yRot = yaw
@@ -112,7 +113,6 @@ class ProjectileMoveInstance(
             pokemonEntity.level().addFreshEntity(projectile)
 
         }
-
     }
 
     fun calculatePositionOffset(dir: Vec3): Vec3 {
