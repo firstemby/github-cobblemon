@@ -518,13 +518,11 @@ class CobblemonConfig {
         it.addFunction("summary_profile_animations") { StringValue(summaryProfileAnimations.name.lowercase()) }
         it.addFunction("animate_battle_tiles") { DoubleValue(animateBattleTiles) }
         it.addFunction("third_person_view_bobbing") { DoubleValue(thirdPersonViewBobbing) }
-        it.addFunction("invert_roll") { DoubleValue(invertRoll) }
         it.addFunction("invert_pitch") { DoubleValue(invertPitch) }
         it.addFunction("invert_yaw") { DoubleValue(invertYaw) }
         it.addFunction("x_axis_sensitivity") { DoubleValue(xAxisSensitivity) }
         it.addFunction("y_axis_sensitivity") { DoubleValue(yAxisSensitivity) }
         it.addFunction("swap_x_and_y_axes") { DoubleValue(swapXAndYAxes) }
-        it.addFunction("automatic_righting_delay") { DoubleValue(rightingDelay) }
         it.addFunction("disable_roll") { DoubleValue(disableRoll) }
         it.addFunction("display_controls_duration_seconds") { DoubleValue(displayControlSeconds) }
         it.addFunction("infinite_ride_stamina") { DoubleValue(infiniteRideStamina) }
@@ -535,6 +533,8 @@ class CobblemonConfig {
         it.addFunction("despawner_far_distance") { DoubleValue(despawnerFarDistance) }
         it.addFunction("despawner_min_age_ticks") { DoubleValue(despawnerMinAgeTicks) }
         it.addFunction("despawner_max_age_ticks") { DoubleValue(despawnerMaxAgeTicks) }
+        it.addFunction("monitor_alpha_rate") { DoubleValue(monitorAlphaRate) }
+        it.addFunction("monitor_shiny_rate") { DoubleValue(monitorShinyRate) }
     }
 
     fun clone(): CobblemonConfig {

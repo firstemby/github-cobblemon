@@ -8,10 +8,6 @@
 
 package com.cobblemon.mod.common.api.habitats.spawningstyle
 
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatSpawn
-import com.cobblemon.mod.common.api.habitats.spawningstyle.HabitatSpawningStyle.Companion.readPoolFromNBT
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -40,7 +36,6 @@ class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Habit
     @Transient
     override val type: ResourceLocation = TYPE
 
-    var pool: NaturalHabitatPool = NaturalHabitatPool.default()
     var replaceSpawns = false
     var rangeOfInfluence = 16
 
@@ -48,8 +43,6 @@ class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Habit
     var affectsFishing = false
     @Transient
     var affectsOverworld = false
-    @Transient
-    var spawnDetails: List<SpawnDetail> = listOf()
 
     fun generateSpawnDetails() {
         affectsFishing = habitatBlockEntity.spawnDetails.any { it.spawnablePositionType.name == "fishing" }
@@ -59,21 +52,10 @@ class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Habit
     override fun writeToNBT(nbt: CompoundTag) {
         nbt.putBoolean(DataKeys.HABITAT_NATURAL_REPLACE_SPAWNS, replaceSpawns)
         nbt.putInt(DataKeys.HABITAT_NATURAL_RANGE_OF_INFLUENCE, rangeOfInfluence)
-
-        val poolNBT = CompoundTag()
-        writePoolToNBT(pool, poolNBT)
-        nbt.put(DataKeys.HABITAT_POOL, poolNBT)
     }
 
     override fun readFromNBT(nbt: CompoundTag) {
         replaceSpawns = nbt.getBoolean(DataKeys.HABITAT_NATURAL_REPLACE_SPAWNS)
         rangeOfInfluence = nbt.getInt(DataKeys.HABITAT_NATURAL_RANGE_OF_INFLUENCE)
-
-        pool = readPoolFromNBT(
-            nbt = nbt.getCompound(DataKeys.HABITAT_POOL),
-            poolInitializer = ::NaturalHabitatPool,
-            spawnInitializer = ::NaturalHabitatSpawn,
-            defaultPool = NaturalHabitatPool::default
-        )
     }
 }

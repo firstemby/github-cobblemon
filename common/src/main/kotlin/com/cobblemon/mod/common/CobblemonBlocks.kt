@@ -9,13 +9,47 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.apricorn.Apricorn
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.block.*
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestVariant
-import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.block.ApricornBlock
+import com.cobblemon.mod.common.block.ApricornSaplingBlock
+import com.cobblemon.mod.common.block.BerryBlock
+import com.cobblemon.mod.common.block.BigRootBlock
+import com.cobblemon.mod.common.block.CoinPouchBlock
+import com.cobblemon.mod.common.block.DamagedMonitorBlock
+import com.cobblemon.mod.common.block.DiscShelfBlock
+import com.cobblemon.mod.common.block.DisplayCaseBlock
+import com.cobblemon.mod.common.block.EggBlock
+import com.cobblemon.mod.common.block.EnergyRootBlock
+import com.cobblemon.mod.common.block.FossilAnalyzerBlock
+import com.cobblemon.mod.common.block.HealingMachineBlock
+import com.cobblemon.mod.common.block.HeartyGrainsBlock
+import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.block.LecternBlock
+import com.cobblemon.mod.common.block.MedicinalLeekBlock
+import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
+import com.cobblemon.mod.common.block.MonitorBlock
+import com.cobblemon.mod.common.block.NestBlock
+import com.cobblemon.mod.common.block.NutBushBlock
+import com.cobblemon.mod.common.block.PCBlock
+import com.cobblemon.mod.common.block.PastureBlock
+import com.cobblemon.mod.common.block.PlaqueBlock
+import com.cobblemon.mod.common.block.PokeSnackBlock
+import com.cobblemon.mod.common.block.RestorationTankBlock
+import com.cobblemon.mod.common.block.RevivalHerbBlock
+import com.cobblemon.mod.common.block.SaccharineLeafBlock
+import com.cobblemon.mod.common.block.SaccharineLogBlock
+import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock
+import com.cobblemon.mod.common.block.StackableItemBlock
+import com.cobblemon.mod.common.block.TumblestoneBlock
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
+import com.cobblemon.mod.common.block.TypeGemCoreBlock
+import com.cobblemon.mod.common.block.VivichokeBlock
+import com.cobblemon.mod.common.block.WallAttachedDirectionalShapeBlock
+import com.cobblemon.mod.common.block.WallAttachedStackableItemBlock
+import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
@@ -33,7 +67,6 @@ import com.cobblemon.mod.common.mixin.invoker.BlocksInvoker
 import com.cobblemon.mod.common.mixin.invoker.DoorBlockInvoker
 import com.cobblemon.mod.common.mixin.invoker.FireBlockInvoker
 import com.cobblemon.mod.common.mixin.invoker.PressurePlateBlockInvoker
-import com.cobblemon.mod.common.block.habitat.HabitatBlock
 import com.cobblemon.mod.common.mixin.invoker.StairsBlockInvoker
 import com.cobblemon.mod.common.mixin.invoker.TrapdoorBlockInvoker
 import com.cobblemon.mod.common.platform.PlatformRegistry
@@ -703,7 +736,16 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
 
     @JvmField
-    val LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava().lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }))
+    val LECTERN = create("lectern", LecternBlock(
+        BlockBehaviour.Properties
+            .of()
+            .mapColor(MapColor.WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .sound(SoundType.WOOD)
+            .strength(2.5F)
+            .ignitedByLava()
+            .lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }
+    ))
 
     @JvmField
     val DISC_SHELF = create("disc_shelf", DiscShelfBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.METAL).strength(2.5F)))
@@ -998,17 +1040,6 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .pushReaction(PushReaction.BLOCK)
         .sound(SoundType.BONE_BLOCK)
     ))
-
-    @JvmField
-    val HABITAT_BLOCK = this.create(
-        name = "habitat_block",
-        entry = HabitatBlock(
-            properties = BlockBehaviour.Properties.of()
-                .mapColor(MapColor.STONE)
-                .strength(1.5F)
-                .pushReaction(PushReaction.BLOCK)
-        )
-    )
 
     @JvmField
     val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()

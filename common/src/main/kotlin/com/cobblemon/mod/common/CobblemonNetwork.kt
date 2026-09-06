@@ -38,7 +38,6 @@ import com.cobblemon.mod.common.client.net.gui.SetTMMachineContainerDataPacketHa
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SynchronizeActiveTMHandler
 import com.cobblemon.mod.common.client.net.habitat.OpenHabitatBlockEditorHandler
-import com.cobblemon.mod.common.client.net.habitat.OpenHabitatBlockEditorHandler
 import com.cobblemon.mod.common.client.net.npc.CloseNPCEditorHandler
 import com.cobblemon.mod.common.client.net.npc.OpenNPCEditorHandler
 import com.cobblemon.mod.common.client.net.orientation.ClientboundUpdateOrientationHandler
@@ -151,13 +150,6 @@ import com.cobblemon.mod.common.net.messages.client.ui.PokedexUIPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetActiveTMPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetTMMachineContainerDataPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SummaryUIPacket
-import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
-import com.cobblemon.mod.common.net.messages.server.BattleChallengeResponsePacket
-import com.cobblemon.mod.common.net.messages.server.BenchMovePacket
-import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
-import com.cobblemon.mod.common.net.messages.server.RequestPlayerInteractionsPacket
-import com.cobblemon.mod.common.net.messages.server.SelectStarterPacket
-import com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SynchronizeActiveTMPacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengeResponsePacket
@@ -522,9 +514,6 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
         list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
         list.add(PacketRegisterInfo(ClientboundSeatAssignmentPacket.ID, ClientboundSeatAssignmentPacket::decode, ClientboundSeatAssignmentPacketHandler))
-
-        // Habitat blocks
-        list.add(PacketRegisterInfo(OpenHabitatBlockEditorPacket.ID, OpenHabitatBlockEditorPacket::decode, OpenHabitatBlockEditorHandler))
 
         // Habitat blocks
         list.add(PacketRegisterInfo(OpenHabitatBlockEditorPacket.ID, OpenHabitatBlockEditorPacket::decode, OpenHabitatBlockEditorHandler))

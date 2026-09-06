@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
 import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.lang

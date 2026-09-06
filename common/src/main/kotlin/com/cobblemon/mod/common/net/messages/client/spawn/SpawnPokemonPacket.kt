@@ -104,8 +104,8 @@ class SpawnPokemonPacket(
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
         entity.entityData.get(PokemonEntity.IS_ALPHA),
         entity.isSilent,
-        entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
         entity.isBusy,
+        entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
         vanillaSpawnPacket
     )
 
@@ -144,8 +144,8 @@ class SpawnPokemonPacket(
         buffer.writeFloat(rideStamina)
         buffer.writeBoolean(isAlpha)
         buffer.writeBoolean(silent)
-        buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
         buffer.writeBoolean(busy)
+        buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
@@ -242,8 +242,8 @@ class SpawnPokemonPacket(
             val rideStamina = buffer.readFloat()
             val isAlpha = buffer.readBoolean()
             val silent = buffer.readBoolean()
-            val riders = buffer.readList { it.readInt() }.toList()
             val busy = buffer.readBoolean()
+            val riders = buffer.readList { it.readInt() }.toList()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
             return SpawnPokemonPacket(
@@ -277,8 +277,8 @@ class SpawnPokemonPacket(
                 rideStamina,
                 isAlpha,
                 silent,
-                riders,
                 busy,
+                riders,
                 vanillaPacket
             )
         }

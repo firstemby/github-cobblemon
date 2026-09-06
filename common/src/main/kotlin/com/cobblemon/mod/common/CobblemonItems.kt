@@ -624,9 +624,6 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
     @JvmField
-    val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
-
-    @JvmField
     val GALARICA_NUTS = compostableItemNameBlockItem("galarica_nuts", CobblemonBlocks.GALARICA_NUT_BUSH)
 
     // Hyper Training Items

@@ -11,10 +11,8 @@ package com.cobblemon.mod.common.net.messages.client.habitat
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.HabitatPools
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.net.IntSize

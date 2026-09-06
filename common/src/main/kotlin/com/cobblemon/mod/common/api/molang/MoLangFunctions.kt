@@ -17,10 +17,12 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.drop.DropEntry
+import com.cobblemon.mod.common.api.molang.function.AbilityPoolMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleActorMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleMessageMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleMoLangFunctions
@@ -340,15 +342,11 @@ object MoLangFunctions {
 
     fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
         addFunctions(BattleMessageMoLangFunctions.attach(battleMessage))
-
         return this
     }
 
     fun QueryStruct.addAbilityPoolFunctions(abilityPool: AbilityPool): QueryStruct {
-        val addedFunctions = abilityPoolFunctions
-            .flatMap { it.invoke(abilityPool).entries }
-            .associate { it.key to it.value }
-        functions.putAll(addedFunctions)
+        addFunctions(AbilityPoolMoLangFunctions.attach(abilityPool))
         return this
     }
 

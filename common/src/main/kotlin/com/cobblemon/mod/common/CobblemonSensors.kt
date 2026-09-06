@@ -8,22 +8,14 @@
 
 package com.cobblemon.mod.common
 
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.BeeHiveSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DefendOwnerSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.DrowsySensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.FlowerSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonAdultSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonGrowableCropSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.SacLeavesSensor
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.SweetBerryBushSensor
+import com.cobblemon.mod.common.entity.pokemon.ai.sensors.*
 import com.cobblemon.mod.common.entity.sensor.BattlingPokemonSensor
 import com.cobblemon.mod.common.entity.sensor.NPCBattlingSensor
 import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
-import java.util.function.Supplier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.ai.sensing.SensorType
+import java.util.function.Supplier
 
 object CobblemonSensors {
     val sensors = mutableMapOf<String, SensorType<*>>()
