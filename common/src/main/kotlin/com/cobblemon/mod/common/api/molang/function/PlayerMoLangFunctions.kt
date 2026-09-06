@@ -335,7 +335,7 @@ object PlayerMoLangFunctions : AbstractMoLangFunctionHolder<Player>() {
             map["start_battle"] = put@{ params ->
                 val opponentValue = params.get<MoValue>(0)
                 val opponent = if (opponentValue is ObjectValue<*>) {
-                    opponentValue.obj as ServerPlayer
+                    opponentValue.obj as? ServerPlayer ?: return@put DoubleValue.ZERO
                 } else {
                     val paramString = opponentValue.asString()
                     val playerUUID = paramString.asUUID

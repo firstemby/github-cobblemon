@@ -112,7 +112,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
         } else {
             try {
                 val expression = animString.asExpressionLike()
-                runtime.resolveObject(expression).obj as PoseAnimation
+                runtime.resolveObject(expression).obj as? PoseAnimation
             } catch (exception: Exception) {
                 val animString = it.asString
                 val anim = animString.substringBefore("(")
@@ -132,9 +132,9 @@ class JsonPose(model: PosableModel, json: JsonObject) {
         }
     }.toTypedArray()
 
-    val quirks = (json.get("quirks")?.asJsonArray ?: JsonArray()).map { json ->
+    val quirks = (json.get("quirks")?.asJsonArray ?: JsonArray()).mapNotNull { json ->
         if (json is JsonPrimitive) {
-            return@map json.asString.asExpressionLike().resolveObject(runtime).obj as SimpleQuirk
+            return@mapNotNull json.asString.asExpressionLike().resolveObject(runtime).obj as? SimpleQuirk
         }
 
         json as JsonObject
@@ -144,7 +144,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
             (json.get("animations")?.normalizeToArray()?.asJsonArray ?: JsonArray()).mapNotNull { animJson ->
                 try {
                     val expr = animJson.asString.asExpressionLike()
-                    runtime.resolveObject(expr).obj as ActiveAnimation
+                    runtime.resolveObject(expr).obj as? ActiveAnimation ?: return@mapNotNull null
                 } catch (e: Exception) {
                     val animString = animJson.asString
                     val anim = animString.substringBefore("(")

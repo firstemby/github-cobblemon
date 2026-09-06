@@ -19,11 +19,20 @@ import com.bedrockk.molang.runtime.value.MoValue
  * @since October 2nd, 2023
  */
 class ObjectValue<T>(
-    var obj: T,
+    var obj: T?,
     val stringify: (T) -> String = { it.toString() },
     val doublify: (T) -> Double = { DoubleValue.ONE.value }
 ) : QueryStruct(hashMapOf()) {
     override fun value() = this
-    override fun asDouble() = doublify(obj)
-    override fun asString() = stringify(obj)
+    override fun asDouble() = obj?.let(doublify) ?: 0.0
+    override fun asString() = obj?.let(stringify) ?: ""
+
+    /**
+     * Clears this ObjectValue's internals so that any escaped references to it
+     * no longer retain the wrapped object or its associated lambda closures.
+     */
+    fun invalidate() {
+        functions.clear()
+        obj = null
+    }
 }

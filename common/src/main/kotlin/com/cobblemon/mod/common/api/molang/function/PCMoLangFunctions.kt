@@ -34,7 +34,7 @@ object PCMoLangFunctions : AbstractMoLangFunctionHolder<PCStore>() {
         map["set_pokemon"] = { params ->
             val box = params.getInt(0)
             val slot = params.getInt(1)
-            val pokemon = params.get<ObjectValue<Pokemon>>(2).obj
+            val pokemon = params.get<ObjectValue<Pokemon>>(2).obj ?: return@map DoubleValue.ZERO
             pc[PCPosition(box, slot)] = pokemon
             DoubleValue.ONE
         }

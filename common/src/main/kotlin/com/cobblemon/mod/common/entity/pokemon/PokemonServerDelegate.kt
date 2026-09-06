@@ -205,7 +205,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
                     .addFunction("attempt_wild_battle") { params ->
                         val opponentValue = params.get<MoValue>(0)
                         val opponent = if (opponentValue is ObjectValue<*>) {
-                            opponentValue.obj as ServerPlayer
+                            opponentValue.obj as? ServerPlayer ?: return@addFunction DoubleValue.ZERO
                         } else {
                             val paramString = opponentValue.asString()
                             val playerUUID = paramString.asUUID
