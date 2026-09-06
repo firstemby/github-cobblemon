@@ -6,7 +6,7 @@
 				"identifier": "geometry.espeon",
 				"texture_width": 128,
 				"texture_height": 64,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -119,7 +119,7 @@
 					}
 				},
 				{
-					"name": "item_hat",
+					"name": "locator_item_hat",
 					"parent": "head_angle",
 					"pivot": [0, 23.00004, -6.65],
 					"locators": {

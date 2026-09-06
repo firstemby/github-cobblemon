@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ekans alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "arbok alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -4,6 +4,10 @@
   "profileScale": 0.63,
   "profileTranslation": [ 0.03, 0.77, 0],
   "rootBone": "yungoos",
+  "animations": {
+    "cry": "q.bedrock_stateful('yungoos', 'cry')",
+    "recoil": "q.bedrock_stateful('yungoos', 'recoil')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [
@@ -13,10 +17,31 @@
         "PORTRAIT",
         "PROFILE"
       ],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 20, -20)",
+        "q.look('head_angle')",
+        "q.bedrock('yungoos', 'ground_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('yungoos', 'item_hold')"
+        }
+      ],
+      "quirks": [
+        "q.bedrock_quirk('yungoos', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('yungoos', 'ground_idle')"
+        "q.look('head_ai', 1, 1, 10, -10, 20, -20)",
+        "q.look('head_angle')",
+        "q.bedrock('yungoos', 'battle_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('yungoos', 'item_hold')"
+        }
       ],
       "quirks": [
         "q.bedrock_quirk('yungoos', 'blink')"
@@ -28,12 +53,36 @@
         "SWIM"
       ],
       "animations": [
-        "q.look('head')",
-        "q.bedrock('yungoos', 'ground_idle')",
-        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+        "q.look('head_ai', 1, 1, 10, -10, 20, -20)",
+        "q.look('head_angle')",
+        "q.bedrock('yungoos', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('yungoos', 'blink')"
+      ]
+    },
+    "run": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -10, 20, -20)",
+        "q.look('head_angle')",
+        "q.bedrock('yungoos', 'ground_run')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('yungoos', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": [
+        "q.bedrock('yungoos', 'sleep')"
       ]
     }
   }

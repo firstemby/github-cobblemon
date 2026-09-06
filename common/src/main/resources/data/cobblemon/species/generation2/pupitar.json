@@ -64,7 +64,17 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "pupitar alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "tyranitar alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

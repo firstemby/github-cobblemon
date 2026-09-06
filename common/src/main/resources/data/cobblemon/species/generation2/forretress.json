@@ -110,6 +110,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "forretress alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -193,7 +202,6 @@
     "tm:lunge",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:naturalgift",
     "tm:painsplit",
     "tm:payback",
     "tm:pinmissile",

@@ -361,7 +361,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy1",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1
@@ -371,7 +371,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy2",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1
@@ -381,7 +381,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy3",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1
@@ -391,7 +391,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy4",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1
@@ -401,7 +401,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy5",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1
@@ -411,7 +411,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_snowy6",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_snowy",
         "projection": "rigid"
       },
       "weight": 1

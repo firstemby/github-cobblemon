@@ -327,7 +327,6 @@ open class Pokemon : ShowdownIdentifiable {
             if (experienceGroup.getLevel(experience) != boundedValue || value == Cobblemon.config.maxPokemonLevel) {
                 experience = experienceGroup.getExperience(boundedValue)
             }
-//            _level.emit(value)
 
             currentHealth = ceil(hpRatio * maxHealth).coerceIn(0..maxHealth)
         }
@@ -1037,6 +1036,10 @@ open class Pokemon : ShowdownIdentifiable {
         return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
     }
 
+    fun isFreezeImmune(): Boolean {
+        return ElementalTypes.ICE in types || form.behaviour.freezeImmune
+    }
+
     fun dampensVibrations(): Boolean = form.behaviour.dampensVibrations
 
     // function to return the max hunger for the pokemon
@@ -1728,12 +1731,22 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         if (reassess) {
-            gender = if (form.maleRatio !in 0F..1F) {
-                Gender.GENDERLESS
-            } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
-                Gender.MALE
+            val allForms = form.species.forms
+            val isGenderedForms = allForms.any { it.maleRatio == 1F } && allForms.any { it.maleRatio == 0F }
+            gender = if (isGenderedForms) {
+                if (Random.nextBoolean()) {
+                    Gender.FEMALE
+                } else {
+                    Gender.MALE
+                }
             } else {
-                Gender.FEMALE
+                if (form.maleRatio !in 0F..1F) {
+                    Gender.GENDERLESS
+                } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
+                    Gender.MALE
+                } else {
+                    Gender.FEMALE
+                }
             }
         }
     }

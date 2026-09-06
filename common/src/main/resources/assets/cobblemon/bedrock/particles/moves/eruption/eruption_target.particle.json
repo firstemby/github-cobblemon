@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:eruption_target",
 			"basic_render_parameters": {
 				"material": "particles_alpha",
-				"texture": "textures/particles/vanilla/lava"
+				"texture": "textures/particles/generic/burning_rock"
 			}
 		},
 		"curves": {
@@ -19,7 +19,7 @@
 				"type": "linear",
 				"input": "v.particle_age",
 				"horizontal_range": "v.particle_lifetime",
-				"nodes": [1, 1, 0.99, 0.97, 0.93, 0.83, 0.54, 0]
+				"nodes": [-0.04, 0.46, 0.8, 0.96, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 			}
 		},
 		"events": {
@@ -47,7 +47,7 @@
 				"creation_expression": "v.target_deltaz=10;"
 			},
 			"minecraft:emitter_rate_steady": {
-				"spawn_rate": 25,
+				"spawn_rate": 10,
 				"max_particles": 1000
 			},
 			"minecraft:emitter_lifetime_once": {
@@ -55,7 +55,7 @@
 			},
 			"minecraft:emitter_shape_disc": {
 				"offset": [0, 9, "-v.target_deltaz*0.33"],
-				"radius": "math.clamp(v.entity_width,1.5,10)",
+				"radius": "math.clamp(v.entity_width,2,10)",
 				"direction": ["(v.particle_random_1-0.5)*0.3", "(-v.particle_random_2-0.55)*0.9", "(v.target_deltaz*0.05)+(v.particle_random_3-0.5)*0.3"]
 			},
 			"minecraft:particle_lifetime_expression": {
@@ -87,18 +87,18 @@
 				"linear_drag_coefficient": 1
 			},
 			"minecraft:particle_appearance_billboard": {
-				"size": ["((0.3-(v.particle_random_4*0.125))*v.quiver)*v.shrink", "((0.3-(v.particle_random_4*0.125))*v.quiver)*v.shrink"],
+				"size": ["((0.8-(v.particle_random_4*0.125))*v.quiver)*v.shrink", "((0.8-(v.particle_random_4*0.125))*v.quiver)*v.shrink"],
 				"facing_camera_mode": "rotate_xyz",
 				"uv": {
-					"texture_width": 8,
-					"texture_height": 8,
-					"uv": [0, 0],
-					"uv_size": [8, 8]
+					"texture_width": 32,
+					"texture_height": 192,
+					"uv": [0, "math.round(v.particle_random_4*5)*32"],
+					"uv_size": [32, 32]
 				}
 			},
 			"minecraft:particle_motion_collision": {
 				"collision_drag": 20,
-				"collision_radius": 0.1
+				"collision_radius": 0.2
 			},
 			"minecraft:particle_appearance_tinting": {
 				"color": {

@@ -121,7 +121,13 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "charizard alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {
@@ -438,7 +444,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "moving": {
           "fly": {
@@ -559,7 +565,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "moving": {
           "fly": {

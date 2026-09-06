@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
@@ -29,7 +30,7 @@ class GemItem(settings: Properties, val block: Block): Item(settings) {
         if (state.isFaceSturdy(world, pos, direction)) {
             if (!world.getBlockState(pos.relative(direction)).isAir) return InteractionResult.FAIL
             context.itemInHand.consume(1, context.player)
-            world.setBlockAndUpdate(pos.relative(direction), block.defaultBlockState().setValue(DirectionalBlock.FACING, direction))
+            world.setBlockAndUpdate(pos.relative(direction), block.defaultBlockState().setValue(DirectionalBlock.FACING, direction).setValue(TypeGemClusterBlock.STAGE, 1))
             world.playSound(null, pos, CobblemonSounds.TYPE_GEM_CLUSTER_SOUNDS.placeSound, SoundSource.BLOCKS)
             return InteractionResult.SUCCESS
         }

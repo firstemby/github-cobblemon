@@ -6,6 +6,7 @@
   "rootBone": "tadbulb",
   "animations": {
     "faint": "q.bedrock_primary('tadbulb', 'faint', q.curve('one'))",
+    "cry": "q.bedrock_stateful('tadbulb', 'cry')",
     "recoil": "q.bedrock_stateful('tadbulb', 'recoil')",
     "physical": "q.bedrock_primary('tadbulb', 'physical', q.curve('symmetrical_wide'))",
     "special": "q.bedrock_primary('tadbulb', 'special', q.curve('symmetrical'))",

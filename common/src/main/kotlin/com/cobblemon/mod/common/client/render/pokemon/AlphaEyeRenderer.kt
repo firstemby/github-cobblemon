@@ -48,11 +48,12 @@ fun updateEyeTrail(
     entityPos: Vec3,
     trailPositions: MutableMap<String, ArrayDeque<Pair<Vec3, Long>>>
 ) {
-    if ("alpha_eyes" !in aspects) {
+    val locators = locatorStates.keys.filter { "eye" in it.lowercase() }
+    if ("alpha_eyes" !in aspects || locators.isEmpty()) {
         trailPositions.clear()
         return
     }
-    for (locatorName in locatorStates.keys.filter { "eye" in it.lowercase() }) {
+    for (locatorName in locators) {
         val wrapper = locatorStates[locatorName] ?: continue
         val pos = wrapper.matrix.getTranslation(Vector3f())
         val worldPos = Vec3(

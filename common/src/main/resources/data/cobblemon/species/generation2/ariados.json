@@ -43,12 +43,13 @@
   "catchRate": 90,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "height": 1,
     "fixed": false,
-    "width": 1
+    "width": 0.83
   },
+  "standingEyeHeight": 0.5,
   "riding": {
     "behaviours": {
       "LAND": {
@@ -76,7 +77,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ariados alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

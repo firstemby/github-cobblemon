@@ -2,7 +2,7 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:alternatives",
@@ -44,21 +44,30 @@
                   "add": false,
                   "count": {
                     "type": "minecraft:uniform",
-                    "max": 3.0,
-                    "min": 2.0
+                    "max": 4,
+                    "min": 2
                   },
                   "function": "minecraft:set_count"
                 },
                 {
-                  "enchantment": "minecraft:fortune",
-                  "formula": "minecraft:ore_drops",
-                  "function": "minecraft:apply_bonus"
-                },
-                {
-                  "function": "minecraft:limit_count",
-                  "limit": {
-                    "max": 4.0
-                  }
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:constant",
+                    "value": 1
+                  },
+                  "add": true,
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0,
+                        0.33333333,
+                        0.66666666,
+                        1
+                      ]
+                    }
+                  ]
                 },
                 {
                   "function": "minecraft:explosion_decay"
@@ -68,10 +77,66 @@
             },
             {
               "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "cobblemon:water_gem_cluster",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "stage": "2"
+                  }
+                }
+              ],
               "functions": [
                 {
                   "add": false,
-                  "count": 1.0,
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 2,
+                    "min": 1
+                  },
+                  "function": "minecraft:set_count"
+                },
+                {
+                  "function": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:constant",
+                    "value": 1
+                  },
+                  "add": true,
+                  "conditions": [
+                    {
+                      "condition": "minecraft:table_bonus",
+                      "enchantment": "minecraft:fortune",
+                      "chances": [
+                        0,
+                        0.33333333,
+                        0.66666666,
+                        1
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "function": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "cobblemon:water_gem"
+            },
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "cobblemon:water_gem_cluster",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "stage": "1"
+                  }
+                }
+              ],
+              "functions": [
+                {
+                  "add": false,
+                  "count": 1,
                   "function": "minecraft:set_count"
                 },
                 {
@@ -83,7 +148,7 @@
           ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }

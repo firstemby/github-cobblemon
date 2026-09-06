@@ -57,7 +57,7 @@
           "ACCELERATION": "65-85",
           "JUMP": "35-45",
           "SKILL": "35-60",
-          "SPEED": "50-85",
+          "SPEED": "50-80",
           "STAMINA": "30-60"
         }
       }
@@ -73,7 +73,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "cyclizar",

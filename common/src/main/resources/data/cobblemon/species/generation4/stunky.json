@@ -206,8 +206,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "stunky alpha",
+          "tier": 1
+        },
         {
           "pokemon": "skuntank",
           "tier": 1

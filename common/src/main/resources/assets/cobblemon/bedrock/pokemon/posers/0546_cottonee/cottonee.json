@@ -8,8 +8,25 @@
     "cry": "q.bedrock_stateful('cottonee', 'cry')"
   },
   "poses": {
+    "battle-standing": {
+      "isBattle": true,
+      "poseTypes": [
+        "STAND", "HOVER"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('cottonee', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cottonee', 'blink')", "q.bedrock_primary_quirk('cottonee', 'quirk_battle_hop', 20, 40, 1)"
+      ]
+    },
     "standing": {
-      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "HOVER", "FLOAT"],
+      "isBattle": false,
+      "poseTypes": [
+        "STAND",
+        "PROFILE", "PORTRAIT", "NONE"
+      ],
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('cottonee', 'ground_idle')"
@@ -18,15 +35,53 @@
         "q.bedrock_quirk('cottonee', 'blink')"
       ]
     },
-    "walking": {
-      "poseTypes": ["WALK", "FLY", "SWIM"],
+    "walk": {
+      "poseTypes": [
+        "WALK"
+      ],
       "animations": [
         "q.look('head_ai')",
-        "q.bedrock('cottonee', 'ground_idle')"
+        "q.bedrock('cottonee', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('cottonee', 'blink')"
       ]
+    },
+    "hover": {
+      "isBattle": false,
+      "poseTypes": [
+        "HOVER"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('cottonee', 'air_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cottonee', 'blink')"
+      ]
+    },
+    "fly": {
+      "poseTypes": [
+        "FLY"
+      ],
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('cottonee', 'air_fly')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cottonee', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('cottonee', 'sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
     }
   }
 }

@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "paras",
@@ -142,7 +142,6 @@
     "tm:leechlife",
     "tm:lightscreen",
     "tm:metalclaw",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:psybeam",

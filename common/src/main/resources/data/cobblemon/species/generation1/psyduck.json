@@ -66,6 +66,19 @@
     "combat": {
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "golduck alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "psyduck",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

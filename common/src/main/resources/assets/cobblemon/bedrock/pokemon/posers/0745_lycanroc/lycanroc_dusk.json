@@ -4,6 +4,9 @@
   "profileScale": 0.65,
   "profileTranslation": [ -0.02, 0.79, 0],
   "rootBone": "lycanroc_dusk",
+  "animations": {
+    "cry": "q.bedrock_stateful('lycanroc_dusk', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

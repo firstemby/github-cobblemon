@@ -442,7 +442,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/chillingwater"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -467,7 +467,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/chillingwater"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -492,7 +492,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/chillingwater"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -517,7 +517,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/chillingwater"
                     },
                     "input_predicate": {
                         "block_state": {

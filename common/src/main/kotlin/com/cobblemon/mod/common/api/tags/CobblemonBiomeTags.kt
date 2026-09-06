@@ -66,6 +66,8 @@ object CobblemonBiomeTags {
     val IS_WARM_OCEAN = create("is_warm_ocean")
     @JvmField
     val IS_DEEP_DARK = create("is_deep_dark")
+    @JvmField
+    val IS_MOUNTAIN = create("is_mountain")
 
     // Has Block tags
     @JvmField

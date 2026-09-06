@@ -53,8 +53,7 @@
     "moving": {
       "swim": {
         "swimSpeed": "0.2",
-        "avoidsWater": true,
-        "canWalkOnWater": true
+        "avoidsWater": true
       },
       "fly": {
         "canFly": true
@@ -64,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "tadbulb",

@@ -5,7 +5,7 @@
   "profileTranslation": [0.0, 0.5, 0.0],
   "rootBone": "sandshrew",
   "animations": {
-    "cry": "q.bedrock_stateful('sandshrew', 'cry')"
+    "cry": "q.bedrock_stateful('sandshrew_alolan', 'cry')"
   },
   "poses": {
     "standing": {
@@ -22,6 +22,12 @@
       ],
       "quirks": [
         "q.bedrock_quirk('sandshrew_alolan', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "ball",
+          "isVisible": false
+        }
       ]
     },
     "walk": {
@@ -35,6 +41,12 @@
       ],
       "quirks": [
         "q.bedrock_quirk('sandshrew_alolan', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "ball",
+          "isVisible": false
+        }
       ]
     }
   }

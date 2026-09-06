@@ -66,10 +66,10 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "empoleon",
+          "pokemon": "empoleon alpha",
           "tier": 1
         }
       ]

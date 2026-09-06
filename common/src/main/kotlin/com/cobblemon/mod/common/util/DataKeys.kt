@@ -274,11 +274,9 @@ object DataKeys {
     // Habitat Blocks
     const val HABITAT_SPAWNING_STYLE = "SpawningStyle"
     const val HABITAT_MIMIC = "MimicId"
-    const val HABITAT_PHASE_COUNT = "PhaseCount"
     const val HABITAT_PHASE_ORDER = "PhaseOrder"
     const val HABITAT_LEVEL_RANGE = "LevelRange"
     const val HABITAT_MODIFIERS = "Modifiers"
-    const val HABITAT_POOL = "Pool"
 
     // --- Pools
     const val HABITAT_POOL_ID = "PoolId"

@@ -294,10 +294,11 @@
     "herd": {
       "toleratedLeaders": [
         {
-          "pokemon": "indeedee",
+          "pokemon": "indeedee alpha",
           "tier": 1
         }
-      ]
+      ],
+      "maxSize": 3
     },
     "moving": {
       "swim": {

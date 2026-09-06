@@ -109,7 +109,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "magnezone alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {

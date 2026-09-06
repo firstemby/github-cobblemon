@@ -68,7 +68,7 @@
       "canLook": false
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 5
     },
     "combat": {
       "willFlee": false

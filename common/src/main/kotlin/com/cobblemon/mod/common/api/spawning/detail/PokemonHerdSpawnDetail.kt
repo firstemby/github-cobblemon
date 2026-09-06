@@ -11,14 +11,19 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.weightedSelection
 import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.Mth.clamp
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import kotlin.math.ceil
 
 /**
  * A spawn detail that spawns a herd of Pokémon. This relies on the same [PokemonSpawnAction]s as
@@ -36,7 +41,6 @@ import net.minecraft.world.item.Items
 class PokemonHerdSpawnDetail : SpawnDetail() {
     companion object {
         val TYPE = "pokemon-herd"
-        const val HERD_LEADER = "leader"
     }
 
     override val type: String = TYPE
@@ -50,14 +54,14 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         get() = "${id}__LEVEL"
 
     class Herdable {
-        var pokemon: PokemonProperties = PokemonProperties()
+        var pokemon = PokemonProperties()
         val levelRange: IntRange? = null
         var levelRangeOffset: IntRange? = null
         val herdLevelRange: IntRange? = null
         var dropTable: DropTable? = null
-        var isLeader: Boolean = false
-        var isFollower: Boolean = true
-        var weight: Float = 1F
+        var isLeader = false
+        var isFollower = true
+        var weight = 1F
         var maxTimes = 10
         var heldItem: ResourceLocation? = null
     }
@@ -69,22 +73,23 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         selectionData: SpawnSelectionData
     ) {
         selectionData.removeSpawnDetails { it != this }
+        selectionData.guaranteedBucket = bucket
         selectionData.removeSpawnablePositions { _, pos -> pos.distanceTo(spawnablePosition) < minDistanceBetweenSpawns }
 
         val herdSpawnCount = selectionData.spawnActions.count { it.detail == this } + 1
+        val lacksPossibleLeader = lacksPossibleLeader(selectionData)
 
-        if (herdSpawnCount >= maxHerdSize || getValidHerdMembers(selectionData).isEmpty()) {
+        if (herdSpawnCount >= maxHerdSize || getValidHerdMembersForRole(selectionData, useLeaderRole = lacksPossibleLeader).isEmpty()) {
             // We can't spawn any more in the herd so remove this spawn from the selection pool.
             selectionData.removeSpawnDetails { it == this }
         }
     }
 
     fun lacksPossibleLeader(selectionData: SpawnSelectionData): Boolean {
-        val level = getOrSetHerdLevel(selectionData)
         val herdable = getValidHerdMembers(selectionData)
         val herdCounts = getHerdMemberCounts(selectionData)
 
-        val leaderIsPossible = herdable.any { it.herdLevelRange?.contains(level) != false && it.isLeader }
+        val leaderIsPossible = herdable.any { it.isLeader }
         val leaderIsSelected = herdCounts.any { it.key?.isLeader == true && it.value > 0 }
         return leaderIsPossible && !leaderIsSelected
     }
@@ -93,25 +98,42 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
         return (selectionData.context[herdLevelKey] as? Int) ?: run {
             val level = levelRange.random()
             selectionData.context[herdLevelKey] = level
-            return level
+            level
         }
+    }
+
+    private fun getValidHerdMembersForRole(selectionData: SpawnSelectionData, useLeaderRole: Boolean): List<Herdable> {
+        return getValidHerdMembers(selectionData).filter { (useLeaderRole && it.isLeader) || (!useLeaderRole && it.isFollower) }
     }
 
     override fun createSpawnAction(
         spawnablePosition: SpawnablePosition,
         bucket: String,
         selectionData: SpawnSelectionData
-    ): PokemonSpawnAction {
-        val validHerdMembers = getValidHerdMembers(selectionData)
-        var searchedForLeader = false
-        val herdable = if (lacksPossibleLeader(selectionData)) {
-            searchedForLeader = true
-            validHerdMembers.filter { it.isLeader }
-        } else {
-            validHerdMembers.filter { it.isFollower }
-        }.weightedSelection { it.weight } ?: herdablePokemon[0]
+    ): SpawnAction<*> {
+        val herdable = getValidHerdMembersForRole(
+            selectionData = selectionData,
+            useLeaderRole = lacksPossibleLeader(selectionData)
+        ).weightedSelection { it.weight } ?: herdablePokemon[0]
 
-        val level = selectionData.context[herdLevelKey] as? Int ?: 1
+        var level = selectionData.context[herdLevelKey] as? Int ?: 1
+
+        // Attempt to do more detailed anti-wall-spawn logic. Herd members could spawn in walls because
+        // we've just been assuming they're 1 block wide (or at least, all in the herd have the same size).
+        // Some pokemon are not that though.
+        if (spawnablePosition is AreaSpawnablePosition) {
+            val species = herdable.pokemon.species?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+            if (species != null) {
+                val height = ceil(species.hitbox.height * species.baseScale).toInt()
+                val width = ceil(species.hitbox.width * species.baseScale).toInt()
+                if (!spawnablePosition.hasSpace(width, height)) {
+                    return EmptySpawnAction(spawnablePosition, bucket, EmptySpawnDetail.EMPTY)
+                }
+            }
+        }
+
+        level = herdable.levelRange?.let { clamp(level, it.first, it.last) } ?: level
+
         val levelRange = herdable.levelRangeOffset?.let { offset ->
             val min = level + offset.first
             val max = level + offset.last
@@ -136,11 +158,7 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
             drops = herdable.dropTable,
             heldItem = heldItem,
             levelRange = levelRange
-        ).also {
-            if (herdable.isLeader && searchedForLeader) {
-                it.labels += HERD_LEADER
-            }
-        }
+        )
     }
 
     fun getHerdMemberCounts(selectionData: SpawnSelectionData): Map<Herdable?, Int> {

@@ -149,8 +149,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "kubfu alpha",
+          "tier": 1
+        },
         {
           "pokemon": "urshifu",
           "tier": 1

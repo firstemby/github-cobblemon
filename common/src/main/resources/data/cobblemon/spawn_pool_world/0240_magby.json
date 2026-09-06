@@ -12,8 +12,8 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "11-37",
-            "weight": 9.0,
+            "level": "12-37",
+            "weight": 16.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -41,8 +41,8 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "11-36",
-            "weight": 9.0,
+            "level": "12-37",
+            "weight": 16.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -61,8 +61,8 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
-            "level": "11-36",
-            "weight": 9.0,
+            "level": "12-37",
+            "weight": 16.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_basalt",

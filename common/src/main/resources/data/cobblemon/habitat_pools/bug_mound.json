@@ -3,39 +3,116 @@
   "type": "cobblemon:natural",
   "spawns": [
     {
-      "species": "cobblemon:geodude",
+      "species": "Sewaddle",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 10
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "1"
     },
     {
-      "species": "cobblemon:zubat",
+      "species": "Swadloon",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 9
+      "weight": 3.0,
+      "levelRange": "20-38",
+      "phases": "1"
     },
     {
-      "species": "cobblemon:machop",
+      "species": "Leavanny",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "36-46",
-      "weight": 8
+      "weight": 1.0,
+      "levelRange": "33-50",
+      "phases": "1"
     },
     {
-      "species": "cobblemon:graveler",
+      "species": "Venipede",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "1-26",
+      "phases": "1-4"
     },
     {
-      "species": "cobblemon:golbat",
+      "species": "Whirlipede",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 3.0,
+      "levelRange": "22-36",
+      "phases": "1-4"
+    },
+    {
+      "species": "Scolipede",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "30-49",
+      "phases": "1-4"
+    },
+    {
+      "species": "Heatmor",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "23-48",
+      "phases": "1-4"
+    },
+    {
+      "species": "Durant",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "23-48",
+      "phases": "2-4"
+    },
+    {
+      "species": "Salandit",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "7-32",
+      "phases": "1-4"
+    },
+    {
+      "species": "Salazzle",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "33-48",
+      "phases": "1-4"
+    },
+    {
+      "species": "Silicobra",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "7-32",
+      "phases": "1-4"
+    },
+    {
+      "species": "Sandaconda",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "36-51",
+      "phases": "1-4"
+    },
+    {
+      "species": "Sizzlipede",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "1-4"
+    },
+    {
+      "species": "Centiskorch",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "36-51",
+      "phases": "1-4"
     }
   ]
 }

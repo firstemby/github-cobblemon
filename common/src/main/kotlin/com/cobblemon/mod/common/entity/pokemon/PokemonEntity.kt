@@ -799,6 +799,13 @@ open class PokemonEntity(
     }
 
     /**
+     * Prevents ice type Pokémon from freezing (from powered snow)
+     */
+    override fun canFreeze(): Boolean {
+        return !pokemon.isFreezeImmune() && super.canFreeze()
+    }
+
+    /**
      * Prevents flying type Pokémon from taking fall damage.
      */
     override fun causeFallDamage(fallDistance: Float, damageMultiplier: Float, damageSource: DamageSource): Boolean {

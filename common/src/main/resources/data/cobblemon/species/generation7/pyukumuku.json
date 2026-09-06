@@ -68,6 +68,15 @@
     },
     "combat": {
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "pyukumuku alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -18,6 +18,9 @@
       "poseTypes": ["STAND"],
       "isBattle": true,
       "isUnderWater": false,
+      "namedAnimations": {
+        "protect": "q.bedrock_primary('cloyster', 'protect', q.curve('symmetrical_wide'))"
+      },
       "animations": ["q.bedrock('cloyster', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('cloyster', 'blink')"]
     },
@@ -25,6 +28,9 @@
       "poseTypes": ["FLOAT", "SWIM", "STAND"],
       "isBattle": true,
       "isUnderWater": true,
+      "namedAnimations": {
+        "protect": "q.bedrock_primary('cloyster', 'protect', q.curve('symmetrical_wide'))"
+      },
       "animations": ["q.bedrock('cloyster', 'water_battle_idle')"],
       "quirks": ["q.bedrock_quirk('cloyster', 'blink')"]
     },

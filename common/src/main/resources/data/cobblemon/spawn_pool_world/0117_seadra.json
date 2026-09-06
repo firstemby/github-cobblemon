@@ -13,49 +13,36 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
+            "weight": 1.9,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_lukewarm_ocean",
                     "#cobblemon:is_warm_ocean"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
             "id": "seadra-2",
             "pokemon": "seadra",
+            "presets": [
+                "water"
+            ],
             "type": "pokemon",
-            "spawnablePositionType": "fishing",
+            "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
-            "weightMultipliers": [
-                {
-                    "multiplier": 3.0,
-                    "condition": {
-                        "minLureLevel": 2,
-                        "maxLureLevel": 2
-                    }
-                },
-                {
-                    "multiplier": 5.0,
-                    "condition": {
-                        "minLureLevel": 3
-                    }
-                }
-            ],
+            "weight": 1.9,
             "condition": {
-                "canSeeSky": true,
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_cold_ocean",
-                    "#cobblemon:is_frozen_ocean"
-                ]
+                    "#cobblemon:is_lukewarm_ocean",
+                    "#cobblemon:is_warm_ocean"
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -68,15 +55,18 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
+            "weight": 1.9,
             "condition": {
                 "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_lukewarm_ocean",
-                    "#cobblemon:is_warm_ocean"
-                ]
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
+                "isPokeSnack": true
             }
         },
         {
@@ -86,7 +76,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -103,9 +93,7 @@
                 }
             ],
             "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
+                "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
@@ -120,24 +108,39 @@
         {
             "id": "seadra-5",
             "pokemon": "seadra",
-            "presets": [
-                "water"
-            ],
             "type": "pokemon",
-            "spawnablePositionType": "submerged",
+            "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
+            "weight": 1.9,
+            "weightMultipliers": [
+                {
+                    "multiplier": 3.0,
+                    "condition": {
+                        "minLureLevel": 2,
+                        "maxLureLevel": 2
+                    }
+                },
+                {
+                    "multiplier": 5.0,
+                    "condition": {
+                        "minLureLevel": 3
+                    }
+                }
+            ],
             "condition": {
                 "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13
+                    "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_cold_ocean",
+                    "#cobblemon:is_frozen_ocean"
+                ]
             }
         },
         {
@@ -147,7 +150,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "32-44",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

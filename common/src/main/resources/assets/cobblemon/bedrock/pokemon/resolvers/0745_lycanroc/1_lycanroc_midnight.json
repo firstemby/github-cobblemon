@@ -13,6 +13,16 @@
       "aspects": ["midnight-form", "shiny"],
       "texture": "cobblemon:textures/pokemon/0745_lycanroc/lycanroc_midnight_shiny.png",
       "layers": []
+    },
+    {
+      "aspects": ["midnight-form", "alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0745_lycanroc/lycanroc_midnight_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

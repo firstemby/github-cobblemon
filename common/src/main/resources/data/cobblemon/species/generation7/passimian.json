@@ -196,7 +196,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "passimian",

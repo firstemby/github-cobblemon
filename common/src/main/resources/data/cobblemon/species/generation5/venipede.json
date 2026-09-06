@@ -68,6 +68,23 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "venipede alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "whirlipede alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "scolipede alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

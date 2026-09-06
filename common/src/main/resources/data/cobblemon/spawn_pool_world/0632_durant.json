@@ -13,14 +13,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-48",
-            "weight": 2.0,
+            "weight": 20.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_badlands",
                     "#cobblemon:is_hills"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -33,14 +34,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_badlands",
                     "#cobblemon:is_hills"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -53,11 +55,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "23-48",
-            "weight": 10.0,
+            "weight": 60.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_mountain"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

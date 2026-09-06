@@ -120,6 +120,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "salamence alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -338,6 +347,9 @@
         "resting": {
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
+        },
+        "herd": {
+          "maxSize": 8
         }
       },
       "evolutions": [],

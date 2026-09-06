@@ -4,7 +4,7 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "tranquill-2",
+            "id": "tranquill-1",
             "pokemon": "tranquill",
             "presets": [
                 "natural",
@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-36",
-            "weight": 0.9,
+            "weight": 5.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -22,7 +22,8 @@
                     "#cobblemon:is_mountain",
                     "#cobblemon:is_sky"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -31,7 +32,7 @@
             }
         },
         {
-            "id": "tranquill-3",
+            "id": "tranquill-2",
             "pokemon": "tranquill",
             "presets": [
                 "natural",
@@ -41,14 +42,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-36",
-            "weight": 0.9,
+            "weight": 5.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -58,7 +60,7 @@
             }
         },
         {
-            "id": "tranquill-4",
+            "id": "tranquill-3",
             "pokemon": "tranquill",
             "presets": [
                 "natural"
@@ -67,7 +69,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-36",
-            "weight": 0.9,
+            "weight": 5.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -77,7 +79,8 @@
                 "timeRange": "day",
                 "structures": [
                     "#minecraft:village"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

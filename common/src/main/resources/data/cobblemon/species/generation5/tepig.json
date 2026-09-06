@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "spoink",
@@ -94,8 +94,12 @@
           "tier": 2
         },
         {
-          "pokemon": "emboar",
+          "pokemon": "emboar mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "emboar mega",
+          "tier": 4
         }
       ]
     },

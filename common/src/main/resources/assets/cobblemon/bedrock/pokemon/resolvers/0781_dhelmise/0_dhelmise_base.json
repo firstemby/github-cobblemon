@@ -14,18 +14,6 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0781_dhelmise/dhelmise_shiny.png"
-    },
-    {
-      "aspects": [
-        "alpha_eyes"
-      ],
-      "layers": [
-        {
-          "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0781_dhelmise/dhelmise_alpha.png",
-          "emissive": true
-        }
-      ]
     }
   ]
 }

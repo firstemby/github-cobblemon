@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "talonflame",
@@ -152,7 +152,6 @@
     "tm:hurricane",
     "tm:hyperbeam",
     "tm:incinerate",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:protect",
     "tm:raindance",

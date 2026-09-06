@@ -57,8 +57,12 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "marshtomp alpha",
+          "tier": 1
+        },
         {
           "pokemon": "swampert mega=false",
           "tier": 1

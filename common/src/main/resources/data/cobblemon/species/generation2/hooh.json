@@ -169,7 +169,6 @@
     "tm:laserfocus",
     "tm:lightscreen",
     "tm:mysticalfire",
-    "tm:naturalgift",
     "tm:ominouswind",
     "tm:overheat",
     "tm:pluck",
@@ -264,7 +263,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "hooh",

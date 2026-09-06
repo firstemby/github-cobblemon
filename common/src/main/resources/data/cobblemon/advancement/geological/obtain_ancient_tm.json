@@ -10,7 +10,7 @@
       "translate": "advancements.cobblemon.obtain_ancient_tm.description"
     }
   },
-  "parent": "cobblemon:geological/craft_tm",
+  "parent": "cobblemon:geological/obtain_tm",
   "criteria": {
     "learn_tm_alluringvoice":
         {"trigger":"cobblemon:has_learn_specific_tm","conditions":{"tm":"cobblemon:alluringvoice"}},

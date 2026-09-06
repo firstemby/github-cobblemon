@@ -1,5 +1,5 @@
 {
-    "biomes": "#cobblemon:is_plains",
+    "biomes": "#cobblemon:is_grassland",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/sunflowerbed_clearing_start",

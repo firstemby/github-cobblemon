@@ -72,7 +72,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "8"
+      "maxSize": 8,
+      "toleratedLeaders": [
+        {
+          "pokemon": "slaking alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

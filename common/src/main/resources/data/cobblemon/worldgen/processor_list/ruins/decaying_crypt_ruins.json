@@ -1917,7 +1917,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1944,7 +1944,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1971,7 +1971,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1998,7 +1998,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"

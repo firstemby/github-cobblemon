@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.wooper_paldean",
+				"identifier": "geometry.wooper_male",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -12,12 +12,12 @@
 			},
 			"bones": [
 				{
-					"name": "wooper_paldean",
+					"name": "wooper",
 					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "body",
-					"parent": "wooper_paldean",
+					"parent": "wooper",
 					"pivot": [0, 4, 0]
 				},
 				{
@@ -271,7 +271,7 @@
 				},
 				{
 					"name": "locator_root",
-					"parent": "wooper_paldean",
+					"parent": "wooper",
 					"pivot": [0, 0, 0],
 					"locators": {
 						"root": [0, 0, 0]
@@ -279,7 +279,7 @@
 				},
 				{
 					"name": "locator_top",
-					"parent": "wooper_paldean",
+					"parent": "wooper",
 					"pivot": [0, 15, 0],
 					"locators": {
 						"top": [0, 15, 0]

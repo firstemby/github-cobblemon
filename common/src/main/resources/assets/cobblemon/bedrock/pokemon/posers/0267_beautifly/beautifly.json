@@ -2,7 +2,7 @@
   "portraitScale": 1.73,
   "portraitTranslation": [-0.09, 0.26, 0],
   "profileScale": 0.60,
-  "profileTranslation": [0.16, 0.90, 0],
+  "profileTranslation": [0, 0.90, 0],
   "rootBone": "beautifly",
   "poses": {
 	"battle-standing": {

@@ -34,7 +34,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.quirk.ModelQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.quirk.SimpleQuirk
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
-import com.cobblemon.mod.common.client.util.exists
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
@@ -133,6 +132,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * a good user experience.
      */
     open var profileTranslation = Vec3(0.0, 0.0, 0.0)
+
+    open var profilePokedexScale: Float? = null
+    open var profilePokedexTranslation: Vec3? = null
+    open var profileSummaryScale: Float? = null
+    open var profileSummaryTranslation: Vec3? = null
 
     var red = 1F
     var green = 1F
@@ -251,7 +255,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     fun setLayerContext(buffer: MultiBufferSource, state: PosableState, layers: Iterable<ModelLayer>) {
-        currentLayers = layers
+        currentLayers = layers.sortedBy { it.translucent }
         bufferProvider = buffer
         currentState = state
     }

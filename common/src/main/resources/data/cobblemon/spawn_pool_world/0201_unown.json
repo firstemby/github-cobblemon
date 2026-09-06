@@ -13,11 +13,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -30,11 +31,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -47,11 +49,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -64,11 +67,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -81,11 +85,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -98,11 +103,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -115,11 +121,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -132,11 +139,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -149,11 +157,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -166,11 +175,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -183,11 +193,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -200,11 +211,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -217,11 +229,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -234,11 +247,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -251,11 +265,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -268,11 +283,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -285,11 +301,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -302,11 +319,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -319,11 +337,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -336,11 +355,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -353,11 +373,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -370,11 +391,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -387,11 +409,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -404,11 +427,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -421,11 +445,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -438,11 +463,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -455,11 +481,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -472,11 +499,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -489,7 +517,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -507,7 +535,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -525,7 +553,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -543,7 +571,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -561,7 +589,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -579,7 +607,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -597,7 +625,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -615,7 +643,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -633,7 +661,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -651,7 +679,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -669,7 +697,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -687,7 +715,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -705,7 +733,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -723,7 +751,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -741,7 +769,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -759,7 +787,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -777,7 +805,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -795,7 +823,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -813,7 +841,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -831,7 +859,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -849,7 +877,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -867,7 +895,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -885,7 +913,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -903,7 +931,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -921,7 +949,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -939,7 +967,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.754,
+            "weight": 7.538,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -957,7 +985,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.2,
+            "weight": 2.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -975,7 +1003,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 0.2,
+            "weight": 2.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -990,7 +1018,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1009,7 +1037,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1028,7 +1056,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1047,7 +1075,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1066,7 +1094,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1085,7 +1113,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1104,7 +1132,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1123,7 +1151,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1142,7 +1170,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1161,7 +1189,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1180,7 +1208,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1199,7 +1227,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1218,7 +1246,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1237,7 +1265,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1256,7 +1284,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1275,7 +1303,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1294,7 +1322,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1313,7 +1341,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1332,7 +1360,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1351,7 +1379,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1370,7 +1398,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1389,7 +1417,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1408,7 +1436,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1427,7 +1455,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1446,7 +1474,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1465,7 +1493,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 3.769,
+            "weight": 37.692,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1484,7 +1512,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"
@@ -1503,7 +1531,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-100",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

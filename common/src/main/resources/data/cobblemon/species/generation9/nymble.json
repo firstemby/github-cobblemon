@@ -145,6 +145,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "nymble alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "lokix alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

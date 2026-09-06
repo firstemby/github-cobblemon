@@ -167,6 +167,19 @@
       ],
       "drowsyChance": 0.0033,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dottler alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "orbeetle alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

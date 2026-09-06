@@ -171,6 +171,23 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "grubbin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "charjabug alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vikavolt alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

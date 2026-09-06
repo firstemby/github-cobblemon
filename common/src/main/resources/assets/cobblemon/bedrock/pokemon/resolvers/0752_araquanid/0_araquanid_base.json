@@ -16,7 +16,8 @@
         {
           "name": "translucent",
           "texture": "cobblemon:textures/pokemon/0752_araquanid/araquanid_translucent.png",
-          "translucent": true
+          "translucent": true,
+          "translucent_cull": true
         }
       ]
     },
