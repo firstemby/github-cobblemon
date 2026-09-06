@@ -82,6 +82,8 @@ object DataKeys {
     const val POKEMON_RECALCULATE_POSE = "RecalculatePose"
     const val POKEMON_PLATFORM_TYPE = "PlatformType"
 
+    const val POKEMON_BREEDING_COOLDOWN = "BreedingCooldown"
+
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
     const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
@@ -227,6 +229,9 @@ object DataKeys {
     const val GENERIC_BEDROCK_COLLIDER_WIDTH = "Width"
     const val GENERIC_BEDROCK_COLLIDER_HEIGHT = "Height"
     const val GENERIC_BEDROCK_SYNC_AGE = "SyncAge"
+
+    //Egg stuff
+    const val EGG = "Egg"
 
     // NPCs
     const val NPC_CLASS = "NPCClass"

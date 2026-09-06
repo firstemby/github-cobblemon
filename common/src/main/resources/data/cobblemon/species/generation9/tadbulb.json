@@ -170,5 +170,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

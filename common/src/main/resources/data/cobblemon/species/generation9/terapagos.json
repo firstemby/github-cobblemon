@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "terashift",
+    "terashift",
     "h:terashift"
   ],
   "eggGroups": [
@@ -160,6 +161,7 @@
       ],
       "abilities": [
         "terashell",
+        "terashell",
         "h:terashell"
       ],
       "baseStats": {
@@ -226,6 +228,7 @@
         "stellar-form"
       ],
       "abilities": [
+        "teraformzero",
         "teraformzero",
         "h:teraformzero"
       ],

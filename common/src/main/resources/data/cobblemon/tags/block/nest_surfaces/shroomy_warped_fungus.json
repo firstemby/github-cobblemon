@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:warped_stems",
+    "minecraft:warped_nylium",
+    "minecraft:warped_wart_block"
+  ]
+}

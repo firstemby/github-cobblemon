@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sandstream",
+    "sandstream",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -326,6 +327,7 @@
       ],
       "abilities": [
         "sandstream",
+        "sandstream",
         "h:sandstream"
       ],
       "baseStats": {
@@ -361,7 +363,15 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "rocky",
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

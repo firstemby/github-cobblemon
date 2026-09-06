@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:magician"
   ],
   "eggGroups": [
@@ -263,5 +264,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "braixen",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

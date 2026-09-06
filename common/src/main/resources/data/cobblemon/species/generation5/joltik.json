@@ -243,5 +243,9 @@
     "blockInteract": {
       "immuneToCobwebBlock": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

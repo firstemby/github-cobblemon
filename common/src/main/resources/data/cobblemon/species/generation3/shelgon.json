@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "rockhead",
+    "rockhead",
     "h:overcoat"
   ],
   "eggGroups": [
@@ -232,5 +233,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "rocky"
   ]
 }

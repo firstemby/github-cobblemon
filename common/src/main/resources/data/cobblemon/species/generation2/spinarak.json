@@ -255,5 +255,9 @@
     "blockInteract": {
       "immuneToCobwebBlock": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

@@ -296,6 +296,7 @@
       ],
       "abilities": [
         "skilllink",
+        "skilllink",
         "h:skilllink"
       ],
       "baseStats": {
@@ -331,7 +332,15 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "grassy",
+        "shroomy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

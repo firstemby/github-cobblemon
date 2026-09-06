@@ -61,6 +61,8 @@ object CobblemonCommands {
         ChangeBoxWallpaperCommand.register(dispatcher)
         RunMolangCommand.register(dispatcher)
         RunMolangScriptCommand.register(dispatcher)
+        GivePokemonEggCommand.register(dispatcher)
+        GiveAllPokemonEggCommand.register(dispatcher)
         SpectateBattleCommand.register(dispatcher)
         CobblemonConfigCommand.register(dispatcher)
         UnlockPCBoxWallpaperCommand.register(dispatcher)
@@ -73,9 +75,11 @@ object CobblemonCommands {
         PcTakeCommand.register(dispatcher)
         GiveTmCommand.register(dispatcher)
         TmCommand.register(dispatcher)
+        BreedPokemonCommand.register(dispatcher)
 
         // Possibly lock down registration if and only if under dev environment or running in an environment
         // with a certain system environment variable set
         CobblemonInfoCommand.register(dispatcher)
+        DebugCobblemonAICommand.register(dispatcher)
     }
 }

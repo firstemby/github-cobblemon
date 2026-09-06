@@ -433,7 +433,11 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     },
     {
       "name": "Dusk",
@@ -457,6 +461,7 @@
         "dusk-form"
       ],
       "abilities": [
+        "toughclaws",
         "toughclaws",
         "h:toughclaws"
       ],
@@ -629,7 +634,15 @@
           "drowsyChance": 0.0021,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

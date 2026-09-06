@@ -1,0 +1,18 @@
+{
+  "name": "cobblemon:sandshrew_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/sandshrew_egg.png"
+    },
+    {
+      "aspects": [
+        "alola"
+      ],
+      "texture": "cobblemon:textures/egg/sandshrew_alola_egg.png"
+    }
+  ]
+}

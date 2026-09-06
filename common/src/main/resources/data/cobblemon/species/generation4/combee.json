@@ -19,6 +19,7 @@
   ],
   "abilities": [
     "honeygather",
+    "honeygather",
     "h:hustle"
   ],
   "eggGroups": [
@@ -186,5 +187,8 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

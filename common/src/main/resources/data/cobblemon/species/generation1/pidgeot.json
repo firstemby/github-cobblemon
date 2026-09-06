@@ -297,6 +297,7 @@
       ],
       "abilities": [
         "noguard",
+        "noguard",
         "h:noguard"
       ],
       "baseStats": {
@@ -370,7 +371,10 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ]
 }

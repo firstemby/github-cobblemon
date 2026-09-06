@@ -294,6 +294,7 @@
       ],
       "abilities": [
         "sheerforce",
+        "sheerforce",
         "h:sheerforce"
       ],
       "baseStats": {
@@ -334,7 +335,19 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "fiery",
+        "grassy",
+        "rocky",
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

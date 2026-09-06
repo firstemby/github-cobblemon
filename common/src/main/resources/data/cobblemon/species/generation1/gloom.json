@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "chlorophyll",
+    "chlorophyll",
     "h:stench"
   ],
   "eggGroups": [
@@ -231,5 +232,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:sun_stone"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

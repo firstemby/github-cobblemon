@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.net.messages.server.habitat
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource

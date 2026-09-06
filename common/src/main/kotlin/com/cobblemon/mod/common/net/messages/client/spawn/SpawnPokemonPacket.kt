@@ -59,11 +59,14 @@ class SpawnPokemonPacket(
     var spawnYaw: Float,
     var friendship: Int,
     var freezeFrame: Float,
+    var isNewlyHatched: Boolean,
+    var passengers: IntArray,
     var tickSpawned: Int,
     var rideBoosts: Map<RidingStat, Float>,
     var rideStamina: Float,
     var isAlpha: Boolean,
     var silent: Boolean,
+    var busy: Boolean,
     var riders: List<Int>,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
@@ -94,11 +97,14 @@ class SpawnPokemonPacket(
         entity.entityData.get(PokemonEntity.SPAWN_DIRECTION),
         entity.entityData.get(PokemonEntity.FRIENDSHIP),
         entity.entityData.get(PokemonEntity.FREEZE_FRAME),
+        entity.isNewlyHatched,
+        entity.passengers.map { it.id }.toIntArray(),
         entity.tickCount,
         entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
         entity.entityData.get(PokemonEntity.IS_ALPHA),
         entity.isSilent,
+        entity.isBusy,
         entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
         vanillaSpawnPacket
     )
@@ -127,6 +133,8 @@ class SpawnPokemonPacket(
         buffer.writeFloat(this.spawnYaw)
         buffer.writeInt(this.friendship)
         buffer.writeFloat(this.freezeFrame)
+        buffer.writeBoolean(this.isNewlyHatched)
+        buffer.writeVarIntArray(this.passengers)
         buffer.writeInt(this.tickSpawned)
         buffer.writeMap(
             rideBoosts,
@@ -136,6 +144,7 @@ class SpawnPokemonPacket(
         buffer.writeFloat(rideStamina)
         buffer.writeBoolean(isAlpha)
         buffer.writeBoolean(silent)
+        buffer.writeBoolean(busy)
         buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
     }
 
@@ -179,11 +188,13 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.SPAWN_DIRECTION, spawnYaw)
         entity.entityData.set(PokemonEntity.FRIENDSHIP, friendship)
         entity.entityData.set(PokemonEntity.FREEZE_FRAME, freezeFrame)
+        entity.isNewlyHatched = isNewlyHatched
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
         entity.entityData.set(PokemonEntity.IS_ALPHA, isAlpha)
         entity.isSilent = silent
+        entity.isBusy = busy
 
         entity.tickSpawned = this.tickSpawned
         entity.delegate.updateAge(this.tickSpawned)
@@ -221,6 +232,8 @@ class SpawnPokemonPacket(
             val spawnAngle = buffer.readFloat()
             val friendship = buffer.readInt()
             val freezeFrame = buffer.readFloat()
+            val isNewlyHatched = buffer.readBoolean()
+            val passengers = buffer.readVarIntArray()
             val tickSpawned = buffer.readInt()
             val rideBoosts = buffer.readMap(
                 { buffer.readEnumConstant(RidingStat::class.java) },
@@ -229,6 +242,7 @@ class SpawnPokemonPacket(
             val rideStamina = buffer.readFloat()
             val isAlpha = buffer.readBoolean()
             val silent = buffer.readBoolean()
+            val busy = buffer.readBoolean()
             val riders = buffer.readList { it.readInt() }.toList()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
@@ -256,11 +270,14 @@ class SpawnPokemonPacket(
                 spawnAngle,
                 friendship,
                 freezeFrame,
+                isNewlyHatched,
+                passengers,
                 tickSpawned,
                 rideBoosts,
                 rideStamina,
                 isAlpha,
                 silent,
+                busy,
                 riders,
                 vanillaPacket
             )

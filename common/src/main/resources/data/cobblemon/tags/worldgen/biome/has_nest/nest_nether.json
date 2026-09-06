@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:nether/is_warped",
+    "#cobblemon:nether/is_crimson",
+    "#cobblemon:nether/is_forest"
+  ]
+}

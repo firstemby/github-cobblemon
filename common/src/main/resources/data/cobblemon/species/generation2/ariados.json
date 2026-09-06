@@ -260,5 +260,9 @@
     "special:refresh"
   ],
   "preEvolution": "spinarak",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

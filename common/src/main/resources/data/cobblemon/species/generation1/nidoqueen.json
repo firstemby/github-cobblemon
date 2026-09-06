@@ -325,5 +325,8 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -43,6 +43,7 @@ import java.text.ParseException
 
 object GeneralMoLangFunctions {
     val holder: HashMap<String, (MoParams) -> Any> = hashMapOf(
+        "cobblemon_config" to { Cobblemon.config.struct },
         "print" to { params ->
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)

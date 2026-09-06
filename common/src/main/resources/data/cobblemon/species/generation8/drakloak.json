@@ -217,5 +217,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "watery"
   ]
 }

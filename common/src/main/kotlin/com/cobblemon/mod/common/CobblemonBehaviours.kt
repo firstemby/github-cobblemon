@@ -12,6 +12,8 @@ import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.ai.CobblemonBehaviour
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.data.JsonDataRegistry.Companion.JSON_EXTENSION
@@ -26,6 +28,8 @@ import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.ExpressionOrEntityVariableAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.MemoryModuleTypeAdapter
+import com.cobblemon.mod.common.util.adapters.ObjectiveConfigAdapter
+import com.cobblemon.mod.common.util.adapters.SenseConfigAdapter
 import com.cobblemon.mod.common.util.adapters.SensorTypeAdapter
 import com.cobblemon.mod.common.util.adapters.TaskConfigAdapter
 import com.cobblemon.mod.common.util.adapters.TranslatedTextAdapter
@@ -55,6 +59,8 @@ object CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
         .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
         .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(ObjectiveConfig::class.java, ObjectiveConfigAdapter)
+        .registerTypeAdapter(SenseConfig::class.java, SenseConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
             ExpressionOrEntityVariableAdapter

@@ -1,0 +1,9 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "t.volbeat = q.pokemon_species.get_by_identifier('cobblemon:volbeat');",
+    "t.illumise = q.pokemon_species.get_by_identifier('cobblemon:illumise');",
+    "(q.mother.species.name == 'Volbeat' || q.mother.species.name == 'Illumise') ? q.random(t.volbeat, t.illumise) : q.offspring_species;"
+  ]
+}

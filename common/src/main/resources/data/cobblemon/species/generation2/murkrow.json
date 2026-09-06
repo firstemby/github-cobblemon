@@ -265,5 +265,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

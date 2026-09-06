@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:liquidvoice"
   ],
   "eggGroups": [
@@ -224,5 +225,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
   ]
 }

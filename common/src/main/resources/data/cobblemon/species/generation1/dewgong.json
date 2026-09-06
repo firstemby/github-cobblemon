@@ -304,5 +304,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "seel",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy"
+  ]
 }

@@ -219,5 +219,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "gurdurr",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

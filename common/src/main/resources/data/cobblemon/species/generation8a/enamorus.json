@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "cutecharm",
+    "cutecharm",
     "h:contrary"
   ],
   "eggGroups": [
@@ -150,6 +151,7 @@
         "therian-forme"
       ],
       "abilities": [
+        "overcoat",
         "overcoat",
         "h:overcoat"
       ],

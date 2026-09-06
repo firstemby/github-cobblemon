@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "emergencyexit",
+    "emergencyexit",
     "h:emergencyexit"
   ],
   "eggGroups": [
@@ -235,5 +236,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "wimpod",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "colorchange",
+    "colorchange",
     "h:protean"
   ],
   "eggGroups": [
@@ -251,5 +252,8 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

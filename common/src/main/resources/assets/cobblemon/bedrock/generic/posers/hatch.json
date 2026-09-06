@@ -1,0 +1,11 @@
+{
+  "poses": {
+    "hatch": {
+      "poseName": "hatch",
+      "transformTicks": 0,
+      "poseTypes": ["NONE"],
+      "animations": [
+      ]
+    }
+  }
+}

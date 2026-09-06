@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "clearbody",
+    "clearbody",
     "h:sturdy"
   ],
   "eggGroups": [
@@ -228,5 +229,8 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

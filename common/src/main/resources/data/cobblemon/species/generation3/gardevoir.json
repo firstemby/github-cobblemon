@@ -317,6 +317,7 @@
       ],
       "abilities": [
         "pixilate",
+        "pixilate",
         "h:pixilate"
       ],
       "eggGroups": [
@@ -359,7 +360,17 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "shroomy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "shroomy"
   ]
 }

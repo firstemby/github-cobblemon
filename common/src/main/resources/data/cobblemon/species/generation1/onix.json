@@ -278,5 +278,8 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

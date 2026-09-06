@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "flowergift",
+    "flowergift",
     "h:flowergift"
   ],
   "eggGroups": [
@@ -255,7 +256,10 @@
         "tutor:worryseed"
       ],
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "behaviour": {
@@ -281,5 +285,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -231,6 +231,7 @@
       ],
       "abilities": [
         "mimicry",
+        "mimicry",
         "h:mimicry"
       ],
       "baseStats": {
@@ -366,7 +367,14 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

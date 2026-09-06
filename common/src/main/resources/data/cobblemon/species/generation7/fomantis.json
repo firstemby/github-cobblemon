@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "leafguard",
+    "leafguard",
     "h:contrary"
   ],
   "eggGroups": [
@@ -203,5 +204,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

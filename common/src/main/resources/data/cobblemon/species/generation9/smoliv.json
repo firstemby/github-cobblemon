@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "earlybird",
+    "earlybird",
     "h:harvest"
   ],
   "eggGroups": [
@@ -165,5 +166,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

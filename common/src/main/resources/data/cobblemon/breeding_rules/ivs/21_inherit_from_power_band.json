@@ -1,0 +1,14 @@
+{
+  "type": "cobblemon:expression",
+  "order": 21,
+  "expression": [
+    "t.father_has_band = q.father.held_item.is_of('cobblemon:power_band');",
+    "t.mother_has_band = q.mother.held_item.is_of('cobblemon:power_band');",
+    "t.parent_has_band = t.father_has_band || t.mother_has_band;",
+    "t.both_have_band = t.father_has_band && t.mother_has_band;",
+    "t.inheritor = t.both_have_band ? q.random(q.father, q.mother) : (t.father_has_band ? q.father : q.mother);",
+    "t.parent_has_band ? {",
+    "  q.inherit(t.inheritor, 'spd');",
+    "};"
+  ]
+}

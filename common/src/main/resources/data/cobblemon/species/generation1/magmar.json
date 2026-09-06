@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "flamebody",
+    "flamebody",
     "h:vitalspirit"
   ],
   "eggGroups": [
@@ -248,5 +249,9 @@
   "lightingData": {
     "lightLevel": 9,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

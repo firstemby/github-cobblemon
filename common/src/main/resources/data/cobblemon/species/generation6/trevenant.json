@@ -249,5 +249,9 @@
     "legacy:swagger"
   ],
   "preEvolution": "phantump",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy",
+    "twiggy"
+  ]
 }

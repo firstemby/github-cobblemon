@@ -322,6 +322,7 @@ class PCGUI(
         val y = (height - BASE_HEIGHT) / 2
 
         // Render Portrait Background
+
         blitk(
             matrixStack = matrices,
             texture = portraitBackgroundResource,
@@ -337,6 +338,7 @@ class PCGUI(
         }
 
         // Render Base Resource
+
         blitk(
             matrixStack = matrices,
             texture = baseResource,

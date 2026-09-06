@@ -248,5 +248,8 @@
     },
     "seats": [],
     "behaviour": null
-  }
+  },
+  "nestTypes": [
+    "watery"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "windrider",
+    "windrider",
     "h:infiltrator"
   ],
   "eggGroups": [
@@ -173,5 +174,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "sandy",
+    "twiggy"
+  ]
 }

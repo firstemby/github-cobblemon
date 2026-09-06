@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "snowcloak",
+    "snowcloak",
     "h:cursedbody"
   ],
   "eggGroups": [
@@ -262,5 +263,9 @@
     "special:sing"
   ],
   "preEvolution": "snorunt",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

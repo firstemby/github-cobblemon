@@ -246,5 +246,8 @@
     "special:refresh"
   ],
   "preEvolution": "shroomish",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

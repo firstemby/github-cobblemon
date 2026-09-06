@@ -28,6 +28,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.MatrixWrapper
+import com.cobblemon.mod.common.client.render.models.blockbench.JsonModelAdapter.Companion.model
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
@@ -396,6 +397,10 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         incrementAge(entity)
         playWildShinySounds()
         sendRidingChanges(entity)
+        if (entity.isNewlyHatched) {
+            hatch()
+            entity.isNewlyHatched = false
+        }
     }
 
     private fun sendRidingChanges(entity: PokemonEntity) {
@@ -406,6 +411,16 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 return@ifRidingAvailable
             }
             CobblemonNetwork.sendToServer(ServerboundUpdateRidingStatePacket(entity.id, behaviour.key, state))
+        }
+    }
+
+    fun hatch() {
+        val animation = model?.getAnimation(this, "q.bedrock_primary('hatch', 'hatch');", runtime) ?: return
+        if (animation is PrimaryAnimation) {
+            addPrimaryAnimation(animation)
+        }
+        else {
+            addActiveAnimation(animation)
         }
     }
 

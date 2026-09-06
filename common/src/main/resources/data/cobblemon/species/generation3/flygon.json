@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -339,5 +340,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "vibrava",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

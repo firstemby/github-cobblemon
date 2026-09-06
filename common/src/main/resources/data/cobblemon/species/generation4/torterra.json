@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:shellarmor"
   ],
   "eggGroups": [
@@ -238,5 +239,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "grotle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

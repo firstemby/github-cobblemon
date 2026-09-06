@@ -230,5 +230,9 @@
     "legacy:toxic"
   ],
   "evolutions": [],
-  "standingEyeHeight": 0.45
+  "standingEyeHeight": 0.45,
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

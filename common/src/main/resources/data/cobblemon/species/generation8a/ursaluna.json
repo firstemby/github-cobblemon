@@ -318,6 +318,7 @@
       ],
       "abilities": [
         "mindseye",
+        "mindseye",
         "h:mindseye"
       ],
       "baseStats": {
@@ -473,7 +474,15 @@
         "tutor:vacuumwave"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "rocky",
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

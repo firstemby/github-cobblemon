@@ -54,6 +54,10 @@ import com.cobblemon.mod.common.api.storage.adapter.database.MongoDBStoreAdapter
 import com.cobblemon.mod.common.api.storage.adapter.flatfile.FileStoreAdapter
 import com.cobblemon.mod.common.api.storage.adapter.flatfile.JSONStoreAdapter
 import com.cobblemon.mod.common.api.storage.adapter.flatfile.NBTStoreAdapter
+import com.cobblemon.mod.common.api.storage.egg.EggStoreManager
+import com.cobblemon.mod.common.api.storage.egg.JsonEggStoreBackend
+import com.cobblemon.mod.common.api.storage.egg.MongoEggStoreBackend
+import com.cobblemon.mod.common.api.storage.egg.NbtEggStoreBackend
 import com.cobblemon.mod.common.api.storage.factory.FileBackedPokemonStoreFactory
 import com.cobblemon.mod.common.api.storage.molang.NbtMoLangDataStoreFactory
 import com.cobblemon.mod.common.api.storage.pc.PCStore
@@ -175,6 +179,7 @@ object Cobblemon {
     var storage = PokemonStoreManager()
     var molangData = NbtMoLangDataStoreFactory
     lateinit var playerDataManager: PlayerInstancedDataStoreManager
+    lateinit var eggStoreManager: EggStoreManager
     lateinit var starterConfig: StarterConfig
     val dataProvider: DataProvider = CobblemonDataProvider
     var permissionValidator: PermissionValidator by Delegates.observable(LaxPermissionValidator().also { it.initialize() }) { _, _, newValue -> newValue.initialize() }
@@ -183,6 +188,8 @@ object Cobblemon {
     var wallpapers = mutableMapOf<UUID, Set<ResourceLocation>>()
 
     val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
+    /** Player UUID to entity UUID that they're brain debuggin' */
+    val serverPlayerDebuggingPokemonBrainEntities = mutableMapOf<UUID, UUID>()
 
     val statistics: CobblemonStats = CobblemonStats
 
@@ -204,6 +211,8 @@ object Cobblemon {
             this.LOGGER.info("  - Git Commit: ${smallCommitHash()} (https://gitlab.com/cable-mc/cobblemon/-/commit/${CobblemonBuildDetails.GIT_COMMIT})")
             this.LOGGER.info("  - Branch: ${CobblemonBuildDetails.BRANCH}")
         }
+
+        this.loadConfig()
 
         implementation.registerRecipeSerializers()
         implementation.registerRecipeTypes()
@@ -233,7 +242,6 @@ object Cobblemon {
         ExperienceGroups.registerDefaults()
         CaptureCalculators.registerDefaults()
 
-        this.loadConfig()
 //        CobblemonBlockPredicates.touch()
         CobblemonOrePlacedFeatures.register()
         CobblemonPlacedFeatures.register()
@@ -259,6 +267,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            serverPlayerDebuggingPokemonBrainEntities.remove(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -375,6 +384,12 @@ object Cobblemon {
             playerDataManager = PlayerInstancedDataStoreManager().also { it.setup(server) }
             HabitatPools.onServerLoading(server)
 
+            val eggBackend = when (config.storageFormat) {
+                "nbt" -> NbtEggStoreBackend()
+                "json" -> JsonEggStoreBackend()
+                else -> null // MongoDB handled below
+            }
+
             val mongoClient: MongoClient?
 
             val pokemonStoreRoot = server.getWorldPath(LevelResource.ROOT).resolve("pokemon").toFile()
@@ -426,6 +441,10 @@ object Cobblemon {
                         playerDataManager.setFactory(generalMongoFactory, PlayerInstancedDataStoreTypes.GENERAL)
                         playerDataManager.setFactory(pokedexMongoFactory, PlayerInstancedDataStoreTypes.POKEDEX)
                         playerDataManager.setFactory(tmMovesMongoFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
+
+                        eggStoreManager = EggStoreManager(MongoEggStoreBackend(mongoClient, config.mongoDBDatabaseName))
+                        eggStoreManager.setup(server)
+
                         MongoDBStoreAdapter(mongoClient, config.mongoDBDatabaseName)
                     } catch (e: ClassNotFoundException) {
                         LOGGER.error("MongoDB driver not found.")
@@ -439,6 +458,11 @@ object Cobblemon {
             }
                 .with(ReforgedConversion(server.getWorldPath(LevelResource.ROOT))) as FileStoreAdapter<*>
 
+            if (eggBackend != null) {
+                eggStoreManager = EggStoreManager(eggBackend)
+                eggStoreManager.setup(server)
+            }
+
             storage.registerFactory(
                 priority = Priority.LOWEST,
                 factory = FileBackedPokemonStoreFactory(
@@ -451,6 +475,7 @@ object Cobblemon {
 
         PlatformEvents.SERVER_STOPPED.subscribe {
             storage.unregisterAll(it.server.registryAccess())
+            eggStoreManager.shutdown()
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()
             playerDataManager.saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)

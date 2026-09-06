@@ -272,5 +272,8 @@
     "special:wish"
   ],
   "preEvolution": "drowzee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

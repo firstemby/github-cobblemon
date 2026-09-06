@@ -34,6 +34,18 @@
           "cobblemon:maintain_herd_leader"
         ]
       }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "4": [
+          "cobblemon:herd"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [ "cobblemon:nearby_entities" ]
     }
   ]
 }

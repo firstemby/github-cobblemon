@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:speedboost"
   ],
   "eggGroups": [
@@ -236,5 +237,8 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

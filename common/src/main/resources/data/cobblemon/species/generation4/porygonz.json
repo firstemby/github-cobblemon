@@ -228,5 +228,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "porygon2",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

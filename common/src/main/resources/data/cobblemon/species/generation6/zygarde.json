@@ -19,6 +19,7 @@
   ],
   "abilities": [
     "aurabreak",
+    "aurabreak",
     "h:aurabreak"
   ],
   "eggGroups": [
@@ -351,6 +352,7 @@
       ],
       "abilities": [
         "powerconstruct",
+        "powerconstruct",
         "h:powerconstruct"
       ],
       "baseStats": {
@@ -488,6 +490,7 @@
       ],
       "abilities": [
         "powerconstruct",
+        "powerconstruct",
         "h:powerconstruct"
       ],
       "moves": [
@@ -614,6 +617,7 @@
         "complete-percent"
       ],
       "abilities": [
+        "powerconstruct",
         "powerconstruct",
         "h:powerconstruct"
       ],

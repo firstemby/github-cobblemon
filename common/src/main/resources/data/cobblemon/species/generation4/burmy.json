@@ -16,6 +16,7 @@
   ],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:overcoat"
   ],
   "eggGroups": [
@@ -216,7 +217,12 @@
           }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     },
     {
       "name": "Trash",
@@ -295,7 +301,12 @@
           }
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -324,5 +335,10 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

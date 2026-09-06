@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "guts",
+    "guts",
     "h:scrappy"
   ],
   "eggGroups": [
@@ -197,5 +198,8 @@
     "special:featherdance"
   ],
   "preEvolution": "taillow",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

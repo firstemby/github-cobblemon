@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "shielddust",
+    "shielddust",
     "h:runaway"
   ],
   "eggGroups": [
@@ -150,5 +151,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

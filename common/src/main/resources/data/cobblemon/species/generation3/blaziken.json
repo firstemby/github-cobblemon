@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:speedboost"
   ],
   "eggGroups": [
@@ -264,6 +265,7 @@
       ],
       "abilities": [
         "speedboost",
+        "speedboost",
         "h:speedboost"
       ],
       "baseStats": {
@@ -298,7 +300,10 @@
           "rouseChance": 0.0042
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -327,5 +332,8 @@
       "rouseChance": 0.0042
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

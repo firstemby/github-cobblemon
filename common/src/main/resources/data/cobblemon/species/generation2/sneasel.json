@@ -484,7 +484,15 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy"
   ]
 }

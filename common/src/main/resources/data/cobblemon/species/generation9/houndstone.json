@@ -14,6 +14,7 @@
   "aspects": [],
   "abilities": [
     "sandrush",
+    "sandrush",
     "h:fluffy"
   ],
   "eggGroups": [
@@ -176,5 +177,10 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "innerfocus",
+    "innerfocus",
     "h:infiltrator"
   ],
   "eggGroups": [
@@ -297,5 +298,8 @@
     "legacy:takedown"
   ],
   "preEvolution": "golbat",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

@@ -1,0 +1,194 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"0": "minecraft:block/short_grass",
+		"3": "minecraft:block/grass_block_top",
+		"4": "cobblemon:block/nest_grass",
+		"particle": "minecraft:block/short_grass"
+	},
+	"elements": [
+		{
+			"name": "nest",
+			"from": [4, 0, 4],
+			"to": [12, 2, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0.2, 5]},
+			"faces": {
+				"north": {"uv": [0, 12, 8, 14], "texture": "#3", "tintindex": 0},
+				"east": {"uv": [8, 12, 16, 14], "texture": "#3", "tintindex": 0},
+				"south": {"uv": [8, 2, 16, 4], "texture": "#3", "tintindex": 0},
+				"west": {"uv": [0, 2, 8, 4], "texture": "#3", "tintindex": 0},
+				"up": {"uv": [12, 12, 4, 4], "texture": "#3", "tintindex": 0},
+				"down": {"uv": [12, 4, 4, 12], "texture": "#3", "tintindex": 0}
+			}
+		},
+		{
+			"name": "nest_shadow",
+			"from": [5, 2.01, 5],
+			"to": [11, 2.01, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, -0.8, 5]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 0], "texture": "#4", "tintindex": 0},
+				"east": {"uv": [0, 0, 6, 0], "texture": "#4", "tintindex": 0},
+				"south": {"uv": [0, 0, 6, 0], "texture": "#4", "tintindex": 0},
+				"west": {"uv": [0, 0, 6, 0], "texture": "#4", "tintindex": 0},
+				"up": {"uv": [11, 11, 5, 5], "texture": "#4", "tintindex": 0},
+				"down": {"uv": [5, 5, 11, 11], "texture": "#4", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [11, 0, 0.5],
+			"to": [11, 8, 5.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [11, 1.5, 4]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [3, 2, 8, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [8, 2, 3, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 4, 0, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [3, 0, 1],
+			"to": [3, 14, 10],
+			"rotation": {"angle": -45, "axis": "y", "origin": [5, 7, 5.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [5, 2, 14, 16], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [14, 2, 5, 16], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 4, 0, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [5, 0, 1],
+			"to": [5, 11, 6],
+			"rotation": {"angle": 45, "axis": "y", "origin": [5, 7, 5.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [7, 2, 12, 13], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 0, 6], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [12, 2, 7, 13], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 4, 0, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [1.5, 0, 12],
+			"to": [6.5, 10, 12],
+			"rotation": {"angle": 45, "axis": "y", "origin": [5, 2.5, 12]},
+			"faces": {
+				"north": {"uv": [8, 2, 3, 12], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [3, 2, 8, 12], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [3, 0, 0, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [3, 0, 0, 0], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [14, 0, -1],
+			"to": [14, 6, 4],
+			"rotation": {"angle": 45, "axis": "y", "origin": [15, 3, 5]},
+			"faces": {
+				"north": {"uv": [8, 3, 8, 8], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [16, 7, 11, 13], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [8, 3, 8, 8], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [11, 7, 16, 13], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 0, 0, 3], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 0, 0, 3], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [11.5, 0, 9],
+			"to": [11.5, 8, 15],
+			"rotation": {"angle": 45, "axis": "y", "origin": [13.5, 4.5, 12.5]},
+			"faces": {
+				"north": {"uv": [0, 1, 0, 9], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [2, 2, 8, 10], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 1, 0, 9], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [8, 2, 2, 10], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 7, 0, 1], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 1, 0, 7], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "grass",
+			"from": [12, 0, 9.5],
+			"to": [12, 13, 17.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [13.5, 4.5, 12.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [8, 2, 16, 15], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [16, 2, 8, 15], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 4, 0, 0], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#0", "tintindex": 0}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 2.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 2.25],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"translation": [4.25, 1.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"translation": [4.25, 1.5, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"ground": {
+			"translation": [0, 3.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [30, -45, 0],
+			"translation": [0, 1.75, 0],
+			"scale": [0.85, 0.85, 0.85]
+		},
+		"head": {
+			"rotation": [-180, -90, 0],
+			"translation": [0, -2.75, 0],
+			"scale": [1.55, 1.55, 1.55]
+		}
+	},
+	"groups": [
+		{
+			"name": "nest",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 6,
+			"children": [
+				0,
+				1,
+				{
+					"name": "grass",
+					"origin": [13.5, 5, 0],
+					"scope": 0,
+					"color": 7,
+					"children": [2, 3, 4, 5, 6, 7, 8]
+				}
+			]
+		}
+	]
+}

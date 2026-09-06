@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "leafguard",
+    "leafguard",
     "h:contrary"
   ],
   "eggGroups": [
@@ -202,5 +203,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "fomantis",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

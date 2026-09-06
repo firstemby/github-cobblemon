@@ -144,13 +144,13 @@ class WanderTaskConfig : SingleTaskConfig {
                     if (wanderChance <= 0 || world.random.nextFloat() > wanderChance) {
                         return@Trigger false
                     }
-                    pathCooldown.setWithExpiry(true, wanderControl.pathCooldownTicks.toLong())
+                    pathCooldown.setWithExpiry(true, 40L)
                     val minimumHeight = minimumHeight.resolveInt(mainThreadRuntime)
                     val maximumHeight = maximumHeight.resolveInt(mainThreadRuntime)
 
                     var attempts = 0
                     var pos: BlockPos? = null
-                    while (attempts++ < wanderControl.maxAttempts && pos == null) {
+                    while (attempts++ < (wanderControl.maxAttempts ?: 4) && pos == null) {
 //                    val targetVec = getLandTarget(entity) ?: return@Trigger true
                         val targetVec = if (maximumHeight != -1) {
                             HoverRandomPos.getPos(
@@ -196,7 +196,7 @@ class WanderTaskConfig : SingleTaskConfig {
                             minimumHeight = minimumHeight,
                             maximumHeight = maximumHeight,
                             world = world
-                        ).takeIf(wanderControl::isSuitable)
+                        )//.takeIf(wanderControl::isSuitable)
                     }
 
                     if (pos == null) {
@@ -208,17 +208,8 @@ class WanderTaskConfig : SingleTaskConfig {
                             pos = pos,
                             speedModifier = speedMultiplier.resolveFloat(mainThreadRuntime),
                             completionRange = 0,
-                            nodeTypeFilter = { nodeType ->
-                                entity.canBreatheUnderwater() || nodeType !in listOf(
-                                    PathType.WATER,
-                                    PathType.WATER_BORDER
-                                )
-                            },
-                            destinationNodeTypeFilter = { nodeType ->
-                                !avoidsTargetingAir || nodeType !in listOf(
-                                    PathType.OPEN
-                                )
-                            }
+                            nodeTypeFilter = { nodeType -> entity.canBreatheUnderwater() || nodeType !in listOf(PathType.WATER, PathType.WATER_BORDER) },
+                            destinationNodeTypeFilter = { nodeType -> !avoidsTargetingAir || nodeType !in listOf(PathType.OPEN) }
                         )
                     )
                     lookTarget.set(BlockPosTracker(pos.toVec3d().add(0.0, entity.eyeHeight.toDouble(), 0.0)))

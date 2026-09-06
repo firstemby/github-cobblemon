@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "weakarmor",
+    "weakarmor",
     "h:cursedbody"
   ],
   "eggGroups": [
@@ -209,5 +210,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

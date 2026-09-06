@@ -17,10 +17,12 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.drop.DropEntry
+import com.cobblemon.mod.common.api.molang.function.AbilityPoolMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleActorMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleMessageMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.BattleMoLangFunctions
@@ -48,6 +50,7 @@ import com.cobblemon.mod.common.api.molang.function.SpeciesMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.WorldMoLangFunctions
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -339,7 +342,11 @@ object MoLangFunctions {
 
     fun QueryStruct.addBattleMessageFunctions(battleMessage: BattleMessage): QueryStruct {
         addFunctions(BattleMessageMoLangFunctions.attach(battleMessage))
+        return this
+    }
 
+    fun QueryStruct.addAbilityPoolFunctions(abilityPool: AbilityPool): QueryStruct {
+        addFunctions(AbilityPoolMoLangFunctions.attach(abilityPool))
         return this
     }
 

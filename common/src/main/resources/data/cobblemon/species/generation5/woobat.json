@@ -264,5 +264,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

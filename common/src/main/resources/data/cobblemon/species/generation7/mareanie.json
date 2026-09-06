@@ -210,5 +210,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

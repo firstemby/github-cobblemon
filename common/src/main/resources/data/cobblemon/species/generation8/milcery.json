@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sweetveil",
+    "sweetveil",
     "h:aromaveil"
   ],
   "eggGroups": [
@@ -1403,5 +1404,8 @@
       ],
       "permanent": true
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

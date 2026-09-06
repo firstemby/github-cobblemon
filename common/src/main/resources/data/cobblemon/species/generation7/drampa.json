@@ -299,5 +299,8 @@
     "legacy:toxic"
   ],
   "evolutions": [],
-  "standingEyeHeight": 0.7
+  "standingEyeHeight": 0.7,
+  "nestTypes": [
+    "rocky"
+  ]
 }

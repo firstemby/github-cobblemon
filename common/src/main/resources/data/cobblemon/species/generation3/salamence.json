@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:moxie"
   ],
   "eggGroups": [
@@ -319,6 +320,7 @@
       ],
       "abilities": [
         "aerilate",
+        "aerilate",
         "h:aerilate"
       ],
       "baseStats": {
@@ -354,7 +356,15 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "rocky"
   ]
 }

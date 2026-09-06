@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "toxicdebris",
+    "toxicdebris",
     "h:corrosion"
   ],
   "eggGroups": [
@@ -188,5 +189,8 @@
     "tutor:stoneedge"
   ],
   "preEvolution": "glimmet",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

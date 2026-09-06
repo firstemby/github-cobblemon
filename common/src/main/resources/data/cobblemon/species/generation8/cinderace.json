@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:libero"
   ],
   "eggGroups": [
@@ -238,5 +239,10 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "icy"
   ]
 }

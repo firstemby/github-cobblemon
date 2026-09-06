@@ -11,28 +11,51 @@ package com.cobblemon.mod.common.api.abilities
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.PrioritizedList
 import com.cobblemon.mod.common.api.Priority
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addAbilityPoolFunctions
+import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 
 /**
  * A pool of potential abilities, as a [PrioritizedList]. The added logic of this subclass
  * is that it has selection logic. Given a species and a set of aspects, it will go through
- * each priority group, and if it can then it will pick from that group and return it.
+ * each priority group, and if it can then it will pick from that group and return it. It also
+ * returns the index of that ability within the type band it is.
  *
  * @author Hiroku
  * @since July 28th, 2022
  */
 open class AbilityPool : PrioritizedList<PotentialAbility>() {
-    fun select(species: Species, aspects: Set<String>): Pair<Ability, Priority> {
+    val struct = ObjectValue(this)
+        .also { it.addAbilityPoolFunctions(this) }
+
+    fun getInheritedAbility(parent: Pokemon): Ability? {
+        if (parent.ability.forced) {
+            return null
+        }
+
+        val parentAbilityType = parent.form.abilities.find { it.template == parent.ability.template }?.type ?: return null // Should be impossible
+        val matchingTypes = ordered.filter { it.type == parentAbilityType }
+        val desiredIndex = parent.ability.index
+        val matchingPotentialAbility = matchingTypes.getOrNull(desiredIndex) ?: return null
+        return matchingPotentialAbility.template.create().also { it.index = desiredIndex }
+    }
+
+    fun select(species: Species, aspects: Set<String>): Ability {
+        val typeMap = ordered.groupBy { it.type }
         for (priority in Priority.entries) {
             val potentialAbilities = priorityMap[priority]?.filter { it.isSatisfiedBy(aspects) } ?: continue
             if (potentialAbilities.isNotEmpty()) {
-                return potentialAbilities.random().template.create() to priority
+                val selected = potentialAbilities.random()
+                val ability = selected.template.create(priority = selected.priority)
+                ability.index = typeMap[selected.type]!!.indexOf(selected)
+                return ability
             }
         }
 
         LOGGER.error("Unable to select an ability from the pool for $species and aspects: ${aspects.joinToString()}")
         LOGGER.error("Please show this to the Cobblemon developers!")
         Exception().printStackTrace()
-        return Abilities.first().create() to Priority.LOWEST
+        return Abilities.first().create()
     }
 }

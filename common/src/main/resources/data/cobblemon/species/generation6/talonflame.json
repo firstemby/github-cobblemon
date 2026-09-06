@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flamebody",
+    "flamebody",
     "h:galewings"
   ],
   "eggGroups": [
@@ -203,5 +204,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "fletchinder",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

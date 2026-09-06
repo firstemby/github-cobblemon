@@ -259,5 +259,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "nosepass",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

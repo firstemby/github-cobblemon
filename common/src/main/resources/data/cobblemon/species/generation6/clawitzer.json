@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "megalauncher",
+    "megalauncher",
     "h:megalauncher"
   ],
   "eggGroups": [
@@ -189,5 +190,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "clauncher",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

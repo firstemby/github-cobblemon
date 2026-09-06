@@ -204,5 +204,8 @@
     "legacy:stompingtantrum"
   ],
   "preEvolution": "duraludon",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

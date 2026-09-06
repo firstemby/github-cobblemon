@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sheerforce",
+    "sheerforce",
     "h:heavymetal"
   ],
   "eggGroups": [
@@ -229,5 +230,10 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

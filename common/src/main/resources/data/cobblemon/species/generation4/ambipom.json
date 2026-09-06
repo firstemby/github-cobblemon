@@ -260,5 +260,8 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "aipom",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

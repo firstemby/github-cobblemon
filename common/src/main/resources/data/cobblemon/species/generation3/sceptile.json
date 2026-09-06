@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:unburden"
   ],
   "eggGroups": [
@@ -289,6 +290,7 @@
       ],
       "abilities": [
         "lightningrod",
+        "lightningrod",
         "h:lightningrod"
       ],
       "baseStats": {
@@ -321,7 +323,15 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:protean"
   ],
   "eggGroups": [
@@ -218,5 +219,8 @@
     "tutor:worryseed"
   ],
   "preEvolution": "floragato",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

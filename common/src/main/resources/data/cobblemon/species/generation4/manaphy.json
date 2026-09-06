@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "hydration",
+    "hydration",
     "h:hydration"
   ],
   "eggGroups": [
@@ -199,5 +200,8 @@
     "legacy:toxic",
     "legacy:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

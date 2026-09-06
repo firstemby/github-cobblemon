@@ -67,7 +67,7 @@ object SpawnLoader {
         .registerTypeAdapter(MoonPhaseRange::class.java, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
+        .registerTypeAdapter(CompoundTag::class.java, CompoundTagAdapter)
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
         .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)

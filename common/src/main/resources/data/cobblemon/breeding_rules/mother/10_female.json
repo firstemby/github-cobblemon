@@ -1,0 +1,5 @@
+{
+  "type": "expression",
+  "order": 10,
+  "expression": "(q.parent_1.is_female && q.parent_2.is_male) ? q.parent_1 : ((q.parent_2.is_female && q.parent_1.is_male) ? q.parent_2 : 0)"
+}

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:leafguard"
   ],
   "eggGroups": [
@@ -236,5 +237,8 @@
     "special:frenzyplant"
   ],
   "preEvolution": "bayleef",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

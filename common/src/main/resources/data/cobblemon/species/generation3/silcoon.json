@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:shedskin"
   ],
   "eggGroups": [
@@ -130,5 +131,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

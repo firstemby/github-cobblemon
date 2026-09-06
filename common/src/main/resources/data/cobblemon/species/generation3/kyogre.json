@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "drizzle",
+    "drizzle",
     "h:drizzle"
   ],
   "eggGroups": [
@@ -185,6 +186,7 @@
         "primal"
       ],
       "abilities": [
+        "primordialsea",
         "primordialsea",
         "h:primordialsea"
       ],

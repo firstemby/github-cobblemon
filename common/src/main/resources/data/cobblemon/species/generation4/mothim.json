@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swarm",
+    "swarm",
     "h:tintedlens"
   ],
   "eggGroups": [
@@ -200,5 +201,10 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

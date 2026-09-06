@@ -1,0 +1,571 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.block.entity
+
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.api.text.red
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import java.util.UUID
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.core.HolderLookup
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ClientGamePacketListener
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityTicker
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.BlockHitResult
+
+class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
+    var renderState: BlockEntityRenderState? = null
+    var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
+    private var eggItem: ItemStack = ItemStack.EMPTY
+    var ownerUUID: UUID? = null // player UUID that placed this nest
+    val eggState = EggState()
+    var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null)
+
+    /**
+     * Sets the ItemStack and synchronizes it.
+     */
+    fun setItem(itemStack: ItemStack) {
+        this.eggItem = itemStack
+        setChanged() // Mark the block entity as changed.
+        level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
+    }
+
+    /**
+     * Retrieves the ItemStack.
+     */
+    fun getItem(): ItemStack = eggItem
+
+    /**
+     * Drops the ItemStack in the world.
+     */
+    fun dropItem(world: Level, pos: BlockPos, state: BlockState) {
+        if (!eggItem.isEmpty) {
+            val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItem.copy())
+            world.addFreshEntity(itemEntity)
+            eggItem = ItemStack.EMPTY
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+        }
+    }
+
+    /**
+     * Handles interaction with the block.
+     */
+    fun onUse(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: ServerPlayer,
+        hand: InteractionHand,
+        hit: BlockHitResult
+    ): InteractionResult {
+        val heldItem = player.getItemInHand(hand)
+
+        val eggComponent = eggItem.get(CobblemonItemComponents.EGG_DATA)
+        if (!eggItem.isEmpty && eggComponent != null) {
+            // Hatch the Pokémon if the time to hatch is 0 or below
+            if (eggComponent.ticksToHatch <= 0F) {
+                eggState.isHatching = true // Trigger hatch animation on the renderer
+                //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
+                eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
+                setChanged()
+                level?.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+                return InteractionResult.SUCCESS
+            }
+
+
+            // Otherwise, drop the egg
+            dropItem(world, pos, state)
+            notifyEggTheftIfVisible(player)
+            eggState.resetHatchingState()
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+            return InteractionResult.SUCCESS
+        }
+
+        // Place a new egg if the player is holding one
+        if (!heldItem.isEmpty && heldItem.get(CobblemonItemComponents.EGG_DATA) != null) {
+            if (!player.isCreative) {
+                setItem(heldItem.split(1))
+            } else {
+                setItem(heldItem.copy())
+            }
+            eggState.resetHatchingState()
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
+            return InteractionResult.SUCCESS
+        }
+
+        return InteractionResult.FAIL
+    }
+
+    fun notifyEggTheftIfVisible(player: ServerPlayer) {
+        if (player.uuid == ownerUUID && ownerUUID != null) return
+        val serverLevel = level as? ServerLevel ?: return
+        val parentsToCheck = listOfNotNull(
+            parents.first?.let { serverLevel.getEntity(it) as? PokemonEntity },
+            parents.second?.let { serverLevel.getEntity(it) as? PokemonEntity }
+        )
+        for (parent in parentsToCheck) {
+            if (!parent.hasLineOfSight(player)) continue
+            if (parent.distanceToSqr(player) > EGG_THEFT_SIGHT_RANGE_SQR) continue
+            val brain = parent.biggerBrain
+            brain.setMemory(CobblemonMemories.EGG_THIEF, player)
+            brain.setMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK, serverLevel.gameTime)
+            brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+            brain.sendDebugMessage("[NestBlockEntity] Egg theft observed by ${parent.name.string} at ${blockPos}.")
+        }
+    }
+
+    fun hatchWildEgg(state: BlockState, world: ServerLevel, pos: BlockPos) {
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA) ?: return
+        Cobblemon.eggStoreManager.hatch(eggId = egg.eggId) { offspring ->
+            if (offspring != null) {
+                val spawnedEntity = PokemonEntity(world, offspring).apply {
+                    setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+                    isNewlyHatched = true
+                    world.addFreshEntity(this)
+                }
+
+                spawnedEntity.after(seconds = 1.0F) { spawnedEntity.cry() }
+            }
+
+            clearParentsAfterWildHatch(world)
+            setItem(Items.AIR.defaultInstance)
+            eggState.resetHatchingState()
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            Cobblemon.eggStoreManager.remove(eggId = egg.eggId)
+        }
+    }
+
+    private fun clearParentsAfterWildHatch(world: ServerLevel) {
+        val parentEntities = listOfNotNull(
+            parents.first?.let { world.getEntity(it) as? PokemonEntity },
+            parents.second?.let { world.getEntity(it) as? PokemonEntity }
+        )
+        for (parent in parentEntities) {
+            val brain = parent.biggerBrain
+            brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+            brain.eraseMemory(CobblemonMemories.NEST_LOCATION)
+            brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
+            brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            brain.eraseMemory(CobblemonMemories.EGG_THIEF)
+            brain.eraseMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
+            brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+            brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
+            brain.eraseMemory(CobblemonMemories.IRRITATED_AT)
+            brain.sendDebugMessage("[NestBlockEntity] Wild egg hatched; clearing nest memories.")
+        }
+        parents = Pair(null, null)
+        nestClaimedBy = Pair(null, null)
+    }
+
+    override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
+        super.saveAdditional(tag, registryLookup)
+        //if (!eggItem.isEmpty) {
+            tag.put("EggItem", eggItem.saveOptional(registryLookup))
+        //}
+        ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
+        tag.putBoolean("IsHatching", eggState.isHatching)
+        tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        eggState.renderingBlockPos?.let {
+            tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
+        }
+    }
+
+    override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
+        super.loadAdditional(tag, registryLookup)
+        //if (tag.contains("EggItem")) {
+            eggItem = ItemStack.parseOptional(registryLookup, tag.getCompound("EggItem"))
+        //}
+        if (tag.contains("OwnerUUID")) {
+            ownerUUID = tag.getUUID("OwnerUUID")
+        }
+
+        eggState.isHatching = tag.getBoolean("IsHatching")
+        eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
+        if (tag.contains("RenderingBlockPos")) {
+            val posArray = tag.getIntArray("RenderingBlockPos")
+            if (posArray.size == 3) {
+                eggState.renderingBlockPos = BlockPos(posArray[0], posArray[1], posArray[2])
+            }
+        }
+
+    }
+
+    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
+        //println("getUpdatePacket called for NestBlockEntity at $blockPos with egg: $eggComponent")
+        return ClientboundBlockEntityDataPacket.create(this)
+    }
+
+    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
+        val tag = saveWithoutMetadata(registryLookup)
+        //println("getUpdateTag called for NestBlockEntity at $blockPos with tag: $tag")
+        return tag
+    }
+
+    /*fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }*/
+
+    fun hatchPokemon(
+        state: BlockState,
+        world: Level,
+        pos: BlockPos,
+        player: ServerPlayer
+    ) {
+        val egg = getItem().get(CobblemonItemComponents.EGG_DATA) ?: return
+        if (world !is ServerLevel) return
+
+        if (!eggState.isHatching && player.uuid != ownerUUID) {
+            return // It won't hatch for you, friend
+        }
+
+        Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
+            // Clear the egg from the nest and update the block entity
+            setItem(Items.AIR.defaultInstance)
+            eggState.resetHatchingState()
+            setChanged()
+            world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+
+            if (offspring == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Unable to generate Pokémon.".red(), true)
+                return@hatch
+            }
+
+            val playerParty = Cobblemon.storage.getParty(player)
+            val playerPC = Cobblemon.storage.getPC(player)
+
+            // Ensure PC has space for the Pokémon
+            if (playerPC.getFirstAvailablePosition() == null) {
+                player.displayClientMessage("TEMP MESSAGE: Hatching failed: Your PC is full.".red(), true)
+                return@hatch
+            }
+
+            // Spawn the Pokémon entity at the egg's position
+            val spawnedEntity = PokemonEntity(world, offspring).apply {
+                setPos(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5)
+                isNewlyHatched = true
+                world.addFreshEntity(this)
+            }
+
+            // Trigger cry animation
+            spawnedEntity.after(seconds = 1.0f) {
+                spawnedEntity.cry()
+            }
+
+            // If party has space, add Pokémon to the party
+            if (playerParty.getFirstAvailablePosition() != null) {
+                playerParty.add(offspring)
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your party!".green(), true)
+            }
+
+            // If party is full but PC has space, add to PC and recall Pokémon
+            else if (playerPC.add(offspring)) {
+                player.displayClientMessage("TEMP MESSAGE: The Pokémon was added to your PC storage.".green(), true)
+
+                // Schedule recall animation
+                spawnedEntity.after(seconds = 3.0f) {
+                    spawnedEntity.recallWithAnimation()
+                }
+            }
+        }
+    }
+
+
+
+
+    /**
+     * Spawns a Pokémon of the given species around the specified position.
+     * @param world The world in which to spawn the Pokémon.
+     * @param pos The position around which to spawn the Pokémon.
+     * @param species The species of the Pokémon to spawn.
+     * @param isMale Whether the Pokémon should be male or female.
+     * @return The spawned Pokémon entity, or null if spawning failed.
+     *//*
+    fun spawnPokemon(
+        world: Level,
+        pos: BlockPos//,
+        //species: PokemonSpecies
+    ): Pair<PokemonEntity?,PokemonEntity?> {
+        if (world !is ServerLevel) return null to null
+
+        // Generate a random offset within the radius
+        val randomOffset = {
+            world.random.nextDouble() * SPAWN_RADIUS * 2 - SPAWN_RADIUS
+        }
+        val spawnPos = pos.offset(randomOffset().toInt(), 0, randomOffset().toInt())
+
+        // todo Use Spawn files
+        // todo CHANGE THIS! We probably want a brand new spawner similar to the fishing spawner
+        val spawner = BestSpawner.nestSpawner
+
+        val buckets = Cobblemon.bestSpawner.config.buckets
+
+        val chosenBucket = chooseSpawnBucket(buckets)
+
+        val spawnCause = NestSpawnCause(
+            spawner = spawner,
+            bucket = chosenBucket,
+            entity = null
+        )
+
+        //
+        val result = spawner.run(spawnCause, level as ServerLevel, spawnPos)
+
+        var spawnedPokemon: PokemonEntity? = null
+        var partnerPokemon: PokemonEntity? = null
+        val resultingSpawn = result?.get()
+
+        if (resultingSpawn is EntitySpawnResult) {
+            for (entity in resultingSpawn.entities) {
+                // we can query the spawned pokemon here
+                spawnedPokemon = (entity as PokemonEntity)
+
+                // spawn a partner pokemon also in a random position
+                partnerPokemon = this.spawnPartnerPokemon(world, pos, spawnedPokemon)
+
+                // CRAB IDEA: todo maybe some grass particles? as if they appeared from the grass or forest?
+
+
+            }
+        }
+
+        return spawnedPokemon to partnerPokemon
+    }
+
+    fun spawnPartnerPokemon(
+        world: ServerLevel,
+        pos: BlockPos,
+        originalPokemon: PokemonEntity
+    ): PokemonEntity? {
+        println("Attempting to spawn partner Pokémon...")
+        println("Original Pokémon being cloned: ${originalPokemon}")
+
+        val pokemon = originalPokemon.pokemon
+        println("Pokemon details before cloning: UUID=${pokemon.uuid}, Ability=${pokemon.ability}, Species=${pokemon.species}, Form=${pokemon.form}")
+
+        // Validate ability before cloning
+        if (pokemon.ability.template == Abilities.DUMMY) {
+            println("Original Pokémon has DUMMY ability. Rolling a new one before cloning...")
+            pokemon.rollAbility()
+            println("New ability assigned: ${pokemon.ability}")
+        }
+
+        // Perform the clone
+        val clonedPokemon = try {
+            pokemon.clone()
+        } catch (e: IllegalStateException) {
+            println("Error cloning Pokémon: ${e.message}")
+            return null // Skip spawning if cloning fails
+        }
+
+        // Apply further customization to the cloned Pokémon
+        clonedPokemon.gender = if (pokemon.gender == Gender.MALE) Gender.FEMALE else Gender.MALE
+        println("Cloned Pokémon details: ${clonedPokemon}")
+
+        // Generate a random offset for the partner Pokémon
+        val randomOffset = {
+            world.random.nextDouble() * SPAWN_RADIUS * 2 - SPAWN_RADIUS
+        }
+        val spawnPos = pos.offset(randomOffset().toInt(), 0, randomOffset().toInt())
+
+        // Create the partner PokemonEntity
+        val partnerPokemonEntity = PokemonEntity(world, clonedPokemon).apply {
+            setPos(spawnPos.x + 0.5, spawnPos.y.toDouble(), spawnPos.z + 0.5)
+        }
+
+        // Add the partner to the world
+        return if (world.addFreshEntity(partnerPokemonEntity)) partnerPokemonEntity else null
+    }
+
+    fun chooseSpawnBucket(buckets: List<SpawnBucket>): SpawnBucket {
+        val baseIncreases = listOf(2.5F, 1.0F, 0.6F)  // Base increases for the first three buckets beyond the first
+        val adjustedWeights = buckets.mapIndexed { index, bucket ->
+            if (index == 0) {
+                // Placeholder, will be recalculated
+                0.0F
+            } else {
+                val increase = if (index < baseIncreases.size) baseIncreases[index] else baseIncreases.last() + (index - baseIncreases.size + 1) * 0.15F
+                bucket.weight + increase
+            }
+        }.toMutableList()
+
+        // Recalculate the first bucket's weight to ensure the total is 100%
+        val totalAdjustedWeight = adjustedWeights.sum() - adjustedWeights[0]  // Corrected to ensure the list contains Floats
+        adjustedWeights[0] = 100.0F - totalAdjustedWeight + buckets[0].weight
+
+        // Random selection based on adjusted weights
+        val weightSum = adjustedWeights.sum()
+        val chosenSum = kotlin.random.Random.nextDouble(weightSum.toDouble()).toFloat()  // Ensure usage of Random from kotlin.random package
+        var sum = 0.0F
+        adjustedWeights.forEachIndexed { index, weight ->
+            sum += weight
+            if (sum >= chosenSum) {
+                return buckets[index]
+            }
+        }
+
+        return buckets.first()  // Fallback
+    }*/
+
+    // Hopper interaction methods
+    override fun getContainerSize(): Int = 1
+
+    override fun isEmpty(): Boolean = eggItem.isEmpty
+
+    override fun getItem(slot: Int): ItemStack = if (slot == 0) eggItem else ItemStack.EMPTY
+
+    override fun removeItem(slot: Int, amount: Int): ItemStack {
+        if (slot == 0 && !eggItem.isEmpty) {
+            val removed = eggItem.split(amount)
+            setChanged()
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun removeItemNoUpdate(slot: Int): ItemStack {
+        if (slot == 0) {
+            val removed = eggItem
+            eggItem = ItemStack.EMPTY
+            return removed
+        }
+        return ItemStack.EMPTY
+    }
+
+    override fun setItem(slot: Int, stack: ItemStack) {
+        if (slot == 0) {
+            eggItem = stack
+            setChanged()
+        }
+    }
+
+    override fun setChanged() {
+        // Marks the block entity as modified
+        level?.blockEntityChanged(worldPosition)
+
+        // Schedules a block update to synchronize with the client
+        level?.sendBlockUpdated(worldPosition, blockState, blockState, Block.UPDATE_ALL)
+    }
+
+    override fun getSlotsForFace(direction: Direction): IntArray {
+        return intArrayOf(0)
+    }
+
+    /**
+     * Allows hoppers to insert items into the container.
+     */
+    override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, direction: Direction?): Boolean {
+        // Allow only items with EggComponent to be inserted
+        return slot == 0 && stack.get(CobblemonItemComponents.EGG_DATA) != null
+    }
+
+    /**
+     * Allows hoppers to pull items out of the container.
+     */
+    override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, direction: Direction): Boolean {
+        // Allow items to be pulled out only if the slot contains an egg item
+        return slot == 0 && !eggItem.isEmpty
+    }
+
+    override fun stillValid(player: Player): Boolean = true
+
+    override fun clearContent() {
+        eggItem = ItemStack.EMPTY
+    }
+
+    companion object {
+        private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick // todo remove this
+        private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
+        private const val EGG_THEFT_SIGHT_RANGE_SQR = 20.0 * 20.0
+
+        val TICKER = BlockEntityTicker<NestBlockEntity> { world, pos, state, blockEntity ->
+            // Retrieve the Egg from the EggComponent
+            val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)
+
+            if (egg != null) {
+                if (egg.ticksToHatch == 0F) {
+                    if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel) {
+                        blockEntity.hatchWildEgg(state, world, pos)
+                        return@BlockEntityTicker
+                    }
+                }
+
+                // Decrease hatch time if the egg still has time left (faster if in nether)
+                val isNether = if (world != null && world.dimension() == Level.NETHER) true else false
+
+                if (egg.ticksToHatch > 0F) {
+                    egg.ticksToHatch = when {
+                        isNether -> egg.ticksToHatch - Cobblemon.config.netherNestHatchRate
+                        else -> egg.ticksToHatch - Cobblemon.config.nestHatchRate
+                    }
+                }
+
+                // Sync to client every 10 seconds (200 ticks)
+                if (egg.ticksToHatch % 200F == 0F) {
+                    //blockEntity.setItem(egg) // Update component and synchronize
+                    //blockEntity.setChanged()
+                    val test = 1
+                }
+            } else {
+                // Attempt to spawn a random egg in the nest with a small chance
+                if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and remove this entirely later too
+
+                    /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+                    val test = 1
+
+                    // todo remove this as we are not having nests spawn pokemon anymore
+                    /*val (parent1, parent2) = blockEntity.spawnPokemon(world, pos)
+
+                    if (parent1 != null && parent2 != null) {
+                        val childResult = BreedingLogicManager.breed(parent1.pokemon,parent2.pokemon)
+
+                        // Create an egg with the parents
+                        val egg = childResult.pokemon?.species?.let {
+                            Egg(
+                                    species = it.resourceIdentifier,
+                                    parentOne = parent1.pokemon, // Parent one UUID
+                                    parentTwo = parent2.pokemon, // Parent two UUID
+                                    form = childResult.pokemon.formData.name.lowercase(),
+                                    timeToHatch = 200F // 10 seconds hatch time
+                            )
+                        }*/ // TODO KILL ALL OF THIS CODE ONCE WE HAVE A HABITAT SPAWNER
+                        if (egg != null) {
+                            blockEntity.setItem(egg.createEggItemStack())
+                        }
+                        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+                    }*/
+                }
+            }
+        }
+    }
+}

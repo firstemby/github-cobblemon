@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "sweetveil",
+    "sweetveil",
     "h:aromaveil"
   ],
   "eggGroups": [
@@ -355,5 +356,8 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

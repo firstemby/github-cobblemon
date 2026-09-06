@@ -9,7 +9,9 @@
   "client": [
     "BuiltinModelItemRendererMixin",
     "EntityRenderDispatcherMixin",
+      "ItemModelShaperMixin",
     "ItemPropertiesMixin",
+      "ModelBakeryMixin",
     "MusicManagerMixin",
     "ParticleManagerMixin",
     "SoundEngineMixin",

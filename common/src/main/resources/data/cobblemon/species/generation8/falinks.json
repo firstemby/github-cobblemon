@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "battlearmor",
+    "battlearmor",
     "h:defiant"
   ],
   "eggGroups": [
@@ -186,5 +187,8 @@
     "legacy:round",
     "legacy:snore"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

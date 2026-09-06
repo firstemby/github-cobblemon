@@ -205,5 +205,8 @@
     "legacy:swagger"
   ],
   "preEvolution": "mareanie",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

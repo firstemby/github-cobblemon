@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:expression",
+  "order": 10,
+  "expression": "q.offspring.species.has_feature('sheared') ? { q.offspring.apply('sheared=true'); }; "
+}

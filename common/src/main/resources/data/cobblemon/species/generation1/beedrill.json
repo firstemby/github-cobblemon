@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "swarm",
+    "swarm",
     "h:sniper"
   ],
   "eggGroups": [
@@ -256,6 +257,7 @@
       ],
       "abilities": [
         "adaptability",
+        "adaptability",
         "h:adaptability"
       ],
       "baseStats": {
@@ -325,5 +327,8 @@
     "behaviour": {
       "key": "cobblemon:air/glider"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

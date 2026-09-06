@@ -1,0 +1,6 @@
+{
+  "type": "cobblemon:set_inherited_iv_count",
+  "order": 11,
+  "count": 5,
+  "condition": "q.mother.held_item.is_of('cobblemon:destiny_knot') || q.father.held_item.is_of('cobblemon:destiny_knot')"
+}

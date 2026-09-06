@@ -285,6 +285,7 @@
       ],
       "abilities": [
         "parentalbond",
+        "parentalbond",
         "h:parentalbond"
       ],
       "baseStats": {
@@ -361,7 +362,11 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     }
   ],
   "riding": {
@@ -401,5 +406,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

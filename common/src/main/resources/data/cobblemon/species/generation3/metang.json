@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "clearbody",
+    "clearbody",
     "h:lightmetal"
   ],
   "eggGroups": [
@@ -264,5 +265,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

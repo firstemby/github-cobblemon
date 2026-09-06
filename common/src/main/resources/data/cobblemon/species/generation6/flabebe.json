@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "flowerveil",
+    "flowerveil",
     "h:symbiosis"
   ],
   "eggGroups": [
@@ -359,5 +360,9 @@
       ],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

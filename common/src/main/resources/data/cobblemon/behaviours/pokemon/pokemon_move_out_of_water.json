@@ -1,0 +1,24 @@
+{
+  "name": "cobblemon.behaviour.pokemon_move_out_of_water.name",
+  "description": "cobblemon.behaviour.pokemon_move_out_of_water.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "add_tasks_to_activity",
+      "condition": "q.entity.behaviour.moving.swim.avoids_water",
+      "activity": "idle",
+      "tasksByPriority": {
+        "4": []
+      }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.behaviour.moving.swim.avoids_water",
+      "objectivesByPriority": {
+        "3": [
+          "cobblemon:move_out_of_water"
+        ]
+      }
+    }
+  ]
+}

@@ -212,5 +212,8 @@
     "special:refresh"
   ],
   "preEvolution": "ledyba",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

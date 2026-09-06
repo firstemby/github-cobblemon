@@ -280,6 +280,11 @@
       ]
     }
   ],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ],
   "lightingData": {
     "lightLevel": 6,
     "liquidGlowMode": "BOTH"

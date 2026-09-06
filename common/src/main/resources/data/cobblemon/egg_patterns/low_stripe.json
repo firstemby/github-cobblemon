@@ -1,0 +1,7 @@
+{
+  "model": "cobblemon:egg",
+  "baseTexturePath": "cobblemon:base",
+  "overlayTexturePath": "cobblemon:pattern_low_stripe",
+  "baseInvSpritePath": "cobblemon:test_pattern_base",
+  "overlayInvSpritePath": "cobblemon:test_pattern_overlay"
+}

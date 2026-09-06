@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "keeneye",
+    "keeneye",
     "h:sniper"
   ],
   "eggGroups": [
@@ -245,5 +246,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "twiggy"
+  ]
 }

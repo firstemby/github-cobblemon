@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "drought",
+    "drought",
     "h:drought"
   ],
   "eggGroups": [
@@ -256,6 +257,7 @@
         "primal"
       ],
       "abilities": [
+        "desolateland",
         "desolateland",
         "h:desolateland"
       ],

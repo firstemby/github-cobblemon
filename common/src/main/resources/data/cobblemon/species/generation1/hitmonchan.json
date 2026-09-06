@@ -249,5 +249,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "tyrogue",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -296,5 +297,9 @@
     "special:refresh"
   ],
   "preEvolution": "baltoy",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

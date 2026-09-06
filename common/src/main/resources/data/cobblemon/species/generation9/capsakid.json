@@ -176,5 +176,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "sandy"
+  ]
 }

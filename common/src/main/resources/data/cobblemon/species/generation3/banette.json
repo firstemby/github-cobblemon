@@ -237,6 +237,7 @@
       ],
       "abilities": [
         "prankster",
+        "prankster",
         "h:prankster"
       ],
       "baseStats": {
@@ -275,7 +276,11 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "rocky",
+        "shroomy"
+      ]
     }
   ],
   "behaviour": {
@@ -308,5 +313,9 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "shroomy"
+  ]
 }

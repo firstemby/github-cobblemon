@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flamebody",
+    "flamebody",
     "h:swarm"
   ],
   "eggGroups": [
@@ -273,5 +274,11 @@
     "legacy:toxic"
   ],
   "preEvolution": "larvesta",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "shroomy"
+  ]
 }

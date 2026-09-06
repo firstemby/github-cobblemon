@@ -264,5 +264,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "shroomy"
+  ]
 }

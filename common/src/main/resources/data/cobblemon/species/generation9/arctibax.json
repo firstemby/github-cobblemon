@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "thermalexchange",
+    "thermalexchange",
     "h:icebody"
   ],
   "eggGroups": [
@@ -164,5 +165,9 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     }
-  }
+  },
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

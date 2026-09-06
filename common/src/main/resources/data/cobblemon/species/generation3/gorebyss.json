@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:hydration"
   ],
   "eggGroups": [
@@ -208,5 +209,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "clamperl",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

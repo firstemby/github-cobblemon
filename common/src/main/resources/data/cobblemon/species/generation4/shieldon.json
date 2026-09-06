@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sturdy",
+    "sturdy",
     "h:soundproof"
   ],
   "eggGroups": [
@@ -224,5 +225,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

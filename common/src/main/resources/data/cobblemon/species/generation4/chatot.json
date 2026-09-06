@@ -186,5 +186,8 @@
     "legacy:swift",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

@@ -235,5 +235,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "elgyem",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

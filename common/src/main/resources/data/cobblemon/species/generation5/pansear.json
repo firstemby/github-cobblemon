@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "gluttony",
+    "gluttony",
     "h:blaze"
   ],
   "eggGroups": [
@@ -257,5 +258,9 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy"
+  ]
 }

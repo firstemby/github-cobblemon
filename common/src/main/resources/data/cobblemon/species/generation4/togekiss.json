@@ -346,5 +346,8 @@
   "evolutions": [],
   "flyingEyeHeight": 0.7,
   "standingEyeHeight": 0.7,
-  "swimmingEyeHeight": 0.7
+  "swimmingEyeHeight": 0.7,
+  "nestTypes": [
+    "twiggy"
+  ]
 }

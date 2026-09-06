@@ -1,0 +1,22 @@
+﻿{
+  "variants": {
+    "variant=sandy_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_sandy"
+    },
+    "variant=sandy_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_sandy"
+    },
+    "variant=sandy_red_sand,waterlogged=false": {
+      "model": "cobblemon:block/nest_sandy_red_sand"
+    },
+    "variant=sandy_red_sand,waterlogged=true": {
+      "model": "cobblemon:block/nest_sandy_red_sand"
+    },
+    "variant=sandy_soul_sand,waterlogged=false": {
+      "model": "cobblemon:block/nest_sandy_soul_sand"
+    },
+    "variant=sandy_soul_sand,waterlogged=true": {
+      "model": "cobblemon:block/nest_sandy_soul_sand"
+    }
+  }
+}

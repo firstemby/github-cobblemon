@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "defeatist",
+    "defeatist",
     "h:defeatist"
   ],
   "eggGroups": [
@@ -229,5 +230,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

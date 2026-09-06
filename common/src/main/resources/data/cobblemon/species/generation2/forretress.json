@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "sturdy",
+    "sturdy",
     "h:overcoat"
   ],
   "eggGroups": [
@@ -299,5 +300,9 @@
   "evolutions": [],
   "features": [
     "shulker"
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

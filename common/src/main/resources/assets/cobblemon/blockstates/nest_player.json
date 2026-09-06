@@ -1,0 +1,10 @@
+﻿{
+  "variants": {
+    "variant=player_submerged,waterlogged=false": {
+      "model": "cobblemon:block/nest_player"
+    },
+    "variant=player_submerged,waterlogged=true": {
+      "model": "cobblemon:block/nest_player"
+    }
+  }
+}

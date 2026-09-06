@@ -226,5 +226,8 @@
   "lightingData": {
     "lightLevel": 7,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "shroomy"
+  ]
 }

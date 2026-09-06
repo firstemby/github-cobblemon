@@ -31,6 +31,9 @@ object CobblemonPermissions {
     val GIVE_POKEMON_SELF = this.create("${GIVE_POKEMON_BASE}.self", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
     @JvmStatic
     val GIVE_POKEMON_OTHER = this.create("${GIVE_POKEMON_BASE}.other", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    val GIVE_POKEMON_EGG = this.create("${COMMAND_PREFIX}givepokemonegg", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
     private const val HEAL_POKEMON_BASE = "${COMMAND_PREFIX}healpokemon"
     @JvmStatic
     val HEAL_POKEMON_SELF = this.create("$HEAL_POKEMON_BASE.self", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
@@ -85,6 +88,9 @@ object CobblemonPermissions {
 
     @JvmStatic
     val FRIENDSHIP = this.create("${COMMAND_PREFIX}friendship", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+
+    @JvmStatic
+    val BREED = this.create("${COMMAND_PREFIX}breed", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
 
     @JvmStatic
@@ -151,6 +157,8 @@ object CobblemonPermissions {
 
     @JvmStatic
     val USE_RIDING_STATS_DEBUG = this.create("useridingstatsdebug", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val DEBUG_COBBLEMON_AI = this.create("${COMMAND_PREFIX}debugcobblemonai", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
     @JvmStatic
     fun all(): Iterable<Permission> = this.permissions

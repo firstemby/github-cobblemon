@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:sand",
+    "minecraft:sandstone",
+    "minecraft:suspicious_sand",
+    {
+      "id": "#c:sands",
+      "required": false
+    }
+  ]
+}

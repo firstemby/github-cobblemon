@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:magician"
   ],
   "eggGroups": [
@@ -247,5 +248,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "twiggy"
   ]
 }

@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.client.net.data.CobblemonMechanicsSyncHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
 import com.cobblemon.mod.common.client.net.debug.OpenRidingStatsDebugGUIHandler
+import com.cobblemon.mod.common.client.net.debug.UpdateTrackedBrainDataHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
 import com.cobblemon.mod.common.client.net.effect.PokeSnackBlockParticlesHandler
@@ -84,6 +85,7 @@ import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyn
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
+import com.cobblemon.mod.common.net.messages.client.debug.UpdateTrackedBrainDataPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
@@ -166,6 +168,7 @@ import com.cobblemon.mod.common.net.messages.server.behaviour.DamageOnCollisionP
 import com.cobblemon.mod.common.net.messages.server.behaviour.SetEntityBehaviourPacket
 import com.cobblemon.mod.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
 import com.cobblemon.mod.common.net.messages.server.block.TMMachineTeachMovePacket
+import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.move.MoveSelectedPacket
 import com.cobblemon.mod.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
@@ -224,6 +227,7 @@ import com.cobblemon.mod.common.net.serverhandling.behaviour.DamageOnCollisionPa
 import com.cobblemon.mod.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
 import com.cobblemon.mod.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler
 import com.cobblemon.mod.common.net.serverhandling.block.TMMachineTeachMoveHandler
+import com.cobblemon.mod.common.net.serverhandling.breeding.TriggerEggHatchHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectCancelledHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.move.MoveSelectedHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.party.PartyPokemonSelectedHandler
@@ -516,6 +520,8 @@ object CobblemonNetwork {
 
         // Debug
         list.add(PacketRegisterInfo(OpenRidingStatsDebugGUIPacket.ID, OpenRidingStatsDebugGUIPacket::decode, OpenRidingStatsDebugGUIHandler))
+        list.add(PacketRegisterInfo(UpdateTrackedBrainDataPacket.ID, UpdateTrackedBrainDataPacket::decode, UpdateTrackedBrainDataHandler))
+
 
 
         return list
@@ -638,6 +644,9 @@ object CobblemonNetwork {
         // TM Machine
         list.add(PacketRegisterInfo(SetActiveTMPacket.ID, SetActiveTMPacket::decode, SetActiveTMPacketHandler))
         list.add(PacketRegisterInfo(SetTMMachineContainerDataPacket.ID, SetTMMachineContainerDataPacket::decode, SetTMMachineContainerDataPacketHandler))
+
+        // Breeding Packets
+        list.add(PacketRegisterInfo(TriggerEggHatchPacket.ID, TriggerEggHatchPacket::decode, TriggerEggHatchHandler))
 
         // Behaviour Packets
         list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))

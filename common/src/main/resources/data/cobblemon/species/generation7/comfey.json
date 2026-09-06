@@ -227,5 +227,8 @@
     "legacy:toxic",
     "special:celebrate"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

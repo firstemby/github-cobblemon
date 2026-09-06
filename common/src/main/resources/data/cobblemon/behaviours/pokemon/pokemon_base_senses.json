@@ -1,0 +1,16 @@
+{
+  "name": "cobblemon.behaviour.pokemon_base_senses.name",
+  "description": "cobblemon.behaviour.pokemon_base_senses.desc",
+  "entityType": "cobblemon:pokemon",
+  "onAdd": [],
+  "onRemove": [],
+  "configurations": [
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:nearby_entities",
+        "cobblemon:hurt_by"
+      ]
+    }
+  ]
+}

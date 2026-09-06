@@ -14,6 +14,8 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LockFixation
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
@@ -246,9 +248,12 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
             entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
-        }
-        else {
+        } else {
             entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+        }
+
+        if (entity.entityData.get(PokemonEntity.BUSY) != entity.biggerBrain.fixation is LockFixation) {
+            entity.entityData.set(PokemonEntity.BUSY, entity.biggerBrain.fixation is LockFixation)
         }
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)

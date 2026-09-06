@@ -203,5 +203,8 @@
       "learnableMoves": [],
       "requirements": []
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

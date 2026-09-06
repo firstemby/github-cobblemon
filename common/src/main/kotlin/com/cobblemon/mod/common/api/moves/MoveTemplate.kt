@@ -9,17 +9,17 @@
 package com.cobblemon.mod.common.api.moves
 
 import com.bedrockk.molang.runtime.struct.MoStruct
-import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
 import com.cobblemon.mod.common.pokemon.FormData
-import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.util.lang
 import com.google.gson.annotations.SerializedName
 import com.mojang.serialization.Codec
@@ -57,7 +57,7 @@ open class MoveTemplate(
     val weight: Float
 ) {
     val struct: MoStruct by lazy {
-        QueryStruct(hashMapOf())
+        ObjectValue(this)
             .addFunction("name") { StringValue(name) }
             .addFunction("display_name") { StringValue(displayName.string) }
             .addFunction("description") { StringValue(description.string) }

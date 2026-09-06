@@ -232,5 +232,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

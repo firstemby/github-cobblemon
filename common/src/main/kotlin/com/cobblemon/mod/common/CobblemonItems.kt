@@ -604,6 +604,22 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     @JvmField val BERRY_JUICE = this.create("berry_juice", BerryJuiceItem())
 
+    val NEST_GRASSY = blockItem("nest_grassy", CobblemonBlocks.NEST_GRASSY)
+    val NEST_LEAFY = blockItem("nest_leafy", CobblemonBlocks.NEST_LEAFY)
+    val NEST_FIERY = blockItem("nest_fiery", CobblemonBlocks.NEST_FIERY)
+    val NEST_ICY = blockItem("nest_icy", CobblemonBlocks.NEST_ICY)
+    val NEST_HAY = blockItem("nest_hay", CobblemonBlocks.NEST_HAY)
+    val NEST_KELP = blockItem("nest_kelp", CobblemonBlocks.NEST_KELP)
+    val NEST_ROCKY = blockItem("nest_rocky", CobblemonBlocks.NEST_ROCKY)
+    val NEST_SANDY = blockItem("nest_sandy", CobblemonBlocks.NEST_SANDY)
+    val NEST_SHROOMY = blockItem("nest_shroomy", CobblemonBlocks.NEST_SHROOMY)
+    val NEST_TWIGGY = blockItem("nest_twiggy", CobblemonBlocks.NEST_TWIGGY)
+    val NEST_WATERY = blockItem("nest_watery", CobblemonBlocks.NEST_WATERY)
+
+
+    @JvmField
+    val INCUBATOR = blockItem("incubator", CobblemonBlocks.INCUBATOR)
+
     @JvmField
     val HABITAT_BLOCK = blockItem("habitat_block", CobblemonBlocks.HABITAT_BLOCK)
 
@@ -960,7 +976,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
-    val DESTINY_KNOT = heldItem("destiny_knot")
+    val DESTINY_KNOT = heldItem("destiny_knot", null, Properties().durability(256))
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField
@@ -1562,6 +1578,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     //@JvmField
     //val BINDING_SOIL = blockItem("binding_soil", CobblemonBlocks.BINDING_SOIL)
+    @JvmField
+    val POKEMON_EGG = eggItem("egg", CobblemonBlocks.EGG, Item.Properties().stacksTo(1))
+
+    private fun eggItem(name: String, block: Block, settings: Item.Properties = Item.Properties()): BlockItem = this.create(name, BlockItem(block, settings))
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
@@ -1651,9 +1671,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
         return create(name, RegionalFoodItem(properties))
     }
 
-    private fun heldItem(name: String, remappedName: String? = null): CobblemonItem = create(
+    private fun heldItem(name: String, remappedName: String? = null, settings:Item.Properties = Item.Properties()): CobblemonItem = create(
         name,
-        CobblemonItem(Item.Properties()).also {
+        CobblemonItem(settings).also {
             if (remappedName != null) {
                 CobblemonHeldItemManager.registerRemap(it, remappedName)
             }

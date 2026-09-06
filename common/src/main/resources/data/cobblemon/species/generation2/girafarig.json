@@ -295,5 +295,8 @@
       "result": "farigiraf",
       "variant": "level_up"
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

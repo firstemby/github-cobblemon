@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "moldbreaker",
+    "moldbreaker",
     "h:sheerforce"
   ],
   "eggGroups": [
@@ -230,5 +231,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "mummy",
+    "mummy",
     "h:mummy"
   ],
   "eggGroups": [
@@ -245,6 +246,7 @@
       ],
       "abilities": [
         "wanderingspirit",
+        "wanderingspirit",
         "h:wanderingspirit"
       ],
       "baseStats": {
@@ -400,7 +402,14 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

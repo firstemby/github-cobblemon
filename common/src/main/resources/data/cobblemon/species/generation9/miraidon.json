@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "hadronengine",
+    "hadronengine",
     "h:hadronengine"
   ],
   "eggGroups": [

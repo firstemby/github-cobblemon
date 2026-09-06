@@ -560,7 +560,13 @@
       ],
       "preEvolution": "slowpoke galarian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

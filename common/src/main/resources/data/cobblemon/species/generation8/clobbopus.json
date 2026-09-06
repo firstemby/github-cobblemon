@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "limber",
+    "limber",
     "h:technician"
   ],
   "eggGroups": [
@@ -172,5 +173,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

@@ -341,6 +341,7 @@
       ],
       "abilities": [
         "magicbounce",
+        "magicbounce",
         "h:magicbounce"
       ],
       "baseStats": {
@@ -376,7 +377,13 @@
         "herd": {
           "maxSize": 4
         }
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

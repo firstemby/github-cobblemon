@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:marvelscale"
   ],
   "eggGroups": [
@@ -306,5 +307,9 @@
     },
     "seats": [],
     "behaviour": null
-  }
+  },
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

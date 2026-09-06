@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:dirt",
+    "#minecraft:nylium",
+    {
+      "id": "#c:dirts",
+      "required": false
+    }
+  ]
+}

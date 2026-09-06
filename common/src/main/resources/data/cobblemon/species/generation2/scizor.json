@@ -263,6 +263,7 @@
       ],
       "abilities": [
         "technician",
+        "technician",
         "h:technician"
       ],
       "baseStats": {
@@ -298,7 +299,13 @@
         "herd": {
           "maxSize": 6
         }
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

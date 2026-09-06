@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:moxie"
   ],
   "eggGroups": [
@@ -180,5 +181,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy",
+    "watery"
   ]
 }

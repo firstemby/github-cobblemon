@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -265,5 +266,9 @@
       ],
       "requirements": []
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

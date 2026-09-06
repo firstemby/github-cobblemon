@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sturdy",
+    "sturdy",
     "h:soundproof"
   ],
   "eggGroups": [
@@ -250,5 +251,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "shieldon",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

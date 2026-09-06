@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "hustle",
+    "hustle",
     "h:hustle"
   ],
   "eggGroups": [
@@ -216,5 +217,8 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

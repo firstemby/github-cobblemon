@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:solarpower"
   ],
   "eggGroups": [
@@ -366,6 +367,7 @@
       ],
       "abilities": [
         "toughclaws",
+        "toughclaws",
         "h:toughclaws"
       ],
       "baseStats": {
@@ -466,7 +468,11 @@
       "lightingData": {
         "lightLevel": 14,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     },
     {
       "name": "Mega-Y",
@@ -486,6 +492,7 @@
         "mega_y"
       ],
       "abilities": [
+        "drought",
         "drought",
         "h:drought"
       ],
@@ -587,7 +594,11 @@
       "lightingData": {
         "lightLevel": 14,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     },
     {
       "name": "Gmax",
@@ -614,5 +625,9 @@
   "lightingData": {
     "lightLevel": 14,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

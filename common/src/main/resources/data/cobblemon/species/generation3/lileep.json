@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "suctioncups",
+    "suctioncups",
     "h:stormdrain"
   ],
   "eggGroups": [
@@ -209,5 +210,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

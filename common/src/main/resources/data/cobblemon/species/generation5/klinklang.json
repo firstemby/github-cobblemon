@@ -224,5 +224,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "klang",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

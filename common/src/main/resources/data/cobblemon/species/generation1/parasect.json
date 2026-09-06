@@ -239,5 +239,8 @@
     "special:refresh"
   ],
   "preEvolution": "paras",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

@@ -646,7 +646,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val headPitch = if (shouldRotateHead) headPitch else 0f
         val headYaw = if (shouldRotateHead) headYaw else 0f
 
-
         // Quirks will run if there is no primary animation running and quirks are enabled for this context.
         if (primaryAnimation == null && context.request(RenderContext.DO_QUIRKS) != false) {
             // Remove any quirk animations that don't exist in our current pose

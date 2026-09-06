@@ -267,6 +267,7 @@
       ],
       "abilities": [
         "owntempo",
+        "owntempo",
         "h:owntempo"
       ],
       "moves": [
@@ -394,5 +395,9 @@
       ],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:unaware"
   ],
   "eggGroups": [
@@ -195,5 +196,10 @@
   "lightingData": {
     "lightLevel": 15,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky",
+    "sandy"
+  ]
 }

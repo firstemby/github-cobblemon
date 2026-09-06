@@ -452,7 +452,15 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "rocky",
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

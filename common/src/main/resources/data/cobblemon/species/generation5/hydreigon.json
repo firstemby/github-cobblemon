@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -328,5 +329,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "zweilous",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

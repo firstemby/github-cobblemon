@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:vitalspirit"
   ],
   "eggGroups": [

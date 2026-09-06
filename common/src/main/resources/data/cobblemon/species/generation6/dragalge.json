@@ -215,5 +215,8 @@
     "legacy:swagger"
   ],
   "preEvolution": "skrelp",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

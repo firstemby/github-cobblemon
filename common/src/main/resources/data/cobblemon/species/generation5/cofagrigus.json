@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "mummy",
+    "mummy",
     "h:mummy"
   ],
   "eggGroups": [
@@ -213,5 +214,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "yamask",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

@@ -252,6 +252,7 @@
       ],
       "abilities": [
         "refrigerate",
+        "refrigerate",
         "h:refrigerate"
       ],
       "baseStats": {
@@ -293,7 +294,15 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "icy",
+    "rocky"
   ]
 }

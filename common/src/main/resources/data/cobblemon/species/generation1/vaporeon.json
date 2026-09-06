@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "waterabsorb",
+    "waterabsorb",
     "h:hydration"
   ],
   "eggGroups": [
@@ -265,5 +266,9 @@
     "special:sing"
   ],
   "preEvolution": "eevee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "watery"
+  ]
 }

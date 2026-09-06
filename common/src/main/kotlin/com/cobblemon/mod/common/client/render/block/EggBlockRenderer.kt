@@ -1,0 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.client.render.block
+
+import com.cobblemon.mod.common.block.entity.EggBlockEntity
+import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+
+class EggBlockRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<EggBlockEntity> {
+    override fun render(
+        entity: EggBlockEntity,
+        tickDelta: Float,
+        matrices: PoseStack,
+        vertexConsumers: MultiBufferSource,
+        light: Int,
+        overlay: Int
+    ) {
+        // Ensure the renderer runs only on the client
+        val isClientSide = entity.level?.isClientSide ?: false
+        if (!isClientSide) return
+        
+        entity.eggComponent?.let { egg ->
+            matrices.pushPose() // Start transformation stack
+            try {
+                // Render the egg model with the dynamically determined texture
+                EggRenderHelper.renderEgg(
+                    egg = egg,
+                    state = EggState(),
+                    matrices = matrices,
+                    vertexConsumers = vertexConsumers,
+                    light = light,
+                    overlay = overlay,
+                    yRot = 0f,
+                    scale = 1f,
+                    translation = Triple(0.5f, 0.285f, 0.5f), // Adjust translation
+                    rotation = Triple(180f, 0f, 0f),           // Adjust rotation
+                    tickDelta = 0F
+                )
+            } finally {
+                matrices.popPose() // Ensure this is always called
+            }
+        }
+    }
+}

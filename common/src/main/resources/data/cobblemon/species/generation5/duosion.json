@@ -244,5 +244,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy",
+    "watery"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -228,5 +229,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "combee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

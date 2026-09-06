@@ -1,0 +1,6 @@
+{
+  "type": "cobblemon:species_feature_inheritance",
+  "order": 40,
+  "feature": "bull_breed",
+  "parent": "q.mother"
+}

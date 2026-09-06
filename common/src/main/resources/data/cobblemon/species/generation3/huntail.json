@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:waterveil"
   ],
   "eggGroups": [
@@ -214,5 +215,8 @@
   "lightingData": {
     "lightLevel": 6,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "watery"
+  ]
 }

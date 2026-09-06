@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:unburden"
   ],
   "eggGroups": [
@@ -271,5 +272,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

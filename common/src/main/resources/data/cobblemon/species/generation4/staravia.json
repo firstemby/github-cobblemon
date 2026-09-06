@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:reckless"
   ],
   "eggGroups": [
@@ -225,5 +226,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

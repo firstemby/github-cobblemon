@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:lightningrod"
   ],
   "eggGroups": [

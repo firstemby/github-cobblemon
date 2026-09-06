@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "shielddust",
+    "shielddust",
     "h:icescales"
   ],
   "eggGroups": [
@@ -192,5 +193,8 @@
       "drowsyChance": 0.0033,
       "rouseChance": 0.0042
     }
-  }
+  },
+  "nestTypes": [
+    "icy"
+  ]
 }

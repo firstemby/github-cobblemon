@@ -14,6 +14,7 @@
   "aspects": [],
   "abilities": [
     "swarm",
+    "swarm",
     "h:swarm"
   ],
   "eggGroups": [
@@ -189,5 +190,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

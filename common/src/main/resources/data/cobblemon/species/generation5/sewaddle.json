@@ -210,5 +210,8 @@
         "avoidsWater": true
       }
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

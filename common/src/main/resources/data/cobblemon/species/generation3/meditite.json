@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "purepower",
+    "purepower",
     "h:telepathy"
   ],
   "eggGroups": [
@@ -273,5 +274,8 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

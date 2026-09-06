@@ -289,6 +289,7 @@
       ],
       "abilities": [
         "sandforce",
+        "sandforce",
         "h:sandforce"
       ],
       "baseStats": {
@@ -326,7 +327,13 @@
         "herd": {
           "maxSize": 4
         }
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

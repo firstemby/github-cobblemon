@@ -155,12 +155,14 @@ def modify_files(file, pokemon_data_dir, behaviour_dict):
                                 form.pop('behaviour', None)
                             else:
                                 apply_behaviour(form, row)
+                            apply_nest_types(form, row)
                 if none_existed == False and pokemon_form == None:
                     if blank_behaviour:
                         no_behaviour_base_forms.append(file)
                         data.pop('behaviour', None)
                     else:
                         apply_behaviour(data, row)
+                    apply_nest_types(data, row)
                 # Clean duplicates from forms
                 if 'forms' in data:
                     for form in data['forms']:
@@ -236,6 +238,28 @@ def apply_behaviour(pokemon_form, behaviour_row):
         del behaviour['herd']
 
     assign(behaviour, 'fireImmune', behaviour_row['Fire Immune'] == True, False)
+
+def apply_nest_types(pokemon_form, behaviour_row):
+    nest_types = parse_nest_types(behaviour_row.get('Nest Types', ''))
+    if nest_types:
+        pokemon_form['nestTypes'] = nest_types
+    elif 'nestTypes' in pokemon_form:
+        del pokemon_form['nestTypes']
+
+def parse_nest_types(value):
+    if value is None:
+        return []
+    raw = str(value).strip()
+    if raw == '' or raw.lower() == 'n/a':
+        return []
+    seen = set()
+    result = []
+    for entry in raw.split(','):
+        cleaned = entry.strip().lower()
+        if cleaned and cleaned not in seen:
+            seen.add(cleaned)
+            result.append(cleaned)
+    return result
 
 def build_lighting_data(behaviour_row, lighting_data):
     light_level = behaviour_row['Light Level']

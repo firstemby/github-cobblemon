@@ -130,6 +130,7 @@ class Species : ShowdownIdentifiable {
 
     var labels = hashSetOf<String>()
         private set
+    var nestTypes = mutableListOf<String>()
 
     val possibleGenders: Set<Gender>
         get() = forms.flatMap {

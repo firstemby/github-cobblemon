@@ -262,6 +262,9 @@
       "preEvolution": "shellos",
       "evolutions": [],
       "battleOnly": false,
+      "nestTypes": [
+        "watery"
+      ],
       "behaviour": {
         "resting": {
           "drowsyChance": 0.0333,
@@ -290,5 +293,8 @@
         }
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

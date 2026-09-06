@@ -96,6 +96,9 @@ interface TaskConfig {
             cobblemonResource("eat_grass") to EatGrassTaskConfig::class.java,
             cobblemonResource("find_air") to FindAirTaskConfig::class.java,
             cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
+            /*cobblemonResource("hunt_player") to HuntPlayerTaskConfig::class.java,*/
+            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
             cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig::class.java,
             cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig::class.java,
             cobblemonResource("place_honey_in_sacc_leaves") to PlaceHoneyInSaccLeavesTaskConfig::class.java,
@@ -108,7 +111,7 @@ interface TaskConfig {
             cobblemonResource("defend_owner") to DefendOwnerTaskConfig::class.java,
             cobblemonResource("move_to_sweet_berry_bush") to MoveToSweetBerryBushTaskConfig::class.java,
             cobblemonResource("stop_moving_to_sweet_berry_bush") to StopTryingToReachSweetBerryBushTaskConfig::class.java,
-            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig::class.java,
+//            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig::class.java,
             cobblemonResource("eat_held_item") to EatHeldItemTaskConfig::class.java,
             cobblemonResource("move_to_item") to MoveToItemTaskConfig::class.java,
             cobblemonResource("stop_moving_to_item") to StopTryingToReachWantedItemTaskConfig::class.java,

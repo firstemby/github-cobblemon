@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "wellbakedbody",
+    "wellbakedbody",
     "h:aromaveil"
   ],
   "eggGroups": [
@@ -175,5 +176,8 @@
     "tutor:thunderfang"
   ],
   "preEvolution": "fidough",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

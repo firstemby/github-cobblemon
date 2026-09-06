@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "myceliummight",
+    "myceliummight",
     "h:myceliummight"
   ],
   "eggGroups": [
@@ -219,5 +220,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "shroomy"
+  ]
 }

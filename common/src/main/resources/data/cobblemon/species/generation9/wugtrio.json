@@ -144,5 +144,9 @@
     "tutor:waterpulse"
   ],
   "preEvolution": "wiglett",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "watery"
+  ]
 }

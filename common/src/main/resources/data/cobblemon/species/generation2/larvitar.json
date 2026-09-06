@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "guts",
+    "guts",
     "h:sandveil"
   ],
   "eggGroups": [
@@ -255,5 +256,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

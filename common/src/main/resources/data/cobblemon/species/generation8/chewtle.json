@@ -197,5 +197,10 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
   ]
 }

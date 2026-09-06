@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "noguard",
+    "noguard",
     "h:noguard"
   ],
   "eggGroups": [
@@ -204,5 +205,8 @@
       "requirements": [],
       "requiredContext": "cobblemon:dusk_stone"
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

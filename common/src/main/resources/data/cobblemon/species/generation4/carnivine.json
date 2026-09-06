@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -189,5 +190,8 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

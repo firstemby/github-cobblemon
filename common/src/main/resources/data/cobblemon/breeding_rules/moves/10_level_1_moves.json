@@ -1,0 +1,5 @@
+{
+  "type": "cobblemon:expression",
+  "order": 10,
+  "expression": "q.add_moves_to_stack(q.offspring.level_learnset.1)"
+}

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "waterveil",
+    "waterveil",
     "h:waterveil"
   ],
   "eggGroups": [
@@ -180,5 +181,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

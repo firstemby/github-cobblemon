@@ -327,7 +327,12 @@
       "lightingData": {
         "lightLevel": 8,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky",
+        "sandy"
+      ]
     },
     {
       "name": "Gmax",
@@ -523,5 +528,10 @@
   "lightingData": {
     "lightLevel": 10,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

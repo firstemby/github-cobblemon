@@ -52,7 +52,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
         if (!shouldRender(entity, entity.blockPos.toVec3d())) return
         val blockState = entity.blockState
         if (entity.renderState == null) {
-            entity.renderState = BerryBlockEntityRenderState()
+            entity.renderState = BasicBlockEntityRenderState()
         }
 
         // RenderType.entityCutoutNoCull for shading, as shading is absent in RenderType CobblemonRenderLayers.BERRY_LAYER
@@ -60,7 +60,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
             RenderType.entityCutoutNoCull(BERRY_SPRITE_ATLAS.textureAtlas.location())
         )
 
-        val renderState = entity.renderState as BerryBlockEntityRenderState
+        val renderState = entity.renderState as BasicBlockEntityRenderState
 //        if (renderState.needsRebuild || renderState.vboLightLevel != light) {
             renderToBuffer(entity, matrices, light, overlay, renderState, buffer)
 //            renderState.vboLightLevel = light
@@ -103,7 +103,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
     }
 
 
-    fun renderToBuffer(entity: BerryBlockEntity, matrices: PoseStack, light: Int, overlay: Int, renderState: BerryBlockEntityRenderState, buffer: VertexConsumer) {
+    fun renderToBuffer(entity: BerryBlockEntity, matrices: PoseStack, light: Int, overlay: Int, renderState: BasicBlockEntityRenderState, buffer: VertexConsumer) {
         if (entity.blockState.getValue(BerryBlock.AGE) == 0) {
             renderBabyToBuffer(entity, matrices, light, overlay, buffer)
             renderState.drawVbo = true

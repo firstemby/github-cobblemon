@@ -1116,6 +1116,10 @@
   "cobblemon.command.unlockablepcboxwallpaper.invalid-wallpaper": "Invalid wallpaper identifier",
   "cobblemon.command.behaviouredit.non_scriptable": "You are not looking at a MoLang scriptable entity.",
   "cobblemon.command.technicalmachine.invalid-tm": "Invalid TM",
+  "cobblemon.command.breedpokemon.cannot_breed": "%1$s and %2$s cannot breed.",
+  "cobblemon.command.breedpokemon.success": "Successfully created an egg from %1$s and %2$s.",
+  "cobblemon.command.breedpokemon.must_specify_player": "You must specify a player if you are not one.",
+
   "cobblemon.ui.generic.yes": "Yes",
   "cobblemon.ui.generic.no": "No",
   "cobblemon.ui.generic.save": "Save",
@@ -1190,6 +1194,8 @@
   "cobblemon.ui.edit.habitat.validation.min_light": "Min Light must be between 0 and 15.",
   "cobblemon.ui.edit.habitat.validation.max_light": "Max Light must be between 0 and 15.",
 
+
+  "cobblemon.ui.edit.habitat": "Habitat Editor",
 
   "cobblemon.ui.pokenav.title": "PokéNav",
   "cobblemon.ui.pokenav.narrator.backbutton": "PokéNav button pressed",
@@ -2139,6 +2145,13 @@
   "cobblemon.mint.interact": "%1$s's stats have changed!",
   "cobblemon.mint.same_nature": "%1$s's stats seem unaffected by the %2$s.",
   "cobblemon.ability_changer.changed": "%1$s's ability changed to %2$s!",
+
+  "cobblemon.subtitle.egg.jiggle.small": "Pokémon egg jiggles",
+  "cobblemon.subtitle.egg.jiggle.medium": "Pokémon egg jiggles",
+  "cobblemon.subtitle.egg.jump": "Pokémon egg hops",
+  "cobblemon.subtitle.egg.crack": "Pokémon egg cracks",
+  "cobblemon.subtitle.egg.hatch": "Pokémon hatches.",
+
   "itemGroup.cobblemon.plants": "Plants",
   "item.cobblemon.aguav_berry": "Aguav Berry",
   "item.cobblemon.aguav_berry.tooltip": "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpD Nature",
@@ -2288,6 +2301,7 @@
   "item.cobblemon.yache_berry.tooltip": "Halves damage taken from a supereffective Ice-type attack",
   "cobblemon.command.general.invalid-party-slot": "There is no Pokémon in slot %1$s!",
   "cobblemon.command.givepokemon.give": "Gave %1$s to %2$s.",
+  "cobblemon.command.givepokemonegg.give": "Gave %1$s egg to %2$s.",
   "cobblemon.command.pokemonedit": "Edited %2$s's %1$s.",
   "cobblemon.command.teach": "%2$s's %1$s learnt %3$s.",
   "cobblemon.command.teach.already_knows": "%1$s already knows %2$s!",
@@ -2295,6 +2309,7 @@
   "cobblemon.command.friendship": "%1$s has %2$s friendship.",
   "cobblemon.command.givepokemon.nospecies": "Error: You need to include a Pokémon name or 'random'",
   "cobblemon.command.spawnpokemon.nospecies": "Error: You need to include a Pokémon name or 'random'",
+  "cobblemon.command.givepokemonegg.nospecies": "Error: You need to include a Pokémon name or 'random'",
   "cobblemon.command.error.nonpc": "Error: You need to include a valid NPC identifier.",
   "cobblemon.command.held_item": "%1$s's %2$s was given the %3$s to hold.",
   "cobblemon.command.giveallmarks": "%1$s's %2$s was given all available marks.",
@@ -3397,6 +3412,22 @@
   "block.cobblemon.nether_fire_stone_ore": "Nether Fire Stone Ore",
   "block.cobblemon.terracotta_sun_stone_ore": "Terracotta Sun Stone Ore",
   "block.cobblemon.pasture": "Pasture Block",
+  "block.cobblemon.basic_nest": "Nest",
+  "block.cobblemon.cave_nest": "Cave Nest",
+  "block.cobblemon.nether_nest": "Nether Nest",
+  "block.cobblemon.water_nest": "Water Nest",
+  "block.cobblemon.nest_grassy": "Grassy Nest",
+  "block.cobblemon.nest_leafy": "Leafy Nest",
+  "block.cobblemon.nest_fiery": "Fiery Nest",
+  "block.cobblemon.nest_icy": "Icy Nest",
+  "block.cobblemon.nest_hay": "Hay Nest",
+  "block.cobblemon.nest_kelp": "Kelp Nest",
+  "block.cobblemon.nest_rocky": "Rocky Nest",
+  "block.cobblemon.nest_sandy": "Sandy Nest",
+  "block.cobblemon.nest_shroomy": "Shroomy Nest",
+  "block.cobblemon.nest_twiggy": "Twiggy Nest",
+  "block.cobblemon.nest_watery": "Watery Nest",
+
   "block.cobblemon.poke_cake": "Poké Cake",
   "block.cobblemon.poke_snack": "Poké Snack",
   "block.cobblemon.habitat_block": "Habitat Block",
@@ -3768,6 +3799,13 @@
   "cobblemon.entity.variable.animation_name.desc": "The name of the animation to play when the NPC is interacted with.",
   "cobblemon.entity.variable.play_animation.name": "Play Animation",
   "cobblemon.entity.variable.play_animation.desc": "Whether to play an animation when the NPC is interacted with.",
+
+  "cobblemon.behaviour.pokemon_base_senses.name": "Base Senses",
+  "cobblemon.behaviour.pokemon_base_senses.desc": "Provides basic awareness of nearby entities, who has attacked them, etc.",
+
+  "cobblemon.behaviour.moves_in_fluid.name": "Moves In Fluid",
+  "cobblemon.behaviour.moves_in_fluid.desc": "Supports moving in fluid, particularly the vertical stability while submerged",
+
   "npc.sacchi.name": "Professor Sacchi",
   "cobblemon.move.pound": "Pound",
   "cobblemon.move.pound.desc": "The target is physically pounded with a long tail, a foreleg, or the like.",

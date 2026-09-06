@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:waterabsorb"
   ],
   "eggGroups": [
@@ -260,5 +261,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

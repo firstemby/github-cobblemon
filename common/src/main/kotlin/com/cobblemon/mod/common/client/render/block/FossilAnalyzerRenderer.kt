@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.render.block
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.block.entity.FossilAnalyzerBlockEntity
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
+import com.mojang.authlib.minecraft.client.MinecraftClient
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
@@ -24,7 +25,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 
 class FossilAnalyzerRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<FossilAnalyzerBlockEntity> {
-
     override fun render(
         entity: FossilAnalyzerBlockEntity,
         tickDelta: Float,
@@ -45,7 +45,7 @@ class FossilAnalyzerRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEn
 
         struct.fossilInventory.forEachIndexed { index, fossilStack ->
             matrices.pushPose()
-            
+
             val dirOffset = when (direction) {
                 Direction.NORTH -> Vec3(0.0, 0.0, 0.05)
                 Direction.SOUTH -> Vec3(0.0, 0.0, -0.05)

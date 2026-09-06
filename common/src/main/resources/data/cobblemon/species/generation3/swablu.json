@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "naturalcure",
+    "naturalcure",
     "h:cloudnine"
   ],
   "eggGroups": [
@@ -241,5 +242,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

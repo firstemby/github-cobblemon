@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "eartheater",
+    "eartheater",
     "h:sandveil"
   ],
   "eggGroups": [
@@ -184,5 +185,9 @@
     "tutor:stompingtantrum",
     "special:headbutt"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy"
+  ]
 }

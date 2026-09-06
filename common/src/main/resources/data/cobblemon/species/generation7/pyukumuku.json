@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "innardsout",
+    "innardsout",
     "h:unaware"
   ],
   "eggGroups": [
@@ -148,5 +149,8 @@
     "legacy:confide",
     "legacy:doubleteam"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

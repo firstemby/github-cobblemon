@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:waterabsorb"
   ],
   "eggGroups": [
@@ -272,5 +273,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "cacnea",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy"
+  ]
 }

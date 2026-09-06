@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "flashfire",
+    "flashfire",
     "h:flamebody"
   ],
   "eggGroups": [
@@ -181,5 +182,9 @@
   "lightingData": {
     "lightLevel": 7,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

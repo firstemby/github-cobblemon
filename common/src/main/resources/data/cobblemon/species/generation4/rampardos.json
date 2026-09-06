@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "moldbreaker",
+    "moldbreaker",
     "h:sheerforce"
   ],
   "eggGroups": [
@@ -237,5 +238,9 @@
     "legacy:whirlpool"
   ],
   "preEvolution": "cranidos",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

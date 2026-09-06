@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "unnerve",
+    "unnerve",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -170,6 +171,7 @@
         "ice-rider"
       ],
       "abilities": [
+        "asoneglastrier",
         "asoneglastrier",
         "h:asoneglastrier"
       ],
@@ -396,6 +398,7 @@
         "shadow-rider"
       ],
       "abilities": [
+        "asonespectrier",
         "asonespectrier",
         "h:asonespectrier"
       ],

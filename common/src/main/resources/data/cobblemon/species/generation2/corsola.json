@@ -253,6 +253,7 @@
       ],
       "abilities": [
         "weakarmor",
+        "weakarmor",
         "h:cursedbody"
       ],
       "baseStats": {
@@ -434,7 +435,15 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "rocky",
+        "sandy",
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

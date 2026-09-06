@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "gulpmissile",
+    "gulpmissile",
     "h:gulpmissile"
   ],
   "eggGroups": [
@@ -228,5 +229,10 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy",
+    "watery"
   ]
 }

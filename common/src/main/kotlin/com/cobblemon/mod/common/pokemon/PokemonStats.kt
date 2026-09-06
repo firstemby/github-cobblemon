@@ -9,16 +9,9 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.net.IntSize
-import com.cobblemon.mod.common.util.writeSizedInt
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 
 /**
  * Holds a mapping from a Stat to value that should be reducible to a short for NBT and net.
@@ -29,8 +22,24 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
     override fun iterator() = stats.entries.iterator()
 
     val struct = ObjectValue(this).also {
+        it.addFunction("get") { params ->
+            val statTypeArg = params.getString(0)
+            val statType = Stats.PERMANENT.find { it.showdownId == statTypeArg || it.identifier.path == statTypeArg } ?: return@addFunction DoubleValue.ZERO
+            return@addFunction DoubleValue(this.getOrDefault(statType))
+        }
+        it.addFunction("set") { params ->
+            val statTypeArg = params.getString(0)
+            val statType = Stats.PERMANENT.find { it.showdownId == statTypeArg || it.identifier.path == statTypeArg } ?: return@addFunction DoubleValue.ZERO
+            val value = params.getInt(1)
+            this[statType] = value
+            return@addFunction DoubleValue.ONE
+        }
         for (stat in Stats.PERMANENT) {
             it.addFunction(stat.showdownId) { DoubleValue(this.getOrDefault(stat)) }
+            it.addFunction("set_${stat.showdownId}") { params ->
+                val value = params.getInt(0)
+                this[stat] = value
+            }
         }
     }
 
@@ -70,4 +79,13 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
     fun getOrDefault(stat: Stat) = this[stat] ?: this.defaultValue
 
     fun total(): Int = stats.values.sum()
+
+    fun copyFrom(other: PokemonStats) {
+        doWithoutEmitting {
+            for ((stat, value) in other) {
+                this[stat] = value
+            }
+        }
+        update()
+    }
 }

@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:banned_egg_groups_barrier",
+  "order": 70,
+  "condition": "q.cobblemon_config.can_breed_undiscovered == 0",
+  "bannedEggGroups": [
+    "UNDISCOVERED"
+  ]
+}

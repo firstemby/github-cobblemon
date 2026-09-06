@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:thickfat"
   ],
   "eggGroups": [
@@ -260,5 +261,11 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "shroomy"
   ]
 }

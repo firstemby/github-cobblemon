@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "toxicdebris",
+    "toxicdebris",
     "h:corrosion"
   ],
   "eggGroups": [
@@ -193,5 +194,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

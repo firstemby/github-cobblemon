@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flamebody",
+    "flamebody",
     "h:swarm"
   ],
   "eggGroups": [
@@ -218,5 +219,11 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy",
+    "shroomy"
   ]
 }

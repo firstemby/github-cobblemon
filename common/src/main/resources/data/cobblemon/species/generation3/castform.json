@@ -16,6 +16,7 @@
   ],
   "abilities": [
     "forecast",
+    "forecast",
     "h:forecast"
   ],
   "eggGroups": [
@@ -242,7 +243,13 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "sandy",
+        "watery"
+      ]
     },
     {
       "name": "Rainy",
@@ -269,7 +276,13 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "sandy",
+        "watery"
+      ]
     },
     {
       "name": "Snowy",
@@ -296,7 +309,19 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "sandy",
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy",
+    "watery"
   ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "flashfire",
+    "flashfire",
     "h:guts"
   ],
   "eggGroups": [
@@ -260,5 +261,10 @@
       "rouseChance": 0.0042
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "sandy"
+  ]
 }

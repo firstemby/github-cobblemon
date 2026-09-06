@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "clearbody",
+    "clearbody",
     "h:lightmetal"
   ],
   "eggGroups": [
@@ -352,6 +353,7 @@
       ],
       "abilities": [
         "toughclaws",
+        "toughclaws",
         "h:toughclaws"
       ],
       "baseStats": {
@@ -393,7 +395,13 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

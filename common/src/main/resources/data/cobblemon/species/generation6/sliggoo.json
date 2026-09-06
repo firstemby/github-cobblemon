@@ -370,7 +370,11 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "shroomy",
+        "watery"
+      ]
     }
   ],
   "behaviour": {
@@ -402,5 +406,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ]
 }

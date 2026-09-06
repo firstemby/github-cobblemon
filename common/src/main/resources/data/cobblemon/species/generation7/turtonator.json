@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "shellarmor",
+    "shellarmor",
     "h:shellarmor"
   ],
   "eggGroups": [
@@ -216,5 +217,9 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sapsipper",
+    "sapsipper",
     "h:grasspelt"
   ],
   "eggGroups": [
@@ -229,5 +230,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "skiddo",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

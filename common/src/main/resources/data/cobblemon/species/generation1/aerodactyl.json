@@ -331,6 +331,7 @@
       ],
       "abilities": [
         "toughclaws",
+        "toughclaws",
         "h:toughclaws"
       ],
       "baseStats": {
@@ -346,5 +347,9 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }
