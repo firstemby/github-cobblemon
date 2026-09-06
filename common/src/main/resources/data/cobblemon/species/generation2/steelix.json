@@ -70,7 +70,16 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "steelix alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 7,
@@ -170,7 +179,6 @@
     "tm:mudslap",
     "tm:naturepower",
     "tm:payback",
-    "tm:powershift",
     "tm:protect",
     "tm:psychicfangs",
     "tm:psychup",
@@ -226,7 +234,6 @@
     "tutor:magnetrise",
     "tutor:meteorbeam",
     "tutor:mudslap",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -250,6 +257,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

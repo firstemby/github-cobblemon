@@ -104,7 +104,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "altaria mega=false",
@@ -223,7 +223,6 @@
     "tm:icebeam",
     "tm:incinerate",
     "tm:irontail",
-    "tm:naturalgift",
     "tm:ominouswind",
     "tm:outrage",
     "tm:playrough",

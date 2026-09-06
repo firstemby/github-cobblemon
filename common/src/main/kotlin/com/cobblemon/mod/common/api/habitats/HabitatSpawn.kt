@@ -65,7 +65,7 @@ class HabitatSpawn {
     /** The maximum light level that the Pokémon can spawn in. */
     var maxLight: Int? = null
 
-    open fun writeToNBT(nbt: CompoundTag) {
+    fun writeToNBT(nbt: CompoundTag) {
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_SPECIES, species.resourceIdentifier.toString())
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE, spawnablePositionType)
         nbt.putFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT, weight)
@@ -78,7 +78,7 @@ class HabitatSpawn {
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_BUCKET, bucket)
     }
 
-    open fun readFromNBT(nbt: CompoundTag) {
+    fun readFromNBT(nbt: CompoundTag) {
         species = PokemonSpecies.getByIdentifier(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_SPECIES).asIdentifierDefaultingNamespace())!!
         spawnablePositionType = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE)
         weight = nbt.getFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT)
@@ -91,7 +91,7 @@ class HabitatSpawn {
         bucket = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_BUCKET)) nbt.getString(DataKeys.HABITAT_POOL_SPAWN_BUCKET) else "common"
     }
 
-    open fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(species.resourceIdentifier)
         buffer.writeUtf(spawnablePositionType)
         buffer.writeFloat(weight)
@@ -104,7 +104,7 @@ class HabitatSpawn {
         buffer.writeUtf(bucket)
     }
 
-    open fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         species = PokemonSpecies.getByIdentifier(buffer.readResourceLocation())!!
         spawnablePositionType = buffer.readUtf()
         weight = buffer.readFloat()
@@ -118,7 +118,7 @@ class HabitatSpawn {
     }
 
     /** Creates the [PokemonSpawnDetail] that will be used in the spawner. This is done per habitat block. */
-    open fun createSpawnDetail(habitatBlockEntity: HabitatBlockEntity): PokemonSpawnDetail? {
+    fun createSpawnDetail(habitatBlockEntity: HabitatBlockEntity): PokemonSpawnDetail? {
         val spawnDetail = PokemonSpawnDetail()
 
         // If the habitat block specifies a level range, it restricts how and if this spawn exists

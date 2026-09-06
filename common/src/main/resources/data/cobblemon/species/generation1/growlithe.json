@@ -73,7 +73,20 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "growlithe alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "arcanine",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 2,

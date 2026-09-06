@@ -68,6 +68,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "boltund alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

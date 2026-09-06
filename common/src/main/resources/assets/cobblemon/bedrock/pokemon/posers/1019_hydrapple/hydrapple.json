@@ -4,6 +4,9 @@
   "profileScale": 0.54,
   "profileTranslation": [0.00, 0.93, 0],
   "rootBone": "hydrapple",
+  "animations": {
+    "cry": "q.bedrock_stateful('hydrapple', 'cry')"
+  },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

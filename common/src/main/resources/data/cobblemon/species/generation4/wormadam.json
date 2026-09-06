@@ -77,7 +77,6 @@
     "tm:bugbite",
     "tm:bugbuzz",
     "tm:bulletseed",
-    "tm:captivate",
     "tm:dig",
     "tm:dreameater",
     "tm:dualwingbeat",
@@ -211,7 +210,6 @@
         "tm:bugbite",
         "tm:bugbuzz",
         "tm:bulldoze",
-        "tm:captivate",
         "tm:dig",
         "tm:dreameater",
         "tm:dualwingbeat",
@@ -292,33 +290,7 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 5,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     },
     {
       "name": "Trash",
@@ -373,7 +345,6 @@
         "tm:attract",
         "tm:bugbite",
         "tm:bugbuzz",
-        "tm:captivate",
         "tm:dig",
         "tm:dreameater",
         "tm:dualwingbeat",
@@ -455,33 +426,7 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "day"
-          ],
-          "drowsyChance": 0.0033,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "herd": {
-          "maxSize": 5,
-          "toleratedLeaders": [
-            {
-              "pokemon": "wormadam alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "behaviour": {
@@ -499,6 +444,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wormadam alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

@@ -58,11 +58,15 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "falinks",
+          "pokemon": "falinks mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "falinks mega",
+          "tier": 2
         }
       ]
     },

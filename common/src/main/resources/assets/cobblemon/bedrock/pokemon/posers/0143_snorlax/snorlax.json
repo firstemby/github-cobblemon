@@ -23,7 +23,7 @@
         }
       ],
       "transitions": {
-        "sleeping": "q.bedrock_primary('snorlax', 'sleep_intro')"
+        "sleep": "q.bedrock_primary('snorlax', 'sleep_intro')"
       }
     },
     "standing": {
@@ -41,7 +41,7 @@
         }
       ],
       "transitions": {
-        "sleeping": "q.bedrock_primary('snorlax', 'sleep_intro')"
+        "sleep": "q.bedrock_primary('snorlax', 'sleep_intro')"
       }
       },
     "walking": {
@@ -58,7 +58,7 @@
         }
       ],
       "transitions": {
-        "sleeping": "q.bedrock_primary('snorlax', 'sleep_intro')"
+        "sleep": "q.bedrock_primary('snorlax', 'sleep_intro')"
       }
     },
     "sleep": {

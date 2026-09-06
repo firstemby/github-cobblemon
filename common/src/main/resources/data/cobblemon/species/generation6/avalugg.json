@@ -70,7 +70,13 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "avalugg alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -275,6 +281,7 @@
         "egg:mirrorcoat",
         "egg:mist",
         "egg:sharpen",
+        "tm:afteryou",
         "tm:auroraveil",
         "tm:avalanche",
         "tm:blizzard",
@@ -289,8 +296,11 @@
         "tm:earthquake",
         "tm:endure",
         "tm:facade",
+        "tm:flash",
+        "tm:frostbreath",
         "tm:gigaimpact",
         "tm:gyroball",
+        "tm:hail",
         "tm:hardpress",
         "tm:heavyslam",
         "tm:highhorsepower",
@@ -304,14 +314,15 @@
         "tm:irondefense",
         "tm:ironhead",
         "tm:meteorbeam",
-        "tm:powershift",
         "tm:protect",
         "tm:raindance",
         "tm:rest",
         "tm:rockblast",
+        "tm:rockpolish",
         "tm:rockslide",
         "tm:rocksmash",
         "tm:rocktomb",
+        "tm:safeguard",
         "tm:sandstorm",
         "tm:scaryface",
         "tm:sleeptalk",
@@ -319,9 +330,11 @@
         "tm:stealthrock",
         "tm:stompingtantrum",
         "tm:stoneedge",
+        "tm:strength",
         "tm:substitute",
         "tm:takedown",
         "tm:terablast",
+        "tutor:afteryou",
         "tutor:bulldoze",
         "tutor:gigaimpact",
         "tutor:highhorsepower",
@@ -333,7 +346,6 @@
         "tutor:irondefense",
         "tutor:ironhead",
         "tutor:meteorbeam",
-        "tutor:powershift",
         "tutor:rest",
         "tutor:rockslide",
         "tutor:rocksmash",
@@ -347,6 +359,7 @@
         "legacy:flashcannon",
         "legacy:frustration",
         "legacy:hiddenpower",
+        "legacy:powershift",
         "legacy:return",
         "legacy:round",
         "legacy:secretpower",

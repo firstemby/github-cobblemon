@@ -78,8 +78,12 @@
       ]
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "vulpix alpha",
+          "tier": 1
+        },
         {
           "pokemon": "ninetales",
           "tier": 1
@@ -159,7 +163,6 @@
     "tm:batonpass",
     "tm:bodyslam",
     "tm:burningjealousy",
-    "tm:captivate",
     "tm:charm",
     "tm:confuseray",
     "tm:covet",
@@ -338,7 +341,6 @@
         "tm:batonpass",
         "tm:blizzard",
         "tm:bodyslam",
-        "tm:captivate",
         "tm:charm",
         "tm:chillingwater",
         "tm:confuseray",

@@ -89,6 +89,7 @@ open class FlatSelector : SpawningSelector<FlatSelector.SpawnablePositionSelecti
         val spawnablePositions: List<SpawnablePosition>,
         val selectingSpawnInformation: MutableMap<String, SpawnablePositionBucketSelectionData>,
     ): SpawnSelectionData {
+        override var guaranteedBucket: String? = null
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 

@@ -64,6 +64,19 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "crabrawler alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "crabominable alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

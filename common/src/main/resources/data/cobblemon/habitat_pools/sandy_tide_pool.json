@@ -288,7 +288,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "8-33",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "4"
     },
     {
@@ -297,7 +297,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 6.0,
       "levelRange": "8-33",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "4"
     },
     {
@@ -306,7 +306,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "8-33",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-3, 5-10"
     },
     {
@@ -315,7 +315,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 6.0,
       "levelRange": "8-33",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-3, 5-10"
     },
     {
@@ -356,7 +356,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "30-48",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "4"
     },
     {
@@ -365,7 +365,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 4.0,
       "levelRange": "30-48",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "4"
     },
     {
@@ -374,7 +374,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "30-48",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-3, 5-10"
     },
     {
@@ -383,7 +383,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 4.0,
       "levelRange": "30-48",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-3, 5-10"
     },
     {

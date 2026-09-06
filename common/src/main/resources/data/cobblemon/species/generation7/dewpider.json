@@ -68,6 +68,19 @@
     },
     "blockInteract": {
       "immuneToCobwebBlock": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewpider",
+          "tier": 1
+        },
+        {
+          "pokemon": "araquanid",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

@@ -4,6 +4,9 @@
   "profileScale": 0.63,
   "profileTranslation": [ 0, 0.77, 0],
   "rootBone": "cherubi",
+  "animations": {
+    "cry": "q.bedrock_stateful('cherubi', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

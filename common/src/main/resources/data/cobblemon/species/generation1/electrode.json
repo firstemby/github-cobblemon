@@ -59,7 +59,7 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "electrode",
@@ -332,35 +332,7 @@
       ],
       "preEvolution": "voltorb hisuian",
       "evolutions": [],
-      "battleOnly": false,
-      "behaviour": {
-        "resting": {
-          "times": [
-            "any"
-          ],
-          "drowsyChance": 0.0014,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "swim": {
-            "avoidsWater": true
-          }
-        },
-        "combat": {
-          "willDefendSelf": true,
-          "willDefendOwner": true,
-          "willFlee": false
-        },
-        "herd": {
-          "maxSize": 5,
-          "toleratedLeaders": [
-            {
-              "pokemon": "electrode",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": false
     }
   ],
   "riding": {

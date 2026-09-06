@@ -99,6 +99,15 @@
       "drowsyChance": 0.0333,
       "light": "0-4",
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "crustle alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

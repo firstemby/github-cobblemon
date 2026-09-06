@@ -91,7 +91,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "drifblim",
@@ -200,7 +200,6 @@
     "tm:painsplit",
     "tm:payback",
     "tm:phantomforce",
-    "tm:powershift",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
@@ -247,7 +246,6 @@
     "tutor:magiccoat",
     "tutor:ominouswind",
     "tutor:painsplit",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:recycle",
     "tutor:rest",
@@ -272,6 +270,7 @@
     "legacy:hiddenpower",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:psychup",
     "legacy:return",
     "legacy:round",

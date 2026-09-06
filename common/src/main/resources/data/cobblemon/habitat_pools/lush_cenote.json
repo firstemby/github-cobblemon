@@ -104,7 +104,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 3.0,
       "levelRange": "8-33",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-7"
     },
     {
@@ -121,7 +121,7 @@
       "spawnablePositionType": "seafloor",
       "weight": 2.0,
       "levelRange": "30-48",
-      "modifiers": "eastsea",
+      "modifiers": "sea=east",
       "phases": "1-7"
     },
     {

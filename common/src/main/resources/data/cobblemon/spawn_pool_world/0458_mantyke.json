@@ -13,24 +13,48 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "10-35",
-            "weight": 8.4,
+            "weight": 15.6,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_lukewarm_ocean",
                     "#cobblemon:is_warm_ocean"
                 ],
-                "minY": 48
+                "minY": 48,
+                "isPokeSnack": true
             }
         },
         {
             "id": "mantyke-2",
             "pokemon": "mantyke",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "10-35",
+            "weight": 15.6,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_lukewarm_ocean",
+                    "#cobblemon:is_warm_ocean"
+                ],
+                "minY": 48,
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "mantyke-3",
+            "pokemon": "mantyke",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "10-35",
-            "weight": 8.4,
+            "weight": 84.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -46,13 +70,13 @@
             }
         },
         {
-            "id": "mantyke-3",
+            "id": "mantyke-4",
             "pokemon": "mantyke",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "10-35",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -75,35 +99,13 @@
             }
         },
         {
-            "id": "mantyke-4",
-            "pokemon": "mantyke",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "10-35",
-            "weight": 8.4,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_lukewarm_ocean",
-                    "#cobblemon:is_warm_ocean"
-                ],
-                "minY": 48
-            }
-        },
-        {
             "id": "mantyke-5",
             "pokemon": "mantyke",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "10-35",
-            "weight": 8.4,
+            "weight": 84.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -127,7 +129,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "10-35",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

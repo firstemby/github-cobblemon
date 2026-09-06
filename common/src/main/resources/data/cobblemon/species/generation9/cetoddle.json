@@ -44,10 +44,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 1.05,
     "fixed": false
   },
+  "standingEyeHeight": 0.67,
   "behaviour": {
     "moving": {
       "walk": {
@@ -64,7 +65,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "cetoddle",

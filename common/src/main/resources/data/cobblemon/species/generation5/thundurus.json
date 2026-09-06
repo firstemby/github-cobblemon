@@ -95,7 +95,6 @@
     "tm:lashout",
     "tm:nastyplot",
     "tm:payback",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:raindance",
@@ -146,7 +145,6 @@
     "tutor:irontail",
     "tutor:knockoff",
     "tutor:lashout",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
@@ -167,6 +165,7 @@
     "legacy:doubleteam",
     "legacy:frustration",
     "legacy:hiddenpower",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
@@ -261,6 +260,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

@@ -49,9 +49,6 @@
   },
   "behaviour": {
     "moving": {
-      "walk": {
-        "canWalk": false
-      },
       "swim": {
         "avoidsWater": true
       },
@@ -70,6 +67,15 @@
     },
     "combat": {
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "komala alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

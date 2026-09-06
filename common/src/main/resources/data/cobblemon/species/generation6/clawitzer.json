@@ -67,6 +67,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "clawitzer alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -87,6 +96,7 @@
     "35:swordsdance",
     "42:aurasphere",
     "49:bounce",
+    "55:focusblast",
     "56:muddywater",
     "63:crabhammer",
     "egg:aquatail",

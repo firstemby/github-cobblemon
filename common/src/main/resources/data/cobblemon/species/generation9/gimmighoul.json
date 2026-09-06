@@ -73,6 +73,19 @@
     "combat": {
       "willDefendSelf": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gimmighoul alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gholdengo alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

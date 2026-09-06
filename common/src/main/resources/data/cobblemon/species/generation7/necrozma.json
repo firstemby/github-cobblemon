@@ -678,6 +678,9 @@
       ],
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

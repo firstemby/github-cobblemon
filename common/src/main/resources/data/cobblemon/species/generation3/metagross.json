@@ -129,7 +129,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "6"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "metagross alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {

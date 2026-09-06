@@ -71,6 +71,23 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "butterfree alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "beautifly alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vivillon alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

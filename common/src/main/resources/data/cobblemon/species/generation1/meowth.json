@@ -75,6 +75,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "meowth galarian=false alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "persian galarian=false",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -125,7 +138,6 @@
     "tm:amnesia",
     "tm:assurance",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",
@@ -341,7 +353,6 @@
         "tm:amnesia",
         "tm:assurance",
         "tm:bodyslam",
-        "tm:captivate",
         "tm:charm",
         "tm:chillingwater",
         "tm:confuseray",
@@ -489,7 +500,7 @@
               "tier": 1
             },
             {
-              "pokemon": "persian galarian=false alpha",
+              "pokemon": "persian galarian=false",
               "tier": 1
             }
           ]

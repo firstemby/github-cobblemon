@@ -59,7 +59,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "nidoranf",
@@ -142,7 +142,6 @@
     "tm:beatup",
     "tm:blizzard",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:cut",
     "tm:dig",
     "tm:drillrun",

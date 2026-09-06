@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -40,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 0.6,
+            "weight": 2.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -63,7 +63,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
+            "weight": 6.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"

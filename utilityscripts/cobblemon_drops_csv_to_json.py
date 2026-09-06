@@ -80,7 +80,7 @@ def main(dex_range=None):
 
 
 def get_drops_df(dex_range=range(0, 1111)):
-    drops_spreadsheet_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR51bmzKMTvCfa1UKf454nnlNBCUVMtVNQvxdAiYU09E5pWS7mbsrVt45ABsCGZTByt9N_YEgnSwj8V/pub?gid=0&single=true&output=csv'
+    drops_spreadsheet_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX4d5Ao7ABQRGlBpBv6hWIipbm_SKJuQUj3LXfhkQUvAg6sWM1gspv1cJYOIMPWXs2ehMnxvZsvxDG/pub?gid=0&single=true&output=csv'
     conversion_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmvHzUc6_UUKbcvRche7AVebNoljqC1bf3iccusJqW9-C3k0KtESJxOCXShykSejIarAB2jHJ2bHCb/pub?gid=0&single=true&output=csv'
     pokemon_data_dir = '../common/src/main/resources/data/cobblemon/species'
     sqlite_db_name = 'pokemon_drops_data.sqlite'

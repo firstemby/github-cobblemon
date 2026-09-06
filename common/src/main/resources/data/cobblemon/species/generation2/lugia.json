@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "lugia",
@@ -216,7 +216,6 @@
     "tm:laserfocus",
     "tm:lightscreen",
     "tm:liquidation",
-    "tm:naturalgift",
     "tm:ominouswind",
     "tm:protect",
     "tm:psychic",

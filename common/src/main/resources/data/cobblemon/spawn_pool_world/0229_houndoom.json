@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-50",
-            "weight": 0.96,
+            "weight": 3.2,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -26,7 +26,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_badlands"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -39,11 +40,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-50",
-            "weight": 0.6,
+            "weight": 2.0,
             "condition": {
                 "biomes": [
                     "#minecraft:is_nether"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "drops": {
                 "amount": 6,
@@ -77,7 +79,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-50",
-            "weight": 16.0,
+            "weight": 100.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {

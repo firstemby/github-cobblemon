@@ -13,13 +13,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
-            "weight": 5.52,
-            "weightMultiplier": {
-                "multiplier": 2.5,
-                "condition": {
-                    "timeRange": "twilight"
+            "weight": 44.16,
+            "weightMultipliers": [
+                {
+                    "multiplier": 2.5,
+                    "condition": {
+                        "timeRange": "twilight"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -44,7 +52,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.9,
+            "weight": 15.2,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_forest"
@@ -66,13 +80,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "5-30",
-            "weight": 5.52,
-            "weightMultiplier": {
-                "multiplier": 2.5,
-                "condition": {
-                    "timeRange": "twilight"
+            "weight": 27.6,
+            "weightMultipliers": [
+                {
+                    "multiplier": 2.5,
+                    "condition": {
+                        "timeRange": "twilight"
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -92,7 +114,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.9,
+            "weight": 9.5,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_frozen"

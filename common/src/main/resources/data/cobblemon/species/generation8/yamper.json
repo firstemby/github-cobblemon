@@ -63,6 +63,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "yamper",
+          "tier": 1
+        },
+        {
+          "pokemon": "boltund",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

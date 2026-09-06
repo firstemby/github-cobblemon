@@ -447,6 +447,14 @@
 					"cubes": [
 						{"origin": [0, -24.5, -8], "size": [0, 12, 7], "uv": [98, 109]}
 					]
+				},
+				{
+					"name": "locator_seat_1",
+					"parent": "body",
+					"pivot": [0, 54, -10],
+					"locators": {
+						"seat_1": [0, 54, -10]
+					}
 				}
 			]
 		}

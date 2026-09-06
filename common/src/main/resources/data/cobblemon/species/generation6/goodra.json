@@ -79,6 +79,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.19
+      },
+      "swim": {
+        "canWalkOnWater": true
       }
     },
     "resting": {
@@ -86,6 +89,15 @@
       "drowsyChance": 0.0333,
       "light": "0-4",
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "goodra alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -366,6 +378,7 @@
         "tm:hyperbeam",
         "tm:icebeam",
         "tm:icespinner",
+        "tm:infestation",
         "tm:ironhead",
         "tm:irontail",
         "tm:knockoff",
@@ -381,6 +394,7 @@
         "tm:rocktomb",
         "tm:sandstorm",
         "tm:scaryface",
+        "tm:shockwave",
         "tm:skittersmack",
         "tm:sleeptalk",
         "tm:sludgebomb",
@@ -414,6 +428,7 @@
         "tutor:rest",
         "tutor:rockslide",
         "tutor:rocksmash",
+        "tutor:shockwave",
         "tutor:skittersmack",
         "tutor:sleeptalk",
         "tutor:sludgebomb",

@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "blitzle",
@@ -152,7 +152,6 @@
     "tm:allyswitch",
     "tm:bodyslam",
     "tm:bounce",
-    "tm:captivate",
     "tm:charm",
     "tm:doubleedge",
     "tm:echoedvoice",

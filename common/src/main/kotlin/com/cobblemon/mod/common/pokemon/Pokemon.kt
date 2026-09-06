@@ -1731,12 +1731,22 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         if (reassess) {
-            gender = if (form.maleRatio !in 0F..1F) {
-                Gender.GENDERLESS
-            } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
-                Gender.MALE
+            val allForms = form.species.forms
+            val isGenderedForms = allForms.any { it.maleRatio == 1F } && allForms.any { it.maleRatio == 0F }
+            gender = if (isGenderedForms) {
+                if (Random.nextBoolean()) {
+                    Gender.FEMALE
+                } else {
+                    Gender.MALE
+                }
             } else {
-                Gender.FEMALE
+                if (form.maleRatio !in 0F..1F) {
+                    Gender.GENDERLESS
+                } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
+                    Gender.MALE
+                } else {
+                    Gender.FEMALE
+                }
             }
         }
     }

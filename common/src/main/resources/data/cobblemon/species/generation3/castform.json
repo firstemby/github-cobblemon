@@ -68,6 +68,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "castform alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -186,7 +195,7 @@
         "cobblemon.species.castform-sunny.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "sunny-form"
@@ -245,7 +254,7 @@
         "cobblemon.species.castform-rainy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "rainy-form"
@@ -260,37 +269,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {
-        "resting": {
-          "willSleepOnBed": true,
-          "drowsyChance": 0.0333,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          },
-          "fly": {
-            "canFly": true
-          }
-        },
-        "combat": {
-          "willDefendOwner": true
-        },
-        "herd": {
-          "maxSize": 3,
-          "toleratedLeaders": [
-            {
-              "pokemon": "castform alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": true
     },
     {
       "name": "Snowy",
@@ -302,7 +281,7 @@
         "cobblemon.species.castform-snowy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "snowy-form"
@@ -317,37 +296,7 @@
         ]
       },
       "evolutions": [],
-      "battleOnly": true,
-      "behaviour": {
-        "resting": {
-          "willSleepOnBed": true,
-          "drowsyChance": 0.0333,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          },
-          "fly": {
-            "canFly": true
-          }
-        },
-        "combat": {
-          "willDefendOwner": true
-        },
-        "herd": {
-          "maxSize": 3,
-          "toleratedLeaders": [
-            {
-              "pokemon": "castform alpha",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "battleOnly": true
     }
   ]
 }

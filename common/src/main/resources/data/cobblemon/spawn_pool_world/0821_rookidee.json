@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-25",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -24,7 +24,8 @@
                     "#cobblemon:is_spooky",
                     "#cobblemon:is_taiga"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

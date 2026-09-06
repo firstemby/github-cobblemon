@@ -53,8 +53,7 @@
   "behaviour": {
     "moving": {
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.18
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true
@@ -64,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "hoppip",
@@ -149,7 +148,6 @@
     "egg:tickle",
     "egg:worryseed",
     "tm:beatup",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:dazzlinggleam",
@@ -168,7 +166,6 @@
     "tm:grassyterrain",
     "tm:helpinghand",
     "tm:mistyterrain",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:rest",

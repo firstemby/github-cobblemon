@@ -90,6 +90,19 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "duraludon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "archaludon alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -64,6 +64,31 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "applin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flapple alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "appletun alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dipplin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hydrapple alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

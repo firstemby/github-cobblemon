@@ -242,10 +242,30 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.15
+      },
+      "swim": {
+        "canWalkOnWater": true
       }
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "goomy alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sliggoo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "goodra alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

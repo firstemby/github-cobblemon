@@ -72,6 +72,23 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "venomoth alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dustox alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "mothim alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -68,7 +68,16 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "turtonator alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,

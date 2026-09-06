@@ -76,11 +76,15 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
-          "pokemon": "venusaur mega",
+          "pokemon": "venusaur mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "venusaur mega",
+          "tier": 2
         }
       ]
     },

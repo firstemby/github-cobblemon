@@ -70,7 +70,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "flabebe",
@@ -78,6 +78,10 @@
         },
         {
           "pokemon": "floette eternal=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "floette mega=false",
           "tier": 2
         },
         {
@@ -90,6 +94,10 @@
         },
         {
           "pokemon": "florges",
+          "tier": 4
+        },
+        {
+          "pokemon": "floette mega",
           "tier": 4
         }
       ]
@@ -136,7 +144,6 @@
     "tm:allyswitch",
     "tm:batonpass",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

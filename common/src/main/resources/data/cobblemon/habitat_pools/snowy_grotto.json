@@ -256,22 +256,6 @@
       "timeRange": "night"
     },
     {
-      "species": "Snover",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "8-33",
-      "phases": "1-9"
-    },
-    {
-      "species": "Abomasnow",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 4.0,
-      "levelRange": "40-49",
-      "phases": "1-9"
-    },
-    {
       "species": "Glaceon",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
@@ -353,7 +337,7 @@
       "spawnablePositionType": "grounded",
       "weight": 1.0,
       "levelRange": "3-28",
-      "modifiers": "dusk",
+      "modifiers": "wolf_form=dusk",
       "phases": "8"
     },
     {
@@ -362,7 +346,7 @@
       "spawnablePositionType": "grounded",
       "weight": 1.0,
       "levelRange": "3-28",
-      "modifiers": "dusk",
+      "modifiers": "wolf_form=dusk",
       "phases": "1-7"
     },
     {
@@ -371,7 +355,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.5,
       "levelRange": "25-49",
-      "modifiers": "midday",
+      "modifiers": "wolf_form=midday",
       "phases": "8",
       "timeRange": "day"
     },
@@ -381,7 +365,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.5,
       "levelRange": "25-49",
-      "modifiers": "midday",
+      "modifiers": "wolf_form=midday",
       "phases": "1-7",
       "timeRange": "day"
     },
@@ -391,7 +375,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.5,
       "levelRange": "25-49",
-      "modifiers": "midnight",
+      "modifiers": "wolf_form=midnight",
       "phases": "8",
       "timeRange": "night"
     },
@@ -401,7 +385,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.5,
       "levelRange": "25-49",
-      "modifiers": "midnight",
+      "modifiers": "wolf_form=midnight",
       "phases": "1-7",
       "timeRange": "night"
     },
@@ -411,7 +395,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.5,
       "levelRange": "25-49",
-      "modifiers": "dusk",
+      "modifiers": "wolf_form=dusk",
       "phases": "8"
     },
     {
@@ -420,7 +404,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.5,
       "levelRange": "25-49",
-      "modifiers": "dusk",
+      "modifiers": "wolf_form=dusk",
       "phases": "1-7"
     },
     {

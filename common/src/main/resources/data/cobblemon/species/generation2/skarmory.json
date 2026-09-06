@@ -104,11 +104,15 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "skarmory",
+          "pokemon": "skarmory mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "skarmory mega",
+          "tier": 2
         }
       ]
     },

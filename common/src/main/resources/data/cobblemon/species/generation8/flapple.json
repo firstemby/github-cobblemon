@@ -178,8 +178,16 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 6,
       "toleratedLeaders": [
+        {
+          "pokemon": "appletun alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hydrapple alpha",
+          "tier": 1
+        },
         {
           "pokemon": "flapple",
           "tier": 1

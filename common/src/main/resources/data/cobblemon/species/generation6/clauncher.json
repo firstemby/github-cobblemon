@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "clauncher alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "clawitzer alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

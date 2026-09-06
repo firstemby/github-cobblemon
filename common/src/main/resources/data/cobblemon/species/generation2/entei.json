@@ -189,6 +189,15 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hooh alpha",
+          "tier": 1
+        }
+      ]
+    }
   }
 }

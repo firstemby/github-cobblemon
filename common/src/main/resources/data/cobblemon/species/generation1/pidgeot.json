@@ -123,8 +123,12 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
+        {
+          "pokemon": "pidgeotto alpha",
+          "tier": 1
+        },
         {
           "pokemon": "unfezant",
           "tier": 1

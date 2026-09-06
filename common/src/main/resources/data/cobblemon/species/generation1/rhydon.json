@@ -78,7 +78,17 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "4"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "rhydon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "rhyperior alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

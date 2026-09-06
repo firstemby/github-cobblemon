@@ -195,7 +195,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "snorunt",
@@ -206,12 +206,16 @@
           "tier": 2
         },
         {
-          "pokemon": "froslass",
-          "tier": 3
+          "pokemon": "froslass mega=false",
+          "tier": 2
         },
         {
           "pokemon": "glalie mega",
-          "tier": 4
+          "tier": 3
+        },
+        {
+          "pokemon": "froslass mega",
+          "tier": 3
         }
       ]
     },

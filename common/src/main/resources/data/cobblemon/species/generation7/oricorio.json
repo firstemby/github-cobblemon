@@ -96,7 +96,6 @@
     "tm:attract",
     "tm:batonpass",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:defog",
@@ -302,7 +301,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "oricorio",

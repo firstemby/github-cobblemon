@@ -133,6 +133,7 @@ object AdvancementHandler : EventHandler {
                         }
                         Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
                         CobblemonCriteria.DEFEAT_POKEMON.trigger(player, CountableContext(advancementData.totalBattleVictoryCount))
+                        playerData.sendToPlayer(player)
                     }
             }
         }
@@ -150,6 +151,7 @@ object AdvancementHandler : EventHandler {
                     advancementData.updateTotalPvNBattleVictoryCount()
                 Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
                 CobblemonCriteria.WIN_BATTLE.trigger(player, BattleCountableContext(event.battle, advancementData.totalBattleVictoryCount))
+                playerData.sendToPlayer(player)
             }
 
     }

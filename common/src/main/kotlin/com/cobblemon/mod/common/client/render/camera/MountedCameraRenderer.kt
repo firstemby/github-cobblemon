@@ -75,7 +75,7 @@ object MountedCameraRenderer {
         val state = FloatingState().also { it.currentAspects = vehicle.pokemon.aspects }
         val model = getPoser(vehicle.pokemon.species.resourceIdentifier, state)
 
-        val locatorName = delegate.getSeatLocator(driver)
+        val locatorName = delegate.getSeatLocator(driver) ?: return null
         val locator = delegate.locatorStates[locatorName] ?: return null
 
         // Get additional offset from poser and add to the eyeHeight offset

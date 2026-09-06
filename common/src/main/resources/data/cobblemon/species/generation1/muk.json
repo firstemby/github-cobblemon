@@ -69,6 +69,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "muk alolan=false alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -173,7 +182,6 @@
     "tm:sleeptalk",
     "tm:sludgebomb",
     "tm:sludgewave",
-    "tm:smog",
     "tm:spite",
     "tm:strength",
     "tm:substitute",

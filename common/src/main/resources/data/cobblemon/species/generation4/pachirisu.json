@@ -208,6 +208,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "pachirisu alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

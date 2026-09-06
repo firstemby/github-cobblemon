@@ -53,19 +53,17 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "canWalk": true,
         "walkSpeed": 0.2
       },
       "fly": {
-        "canFly": true,
-        "flySpeedHorizontal": 0.25
+        "canFly": true
       },
       "swim": {
         "avoidsWater": true
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "jumpluff",
@@ -139,7 +137,6 @@
     "egg:tickle",
     "egg:worryseed",
     "tm:beatup",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:dazzlinggleam",
@@ -163,7 +160,6 @@
     "tm:hyperbeam",
     "tm:lightscreen",
     "tm:mistyterrain",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:playrough",
     "tm:protect",

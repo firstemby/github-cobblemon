@@ -84,6 +84,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "sableye alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -147,7 +156,6 @@
     "tm:brickbreak",
     "tm:bulkup",
     "tm:calmmind",
-    "tm:captivate",
     "tm:confuseray",
     "tm:cut",
     "tm:darkpulse",

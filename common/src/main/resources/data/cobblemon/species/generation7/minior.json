@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "minior",
@@ -222,39 +222,7 @@
       },
       "baseExperienceYield": 154,
       "catchRate": 30,
-      "evolutions": [],
-      "behaviour": {
-        "resting": {
-          "times": [
-            "any"
-          ],
-          "drowsyChance": 0.0014,
-          "rouseChance": 0.0042
-        },
-        "moving": {
-          "walk": {
-            "canWalk": false
-          },
-          "swim": {
-            "avoidsWater": true
-          },
-          "fly": {
-            "canFly": true
-          }
-        },
-        "combat": {
-          "willDefendOwner": true
-        },
-        "herd": {
-          "maxSize": 4,
-          "toleratedLeaders": [
-            {
-              "pokemon": "minior",
-              "tier": 1
-            }
-          ]
-        }
-      }
+      "evolutions": []
     }
   ],
   "drops": {

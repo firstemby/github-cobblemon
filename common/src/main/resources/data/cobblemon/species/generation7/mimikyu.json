@@ -341,6 +341,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mimikyu alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

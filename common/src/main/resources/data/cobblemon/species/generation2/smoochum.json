@@ -92,7 +92,6 @@
     "tm:blizzard",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:drainingkiss",
@@ -205,7 +204,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "smoochum",

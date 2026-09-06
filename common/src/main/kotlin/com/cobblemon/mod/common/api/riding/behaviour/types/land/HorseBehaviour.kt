@@ -193,7 +193,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
         val newStam = if (state.sprinting.get()) {
             max(0.0f,stam - stamDrainRate)
         } else {
-            min(1.0f,stam + stamDrainRate * 4)
+            min(1.0f,stam + stamDrainRate * 8) // Need to change this to probably be in seconds eventually? idk something that isn't this magic number.
         }
 
         state.stamina.set(newStam.coerceIn(0F, 1F))

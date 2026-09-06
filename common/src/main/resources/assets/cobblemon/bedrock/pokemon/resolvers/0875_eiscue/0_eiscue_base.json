@@ -23,7 +23,9 @@
         {
           "name": "alpha_eyes",
           "texture": "cobblemon:textures/pokemon/0875_eiscue/eiscue_alpha.png",
-          "emissive": true
+          "emissive": true,
+          "translucent": true,
+          "translucent_cull": true
         }
       ]
     }

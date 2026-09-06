@@ -16,6 +16,11 @@
       "targetLocators": ["middle"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.leafstorm.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.1
     },
@@ -34,6 +39,11 @@
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:leafstorm_target",
       "locators": ["target"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.leafstorm.target');"]
     },
     {
       "type": "animation",

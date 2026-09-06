@@ -68,6 +68,23 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "drowzee alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hypno alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "komala",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

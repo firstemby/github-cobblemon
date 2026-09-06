@@ -226,7 +226,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "rapidash",

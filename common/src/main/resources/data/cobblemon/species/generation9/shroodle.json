@@ -62,15 +62,15 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "shroodle",
+          "pokemon": "grafaiai alpha",
           "tier": 1
         },
         {
-          "pokemon": "grafaiai",
-          "tier": 2
+          "pokemon": "shroodle",
+          "tier": 1
         }
       ]
     },

@@ -57,10 +57,10 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
-          "pokemon": "salazzle",
+          "pokemon": "salazzle alpha",
           "tier": 1
         }
       ]
@@ -134,7 +134,6 @@
     "tm:bodyslam",
     "tm:breakingswipe",
     "tm:burningjealousy",
-    "tm:captivate",
     "tm:corrosivegas",
     "tm:covet",
     "tm:crosspoison",

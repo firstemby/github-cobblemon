@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.api.spawning.selection.SpawnSelectionData
 class EmptySpawnDetail : SpawnDetail() {
     companion object {
         val TYPE = "empty"
+        val EMPTY = EmptySpawnDetail()
     }
 
     override val type: String = TYPE

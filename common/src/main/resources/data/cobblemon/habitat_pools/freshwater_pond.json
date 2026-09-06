@@ -532,7 +532,7 @@
       "spawnablePositionType": "submerged",
       "weight": 10.0,
       "levelRange": "21-46",
-      "modifiers": "bluestriped",
+      "modifiers": "striped=blue",
       "phases": "8"
     },
     {
@@ -541,7 +541,7 @@
       "spawnablePositionType": "submerged",
       "weight": 10.0,
       "levelRange": "21-46",
-      "modifiers": "bluestriped",
+      "modifiers": "striped=blue",
       "phases": "9-14"
     },
     {

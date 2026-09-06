@@ -90,6 +90,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "archaludon alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -136,6 +145,7 @@
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:laserfocus",
     "tm:lightscreen",
     "tm:metalclaw",
     "tm:metalsound",
@@ -149,12 +159,14 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:scaryface",
+    "tm:screech",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:snarl",
     "tm:solarbeam",
     "tm:stealthrock",
     "tm:steelbeam",
+    "tm:steelroller",
     "tm:stoneedge",
     "tm:substitute",
     "tm:swordsdance",
@@ -173,6 +185,7 @@
     "tutor:hyperbeam",
     "tutor:irondefense",
     "tutor:ironhead",
+    "tutor:laserfocus",
     "tutor:meteorbeam",
     "tutor:outrage",
     "tutor:rest",
@@ -182,6 +195,7 @@
     "tutor:snarl",
     "tutor:stealthrock",
     "tutor:steelbeam",
+    "tutor:steelroller",
     "tutor:stoneedge",
     "tutor:thunderbolt",
     "legacy:attract",

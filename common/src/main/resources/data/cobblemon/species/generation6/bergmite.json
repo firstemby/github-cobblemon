@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bergmite",
@@ -196,6 +196,90 @@
         {
           "variant": "level",
           "minLevel": 37
+        }
+      ]
+    },
+    {
+      "id": "bergmite_avalugghisui",
+      "variant": "level_up",
+      "result": "avalugg hisuian",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "rockslide"
+      ],
+      "requirements": [
+        {
+          "variant": "level",
+          "minLevel": 37
+        },
+        {
+          "variant": "biome",
+          "biomeCondition": "#cobblemon:evolution/regional/bergmite_hisuibiome"
+        }
+      ]
+    }
+  ],
+  "forms": [
+    {
+      "name": "Hisui-Bias",
+      "primaryType": "ice",
+      "maleRatio": 0.5,
+      "height": 10,
+      "weight": 995,
+      "pokedex": [
+        "cobblemon.species.bergmite-hisuibias.desc"
+      ],
+      "labels": [
+        "gen8a",
+        "customized_official",
+        "hisuian_form"
+      ],
+      "aspects": [
+        "region-bias-hisui"
+      ],
+      "dynamaxBlocked": false,
+      "evolutions": [
+        {
+          "id": "bergmite_avalugg",
+          "variant": "level_up",
+          "result": "avalugg",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "bodyslam"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 37
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_hisuibiome"
+            },
+            {
+              "variant": "biome",
+              "biomeCondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+            }
+          ]
+        },
+        {
+          "id": "bergmite_avalugghisui",
+          "variant": "level_up",
+          "result": "avalugg hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "rockslide"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 37
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+            }
+          ]
         }
       ]
     }

@@ -301,19 +301,19 @@
 					]
 				},
 				{
-					"name": "seat1",
+					"name": "locator_seat_1",
 					"parent": "torso",
 					"pivot": [0, 32.9, -2.5],
 					"locators": {
-						"seat1": [0, 32.9, -2.5]
+						"seat_1": [0, 32.9, -2.5]
 					}
 				},
 				{
-					"name": "seat2",
+					"name": "locator_seat_2",
 					"parent": "torso",
 					"pivot": [0, 32.9, 2.5],
 					"locators": {
-						"seat2": [0, 32.9, 2.5]
+						"seat_2": [0, 32.9, 2.5]
 					}
 				},
 				{

@@ -175,11 +175,6 @@
             },
             "limit": 9,
             "processor_type": "minecraft:capped"
-        },
-        {
-            "processor_type": "gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -4
         }
     ]
 }

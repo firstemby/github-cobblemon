@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "27-46",
-            "weight": 0.1,
+            "weight": 0.6,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -26,11 +26,12 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_plains"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
-            "id": "jumpluff-3",
+            "id": "jumpluff-2",
             "pokemon": "jumpluff",
             "presets": [
                 "natural",
@@ -40,18 +41,19 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "27-46",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "aether:skyroot_grove",
                     "aether:skyroot_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
-            "id": "jumpluff-4",
+            "id": "jumpluff-3",
             "pokemon": "jumpluff",
             "presets": [
                 "natural"
@@ -60,11 +62,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "27-46",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [

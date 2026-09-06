@@ -66,6 +66,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "stufful alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "bewear alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

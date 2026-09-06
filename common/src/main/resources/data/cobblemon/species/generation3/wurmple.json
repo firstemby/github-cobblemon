@@ -132,6 +132,23 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wurmple alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "beautifly alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dustox alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

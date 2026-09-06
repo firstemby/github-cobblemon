@@ -46,10 +46,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 0.67,
     "fixed": false
   },
+  "standingEyeHeight": 0.6,
   "behaviour": {
     "moving": {
       "walk": {
@@ -67,7 +68,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "mantyke",

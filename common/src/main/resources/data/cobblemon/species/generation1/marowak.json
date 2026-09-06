@@ -354,6 +354,7 @@
         "tm:focusblast",
         "tm:focusenergy",
         "tm:focuspunch",
+        "tm:furycutter",
         "tm:gigaimpact",
         "tm:headbutt",
         "tm:heatwave",
@@ -362,6 +363,7 @@
         "tm:icebeam",
         "tm:icywind",
         "tm:imprison",
+        "tm:incinerate",
         "tm:irondefense",
         "tm:ironhead",
         "tm:irontail",
@@ -374,11 +376,14 @@
         "tm:outrage",
         "tm:painsplit",
         "tm:poltergeist",
+        "tm:poweruppunch",
         "tm:protect",
         "tm:raindance",
         "tm:rest",
         "tm:retaliate",
+        "tm:rockclimb",
         "tm:rockslide",
+        "tm:rocksmash",
         "tm:rocktomb",
         "tm:sandstorm",
         "tm:scorchingsands",
@@ -390,6 +395,7 @@
         "tm:stealthrock",
         "tm:stompingtantrum",
         "tm:stoneedge",
+        "tm:strength",
         "tm:substitute",
         "tm:sunnyday",
         "tm:swift",
@@ -415,6 +421,7 @@
         "tutor:flamethrower",
         "tutor:focusenergy",
         "tutor:focuspunch",
+        "tutor:furycutter",
         "tutor:gigaimpact",
         "tutor:heatwave",
         "tutor:hyperbeam",
@@ -432,6 +439,7 @@
         "tutor:poltergeist",
         "tutor:rest",
         "tutor:rockslide",
+        "tutor:rocksmash",
         "tutor:scorchingsands",
         "tutor:shadowball",
         "tutor:sleeptalk",
@@ -479,7 +487,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "marowak alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

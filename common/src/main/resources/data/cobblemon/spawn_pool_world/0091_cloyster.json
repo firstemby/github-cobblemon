@@ -13,7 +13,13 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.5,
+            "weight": 1.5,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -32,7 +38,13 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.3,
+            "weight": 0.5,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -53,7 +65,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.5,
+            "weight": 5.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -76,7 +88,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.1,
+            "weight": 1.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -113,7 +125,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.5,
+            "weight": 5.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -138,7 +150,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.1,
+            "weight": 1.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -180,7 +192,13 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.3,
+            "weight": 0.5,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -200,7 +218,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "26-53",
-            "weight": 0.5,
+            "weight": 5.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

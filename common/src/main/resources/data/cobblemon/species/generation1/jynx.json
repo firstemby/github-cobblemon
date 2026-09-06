@@ -94,7 +94,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:drainingkiss",
@@ -234,7 +233,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "jynx alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

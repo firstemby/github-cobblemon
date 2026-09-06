@@ -66,6 +66,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "seviper alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "ai": [

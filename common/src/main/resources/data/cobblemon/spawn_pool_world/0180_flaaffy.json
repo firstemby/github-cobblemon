@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "15-37",
-            "weight": 0.9,
+            "weight": 5.4,
             "weightMultipliers": [
                 {
                     "multiplier": 0.25,
@@ -34,7 +34,8 @@
                 "biomes": [
                     "#cobblemon:is_highlands",
                     "#cobblemon:is_plains"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

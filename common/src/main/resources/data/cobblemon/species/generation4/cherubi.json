@@ -42,7 +42,7 @@
   "catchRate": 190,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -102,7 +102,6 @@
     "tm:grassyterrain",
     "tm:helpinghand",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pollenpuff",
@@ -166,11 +165,15 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "cherubi",
           "tier": 1
+        },
+        {
+          "pokemon": "cherrim",
+          "tier": 2
         }
       ]
     },

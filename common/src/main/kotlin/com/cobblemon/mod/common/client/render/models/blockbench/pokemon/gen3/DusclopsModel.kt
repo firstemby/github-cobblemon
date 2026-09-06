@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Pose
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
@@ -33,6 +34,8 @@ class DusclopsModel (root: ModelPart) : PokemonPosableModel(root) {
     lateinit var battleidle: Pose
 
     override fun registerPoses() {
+        animations["cry"] = "q.bedrock_stateful('squirtle', 'cry')".asExpressionLike()
+
         val blink = quirk { bedrockStateful("dusclops", "blink") }
 
         sleep = registerPose(
