@@ -1,0 +1,47 @@
+{
+  "fabric:load_conditions": [
+    { "condition": "fabric:not",
+      "value": { "condition": "fabric:true" }
+    }
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "type": "farmersdelight:cooking",
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "type": "neoforge:compound",
+      "children": [
+        {
+          "tag": "cobblemon:apples"
+        },
+        {
+          "item": "minecraft:apple"
+        }
+      ]
+    },
+    {
+      "type": "neoforge:compound",
+      "children": [
+        {
+          "tag": "cobblemon:apples"
+        },
+        {
+          "item": "minecraft:apple"
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "recipe_book_tab": "drinks",
+  "result": {
+    "count": 1,
+    "id": "farmersdelight:apple_cider"
+  }
+}

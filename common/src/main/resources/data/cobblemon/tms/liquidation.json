@@ -1,0 +1,19 @@
+{
+  "moveName": "liquidation",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "water",
+  "recipe": [
+    {
+      "item": "cobblemon:water_gem",
+      "count": 8
+    },
+    {
+      "item": "minecraft:prismarine_shard",
+      "count": 1
+    }
+  ]
+}

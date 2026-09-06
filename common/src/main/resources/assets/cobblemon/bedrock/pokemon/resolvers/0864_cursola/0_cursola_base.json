@@ -7,7 +7,7 @@
       "poser": "cobblemon:cursola",
       "model": "cobblemon:cursola.geo",
       "texture": "cobblemon:textures/pokemon/0864_cursola/cursola.png",
-      "layers": [       
+      "layers": [
         {
           "name": "emissive",
           "emissive": true,
@@ -24,9 +24,11 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0864_cursola/cursola_shiny.png",
-      "layers": [       
+      "layers": [
         {
           "name": "emissive",
           "emissive": true,
@@ -39,6 +41,18 @@
           "texture": "cobblemon:textures/pokemon/0864_cursola/cursola_ectoplasm_shiny.png",
           "translucent": true,
           "translucent_cull": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0864_cursola/cursola_alpha.png",
+          "emissive": true
         }
       ]
     }

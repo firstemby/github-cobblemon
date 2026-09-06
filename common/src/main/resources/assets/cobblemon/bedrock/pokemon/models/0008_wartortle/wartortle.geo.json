@@ -112,9 +112,9 @@
 				{
 					"name": "locator_item_face",
 					"parent": "head_angle",
-					"pivot": [0, 19.75, -5],
+					"pivot": [0, 20.5, -5],
 					"locators": {
-						"item_face": [0, 19.75, -5]
+						"item_face": [0, 20.5, -5]
 					}
 				},
 				{
@@ -276,9 +276,9 @@
 				{
 					"name": "locator_item",
 					"parent": "elbow_right",
-					"pivot": [-13, 13.5, 0],
+					"pivot": [-14, 13.5, 0],
 					"locators": {
-						"item": [-13, 13.5, 0]
+						"item": [-14, 13.5, 0]
 					}
 				},
 				{

@@ -2,7 +2,9 @@
   "portraitScale": 1.63,
   "portraitTranslation": [-1.76, 1.25, 0],
   "profileScale": 0.53,
-  "profileTranslation": [-0.09, 0.92, 0],
+  "profileTranslation": [0.49, 0.96, 0],
+  "profilePokedexTranslation": [0, 0.96, 0],
+  "profileSummaryTranslation": [-0.30, 0.87, 0],
   "rootBone": "drapion",
   "animations": {
     "cry": "q.bedrock_stateful('drapion', 'cry')"

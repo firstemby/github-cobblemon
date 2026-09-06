@@ -142,9 +142,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "mushroom",
-					"pivot": [0, 21, 4],
+					"pivot": [0, 22, 3],
 					"locators": {
-						"seat_1": [0, 21, 4]
+						"seat_1": [0, 22, 3]
 					}
 				},
 				{

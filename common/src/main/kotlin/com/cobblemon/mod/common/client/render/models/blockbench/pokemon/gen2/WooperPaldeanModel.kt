@@ -23,7 +23,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class WooperPaldeanModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
-    override val rootPart = root.registerChildWithAllChildren("wooper_paldean")
+    override val rootPart = root.registerChildWithAllChildren("wooper")
     override val head = getPart("head")
 
     override var portraitScale = 2.0F

@@ -10,9 +10,22 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
       "animations": [
         "q.look('head')",
         "q.bedrock('grafaiai', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('grafaiai', 'blink')",
+        "q.bedrock_primary_quirk('grafaiai', q.array('idle_quirk_left', 'idle_quirk_right'), 20, 40, 1, q.curve('symmetrical'))"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('grafaiai', 'battle_idle')"
       ],
       "quirks": ["q.bedrock_quirk('grafaiai', 'blink')"]
     },
@@ -20,11 +33,18 @@
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.22, 0.2, 'arm_left', 'arm_right')",
-        "q.bedrock('grafaiai', 'ground_idle')"
+        "q.bedrock('grafaiai', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('grafaiai', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": [
+        "q.bedrock('grafaiai', 'sleep')"
+      ]
     }
   }
 }

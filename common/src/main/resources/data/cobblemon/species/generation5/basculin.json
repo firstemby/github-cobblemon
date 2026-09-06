@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "basculin striped=red",
@@ -227,7 +227,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "basculin striped=blue",
@@ -367,7 +367,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "basculin striped=white",

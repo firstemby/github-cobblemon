@@ -1,0 +1,9 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/enhydro_agate"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_enhydro_agate"
+    }
+}

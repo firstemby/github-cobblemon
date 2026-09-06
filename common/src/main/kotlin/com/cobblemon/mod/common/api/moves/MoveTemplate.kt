@@ -12,12 +12,12 @@ import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.api.types.ElementalType
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.lang
@@ -53,7 +53,8 @@ open class MoveTemplate(
     val pp: Int,
     val priority: Int,
     val critRatio: Double,
-    val effectChances: Array<Double>
+    val effectChances: Array<Double>,
+    val weight: Float
 ) {
     val struct: MoStruct by lazy {
         QueryStruct(hashMapOf())
@@ -69,8 +70,8 @@ open class MoveTemplate(
             .addFunction("max_pp") { DoubleValue(maxPp) }
             .addFunction("priority") { DoubleValue(priority) }
             .addFunction("crit_ratio") { DoubleValue(critRatio) }
+            .addFunction("weight") { DoubleValue(weight.toDouble()) }
     }
-
 
     val displayName: MutableComponent
         get() = lang("move.$name")
@@ -89,7 +90,8 @@ open class MoveTemplate(
         pp = 5,
         priority = 0,
         critRatio = 0.0,
-        effectChances = emptyArray()
+        effectChances = emptyArray(),
+        weight = 0F,
     )
 
     companion object {
@@ -159,5 +161,13 @@ open class MoveTemplate(
             return ElementalTypes.NORMAL
         }
         return this.elementalType
+    }
+
+    fun getSelectionWeight(form: FormData): Float {
+        return if (this in form.signatureMoves) {
+            weight * MovesetBuilder.signatureMoveWeightMultiplier
+        } else {
+            weight
+        }
     }
 }

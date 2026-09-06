@@ -70,6 +70,12 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .build())
 
     @JvmField
+    val TM_MOVE: DataComponentType<TMMoveComponent> = create("tm_move", DataComponentType.builder<TMMoveComponent>()
+        .persistent(TMMoveComponent.CODEC)
+        .networkSynchronized(TMMoveComponent.PACKET_CODEC)
+        .build())
+
+    @JvmField
     val INGREDIENT: DataComponentType<IngredientComponent> = create("ingredient", DataComponentType.builder<IngredientComponent>()
             .persistent(IngredientComponent.CODEC)
             .networkSynchronized(IngredientComponent.PACKET_CODEC)
@@ -101,6 +107,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:flavour"), FLAVOUR)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ride_boosts"), RIDE_BOOST)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food_colour"), FOOD_COLOUR)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:tm_move"), TM_MOVE)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:ingredient"), INGREDIENT)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)

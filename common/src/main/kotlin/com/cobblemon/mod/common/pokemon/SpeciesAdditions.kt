@@ -44,14 +44,11 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
             parameter.additions.forEach { addition ->
                 try {
                     var value = addition.value
-                    if (value is MutableCollection<*>) {
+                    // Catch collection properties that append
+                    val appendKeywordsCollection = listOf("forms", "evolutions")
+                    if ((appendKeywordsCollection.any { it == addition.property.name }) && (value is MutableCollection<*>)) {
                         val existing = addition.property.getter.call(species) as MutableCollection<Any>
                         existing.addAll(value.filterNotNull())
-                        value = existing
-                    }
-                    else if (value is MutableMap<*, *>) {
-                        val existing = addition.property.getter.call(species) as MutableMap<Any, Any>
-                        existing.putAll(value as MutableMap<Any, Any>)
                         value = existing
                     }
                     addition.property.setter.call(species, value)

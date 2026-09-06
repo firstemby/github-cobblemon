@@ -2,7 +2,7 @@
     "biomes": "#cobblemon:is_lush",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
-    "start_pool": "cobblemon:ruins/rooted_arch_ruins",
+    "start_pool": "minecraft:empty",
     "size": 7,
     "step": "underground_structures",
     "start_height": {

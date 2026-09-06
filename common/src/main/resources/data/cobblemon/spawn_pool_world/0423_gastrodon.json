@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-48",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -34,7 +34,7 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "30-48",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -51,7 +51,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -78,7 +78,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-48",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -104,7 +104,7 @@
             "spawnablePositionType": "seafloor",
             "bucket": "common",
             "level": "30-48",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -121,7 +121,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -145,7 +145,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -171,7 +171,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

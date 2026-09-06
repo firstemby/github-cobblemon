@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "eelektrik",
@@ -140,7 +140,6 @@
     "tm:bodyslam",
     "tm:bounce",
     "tm:brine",
-    "tm:captivate",
     "tm:confuseray",
     "tm:dive",
     "tm:drainingkiss",

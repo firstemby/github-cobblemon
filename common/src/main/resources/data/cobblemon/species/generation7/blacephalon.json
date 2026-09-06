@@ -182,6 +182,9 @@
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3
+    }
   }
 }

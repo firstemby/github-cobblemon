@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "1-22",
-            "weight": 8.75,
+            "weight": 34.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -26,7 +26,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -39,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "1-22",
-            "weight": 8.75,
+            "weight": 34.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -54,7 +55,8 @@
                 ],
                 "structures": [
                     "#minecraft:village"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -67,13 +69,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "1-22",
-            "weight": 8.75,
+            "weight": 34.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

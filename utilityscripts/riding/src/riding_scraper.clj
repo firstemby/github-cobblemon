@@ -2,11 +2,12 @@
   (:require
     [clj-http.client :as client]
     [clojure.data.csv :as csv]
-    [clojure.string :as s :refer [upper-case blank? split trim ends-with? includes? lower-case]]
+    [clojure.string :as s :refer [upper-case blank? split trim lower-case]]
     [clojure.java.io :refer [file]]
     [clojure.data.json :refer [read-str write-str]])
   (:import (com.cobblemon.mod.common.api.pokemon PokemonSpecies)
            (com.cobblemon.mod.common.client.gui PokemonGuiUtilsKt)
+           (com.cobblemon.mod.common.client.gui ProfileTransformType)
            (com.cobblemon.mod.common.client.render.models.blockbench FloatingState)
            (com.cobblemon.mod.common.client.render.pokemon PokemonRenderer)
            (com.cobblemon.mod.common.entity PoseType)
@@ -52,7 +53,7 @@
     (.rotateZ quaternion (float 3.14))
     (.translate pose-stack ^Float (:x translation-offset) ^Float (:y translation-offset) ^Float (:z translation-offset))
     (.setCurrentAspects state (.getAspects renderable))
-    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) false true 1 1 1 1 0 0)
+    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) ProfileTransformType/PROFILE true 1 1 1 1 0 0 13)
     (let [seat-locators (filter #(s/starts-with? % "seat_") (.keySet (.getLocatorStates state)))]
       (when (not-empty seat-locators)
         (into {} (map (fn [x] [x (get-seat-locator state x)]) seat-locators))))))
@@ -413,15 +414,15 @@
       (s/replace "é" "e")))
 
 (defn get-file-for-species
-  "Return the first JSON file from `files` whose name matches `species`.
-   - Only considers files whose names end with \".json\"
-   - Selects the first file whose name contains the normalized species token.
+  "Return the JSON file from `files` whose name is exactly the normalized
+   species token followed by \".json\", so species whose names are prefixes of
+   others (e.g. \"pidgeot\" vs \"pidgeotto\") resolve to the correct file.
    Returns a java.io.File or nil if no match is found."
   [species files]
-  (->> files
-       (filter #(ends-with? (.getName %) ".json"))
-       (filter #(includes? (.getName %) (sanitize-species-name species)))
-       (first)))
+  (let [file-name (str (sanitize-species-name species) ".json")]
+    (->> files
+         (filter #(= (.getName %) file-name))
+         (first))))
 
 (defn read-species-json
   "Read a species JSON file from disk and parse it into Clojure data.

@@ -70,6 +70,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "kadabra alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "alakazam alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

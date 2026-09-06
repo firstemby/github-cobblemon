@@ -166,11 +166,15 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "scovillain",
+          "pokemon": "scovillain mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "scovillain mega",
+          "tier": 2
         }
       ]
     },

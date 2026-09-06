@@ -5,6 +5,7 @@
   "profileTranslation": [0,0.47,0],
   "rootBone": "banette",
   "animations": {
+    "cry": "q.bedrock_stateful('banette', 'cry')"
   },
   "poses": {
     "standing": {

@@ -65,8 +65,16 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "squirtle alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "wartortle alpha",
+          "tier": 1
+        },
         {
           "pokemon": "blastoise mega=false",
           "tier": 1
@@ -249,7 +257,18 @@
           "variant": "level",
           "minLevel": 36
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "minecraft:turtle_scute",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

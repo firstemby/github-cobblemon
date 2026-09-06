@@ -199,6 +199,15 @@
       ],
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vikavolt alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

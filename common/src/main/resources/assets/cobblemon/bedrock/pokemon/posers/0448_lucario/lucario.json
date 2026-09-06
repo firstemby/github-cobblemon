@@ -15,7 +15,7 @@
         "q.look('head')",
         "q.bedrock('lucario', 'battle_idle')"
       ],
-      "quirks": ["q.bedrock_quirk('lucario', 'blink')"]
+      "quirks": ["q.bedrock_quirk('lucario', 'blink')", "q.bedrock_quirk('lucario', 'battle_quirk')"]
     },
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
@@ -24,18 +24,22 @@
         "q.look('head')",
         "q.bedrock('lucario', 'ground_idle')"
       ],
-      "quirks": ["q.bedrock_quirk('lucario', 'blink')"]
+      "quirks": ["q.bedrock_quirk('lucario', 'blink')", "q.bedrock_quirk('lucario', q.array('idle_quirk','idle_quirk2'))"]
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
       "isBattle": false,
       "animations": [
         "q.look('head')",
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
-        "q.bimanual_swing(0.66, 0.6, 'arm_left', 'arm_right')",
-        "q.bedrock('lucario', 'ground_idle')"
+        "q.bedrock('lucario', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('lucario', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('lucario', 'sleep')"],
+      "quirks": ["q.bedrock_quirk('lucario', 'sleep_quirk')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     }
   }
 }

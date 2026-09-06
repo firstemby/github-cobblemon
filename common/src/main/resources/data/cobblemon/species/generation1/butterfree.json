@@ -72,7 +72,21 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "butterfree alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "beautifly alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vivillon alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendOwner": true
@@ -122,7 +136,6 @@
     "tm:batonpass",
     "tm:bugbite",
     "tm:bugbuzz",
-    "tm:captivate",
     "tm:defog",
     "tm:drainingkiss",
     "tm:dreameater",

@@ -71,6 +71,9 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2
     }
   },
   "moves": [

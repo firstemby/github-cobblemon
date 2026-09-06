@@ -18,12 +18,12 @@ import com.cobblemon.mod.common.api.spawning.condition.SeafloorSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SubmergedSpawningCondition
 import com.cobblemon.mod.common.api.spawning.condition.SurfaceSpawningCondition
+import com.cobblemon.mod.common.api.spawning.detail.EmptySpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.NPCSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail
 import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.FishingSpawnablePosition
@@ -121,6 +121,7 @@ object BestSpawner {
         SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
         SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = EmptySpawnDetail.TYPE, EmptySpawnDetail::class.java)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
         loadConfig()

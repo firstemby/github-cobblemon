@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.preset
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.util.adapters.RegisteredSpawnablePositionAdapter
 import com.google.gson.GsonBuilder
@@ -29,7 +28,7 @@ import java.io.InputStreamReader
  * @since July 8th, 2022
  */
 class BestSpawnerConfig {
-    val version = 0
+    val version = 2
     /** Whether an external config will be replaced by an internal one once [version] is higher on the internal. */
     val replaceWithNewVersion = true
     @SerializedName("spawnablePositionTypeWeights", alternate = ["contextWeights"])
@@ -39,11 +38,34 @@ class BestSpawnerConfig {
         "surface" to 0.01F,
         "seafloor" to 1F
     )
-    val buckets = mutableListOf(
-        SpawnBucket("common", 94.3F),
-        SpawnBucket("uncommon", 5F),
-        SpawnBucket("rare", 0.5F),
-        SpawnBucket("ultra-rare", 0.2F)
+
+    val worldBuckets = mutableMapOf(
+        "common" to 94.05F,
+        "uncommon" to 5F,
+        "rare" to 0.5F,
+        "ultra-rare" to 0.2F,
+        "boss" to 0.25F,
+    )
+
+    val fishingBuckets = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
+    )
+
+    val activatedHabitatBuckets: MutableMap<String, Float> = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
+    )
+
+    val pokeSnackBuckets = mutableMapOf(
+        "common" to 83.25F,
+        "uncommon" to 11.25F,
+        "rare" to 4.125F,
+        "ultra-rare" to 1.375F
     )
 
     companion object {

@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
  * @since April 21st, 2025
  */
 interface SpawnSelectionData {
+    var guaranteedBucket: String?
     val context: MutableMap<String, Any>
     val spawnActions: MutableList<SpawnAction<*>>
     fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean)
@@ -28,6 +29,7 @@ interface SpawnSelectionData {
 
     companion object {
         val EMPTY = object : SpawnSelectionData {
+            override var guaranteedBucket: String? = null
             override val context: MutableMap<String, Any> = mutableMapOf()
             override val spawnActions: MutableList<SpawnAction<*>> = mutableListOf()
             override fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean) {}

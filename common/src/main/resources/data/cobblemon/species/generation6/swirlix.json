@@ -168,7 +168,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "swirlix",
@@ -198,7 +198,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "canWalk": true
+        "canWalk": false
       },
       "fly": {
         "canFly": true

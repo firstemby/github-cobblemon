@@ -1,0 +1,16 @@
+{
+  "species": "cobblemon:bergmite",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["region-bias-hisui"],
+      "model": "cobblemon:bergmite_hisui_bias.geo",
+      "texture": "cobblemon:textures/pokemon/0712_bergmite/bergmite.png",
+      "layers": []
+    },
+    {
+      "aspects": ["shiny", "region-bias-hisui"],
+      "texture": "cobblemon:textures/pokemon/0712_bergmite/bergmite_shiny.png"
+    }
+  ]
+}

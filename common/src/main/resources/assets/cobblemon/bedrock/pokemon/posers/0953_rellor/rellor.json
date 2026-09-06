@@ -1,20 +1,41 @@
 {
   "portraitScale": 1.51,
-  "portraitTranslation": [ -0.16, 0.61, 0],
+  "portraitTranslation": [ -0.16, 0.61, 0 ],
   "profileScale": 0.58,
-  "profileTranslation": [ -0.09, 0.8, 0],
+  "profileTranslation": [ -0.09, 0.8, 0 ],
   "rootBone": "rellor",
   "animations": {
-    "cry": "q.bedrock_stateful('rellor', 'cry')"
+    "cry": "q.bedrock_stateful('rellor', 'cry')",
+    "recoil": "q.bedrock_stateful('rellor', 'recoil')",
+    "physical": "q.bedrock_primary('rellor', 'physical', q.curve('symmetrical'))",
+    "special": "q.bedrock_primary('rellor', 'special', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_primary('rellor', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
+    "battle-standing": {
+      "poseTypes": [
+        "STAND",
+        "FLOAT"
+      ],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('rellor', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('rellor', 'blink')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_primary('rellor', 'battle_cry', q.curve('symmetrical_wide'))"
+      }
+    },
     "standing": {
       "poseTypes": [
         "STAND",
         "NONE",
-        "FLOAT"
+        "FLOAT",
+        "PROFILE"
       ],
-      "isBattle": true,
+      "isBattle": false,
       "animations": [
         "q.bedrock('rellor', 'ground_idle')"
       ],
@@ -28,18 +49,30 @@
         "SWIM"
       ],
       "animations": [
-        "q.bedrock('rellor', 'ground_idle')"
+        "q.bedrock('rellor', 'ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('rellor', 'blink')"
       ]
     },
+    "sleep": {
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('rellor', 'sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
     "portrait": {
       "poseTypes": [
-        "PORTRAIT",
-        "PROFILE"
+        "PORTRAIT"
       ],
-      "animations": ["q.bedrock('rellor', 'portrait')"]
+      "animations": [
+        "q.bedrock('rellor', 'portrait')"
+      ]
     }
   }
 }

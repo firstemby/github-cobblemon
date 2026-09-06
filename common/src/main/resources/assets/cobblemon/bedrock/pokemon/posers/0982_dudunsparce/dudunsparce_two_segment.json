@@ -2,7 +2,7 @@
   "portraitScale": 1.1,
   "portraitTranslation": [-0.8, -0.009, 0],
   "profileScale": 0.5,
-  "profileTranslation": [-0.18, 0.96, 0],
+  "profileTranslation": [0, 0.96, 0],
   "rootBone": "dudunsparce",
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.45, 0],

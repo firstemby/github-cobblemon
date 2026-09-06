@@ -58,11 +58,19 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
-          "pokemon": "delphox",
+          "pokemon": "braixen alpha",
           "tier": 1
+        },
+        {
+          "pokemon": "delphox mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "delphox mega",
+          "tier": 2
         }
       ]
     },

@@ -115,7 +115,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     open var properties = mutableMapOf<String, String>()
 
     /*
-     * Hello future Hiro, this is past Hiro. You've gotten forgetful in your old age.
+     * Hello future Hiro, this is past Hiro. You've become forgetful in your old age.
      *
      * The profile translation is not actually necessary. The reason why you thought it was necessary
      * is that there is a 1.5 block offset applied by living-entity-renderer-intended models due to
@@ -132,6 +132,11 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * a good user experience.
      */
     open var profileTranslation = Vec3(0.0, 0.0, 0.0)
+
+    open var profilePokedexScale: Float? = null
+    open var profilePokedexTranslation: Vec3? = null
+    open var profileSummaryScale: Float? = null
+    open var profileSummaryTranslation: Vec3? = null
 
     var red = 1F
     var green = 1F
@@ -250,7 +255,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     fun setLayerContext(buffer: MultiBufferSource, state: PosableState, layers: Iterable<ModelLayer>) {
-        currentLayers = layers
+        currentLayers = layers.sortedBy { it.translucent }
         bufferProvider = buffer
         currentState = state
     }
@@ -459,7 +464,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 val scrolling = layer.scrolling
 
                 val renderLayer: RenderType = if (scrolling != null) {
-                    getScrollingLayer(texture, scrolling)
+                    getScrollingLayer(texture, scrolling, layer)
                 } else if (layer.texture is AnimatedModelTextureSupplier && layer.texture.interpolation) {
                     val interpolatedTexture = layer.texture.interpolatedTexture(currentState ?: FloatingState()) ?: continue
                     makeLayer(DynamicStateShard(interpolatedTexture), layer.emissive, layer.translucent, layer.translucent_cull)
@@ -536,11 +541,15 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
-    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings): RenderType {
+    fun getScrollingLayer(texture: ResourceLocation, scrolling: ScrollingTextureSettings, layer: ModelLayer): RenderType {
         val gameTime = Util.getMillis().toFloat() / 1000f
         val offsetU = (gameTime * scrolling.speedU) % 1.0f
         val offsetV = (gameTime * scrolling.speedV) % 1.0f
-        return RenderType.breezeWind(texture, offsetU, offsetV)
+        return if (layer.emissive) {
+            RenderType.energySwirl(texture, offsetU, offsetV)
+        } else {
+            RenderType.breezeWind(texture, offsetU, offsetV)
+        }
     }
 
     /** Applies the given pose's [ModelPartTransformation]s to the model, if there is a matching pose. */
@@ -577,9 +586,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // Is there any reason why we should actually change the pose?
         if (entity != null && (poseName == null || currentPose == null || !currentPose.isSuitable(state) || entityPoseType !in currentPose.poseTypes)) {
             val desirablePose = getFirstSuitablePose(state, entityPoseType)
-            if (desirablePose == currentPose) {
-                return currentPose
-            }
             // If this if succeeds then it just no longer fits this pose
             if (currentPose != null) {
                 // Don't apply pose correction until the current primary animation is complete.
@@ -756,7 +762,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         var yRot = 0f
         // We could improve this to be generalized for other entities. First we'd have to figure out wtf is going on, though.
         if (entity is PokemonEntity) {
-            scale = entity.pokemon.form.baseScale * entity.pokemon.scaleModifier * (entity.delegate as PokemonClientDelegate).entityScaleModifier
+            scale = entity.pokemon.form.baseScale * entity.pokemon.effectiveScale * (entity.delegate as PokemonClientDelegate).activeSendoutScale
             // If scale is 0 we start getting NaNs
             scale.coerceAtLeast(0.01f)
             if (entity.passengers.isNotEmpty() && entity.controllingPassenger is OrientationControllable

@@ -13,13 +13,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "14-34",
-            "weight": 0.19,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 0.95,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -39,7 +47,13 @@
             "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "14-34",
-            "weight": 0.57,
+            "weight": 0.95,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -51,11 +65,44 @@
         {
             "id": "lombre-3",
             "pokemon": "lombre",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "surface",
+            "bucket": "common",
+            "level": "14-34",
+            "weight": 0.95,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "minecraft:lily_pad"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "lombre-4",
+            "pokemon": "lombre",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "14-34",
-            "weight": 0.95,
+            "weight": 9.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -74,13 +121,13 @@
             }
         },
         {
-            "id": "lombre-4",
+            "id": "lombre-5",
             "pokemon": "lombre",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "14-34",
-            "weight": 0.95,
+            "weight": 9.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

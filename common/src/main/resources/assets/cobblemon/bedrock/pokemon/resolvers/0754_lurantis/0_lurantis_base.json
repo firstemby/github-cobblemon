@@ -16,13 +16,27 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0754_lurantis/lurantis_shiny.png",
       "layers": [
         {
           "name": "transparency",
           "texture": "cobblemon:textures/pokemon/0754_lurantis/lurantis_shiny_transparent.png",
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0754_lurantis/lurantis_alpha.png",
+          "emissive": true
         }
       ]
     }

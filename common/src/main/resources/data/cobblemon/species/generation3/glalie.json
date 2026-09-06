@@ -64,8 +64,12 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "froslass alpha",
+          "tier": 1
+        },
         {
           "pokemon": "glalie mega",
           "tier": 1
@@ -264,7 +268,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "resting": {
           "times": [

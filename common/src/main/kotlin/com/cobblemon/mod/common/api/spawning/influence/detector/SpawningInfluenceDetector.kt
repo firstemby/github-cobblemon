@@ -29,9 +29,10 @@ import net.minecraft.world.level.block.state.BlockState
 interface SpawningInfluenceDetector {
     companion object {
         @JvmStatic
-        val detectors = mutableSetOf<SpawningInfluenceDetector>(
+        val detectors = mutableSetOf(
             SaccharineLogSlatheredDetector,
-            IncenseSweetDetector
+            IncenseSweetDetector,
+            HabitatBlockDetector,
         )
     }
 

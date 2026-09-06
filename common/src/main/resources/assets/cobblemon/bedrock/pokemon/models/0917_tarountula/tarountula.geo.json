@@ -18,14 +18,12 @@
 				{
 					"name": "body",
 					"parent": "tarountula",
-					"pivot": [0, 13.5, 0],
-					"rotation": [0, 0, 0]
+					"pivot": [0, 13.5, 0]
 				},
 				{
 					"name": "torso",
 					"parent": "body",
 					"pivot": [0, 16, -0.5],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-3.5, 13, -4], "size": [7, 6, 8], "uv": [0, 28]},
 						{"origin": [-1.5, 14.5, 4], "size": [3, 3, 3], "uv": [30, 38]}
@@ -72,6 +70,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "left_eye",
+					"pivot": [1.6, 15.75, -9],
+					"locators": {
+						"eye2": [1.6, 15.75, -9]
+					}
+				},
+				{
 					"name": "left_pupil",
 					"parent": "left_eye",
 					"pivot": [1.6, 15.5, -9.02],
@@ -103,6 +109,14 @@
 					"cubes": [
 						{"origin": [-3.1, 14.25, -9.02], "size": [3, 3, 0], "uv": [0, 0]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "right_eye",
+					"pivot": [-1.6, 15.75, -9],
+					"locators": {
+						"eye1": [-1.6, 15.75, -9]
+					}
 				},
 				{
 					"name": "right_pupil",

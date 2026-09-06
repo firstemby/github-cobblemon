@@ -41,7 +41,7 @@
       "type": "animation",
       "animation": ["recoil"],
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
-      "delay": 0.88
+      "delay": 0.2
     },
     {
       "type": "remove_holds",

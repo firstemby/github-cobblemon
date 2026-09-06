@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "30-50",
-            "weight": 0.32,
+            "weight": 7.4,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -33,7 +33,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "30-50",
-            "weight": 0.2,
+            "weight": 8.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {

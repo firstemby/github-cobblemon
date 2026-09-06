@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:electric_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:electric_gem_block",
+    "count": 1
+  },
+  "criteria": {
+    "has_electric_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:electric_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:electric_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_electric_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

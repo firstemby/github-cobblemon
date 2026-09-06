@@ -16,8 +16,13 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "body",
+					"name": "body2",
 					"parent": "rabsca",
+					"pivot": [0, 26, 0]
+				},
+				{
+					"name": "body",
+					"parent": "body2",
 					"pivot": [0, 10, 0]
 				},
 				{
@@ -287,6 +292,22 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eyes",
+					"pivot": [-2.10202, 9.41605, -2.52],
+					"locators": {
+						"eye1": [-2.10202, 9.41605, -2.52]
+					}
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eyes",
+					"pivot": [2.10202, 9.41605, -2.52],
+					"locators": {
+						"eye2": [2.10202, 9.41605, -2.52]
+					}
+				},
+				{
 					"name": "arms",
 					"parent": "body",
 					"pivot": [0, 9.75, -2.5]
@@ -343,7 +364,7 @@
 				},
 				{
 					"name": "ball",
-					"parent": "rabsca",
+					"parent": "body2",
 					"pivot": [0, 39, 0]
 				},
 				{
@@ -411,6 +432,22 @@
 						{"origin": [0.4, 41.2, -2.61], "size": [2, 1, 0], "pivot": [1.5, 41.75, -2.61], "rotation": [0, 0, 30], "uv": [81, 28]},
 						{"origin": [-2.4, 41.2, -2.61], "size": [2, 1, 0], "pivot": [-1.5, 41.75, -2.61], "rotation": [0, 0, -30], "uv": [81, 29], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right2",
+					"parent": "grub",
+					"pivot": [-1.40442, 41.68971, -2.61],
+					"locators": {
+						"eye3": [-1.40442, 41.68971, -2.61]
+					}
+				},
+				{
+					"name": "locator_eye_left2",
+					"parent": "grub",
+					"pivot": [1.40442, 41.68971, -2.61],
+					"locators": {
+						"eye4": [1.40442, 41.68971, -2.61]
+					}
 				},
 				{
 					"name": "ball_cloud",

@@ -104,6 +104,10 @@ class FormData(
     private var _baseAI: MutableList<BehaviourConfig>? = null,
     @SerializedName("ai")
     private var _ai: MutableList<BehaviourConfig>? = null,
+    @SerializedName("signatureMoves")
+    private var _signatureMoves: MutableList<MoveTemplate>? = null,
+    @SerializedName("defaultWildMovesetBuilder")
+    private val _defaultWildMovesetBuilder: ResourceLocation? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
@@ -235,6 +239,10 @@ class FormData(
         get() = _baseAI ?: species.baseAI
     val ai: List<BehaviourConfig>
         get() = _ai ?: species.ai
+    val signatureMoves: List<MoveTemplate>
+        get() = _signatureMoves ?: species.signatureMoves
+    val defaultWildMovesetBuilder: ResourceLocation
+        get() = _defaultWildMovesetBuilder ?: species.defaultWildMovesetBuilder
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)

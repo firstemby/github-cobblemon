@@ -105,12 +105,30 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_right",
+					"pivot": [1.75, 13.75, 0.25],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye2": [1.75, 13.75, 0.25]
+					}
+				},
+				{
 					"name": "eye_left",
 					"parent": "eye_right",
 					"pivot": [-1.75, 13.75, 0.25],
 					"cubes": [
 						{"origin": [-2.25, 13.75, -0.25], "size": [1, 0, 1], "inflate": 0.01, "uv": [5, 1]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_left",
+					"pivot": [-1.75, 13.75, 0.25],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye1": [-1.75, 13.75, 0.25]
+					}
 				},
 				{
 					"name": "petals",

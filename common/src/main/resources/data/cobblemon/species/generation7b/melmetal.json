@@ -146,7 +146,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "melmetal alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

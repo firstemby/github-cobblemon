@@ -4,9 +4,7 @@
   "profileScale": 0.92,
   "profileTranslation": [0, 0.35, 0],
   "rootBone": "sandygast",
-  "animations": {
-    "cry": "q.bedrock_stateful('sandygast', 'cry')"
-  },
+  "animations": {},
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],

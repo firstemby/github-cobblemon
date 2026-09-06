@@ -1,10 +1,13 @@
 {
   "portraitScale": 2.1,
-  "portraitTranslation": [-0.3, 0.69, 0],
+  "portraitTranslation": [-0.3, 0.85, 0],
   "profileScale": 0.7,
   "profileTranslation": [0, 0.67, 0],
   "rootBone": "hypno",
-  "animations": {},
+  "animations": {
+    "cry": "q.bedrock_stateful('hypno', 'cry')",
+    "recoil": "q.bedrock_stateful('hypno', 'recoil')"
+  },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
@@ -13,10 +16,13 @@
         "q.look('head')",
         "q.bedrock('hypno', 'battle_idle')"
       ],
+      "namedAnimations": {
+        "recoil": "q.bedrock_stateful('hypno', 'battle_recoil')"
+      },
       "quirks": ["q.bedrock_quirk('hypno', 'blink')"]
     },
     "standing": {
-      "poseTypes": ["STAND", "FLOAT", "NONE"],
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
       "isBattle": false,
       "animations": [
         "q.look('head')",
@@ -28,11 +34,38 @@
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
-        "q.biped_walk(0.66, 0.6, 'left_upper_leg', 'right_upper_leg')",
-        "q.bimanual_swing(0.66, 0.6, 'left_upper_arm', 'right_upper_arm')",
-        "q.bedrock('hypno', 'ground_idle')"
+        "q.bedrock('hypno', 'ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('hypno', 'blink')"]
+    },
+    "run": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('hypno', 'ground_run')"
+      ],
+      "quirks": ["q.bedrock_quirk('hypno', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": false,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": [
+        "q.bedrock('hypno', 'sleep')"
+      ]
+    },
+    "battle-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": [
+        "q.bedrock('hypno', 'battle_sleep')"
+      ]
     }
   }
 }

@@ -1,0 +1,46 @@
+{
+    "timeline": [
+      {
+        "type": "add_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "animation",
+        "animation": ["lightscreen", "barrier", "screen", "status"],
+      "delay": 1.17
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:lightscreen_actor",
+        "locators": ["target"]
+      },
+      {
+        "type": "entity_molang",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "expressions": ["q.sound('move.lightscreen.actor');"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.07
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:lightscreen_actoreffect",
+        "locators": ["target"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.66
+      },
+      {
+        "type": "remove_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "pause",
+        "pause": 1.2
+      }
+    ]
+  }

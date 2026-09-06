@@ -5,7 +5,9 @@
   "profileTranslation": [0, 0.89, 0],
   "rootBone": "shellos_east",
   "animations": {
-    "recoil": "q.bedrock_stateful('shellos_east', 'recoil')"
+    "cry": "q.bedrock_stateful('shellos', 'cry')",
+    "faint": "q.bedrock_primary('shellos', 'faint', q.curve('one'))",
+    "recoil": "q.bedrock_stateful('shellos', 'recoil')"
   },
   "poses": {
     "standing": {
@@ -16,8 +18,15 @@
         "PROFILE",
         "NONE"
       ],
-      "animations": ["q.bedrock('shellos_east', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('shellos_east', 'blink')"]
+      "isBattle": false,
+      "animations": ["q.bedrock('shellos', 'ground_idle')", "q.look('head')"],
+      "quirks": ["q.bedrock_quirk('shellos', 'blink')", "q.bedrock_quirk('shellos', 'quirk')"]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": ["q.bedrock('shellos', 'battle_idle')", "q.look('head')"],
+      "quirks": ["q.bedrock_quirk('shellos', 'blink')"]
     },
     "walking": {
       "poseTypes": [
@@ -25,10 +34,14 @@
         "SWIM"
       ],
       "animations": [
-        "q.bedrock('shellos_east', 'ground_idle')",
-        "q.quadruped_walk(0.66, 0.6, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+        "q.bedrock('shellos', 'ground_walk')", "q.look('head')"
       ],
-      "quirks": ["q.bedrock_quirk('shellos_east', 'blink')"]
+      "quirks": ["q.bedrock_quirk('shellos', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('shellos', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     }
   }
 }

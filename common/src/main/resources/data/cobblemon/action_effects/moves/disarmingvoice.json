@@ -1,0 +1,53 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["disarmingvoice", "sing", "special"],
+      "delay": 1.25
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:disarmingvoice_actor1",
+      "locators": ["mouth", "special", "target"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:disarmingvoice_actorhearts",
+      "locators": ["mouth", "special", "target"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.005
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:disarmingvoice_actor2",
+      "locators": ["mouth", "special", "target"],
+      "targetLocators": ["target"]
+    },
+    {
+      "type": "pause",
+      "pause": 1
+    },
+    {
+      "type": "entity_particles",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "effect": "cobblemon:disarmingvoice_target",
+      "locators": ["target"]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.6
+    }
+  ]
+}

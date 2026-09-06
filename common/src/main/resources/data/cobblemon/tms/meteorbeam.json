@@ -1,0 +1,23 @@
+{
+  "moveName": "meteorbeam",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "rock",
+  "recipe": [
+    {
+      "item": "cobblemon:rock_gem",
+      "count": 12
+    },
+    {
+      "item": "cobblemon:moon_stone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1
+    }
+  ]
+}

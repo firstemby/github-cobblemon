@@ -16,6 +16,7 @@ check_assets_cache:
   stage: preprocessing
   script:
     - echo "Checking if cached hash matches current hash"
+    - yum install -y findutils
 
     # Calculate the current hash
     - find common/src/main/resources/assets common/src/main/resources/data -type f -exec sha256sum {} + | sort -k 2 | sha256sum > current_hash.txt
@@ -71,8 +72,8 @@ setup_packsquash:
     - echo "Installing wget & unzip"
     - yum install -y wget unzip
     - echo "Downloading PackSquash"
-    - wget https://github.com/ComunidadAylas/PackSquash/releases/download/v0.4.0/PackSquash.CLI.executable.x86_64-unknown-linux-musl.zip
-    - unzip PackSquash.CLI.executable.x86_64-unknown-linux-musl.zip -d ./packsquash_bin
+    - wget https://github.com/ComunidadAylas/PackSquash/releases/download/v0.4.1/packsquash-x86_64-unknown-linux-musl.zip
+    - unzip packsquash-x86_64-unknown-linux-musl.zip -d ./packsquash_bin
     - echo "Creating PackSquash options.toml"
     - |
       cat <<EOF > ./options.toml
@@ -148,6 +149,7 @@ build:
   dependencies:
     - replace_resources
   script:
+    - yum install -y findutils
     - export GRADLE_OPTS="-Xmx4G -Xms4G"
     - chmod +x ./gradlew
     - ./gradlew build
@@ -163,6 +165,7 @@ publish:
   rules:
     - if: '$CI_PROJECT_PATH == "cable-mc/cobblemon" && $CI_COMMIT_BRANCH == "main"'
   script:
+    - yum install -y findutils
     - export GRADLE_OPTS="-Xmx4G -Xms4G"
     - chmod +x ./gradlew
     - ./gradlew publish
@@ -176,6 +179,7 @@ deploy_artifacts:
   dependencies:
     - build
   script:
+    - yum install -y findutils
     - echo "Collecting artifacts..."
     - find neoforge/build/libs/ -type f -name "*.jar" | grep -vE "dev-shadow|sources|javadoc" | xargs -I {} mv {} ./
     - find fabric/build/libs/ -type f -name "*.jar" | grep -vE "dev-shadow|sources|javadoc" | xargs -I {} mv {} ./

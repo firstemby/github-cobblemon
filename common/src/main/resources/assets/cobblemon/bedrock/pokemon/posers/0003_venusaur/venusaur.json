@@ -1,8 +1,9 @@
 {
   "portraitScale": 1.03,
   "portraitTranslation": [-0.31, 0.12, 0],
-  "profileScale": 0.47,
-  "profileTranslation": [0, 0.98, 0.0],
+  "profileScale": 0.51,
+  "profileTranslation": [0.09, 0.96, 0.0],
+  "profilePokedexTranslation": [0, 0.98, 0],
   "rootBone": "venusaur",
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.25, 0]

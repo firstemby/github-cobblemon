@@ -10,12 +10,28 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0417_pachirisu/pachirisu_shiny.png"
     },
     {
-      "aspects": ["female"],
+      "aspects": [
+        "female"
+      ],
       "model": "cobblemon:pachirisu_female.geo"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0417_pachirisu/pachirisu_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

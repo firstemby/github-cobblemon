@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.MovesetBuilder
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
@@ -112,7 +113,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(TimeRange::class.java, TimeRange.adapter)
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
@@ -131,6 +132,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
         .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
         .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
+        .registerTypeAdapter(MovesetBuilder::class.java, MovesetBuilderReferenceAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()

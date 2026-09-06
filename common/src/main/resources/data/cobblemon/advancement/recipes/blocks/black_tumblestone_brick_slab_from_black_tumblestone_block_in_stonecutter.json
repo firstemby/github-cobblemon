@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/blocks",
   "rewards": {
     "recipes": [
       "cobblemon:black_tumblestone_brick_slab_from_black_tumblestone_block_in_stonecutter"

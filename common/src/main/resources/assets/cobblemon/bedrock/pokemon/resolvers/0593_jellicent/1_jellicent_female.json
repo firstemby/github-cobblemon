@@ -10,6 +10,16 @@
     {
       "aspects": ["female", "shiny"],
       "texture": "cobblemon:textures/pokemon/0593_jellicent/jellicent_female_shiny.png"
+    },
+    {
+      "aspects": ["alpha_eyes", "female"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0593_jellicent/jellicent_female_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

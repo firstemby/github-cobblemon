@@ -65,6 +65,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "walkingwake alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

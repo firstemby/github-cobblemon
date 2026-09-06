@@ -95,7 +95,6 @@
     "tm:lashout",
     "tm:nastyplot",
     "tm:payback",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:raindance",
@@ -146,7 +145,6 @@
     "tutor:irontail",
     "tutor:knockoff",
     "tutor:lashout",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:risingvoltage",
@@ -167,6 +165,7 @@
     "legacy:doubleteam",
     "legacy:frustration",
     "legacy:hiddenpower",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
@@ -213,7 +212,32 @@
         "speed": 0
       },
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4
+        }
+      }
     }
   ],
   "behaviour": {
@@ -236,6 +260,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

@@ -124,7 +124,6 @@
     "tm:lowkick",
     "tm:lowsweep",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:payback",
     "tm:poweruppunch",
@@ -195,7 +194,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "monferno",

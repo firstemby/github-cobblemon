@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.ai.config.task.PollinateFlowerTaskConfig
 import com.cobblemon.mod.common.api.spawning.influence.SaccharineLogSlatheredInfluence
 import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
+import com.cobblemon.mod.common.client.render.MatrixWrapper
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
@@ -28,10 +30,36 @@ val aspectParticleMap: Map<String, ParticleData> = mapOf(
             ParticleTypes.BLOCK,
             CobblemonBlocks.POKE_SNACK.defaultBlockState()
         ), 0.05, 3),
-    PollinateFlowerTaskConfig.HAS_NECTAR_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_NECTAR, 0.075, 1)
+    PollinateFlowerTaskConfig.HAS_NECTAR_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_NECTAR, 0.075, 1),
+    "alpha_eyes" to ParticleData.SnowstormParticle(cobblemonResource("alpha_eyes"), 0.25, 1, LocatorResolvers.containing("eye"))
 )
 
 sealed class ParticleData {
-    data class SnowstormParticle(val particle: ResourceLocation, val chance: Double, val amount: Int, val locators: List<String>): ParticleData()
-    data class MinecraftParticle(val particle: ParticleOptions, val chance: Double, val amount: Int): ParticleData()
+    data class SnowstormParticle(
+        val particle: ResourceLocation,
+        val chance: Double,
+        val amount: Int,
+        val locatorResolver: (Map<String, MatrixWrapper>) -> List<String>
+    ): ParticleData()
+
+    data class MinecraftParticle(
+        val particle: ParticleOptions,
+        val chance: Double,
+        val amount: Int
+    ): ParticleData()
+}
+
+/**
+ * Just a few predefined lambdas for common resolutions.
+ * vararg allows for comma seperated entries which is kind of crazy
+ */
+object LocatorResolvers {
+    fun containing(substring: String): (Map<String, MatrixWrapper>) -> List<String> =
+        { locatorStates -> locatorStates.keys.filter { substring in it.lowercase() } }
+
+    fun exact(vararg names: String): (Map<String, MatrixWrapper>) -> List<String> =
+        { locatorStates -> names.filter { locatorStates[it] != null } }
+
+    fun firstMatch(vararg names: String): (Map<String, MatrixWrapper>) -> List<String> =
+        { locatorStates -> listOfNotNull(names.firstOrNull { locatorStates[it] != null }) }
 }

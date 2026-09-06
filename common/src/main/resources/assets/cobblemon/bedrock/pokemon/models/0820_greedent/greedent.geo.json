@@ -34,30 +34,35 @@
 				{
 					"name": "body",
 					"parent": "greedent",
-					"pivot": [0, 11, 0],
+					"pivot": [0, 11, 0]
+				},
+				{
+					"name": "waist",
+					"parent": "body",
+					"pivot": [0, 2.5, 0],
 					"cubes": [
 						{"origin": [-6.5, 1.5, -5.5], "size": [13, 8, 12], "inflate": 0.01, "uv": [56, 0]}
 					]
 				},
 				{
-					"name": "locator_middle",
-					"parent": "body",
-					"pivot": [0, 11, 0],
-					"locators": {
-						"middle": [0, 11, 0]
-					}
-				},
-				{
 					"name": "locator_target",
-					"parent": "body",
+					"parent": "waist",
 					"pivot": [0, 11.5, -7],
 					"locators": {
 						"target": [0, 11.5, -6.5]
 					}
 				},
 				{
+					"name": "locator_middle",
+					"parent": "waist",
+					"pivot": [0, 11, 0],
+					"locators": {
+						"middle": [0, 11, 0]
+					}
+				},
+				{
 					"name": "belly_fluff_right",
-					"parent": "body",
+					"parent": "waist",
 					"pivot": [-2.5, 1.5, -5.5],
 					"rotation": [0, -17.5, 22.5],
 					"cubes": [
@@ -66,7 +71,7 @@
 				},
 				{
 					"name": "belly_fluff_left",
-					"parent": "body",
+					"parent": "waist",
 					"pivot": [2.5, 1.5, -5.5],
 					"rotation": [0, 17.5, -22.5],
 					"cubes": [
@@ -75,7 +80,7 @@
 				},
 				{
 					"name": "torso",
-					"parent": "body",
+					"parent": "waist",
 					"pivot": [0, 9.5, 0.5]
 				},
 				{

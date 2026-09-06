@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.block
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import com.cobblemon.mod.common.util.isServerSide
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -285,7 +286,7 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
                     // Replace the consumed empty bottle with a honey bottle
                     player.setItemInHand(hand, ItemStack(Items.HONEY_BOTTLE));
                 } else {
-                    player.addItem(Items.HONEY_BOTTLE.defaultInstance)
+                    player.giveOrDropItemStack(Items.HONEY_BOTTLE.defaultInstance)
                 }
 
                 level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS)

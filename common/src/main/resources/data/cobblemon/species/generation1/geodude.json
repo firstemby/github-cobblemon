@@ -72,7 +72,21 @@
       }
     },
     "herd": {
-      "maxSize": "2"
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "geodude alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "graveler alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "golem alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendOwner": true
@@ -426,7 +440,21 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "2"
+          "maxSize": 2,
+          "toleratedLeaders": [
+            {
+              "pokemon": "geodude alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "graveler alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "golem alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "depth": "comatose",

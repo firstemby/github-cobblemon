@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:habitats/zen_garden_start",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:habitats/zen_garden_start",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:habitats/zen_garden",
+                "projection": "terrain_matching"
+            }
+        }
+    ]
+}

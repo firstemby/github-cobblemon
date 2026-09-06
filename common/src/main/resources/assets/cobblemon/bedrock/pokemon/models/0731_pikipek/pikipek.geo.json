@@ -55,12 +55,28 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-1.5, 6.6, -2.5],
+					"locators": {
+						"eye1": [-1.5, 6.6, -2.5]
+					}
+				},
+				{
 					"name": "eye_left",
 					"parent": "head",
 					"pivot": [0, -0.4, 0],
 					"cubes": [
 						{"origin": [1, 5.6, -2.5], "size": [1, 2, 1], "inflate": 0.01, "uv": [17, 19]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [1.5, 6.6, -2.5],
+					"locators": {
+						"eye2": [1.5, 6.6, -2.5]
+					}
 				},
 				{
 					"name": "eye_right_closed",

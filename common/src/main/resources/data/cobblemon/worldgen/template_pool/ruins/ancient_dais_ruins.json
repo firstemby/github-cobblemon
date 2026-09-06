@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:ruins/anient_dais_ruins",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/ancient_dais_ruins",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/ancient_dais_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

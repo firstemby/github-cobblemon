@@ -1,0 +1,39 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
+  ],
+  "neoforge:conditions": [{
+      "type": "neoforge:false"
+    }],
+  "type": "farmersdelight:cutting",
+  "ingredients": [
+    {
+      "item": "cobblemon:ghost_gem_block"
+    }
+  ],
+  "result": [
+    {
+      "item": {
+        "count": 4,
+        "id": "cobblemon:ghost_gem"
+      }
+    }
+  ],
+  "tool": {
+    "fabric:type": "fabric:any",
+    "ingredients": [
+      {
+        "fabric:type": "farmersdelight:item_ability",
+        "action": "pickaxe_dig"
+      },
+      {
+        "tag": "minecraft:pickaxes"
+      }
+    ]
+  }
+}

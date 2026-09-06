@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.3,
+            "weight": 2.4,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 1,
                 "maxSkyLight": 7,
@@ -38,7 +44,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.1,
+            "weight": 0.8,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -63,7 +75,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.3,
+            "weight": 2.4,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -87,7 +105,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.3,
+            "weight": 2.4,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -107,7 +131,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.3,
+            "weight": 2.4,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_warped"
@@ -121,7 +151,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "39-50",
-            "weight": 0.3,
+            "weight": 2.4,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
