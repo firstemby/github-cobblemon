@@ -17,6 +17,9 @@
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
+      "namedAnimations": {
+        "protect": "q.bedrock_primary('shellder', 'protect', q.curve('symmetrical_wide'))"
+      },
       "animations": ["q.bedrock('shellder', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('shellder', 'blink')"]
     },

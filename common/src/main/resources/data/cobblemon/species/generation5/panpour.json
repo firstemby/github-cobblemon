@@ -125,7 +125,6 @@
     "tm:lowkick",
     "tm:lowsweep",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:payback",
     "tm:protect",
     "tm:raindance",
@@ -191,7 +190,7 @@
       "id": "panpour_simipour",
       "variant": "item_interact",
       "result": "simipour",
-      "consumeHeldItem": true,
+      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
       "requiredContext": "cobblemon:water_stone"
@@ -199,7 +198,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "aipom",

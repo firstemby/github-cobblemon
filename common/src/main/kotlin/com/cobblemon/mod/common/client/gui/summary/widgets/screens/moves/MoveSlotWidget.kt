@@ -36,9 +36,10 @@ class MoveSlotWidget(
 ): SoundlessWidget(pX, pY, MOVE_WIDTH, MOVE_HEIGHT, Component.literal(move?.name ?: "")) {
 
     companion object {
-        private val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
-        private val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
-        private val moveSelectedOverlayResource = cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png")
+        val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
+        val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
+        val moveOverlayBarResource = cobblemonResource("textures/gui/summary/summary_move_overlay_bar.png")
+        val moveSelectedOverlayResource = cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png")
 
         const val MOVE_WIDTH = 108
         const val MOVE_HEIGHT = 22
@@ -50,6 +51,7 @@ class MoveSlotWidget(
     }.apply {
         addWidget(this)
     }
+
     private val moveDownButton = ReorderMoveButton(x, y, false) {
         movesWidget.selectMove(null)
         movesWidget.reorderMove(this, false)
@@ -67,46 +69,55 @@ class MoveSlotWidget(
     }.apply {
         addWidget(this)
     }
+
     val elementalType:ElementalType = Moves.getByNameOrDummy(move?.name ?: "").getEffectiveElementalType(pokemon)
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
         val matrices = context.pose()
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height
         if (move != null) {
-            val moveTemplate = Moves.getByNameOrDummy(move.name)
             val rgb = elementalType.hue.toRGB()
 
             if (movesWidget.selectedMove == move) {
                 blitk(
-                        matrixStack = matrices,
-                        texture = moveSelectedOverlayResource,
-                        x = x - 1,
-                        y = y - 1,
-                        width = MOVE_WIDTH + 2,
-                        height = MOVE_HEIGHT + 2
+                    matrixStack = matrices,
+                    texture = moveSelectedOverlayResource,
+                    x = x - 1,
+                    y = y - 1,
+                    width = MOVE_WIDTH + 2,
+                    height = MOVE_HEIGHT + 2
                 )
             }
 
             blitk(
-                    matrixStack = matrices,
-                    texture = moveResource,
-                    x = x,
-                    y = y,
-                    width = MOVE_WIDTH,
-                    height = MOVE_HEIGHT,
-                    vOffset = if (isHovered) MOVE_HEIGHT else 0,
-                    textureHeight = MOVE_HEIGHT * 2,
-                    red = rgb.first,
-                    green = rgb.second,
-                    blue = rgb.third
+                matrixStack = matrices,
+                texture = moveResource,
+                x = x,
+                y = y,
+                width = MOVE_WIDTH,
+                height = MOVE_HEIGHT,
+                vOffset = if (isHovered) MOVE_HEIGHT else 0,
+                textureHeight = MOVE_HEIGHT * 2,
+                red = rgb.first,
+                green = rgb.second,
+                blue = rgb.third
             )
 
             blitk(
-                    matrixStack = matrices,
-                    texture = moveOverlayResource,
-                    x = x,
-                    y = y,
-                    width = MOVE_WIDTH,
-                    height = MOVE_HEIGHT
+                matrixStack = matrices,
+                texture = moveOverlayResource,
+                x = x,
+                y = y,
+                width = MOVE_WIDTH,
+                height = MOVE_HEIGHT
+            )
+
+            blitk(
+                matrixStack = matrices,
+                texture = moveOverlayBarResource,
+                x = x + 60,
+                y = y + 13,
+                width = 47,
+                height = 8
             )
 
             var movePPText = Component.literal("${move.currentPp}/${move.maxPp}").bold()
@@ -116,36 +127,28 @@ class MoveSlotWidget(
             }
 
             drawScaledText(
-                    context = context,
-                    font = CobblemonResources.DEFAULT_LARGE,
-                    text = movePPText,
-                    x = x + 93,
-                    y = y + 13,
-                    centered = true
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = movePPText,
+                x = x + 93,
+                y = y + 13,
+                centered = true
             )
 
             // Type Icon
-            TypeIcon(
-                x = x + 2,
-                y = y + 2,
-                type = elementalType
-            ).render(context)
+            TypeIcon(x = x + 2, y = y + 2, type = elementalType).render(context)
 
             // Move Category
-            MoveCategoryIcon(
-                    x = x + 66,
-                    y = y + 13.5,
-                    category = move.damageCategory
-            ).render(context)
+            MoveCategoryIcon(x = x + 66, y = y + 13.5, category = move.damageCategory).render(context)
 
             // Move Name
             drawScaledText(
-                    context = context,
-                    font = CobblemonResources.DEFAULT_LARGE,
-                    text = move.displayName.bold(),
-                    x = x + 28,
-                    y = y + 2,
-                    shadow = true
+                context = context,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = move.displayName.bold(),
+                x = x + 28,
+                y = y + 2,
+                shadow = true
             )
 
             // Reorder Buttons
@@ -158,9 +161,7 @@ class MoveSlotWidget(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-        if (isHovered) {
-            movesWidget.selectMove(move)
-        }
+        if (isHovered) movesWidget.selectMove(move)
         return super.mouseClicked(mouseX, mouseY, button)
     }
 }

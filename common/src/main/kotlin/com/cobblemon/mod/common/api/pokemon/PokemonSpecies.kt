@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.api.drop.ItemDropMethod
 import com.cobblemon.mod.common.api.entity.EntityDimensionsAdapter
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.moves.MoveTemplate
+import com.cobblemon.mod.common.api.moves.MovesetBuilder
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies.getByIdentifier
@@ -139,6 +140,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
         .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
         .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
+        .registerTypeAdapter(MovesetBuilder::class.java, MovesetBuilderReferenceAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
@@ -348,11 +350,11 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         val result = mutableMapOf<String, String>()
         this.species.forEach {species ->
             val baseSpecies = ShowdownSpecies(species, null)
-            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name, "")] = this.gson.toJson(baseSpecies)
+            result[ShowdownIdentifiable.REGEX.replace(baseSpecies.name.lowercase(), "")] = this.gson.toJson(baseSpecies)
             species.forms.forEach { form ->
                 if (form != species.standardForm) {
                     val formSpecies = ShowdownSpecies(species, form)
-                    result[ShowdownIdentifiable.REGEX.replace(formSpecies.name, "")] = this.gson.toJson(formSpecies)
+                    result[ShowdownIdentifiable.REGEX.replace(formSpecies.name.lowercase(), "")] = this.gson.toJson(formSpecies)
                 }
             }
         }

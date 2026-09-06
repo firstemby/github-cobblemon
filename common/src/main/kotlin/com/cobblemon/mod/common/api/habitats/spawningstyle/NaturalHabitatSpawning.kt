@@ -14,15 +14,16 @@ import com.cobblemon.mod.common.api.habitats.spawningstyle.HabitatSpawningStyle.
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.block.habitat.HabitatBlockEntity
 import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 
 /**
  * A habitat spawning style defined by tapping into regular spawning methods. This works by adding to the spawn list
  * for spawning that's occurring nearby. When [replaceSpawns] is set to true, the original spawns will be
- * removed completely in favour of the spawns provided in this habitat's [pool].
+ * removed completely in favour of the spawns provided in this habitat's pool.
  *
- * The spawn details are generated from the [pool] every time there is some change to the habitat block's settings,
+ * The spawn details are generated from the pool every time there is some change to the habitat block's settings,
  * then those spawn details are used for spawning Pokémon when world spawning is occurring nearby.
  *
  * Whether or not this interactions with overworld or fishing spawns is determined by whether the habitat pool has
@@ -32,8 +33,12 @@ import net.minecraft.resources.ResourceLocation
  * @since February 22nd, 2026
  */
 class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : HabitatSpawningStyle {
+    companion object {
+        val TYPE = cobblemonResource("natural")
+    }
+
     @Transient
-    override val type: ResourceLocation = NaturalHabitatSpawn.TYPE
+    override val type: ResourceLocation = TYPE
 
     var pool: NaturalHabitatPool = NaturalHabitatPool.default()
     var replaceSpawns = false
@@ -47,9 +52,8 @@ class NaturalHabitatSpawning(val habitatBlockEntity: HabitatBlockEntity) : Habit
     var spawnDetails: List<SpawnDetail> = listOf()
 
     fun generateSpawnDetails() {
-        spawnDetails = pool.createSpawnDetails(habitatBlockEntity = habitatBlockEntity)
-        affectsFishing = spawnDetails.any { it.spawnablePositionType.name == "fishing" }
-        affectsOverworld = spawnDetails.any { it.spawnablePositionType.name != "fishing" }
+        affectsFishing = habitatBlockEntity.spawnDetails.any { it.spawnablePositionType.name == "fishing" }
+        affectsOverworld = habitatBlockEntity.spawnDetails.any { it.spawnablePositionType.name != "fishing" }
     }
 
     override fun writeToNBT(nbt: CompoundTag) {

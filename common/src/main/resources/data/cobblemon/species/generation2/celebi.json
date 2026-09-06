@@ -112,7 +112,6 @@
     "tm:metronome",
     "tm:mudslap",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:pollenpuff",
     "tm:protect",
@@ -217,7 +216,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "celebi",

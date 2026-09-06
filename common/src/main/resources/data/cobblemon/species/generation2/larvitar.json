@@ -67,7 +67,7 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "larvitar",
@@ -76,6 +76,10 @@
         {
           "pokemon": "axew",
           "tier": 1
+        },
+        {
+          "pokemon": "pupitar",
+          "tier": 2
         },
         {
           "pokemon": "fraxure",

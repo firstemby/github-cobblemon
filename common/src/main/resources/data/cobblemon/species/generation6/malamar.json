@@ -61,11 +61,15 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "malamar",
+          "pokemon": "malamar mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "malamar mega",
+          "tier": 2
         }
       ]
     },
@@ -235,6 +239,10 @@
   ],
   "preEvolution": "inkay",
   "evolutions": [],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "BOTH"
+  },
   "nestTypes": [
     "rocky",
     "sandy",

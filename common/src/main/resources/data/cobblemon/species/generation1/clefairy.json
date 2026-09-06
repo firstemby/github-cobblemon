@@ -59,7 +59,17 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "clefairy alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "clefable alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

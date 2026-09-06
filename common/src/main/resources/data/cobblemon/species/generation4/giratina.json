@@ -386,6 +386,9 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4
         }
       }
     }
@@ -410,6 +413,9 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

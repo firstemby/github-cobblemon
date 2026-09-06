@@ -15,9 +15,11 @@ import com.cobblemon.mod.common.api.text.*
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNatureTextIfMinted
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget.Companion.SCALE
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.PokemonSizeCategory
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
@@ -34,8 +36,13 @@ class InfoWidget(
     companion object {
         private const val WIDTH = 134
         private const val HEIGHT = 148
-        private val infoBaseResource = cobblemonResource("textures/gui/summary/summary_info_base.png")
         private const val ROW_HEIGHT = 15
+        private const val HALF_SCALE = 0.5F
+
+        private const val SIZE_ICON_WIDTH = 37
+        private const val SIZE_ICON_HEIGHT = 16
+
+        private val infoBaseResource = cobblemonResource("textures/gui/summary/summary_info_base.png")
     }
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
@@ -49,7 +56,6 @@ class InfoWidget(
             width = width,
             height = height
         )
-
 
         // Pokédex Number
         // Add preceding zeroes if Pokédex number is less than 4 digits
@@ -67,6 +73,17 @@ class InfoWidget(
         )
         pokedexNumberWidget.render(context, pMouseX, pMouseY, pPartialTicks)
 
+        // Size
+        val size = if (pokemon.isAlpha) "alpha" else pokemon.getSizeCategory().name.lowercase()
+        blitk(
+            matrixStack = matrices,
+            texture = cobblemonResource("textures/gui/summary/icon_size_${size}.png"),
+            x = (x + 107.5) / HALF_SCALE,
+            y = (y + 6.5) / HALF_SCALE,
+            width = SIZE_ICON_WIDTH,
+            height = SIZE_ICON_HEIGHT,
+            scale = HALF_SCALE
+        )
 
         // Species
         val speciesWidget = InfoOneLineWidget(
@@ -130,19 +147,17 @@ class InfoWidget(
         )
         abilityWidget.render(context, pMouseX, pMouseY, pPartialTicks)
 
-        val smallTextScale = 0.5F
-
         matrices.pushPose()
-        matrices.scale(smallTextScale, smallTextScale, 1F)
+        matrices.scale(HALF_SCALE, HALF_SCALE, 1F)
         MultiLineLabelK.create(
             component = pokemon.ability.description.asTranslated(),
-            width = 117 / smallTextScale,
+            width = 117 / HALF_SCALE,
             maxLines = 3
         ).renderLeftAligned(
             context = context,
-            x = (x + 8) / smallTextScale,
-            y = (y + 94.5) / smallTextScale,
-            ySpacing = 5.5 / smallTextScale,
+            x = (x + 8) / HALF_SCALE,
+            y = (y + 94.5) / HALF_SCALE,
+            ySpacing = 5.5 / HALF_SCALE,
             colour = ColourLibrary.WHITE,
             shadow = true
         )
@@ -153,7 +168,7 @@ class InfoWidget(
             text = lang("ui.info.experience_points"),
             x = x + 72.5,
             y = y + 125,
-            scale = smallTextScale,
+            scale = HALF_SCALE,
             shadow = true
         )
 
@@ -162,7 +177,7 @@ class InfoWidget(
             text = lang("ui.info.to_next_level"),
             x = x + 72.5,
             y = y + 137,
-            scale = smallTextScale,
+            scale = HALF_SCALE,
             shadow = true
         )
 
@@ -177,9 +192,9 @@ class InfoWidget(
         drawScaledText(
             context = context,
             text = experience,
-            x = (x + 127) - (mcFont.width(experience) * smallTextScale),
+            x = (x + 127) - (mcFont.width(experience) * HALF_SCALE),
             y = y + 125,
-            scale = smallTextScale,
+            scale = HALF_SCALE,
             shadow = true
         )
 
@@ -187,9 +202,9 @@ class InfoWidget(
         drawScaledText(
             context = context,
             text = experienceToNextText,
-            x = (x + 127) - (mcFont.width(experienceToNextText) * smallTextScale),
+            x = (x + 127) - (mcFont.width(experienceToNextText) * HALF_SCALE),
             y = y + 137,
-            scale = smallTextScale,
+            scale = HALF_SCALE,
             shadow = true
         )
 
@@ -210,5 +225,10 @@ class InfoWidget(
             green = 0.65,
             blue = 0.84
         )
+
+        if (pMouseX >= (x + 107.5) && pMouseY >= (y + 6.5) && pMouseX <= ((x + 107.5) + (SIZE_ICON_WIDTH * SCALE)) && pMouseY <= ((y + 6.5) + (SIZE_ICON_HEIGHT * SCALE))) {
+            val sizeLabel = if (pokemon.isAlpha) lang("ui.pokemon.alpha") else lang("size_category.prefix", PokemonSizeCategory.translationKey(pokemon.getSizeCategory()).text())
+            context.renderTooltip( Minecraft.getInstance().font, sizeLabel, pMouseX, pMouseY)
+        }
     }
 }

@@ -8,11 +8,9 @@
 
 package com.cobblemon.mod.common.client.gui.habitat
 
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawn
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatSpawn
+import com.cobblemon.mod.common.api.habitats.HabitatSpawn
 import com.cobblemon.mod.common.api.habitats.dto.HabitatPoolSettingsDTO
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
@@ -20,19 +18,31 @@ import com.cobblemon.mod.common.util.lang
 import java.awt.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.network.chat.MutableComponent
 
 class HabitatPoolEditorGUI(
     val pool: HabitatPoolSettingsDTO,
     val isActivated: Boolean,
-    val buckets: List<SpawnBucket>,
+    val buckets: List<String>,
     val spawnablePositionTypes: List<String>,
     val maxPokemonLevel: Int,
-    val parentScreen: Screen
-) : Screen(lang("ui.edit.habitat.pool")), CobblemonRenderable {
+    val parentScreen: Screen,
+    val editable: Boolean = true
+) : Screen(lang("ui.edit.habitat.pool.title")), CobblemonRenderable {
     private var scrollOffset = 0.0
-    private val headers = mutableListOf<Pair<String, Int>>()
+    private var minScrollOffset = 0.0
+    private val headerHeight = 24
+    private val footerHeight = 44
+    private val optionsTopPadding = 6
+    private val optionsBottomPadding = 6
+    private val actionButtonHeight = 20
+    private val actionButtonBottomMargin = 10
+    private val optionWidgets = mutableListOf<AbstractWidget>()
+    private val footerWidgets = mutableListOf<AbstractWidget>()
+    private val headers = mutableListOf<Pair<MutableComponent, Int>>()
     private val spawnRows = mutableListOf<SpawnRowData>()
 
     data class SpawnRowData(
@@ -47,9 +57,12 @@ class HabitatPoolEditorGUI(
 
     override fun init() {
         super.init()
+        optionWidgets.clear()
+        footerWidgets.clear()
         headers.clear()
         spawnRows.clear()
-        var y = 10 + scrollOffset.toInt()
+        scrollOffset = scrollOffset.coerceIn(minScrollOffset, 0.0)
+        var y = getOptionsTop() + scrollOffset.toInt()
         val spacing = 25
         val buttonWidth = getScaledWidth() - 20
 
@@ -58,27 +71,23 @@ class HabitatPoolEditorGUI(
         }
 
         // Headers
-        val colWidth = if (isActivated) buttonWidth / 5 else buttonWidth / 6
+        val colWidth = buttonWidth / 6
         var x = 10
-        headers.add("Species" to x)
+        headers.add(lang("ui.edit.habitat.pool.species") to x)
         x += colWidth
-        headers.add("Levels" to x)
+        headers.add(lang("ui.edit.habitat.pool.levels") to x)
         x += colWidth
-        headers.add("Phases" to x)
+        headers.add(lang("ui.edit.habitat.pool.phases") to x)
         x += colWidth
-        headers.add("Position" to x)
+        headers.add(lang("ui.edit.habitat.pool.position") to x)
         x += colWidth
-        headers.add("Weight" to x)
-        if (!isActivated) {
-            x += colWidth - 10
-            headers.add("Bucket" to x)
-        }
+        headers.add(lang("ui.edit.habitat.pool.weight") to x)
+        x += colWidth - 10
+        headers.add(lang("ui.edit.habitat.pool.bucket") to x)
         y += 20
 
         var spawns = pool.spawns!!
-        if (!isActivated) {
-            spawns = spawns.sortedBy { (it as? NaturalHabitatSpawn)?.bucket?.name?.first() }.toMutableList()
-        }
+        spawns = spawns.sortedBy { it.bucket }.toMutableList()
 
         spawns.forEachIndexed { index, spawn ->
             val rowY = y
@@ -94,68 +103,91 @@ class HabitatPoolEditorGUI(
                 phases = spawn.phases?.let { IntRangesAdapter.basic.serialize(it) } ?: "All",
                 position = spawn.spawnablePositionType,
                 weight = spawn.weight.toString(),
-                bucket = if (!isActivated && spawn is NaturalHabitatSpawn) spawn.bucket.name.first().uppercaseChar().toString() else null,
+                bucket = spawn.bucket.first().uppercaseChar().toString(),
                 y = rowY
             ))
             
-            // Edit button
-            addRenderableWidget(
-                Button.builder("E".text()) {
-                    Minecraft.getInstance().setScreen(HabitatSpawnEditorGUI(spawn, isActivated, maxPokemonLevel, buckets, spawnablePositionTypes, this))
-                }.bounds(getScaledWidth() - 55, rowY, 20, 20).build()
-            )
-            
-            // Delete button
-            addRenderableWidget(
-                Button.builder("X".text()) {
-                    pool.spawns!!.removeAt(index)
-                    rebuildWidgets()
-                }.bounds(getScaledWidth() - 30, rowY, 20, 20).build()
-            )
+            if (editable) {
+                addOptionWidget(
+                    Button.builder("E".text()) {
+                        Minecraft.getInstance().setScreen(HabitatSpawnEditorGUI(spawn, maxPokemonLevel, buckets, spawnablePositionTypes, this))
+                    }.bounds(getScaledWidth() - 55, rowY, 20, 20).build()
+                )
+
+                addOptionWidget(
+                    Button.builder("X".text()) {
+                        pool.spawns!!.removeAt(index)
+                        rebuildWidgets()
+                    }.bounds(getScaledWidth() - 30, rowY, 20, 20).build()
+                )
+            }
             
             y += spacing
         }
 
-        addRenderableWidget(
-            Button.builder("Add Spawn".text()) {
-                val newSpawn = if (isActivated) ActivatedHabitatSpawn() else NaturalHabitatSpawn()
-                newSpawn.species = PokemonSpecies.implemented.random()
-                newSpawn.spawnablePositionType = spawnablePositionTypes.firstOrNull() ?: "grounded"
-                if (newSpawn is NaturalHabitatSpawn) {
+        if (editable) {
+            addOptionWidget(
+                Button.builder(lang("ui.edit.habitat.pool.add_spawn")) {
+                    val newSpawn = HabitatSpawn()
+                    newSpawn.species = PokemonSpecies.implemented.random()
+                    newSpawn.spawnablePositionType = spawnablePositionTypes.firstOrNull() ?: "grounded"
                     newSpawn.bucket = buckets.firstOrNull() ?: return@builder
-                }
-                pool.spawns!!.add(newSpawn)
-                rebuildWidgets()
-            }.bounds(10, y, buttonWidth, 20).build()
-        )
-        y += spacing
+                    pool.spawns!!.add(newSpawn)
+                    rebuildWidgets()
+                }.bounds(10, y, buttonWidth, 20).build()
+            )
+            y += spacing
+        }
 
-        addRenderableWidget(
-            Button.builder("Back".text()) {
+        val contentBottomAtZeroOffset = y - scrollOffset.toInt()
+        updateScrollBounds(contentBottomAtZeroOffset)
+        if (scrollOffset < minScrollOffset) {
+            scrollOffset = minScrollOffset
+            rebuildWidgets()
+            return
+        }
+
+        addFooterWidget(
+            Button.builder(lang("ui.edit.habitat.pool.back")) {
                 Minecraft.getInstance().setScreen(parentScreen)
-            }.bounds(10, getScaledHeight() - 30, buttonWidth, 20).build()
+            }.bounds(10, getScaledHeight() - (actionButtonHeight + actionButtonBottomMargin), buttonWidth, actionButtonHeight).build()
         )
+        updateOptionWidgetInteractivity()
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
-        scrollOffset = (scrollOffset + scrollY * 10).coerceIn(-500.0, 0.0)
+        if (mouseY < getOptionsTop() || mouseY > getOptionsBottom()) {
+            return false
+        }
+        scrollOffset = (scrollOffset + scrollY * 10).coerceIn(minScrollOffset, 0.0)
         rebuildWidgets()
         return true
     }
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
-        
+        guiGraphics.fill(0, 0, width, headerHeight, Color(0, 0, 0, 150).rgb)
+        guiGraphics.fill(0, getFooterTop(), width, height, Color(0, 0, 0, 150).rgb)
+        guiGraphics.drawCenteredString(font, title, width / 2, 8, 0xFFFFFF)
+
         val buttonWidth = getScaledWidth() - 20
-        val colWidth = if (isActivated) buttonWidth / 5 else buttonWidth / 6
-        
+        val colWidth = buttonWidth / 6
+        val optionsTop = getOptionsTop()
+        val optionsBottom = getOptionsBottom()
+
+        guiGraphics.enableScissor(0, optionsTop, width, optionsBottom)
+
         // Draw headers
         headers.forEach { (header, x) ->
-            guiGraphics.drawString(font, header, x, 15 + scrollOffset.toInt(), 0xFFFFFF)
+            val y = optionsTop + 5 + scrollOffset.toInt()
+            if (y >= optionsTop && y + font.lineHeight <= optionsBottom) {
+                guiGraphics.drawString(font, header, x, y, 0xFFFFFF)
+            }
         }
         
         // Draw spawn rows
         spawnRows.forEach { row ->
+            if (row.y < optionsTop || row.y + 20 > optionsBottom) return@forEach
             var x = 10
             guiGraphics.drawString(font, row.species, x, row.y + 5, 0xFFFFFF)
             x += colWidth
@@ -171,8 +203,57 @@ class HabitatPoolEditorGUI(
                 guiGraphics.drawString(font, row.bucket, x, row.y + 5, 0xFFFFFF)
             }
         }
-        
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+
+        optionWidgets.forEach { widget ->
+            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+        }
+
+        guiGraphics.disableScissor()
+
+        footerWidgets.forEach { widget ->
+            widget.render(guiGraphics, mouseX, mouseY, partialTick)
+        }
+    }
+
+    private fun updateScrollBounds(contentBottomAtZeroOffset: Int) {
+        minScrollOffset = minOf(0.0, (getOptionsBottom() - contentBottomAtZeroOffset).toDouble())
+    }
+
+    private fun getOptionsTop(): Int {
+        return headerHeight + optionsTopPadding
+    }
+
+    private fun getFooterTop(): Int {
+        return getScaledHeight() - footerHeight
+    }
+
+    private fun getOptionsBottom(): Int {
+        return getFooterTop() - optionsBottomPadding
+    }
+
+    private fun <T : AbstractWidget> addOptionWidget(widget: T): T {
+        optionWidgets.add(widget)
+        return addRenderableWidget(widget)
+    }
+
+    private fun <T : AbstractWidget> addFooterWidget(widget: T): T {
+        footerWidgets.add(widget)
+        return addRenderableWidget(widget)
+    }
+
+    private fun updateOptionWidgetInteractivity() {
+        val optionsTop = getOptionsTop()
+        val optionsBottom = getOptionsBottom()
+        optionWidgets.forEach { widget ->
+            val widgetTop = widget.y
+            val widgetBottom = widget.y + widget.height
+            val inViewport = widgetBottom > optionsTop && widgetTop < optionsBottom
+            widget.visible = inViewport
+            widget.active = inViewport
+            if (!inViewport) {
+                widget.setFocused(false)
+            }
+        }
     }
 
     fun getScaledWidth() = Minecraft.getInstance().window.guiScaledWidth

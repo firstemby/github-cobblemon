@@ -287,7 +287,7 @@ class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterl
         PCLinkManager.addLink(ProximityPCLink(pc, player.uuid, baseEntity))
         OpenPCPacket(pc).sendToPlayer(player)
         world.playSoundServer(
-            position = blockPos.toVec3d(),
+            position = blockPos.bottomCenter,
             sound = CobblemonSounds.PC_ON,
             volume = 0.5F,
             pitch = 1F

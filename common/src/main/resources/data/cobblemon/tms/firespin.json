@@ -1,0 +1,19 @@
+{
+  "moveName": "firespin",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "fire",
+  "recipe": [
+    {
+      "item": "cobblemon:fire_gem",
+      "count": 2
+    },
+    {
+      "item": "minecraft:string",
+      "count": 1
+    }
+  ]
+}

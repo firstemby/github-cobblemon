@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 335,
   "name": "Zangoose",
   "primaryType": "normal",
@@ -41,10 +42,10 @@
   "catchRate": 90,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.9,
+    "height": 1.8,
     "fixed": false
   },
   "behaviour": {
@@ -66,6 +67,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "zangoose alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "ai": [

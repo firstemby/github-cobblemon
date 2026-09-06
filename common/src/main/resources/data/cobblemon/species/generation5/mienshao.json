@@ -198,7 +198,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mienshao",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

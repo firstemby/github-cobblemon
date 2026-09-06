@@ -10,6 +10,18 @@
       "aspects": ["shiny", "noice_face"],
       "model": "cobblemon:eiscue_no_ice.geo",
       "texture": "cobblemon:textures/pokemon/0875_eiscue/eiscue_no_ice_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "noice_face"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0875_eiscue/eiscue_no_ice_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

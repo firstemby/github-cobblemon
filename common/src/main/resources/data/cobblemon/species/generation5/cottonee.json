@@ -63,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "hoppip",
@@ -96,6 +96,7 @@
       ]
     },
     "resting": {
+      "canSleep": true,
       "willSleepOnBed": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
@@ -147,7 +148,6 @@
     "egg:tickle",
     "egg:worryseed",
     "tm:beatup",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:dazzlinggleam",
@@ -166,7 +166,6 @@
     "tm:grassyterrain",
     "tm:helpinghand",
     "tm:mistyterrain",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:rest",

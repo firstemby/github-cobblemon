@@ -34,6 +34,7 @@ import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.FlagSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
+import com.cobblemon.mod.common.api.pokemon.feature.WeightedChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.helditem.HeldItemProvider
 import com.cobblemon.mod.common.api.pokemon.stats.EvCalculator
 import com.cobblemon.mod.common.api.pokemon.stats.Generation8EvCalculator
@@ -67,6 +68,8 @@ import com.cobblemon.mod.common.api.storage.player.adapter.DexDataMongoBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.DexDataNbtBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataJsonBackend
 import com.cobblemon.mod.common.api.storage.player.adapter.PlayerDataMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveMongoBackend
+import com.cobblemon.mod.common.api.storage.player.adapter.TMMoveNbtBackend
 import com.cobblemon.mod.common.api.storage.player.factory.CachedPlayerDataStoreFactory
 import com.cobblemon.mod.common.api.tags.CobblemonEntityTypeTags
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
@@ -95,9 +98,11 @@ import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacke
 import com.cobblemon.mod.common.permission.LaxPermissionValidator
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
+import com.cobblemon.mod.common.pokemon.aspects.MARK_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
 import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature
@@ -107,6 +112,7 @@ import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
+import com.cobblemon.mod.common.pokemon.properties.HeldItemVisibleProperty
 import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
 import com.cobblemon.mod.common.pokemon.properties.LabelProperty
 import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
@@ -114,13 +120,7 @@ import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
-import com.cobblemon.mod.common.util.DataKeys
-import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.ifDedicatedServer
-import com.cobblemon.mod.common.util.isLaterVersion
-import com.cobblemon.mod.common.util.party
-import com.cobblemon.mod.common.util.requestWallpapers
-import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
 import com.cobblemon.mod.common.world.feature.ore.CobblemonOrePlacedFeatures
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
@@ -253,6 +253,8 @@ object Cobblemon {
 
         DATA_SYNCHRONIZED.subscribe {
             storage.onPlayerDataSync(it)
+            it.tmList().scheduleFullSyncFromStores(it.party(), it.pc())
+            it.pokedex().scheduleFullSyncFromStores(it.party(), it.pc())
             playerDataManager.syncAllToPlayer(it)
             starterHandler.handleJoin(it)
             it.requestWallpapers()
@@ -316,6 +318,9 @@ object Cobblemon {
             this.config.maxPokemonLevel,
             this.config.maxPokemonFriendship,
             this.config.maxDynamaxLevel,
+            this.config.unlockAllMoveDexMovesByDefault,
+            this.config.pokemonIntrinsicSizeMin,
+            this.config.pokemonIntrinsicSizeMax
         ).sendToPlayer(player)
     }
 
@@ -329,8 +334,11 @@ object Cobblemon {
         GENDER_ASPECT.register()
         COSMETIC_SLOT_ASPECT.register()
         CHARACTERISTIC_RAINBOW_ASPECT.register()
+        ALPHA_ASPECT.register()
+        MARK_ASPECT.register()
 
         SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
+        SpeciesFeatures.types["weighted_choice"] = WeightedChoiceSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
         SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
 
@@ -352,6 +360,7 @@ object Cobblemon {
         CustomPokemonProperty.register(UnaspectPropertyType)
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
+        CustomPokemonProperty.register(HeldItemVisibleProperty)
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
@@ -392,8 +401,12 @@ object Cobblemon {
                     val pokedexNbtFactory = CachedPlayerDataStoreFactory(DexDataNbtBackend())
                     pokedexNbtFactory.setup(server)
 
+                    val tmMoveFactory = CachedPlayerDataStoreFactory(TMMoveNbtBackend())
+                    tmMoveFactory.setup(server)
+
                     playerDataManager.setFactory(generalJsonFactory, PlayerInstancedDataStoreTypes.GENERAL)
                     playerDataManager.setFactory(pokedexNbtFactory, PlayerInstancedDataStoreTypes.POKEDEX)
+                    playerDataManager.setFactory(tmMoveFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
 
                     if (config.storageFormat == "nbt") {
                         NBTStoreAdapter(pokemonStoreRoot.absolutePath, useNestedFolders = true, folderPerClass = true)
@@ -420,8 +433,14 @@ object Cobblemon {
                         val pokedexMongoFactory = CachedPlayerDataStoreFactory(DexDataMongoBackend(mongoClient, config.mongoDBDatabaseName, "PokeDexCollection"))
                         pokedexMongoFactory.setup(server)
 
+                        val tmMovesMongoFactory = CachedPlayerDataStoreFactory(
+                                TMMoveMongoBackend(mongoClient, config.mongoDBDatabaseName, "TMMovesCollection")
+                        )
+                        tmMovesMongoFactory.setup(server)
+
                         playerDataManager.setFactory(generalMongoFactory, PlayerInstancedDataStoreTypes.GENERAL)
                         playerDataManager.setFactory(pokedexMongoFactory, PlayerInstancedDataStoreTypes.POKEDEX)
+                        playerDataManager.setFactory(tmMovesMongoFactory, PlayerInstancedDataStoreTypes.TM_MOVES)
 
                         eggStoreManager = EggStoreManager(MongoEggStoreBackend(mongoClient, config.mongoDBDatabaseName))
                         eggStoreManager.setup(server)
@@ -615,6 +634,7 @@ object Cobblemon {
         this.implementation.registerCommandArgument(cobblemonResource("mark"), MarkArgumentType::class, SingletonArgumentInfo.contextFree(MarkArgumentType::mark))
         this.implementation.registerCommandArgument(cobblemonResource("transform_type"), TransformTypeArgumentType::class, SingletonArgumentInfo.contextFree(TransformTypeArgumentType::transformType))
         this.implementation.registerCommandArgument(cobblemonResource("model_part"), ModelPartArgumentType::class, SingletonArgumentInfo.contextFree(ModelPartArgumentType::modelPart))
+        this.implementation.registerCommandArgument(cobblemonResource("tm"), TmArgumentType::class, SingletonArgumentInfo.contextFree(TmArgumentType::tm))
     }
 
 }

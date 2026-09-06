@@ -264,6 +264,9 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 3
         }
       }
     }
@@ -284,6 +287,9 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

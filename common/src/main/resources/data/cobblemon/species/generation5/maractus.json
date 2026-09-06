@@ -65,6 +65,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "maractus alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -69,6 +69,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "purugly alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -108,7 +117,6 @@
     "tm:attract",
     "tm:bodyslam",
     "tm:bulldoze",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:cut",

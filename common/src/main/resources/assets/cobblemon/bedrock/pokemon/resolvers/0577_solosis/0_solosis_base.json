@@ -7,13 +7,14 @@
       "poser": "cobblemon:solosis",
       "model": "cobblemon:solosis.geo",
       "texture": "cobblemon:textures/pokemon/0577_solosis/solosis.png",
-      "layers": [      
+      "layers": [
         {
-        "name": "liquid",
-        "texture": "cobblemon:textures/pokemon/0577_solosis/solosis_liquid.png",
-        "translucent": true,
-        "translucent_cull": true
-      }]
+          "name": "liquid",
+          "texture": "cobblemon:textures/pokemon/0577_solosis/solosis_liquid.png",
+          "translucent": true,
+          "translucent_cull": true
+        }
+      ]
     },
     {
       "aspects": [
@@ -26,7 +27,20 @@
           "texture": "cobblemon:textures/pokemon/0577_solosis/solosis_liquid_shiny.png",
           "translucent": true,
           "translucent_cull": true
-        }]
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0577_solosis/solosis_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

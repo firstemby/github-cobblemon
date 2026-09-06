@@ -73,7 +73,17 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "graveler alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "golem alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -437,7 +447,17 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "3"
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "graveler alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "golem alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "times": [

@@ -10,7 +10,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -32,7 +32,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -60,7 +60,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -84,7 +84,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -108,133 +108,13 @@
             }
         },
         {
-            "id": "inkay-1",
-            "pokemon": "inkay",
-            "presets": [
-                "natural",
-                "wild"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 1.68,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "inkay-2",
-            "pokemon": "inkay",
-            "presets": [
-                "wild"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 1.68,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "inkay-3",
-            "pokemon": "inkay",
-            "presets": [
-                "natural",
-                "wild"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 1.68,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_end"
-                ]
-            }
-        },
-        {
-            "id": "inkay-4",
-            "pokemon": "inkay",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 5.04,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "inkay-5",
-            "pokemon": "inkay",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 5.04,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "inkay-6",
-            "pokemon": "inkay",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "4-29",
-            "weight": 8.4,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13
-            }
-        },
-        {
             "id": "inkay-11",
             "pokemon": "inkay",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 8.4,
+            "weight": 84.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -257,7 +137,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "4-29",
-            "weight": 5.4,
+            "weight": 54.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -275,6 +155,132 @@
                 ],
                 "minY": -60,
                 "maxY": 13
+            }
+        },
+        {
+            "id": "inkay-1",
+            "pokemon": "inkay",
+            "presets": [
+                "natural",
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 16.8,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "inkay-2",
+            "pokemon": "inkay",
+            "presets": [
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 16.8,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "inkay-3",
+            "pokemon": "inkay",
+            "presets": [
+                "natural",
+                "wild"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 16.8,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_end"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "inkay-4",
+            "pokemon": "inkay",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 50.4,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "inkay-5",
+            "pokemon": "inkay",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 50.4,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "inkay-6",
+            "pokemon": "inkay",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "4-29",
+            "weight": 84.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
+                "isPokeSnack": true
             }
         }
     ]

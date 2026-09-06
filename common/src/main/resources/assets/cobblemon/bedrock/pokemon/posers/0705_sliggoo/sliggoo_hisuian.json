@@ -1,0 +1,58 @@
+{
+  "portraitScale": 1.72,
+  "portraitTranslation": [-0.4,0.8,0],
+  "profileScale": 0.57,
+  "profileTranslation": [-0.03,0.97,0],
+  "rootBone": "sliggoo_hisuian",
+  "animations": {
+    "cry": "q.bedrock_stateful('sliggoo_hisuian', 'cry')",
+    "recoil": "q.bedrock_stateful('sliggoo_hisuian', 'recoil')"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": [ "STAND" ],
+      "isBattle": true,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('sliggoo_hisuian', 'battle_idle')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('sliggoo_hisuian', 'battle_cry')"
+      },
+      "quirks": [
+        "q.bedrock_quirk('sliggoo_hisuian', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": [ "STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE" ],
+      "isBattle": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('sliggoo_hisuian', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sliggoo_hisuian', 'blink')",
+        "q.bedrock_quirk('sliggoo_hisuian', 'idle_quirk'), 30, 60, 1)"
+      ]
+    },
+    "walking": {
+      "poseTypes": [ "WALK", "SWIM" ],
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('sliggoo_hisuian', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sliggoo_hisuian', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": [ "SLEEP" ],
+      "animations": [
+        "q.bedrock('sliggoo_hisuian', 'sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    }
+  }
+}

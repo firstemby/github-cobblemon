@@ -130,6 +130,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.55, 11.25, -4.5],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"eye1": [-2.55, 11.25, -4.5]
+					}
+				},
+				{
 					"name": "pupil_closed_right",
 					"parent": "eye_right",
 					"pivot": [-2.415, 11.25, -4.5],
@@ -161,6 +170,15 @@
 					"cubes": [
 						{"origin": [2.515, 9.75, -6], "size": [0, 3, 3], "uv": [41, -3]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.55, 11.25, -4.5],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"eye2": [2.55, 11.25, -4.5]
+					}
 				},
 				{
 					"name": "pupil_left",
@@ -238,27 +256,6 @@
 					"pivot": [-2.415, 12.25, -5],
 					"cubes": [
 						{"origin": [-2.415, 11.75, -6], "size": [0, 1, 2], "inflate": 0.02, "uv": [54, -2]}
-					]
-				},
-				{
-					"name": "blush",
-					"parent": "expressions",
-					"pivot": [-2.5, 8.5, -5.25]
-				},
-				{
-					"name": "blush_left",
-					"parent": "blush",
-					"pivot": [-2.4, 8.5, -5.25],
-					"cubes": [
-						{"origin": [-2.4, 8, -6.25], "size": [0, 1, 2], "inflate": 0.02, "uv": [53, 2]}
-					]
-				},
-				{
-					"name": "blush_right",
-					"parent": "blush",
-					"pivot": [2.4, 8.5, -5.25],
-					"cubes": [
-						{"origin": [2.4, 8, -6.25], "size": [0, 1, 2], "inflate": 0.02, "uv": [53, 1]}
 					]
 				},
 				{

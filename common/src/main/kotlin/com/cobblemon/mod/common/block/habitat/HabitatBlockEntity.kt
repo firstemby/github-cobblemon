@@ -11,16 +11,13 @@ package com.cobblemon.mod.common.block.habitat
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatPool
-import com.cobblemon.mod.common.api.habitats.ActivatedHabitatSpawn
 import com.cobblemon.mod.common.api.habitats.HabitatPhaseOrder
-import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
+import com.cobblemon.mod.common.api.habitats.HabitatPool
 import com.cobblemon.mod.common.api.habitats.dto.HabitatSettingsDTO
 import com.cobblemon.mod.common.api.habitats.spawningstyle.ActivatedHabitatSpawning
 import com.cobblemon.mod.common.api.habitats.spawningstyle.HabitatSpawningStyle
 import com.cobblemon.mod.common.api.habitats.spawningstyle.NaturalHabitatSpawning
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
@@ -34,6 +31,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
@@ -60,16 +60,22 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
 
     var spawningStyle: HabitatSpawningStyle = ActivatedHabitatSpawning(this)
 
-    var numberOfPhases: Int = 1
     var phaseOrder = HabitatPhaseOrder.SIMPLE
     var currentPhase = 1
 
+    val numberOfPhases: Int
+        get() = pool.getPhaseCount()
+
     var levelRange: IntRange = 1..Cobblemon.config.maxPokemonLevel
     var modifiers: PokemonProperties = PokemonProperties()
-
+    var pool: HabitatPool = HabitatPool.default()
     var mimicId: ResourceLocation = BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
     val mimickedState: BlockState
         get() = BuiltInRegistries.BLOCK.get(mimicId).defaultBlockState() ?: Blocks.STONE.defaultBlockState()
+    var displaySpeciesIds: List<ResourceLocation> = emptyList()
+
+    // This is cached here so that it doesn't have to be regenerated every time the block is triggered, updated when settings change.
+    var spawnDetails: List<SpawnDetail> = listOf()
 
     fun onUse(player: Player, hit: BlockHitResult): InteractionResult {
         if (player.level().isClientSide) {
@@ -91,11 +97,24 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
      */
     fun refreshFromSettings() {
         val spawningStyle = spawningStyle
+        var activatedStyle = false
+        var cancelsRegularSpawns = false
+        spawnDetails = pool.createSpawnDetails(this)
         if (spawningStyle is ActivatedHabitatSpawning) {
             spawningStyle.generateSpawnDetails(level as ServerLevel, blockPos)
+            activatedStyle = true
+            cancelsRegularSpawns = spawningStyle.cancelledNaturalSpawningRange > 0
         } else if (spawningStyle is NaturalHabitatSpawning) {
             spawningStyle.generateSpawnDetails()
+            cancelsRegularSpawns = spawningStyle.replaceSpawns
         }
+        refreshDisplaySpeciesIds()
+        level!!.setBlockAndUpdate(
+            blockPos,
+            blockState
+                .setValue(HabitatBlock.ACTIVATED_STYLE, activatedStyle)
+                .setValue(HabitatBlock.CANCELS_REGULAR_SPAWNS, cancelsRegularSpawns)
+        )
     }
 
     fun calculatePhase(gameTime: Long): Int {
@@ -120,21 +139,13 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
 
     fun applySettings(habitatSettingsDTO: HabitatSettingsDTO) {
         val activatedSettings = habitatSettingsDTO.activatedSettings
-        val activatedPool = habitatSettingsDTO.activatedSettings?.habitatPool?.toHabitatPool() as? ActivatedHabitatPool
-        val isActivated = habitatSettingsDTO.isActivatedSpawning
-        if (isActivated && activatedPool == null) {
-            return // Pool was bad, check console logs
-        }
         val naturalSettings = habitatSettingsDTO.naturalSettings
-        val naturalPool = habitatSettingsDTO.naturalSettings?.habitatPool?.toHabitatPool() as? NaturalHabitatPool
-        if (!isActivated && naturalPool == null) {
-            return // Pool was bad, check console logs
-        }
-        this.numberOfPhases = habitatSettingsDTO.numberOfPhases
+        val isActivated = habitatSettingsDTO.isActivatedSpawning
         this.phaseOrder = habitatSettingsDTO.phaseOrder
         this.levelRange = habitatSettingsDTO.levelRange
         this.modifiers = PokemonProperties.parse(habitatSettingsDTO.modifiers)
         this.mimicId = habitatSettingsDTO.mimicId
+        this.pool = habitatSettingsDTO.pool.toHabitatPool() ?: HabitatPool.default()
         if (isActivated && activatedSettings != null) {
             val activatedHabitatSpawning = ActivatedHabitatSpawning(this)
             activatedHabitatSpawning.trigger = activatedSettings.trigger
@@ -143,13 +154,11 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
             activatedHabitatSpawning.spawnRange = activatedSettings.spawnRange
             activatedHabitatSpawning.maxSpawns = activatedSettings.maxSpawns
             activatedHabitatSpawning.maxSpawnsPerActivation = activatedSettings.maxSpawnsPerActivation
-            activatedHabitatSpawning.pool = activatedPool!!
             this.spawningStyle = activatedHabitatSpawning
-        } else if (naturalSettings != null && naturalPool != null) {
+        } else if (naturalSettings != null) {
             val naturalHabitatSpawning = NaturalHabitatSpawning(this)
             naturalHabitatSpawning.replaceSpawns = naturalSettings.replaceSpawns
             naturalHabitatSpawning.rangeOfInfluence = naturalSettings.rangeOfInfluence
-            naturalHabitatSpawning.pool = naturalPool
             this.spawningStyle = naturalHabitatSpawning
         }
 
@@ -161,7 +170,6 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
-        tag.putInt(DataKeys.HABITAT_PHASE_COUNT, numberOfPhases)
         tag.putString(DataKeys.HABITAT_PHASE_ORDER, phaseOrder.toString())
         // Only save the level range when it's a non-trivial one
         if (levelRange.first != 1 || levelRange.last != Cobblemon.config.maxPokemonLevel) {
@@ -170,6 +178,10 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         tag.putString(DataKeys.HABITAT_MODIFIERS, modifiers.asString())
         tag.putString(DataKeys.HABITAT_SPAWNING_STYLE, spawningStyle.type.toString())
         spawningStyle.writeToNBT(tag)
+        HabitatPool.writePoolToNBT(pool = pool, nbt = tag)
+        val speciesListTag = ListTag()
+        displaySpeciesIds.forEach { speciesListTag.add(StringTag.valueOf(it.toString())) }
+        tag.put(DISPLAY_SPECIES_KEY, speciesListTag)
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -177,22 +189,30 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         tag.getString(DataKeys.HABITAT_MIMIC).let {
             mimicId = ResourceLocation.tryParse(it) ?: BuiltInRegistries.BLOCK.getKey(Blocks.STONE)
         }
+        displaySpeciesIds = if (tag.contains(DISPLAY_SPECIES_KEY, Tag.TAG_LIST.toInt())) {
+            tag.getList(DISPLAY_SPECIES_KEY, Tag.TAG_STRING.toInt())
+                .mapNotNull { speciesTag -> ResourceLocation.tryParse(speciesTag.asString) }
+                .distinct()
+        } else {
+            emptyList()
+        }
 
         if (level?.isClientSide == true) {
             return // Client doesn't need to try loading the rest
         }
 
-        numberOfPhases = tag.getInt(DataKeys.HABITAT_PHASE_COUNT)
         phaseOrder = HabitatPhaseOrder.valueOf(tag.getString(DataKeys.HABITAT_PHASE_ORDER))
         levelRange = tag.getString(DataKeys.HABITAT_LEVEL_RANGE).takeIf { it.isNotBlank() }?.let(IntRangeAdapter::deserialize) ?: 1..Cobblemon.config.maxPokemonLevel
         modifiers = tag.getString(DataKeys.HABITAT_MODIFIERS).takeIf { it.isNotBlank() }?.let(PokemonProperties::parse) ?: PokemonProperties()
         val spawningStyleType = tag.getString(DataKeys.HABITAT_SPAWNING_STYLE).asIdentifierDefaultingNamespace()
-        spawningStyle = if (spawningStyleType == ActivatedHabitatSpawn.TYPE) {
+        spawningStyle = if (spawningStyleType == ActivatedHabitatSpawning.TYPE) {
             ActivatedHabitatSpawning(this)
         } else {
             NaturalHabitatSpawning(this)
         }
         spawningStyle.readFromNBT(tag)
+        pool = HabitatPool.readPoolFromNBT(tag)
+        refreshDisplaySpeciesIds()
     }
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener> {
@@ -203,7 +223,14 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         // Don't tell the client everything, otherwise hackermans may learn too much
         val tag = CompoundTag()
         tag.putString(DataKeys.HABITAT_MIMIC, mimicId.toString())
+        val speciesListTag = ListTag()
+        displaySpeciesIds.forEach { speciesListTag.add(StringTag.valueOf(it.toString())) }
+        tag.put(DISPLAY_SPECIES_KEY, speciesListTag)
         return tag
+    }
+
+    private fun refreshDisplaySpeciesIds() {
+        displaySpeciesIds = pool.spawns.map { it.species.resourceIdentifier }.distinct()
     }
 
     fun getInfluentialRange(spawner: Spawner): Int {
@@ -236,7 +263,7 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         return if (spawningStyle is NaturalHabitatSpawning) {
             if (spawningStyle.replaceSpawns) {
                 // Replace mode! Permit spawning only if it's from this block
-                detail in spawningStyle.spawnDetails
+                detail in spawnDetails
             } else {
                 true // We don't mess with other types
             }
@@ -248,16 +275,17 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         }
     }
 
-    override fun injectSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail>? {
+    override fun injectSpawns(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail>? {
         val spawningStyle = spawningStyle
         return if (spawningStyle is NaturalHabitatSpawning) {
-            spawningStyle.spawnDetails.filter { it.spawnablePositionType.clazz == spawnablePosition::class.java && it.isSatisfiedBy(spawnablePosition) }
+            spawnDetails.filter { it.bucket == bucket && it.spawnablePositionType.clazz == spawnablePosition::class.java && it.isSatisfiedBy(spawnablePosition) }
         } else {
             null
         }
     }
 
     companion object {
+        private const val DISPLAY_SPECIES_KEY = "DisplaySpecies"
         val TICKER = BlockEntityTicker<HabitatBlockEntity> { world, pos, _, blockEntity ->
             if (world is ServerLevel) {
                 if (!blockEntity.initialized) {
@@ -293,63 +321,5 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
                 }
             }
         }
-
-        // todo to test with checking how it looks as other blocks
-        val mimicCycle: List<ResourceLocation> = listOf(
-            ResourceLocation.parse("minecraft:stone"),
-            ResourceLocation.parse("minecraft:cobblestone"),
-            ResourceLocation.parse("minecraft:granite"),
-            ResourceLocation.parse("minecraft:diorite"),
-            ResourceLocation.parse("minecraft:andesite"),
-            ResourceLocation.parse("minecraft:deepslate"),
-            ResourceLocation.parse("minecraft:polished_deepslate"),
-
-            ResourceLocation.parse("minecraft:oak_planks"),
-            ResourceLocation.parse("minecraft:spruce_planks"),
-            ResourceLocation.parse("minecraft:birch_planks"),
-            ResourceLocation.parse("minecraft:jungle_planks"),
-            ResourceLocation.parse("minecraft:acacia_planks"),
-            ResourceLocation.parse("minecraft:dark_oak_planks"),
-            ResourceLocation.parse("minecraft:mangrove_planks"),
-            ResourceLocation.parse("minecraft:cherry_planks"),
-            ResourceLocation.parse("minecraft:bamboo_planks"),
-
-            ResourceLocation.parse("minecraft:bricks"),
-            ResourceLocation.parse("minecraft:mossy_cobblestone"),
-            ResourceLocation.parse("minecraft:moss_block"),
-            ResourceLocation.parse("minecraft:bookshelf"),
-            ResourceLocation.parse("minecraft:loom"),
-            ResourceLocation.parse("minecraft:note_block"),
-
-            ResourceLocation.parse("minecraft:coal_block"),
-            ResourceLocation.parse("minecraft:iron_block"),
-            ResourceLocation.parse("minecraft:gold_block"),
-            ResourceLocation.parse("minecraft:diamond_block"),
-            ResourceLocation.parse("minecraft:emerald_block"),
-            ResourceLocation.parse("minecraft:lapis_block"),
-            ResourceLocation.parse("minecraft:redstone_block"),
-            ResourceLocation.parse("minecraft:netherite_block"),
-
-            ResourceLocation.parse("minecraft:obsidian"),
-            ResourceLocation.parse("minecraft:crying_obsidian"),
-            ResourceLocation.parse("minecraft:glowstone"),
-            ResourceLocation.parse("minecraft:blue_ice"),
-            ResourceLocation.parse("minecraft:packed_ice"),
-            ResourceLocation.parse("minecraft:ice"),
-
-            ResourceLocation.parse("minecraft:sandstone"),
-            ResourceLocation.parse("minecraft:red_sandstone"),
-            ResourceLocation.parse("minecraft:cut_sandstone"),
-            ResourceLocation.parse("minecraft:smooth_sandstone"),
-
-            ResourceLocation.parse("minecraft:black_concrete"),
-            ResourceLocation.parse("minecraft:white_concrete"),
-            ResourceLocation.parse("minecraft:lime_concrete"),
-            ResourceLocation.parse("minecraft:cyan_concrete"),
-            ResourceLocation.parse("minecraft:purple_concrete"),
-            ResourceLocation.parse("minecraft:light_blue_concrete"),
-            ResourceLocation.parse("minecraft:yellow_concrete"),
-            ResourceLocation.parse("minecraft:red_concrete")
-        )
     }
 }

@@ -1,0 +1,12 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/frozen_spike",
+            "cobblemon:fossils/frozen_spike_tiny",
+            "cobblemon:fossils/frozen_spike_medium",
+            "cobblemon:fossils/frozen_spike_large"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_frozen_spike"
+    }
+}

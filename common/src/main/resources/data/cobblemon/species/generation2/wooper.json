@@ -73,7 +73,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "wooper",
@@ -400,7 +400,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
             {
               "pokemon": "wooper",

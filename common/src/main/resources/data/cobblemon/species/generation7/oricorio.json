@@ -97,7 +97,6 @@
     "tm:attract",
     "tm:batonpass",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:defog",
@@ -198,7 +197,7 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "oricorio",
@@ -247,7 +246,7 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "oricorio",
@@ -296,7 +295,7 @@
           "willDefendOwner": true
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "oricorio",
@@ -312,7 +311,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "oricorio",

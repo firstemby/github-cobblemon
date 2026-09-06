@@ -10,7 +10,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "15-40",
-            "weight": 9.2,
+            "weight": 92.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"

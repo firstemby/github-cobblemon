@@ -69,6 +69,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "castform alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -187,7 +196,7 @@
         "cobblemon.species.castform-sunny.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "sunny-form"
@@ -224,7 +233,16 @@
         "combat": {
           "willDefendOwner": true
         },
-        "fireImmune": true
+        "fireImmune": true,
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "castform alpha",
+              "tier": 1
+            }
+          ]
+        }
       },
       "nestTypes": [
         "grassy",
@@ -243,7 +261,7 @@
         "cobblemon.species.castform-rainy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "rainy-form"
@@ -276,7 +294,7 @@
         "cobblemon.species.castform-snowy.desc"
       ],
       "labels": [
-        "gen4"
+        "gen3"
       ],
       "aspects": [
         "snowy-form"

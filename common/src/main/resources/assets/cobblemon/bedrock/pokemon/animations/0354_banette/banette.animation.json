@@ -404,6 +404,14 @@
 					"rotation": [1.49371, 3.63717, -24.68117]
 				}
 			}
-		}
+		},
+      "animation.banette.cry": {
+        "animation_length": 1.5,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.banette.cry"
+          }
+        }
+      }
 	}
 }

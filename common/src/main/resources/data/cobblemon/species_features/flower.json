@@ -3,6 +3,7 @@
   "keys": [
     "flower"
   ],
+  "needsKey": false,
   "default": "red",
   "choices": [
     "red",

@@ -95,7 +95,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:cosmicpower",
     "tm:covet",
@@ -212,7 +211,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gothitelle alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

@@ -203,10 +203,14 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "kommoo",
+          "pokemon": "hakamoo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "kommoo alpha",
           "tier": 1
         }
       ]

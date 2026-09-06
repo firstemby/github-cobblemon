@@ -56,7 +56,17 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "poliwrath alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "politoed",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

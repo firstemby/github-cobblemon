@@ -1,5 +1,5 @@
 {
-  "pokemon": ["squirtle", "wartortle", "blastoise", "sandile", "krokorok", "krookodile"],
+  "pokemon": ["squirtle", "wartortle", "blastoise", "sandile", "krokorok", "krookodile", "pancham", "pangoro"],
   "cosmeticItems": [
     {
       "consumedItem": "cobblemon:black_glasses",

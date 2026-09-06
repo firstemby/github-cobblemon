@@ -44,10 +44,10 @@
   "catchRate": 45,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.85,
   "hitbox": {
-    "width": 1.7,
-    "height": 1.8,
+    "width": 1.8,
+    "height": 1.9,
     "fixed": false
   },
   "behaviour": {
@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "primarina",
@@ -131,7 +131,6 @@
     "tm:bodyslam",
     "tm:brine",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

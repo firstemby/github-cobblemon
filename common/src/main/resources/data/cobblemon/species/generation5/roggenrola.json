@@ -72,7 +72,24 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "roggenrola alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "boldore alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gigalith alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 4,

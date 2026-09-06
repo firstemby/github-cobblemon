@@ -69,6 +69,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mewtwo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "mew alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -125,7 +138,6 @@
     "tm:bulletseed",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charge",
     "tm:chargebeam",
     "tm:charm",
@@ -272,7 +284,6 @@
     "tm:mudslap",
     "tm:mysticalfire",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:nightshade",
     "tm:ominouswind",
@@ -292,7 +303,6 @@
     "tm:poltergeist",
     "tm:pounce",
     "tm:powergem",
-    "tm:powershift",
     "tm:powerswap",
     "tm:poweruppunch",
     "tm:powerwhip",
@@ -515,7 +525,6 @@
     "tutor:playrough",
     "tutor:poisonjab",
     "tutor:poltergeist",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:psychocut",
     "tutor:recycle",
@@ -575,6 +584,7 @@
     "tutor:zenheadbutt",
     "legacy:bide",
     "legacy:bubblebeam",
+    "legacy:captivate",
     "legacy:confusion",
     "legacy:counter",
     "legacy:defensecurl",
@@ -589,7 +599,9 @@
     "legacy:horndrill",
     "legacy:megadrain",
     "legacy:mimic",
+    "legacy:naturalgift",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:psywave",
     "legacy:rage",
     "legacy:razorwind",

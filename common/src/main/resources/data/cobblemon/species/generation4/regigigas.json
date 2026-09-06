@@ -102,7 +102,6 @@
     "tm:megapunch",
     "tm:naturepower",
     "tm:payback",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
@@ -146,7 +145,6 @@
     "tutor:icywind",
     "tutor:ironhead",
     "tutor:knockoff",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -166,6 +164,7 @@
     "legacy:hiddenpower",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:psychup",
     "legacy:return",
     "legacy:round",
@@ -177,7 +176,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5
     },
     "resting": {
       "times": [

@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "pineco alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "forretress alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -128,7 +141,6 @@
     "tm:irondefense",
     "tm:lightscreen",
     "tm:lunge",
-    "tm:naturalgift",
     "tm:painsplit",
     "tm:payback",
     "tm:pinmissile",
@@ -216,7 +228,18 @@
           "variant": "level",
           "minLevel": 31
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

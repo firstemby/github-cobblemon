@@ -55,12 +55,6 @@ object PcCommand {
         }
         PCLinkManager.addLink(PermissiblePcLink(pc, player, CobblemonPermissions.PC))
         OpenPCPacket(pc, box = if (box != null) (box - 1) else null).sendToPlayer(player)
-        context.source.level.playSoundServer(
-            position = context.source.player!!.position(),
-            sound = CobblemonSounds.PC_ON,
-            volume = 0.5F,
-            pitch = 1F
-        )
         return Command.SINGLE_SUCCESS
     }
 

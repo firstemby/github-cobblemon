@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 1019,
   "name": "Hydrapple",
   "primaryType": "grass",
@@ -43,6 +44,13 @@
   "catchRate": 10,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "baseScale": 0.8,
+  "hitbox": {
+    "width": 1,
+    "height": 2.6,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.9,
   "moves": [
     "1:ficklebeam",
     "1:withdraw",
@@ -149,6 +157,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hydrapple alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "nestTypes": [

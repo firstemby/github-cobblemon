@@ -65,6 +65,19 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "shelgon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "salamence alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -207,7 +220,18 @@
           "variant": "level",
           "minLevel": 50
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

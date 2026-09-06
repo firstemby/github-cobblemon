@@ -224,7 +224,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hariyama alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

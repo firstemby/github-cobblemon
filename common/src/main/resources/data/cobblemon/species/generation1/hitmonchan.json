@@ -64,6 +64,23 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hitmonlee alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmonchan alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hitmontop alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

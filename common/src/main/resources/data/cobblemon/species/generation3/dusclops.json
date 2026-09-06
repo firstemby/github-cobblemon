@@ -67,7 +67,17 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dusclops alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dusknoir alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -162,7 +172,6 @@
     "tm:payback",
     "tm:phantomforce",
     "tm:poltergeist",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -209,7 +218,6 @@
     "tutor:ominouswind",
     "tutor:painsplit",
     "tutor:poltergeist",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
@@ -239,6 +247,7 @@
     "legacy:mudslap",
     "legacy:naturalgift",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:return",
     "legacy:rockslide",
     "legacy:rocktomb",

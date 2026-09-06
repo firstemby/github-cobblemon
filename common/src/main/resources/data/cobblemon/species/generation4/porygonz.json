@@ -71,7 +71,13 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "porygonz alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -135,7 +141,6 @@
     "tm:magiccoat",
     "tm:magnetrise",
     "tm:nastyplot",
-    "tm:powershift",
     "tm:powerswap",
     "tm:protect",
     "tm:psybeam",
@@ -180,7 +185,6 @@
     "tutor:lastresort",
     "tutor:magiccoat",
     "tutor:magnetrise",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:recycle",
     "tutor:rest",
@@ -209,6 +213,7 @@
     "legacy:naturalgift",
     "legacy:nightmare",
     "legacy:painsplit",
+    "legacy:powershift",
     "legacy:psychup",
     "legacy:psywave",
     "legacy:rage",

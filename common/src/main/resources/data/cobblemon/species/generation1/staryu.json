@@ -69,6 +69,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "staryu alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "starmie alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

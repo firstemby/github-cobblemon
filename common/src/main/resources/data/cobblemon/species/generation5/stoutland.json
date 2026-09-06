@@ -53,7 +53,13 @@
       "avoidedBySkeleton": true
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "stoutland alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

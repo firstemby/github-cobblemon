@@ -14,7 +14,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "38-51",
-            "weight": 0.2,
+            "weight": 0.3,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -33,7 +39,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "38-51",
-            "weight": 0.16,
+            "weight": 0.8,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

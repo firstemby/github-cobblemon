@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "floette",
@@ -159,7 +159,6 @@
     "tm:lightscreen",
     "tm:magicalleaf",
     "tm:magiccoat",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:painsplit",
     "tm:petalblizzard",

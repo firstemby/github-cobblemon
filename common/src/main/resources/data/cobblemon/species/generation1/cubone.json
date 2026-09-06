@@ -379,11 +379,19 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "marowak",
+          "pokemon": "cubone",
           "tier": 1
+        },
+        {
+          "pokemon": "marowak",
+          "tier": 2
+        },
+        {
+          "pokemon": "marowak alolan",
+          "tier": 2
         }
       ]
     },

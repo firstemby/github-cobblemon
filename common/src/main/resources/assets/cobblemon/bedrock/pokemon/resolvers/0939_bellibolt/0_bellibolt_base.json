@@ -22,7 +22,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_shiny.png",
       "layers": [
         {
@@ -34,6 +36,18 @@
           "name": "transparent",
           "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_transparency_shiny.png",
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0939_bellibolt/bellibolt_alpha.png",
+          "emissive": true
         }
       ]
     }

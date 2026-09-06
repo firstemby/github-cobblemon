@@ -13,6 +13,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0628_braviary/braviary_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0628_braviary/braviary_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

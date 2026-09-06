@@ -1,0 +1,14 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/root_nursery3",
+            "cobblemon:habitats/root_nursery4",
+            "cobblemon:habitats/root_nursery5",
+            "cobblemon:habitats/root_nursery6",
+            "cobblemon:habitats/root_nursery7",
+            "cobblemon:habitats/root_nursery8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/root_nurseries"
+    }
+}

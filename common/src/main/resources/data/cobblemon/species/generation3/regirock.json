@@ -187,7 +187,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "regigigas",

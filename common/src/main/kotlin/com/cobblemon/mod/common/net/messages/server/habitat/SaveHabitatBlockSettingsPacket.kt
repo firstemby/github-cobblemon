@@ -30,10 +30,7 @@ class SaveHabitatBlockSettingsPacket(
         fun decode(buffer: RegistryFriendlyByteBuf): SaveHabitatBlockSettingsPacket {
             val blockPos = buffer.readBlockPos()
             val settings = HabitatSettingsDTO()
-            settings.decode(
-                buffer = buffer,
-                buckets = Cobblemon.bestSpawner.config.buckets
-            )
+            settings.decode(buffer)
             return SaveHabitatBlockSettingsPacket(blockPos, settings)
         }
     }

@@ -66,162 +66,10 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.3025863,
-              "z": -0.1542604
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.02595697,
-              "y": -1.282828,
-              "z": -0.16504669
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.03984697,
-              "y": -1.3177792,
-              "z": -0.18566585
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       },
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2831491,
-              "z": 0.36128467
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.008630978,
-              "y": -1.2763681,
-              "z": 0.3505332
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.013196847,
-              "y": -1.3370697,
-              "z": 0.32919547
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_2"
       }
     ]
   },
@@ -231,7 +79,7 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bastiodon",
@@ -322,7 +170,6 @@
     "tm:mudslap",
     "tm:outrage",
     "tm:powergem",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
@@ -377,7 +224,6 @@
     "tutor:meteorbeam",
     "tutor:mudslap",
     "tutor:outrage",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -397,6 +243,7 @@
     "legacy:frustration",
     "legacy:hiddenpower",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

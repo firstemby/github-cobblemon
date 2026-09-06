@@ -66,8 +66,16 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "frogadier alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "greninja mega=false",
+          "tier": 1
+        },
         {
           "pokemon": "greninja ash=false",
           "tier": 1
@@ -75,6 +83,10 @@
         {
           "pokemon": "greninja ash",
           "tier": 2
+        },
+        {
+          "pokemon": "greninja mega",
+          "tier": 3
         }
       ]
     },

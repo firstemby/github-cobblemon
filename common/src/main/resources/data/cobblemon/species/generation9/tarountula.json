@@ -67,6 +67,22 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "spidops alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "tarountula",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -170,7 +186,18 @@
           "variant": "level",
           "minLevel": 15
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

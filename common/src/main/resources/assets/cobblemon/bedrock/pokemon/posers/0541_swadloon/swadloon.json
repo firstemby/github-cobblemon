@@ -5,18 +5,31 @@
   "profileTranslation": [0.0, 0.72, 0.0],
   "rootBone": "swadloon",
   "animations": {
-    "cry": "q.bedrock_stateful('swadloon', 'cry')"
+    "cry": "q.bedrock_stateful('swadloon', 'cry')",
+    "recoil": "q.bedrock_stateful('swadloon', 'recoil')"
   },
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
       "animations": ["q.look('head')", "q.bedrock('swadloon', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('swadloon', 'blink')"]
+      "quirks": ["q.bedrock_quirk('swadloon', 'blink')", "q.bedrock_quirk('swadloon', 'quirk_ground_idle')"]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": true,
+      "animations": ["q.bedrock('sewaddle', 'battle_idle')"],
+      "quirks": ["q.bedrock_quirk('sewaddle', 'blink')"]
     },
     "walking": {
       "poseTypes": ["WALK"],
       "animations": ["q.look('head')", "q.bedrock('swadloon', 'ground_walk')"],
       "quirks": ["q.bedrock_quirk('swadloon', 'blink')"]
+    },
+    "wild-sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('swadloon', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     }
   }
 }

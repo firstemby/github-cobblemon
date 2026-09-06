@@ -58,7 +58,13 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "drapion alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

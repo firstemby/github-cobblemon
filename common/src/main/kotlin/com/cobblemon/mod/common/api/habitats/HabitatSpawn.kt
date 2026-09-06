@@ -10,9 +10,7 @@ package com.cobblemon.mod.common.api.habitats
 
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.spawning.BestSpawner
 import com.cobblemon.mod.common.api.spawning.IntRanges
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.TimeRange
 import com.cobblemon.mod.common.api.spawning.condition.AppendageCondition
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
@@ -30,9 +28,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**
- * A kind of simplified spawn definition for the purposes of spawning from [HabitatBlockEntity] instances. This is a
- * very shallow class tree, with [ActivatedHabitatSpawn] being a trivial subclass but the other subclass being
- * [NaturalHabitatSpawn] which introduces the need to supply a spawn bucket.
+ * A kind of simplified spawn definition for the purposes of spawning from [HabitatBlockEntity] instances.
  *
  * These have only a small subset of the properties that a regular [PokemonSpawnDetail] would have to align with the
  * fact that these are configured from a simple GUI. There are limits to how many properties and conditions could be
@@ -46,11 +42,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 13th, 2026
  */
-sealed class HabitatSpawn {
+class HabitatSpawn {
     /** The species that will be spawned. */
     lateinit var species: Species
     /** The kind of position the Pokémon will spawn in. Things like "grounded", "seafloor", "fishing". */
     lateinit var spawnablePositionType: String
+    /** The bucket to spawn from. */
+    var bucket: String = "common"
 
     /** Selection weight. */
     var weight: Float = 1F
@@ -67,7 +65,7 @@ sealed class HabitatSpawn {
     /** The maximum light level that the Pokémon can spawn in. */
     var maxLight: Int? = null
 
-    open fun writeToNBT(nbt: CompoundTag) {
+    fun writeToNBT(nbt: CompoundTag) {
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_SPECIES, species.resourceIdentifier.toString())
         nbt.putString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE, spawnablePositionType)
         nbt.putFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT, weight)
@@ -77,9 +75,10 @@ sealed class HabitatSpawn {
         timeRange?.let { nbt.putString(DataKeys.HABITAT_POOL_SPAWN_TIMES, TimeRange.adapter.serialize(it)) }
         minLight?.let { nbt.putInt(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT, it) }
         maxLight?.let { nbt.putInt(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT, it) }
+        nbt.putString(DataKeys.HABITAT_POOL_SPAWN_BUCKET, bucket)
     }
 
-    open fun readFromNBT(nbt: CompoundTag) {
+    fun readFromNBT(nbt: CompoundTag) {
         species = PokemonSpecies.getByIdentifier(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_SPECIES).asIdentifierDefaultingNamespace())!!
         spawnablePositionType = nbt.getString(DataKeys.HABITAT_POOL_SPAWN_POSITION_TYPE)
         weight = nbt.getFloat(DataKeys.HABITAT_POOL_SPAWN_WEIGHT)
@@ -89,9 +88,10 @@ sealed class HabitatSpawn {
         timeRange = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_TIMES)) TimeRange.adapter.deserialize(nbt.getString(DataKeys.HABITAT_POOL_SPAWN_TIMES)) else null
         minLight = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT)) nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MIN_LIGHT) else null
         maxLight = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT)) nbt.getInt(DataKeys.HABITAT_POOL_SPAWN_MAX_LIGHT) else null
+        bucket = if (nbt.contains(DataKeys.HABITAT_POOL_SPAWN_BUCKET)) nbt.getString(DataKeys.HABITAT_POOL_SPAWN_BUCKET) else "common"
     }
 
-    open fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeResourceLocation(species.resourceIdentifier)
         buffer.writeUtf(spawnablePositionType)
         buffer.writeFloat(weight)
@@ -101,12 +101,10 @@ sealed class HabitatSpawn {
         buffer.writeNullable(timeRange) { _, value -> buffer.writeUtf(TimeRange.adapter.serialize(value)) }
         buffer.writeNullable(minLight) { _, value -> buffer.writeInt(value) }
         buffer.writeNullable(maxLight) { _, value -> buffer.writeInt(value) }
+        buffer.writeUtf(bucket)
     }
 
-    open fun decode(
-        buffer: RegistryFriendlyByteBuf,
-        buckets: List<SpawnBucket>
-    ) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         species = PokemonSpecies.getByIdentifier(buffer.readResourceLocation())!!
         spawnablePositionType = buffer.readUtf()
         weight = buffer.readFloat()
@@ -116,10 +114,11 @@ sealed class HabitatSpawn {
         timeRange = buffer.readNullable { _ -> TimeRange.adapter.deserialize(buffer.readUtf()) }
         minLight = buffer.readNullable { _ -> buffer.readInt() }
         maxLight = buffer.readNullable { _ -> buffer.readInt() }
+        bucket = buffer.readUtf()
     }
 
     /** Creates the [PokemonSpawnDetail] that will be used in the spawner. This is done per habitat block. */
-    open fun createSpawnDetail(habitatBlockEntity: HabitatBlockEntity): PokemonSpawnDetail? {
+    fun createSpawnDetail(habitatBlockEntity: HabitatBlockEntity): PokemonSpawnDetail? {
         val spawnDetail = PokemonSpawnDetail()
 
         // If the habitat block specifies a level range, it restricts how and if this spawn exists
@@ -138,7 +137,7 @@ sealed class HabitatSpawn {
         spawnDetail.apply {
             this.id = "habitat_${species.resourceIdentifier}"
             this.pokemon = properties
-            this.bucket = BestSpawner.config.buckets.first { it.weight > 0 }
+            this.bucket = this@HabitatSpawn.bucket
             this.weight = this@HabitatSpawn.weight
             this.levelRange = levelRange
             this.conditions = mutableListOf(condition)

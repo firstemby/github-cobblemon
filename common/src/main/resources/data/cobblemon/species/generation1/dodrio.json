@@ -65,7 +65,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "dodrio",
@@ -155,7 +155,6 @@
     "tm:lowkick",
     "tm:lunge",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:payback",
     "tm:pluck",
     "tm:pounce",

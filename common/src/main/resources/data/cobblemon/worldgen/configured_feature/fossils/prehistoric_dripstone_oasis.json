@@ -1,0 +1,9 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/dripstone_oasis1"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_dripstone_oasis"
+    }
+}

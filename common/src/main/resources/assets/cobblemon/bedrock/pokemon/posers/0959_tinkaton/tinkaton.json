@@ -28,7 +28,7 @@
       ],
       "quirks": ["q.bedrock_quirk('tinkaton', 'blink')"],
       "namedAnimations": {
-        "cry": "q.bedrock_primary('tinkaton', 'battle_cry')"
+        "cry": "q.bedrock_primary('tinkaton', 'battle_cry', q.curve('symmetrical_wide'))"
       }
     },
     "standing": {

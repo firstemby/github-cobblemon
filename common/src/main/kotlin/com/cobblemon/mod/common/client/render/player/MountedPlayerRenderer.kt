@@ -61,8 +61,7 @@ object MountedPlayerRenderer {
         root.yRot = 0F
         root.zRot = 0F
 
-        val seatIndex = pokemonEntity.passengers.indexOf(player).takeIf { it != -1 && it < pokemonEntity.seats.size } ?: return
-        val seat = pokemonEntity.seats[seatIndex]
+        val seat = pokemonEntity.getSeatForPassenger(player) ?: return
         val animations = seat.poseAnimations
             ?.firstOrNull { it.poseTypes.isEmpty() || it.poseTypes.contains(pokemonEntity.getCurrentPoseType()) }?.animations
             ?: defaultAnimations
@@ -144,11 +143,11 @@ object MountedPlayerRenderer {
     const val RIDING_SITTING_OFFSET = -10.0
     fun animateRoot(stack: PoseStack) {
         val root = relevantPartsByName["body"] ?: return
-        val rootOffset = Vec3(root.x.toDouble(), root.y.toDouble() + RIDING_SITTING_OFFSET, root.z.toDouble()).scale(1/16.0)
+        val rootOffset = Vec3(-root.x.toDouble(), root.y.toDouble() + RIDING_SITTING_OFFSET, root.z.toDouble()).scale(1/16.0)
         val rotation = Vec3(root.xRot.toDouble(), root.yRot.toDouble(), root.zRot.toDouble())
+        stack.translate(rootOffset.x.toFloat(), rootOffset.y.toFloat(), rootOffset.z.toFloat())
         stack.mulPose(Axis.ZP.rotation(rotation.z.toFloat()))
         stack.mulPose(Axis.YP.rotation(rotation.y.toFloat()))
         stack.mulPose(Axis.XP.rotation(rotation.x.toFloat()))
-        stack.translate(rootOffset.x.toFloat(), rootOffset.y.toFloat(), rootOffset.z.toFloat())
     }
 }

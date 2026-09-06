@@ -69,11 +69,19 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
-          "pokemon": "raticate alolan",
+          "pokemon": "rattata",
           "tier": 1
+        },
+        {
+          "pokemon": "raticate",
+          "tier": 2
+        },
+        {
+          "pokemon": "raticate alolan",
+          "tier": 3
         }
       ]
     },
@@ -395,11 +403,23 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
             {
-              "pokemon": "raticate alolan",
+              "pokemon": "rattata alpha",
               "tier": 1
+            },
+            {
+              "pokemon": "rattata alolan",
+              "tier": 1
+            },
+            {
+              "pokemon": "raticate alpha",
+              "tier": 2
+            },
+            {
+              "pokemon": "raticate alolan",
+              "tier": 2
             }
           ]
         },

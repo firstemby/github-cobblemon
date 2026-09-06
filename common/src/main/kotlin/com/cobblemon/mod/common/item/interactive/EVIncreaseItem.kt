@@ -14,12 +14,14 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.EVs
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
 abstract class EVIncreaseItem(
@@ -41,6 +43,9 @@ abstract class EVIncreaseItem(
         return if (evsGained > 0) {
             pokemon.entity?.playSound(sound, 1F, 1F)
             stack.consume(1, player)
+            if (!player.hasInfiniteMaterials()) {
+                player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
+            }
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)

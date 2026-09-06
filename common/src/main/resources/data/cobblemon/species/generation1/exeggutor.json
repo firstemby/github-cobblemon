@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "exeggutor alolan=false",
@@ -173,7 +173,6 @@
     "tm:lightscreen",
     "tm:lowkick",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:powerswap",
     "tm:protect",
@@ -357,6 +356,7 @@
         "tm:explosion",
         "tm:facade",
         "tm:flamethrower",
+        "tm:flash",
         "tm:gigadrain",
         "tm:gigaimpact",
         "tm:grassknot",
@@ -374,7 +374,6 @@
         "tm:lightscreen",
         "tm:lowkick",
         "tm:magicalleaf",
-        "tm:naturalgift",
         "tm:naturepower",
         "tm:outrage",
         "tm:powerswap",
@@ -388,6 +387,7 @@
         "tm:psyshock",
         "tm:reflect",
         "tm:rest",
+        "tm:rollout",
         "tm:seedbomb",
         "tm:selfdestruct",
         "tm:skillswap",
@@ -396,6 +396,7 @@
         "tm:solarbeam",
         "tm:stompingtantrum",
         "tm:storedpower",
+        "tm:strength",
         "tm:substitute",
         "tm:sunnyday",
         "tm:superpower",
@@ -433,6 +434,7 @@
         "tutor:outrage",
         "tutor:psychic",
         "tutor:rest",
+        "tutor:rollout",
         "tutor:seedbomb",
         "tutor:skillswap",
         "tutor:sleeptalk",
@@ -475,8 +477,12 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
+            {
+              "pokemon": "exeggutor alpha",
+              "tier": 1
+            },
             {
               "pokemon": "exeggutor alolan",
               "tier": 1

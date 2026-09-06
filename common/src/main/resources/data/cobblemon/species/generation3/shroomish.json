@@ -58,7 +58,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "morelull",
@@ -157,7 +157,6 @@
     "tm:headbutt",
     "tm:helpinghand",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:pounce",
     "tm:protect",
     "tm:raindance",

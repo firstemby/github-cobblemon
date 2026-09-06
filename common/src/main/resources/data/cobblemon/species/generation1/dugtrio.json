@@ -69,7 +69,7 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "dugtrio",
@@ -430,7 +430,7 @@
       },
       "behaviour": {
         "herd": {
-          "maxSize": "3",
+          "maxSize": 5,
           "toleratedLeaders": [
             {
               "pokemon": "dugtrio",

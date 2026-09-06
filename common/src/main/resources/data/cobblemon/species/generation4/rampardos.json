@@ -51,7 +51,7 @@
   },
   "behaviour": {
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "rampardos",
@@ -153,7 +153,6 @@
     "tm:mudslap",
     "tm:outrage",
     "tm:payback",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
@@ -207,7 +206,6 @@
     "tutor:laserfocus",
     "tutor:mudslap",
     "tutor:outrage",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -229,6 +227,7 @@
     "legacy:hiddenpower",
     "legacy:naturalgift",
     "legacy:painsplit",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

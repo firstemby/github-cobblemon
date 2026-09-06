@@ -56,15 +56,19 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
-          "pokemon": "pyroar female",
+          "pokemon": "pyroar female mega=false",
           "tier": 1
         },
         {
-          "pokemon": "pyroar male",
+          "pokemon": "pyroar male mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "pyroar mega=3",
+          "tier": 1
         }
       ]
     },

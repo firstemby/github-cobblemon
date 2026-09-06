@@ -1,0 +1,19 @@
+{
+  "moveName": "steelroller",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "steel",
+  "recipe": [
+    {
+      "item": "cobblemon:steel_gem",
+      "count": 6
+    },
+    {
+      "tag": "cobblemon:held/terrain_seeds",
+      "count": 1
+    }
+  ]
+}

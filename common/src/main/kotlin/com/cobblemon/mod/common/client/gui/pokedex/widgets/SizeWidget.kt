@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.pokedex.widgets
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.CobblemonResources
+import com.cobblemon.mod.common.client.gui.ProfileTransformType
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_HEIGHT
@@ -90,7 +91,7 @@ class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(0F, 0F, 0F)),
             state = FloatingState(),
             scale = modelScale,
-            applyProfileTransform = false,
+            profileTransformType = ProfileTransformType.NONE,
             applyBaseScale = true,
             r = 0F,
             g = 0F,

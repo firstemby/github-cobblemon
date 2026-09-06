@@ -66,7 +66,13 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "greninja alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -293,7 +299,13 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6,
+          "toleratedLeaders": [
+            {
+              "pokemon": "greninja alpha",
+              "tier": 1
+            }
+          ]
         },
         "moving": {
           "swim": {

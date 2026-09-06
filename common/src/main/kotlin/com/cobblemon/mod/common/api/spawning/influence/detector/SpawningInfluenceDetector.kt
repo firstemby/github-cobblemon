@@ -32,7 +32,7 @@ interface SpawningInfluenceDetector {
         val detectors = mutableSetOf(
             SaccharineLogSlatheredDetector,
             IncenseSweetDetector,
-            HabitatBlockDetector
+            HabitatBlockDetector,
         )
     }
 

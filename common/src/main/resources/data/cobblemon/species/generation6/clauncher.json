@@ -67,6 +67,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "clauncher alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "clawitzer alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -177,7 +190,18 @@
           "variant": "level",
           "minLevel": 37
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

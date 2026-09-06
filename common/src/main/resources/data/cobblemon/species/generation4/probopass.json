@@ -72,7 +72,13 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "probopass alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -126,6 +132,7 @@
     "40:stoneedge",
     "43:zapcannon",
     "43:lockon",
+    "50:bodypress",
     "egg:doubleedge",
     "egg:headsmash",
     "egg:magnitude",
@@ -164,7 +171,6 @@
     "tm:meteorbeam",
     "tm:painsplit",
     "tm:powergem",
-    "tm:powershift",
     "tm:protect",
     "tm:rest",
     "tm:rockblast",
@@ -219,7 +225,6 @@
     "tutor:magnetrise",
     "tutor:meteorbeam",
     "tutor:painsplit",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -245,6 +250,7 @@
     "legacy:mimic",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

@@ -168,7 +168,18 @@
           "variant": "level",
           "minLevel": 34
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "behaviour": {
@@ -190,6 +201,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dewbble alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "crustle alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "nestTypes": [

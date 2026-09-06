@@ -39,7 +39,7 @@
         "q.look('neck', 1, 1, 70, -10, 20, -20)",
         "q.look('head')",
         "q.bedrock('fearow', 'ground_idle')",
-        "q.biped_walk(1, 1, 'left_leg', 'right_leg')"
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
       ],
       "transformedParts": [
         {

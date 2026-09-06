@@ -59,7 +59,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "tynamo",
@@ -78,12 +78,16 @@
           "tier": 2
         },
         {
-          "pokemon": "eelektross",
+          "pokemon": "eelektross mega=false",
           "tier": 3
         },
         {
-          "pokemon": "manaphy",
+          "pokemon": "eelektross mega",
           "tier": 4
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 5
         }
       ]
     },

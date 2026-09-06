@@ -71,6 +71,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "whirlipede alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "scolipede alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -184,7 +197,18 @@
           "variant": "level",
           "minLevel": 30
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

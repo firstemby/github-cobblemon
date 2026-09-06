@@ -20,6 +20,7 @@ object DataKeys {
     const val POKEMON_FRIENDSHIP = "Friendship"
     const val POKEMON_FULLNESS = "Fullness"
     const val POKEMON_INTERACTION_COOLDOWN = "InteractionCooldown"
+    const val POKEMON_ALPHA = "Alpha"
 
     const val POKEMON_IVS = "IVs"
     const val POKEMON_IVS_BASE = "Base"
@@ -86,9 +87,11 @@ object DataKeys {
     const val POKEMON_ORIGINAL_TRAINER = "PokemonOriginalTrainer"
     const val POKEMON_ORIGINAL_TRAINER_NAME = "PokemonOriginalTrainerName"
     const val POKEMON_ORIGINAL_TRAINER_TYPE = "PokemonOriginalTrainerType"
+    const val POKEMON_ORIGINAL_TRAINER_FRIENDSHIP = "PokemonOriginalTrainerFriendship"
 
     const val POKEMON_PROPERTIES_MOVES = "Moves"
     const val POKEMON_PROPERTIES_HELDITEM = "HeldItem"
+    const val POKEMON_PROPERTIES_MOVESET_BUILDERS = "MovesetBuilders"
 
     // Entity effects
     const val ENTITY_EFFECTS = "EntityEffects"
@@ -213,6 +216,7 @@ object DataKeys {
     const val HAS_CREATED_POKEMON = "HasCreatedPokemon"
     const val FOSSIL_OWNER = "FossilOwner"
     const val FOSSIL_STATE = "FossilState"
+    const val MONITOR_DISK = "MonitorDisk"
 
     // Generic Block Entity
     const val BLOCK_ENTITY_USER_AMOUNT = "userAmount"
@@ -266,8 +270,8 @@ object DataKeys {
 
     const val SCRIPTED_BEHAVIOURS_ARE_CUSTOM = "BehavioursAreCustom"
     const val SCRIPTED_BEHAVIOURS = "Behaviours"
-    const val SCRIPTED_DATA = "Data"
-    const val SCRIPTED_CONFIG = "Config"
+    const val SCRIPTED_DATA = "ScriptingData"
+    const val SCRIPTED_CONFIG = "ScriptingConfig"
 
     // PokemonProperties
     const val ELEMENTAL_TYPE = "ElementalType"
@@ -275,11 +279,9 @@ object DataKeys {
     // Habitat Blocks
     const val HABITAT_SPAWNING_STYLE = "SpawningStyle"
     const val HABITAT_MIMIC = "MimicId"
-    const val HABITAT_PHASE_COUNT = "PhaseCount"
     const val HABITAT_PHASE_ORDER = "PhaseOrder"
     const val HABITAT_LEVEL_RANGE = "LevelRange"
     const val HABITAT_MODIFIERS = "Modifiers"
-    const val HABITAT_POOL = "Pool"
 
     // --- Pools
     const val HABITAT_POOL_ID = "PoolId"

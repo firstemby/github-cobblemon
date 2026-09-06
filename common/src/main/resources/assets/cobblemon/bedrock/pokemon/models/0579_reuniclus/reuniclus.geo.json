@@ -116,6 +116,14 @@
 					]
 				},
 				{
+					"name": "locator_item_face",
+					"parent": "head",
+					"pivot": [0, 15, -6.5],
+					"locators": {
+						"item_face": [0, 15, -6.5]
+					}
+				},
+				{
 					"name": "locator_face",
 					"parent": "head",
 					"pivot": [0, 13.25, -9],
@@ -134,9 +142,9 @@
 				{
 					"name": "locator_item_hat",
 					"parent": "head",
-					"pivot": [0, 24, 0],
+					"pivot": [0, 20.75, 0],
 					"locators": {
-						"item_hat": [0, 24, 0]
+						"item_hat": [0, 20.75, 0]
 					}
 				},
 				{
@@ -344,6 +352,14 @@
 					]
 				},
 				{
+					"name": "locator_seat_1",
+					"parent": "bubble",
+					"pivot": [0, 24, 5.5],
+					"locators": {
+						"seat_1": [0, 24, 5.5]
+					}
+				},
+				{
 					"name": "bottom_bubble",
 					"parent": "bubble",
 					"pivot": [-3, 2, 0],
@@ -539,9 +555,10 @@
 				{
 					"name": "locator_item",
 					"parent": "arm_right2",
-					"pivot": [-27, 11, -3],
+					"pivot": [-30.5, 17, -5.05],
+					"rotation": [90, 0, -67.5],
 					"locators": {
-						"item": [-27, 11, -3]
+						"item": [-30.5, 17, -5.05]
 					}
 				},
 				{

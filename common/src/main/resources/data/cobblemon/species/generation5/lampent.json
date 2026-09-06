@@ -76,7 +76,17 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "lampent alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "chandelure alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -127,7 +137,6 @@
     "tm:allyswitch",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:confuseray",
     "tm:curse",
     "tm:darkpulse",

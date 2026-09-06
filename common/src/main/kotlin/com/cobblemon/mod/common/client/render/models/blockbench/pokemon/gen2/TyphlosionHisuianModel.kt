@@ -19,7 +19,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 class TyphlosionHisuianModel  (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
-    override val rootPart = root.registerChildWithAllChildren("typhlosion_hisui")
+    override val rootPart = root.registerChildWithAllChildren("typhlosion")
     override val head = getPart("head")
 
     override var portraitScale = 1.4F

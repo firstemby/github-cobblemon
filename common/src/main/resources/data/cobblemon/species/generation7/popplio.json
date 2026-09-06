@@ -45,7 +45,7 @@
   "eggCycles": 15,
   "baseFriendship": 50,
   "shoulderMountable": true,
-  "baseScale": 0.75,
+  "baseScale": 0.65,
   "hitbox": {
     "width": 0.9,
     "height": 0.75,
@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "seel",
@@ -153,7 +153,6 @@
     "tm:babydolleyes",
     "tm:blizzard",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

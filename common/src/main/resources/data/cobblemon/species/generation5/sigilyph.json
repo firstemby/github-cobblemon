@@ -71,6 +71,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "sigilyph alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

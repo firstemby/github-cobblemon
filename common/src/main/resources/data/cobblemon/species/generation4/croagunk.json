@@ -51,13 +51,20 @@
   },
   "behaviour": {
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "croagunk alpha",
+          "tier": 1
+        },
         {
           "pokemon": "toxicroak",
           "tier": 1

@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.habitats.dto
 
 import com.cobblemon.mod.common.api.habitats.NaturalHabitatPool
 import com.cobblemon.mod.common.api.habitats.spawningstyle.NaturalHabitatSpawning
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class NaturalHabitatSettingsDTO() {
@@ -30,10 +29,7 @@ class NaturalHabitatSettingsDTO() {
         habitatPool.encode(buffer)
     }
 
-    fun decode(
-        buffer: RegistryFriendlyByteBuf,
-        buckets: List<SpawnBucket>
-    ) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         this.replaceSpawns = buffer.readBoolean()
         this.rangeOfInfluence = buffer.readInt()
         this.habitatPool = HabitatPoolSettingsDTO()

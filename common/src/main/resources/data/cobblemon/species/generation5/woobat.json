@@ -63,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "zubat",
@@ -148,7 +148,6 @@
     "tm:attract",
     "tm:batonpass",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:defog",

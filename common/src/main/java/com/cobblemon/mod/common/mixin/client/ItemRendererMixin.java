@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.item.PokeBallItem;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.cobblemon.mod.common.item.WearableItem;
 import com.cobblemon.mod.common.item.components.EggComponent;
+import com.cobblemon.mod.common.item.components.TMMoveComponent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -58,7 +59,7 @@ public abstract class ItemRendererMixin {
         cancellable = true
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) throws Exception {
-        boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED || stack.getItem() == CobblemonItems.POKEMON_EGG;
+        boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED || stack.getItem() == CobblemonItems.POKEMON_EGG || stack.getItem() == CobblemonItems.TECHNICAL_MACHINE;
         ResourceLocation resourceLocation = null;
         if (shouldBe2d) {
             if (stack.getItem() instanceof PokeBallItem pokeBallItem) {
@@ -69,6 +70,11 @@ public abstract class ItemRendererMixin {
                 EggComponent component = stack.get(CobblemonItemComponents.EGG_DATA);
                 if (component != null) {
                     resourceLocation = EggTextures.getEggTexture(component.getIdentifier(), component.getVariant());
+                }
+            } else if (stack.getItem() == CobblemonItems.TECHNICAL_MACHINE) {
+                TMMoveComponent component = stack.get(CobblemonItemComponents.TM_MOVE);
+                if (component != null) {
+                    resourceLocation = new ResourceLocation(Cobblemon.MODID, "tm/" + component.getMove().getElementalType().showdownId() + "_tm");
                 }
             }
         }

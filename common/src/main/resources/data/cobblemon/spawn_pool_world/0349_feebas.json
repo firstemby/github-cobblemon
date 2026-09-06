@@ -10,7 +10,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-20",
-            "weight": 5.7,
+            "weight": 57.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -32,7 +32,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "1-20",
-            "weight": 9.5,
+            "weight": 95.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

@@ -72,7 +72,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "corvisquire",
@@ -87,8 +87,12 @@
           "tier": 3
         },
         {
-          "pokemon": "honchkrow",
+          "pokemon": "lycanroc",
           "tier": 4
+        },
+        {
+          "pokemon": "honchkrow",
+          "tier": 5
         }
       ]
     },

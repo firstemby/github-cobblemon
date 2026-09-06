@@ -109,7 +109,6 @@
     "tm:infestation",
     "tm:knockoff",
     "tm:leafstorm",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:painsplit",
     "tm:powerswap",
@@ -188,7 +187,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "tangela",

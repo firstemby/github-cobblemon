@@ -121,7 +121,6 @@
     "tm:knockoff",
     "tm:leafstorm",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:painsplit",
     "tm:payback",
@@ -201,7 +200,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "tangrowth alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

@@ -128,7 +128,6 @@
     "tm:lightscreen",
     "tm:magicalleaf",
     "tm:megahorn",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:playrough",
@@ -260,7 +259,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "9",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "stantler",

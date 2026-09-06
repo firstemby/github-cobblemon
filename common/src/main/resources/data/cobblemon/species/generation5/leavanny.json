@@ -211,9 +211,18 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "leavanny alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.189
+      },
       "swim": {
         "avoidsWater": true
       }

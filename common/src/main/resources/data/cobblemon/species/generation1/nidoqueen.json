@@ -57,7 +57,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 8,
       "toleratedLeaders": [
         {
           "pokemon": "nidoqueen",
@@ -130,7 +130,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
-    "tm:captivate",
     "tm:charm",
     "tm:crunch",
     "tm:cut",

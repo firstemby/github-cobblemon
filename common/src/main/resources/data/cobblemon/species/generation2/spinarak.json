@@ -199,7 +199,18 @@
           "variant": "level",
           "minLevel": 22
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "behaviour": {
@@ -211,8 +222,12 @@
         "canSleep": true,
         "light": "0-4"
       },
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "spinarak alpha",
+          "tier": 1
+        },
         {
           "pokemon": "ariados",
           "tier": 1
@@ -236,6 +251,9 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "nestTypes": [

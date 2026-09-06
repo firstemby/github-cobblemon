@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.events
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.events.pokemon.LevelUpEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonAspectsChangedEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
@@ -20,6 +21,7 @@ object PokedexHandler : EventHandler {
         CobblemonEvents.POKEMON_GAINED.subscribe(Priority.NORMAL, ::onPokemonGained)
         CobblemonEvents.POKEMON_SEEN.subscribe(Priority.NORMAL, ::onPokemonSeen)
         CobblemonEvents.POKEMON_ASPECTS_CHANGED.subscribe(Priority.NORMAL, ::onPokemonAspectsChanged)
+        CobblemonEvents.LEVEL_UP_EVENT.subscribe(Priority.NORMAL, ::onLevelUp)
     }
 
     fun onPokemonGained(event: PokemonGainedEvent) {
@@ -34,5 +36,9 @@ object PokedexHandler : EventHandler {
         if (event.ownerId != null) {
             Cobblemon.playerDataManager.getPokedexData(event.ownerId).catch(event.pokemon)
         }
+    }
+
+    fun onLevelUp(event: LevelUpEvent) {
+        Cobblemon.playerDataManager.getPokedexData(event.pokemon.getOwnerUUID() ?: return).obtain(event.pokemon)
     }
 }

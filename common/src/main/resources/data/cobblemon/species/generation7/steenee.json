@@ -83,7 +83,6 @@
     "egg:synthesis",
     "tm:bounce",
     "tm:bulletseed",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:dazzlinggleam",
@@ -174,8 +173,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "steenee alpha",
+          "tier": 1
+        },
         {
           "pokemon": "tsareena",
           "tier": 1

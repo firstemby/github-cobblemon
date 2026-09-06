@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 6.0,
+            "weight": 30.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -37,7 +43,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 6.0,
+            "weight": 30.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -57,7 +69,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-31",
-            "weight": 6.0,
+            "weight": 30.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_crimson",

@@ -49,7 +49,6 @@ object SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
         .setPrettyPrinting()
         .setLenient()
         .disableHtmlEscaping()
-        .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
         .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)

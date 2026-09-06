@@ -99,7 +99,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:brutalswing",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:chillingwater",
@@ -131,7 +130,6 @@
     "tm:irontail",
     "tm:knockoff",
     "tm:lastresort",
-    "tm:naturalgift",
     "tm:playrough",
     "tm:poweruppunch",
     "tm:protect",
@@ -228,7 +226,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "linoone",

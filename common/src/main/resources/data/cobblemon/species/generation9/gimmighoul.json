@@ -74,6 +74,19 @@
     "combat": {
       "willDefendSelf": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gimmighoul alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gholdengo alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -324,8 +337,12 @@
           "rouseChance": 0.0042
         },
         "herd": {
-          "maxSize": "4",
+          "maxSize": 4,
           "toleratedLeaders": [
+            {
+              "pokemon": "gholdengo alpha",
+              "tier": 1
+            },
             {
               "pokemon": "gimmighoul roaming",
               "tier": 1

@@ -1,0 +1,33 @@
+{
+  "requirements": [
+    {
+      "variant": "properties",
+      "target": "dratini"
+    }
+  ],
+  "interactions": [
+    {
+      "grouping": "cobblemon:brush",
+      "requirements": [
+        {
+          "variant": "owner_held_item",
+          "itemCondition": "#c:tools/brush"
+        }
+      ],
+      "effects": [
+        {
+          "variant": "shrink_item",
+          "amount": 16
+        },
+        {
+          "variant": "drop_item",
+          "item": "cobblemon:shed_shell"
+        },
+        {
+          "variant": "play_sound",
+          "sound": "minecraft:item.brush.brushing.generic"
+        }
+      ]
+    }
+  ]
+}

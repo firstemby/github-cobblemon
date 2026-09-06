@@ -12,15 +12,34 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "16-40",
-            "weight": 3.6,
+            "level": "16-41",
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_jungle",
-                    "#cobblemon:is_tropical_island"
+                    "#cobblemon:is_jungle"
                 ]
+            }
+        },
+        {
+            "id": "ivysaur-2",
+            "pokemon": "ivysaur",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "ultra-rare",
+            "level": "16-41",
+            "weight": 18.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_jungle"
+                ],
+                "isPokeSnack": true
             }
         }
     ]

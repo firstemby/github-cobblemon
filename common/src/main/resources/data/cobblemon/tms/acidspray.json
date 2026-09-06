@@ -1,0 +1,19 @@
+{
+  "moveName": "acidspray",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "poison",
+  "recipe": [
+    {
+      "item": "cobblemon:poison_gem",
+      "count": 2
+    },
+    {
+      "item": "cobblemon:pink_mint_leaf",
+      "count": 2
+    }
+  ]
+}

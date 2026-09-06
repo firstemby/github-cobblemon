@@ -136,7 +136,6 @@
     "tm:megakick",
     "tm:megapunch",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:outrage",
     "tm:protect",
     "tm:raindance",
@@ -245,7 +244,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "7"
+          "maxSize": 7
         },
         "moving": {
           "swim": {
@@ -269,7 +268,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "abomasnow alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

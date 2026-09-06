@@ -65,7 +65,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "phanpy",
@@ -151,7 +151,6 @@
     "tm:lastresort",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:playrough",
     "tm:protect",
     "tm:raindance",

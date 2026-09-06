@@ -193,7 +193,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7
     },
     "moving": {
       "swim": {

@@ -145,7 +145,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "arboliva alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

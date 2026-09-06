@@ -254,7 +254,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "resting": {
           "times": [
@@ -293,7 +293,13 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "banette alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

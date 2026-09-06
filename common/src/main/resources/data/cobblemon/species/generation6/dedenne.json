@@ -108,7 +108,6 @@
     "tm:lightscreen",
     "tm:magnetrise",
     "tm:mistyterrain",
-    "tm:naturalgift",
     "tm:playrough",
     "tm:protect",
     "tm:raindance",
@@ -177,7 +176,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "dedenne",

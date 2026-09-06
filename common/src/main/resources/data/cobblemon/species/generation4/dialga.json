@@ -346,6 +346,9 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4
         }
       }
     }
@@ -367,6 +370,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

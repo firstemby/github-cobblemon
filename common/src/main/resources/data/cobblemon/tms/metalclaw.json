@@ -1,0 +1,19 @@
+{
+  "moveName": "metalclaw",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "steel",
+  "recipe": [
+    {
+      "item": "cobblemon:steel_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:red_mint_leaf",
+      "count": 1
+    }
+  ]
+}

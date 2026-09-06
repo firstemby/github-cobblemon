@@ -66,6 +66,23 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "bagon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "shelgon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "salamence alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -203,7 +220,18 @@
           "variant": "level",
           "minLevel": 30
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [

@@ -238,6 +238,9 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

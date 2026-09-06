@@ -87,7 +87,6 @@
     "tm:mysticalfire",
     "tm:outrage",
     "tm:playrough",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:psychup",
@@ -120,7 +119,6 @@
     "tutor:mysticalfire",
     "tutor:outrage",
     "tutor:playrough",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
@@ -130,7 +128,8 @@
     "tutor:tailwind",
     "tutor:twister",
     "tutor:uproar",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:powershift"
   ],
   "evolutions": [],
   "forms": [
@@ -165,7 +164,32 @@
         "speed": 46
       },
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4
+        }
+      }
     }
   ],
   "behaviour": {
@@ -188,6 +212,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

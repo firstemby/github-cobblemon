@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
+import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdatePassengerPositionPacket;
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.CameraType;
@@ -148,10 +149,22 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
             cobblemon$lastRideYRot = rideYRot;
             cobblemon$lastRideEyePos = rideEyePos;
 
-            CobblemonNetwork.INSTANCE.sendToServer(new ServerboundUpdateRiderRotationPacket(rideXRot, rideYRot, rideEyePos));
+            CobblemonNetwork.INSTANCE.sendToServer(
+                    new ServerboundUpdateRiderRotationPacket(rideXRot, rideYRot, rideEyePos)
+            );
         }
+    }
 
+    @Inject(method = "rideTick", at = @At("TAIL"))
+    private void cobblemon$updatePassengerPosition(CallbackInfo ci) {
+        if (Minecraft.getInstance().player != (Object)this) return;
+        if (!(this.getVehicle() instanceof PokemonEntity pokemonEntity)) return;
+        if (pokemonEntity.getSeatForPassenger(this) == null) return;
 
+        var offset = this.position().subtract(pokemonEntity.position());
+        CobblemonNetwork.INSTANCE.sendToServer(
+                new ServerboundUpdatePassengerPositionPacket(this.getId(), offset)
+        );
     }
 
     @Unique
@@ -217,9 +230,10 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer implements O
     private void cobblemon$isHandsBusy(CallbackInfoReturnable<Boolean> cir) {
         Entity vehicle = this.getVehicle();
         if (vehicle instanceof PokemonEntity pokemonEntity) {
-            int seatIndex = pokemonEntity.getPassengers().indexOf(this);
-            Seat seat = pokemonEntity.getSeats().get(seatIndex);
-            cir.setReturnValue(seat.getHandsBusy());
+            Seat seat = pokemonEntity.getSeatForPassenger(this);;
+            if (seat != null) {
+                cir.setReturnValue(seat.getHandsBusy());
+            }
         }
     }
 

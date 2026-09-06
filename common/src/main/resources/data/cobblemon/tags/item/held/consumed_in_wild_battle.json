@@ -3,6 +3,7 @@
   "values": [
     "#cobblemon:berries",
     "#cobblemon:herbs",
+    "#cobblemon:type_gems",
     "minecraft:snowball"
   ]
 }

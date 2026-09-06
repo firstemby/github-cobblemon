@@ -363,13 +363,6 @@
 						"0.125": [-0.1, 0, -0.1],
 						"0.1667": [0, 0, 0]
 					}
-				},
-				"eyelid_left": {
-					"position": {
-						"0.0": [0.1, 0, -0.1],
-						"0.125": [0.1, 0, -0.1],
-						"0.1667": [0, 0, 0]
-					}
 				}
 			}
 		},
@@ -429,22 +422,22 @@
 				"mouth": {
 					"position": {
 						"0.0": [0, 0, 0],
-						"0.1667": [0, 0, 0],
-						"0.2083": [0, -0.1, 0],
-						"0.3333": [0, -0.1, 0],
-						"0.375": [0, 0, 0],
-						"0.4583": [0, 0, 0],
-						"0.5": [0, -0.1, 0],
-						"0.6667": [0, -0.1, 0],
-						"0.7083": [0, 0, 0],
-						"0.7917": [0, 0, 0],
-						"0.8333": [0, -0.1, 0],
-						"0.9583": [0, -0.1, 0],
-						"1.0": [0, 0, 0],
-						"1.0833": [0, 0, 0],
-						"1.125": [0, -0.1, 0],
-						"1.4167": [0, -0.1, 0],
-						"1.4583": [0, 0, 0]
+						"0.1667": {"pre": [0, 0, 0], "post": [0, 0, 0]},
+						"0.2083": {"pre": [0, 0, 0], "post": [0, -0.3, 0]},
+						"0.3333": {"pre": [0, -0.3, 0], "post": [0, -0.3, 0]},
+						"0.375": {"pre": [0, -0.3, 0], "post": [0, 0, 0]},
+						"0.4583": {"pre": [0, 0, 0], "post": [0, 0, 0]},
+						"0.5": {"pre": [0, 0, 0], "post": [0, -0.3, 0]},
+						"0.6667": {"pre": [0, -0.3, 0], "post": [0, -0.3, 0]},
+						"0.7083": {"pre": [0, -0.3, 0], "post": [0, 0, 0]},
+						"0.7917": {"pre": [0, 0, 0], "post": [0, 0, 0]},
+						"0.8333": {"pre": [0, 0, 0], "post": [0, -0.3, 0]},
+						"0.9583": {"pre": [0, -0.3, 0], "post": [0, -0.3, 0]},
+						"1.0": {"pre": [0, -0.3, 0], "post": [0, 0, 0]},
+						"1.0833": {"pre": [0, 0, 0], "post": [0, 0, 0]},
+						"1.125": {"pre": [0, 0, 0], "post": [0, -0.3, 0]},
+						"1.4167": {"pre": [0, -0.3, 0], "post": [0, -0.3, 0]},
+						"1.4583": {"pre": [0, -0.3, 0], "post": [0, 0, 0]}
 					}
 				},
 				"ear_left": {
@@ -766,13 +759,9 @@
 			"loop": true,
 			"animation_length": 4,
 			"bones": {
-				"brionne": {
-					"rotation": [-38, 0, 0],
-					"position": [0, 4.7, -5]
-				},
 				"body": {
-					"rotation": ["67.5+5*math.sin(q.anim_time*90*3-80)", "2*math.cos(q.anim_time*90*3-80)", 0],
-					"position": ["-1*math.cos(q.anim_time*90*3)", "-11+2*math.sin(q.anim_time*90*3)", "4-1*math.sin(q.anim_time*90*3)"]
+					"rotation": ["34.5+5*math.sin(q.anim_time*90*3-80)", "2*math.cos(q.anim_time*90*3-80)", 0],
+					"position": ["-1*math.cos(q.anim_time*90*3)", "-10.5+2*math.sin(q.anim_time*90*3)", "-0.4-1*math.sin(q.anim_time*90*3)"]
 				},
 				"head": {
 					"rotation": [
@@ -1406,16 +1395,6 @@
 						"1.5": [-0.1, 0, -0.1]
 					}
 				},
-				"eyelid_left": {
-					"position": {
-						"0.0": [0, 0, 0],
-						"0.0417": [0.1, 0, -0.1],
-						"0.5": [0.1, 0, -0.1],
-						"0.5417": [0, 0, 0],
-						"1.4583": [0, 0, 0],
-						"1.5": [0.1, 0, -0.1]
-					}
-				},
 				"neck": {
 					"rotation": {
 						"0.0": [0, 0, 0],
@@ -1444,6 +1423,96 @@
 						"0.0": [0, 0, 15],
 						"1.5833": [0, 0, 0]
 					}
+				}
+			}
+		},
+		"animation.brionne.hold_item": {
+			"loop": true,
+			"bones": {
+				"locator_item": {
+					"rotation": [90, -75, -90],
+					"position": [0, 0, -0.5]
+				}
+			}
+		},
+		"animation.brionne.hold_weapon": {
+			"loop": true,
+			"bones": {
+				"locator_item": {
+					"rotation": [90, -82.5, -90],
+					"position": [0, 4.5, -2]
+				}
+			}
+		},
+		"animation.brionne.shock": {
+			"loop": true,
+			"bones": {
+				"pupil_left": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"pupil_right": {
+					"scale": [0.7, 0.7, 1]
+				},
+				"mouth": {
+					"position": [0, -1, 0]
+				}
+			}
+		},
+		"animation.brionne.angry": {
+			"loop": true,
+			"bones": {
+				"eye_angry_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_angry_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.brionne.sad": {
+			"loop": true,
+			"bones": {
+				"eye_sad_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_sad_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.brionne.unamused": {
+			"loop": true,
+			"bones": {
+				"eye_unamused_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eye_unamused_right": {
+					"position": [-0.1, 0, -0.1]
+				}
+			}
+		},
+		"animation.brionne.happy": {
+			"loop": true,
+			"bones": {
+				"eyelid_happy_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eyelid_happy_right": {
+					"position": [-0.1, 0, -0.1]
+				},
+				"mouth": {
+					"position": [0, -1, 0]
+				}
+			}
+		},
+		"animation.brionne.hurt": {
+			"loop": true,
+			"bones": {
+				"eyelid_recoil_left": {
+					"position": [0.1, 0, -0.1]
+				},
+				"eyelid_recoil_right": {
+					"position": [-0.1, 0, -0.1]
 				}
 			}
 		}

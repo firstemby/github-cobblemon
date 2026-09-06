@@ -67,7 +67,7 @@
       ]
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bouffalant",
@@ -158,7 +158,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:bulldoze",
-    "tm:captivate",
     "tm:charm",
     "tm:curse",
     "tm:doubleedge",
@@ -187,7 +186,6 @@
     "tm:megapunch",
     "tm:metronome",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:playrough",
     "tm:poweruppunch",
     "tm:protect",

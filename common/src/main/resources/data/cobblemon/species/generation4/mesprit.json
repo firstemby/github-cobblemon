@@ -113,7 +113,6 @@
     "tm:magicroom",
     "tm:metronome",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:painsplit",
     "tm:playrough",
     "tm:poweruppunch",
@@ -209,7 +208,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "uxie",

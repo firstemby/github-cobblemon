@@ -61,7 +61,13 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "cloyster alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

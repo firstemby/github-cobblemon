@@ -6,9 +6,9 @@
 				"identifier": "geometry.flamigo",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 2,
-				"visible_bounds_height": 3.5,
-				"visible_bounds_offset": [0, 1.25, 0]
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
 			},
 			"bones": [
 				{
@@ -294,7 +294,6 @@
 					"name": "neck6",
 					"parent": "neck5",
 					"pivot": [0, 19.75, -20],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-1, 17.75, -23], "size": [2, 2, 3], "uv": [29, 2]}
 					]
@@ -303,7 +302,6 @@
 					"name": "neck7",
 					"parent": "neck6",
 					"pivot": [0, 19.75, -23],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-1, 17.75, -26], "size": [2, 2, 3], "inflate": 0.01, "uv": [22, 0]}
 					]
@@ -317,7 +315,6 @@
 					"name": "head_rotation",
 					"parent": "head",
 					"pivot": [0, 18.75, -25.5],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-1, 17, -27.5], "size": [2, 3, 2], "inflate": 0.11, "uv": [0, 0]},
 						{"origin": [-1, 18, -28.7], "size": [2, 2, 1], "inflate": 0.11, "uv": [8, 0]}
@@ -369,6 +366,15 @@
 					"cubes": [
 						{"origin": [0.34, 18.25, -27], "size": [1, 1, 1], "inflate": -0.2, "uv": [24, 10]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [1.1, 18.75, -26.5],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"eye2": [1.1, 18.75, -26.5]
+					}
 				},
 				{
 					"name": "eyelid_left",
@@ -438,6 +444,15 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-1.1, 18.75, -26.5],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"eye1": [-1.1, 18.75, -26.5]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_right",
 					"pivot": [-0.54, 18.75, -26.5],
@@ -475,7 +490,6 @@
 					"name": "jaw",
 					"parent": "head_rotation",
 					"pivot": [0, 18, -27.5],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-1, 17, -28.5], "size": [2, 1, 1], "inflate": 0.1, "uv": [1, 5]}
 					]

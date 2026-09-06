@@ -10,19 +10,25 @@ package com.cobblemon.mod.common.block.habitat
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.EntityBlock
+import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.CommandBlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.BlockHitResult
@@ -34,8 +40,31 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
     var level: Level? = null
     var pos: BlockPos? = null
 
+    companion object {
+        val CANCELS_REGULAR_SPAWNS = BooleanProperty.create("cancels_regular_spawns")
+        val ACTIVATED_STYLE = BooleanProperty.create("activated_style")
+    }
+
+    init {
+        registerDefaultState(stateDefinition.any()
+            .setValue(FACING, Direction.NORTH)
+            .setValue(CANCELS_REGULAR_SPAWNS, false)
+            .setValue(ACTIVATED_STYLE, true)
+        )
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
+        builder.add(FACING, CANCELS_REGULAR_SPAWNS, ACTIVATED_STYLE)
+    }
+
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return HabitatBlockEntity(pos, state)
+    }
+
+    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState {
+        return defaultBlockState()
+            .setValue(FACING, blockPlaceContext.horizontalDirection.opposite)
     }
 
     override fun <T : BlockEntity> getTicker(
@@ -45,18 +74,20 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
     ): BlockEntityTicker<T>? {
         return if (!level.isClientSide && type == CobblemonBlockEntities.HABITAT_BLOCK) {
             @Suppress("UNCHECKED_CAST")
-            HabitatBlockEntity.Companion.TICKER as BlockEntityTicker<T>
+            HabitatBlockEntity.TICKER as BlockEntityTicker<T>
         } else {
             null
         }
     }
 
     override fun useWithoutItem(state: BlockState, level: Level, pos: BlockPos, player: Player, hitResult: BlockHitResult): InteractionResult {
-        if (!level.isClientSide) {
-            val be = level.getBlockEntity(pos) as? HabitatBlockEntity ?: return InteractionResult.PASS
-            return be.onUse(player, hitResult)
+        val blockEntity = level.getBlockEntity(pos)
+        val be = level.getBlockEntity(pos) as? HabitatBlockEntity ?: return InteractionResult.PASS
+        return if (blockEntity is HabitatBlockEntity && player.canUseGameMasterBlocks()) {
+            be.onUse(player, hitResult)
+        } else {
+            InteractionResult.PASS
         }
-        return InteractionResult.SUCCESS
     }
 
     override fun getDrops(state: BlockState, params: LootParams.Builder): MutableList<ItemStack> {
@@ -96,11 +127,15 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
     }
 
     override fun getOcclusionShape(state: BlockState, level: BlockGetter, pos: BlockPos): VoxelShape? {
-        return Shapes.block()
+        return Shapes.empty()
     }
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean {
-        return true
+        return false
+    }
+
+    override fun skipRendering(state: BlockState, adjacentBlockState: BlockState, side: Direction): Boolean {
+        return false
     }
 
     override fun spawnDestroyParticles(level: Level, player: Player, pos: BlockPos, state: BlockState) {

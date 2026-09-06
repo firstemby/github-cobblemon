@@ -6,7 +6,7 @@
 				"identifier": "geometry.tranquill",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -105,8 +105,15 @@
 					"parent": "head_angle",
 					"pivot": [0, 19.5, -5],
 					"locators": {
-						"head": [0, 19.5, -5],
-						"item_hat": [0, 19.5, -5]
+						"head": [0, 19.5, -5]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "head_angle",
+					"pivot": [0, 19.5, -4.5],
+					"locators": {
+						"item_hat": [0, 19.5, -4.5]
 					}
 				},
 				{
@@ -114,8 +121,15 @@
 					"parent": "head_angle",
 					"pivot": [0, 17, -7],
 					"locators": {
-						"face": [0, 17, -7],
-						"item_face": [0, 17, -7]
+						"face": [0, 17, -7]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "head_angle",
+					"pivot": [0, 16.6, -7],
+					"locators": {
+						"item_face": [0, 16.6, -7]
 					}
 				},
 				{
@@ -124,8 +138,7 @@
 					"pivot": [0, 15.5, -7],
 					"locators": {
 						"mouth": [0, 15.5, -7],
-						"special": [0, 15.5, -7],
-						"item": [0, 15.5, -7]
+						"special": [0, 15.5, -7]
 					}
 				},
 				{
@@ -142,7 +155,8 @@
 					"parent": "beak",
 					"pivot": [0, 15.8, -8.8],
 					"locators": {
-						"beak": [0, 15.8, -8.8]
+						"beak": [0, 15.8, -8.8],
+						"physical": [0, 15.8, -8.8]
 					}
 				},
 				{
@@ -151,6 +165,18 @@
 					"pivot": [0, 15.5, -8.5],
 					"locators": {
 						"jaw1": [0, 15.5, -8.5]
+					}
+				},
+				{
+					"name": "locator_item",
+					"parent": "beak",
+					"pivot": [0, 15, -8.5],
+					"rotation": [15, 0, 0],
+					"locators": {
+						"item": {
+							"offset": [0, 15, -8.5],
+							"rotation": [0, 45, 0]
+						}
 					}
 				},
 				{

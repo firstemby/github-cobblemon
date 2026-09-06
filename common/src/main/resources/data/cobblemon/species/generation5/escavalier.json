@@ -180,7 +180,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "escavalier alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

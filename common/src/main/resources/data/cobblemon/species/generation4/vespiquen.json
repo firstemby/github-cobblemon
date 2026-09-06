@@ -68,7 +68,13 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vespiquen alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -129,7 +135,6 @@
     "tm:beatup",
     "tm:bugbite",
     "tm:bugbuzz",
-    "tm:captivate",
     "tm:confuseray",
     "tm:crosspoison",
     "tm:cut",
@@ -155,7 +160,6 @@
     "tm:pollenpuff",
     "tm:pounce",
     "tm:powergem",
-    "tm:powershift",
     "tm:protect",
     "tm:psychicnoise",
     "tm:quash",
@@ -198,7 +202,6 @@
     "tutor:hyperbeam",
     "tutor:laserfocus",
     "tutor:ominouswind",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:roost",
     "tutor:signalbeam",
@@ -217,6 +220,7 @@
     "legacy:hiddenpower",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

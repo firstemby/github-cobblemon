@@ -8,13 +8,12 @@
 
 package com.cobblemon.mod.common.api.spawning.preset
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.multiplier.WeightMultiplier
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePositionType
 import com.cobblemon.mod.common.util.MergeMode
 import com.cobblemon.mod.common.util.adapters.SpawnDetailAdapter
 import com.google.gson.JsonObject
@@ -41,7 +40,7 @@ import com.google.gson.annotations.SerializedName
  * @since July 8th, 2022
  */
 abstract class SpawnDetailPreset {
-    var bucket: SpawnBucket? = null
+    var bucket: String? = null
     var spawnDetailType: String? = null
     @SerializedName("spawnablePositionType", alternate = ["context"])
     var spawnablePositionType: SpawnablePositionType<*>? = null

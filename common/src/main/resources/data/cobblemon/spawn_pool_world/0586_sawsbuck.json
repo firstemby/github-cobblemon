@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -31,7 +31,8 @@
                     "#cobblemon:is_plains",
                     "#cobblemon:is_snowy_forest",
                     "#cobblemon:is_taiga"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -49,13 +50,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 0.2,
+            "weight": 2.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -65,11 +67,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "34-48",
-            "weight": 1.6,
+            "weight": 9.6,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [

@@ -70,10 +70,10 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
-          "pokemon": "ribombee",
+          "pokemon": "ribombee alpha",
           "tier": 1
         }
       ]

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
@@ -133,7 +134,10 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
     override fun isBonemealSuccess(world: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
 
     override fun performBonemeal(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
-        world.setBlock(pos, state.setValue(AGE, state.getValue(AGE) + 1), 2)
+        val curAge = state.getValue(AGE)
+        val newAge = curAge + 1
+        if (newAge > MAX_AGE) return
+        world.setBlock(pos, state.setValue(AGE, newAge), UPDATE_CLIENTS)
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -173,7 +177,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
         world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, resetState))
 
         if (!world.isClientSide) {
-            world.playSoundServer(position = pos.toVec3d(), sound = SoundEvents.ITEM_PICKUP, volume = 0.7F, pitch = 1.4F)
+            world.playSoundServer(position = pos.toVec3d(), sound = CobblemonSounds.APRICORN_HARVEST, volume = 1.0F, pitch = 1.0F)
 
             if (world is ServerLevel && player is ServerPlayer) {
                 CobblemonEvents.APRICORN_HARVESTED.post(ApricornHarvestEvent(player, apricorn, world, pos))
@@ -186,17 +190,17 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
      * This uses [Block.dropResources] to handle the drops.
      * It will also reset the [BlockState] of this block at the given location to the start of growth.
      *
-     * @param world The [World] the apricorn is in.
+     * @param world The [Level] the apricorn is in.
      * @param state The [BlockState] of the apricorn.
      * @param pos The [BlockPos] of the apricorn.
      * @return The [BlockState] after harvest.
      */
     fun harvest(world: Level, state: BlockState, pos: BlockPos): BlockState {
         // Uses loot tables, to change the drops use 'data/cobblemon/loot_tables/blocks/<color>_apricorn.json'
-        Block.dropResources(state, world, pos)
+        dropResources(state, world, pos)
         // Don't use default as we want to keep the facing
         val resetState = state.setValue(AGE, MIN_AGE)
-        world.setBlock(pos, resetState, Block.UPDATE_CLIENTS)
+        world.setBlock(pos, resetState, UPDATE_CLIENTS)
         return resetState
     }
 

@@ -56,7 +56,13 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "meowstic",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

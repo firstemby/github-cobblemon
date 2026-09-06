@@ -56,8 +56,8 @@
       "times": [
         "any"
       ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
+      "drowsyChance": 0,
+      "rouseChance": 0
     },
     "moving": {
       "swim": {
@@ -71,7 +71,7 @@
       }
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "magcargo",

@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "cobblemon:medicinal_brew"
+    },
+    "title": {
+      "translate": "advancements.cobblemon.brew_medicinal_brew"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.brew_medicinal_brew.description"
+    }
+  },
+  "parent": "cobblemon:agriculture/place_campfire_pot",
+  "criteria": {
+    "check_inv": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:medicinal_brew"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -67,7 +67,7 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "chikorita",
@@ -82,16 +82,20 @@
           "tier": 3
         },
         {
-          "pokemon": "meganium",
+          "pokemon": "meganium mega=false",
           "tier": 4
         },
         {
-          "pokemon": "tropius",
+          "pokemon": "meganium mega",
           "tier": 5
         },
         {
-          "pokemon": "aurorus",
+          "pokemon": "tropius",
           "tier": 6
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 7
         }
       ]
     },
@@ -162,7 +166,6 @@
     "tm:magicalleaf",
     "tm:magiccoat",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:reflect",

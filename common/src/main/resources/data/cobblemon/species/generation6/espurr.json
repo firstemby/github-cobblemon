@@ -54,11 +54,19 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "meowstic",
+          "pokemon": "espurr alpha",
           "tier": 1
+        },
+        {
+          "pokemon": "meowstic mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "meowstic mega",
+          "tier": 2
         }
       ]
     },

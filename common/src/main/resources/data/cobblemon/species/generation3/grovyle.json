@@ -57,8 +57,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "grovyle alpha",
+          "tier": 1
+        },
         {
           "pokemon": "sceptile mega=false",
           "tier": 1
@@ -167,7 +171,6 @@
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:poweruppunch",
     "tm:protect",
@@ -256,7 +259,18 @@
           "variant": "level",
           "minLevel": 36
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "nestTypes": [
