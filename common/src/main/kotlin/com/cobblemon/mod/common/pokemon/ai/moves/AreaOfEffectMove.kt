@@ -29,10 +29,12 @@ class AreaOfEffectMove(
     effectChance: Float = 1.0f,
     priority : Int = 1,
     val radius : Float = 0.4f,
+    val innerRadius : Float = 0.0f, // Allows for big aoes with an inner "safe" zone
     val height : Float = 2.0f,
     val durationTicks: Int = 20, // How long the aoe is active
     val damageTickRate: Int = 4, // Deals damage once every four ticks
     val anchoredToGround: Boolean = true, // If started in air, drops to the ground
+    val shape : AOEShape = AOEShape.CYLINDER
     // TODO: Explosion
     // TODO: Sticky
     // TODO: selfEffect
@@ -61,5 +63,10 @@ class AreaOfEffectMove(
         return instance
     }
 
-
+    companion object {
+        enum class AOEShape(val shape: Int) {
+            SPHERE(1),
+            CYLINDER(2),
+        }
+    }
 }
