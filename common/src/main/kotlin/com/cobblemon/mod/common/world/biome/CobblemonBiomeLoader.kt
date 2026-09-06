@@ -43,7 +43,7 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 		loadedBiomes = result.toMap()
 
 		observable.emit(this)
-		Cobblemon.LOGGER.info("Loaded {} cobblemon biomes.", result.size)
+		Cobblemon.LOGGER.info("MEALAM Loaded {} cobblemon biomes.", result.size)
 
 		return result
 	}
@@ -63,5 +63,5 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	@JvmStatic
 	fun getLoadedBiome(location: ResourceLocation): CobblemonBiome =
 		loadedBiomes[location]
-			?: error("Unknown location: $location")
+			?: error("MEALAM Unknown location: $location")
 }

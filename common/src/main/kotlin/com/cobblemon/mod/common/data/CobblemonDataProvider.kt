@@ -51,6 +51,7 @@ import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.ifClient
 import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.world.biome.CobblemonBiomeLoader
 import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -83,6 +84,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(PokeBalls, reloadable = false)
         this.register(PropertiesCompletionProvider, reloadable = false)
         this.register(CobblemonPartyPools, reloadable = false)
+		this.register(CobblemonBiomeLoader, reloadable = true)
         this.register(CobblemonPartyCompositions, reloadable = false)
         this.register(SpawnDetailPresets, reloadable = true)
         this.register(CobblemonSpawnRules, reloadable = true)

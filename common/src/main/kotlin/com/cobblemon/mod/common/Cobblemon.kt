@@ -137,6 +137,7 @@ import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
 import net.minecraft.client.Minecraft
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
+import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -182,7 +183,10 @@ object Cobblemon {
     var seasonResolver: SeasonResolver = TagSeasonResolver
     var wallpapers = mutableMapOf<UUID, Set<ResourceLocation>>()
 
-    val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
+	@JvmField
+	var registryAccess: RegistryAccess.Frozen = RegistryAccess.EMPTY
+
+	val serverPlayerStructs = mutableMapOf<UUID, ObjectValue<Player>>()
 
     val statistics: CobblemonStats = CobblemonStats
 
