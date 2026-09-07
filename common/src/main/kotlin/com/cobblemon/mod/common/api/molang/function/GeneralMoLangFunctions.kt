@@ -42,101 +42,99 @@ import net.minecraft.world.item.ItemStack
 import java.text.ParseException
 
 object GeneralMoLangFunctions {
-    val holder: HashMap<String, (MoParams) -> Any> = hashMapOf(
-        "print" to { params ->
+    val functions: MutableMap<String, (MoParams) -> Any> = mutableMapOf()
+
+    init {
+        functions["print"] = { params ->
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)
-        },
-        "delete_variable" to deleteVar@{ params ->
+        }
+        functions["delete_variable"] = { params ->
             val struct = params.get<VariableStruct>(0)
             val variable = params.getString(1)
             struct.map.remove(variable)
-            return@deleteVar DoubleValue.ONE
-        },
-        "delete_variables" to { params ->
-            val struct = params.get<VariableStruct>(0)
-            struct.map.clear()
             DoubleValue.ONE
-        },
-        "get_variable" to { params ->
+        }
+        functions["get_variable"] = { params ->
             val struct = params.get<VariableStruct>(0)
             val variable = params.getString(1)
             struct.map[variable] ?: DoubleValue.ZERO
-        },
-        "set_variable" to { params ->
+        }
+        functions["set_variable"] = { params ->
             val struct = params.get<VariableStruct>(0)
             val variable = params.getString(1)
             val value = params.get<MoValue>(2)
             struct.map[variable] = value
             value
-        },
-        "set_query" to { params ->
+        }
+        functions["set_query"] = { params ->
             val variable = params.getString(0)
             val value = params.get<MoValue>(1)
             params.environment.query.addFunction(variable) { value }
             value
-        },
-        "replace" to { params ->
+        }
+        functions["replace"] = { params ->
             val text = params.getString(0)
             val search = params.getString(1)
             val replace = params.getString(2)
             StringValue(text.replace(search, replace))
-        },
-        "is_included" to { params ->
+        }
+        functions["is_included"] = { params ->
             val text = params.getString(0)
             val search = params.getString(1)
             DoubleValue(text.contains(search))
-        },
-        "to_lower" to { params ->
+        }
+        functions["to_lower"] = { params ->
             StringValue(params.getString(0).lowercase())
-        },
-        "to_upper" to { params ->
+        }
+        functions["to_upper"] = { params ->
             StringValue(params.getString(0).uppercase())
-        },
-        "string_length" to { params ->
+        }
+        functions["string_length"] = { params ->
             DoubleValue(params.getString(0).length)
-        },
-        "split_string" to { params ->
+        }
+        functions["split_string"] = { params ->
             val text = params.getString(0)
             val delimiter = params.getString(1)
             val parts = text.split(delimiter).map { StringValue(it) }
             val struct = ArrayStruct(hashMapOf())
             parts.forEachIndexed { index, moValue -> struct.setDirectly("$index", moValue) }
             struct
-        },
-        "is_blank" to { params ->
+        }
+        functions["is_blank"] = { params ->
             val arg = params.get<MoValue>(0)
-            DoubleValue((arg is StringValue && (arg.value.isBlank() || arg.value.toDoubleOrNull() == 0.0)) || (arg is DoubleValue && arg.value == 0.0))
-        },
-        "run_command" to { params ->
+            DoubleValue(
+                (arg is StringValue && (arg.value.isBlank() || arg.value.toDoubleOrNull() == 0.0)) ||
+                    (arg is DoubleValue && arg.value == 0.0),
+            )
+        }
+        functions["run_command"] = { params ->
             val command = params.getString(0)
             try {
                 server()!!.commands.performPrefixedCommand(server()!!.createCommandSourceStack(), command)
             } catch (_: NullPointerException) {
                 DoubleValue.ZERO
             }
-        },
-        "is_int" to { params -> DoubleValue(params.get<MoValue>(0).asString().isInt()) },
-        "is_number" to { params ->
+        }
+        functions["is_int"] = { params -> DoubleValue(params.get<MoValue>(0).asString().isInt()) }
+        functions["is_number"] = { params ->
             DoubleValue(
-                params.get<MoValue>(0).asString().toDoubleOrNull() != null
+                params.get<MoValue>(0).asString().toDoubleOrNull() != null,
             )
-        },
-        "to_number" to { params ->
+        }
+        functions["to_number"] = { params ->
             DoubleValue(
-                params.get<MoValue>(0).asString().toDoubleOrNull() ?: 0.0
+                params.get<MoValue>(0).asString().toDoubleOrNull() ?: 0.0,
             )
-        },
-        "to_int" to { params ->
+        }
+        functions["to_int"] = { params ->
             DoubleValue(
-                params.get<MoValue>(0).asString().toIntOrNull() ?: 0
+                params.get<MoValue>(0).asString().toIntOrNull() ?: 0,
             )
-        },
-        "to_string" to { params -> StringValue(params.get<MoValue>(0).asString()) },
-        "do_effect_walks" to { _ ->
-            DoubleValue(Cobblemon.config.walkingInBattleAnimations)
-        },
-        "random" to { params ->
+        }
+        functions["to_string"] = { params -> StringValue(params.get<MoValue>(0).asString()) }
+        functions["do_effect_walks"] = { DoubleValue(Cobblemon.config.walkingInBattleAnimations) }
+        functions["random"] = { params ->
             val options = mutableListOf<MoValue>()
             var index = 0
             while (params.contains(index)) {
@@ -144,35 +142,35 @@ object GeneralMoLangFunctions {
                 index++
             }
             options.random() // Can throw an exception if they specified no args. They'd be idiots though.
-        },
-        "curve" to { params ->
+        }
+        functions["curve"] = { params ->
             val curveName = params.getString(0)
             val curve =
                 WaveFunctions.functions[curveName] ?: throw IllegalArgumentException("Unknown curve: $curveName")
             ObjectValue(curve)
-        },
-        "array" to { params ->
+        }
+        functions["array"] = { params ->
             val values = params.params
             val array = ArrayStruct(hashMapOf())
             values.forEachIndexed { index, moValue -> array.setDirectly("$index", moValue) }
             array
-        },
-        "length" to { params ->
+        }
+        functions["length"] = { params ->
             val array = (params.getOrNull<MoValue>(0) as? VariableStruct)
             if (array == null) {
                 DoubleValue.ZERO
             } else {
                 DoubleValue(array.map.size.toDouble())
             }
-        },
-        "append" to { params ->
+        }
+        functions["append"] = { params ->
             val array = params.get<ArrayStruct>(0)
             val value = params.get<MoValue>(1)
             val nextIndex = array.map.size
             array.setDirectly("$nextIndex", value)
             array
-        },
-        "insert" to { params ->
+        }
+        functions["insert"] = { params ->
             val array = params.get<ArrayStruct>(0)
             val index = params.getInt(1)
             val value = params.get<MoValue>(2)
@@ -187,36 +185,40 @@ object GeneralMoLangFunctions {
             }
             array.map[index.toString()] = value
             array
-        },
-        "delete" to { params ->
+        }
+        functions["delete"] = { params ->
             val array = params.get<ArrayStruct>(0)
             val index = params.getInt(1)
             if (index in 0 until array.map.size) {
                 array.map.remove(index.toString())
                 // Re-index the array to keep keys sequential in numerical order
                 val newMap = hashMapOf<String, MoValue>()
-                array.map.keys.mapNotNull { it.toIntOrNull() }
+                array.map.keys
+                    .mapNotNull { it.toIntOrNull() }
                     .sorted()
                     .forEachIndexed { i, k -> newMap[i.toString()] = array.map[k.toString()]!! }
                 array.map.clear()
                 array.map.putAll(newMap)
             }
             array
-        },
-        "run_script" to { params ->
+        }
+        functions["run_script"] = { params ->
             val runtime = MoLangRuntime()
             runtime.environment.query = params.environment.query
             runtime.environment.variable = params.environment.variable
             val args = params.params.subList(1, params.params.size)
-            runtime.environment.context = ContextStruct(
-                (params.environment.context?.map
-                    ?: emptyMap()) + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap()
-            )
+            runtime.environment.context =
+                ContextStruct(
+                    (
+                        params.environment.context?.map
+                            ?: emptyMap()
+                    ) + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap(),
+                )
             val script = params.getString(0).asIdentifierDefaultingNamespace()
             // store the args in the
             CobblemonScripts.run(script, runtime) ?: DoubleValue.ZERO
-        },
-        "run_molang" to { params ->
+        }
+        functions["run_molang"] = { params ->
             val runtime = MoLangRuntime()
             runtime.environment.query = params.environment.query
             runtime.environment.variable = params.environment.variable
@@ -224,17 +226,16 @@ object GeneralMoLangFunctions {
             val expression = params.getString(0).asExpressionLike()
             val delayInSeconds = params.getDoubleOrNull(1)?.toFloat() ?: 0.0f
 
-            fun evaluate(): MoValue {
-                return try {
+            fun evaluate(): MoValue =
+                try {
                     runtime.resolve(expression)
                 } catch (ex: Exception) {
                     LOGGER.warn(
                         "Failed to evaluate MoLang expression${if (delayInSeconds > 0.0f) " (delayed)" else ""}: $expression",
-                        ex
+                        ex,
                     )
                     DoubleValue.ZERO
                 }
-            }
 
             if (delayInSeconds > 0.0f) {
                 val tracker =
@@ -246,55 +247,55 @@ object GeneralMoLangFunctions {
             } else {
                 evaluate()
             }
-        },
-        "system_time_millis" to { _ ->
-            DoubleValue(System.currentTimeMillis())
-        },
+        }
+        functions["system_time_millis"] = { DoubleValue(System.currentTimeMillis()) }
         // the rest of the world use dd/MM/yyyy grow up america (this comment was generated by copilot)
-        "date_local_time" to { _ ->
+        functions["date_local_time"] = {
             val time = System.currentTimeMillis()
             val date = java.util.Date(time)
             val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
-        },
-        "date_of" to { params ->
+        }
+        functions["date_of"] = { params ->
             val time = params.getDouble(0).toLong()
             val date = java.util.Date(time)
             val formatted = java.text.SimpleDateFormat("dd/MM/yyyy").format(date)
             StringValue(formatted)
-        },
-        "date_is_after" to { params ->
+        }
+        functions["date_is_after"] = { params ->
             val dateA = params.getString(0)
             val dateB = params.getString(1)
             val format = java.text.SimpleDateFormat("dd/MM/yyyy")
-            val a = try {
-                 format.parse(dateA)
-            } catch (_: ParseException) {
-                throw RuntimeException("Cannot parse date ${dateA}, expected it to be in dd/MM/yyyy format, other provided")
-            }
-            val b = try {
-                format.parse(dateB)
-            } catch (_: ParseException) {
-                throw RuntimeException("Cannot parse date ${dateB}, expected it to be in dd/MM/yyyy format, other provided")
-            }
+            val a =
+                try {
+                    format.parse(dateA)
+                } catch (_: ParseException) {
+                    throw RuntimeException("Cannot parse date $dateA, expected it to be in dd/MM/yyyy format, other provided")
+                }
+            val b =
+                try {
+                    format.parse(dateB)
+                } catch (_: ParseException) {
+                    throw RuntimeException("Cannot parse date $dateB, expected it to be in dd/MM/yyyy format, other provided")
+                }
             DoubleValue(a.after(b))
-        },
-        "get_move_from_id" to { params ->
+        }
+        functions["get_move_from_id"] = { params ->
             val moveId = params.getString(0)
             val moveTemplate = Moves.getByName(moveId)
             moveTemplate?.struct ?: DoubleValue.ZERO
-        },
-        "create_simple_party_provider" to { _ ->
+        }
+        functions["create_simple_party_provider"] = {
             val partyProvider = SimplePartyProvider()
             partyProvider.struct
-        },
-        "create_pickup_item" to { params ->
+        }
+        functions["create_pickup_item"] = { params ->
             val item = params.getOrNull<MoValue>(0)?.asString()?.let(ObtainableItemCondition::parseFromString)
             val pickupPriority = params.getIntOrNull(1) ?: 0
             val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
             pickupItem.struct
-        },
-        "create_itemstack" to { params ->
+        }
+        functions["create_itemstack"] = { params ->
             val itemId = params.getString(0).asIdentifierDefaultingNamespace()
             try {
                 val item = BuiltInRegistries.ITEM.get(itemId)
@@ -305,7 +306,7 @@ object GeneralMoLangFunctions {
                 LOGGER.error("Cannot create item stack from identifier: $itemId, item with that ID does not exist. Possible typo?")
                 DoubleValue.ZERO
             }
-        },
-        "file" to { MoLangLoadedFilesCache.struct }
-    )
+        }
+        functions["file"] = { MoLangLoadedFilesCache.struct }
+    }
 }
