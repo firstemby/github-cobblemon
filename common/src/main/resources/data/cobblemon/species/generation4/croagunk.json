@@ -59,8 +59,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "croagunk alpha",
+          "tier": 1
+        },
         {
           "pokemon": "toxicroak",
           "tier": 1

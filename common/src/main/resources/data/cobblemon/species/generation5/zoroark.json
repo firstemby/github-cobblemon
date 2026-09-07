@@ -100,7 +100,6 @@
     "tm:brickbreak",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:confuseray",
     "tm:covet",
     "tm:crunch",
@@ -385,7 +384,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "zoroark alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

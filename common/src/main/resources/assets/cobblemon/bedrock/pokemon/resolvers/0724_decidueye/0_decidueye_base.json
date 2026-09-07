@@ -10,15 +10,11 @@
       "layers": []
     },
     {
-      "aspects": [
-        "shiny"
-      ],
+      "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0724_decidueye/decidueye_shiny.png"
     },
     {
-      "aspects": [
-        "alpha_eyes"
-      ],
+      "aspects": ["alpha_eyes"],
       "layers": [
         {
           "name": "alpha_eyes",

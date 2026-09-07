@@ -59,8 +59,12 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "fraxure alpha",
+          "tier": 1
+        },
         {
           "pokemon": "haxorus",
           "tier": 1

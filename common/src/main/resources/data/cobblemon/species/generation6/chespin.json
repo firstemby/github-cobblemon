@@ -60,7 +60,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "chespin",
@@ -71,8 +71,12 @@
           "tier": 2
         },
         {
-          "pokemon": "chesnaught",
+          "pokemon": "chesnaught mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "chesnaught mega",
+          "tier": 4
         }
       ]
     },

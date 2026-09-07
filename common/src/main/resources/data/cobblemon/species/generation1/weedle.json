@@ -66,7 +66,17 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "weedle alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "beedrill alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

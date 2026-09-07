@@ -56,7 +56,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "nidorina",
@@ -77,6 +77,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.22
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -128,7 +131,6 @@
     "tm:beatup",
     "tm:blizzard",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:charm",
     "tm:crunch",
     "tm:cut",

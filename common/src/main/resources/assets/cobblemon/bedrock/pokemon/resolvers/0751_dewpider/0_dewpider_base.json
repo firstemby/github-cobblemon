@@ -16,7 +16,8 @@
         {
           "name": "translucent",
           "texture": "cobblemon:textures/pokemon/0751_dewpider/dewpider_translucent.png",
-          "translucent": true
+          "translucent": true,
+          "translucent_cull": true
         }
       ]
     },

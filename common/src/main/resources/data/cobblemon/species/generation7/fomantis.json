@@ -54,19 +54,22 @@
       "light": "0-4",
       "willSleepOnBed": true,
       "depth": "comatose",
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
+      "drowsyChance": 0.0033,
+      "rouseChance": 0.0042,
+      "times": [
+        "day"
+      ]
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "fomantis",
+          "pokemon": "lurantis alpha",
           "tier": 1
         },
         {
-          "pokemon": "lurantis",
-          "tier": 2
+          "pokemon": "fomantis",
+          "tier": 1
         }
       ]
     },

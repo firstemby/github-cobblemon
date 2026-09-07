@@ -13,13 +13,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "16-32",
-            "weight": 0.712,
-            "weightMultiplier": {
-                "multiplier": 5.0,
-                "condition": {
-                    "isThundering": true
+            "weight": 21.82,
+            "weightMultipliers": [
+                {
+                    "multiplier": 5.0,
+                    "condition": {
+                        "isThundering": true
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -43,13 +51,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "16-32",
-            "weight": 0.304,
-            "weightMultiplier": {
-                "multiplier": 5.0,
-                "condition": {
-                    "isThundering": true
+            "weight": 7.27,
+            "weightMultipliers": [
+                {
+                    "multiplier": 5.0,
+                    "condition": {
+                        "isThundering": true
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

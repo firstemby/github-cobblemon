@@ -64,7 +64,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "luvdisc",
@@ -128,7 +128,6 @@
     "tm:blizzard",
     "tm:bounce",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:dive",
     "tm:drainingkiss",

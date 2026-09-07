@@ -59,7 +59,13 @@
       }
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "bellibolt alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendOwner": true

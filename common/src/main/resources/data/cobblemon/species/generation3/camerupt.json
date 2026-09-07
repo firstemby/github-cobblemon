@@ -92,7 +92,7 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "camerupt mega=false",
@@ -313,7 +313,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "camerupt mega",

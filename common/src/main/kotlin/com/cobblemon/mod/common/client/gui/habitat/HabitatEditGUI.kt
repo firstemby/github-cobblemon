@@ -115,35 +115,19 @@ class HabitatEditGUI(
         addOptionWidget(mimicInput)
         y += spacing
 
-        labels.add(lang("ui.edit.habitat.phase_number") to (10 to y))
-        y += 12
-        val phasesInput = EditBox(font, 10, y, buttonWidth, 20, "Phases".text())
-        phasesInput.value = habitatSettingsDTO.numberOfPhases.toString()
-        phasesInput.setResponder { value ->
-            val phases = value.toIntOrNull()
-            val valid = phases != null && phases > 0
-            if (valid) {
-                habitatSettingsDTO.numberOfPhases = phases
-            }
-            phasesInput.setTextColor(if (valid) validTextColor else invalidTextColor)
-            setFieldValidity("phases", valid, "ui.edit.habitat.validation.phases")
+        // Phase setting only visible if there's more than one phase
+        val phaseCount = habitatSettingsDTO.pool.toHabitatPool()?.getPhaseCount() ?: 1
+        if (phaseCount > 1) {
+            phaseOrderButton = addOptionWidget(
+                Button.builder(getPhaseOrderText()) {
+                    val orders = HabitatPhaseOrder.entries
+                    val currentIndex = orders.indexOf(habitatSettingsDTO.phaseOrder)
+                    habitatSettingsDTO.phaseOrder = orders[(currentIndex + 1) % orders.size]
+                    refresh()
+                }.bounds(10, y, buttonWidth, 20).build()
+            )
+            y += spacing
         }
-        val initialPhases = phasesInput.value.toIntOrNull()
-        val initialPhasesValid = initialPhases != null && initialPhases > 0
-        phasesInput.setTextColor(if (initialPhasesValid) validTextColor else invalidTextColor)
-        setFieldValidity("phases", initialPhasesValid, "ui.edit.habitat.validation.phases")
-        addOptionWidget(phasesInput)
-        y += spacing
-
-        phaseOrderButton = addOptionWidget(
-            Button.builder(getPhaseOrderText()) {
-                val orders = HabitatPhaseOrder.entries
-                val currentIndex = orders.indexOf(habitatSettingsDTO.phaseOrder)
-                habitatSettingsDTO.phaseOrder = orders[(currentIndex + 1) % orders.size]
-                refresh()
-            }.bounds(10, y, buttonWidth, 20).build()
-        )
-        y += spacing
 
         labels.add(lang("ui.edit.habitat.level_range") to (10 to y))
         y += 12
@@ -390,7 +374,10 @@ class HabitatEditGUI(
     }
 
     fun refresh() {
-        phaseOrderButton.message = getPhaseOrderText()
+        val phaseCount = habitatSettingsDTO.pool.toHabitatPool()?.getPhaseCount() ?: 1
+        if (phaseCount > 1 && ::phaseOrderButton.isInitialized) {
+            phaseOrderButton.message = getPhaseOrderText()
+        }
         spawnModeButton.message = getSpawnModeText()
         poolSelectorButton.message = getPoolText()
         viewPoolButton.message = getViewPoolText()
@@ -439,6 +426,7 @@ class HabitatEditGUI(
                 }
                 habitatSettingsDTO.pool = newCustomPool
             }
+            rebuildWidgets()
             return
         }
 
@@ -451,6 +439,7 @@ class HabitatEditGUI(
         }
 
         habitatSettingsDTO.pool = selectedPool
+        rebuildWidgets()
     }
 
     private fun validateLevelRangeInputs() {

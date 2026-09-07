@@ -29,6 +29,8 @@ object SetTMMachineContainerDataPacketHandler : ServerNetworkPacketHandler<SetTM
             menu.containerData?.set(TMMachineBlockEntity.BURN_PROGRESS_INDEX, 0)
         }
 
+        menu.tmMachineEntity?.setChanged()
+
         menu.broadcastChanges()
     }
 }

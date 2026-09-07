@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
@@ -39,13 +40,13 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
     private val leftMargin = 1f
     private val rightMargin = 1f
     private val topMargin = 1f
-    private val bottomMargin = 1f
     private val interRowSpacing = 0f
     private val tmOverlayDepthOffset = -0.0002f
     private val slotBrightnessMultiplier = 0.65f
 
     private val tmBaseTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_base.png")
     private val tmOverlayTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_overlay.png")
+    private val musicDiscUnknownTexture = cobblemonResource("textures/block/disc_shelf/music_disc_unknown.png")
 
     override fun render(
         entity: DiscShelfBlockEntity,
@@ -77,7 +78,6 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
         val slotWidth = slotWidthPixels / textureSize
         val slotHeight = slotHeightPixels / textureSize
         val verticalSpacing = (slotHeightPixels + interRowSpacing) / textureSize
-        val totalHeight = slotHeight * 7 + interRowSpacing * 6 / textureSize
         val startY = topMargin / textureSize
 
         for ((index, item) in entity.items.withIndex()) {
@@ -188,6 +188,13 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
 
     private fun getItemTexture(itemStack: ItemStack): ResourceLocation {
         val id = BuiltInRegistries.ITEM.getKey(itemStack.item)
-        return cobblemonResource("textures/block/disc_shelf/${id.path}.png")
+        val resource = cobblemonResource("textures/block/disc_shelf/${id.path}.png")
+
+        val resourceManager = Minecraft.getInstance().resourceManager
+        if (resourceManager.getResource(resource).isEmpty) {
+            return musicDiscUnknownTexture
+        }
+
+        return resource
     }
 }

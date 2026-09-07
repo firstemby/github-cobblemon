@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 6.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -25,7 +25,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_grassland"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -38,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 9.9,
+            "weight": 99.902,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -50,7 +51,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "minecraft:mushroom_fields"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -63,7 +65,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 0.1,
+            "weight": 0.098,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -75,7 +77,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "minecraft:mushroom_fields"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

@@ -14,7 +14,6 @@ import com.cobblemon.mod.common.api.multiblock.MultiblockEntity
 import com.cobblemon.mod.common.api.multiblock.MultiblockStructure
 import com.cobblemon.mod.common.api.multiblock.builder.MultiblockStructureBuilder
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.multiblock.FossilMultiblockStructure
@@ -307,8 +306,7 @@ open class FossilMultiblockEntity(
     private fun unlockTmForPlayer(player: ServerPlayer, stack: ItemStack) {
         if (stack.item !is TechnicalMachineItem) return
         val move = TMMoveComponent.getTMMove(stack) ?: return
-        val tmId = TechnicalMachines.moveToTM[move]?.id ?: return
-        player.tmList()?.learn(listOf(tmId))
+        player.tmList().syncTMFromMove(move)
     }
 
     private fun updateMonitorScreen() {

@@ -72,8 +72,12 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
+        {
+          "pokemon": "combee alpha",
+          "tier": 1
+        },
         {
           "pokemon": "vespiquen",
           "tier": 1

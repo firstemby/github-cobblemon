@@ -61,8 +61,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "treecko alpha",
+          "tier": 1
+        },
         {
           "pokemon": "grovyle",
           "tier": 1
@@ -163,7 +167,6 @@
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:poweruppunch",
     "tm:protect",

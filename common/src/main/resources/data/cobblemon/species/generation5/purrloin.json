@@ -75,6 +75,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "purrloin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "liepard alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -116,7 +129,6 @@
     "tm:aerialace",
     "tm:assurance",
     "tm:batonpass",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:cut",

@@ -70,8 +70,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "porygonz alpha",
+          "tier": 1
+        },
         {
           "pokemon": "porygon2",
           "tier": 1

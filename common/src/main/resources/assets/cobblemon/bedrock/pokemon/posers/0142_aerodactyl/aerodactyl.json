@@ -24,7 +24,8 @@
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'battle_idle')"
       ],
       "quirks": [
@@ -38,7 +39,8 @@
       "poseTypes": ["HOVER"],
       "isBattle": true,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'battle_air_idle')"
       ],
       "quirks": [
@@ -53,7 +55,8 @@
       "condition": "q.has_entity ? !q.in_air : 1.0",
       "isBattle": false,
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_idle')",
         {
           "condition": "q.is_ridden",
@@ -77,7 +80,8 @@
       "poseTypes": ["WALK", "SWIM"],
       "condition": "q.has_entity ? !q.in_air && !q.is_sprinting : 1.0",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_walk')",
         {
           "condition": "q.is_ridden",
@@ -90,7 +94,8 @@
       "poseTypes": ["WALK", "SWIM"],
       "condition": "q.has_entity ? !q.in_air && q.is_sprinting : 0.0",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_run')",
         {
           "condition": "q.is_ridden",
@@ -106,7 +111,8 @@
       "isBattle": false,
       "condition": "!q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_idle')"
       ],
       "quirks": [
@@ -118,7 +124,8 @@
       "isBattle": false,
       "condition": "q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_idle')"
       ],
       "quirks": [
@@ -131,7 +138,8 @@
       "isBattle": false,
       "condition": "!q.is_gliding && !q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_fly')"
       ],
       "quirks": [
@@ -143,7 +151,8 @@
       "isBattle": false,
       "condition": "!q.is_gliding && q.is_ridden",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_fly')",
         "q.bedrock('aerodactyl', 'ride_air_fly')"
       ],
@@ -157,7 +166,8 @@
       "isBattle": false,
       "condition": "q.is_gliding",
       "animations": [
-        "q.look('head_ai')",
+        "q.look('neck', 1, 1, 25, -20, 20, -20)",
+        "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_glide')",
         "q.bedrock('aerodactyl', 'air_dive')",
         {

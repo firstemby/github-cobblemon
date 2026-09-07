@@ -56,19 +56,19 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "rolycoly",
+          "pokemon": "rolycoly alpha",
           "tier": 1
         },
         {
-          "pokemon": "carkol",
-          "tier": 2
+          "pokemon": "carkol alpha",
+          "tier": 1
         },
         {
-          "pokemon": "coalossal",
-          "tier": 3
+          "pokemon": "coalossal alpha",
+          "tier": 1
         }
       ]
     },

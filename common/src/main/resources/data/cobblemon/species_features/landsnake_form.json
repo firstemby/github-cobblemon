@@ -1,13 +1,13 @@
 {
-  "type": "choice",
+  "type": "weighted_choice",
   "keys": [
     "landsnake_form"
   ],
-  "default": "two-segment",
-  "choices": [
-    "two-segment",
-    "three-segment"
-  ],
+  "default": "random",
+  "choices": {
+    "two-segment": 99,
+    "three-segment": 1
+  },
   "isAspect": true,
   "aspectFormat": "{{choice}}-form"
 }

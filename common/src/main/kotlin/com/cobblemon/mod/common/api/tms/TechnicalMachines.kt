@@ -12,8 +12,9 @@ import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.adapters.MoveTemplateAdapter
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
-import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.net.messages.client.tms.TechnicalMachineRegistrySyncPacket
 import com.cobblemon.mod.common.util.adapters.TMObtainMethodAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -70,5 +71,7 @@ object TechnicalMachines : JsonDataRegistry<TechnicalMachine> {
 
     fun getByResourceLocation(resourceLocation: ResourceLocation) = tmMap[resourceLocation]
     fun getAllResourceLocations() = tmMap.keys.toSet()
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(player: ServerPlayer) {
+        TechnicalMachineRegistrySyncPacket(tmMap.values.toList()).sendToPlayer(player)
+    }
 }

@@ -45,7 +45,6 @@ class HabitatSpawnEditorGUI(
     private val actionButtonBottomMargin = 10
     private val validTextColor = 0xFFFFFF
     private val invalidTextColor = 0xFF5555
-    private val moonPhaseRange = 0..7
     private lateinit var positionTypeButton: Button
     private lateinit var bucketButton: Button
     private lateinit var timeOfDayButton: Button
@@ -185,7 +184,7 @@ class HabitatSpawnEditorGUI(
                 phasesInput.setTextColor(validTextColor)
                 setFieldValidity("phases_list", true, "ui.edit.habitat.validation.phases_list")
             } else {
-                val parsed = parseMoonPhases(value)
+                val parsed = parsePhases(value)
                 val valid = parsed != null
                 if (valid) {
                     spawn.phases = parsed
@@ -194,7 +193,7 @@ class HabitatSpawnEditorGUI(
                 setFieldValidity("phases_list", valid, "ui.edit.habitat.validation.phases_list")
             }
         }
-        val initialPhasesValid = phasesInput.value.isBlank() || parseMoonPhases(phasesInput.value) != null
+        val initialPhasesValid = phasesInput.value.isBlank() || parsePhases(phasesInput.value) != null
         phasesInput.setTextColor(if (initialPhasesValid) validTextColor else invalidTextColor)
         setFieldValidity("phases_list", initialPhasesValid, "ui.edit.habitat.validation.phases_list")
         addOptionWidget(phasesInput)
@@ -332,7 +331,7 @@ class HabitatSpawnEditorGUI(
         return runCatching { PokemonSpecies.getByName(lowered) }.getOrNull()
     }
 
-    private fun parseMoonPhases(raw: String): IntRanges? {
+    private fun parsePhases(raw: String): IntRanges? {
         val ranges = mutableListOf<IntRange>()
         val tokens = raw.split(",").map(String::trim)
         if (tokens.isEmpty() || tokens.any { it.isEmpty() }) {
@@ -344,13 +343,12 @@ class HabitatSpawnEditorGUI(
             val range = when (parts.size) {
                 1 -> {
                     val value = parts[0].toIntOrNull() ?: return null
-                    if (value !in moonPhaseRange) return null
                     value..value
                 }
                 2 -> {
                     val start = parts[0].toIntOrNull() ?: return null
                     val end = parts[1].toIntOrNull() ?: return null
-                    if (start !in moonPhaseRange || end !in moonPhaseRange || start > end) {
+                    if (start > end) {
                         return null
                     }
                     start..end

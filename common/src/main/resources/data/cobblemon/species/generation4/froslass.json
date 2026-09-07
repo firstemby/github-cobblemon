@@ -64,7 +64,17 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "glalie alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "froslass alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [
@@ -137,7 +147,6 @@
     "tm:blizzard",
     "tm:block",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:confuseray",

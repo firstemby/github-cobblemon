@@ -67,11 +67,15 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "sudowoodo",
+          "pokemon": "bonsly",
           "tier": 1
+        },
+        {
+          "pokemon": "sudowoodo",
+          "tier": 2
         }
       ]
     }

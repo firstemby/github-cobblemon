@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "fletchinder",
@@ -151,7 +151,6 @@
     "tm:heatwave",
     "tm:hurricane",
     "tm:incinerate",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:protect",
     "tm:raindance",

@@ -14,7 +14,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-47",
-            "weight": 0.6,
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -26,7 +32,7 @@
             }
         },
         {
-            "id": "xatu-3",
+            "id": "xatu-2",
             "pokemon": "xatu",
             "presets": [
                 "trail_ruins"
@@ -35,7 +41,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-47",
-            "weight": 10.0,
+            "weight": 50.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

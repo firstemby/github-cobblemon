@@ -42,7 +42,7 @@
       "aspects": ["alpha_eyes", "hisuian"],
       "layers": [
         {
-          "name": "alpha_eyes",
+          "name": "emissive",
           "texture": "cobblemon:textures/pokemon/0571_zoroark/zoroark_hisuian_alpha.png",
           "emissive": true
         }

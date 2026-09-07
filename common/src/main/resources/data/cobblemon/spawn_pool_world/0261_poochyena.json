@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-22",
-            "weight": 5.4,
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -21,7 +21,8 @@
                     "#cobblemon:is_badlands",
                     "#cobblemon:is_savanna"
                 ],
-                "timeRange": "night"
+                "timeRange": "night",
+                "isPokeSnack": true
             }
         },
         {
@@ -35,13 +36,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-22",
-            "weight": 90.0,
+            "weight": 540.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

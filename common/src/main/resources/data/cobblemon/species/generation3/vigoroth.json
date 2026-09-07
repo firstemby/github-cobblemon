@@ -57,10 +57,14 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "vigoroth",
+          "tier": 1
+        },
+        {
+          "pokemon": "slaking alpha",
           "tier": 1
         }
       ]

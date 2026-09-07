@@ -64,8 +64,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "bronzor alpha",
+          "tier": 1
+        },
         {
           "pokemon": "bronzong",
           "tier": 1

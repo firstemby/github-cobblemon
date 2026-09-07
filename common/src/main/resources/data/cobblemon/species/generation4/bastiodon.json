@@ -78,7 +78,7 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bastiodon",
@@ -169,7 +169,6 @@
     "tm:mudslap",
     "tm:outrage",
     "tm:powergem",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:reflect",
@@ -224,7 +223,6 @@
     "tutor:meteorbeam",
     "tutor:mudslap",
     "tutor:outrage",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -244,6 +242,7 @@
     "legacy:frustration",
     "legacy:hiddenpower",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

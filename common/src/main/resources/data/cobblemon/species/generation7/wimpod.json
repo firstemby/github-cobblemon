@@ -67,15 +67,19 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "wimpod",
           "tier": 1
         },
         {
-          "pokemon": "golisopod",
+          "pokemon": "golisopod mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "golisopod mega",
+          "tier": 3
         }
       ]
     }

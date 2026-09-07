@@ -70,6 +70,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ferroseed alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "ferrothorn alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -161,6 +161,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "kartana",
+          "tier": 1
+        }
+      ]
     }
   }
 }

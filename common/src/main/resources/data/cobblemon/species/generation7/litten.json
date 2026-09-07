@@ -76,10 +76,14 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "litten",
+          "pokemon": "litten alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "incineroar alpha",
           "tier": 1
         },
         {

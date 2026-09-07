@@ -12,6 +12,19 @@
     {
       "aspects": ["shiny", "hisuian"],
       "texture": "cobblemon:textures/pokemon/0211_qwilfish/qwilfish_hisuian_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes",
+        "hisuian"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0211_qwilfish/qwilfish_hisuian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

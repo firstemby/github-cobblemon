@@ -67,7 +67,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "skiploom",
@@ -95,7 +95,7 @@
     "amount": 2,
     "entries": [
       {
-        "item": "minecraft:sunflower"
+        "item": "minecraft:dandelion"
       },
       {
         "item": "cobblemon:yache_berry",

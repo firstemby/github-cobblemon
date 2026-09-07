@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "venonat alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "venomoth alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

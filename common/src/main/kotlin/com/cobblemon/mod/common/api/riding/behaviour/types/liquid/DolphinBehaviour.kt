@@ -147,7 +147,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
         val stamDrainRate = (1.0f / boostTime).toFloat()
 
         val newStam = if (state.boosting.get()) max(0.0f,stam - stamDrainRate)
-            else (stam + stamDrainRate).coerceIn(0F, 1F)
+            else (stam + stamDrainRate * 2).coerceIn(0F, 1F)
 
         state.stamina.set(newStam)
     }

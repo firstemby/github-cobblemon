@@ -11,9 +11,9 @@
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
-            "bucket": "common",
+            "bucket": "uncommon",
             "level": "26-48",
-            "weight": 0.2,
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -26,7 +26,8 @@
                 "biomes": [
                     "#cobblemon:is_grassland",
                     "#cobblemon:is_hills"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

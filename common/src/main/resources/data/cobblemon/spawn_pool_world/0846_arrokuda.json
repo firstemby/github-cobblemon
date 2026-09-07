@@ -13,12 +13,18 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "3-28",
-            "weight": 5.4,
+            "weight": 9.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_ocean"
                 ]
             },
             "anticondition": {
@@ -34,7 +40,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "3-28",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -47,8 +53,8 @@
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_ocean"
                 ]
             },
             "anticondition": {
@@ -67,14 +73,20 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "3-28",
-            "weight": 5.4,
+            "weight": 9.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_ocean"
                 ]
             },
             "anticondition": {
@@ -90,7 +102,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "3-28",
-            "weight": 9.0,
+            "weight": 90.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -105,8 +117,8 @@
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_swamp"
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_ocean"
                 ]
             },
             "anticondition": {

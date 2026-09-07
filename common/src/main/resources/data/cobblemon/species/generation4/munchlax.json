@@ -67,6 +67,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "munchlax alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "snorlax alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -149,7 +162,6 @@
     "tm:megapunch",
     "tm:metronome",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:payday",
     "tm:poweruppunch",
     "tm:protect",

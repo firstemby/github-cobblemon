@@ -205,10 +205,10 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
-          "pokemon": "oranguru",
+          "pokemon": "oranguru alpha",
           "tier": 1
         }
       ]

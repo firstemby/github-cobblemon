@@ -43,12 +43,13 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 0.85,
     "fixed": false
   },
+  "standingEyeHeight": 0.5,
   "behaviour": {
     "moving": {
       "walk": {
@@ -70,7 +71,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "lanturn",

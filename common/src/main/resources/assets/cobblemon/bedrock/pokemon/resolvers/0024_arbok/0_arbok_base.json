@@ -218,6 +218,356 @@
     },
     {
       "aspects": [
+        "snake-pattern-angry"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_angry.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-cartoon"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_cartoon.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-clown"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_clown.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-comedic"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_comedic.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-crow"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_crow.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-grin"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_grin.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-ink"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_ink.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-modern"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_modern.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-rain"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_rain.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-scribble"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_scribble.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-silence"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_silence.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-sloth"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_sloth.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-suspicious"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_suspicious.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "snake-pattern-will"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_will.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-angry"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_angry_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-cartoon"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_cartoon_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-clown"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_clown_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-comedic"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_comedic_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-crow"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_crow_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-grin"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_grin_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-ink"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_ink_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-modern"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_modern_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-rain"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_rain_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-scribble"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_scribble_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-silence"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_silence_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-sloth"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_sloth_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-suspicious"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_suspicious_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny",
+        "snake-pattern-will"
+      ],
+      "layers": [
+        {
+          "name": "pattern",
+          "texture": "cobblemon:textures/pokemon/0024_arbok/arbok_pattern_will_shiny.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
+      "aspects": [
         "alpha_eyes"
       ],
       "layers": [

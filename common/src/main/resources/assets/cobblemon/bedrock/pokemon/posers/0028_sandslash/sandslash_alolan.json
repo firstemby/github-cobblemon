@@ -5,7 +5,8 @@
   "profileTranslation": [0.0, 0.55, 0.0],
   "rootBone": "sandslash",
   "animations": {
-    "faint": "q.bedrock_primary('sandslash_alolan', 'faint', q.curve('one'))"
+    "faint": "q.bedrock_primary('sandslash_alolan', 'faint', q.curve('one'))",
+    "cry": "q.bedrock_stateful('sandslash_alolan', 'cry')"
   },
   "poses": {
     "standing": {

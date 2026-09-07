@@ -69,8 +69,12 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "florgato alpha",
+          "tier": 1
+        },
         {
           "pokemon": "meowscarada",
           "tier": 1

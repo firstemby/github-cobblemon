@@ -50,8 +50,12 @@
   },
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "volcarona alpha",
+          "tier": 1
+        },
         {
           "pokemon": "larvesta",
           "tier": 1

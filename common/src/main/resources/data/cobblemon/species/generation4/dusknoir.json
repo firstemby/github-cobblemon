@@ -91,7 +91,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dusknoir alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {
@@ -207,7 +213,6 @@
     "tm:payback",
     "tm:phantomforce",
     "tm:poltergeist",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -258,7 +263,6 @@
     "tutor:ominouswind",
     "tutor:painsplit",
     "tutor:poltergeist",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
@@ -288,6 +292,7 @@
     "legacy:mudslap",
     "legacy:naturalgift",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

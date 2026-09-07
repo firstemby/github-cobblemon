@@ -103,7 +103,6 @@
     "tm:batonpass",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:curse",
@@ -134,7 +133,6 @@
     "tm:mistyterrain",
     "tm:mudslap",
     "tm:mysticalfire",
-    "tm:naturalgift",
     "tm:payday",
     "tm:playrough",
     "tm:protect",
@@ -220,6 +218,43 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vaporeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "jolteon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flareon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "espeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "umbreon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "leafeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "glaceon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sylveon alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

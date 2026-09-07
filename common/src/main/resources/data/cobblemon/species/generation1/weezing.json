@@ -65,7 +65,7 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "weezing",
@@ -299,12 +299,15 @@
         "tm:facade",
         "tm:fireblast",
         "tm:flamethrower",
+        "tm:flash",
         "tm:gigaimpact",
         "tm:gunkshot",
         "tm:gyroball",
         "tm:haze",
         "tm:heatwave",
         "tm:hyperbeam",
+        "tm:incinerate",
+        "tm:infestation",
         "tm:mistyexplosion",
         "tm:mistyterrain",
         "tm:overheat",
@@ -315,10 +318,12 @@
         "tm:psybeam",
         "tm:raindance",
         "tm:rest",
+        "tm:rollout",
         "tm:scaryface",
         "tm:screech",
         "tm:selfdestruct",
         "tm:shadowball",
+        "tm:shockwave",
         "tm:sleeptalk",
         "tm:sludgebomb",
         "tm:sludgewave",
@@ -331,6 +336,7 @@
         "tm:thief",
         "tm:thunder",
         "tm:thunderbolt",
+        "tm:torment",
         "tm:toxic",
         "tm:toxicspikes",
         "tm:venomdrench",
@@ -350,7 +356,9 @@
         "tutor:painsplit",
         "tutor:playrough",
         "tutor:rest",
+        "tutor:rollout",
         "tutor:shadowball",
+        "tutor:shockwave",
         "tutor:sleeptalk",
         "tutor:sludgebomb",
         "tutor:spite",
@@ -377,7 +385,57 @@
       ],
       "preEvolution": "koffing",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "behaviour": {
+        "resting": {
+          "times": [
+            "day"
+          ],
+          "drowsyChance": 0.0033,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "trubbish",
+              "tier": 1
+            },
+            {
+              "pokemon": "grimer alolan=false",
+              "tier": 2
+            },
+            {
+              "pokemon": "garbodor=3",
+              "tier": 1
+            },
+            {
+              "pokemon": "muk alolan=false",
+              "tier": 4
+            },
+            {
+              "pokemon": "weezing",
+              "tier": 5
+            }
+          ]
+        }
+      }
     }
   ],
   "riding": {

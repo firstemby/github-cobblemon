@@ -115,7 +115,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "wailmer",

@@ -59,8 +59,16 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
+        {
+          "pokemon": "vibrava alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flygon alpha",
+          "tier": 1
+        },
         {
           "pokemon": "trapinch",
           "tier": 1

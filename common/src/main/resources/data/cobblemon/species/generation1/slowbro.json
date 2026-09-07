@@ -75,6 +75,19 @@
     "combat": {
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "slowbro alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "slowking alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -393,6 +406,19 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "slowbro alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "slowking alpha",
+              "tier": 1
+            }
+          ]
         }
       },
       "moves": [

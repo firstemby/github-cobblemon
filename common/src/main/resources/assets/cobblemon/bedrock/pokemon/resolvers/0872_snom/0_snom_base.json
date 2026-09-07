@@ -27,6 +27,18 @@
           "translucent_cull": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0872_snom/snom_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

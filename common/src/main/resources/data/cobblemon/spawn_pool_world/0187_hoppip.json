@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-25",
-            "weight": 9.0,
+            "weight": 54.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -27,11 +27,12 @@
                 "biomes": [
                     "#cobblemon:is_plains"
                 ],
-                "isRaining": false
+                "isRaining": false,
+                "isPokeSnack": true
             }
         },
         {
-            "id": "hoppip-3",
+            "id": "hoppip-2",
             "pokemon": "hoppip",
             "presets": [
                 "natural",
@@ -41,7 +42,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-25",
-            "weight": 9.0,
+            "weight": 54.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -49,11 +50,12 @@
                     "aether:skyroot_grove",
                     "aether:skyroot_meadow"
                 ],
-                "isRaining": false
+                "isRaining": false,
+                "isPokeSnack": true
             }
         },
         {
-            "id": "hoppip-4",
+            "id": "hoppip-3",
             "pokemon": "hoppip",
             "presets": [
                 "natural"
@@ -62,11 +64,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-25",
-            "weight": 9.0,
+            "weight": 54.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [

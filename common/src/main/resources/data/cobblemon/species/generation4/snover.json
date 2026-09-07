@@ -118,7 +118,6 @@
     "tm:magicalleaf",
     "tm:megapunch",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -186,7 +185,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "snover",

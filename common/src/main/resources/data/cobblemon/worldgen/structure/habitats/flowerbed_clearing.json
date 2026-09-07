@@ -1,5 +1,5 @@
 {
-    "biomes": "#cobblemon:is_floral",
+    "biomes": "#cobblemon:is_cherry_blossom",
     "spawn_overrides": {},
     "type": "minecraft:jigsaw",
     "start_pool": "cobblemon:habitats/flowerbed_clearing_start",

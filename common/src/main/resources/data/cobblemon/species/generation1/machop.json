@@ -211,8 +211,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "machop alpha",
+          "tier": 1
+        },
         {
           "pokemon": "machoke",
           "tier": 1

@@ -58,8 +58,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "boltoy alpha",
+          "tier": 1
+        },
         {
           "pokemon": "claydol",
           "tier": 1

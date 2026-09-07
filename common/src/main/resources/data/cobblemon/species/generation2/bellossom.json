@@ -123,7 +123,6 @@
     "tm:leafblade",
     "tm:leafstorm",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:playrough",
@@ -192,8 +191,12 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "vileplume alpha",
+          "tier": 1
+        },
         {
           "pokemon": "bellossom",
           "tier": 1

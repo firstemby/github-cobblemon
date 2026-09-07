@@ -69,6 +69,23 @@
     },
     "entityInteract": {
       "avoidedByPhantom": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "abra alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "kadabra alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "alakazam alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

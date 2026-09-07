@@ -69,7 +69,21 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "clamperl alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "huntail alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gorebyss alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

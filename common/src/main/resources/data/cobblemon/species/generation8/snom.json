@@ -56,8 +56,12 @@
       }
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
+        {
+          "pokemon": "frosmoth alpha",
+          "tier": 1
+        },
         {
           "pokemon": "snom",
           "tier": 1

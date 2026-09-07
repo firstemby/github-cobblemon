@@ -62,8 +62,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
+        {
+          "pokemon": "exeggutor alpha",
+          "tier": 1
+        },
         {
           "pokemon": "exeggcute",
           "tier": 1
@@ -144,7 +148,6 @@
     "tm:infestation",
     "tm:leafstorm",
     "tm:lightscreen",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:powerswap",
     "tm:protect",

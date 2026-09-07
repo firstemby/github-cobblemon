@@ -8,7 +8,15 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "4-29",
-      "phases": "1-4"
+      "phases": "1"
+    },
+    {
+      "species": "Paras",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "4-29",
+      "phases": "2-5"
     },
     {
       "species": "Parasect",
@@ -16,7 +24,15 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "24-41",
-      "phases": "1-4"
+      "phases": "1"
+    },
+    {
+      "species": "Parasect",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-41",
+      "phases": "2-5"
     },
     {
       "species": "Cyndaquil",
@@ -25,7 +41,7 @@
       "weight": 6.0,
       "levelRange": "5-31",
       "modifiers": "hisuibias",
-      "phases": "1"
+      "phases": "2"
     },
     {
       "species": "Quilava",
@@ -34,7 +50,7 @@
       "weight": 3.0,
       "levelRange": "17-41",
       "modifiers": "hisuibias",
-      "phases": "1"
+      "phases": "2"
     },
     {
       "species": "Typhlosion",
@@ -43,7 +59,7 @@
       "weight": 1.0,
       "levelRange": "36-53",
       "modifiers": "hisuian",
-      "phases": "1"
+      "phases": "2"
     },
     {
       "species": "Tepig",
@@ -51,7 +67,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "5-31",
-      "phases": "2"
+      "phases": "3"
     },
     {
       "species": "Pignite",
@@ -59,7 +75,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.0,
       "levelRange": "17-42",
-      "phases": "2"
+      "phases": "3"
     },
     {
       "species": "Emboar",
@@ -67,7 +83,7 @@
       "spawnablePositionType": "grounded",
       "weight": 1.0,
       "levelRange": "36-53",
-      "phases": "2"
+      "phases": "3"
     },
     {
       "species": "Venipede",
@@ -99,7 +115,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "11-36",
-      "phases": "3"
+      "phases": "4"
     },
     {
       "species": "Volcarona",
@@ -107,7 +123,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "59-64",
-      "phases": "3"
+      "phases": "4"
     },
     {
       "species": "Fletchling",
@@ -115,7 +131,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "3-28",
-      "phases": "4"
+      "phases": "5"
     },
     {
       "species": "Fletchinder",
@@ -123,7 +139,15 @@
       "spawnablePositionType": "grounded",
       "weight": 3.0,
       "levelRange": "17-38",
-      "phases": "4"
+      "phases": "5"
+    },
+    {
+      "species": "Fletchinder",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "17-38",
+      "phases": "1-4"
     },
     {
       "species": "Talonflame",
@@ -131,7 +155,15 @@
       "spawnablePositionType": "grounded",
       "weight": 1.0,
       "levelRange": "35-50",
-      "phases": "4"
+      "phases": "5"
+    },
+    {
+      "species": "Talonflame",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "35-50",
+      "phases": "1-4"
     },
     {
       "species": "Lechonk",
@@ -139,7 +171,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "1-25",
-      "phases": "1-4"
+      "phases": "1-5"
     },
     {
       "species": "Oinkologne",
@@ -147,7 +179,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "18-49",
-      "phases": "1-4"
+      "phases": "1-5"
     },
     {
       "species": "Toedscool",
@@ -155,7 +187,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "9-34",
-      "phases": "1-4"
+      "phases": "1-5"
     },
     {
       "species": "Toedscruel",
@@ -163,7 +195,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "30-52",
-      "phases": "1-4"
+      "phases": "1-5"
     }
   ]
 }

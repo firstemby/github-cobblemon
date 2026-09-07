@@ -162,6 +162,10 @@
         {
           "variant": "weather",
           "isRaining": true
+        },
+        {
+          "variant": "biome",
+          "biomeCondition": "#cobblemon:is_overworld"
         }
       ]
     }
@@ -257,6 +261,7 @@
         "tm:heavyslam",
         "tm:icebeam",
         "tm:icespinner",
+        "tm:infestation",
         "tm:ironhead",
         "tm:irontail",
         "tm:muddywater",
@@ -268,6 +273,7 @@
         "tm:rockslide",
         "tm:rocktomb",
         "tm:sandstorm",
+        "tm:shockwave",
         "tm:skittersmack",
         "tm:sleeptalk",
         "tm:sludgebomb",
@@ -289,6 +295,7 @@
         "tutor:outrage",
         "tutor:rest",
         "tutor:rockslide",
+        "tutor:shockwave",
         "tutor:skittersmack",
         "tutor:sleeptalk",
         "tutor:sludgebomb",
@@ -324,23 +331,40 @@
             {
               "variant": "weather",
               "isRaining": true
+            },
+            {
+              "variant": "biome",
+              "biomeCondition": "#cobblemon:is_overworld"
             }
           ]
         }
       ],
       "battleOnly": false,
       "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
         "moving": {
-          "walk": {
-            "walkSpeed": 0.15
+          "swim": {
+            "canWalkOnWater": true
           }
         },
         "combat": {
           "willDefendOwner": true
         },
-        "resting": {
-          "drowsyChance": 0.0333,
-          "rouseChance": 0.0042
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "sliggoo alpha",
+              "tier": 1
+            },
+            {
+              "pokemon": "goodra alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     }
@@ -349,6 +373,9 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.15
+      },
+      "swim": {
+        "canWalkOnWater": true
       }
     },
     "combat": {
@@ -357,6 +384,19 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "sliggoo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "goodra alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

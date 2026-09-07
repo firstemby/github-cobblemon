@@ -40,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -114,15 +115,13 @@ public abstract class ServerEntityMixin {
         if (currentPassengers.equals(cobblemon$lastSeatPassengers)) return;
         cobblemon$lastSeatPassengers = List.copyOf(currentPassengers);
 
+        var assignments = new LinkedHashMap<String, Integer>();
         pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
             if (seat.getLocator() == null) return;
             if (passenger == null) return;
-            cobblemon$broadcast(new ClientboundSeatAssignmentPacket(
-                    passenger.getId(),
-                    pokemon.getId(),
-                    seat.getLocator()
-            ));
+            assignments.put(seat.getLocator(), passenger.getId());
         });
+        cobblemon$broadcast(new ClientboundSeatAssignmentPacket(pokemon.getId(), assignments));
     }
 
     private void cobblemon$broadcast(NetworkPacket<?> packet) {

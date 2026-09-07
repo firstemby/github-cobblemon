@@ -70,7 +70,17 @@
       "canLook": false
     },
     "herd": {
-      "maxSize": "2"
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "nosepass alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "probopass alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendOwner": true
@@ -158,7 +168,6 @@
     "tm:meteorbeam",
     "tm:painsplit",
     "tm:powergem",
-    "tm:powershift",
     "tm:protect",
     "tm:rest",
     "tm:rockblast",
@@ -205,7 +214,6 @@
     "tutor:magnetrise",
     "tutor:meteorbeam",
     "tutor:painsplit",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -229,6 +237,7 @@
     "legacy:mimic",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

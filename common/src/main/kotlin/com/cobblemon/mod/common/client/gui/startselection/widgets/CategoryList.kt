@@ -50,6 +50,8 @@ class CategoryList(
         private val buttonResource = cobblemonResource("textures/gui/starterselection/starter_selection.png")
         private val buttonActiveResource = cobblemonResource("textures/gui/starterselection/starter_selection_active.png")
 
+        private val unknownResource = cobblemonResource("textures/gui/pokedex/platform_unknown.png")
+
         const val MARGIN = 4
         const val HEADER_HEIGHT = 7
         const val BUTTON_SEPERATION = 3
@@ -82,7 +84,8 @@ class CategoryList(
             mouseY: Int,
             partialTick: Float
         ) {
-            val rows = (category.pokemon.size - 1) / 3 + 1
+            val itemSize = category.pokemon.size + if (category.randomStarter) 1 else 0
+            val rows = (itemSize - 1) / 3 + 1
             val matrices = guiGraphics.pose()
             //Header
             blitk(
@@ -150,7 +153,7 @@ class CategoryList(
             )
 
             //Buttons
-            for (index in 0..<category.pokemon.size) {
+            for (index in 0..<itemSize) {
                 val row = index / 3
                 val column = index % 3
 
@@ -171,21 +174,33 @@ class CategoryList(
                     vOffset = if (hovered) CONTAINER_BUTTON_SIZE else 0
                 )
 
-                matrices.pushPose()
-                matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0), startY.toDouble() - 6, 0.0)
-                matrices.scale(3.5F, 3.5F, 1F)
+                if (index == category.pokemon.size) {
+                    blitk(
+                        matrixStack = matrices,
+                        texture = unknownResource,
+                        x = (startX + 4.5F) / 0.04f,
+                        y = (startY + 3.5F) / 0.04f,
+                        width = 390,
+                        height = 444,
+                        scale = 0.04f
+                    )
+                } else {
+                    matrices.pushPose()
+                    matrices.translate(startX + (CONTAINER_BUTTON_SIZE / 2.0), startY.toDouble() - 6, 0.0)
+                    matrices.scale(3.5F, 3.5F, 1F)
 
-                val state = FloatingState()
-                state.currentAspects = category.pokemon[index].aspects
-                drawProfilePokemon(
-                    species = category.pokemon[index].species.resourceIdentifier,
-                    matrixStack = matrices,
-                    rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
-                    state = state,
-                    scale = 4.5F,
-                    partialTicks = 0F
-                )
-                matrices.popPose()
+                    val state = FloatingState()
+                    state.currentAspects = category.pokemon[index].aspects
+                    drawProfilePokemon(
+                        species = category.pokemon[index].species.resourceIdentifier,
+                        matrixStack = matrices,
+                        rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(13F, 35F, 0F)),
+                        state = state,
+                        scale = 4.5F,
+                        partialTicks = 0F
+                    )
+                    matrices.popPose()
+                }
             }
         }
 
@@ -201,7 +216,8 @@ class CategoryList(
         }
 
         private fun getButtonHovered(x: Int, y: Int, mouseX: Double, mouseY: Double): Int {
-            for (index in 0..<category.pokemon.size) {
+            val itemSize = category.pokemon.size + if (category.randomStarter) 1 else 0
+            for (index in 0..<itemSize) {
                 val row = index / 3
                 val column = index % 3
 

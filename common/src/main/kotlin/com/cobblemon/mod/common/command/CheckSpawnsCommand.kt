@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.text.underline
 import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.command.argument.SpawnBucketArgumentType
+import com.cobblemon.mod.common.duck.ServerLevelDuck
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.spawner
@@ -54,7 +55,8 @@ object CheckSpawnsCommand {
     }
 
     private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
-        if (!config.enableSpawning) {
+        if (!config.enableSpawning ||
+            (player.serverLevel() as ServerLevelDuck).`cobblemon$getLevelResourceLocation`() in config.worldSpawningBlocklist) {
             return 0
         }
 

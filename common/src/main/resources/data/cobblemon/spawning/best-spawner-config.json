@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "replaceWithNewVersion": true,
   "spawnablePositionTypeWeights": {
     "grounded": 1.0,

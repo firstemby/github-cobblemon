@@ -68,7 +68,20 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "sizzlipede alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "centiskorch alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 2,

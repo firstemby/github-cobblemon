@@ -71,7 +71,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "lotad",
@@ -151,7 +151,6 @@
     "tm:icywind",
     "tm:magicalleaf",
     "tm:muddywater",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:raindance",

@@ -199,6 +199,23 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "flapple alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "appletun alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hydrapple alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

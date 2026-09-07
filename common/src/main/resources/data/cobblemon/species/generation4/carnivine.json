@@ -61,10 +61,10 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "carnivine",
+          "pokemon": "carnivine alpha",
           "tier": 1
         }
       ]

@@ -61,11 +61,15 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "malamar",
+          "pokemon": "malamar mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "malamar mega",
+          "tier": 2
         }
       ]
     },
@@ -234,5 +238,9 @@
     "special:happyhour"
   ],
   "preEvolution": "inkay",
-  "evolutions": []
+  "evolutions": [],
+  "lightingData": {
+    "lightLevel": 7,
+    "liquidGlowMode": "BOTH"
+  }
 }

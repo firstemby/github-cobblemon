@@ -47,7 +47,7 @@
       "poseTypes": ["SHOULDER_LEFT"],
       "animations": [
         "q.look('head')",
-        "q.bedrock('popplio', 'shoulder_left')"
+        "q.bedrock('popplio', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('popplio', 'blink')"
@@ -63,7 +63,7 @@
       "poseTypes": ["SHOULDER_RIGHT"],
       "animations": [
         "q.look('head')",
-        "q.bedrock('popplio', 'shoulder_right')"
+        "q.bedrock('popplio', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('popplio', 'blink')"

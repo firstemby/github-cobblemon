@@ -522,6 +522,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.5, 31.25, -13.5],
+					"locators": {
+						"eye2": [2.5, 31.25, -13.5]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "head_angle",
 					"pivot": [-2, 31.5, -13.52],
@@ -537,6 +545,14 @@
 					"cubes": [
 						{"origin": [-3, 30.5, -13.54], "size": [1, 2, 0], "uv": [34, 44]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.5, 31.25, -13.5],
+					"locators": {
+						"eye1": [-2.5, 31.25, -13.5]
+					}
 				},
 				{
 					"name": "muzzle",
