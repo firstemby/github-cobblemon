@@ -1,6 +1,6 @@
 {
   "timeline": [
-    { "type": "add_holds", "holds": ["effects"] },
+    { "type": "pause_tasks" },
     { "type": "save_position" },
     {
       "type": "sequence",
@@ -45,6 +45,6 @@
       ]
     },
     { "type": "return_to_position" },
-    { "type": "remove_holds" }
+    { "type": "resume_tasks" }
   ]
 }

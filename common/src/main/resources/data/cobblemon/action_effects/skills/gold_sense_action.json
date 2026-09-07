@@ -1,8 +1,7 @@
 {
   "timeline": [
     {
-      "type": "add_holds",
-      "holds": ["effects"]
+      "type": "pause_tasks"
     },
     {
       "type": "animation",
@@ -27,8 +26,7 @@
       ]
     },
     {
-      "type": "remove_holds",
-      "holds": ["effects"]
+      "type": "resume_tasks"
     }
   ]
 }

@@ -48,6 +48,8 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
         ActionEffectKeyframe.register<CannotInterruptActionEffectKeyframe>("cannot_interrupt")
         ActionEffectKeyframe.register<RemoveHoldsActionEffectKeyframe>("remove_holds")
         ActionEffectKeyframe.register<AddHoldsActionEffectKeyframe>("add_holds")
+        ActionEffectKeyframe.register<PauseTasksActionEffectKeyframe>("pause_tasks")
+        ActionEffectKeyframe.register<ResumeTasksActionEffectKeyframe>("resume_tasks")
         ActionEffectKeyframe.register<MoveToTargetActionEffectKeyframe>("move_to_target")
         ActionEffectKeyframe.register<ReturnToPositionActionEffectKeyframe>("return_to_position")
         ActionEffectKeyframe.register<PauseActionEffectKeyframe>("pause")

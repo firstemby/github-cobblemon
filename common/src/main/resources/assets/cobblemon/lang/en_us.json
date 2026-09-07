@@ -2537,6 +2537,8 @@
   "cobblemon.config.ui.unlock_all_move_dex_moves_by_default.tooltip": "If enabled, TM and level-up moves are unlocked and discovered in the TM Machine and Pokédex Move Dex.",
   "cobblemon.config.ui.infinite_tm_uses": "Infinite TM Uses",
   "cobblemon.config.ui.infinite_tm_uses.tooltip": "TMs are not consumed when teaching moves.",
+  "cobblemon.config.ui.infinite_poke_skill_cooldown": "Infinite Poké Skill Cooldown",
+  "cobblemon.config.ui.infinite_poke_skill_cooldown.tooltip": "Poké Skills do not go on cooldown after use.",
   "cobblemon.config.ui.hide_unimplemented_pokemon_in_the_pokedex": "Hide Unimplemented Pokémon in the Pokédex",
   "cobblemon.config.ui.hide_unimplemented_pokemon_in_the_pokedex.tooltip": "Whether to hide unimplemented Pokémon from the Pokédex.",
   "cobblemon.config.ui.summary_pokemon_follow_cursor": "Make Pokémon Follow Cursor",

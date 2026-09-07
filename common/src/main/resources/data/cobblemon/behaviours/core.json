@@ -19,6 +19,15 @@
           "look_at_target"
         ]
       }
+    },
+    {
+      "type": "add_tasks_to_activity",
+      "activity": "cobblemon:action_effect",
+      "tasksByPriority": {
+        "0": [
+          "look_at_target"
+        ]
+      }
     }
   ]
 }

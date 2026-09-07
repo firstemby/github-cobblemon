@@ -313,6 +313,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokemon, lang = "infinite_tm_uses", SERVER)
     var infiniteTmUses = false
 
+    @CobblemonConfigField(Category.Pokemon, lang = "infinite_poke_skill_cooldown", SERVER)
+    var infinitePokeSkillCooldown = false
+
     @CobblemonConfigField(Category.Pokedex, lang = "hide_unimplemented_pokemon_in_the_pokedex", CLIENT)
     var hideUnimplementedPokemonInThePokedex = false
 

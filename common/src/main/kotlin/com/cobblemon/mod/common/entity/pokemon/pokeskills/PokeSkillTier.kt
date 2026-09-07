@@ -183,7 +183,7 @@ class PokeSkillTier(
 
     fun canUse(player: Player, pokemon: Pokemon): Boolean {
         val status = pokemon.status?.status
-        if (id in pokemon.skillCooldownsTicks || player.isInBattle() || status == Statuses.SLEEP || status == Statuses.FROZEN) {
+        if ((!Cobblemon.config.infinitePokeSkillCooldown && id in pokemon.skillCooldownsTicks) || player.isInBattle() || status == Statuses.SLEEP || status == Statuses.FROZEN) {
             return false
         }
         runtime.withQueryValue("player", player.asMostSpecificMoLangValue())
@@ -321,7 +321,9 @@ class PokeSkillTier(
 
         effectTimeline.run(context).thenRun {
             // Auto-apply cooldown after effect completes
-            pokemon.skillCooldownsTicks[id] = cooldownTicks
+            if (!Cobblemon.config.infinitePokeSkillCooldown) {
+                pokemon.skillCooldownsTicks[id] = cooldownTicks
+            }
         }
 
         return true
