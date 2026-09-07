@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
 import com.cobblemon.mod.common.util.asExpression
@@ -39,6 +40,14 @@ abstract class EntityResponseObjective(
 
 
     open fun scanForValidTargets(entity: LivingEntity, brain: BiggerBrain): LivingEntity? {
+
+        //TODO: need to apply some sort of awareness modifier
+        // Sleep obviously should dramatically effect this but it's not hard to imagine other things that could do this
+        if (entity.isSleeping || (entity is PokemonEntity && entity.pokemon.status?.status == Statuses.SLEEP)) {
+            // Also why doesn't entity.isSleeping for PokemonEntities return true if the sleep status is applied?
+            return null
+        }
+
         // Check if we're in the mood to fight
         if (mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
                 .resolveBoolean(condition)
