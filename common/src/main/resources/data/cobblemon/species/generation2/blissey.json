@@ -56,7 +56,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "blissey",
@@ -179,8 +179,6 @@
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
-    "tm:naturalgift",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -245,7 +243,6 @@
     "tutor:irontail",
     "tutor:laserfocus",
     "tutor:lastresort",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:recycle",
     "tutor:rest",
@@ -280,6 +277,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:mudslap",
+    "legacy:powershift",
     "legacy:psywave",
     "legacy:rage",
     "legacy:reflect",

@@ -69,6 +69,19 @@
     },
     "blockInteract": {
       "immuneToCobwebBlock": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "spidops alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "tarountula",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

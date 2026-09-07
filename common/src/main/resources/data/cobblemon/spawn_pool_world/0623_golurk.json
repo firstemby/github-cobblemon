@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "43-48",
-            "weight": 16.0,
+            "weight": 128.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -32,7 +38,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "43-48",
-            "weight": 5.0,
+            "weight": 40.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -54,7 +66,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "43-48",
-            "weight": 2.0,
+            "weight": 16.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -74,7 +92,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "43-48",
-            "weight": 2.0,
+            "weight": 16.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:is_desert"
@@ -92,7 +116,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "43-48",
-            "weight": 2.0,
+            "weight": 16.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:is_jungle"
@@ -106,7 +136,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "43-48",
-            "weight": 0.6,
+            "weight": 4.8,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

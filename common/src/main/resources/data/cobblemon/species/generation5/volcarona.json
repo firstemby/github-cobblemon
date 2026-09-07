@@ -106,7 +106,13 @@
     },
     "fireImmune": true,
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "volcarona alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {

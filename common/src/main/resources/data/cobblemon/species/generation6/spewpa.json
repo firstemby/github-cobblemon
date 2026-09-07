@@ -62,6 +62,19 @@
       "willSleepOnBed": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "spewpa alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vivillon alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

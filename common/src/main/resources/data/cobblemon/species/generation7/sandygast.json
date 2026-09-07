@@ -192,8 +192,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "sandygast alpha",
+          "tier": 1
+        },
         {
           "pokemon": "palossand",
           "tier": 1

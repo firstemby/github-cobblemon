@@ -4,25 +4,6 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "bronzong-5",
-            "pokemon": "bronzong",
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "33-50",
-            "weight": 0.6,
-            "condition": {
-                "biomes": [
-                    "the_bumblezone:howling_constructs"
-                ]
-            },
-            "anticondition": {
-                "structures": [
-                    "#the_bumblezone:sempiternal_sanctums"
-                ]
-            }
-        },
-        {
             "id": "bronzong-1",
             "pokemon": "bronzong",
             "presets": [
@@ -32,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "33-50",
-            "weight": 1.6,
+            "weight": 12.8,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -59,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "33-50",
-            "weight": 6.0,
+            "weight": 76.8,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -74,7 +55,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "33-50",
-            "weight": 6.0,
+            "weight": 76.8,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -96,12 +77,31 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "33-50",
-            "weight": 6.0,
+            "weight": 76.8,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
                 "minY": 48
+            }
+        },
+        {
+            "id": "bronzong-5",
+            "pokemon": "bronzong",
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "33-50",
+            "weight": 7.68,
+            "condition": {
+                "biomes": [
+                    "the_bumblezone:howling_constructs"
+                ]
+            },
+            "anticondition": {
+                "structures": [
+                    "#the_bumblezone:sempiternal_sanctums"
+                ]
             }
         }
     ]

@@ -144,7 +144,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ironjugulis alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

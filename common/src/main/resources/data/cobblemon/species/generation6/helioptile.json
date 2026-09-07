@@ -176,6 +176,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "helioptile alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "heliolisk alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

@@ -148,7 +148,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "garchomp alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {
@@ -363,7 +369,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "8"
+          "maxSize": 8
         },
         "moving": {
           "fly": {

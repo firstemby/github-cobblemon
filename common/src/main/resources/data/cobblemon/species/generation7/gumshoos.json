@@ -201,6 +201,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gumshoos alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

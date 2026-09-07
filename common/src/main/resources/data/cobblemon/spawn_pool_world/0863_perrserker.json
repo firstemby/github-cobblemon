@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -40,7 +40,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {

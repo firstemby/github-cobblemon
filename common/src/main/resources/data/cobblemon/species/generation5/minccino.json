@@ -92,7 +92,6 @@
     "tm:batonpass",
     "tm:bulletseed",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",
@@ -188,7 +187,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "minccino",

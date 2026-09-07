@@ -77,7 +77,6 @@
     "tm:bugbite",
     "tm:bugbuzz",
     "tm:bulletseed",
-    "tm:captivate",
     "tm:dig",
     "tm:dreameater",
     "tm:dualwingbeat",
@@ -211,7 +210,6 @@
         "tm:bugbite",
         "tm:bugbuzz",
         "tm:bulldoze",
-        "tm:captivate",
         "tm:dig",
         "tm:dreameater",
         "tm:dualwingbeat",
@@ -347,7 +345,6 @@
         "tm:attract",
         "tm:bugbite",
         "tm:bugbuzz",
-        "tm:captivate",
         "tm:dig",
         "tm:dreameater",
         "tm:dualwingbeat",
@@ -447,6 +444,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wormadam alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

@@ -108,7 +108,7 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "tropius",
@@ -209,7 +209,6 @@
     "tm:leafstorm",
     "tm:leaftornado",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:ominouswind",
     "tm:outrage",

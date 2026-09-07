@@ -62,19 +62,23 @@
       }
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "skrelp",
           "tier": 1
         },
         {
-          "pokemon": "dragalge",
+          "pokemon": "dragalge mega=false",
           "tier": 2
         },
         {
           "pokemon": "dhelmise",
           "tier": 3
+        },
+        {
+          "pokemon": "dragalge mega",
+          "tier": 4
         }
       ]
     },

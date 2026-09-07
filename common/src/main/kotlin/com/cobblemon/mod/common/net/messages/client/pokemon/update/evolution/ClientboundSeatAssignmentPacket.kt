@@ -13,8 +13,10 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.SingleUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readMap
 import com.cobblemon.mod.common.util.readIdentifier
 import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeMap
 import com.cobblemon.mod.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -25,9 +27,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @since March 31st, 2026
  */
 class ClientboundSeatAssignmentPacket(
-    val passengerEntityId: Int,
     val vehicleEntityId: Int,
-    val seatLocator: String
+    val seatAssignments: Map<String, Int>
 ) : NetworkPacket<ClientboundSeatAssignmentPacket> {
     override val id = ID
 
@@ -35,14 +36,12 @@ class ClientboundSeatAssignmentPacket(
         val ID = cobblemonResource("seat_assignment")
         fun decode(buffer: RegistryFriendlyByteBuf) = ClientboundSeatAssignmentPacket(
             buffer.readInt(),
-            buffer.readInt(),
-            buffer.readString()
+            buffer.readMap({ buffer.readString() }, { buffer.readInt() })
         )
     }
 
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeInt(passengerEntityId)
         buffer.writeInt(vehicleEntityId)
-        buffer.writeString(seatLocator)
+        buffer.writeMap(seatAssignments, { _, locator -> buffer.writeString(locator) }, { _, entityId -> buffer.writeInt(entityId) })
     }
 }

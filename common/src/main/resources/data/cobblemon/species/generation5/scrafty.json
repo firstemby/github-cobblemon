@@ -229,11 +229,15 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "scrafty",
+          "pokemon": "scrafty mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "scrafty mega",
+          "tier": 2
         }
       ]
     },

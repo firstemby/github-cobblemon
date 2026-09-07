@@ -127,7 +127,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "golurk alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {

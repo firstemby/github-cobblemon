@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-21",
-            "weight": 5.04,
+            "weight": 7.8,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -25,7 +25,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_forest"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -43,7 +44,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "1-21",
-            "weight": 1.68,
+            "weight": 2.6,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -58,7 +59,8 @@
                     "aether:skyroot_forest",
                     "aether:skyroot_woodland",
                     "#cobblemon:is_tropical_island"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

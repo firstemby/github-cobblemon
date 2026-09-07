@@ -56,8 +56,12 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
+        {
+          "pokemon": "palpitoad alpha",
+          "tier": 1
+        },
         {
           "pokemon": "poliwrath",
           "tier": 1

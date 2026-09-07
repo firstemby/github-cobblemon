@@ -46,9 +46,9 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1.7,
     "height": 2.2,
-    "fixed": false
+    "fixed": false,
+    "width": 1.7
   },
   "riding": {
     "behaviours": {
@@ -56,10 +56,10 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "5-20",
-          "JUMP": "5-15",
+          "ACCELERATION": "35-60",
+          "JUMP": "20-25",
           "SKILL": "5-25",
-          "SPEED": "25-60",
+          "SPEED": "10-20",
           "STAMINA": "40-80"
         }
       }
@@ -69,6 +69,41 @@
         "locator": "seat_1"
       }
     ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "duraludon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "archaludon alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 1,
@@ -176,15 +211,15 @@
   ],
   "evolutions": [
     {
-      "id": "duraludon_archaludon",
-      "variant": "item_interact",
-      "result": "archaludon",
       "consumeHeldItem": false,
+      "id": "duraludon_archaludon",
       "learnableMoves": [
         "electroshot"
       ],
+      "requiredContext": "cobblemon:metal_alloy",
       "requirements": [],
-      "requiredContext": "cobblemon:metal_alloy"
+      "result": "archaludon",
+      "variant": "item_interact"
     }
   ],
   "forms": [
@@ -205,31 +240,9 @@
       "aspects": [
         "gmax"
       ],
-      "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "dynamaxBlocked": true
     }
-  ],
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.15
-      },
-      "swim": {
-        "avoidsWater": true
-      }
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "times": [
-        "any"
-      ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
-    }
-  }
+  ]
 }

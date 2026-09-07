@@ -15,15 +15,18 @@ import com.cobblemon.mod.common.api.riding.RidingStyle;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
 import com.cobblemon.mod.common.api.stats.CobblemonStats;
+import com.cobblemon.mod.common.duck.ServerLevelDuck;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,9 +36,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
+
     @Shadow
     public abstract ServerLevel serverLevel();
 
+    @Shadow
+    @Final
+    public MinecraftServer server;
     @Unique
     public PlayerSpawner cobblemon$spawner;
 
@@ -55,12 +62,9 @@ public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void cobblemon$tickSpawner(CallbackInfo ci) {
-        if (!Cobblemon.config.getEnableSpawning()) {
-            return;
-        } else if (!serverLevel().getGameRules().getBoolean(CobblemonGameRules.DO_POKEMON_SPAWNING)) {
-            return;
+        if (cobblemon$canSpawn()) {
+            getPlayerSpawner().tick();
         }
-        getPlayerSpawner().tick();
     }
 
     @Inject(method = "rideTick", at = @At("HEAD"))
@@ -120,5 +124,22 @@ public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
         }
 
         return entity;
+    }
+
+    /**
+     * Gets whether we should spawn Cobblemon entities here.
+     *
+     * @return true if we can spawn cobblemon in the current level,
+     *         false otherwise
+     */
+    @SuppressWarnings("resource")
+    @Unique
+    private boolean cobblemon$canSpawn() {
+        return Cobblemon.config.getEnableSpawning() &&
+                this.serverLevel().getGameRules().getBoolean(CobblemonGameRules.DO_POKEMON_SPAWNING) &&
+                // intentionally last as this is a more expensive check, even with all the caching
+                !Cobblemon.config.getWorldSpawningBlocklist().contains(
+                        ((ServerLevelDuck) this.serverLevel()).cobblemon$getLevelResourceLocation()
+                );
     }
 }

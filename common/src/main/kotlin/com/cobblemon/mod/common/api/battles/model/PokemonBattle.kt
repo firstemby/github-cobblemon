@@ -133,7 +133,7 @@ open class PokemonBattle(
         set(value) { field = value.coerceAtMost(Int.MAX_VALUE) } // go outside
 
     /** The current duration of the battle in seconds. */
-    val time: Int get() = ticks % 20
+    val time: Int get() = ticks / 20
 
     var dispatchResult = GO
     val dispatches = ConcurrentLinkedDeque<BattleDispatch>()

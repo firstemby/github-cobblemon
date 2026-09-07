@@ -14,34 +14,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "8-33",
-            "weight": 5.52,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "cetoddle-2",
-            "pokemon": "cetoddle",
-            "presets": [
-                "natural",
-                "wild"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "8-33",
-            "weight": 9.2,
+            "weight": 50.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

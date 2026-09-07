@@ -187,7 +187,17 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "zweilous alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hydreigon alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

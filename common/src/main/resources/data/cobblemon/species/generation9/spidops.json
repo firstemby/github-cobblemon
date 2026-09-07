@@ -176,6 +176,15 @@
     },
     "blockInteract": {
       "immuneToCobwebBlock": true
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "spidops alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

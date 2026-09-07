@@ -83,12 +83,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
-import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.level.storage.loot.LootParams
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams
-import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import java.util.function.Function
 
@@ -99,25 +93,31 @@ import java.util.function.Function
  * @since October 2nd, 2023
  */
 object MoLangFunctions {
-    fun ItemStack.asMoLangValue(registryAccess: RegistryAccess) = ObjectValue(this)
-        .addStandardFunctions()
-        .addFunctions(ItemStackMoLangFunctions.attach(Pair(this, registryAccess)))
+    fun ItemStack.asMoLangValue(registryAccess: RegistryAccess) =
+        ObjectValue(this)
+            .addStandardFunctions()
+            .addFunctions(ItemStackMoLangFunctions.attach(Pair(this, registryAccess)))
 
-    fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME)
-        .addFunctions(BiomeMoLangFunctions.attach(this))
+    fun Holder<Biome>.asBiomeMoLangValue() =
+        asMoLangValue(Registries.BIOME)
+            .addFunctions(BiomeMoLangFunctions.attach(this))
 
-    fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION)
-        .addFunctions(WorldMoLangFunctions.attach(this))
+    fun Holder<Level>.asWorldMoLangValue() =
+        asMoLangValue(Registries.DIMENSION)
+            .addFunctions(WorldMoLangFunctions.attach(this))
 
-    fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK)
-        .addFunctions(BlockMoLangFunctions.attach(this))
+    fun Holder<Block>.asBlockMoLangValue() =
+        asMoLangValue(Registries.BLOCK)
+            .addFunctions(BlockMoLangFunctions.attach(this))
 
-    fun MinecraftServer.asMoLangValue() = ObjectValue(this)
-        .addStandardFunctions()
-        .addFunctions(ServerMoLangFunctions.attach(this))
+    fun MinecraftServer.asMoLangValue() =
+        ObjectValue(this)
+            .addStandardFunctions()
+            .addFunctions(ServerMoLangFunctions.attach(this))
 
-    fun Holder<DimensionType>.asDimensionTypeMoLangValue() = asMoLangValue(Registries.DIMENSION_TYPE)
-        .addFunctions(DimensionTypeMoLangFunctions.attach(this))
+    fun Holder<DimensionType>.asDimensionTypeMoLangValue() =
+        asMoLangValue(Registries.DIMENSION_TYPE)
+            .addFunctions(DimensionTypeMoLangFunctions.attach(this))
 
     fun Player.asMoLangValue(): ObjectValue<Player> {
         if (this is ServerPlayer && uuid in Cobblemon.serverPlayerStructs) {
@@ -129,10 +129,11 @@ object MoLangFunctions {
             }
         }
 
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.effectiveName().string }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.effectiveName().string },
+            )
 
         value.addFunctions(EntityMoLangFunctions.attach(this))
         value.addFunctions(LivingEntityMoLangFunctions.attach(this))
@@ -153,57 +154,63 @@ object MoLangFunctions {
     }
 
     fun PartyStore.asMoLangValue(): ObjectValue<PartyStore> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(PokemonStoreMoLangFunctions.attach(this))
         value.addFunctions(PartyMoLangFunctions.attach(this))
         return value
     }
 
     fun DropEntry.asMoLangValue(): ObjectValue<DropEntry> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(DropEntryMoLangFunctions.attach(this))
         return value
     }
 
     fun PokemonProperties.asMoLangValue(): ObjectValue<PokemonProperties> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.asString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.asString() },
+            )
         value.addFunctions(PokemonPropertiesMoLangFunctions.attach(this))
         return value
     }
 
     fun Evolution.asMoLangValue(): ObjectValue<Evolution> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(EvolutionMoLangFunctions.attach(this))
         return value
     }
 
     fun PCStore.asMoLangValue(): ObjectValue<PCStore> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(PokemonStoreMoLangFunctions.attach(this))
         value.addFunctions(PCMoLangFunctions.attach(this))
         return value
     }
 
     fun NPCEntity.asMoLangValue(): ObjectValue<NPCEntity> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.name.string }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.name.string },
+            )
         value.addFunctions(EntityMoLangFunctions.attach(this))
         value.addFunctions(LivingEntityMoLangFunctions.attach(this))
         value.addFunctions(NPCMoLangFunctions.attach(this))
@@ -211,10 +218,11 @@ object MoLangFunctions {
     }
 
     fun PokemonEntity.asMoLangValue(): ObjectValue<PokemonEntity> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.pokemon.uuid.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.pokemon.uuid.toString() },
+            )
 
         value.addFunctions(EntityMoLangFunctions.attach(this))
         value.addFunctions(LivingEntityMoLangFunctions.attach(this))
@@ -225,36 +233,40 @@ object MoLangFunctions {
     }
 
     fun PokemonBattle.asMoLangValue(): ObjectValue<PokemonBattle> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.battleId.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.battleId.toString() },
+            )
         value.addFunctions(BattleMoLangFunctions.attach(this))
         return value
     }
 
     fun BattleActor.asMoLangValue(): ObjectValue<BattleActor> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(BattleActorMoLangFunctions.attach(this))
         return value
     }
 
     fun SpawnablePosition.asMoLangValue(): ObjectValue<SpawnablePosition> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.toString() }
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.toString() },
+            )
         value.addFunctions(SpawnablePositionMoLangFunctions.attach(this))
         return value
     }
 
     fun Vec3.asMoLangValue(): ObjectValue<Vec3> {
-        val value = ObjectValue(
-            obj = this
-        )
+        val value =
+            ObjectValue(
+                obj = this,
+            )
         value.addFunction("x") { this.x }
         value.addFunction("y") { this.y }
         value.addFunction("z") { this.z }
@@ -265,45 +277,66 @@ object MoLangFunctions {
     /**
      * Different functions exist depending on the entity type, this tries to make the struct that's most specific to the type.
      */
-    fun Entity.asMostSpecificMoLangValue(): ObjectValue<out Entity> {
-        return when (this) {
-            is Player -> asMoLangValue()
-            is PokemonEntity -> struct
-            is NPCEntity -> struct
-            is ItemEntity -> ObjectValue(this).also { item ->
-                item.addStandardFunctions()
-                item.addFunctions(EntityMoLangFunctions.attach(this))
-                item.addFunctions(ItemStackMoLangFunctions.attach(Pair(this.item, this.registryAccess())))
+    fun Entity.asMostSpecificMoLangValue(): ObjectValue<out Entity> =
+        when (this) {
+            is Player -> {
+                asMoLangValue()
             }
 
-            else -> ObjectValue(this).also { objectValue ->
-                objectValue.addStandardFunctions()
-                objectValue.addFunctions(EntityMoLangFunctions.attach(this))
-                if (this is LivingEntity) {
-                    objectValue.addFunctions(LivingEntityMoLangFunctions.attach(this))
+            is PokemonEntity -> {
+                struct
+            }
+
+            is NPCEntity -> {
+                struct
+            }
+
+            is ItemEntity -> {
+                ObjectValue(this).also { item ->
+                    item.addStandardFunctions()
+                    item.addFunctions(EntityMoLangFunctions.attach(this))
+                    item.addFunctions(ItemStackMoLangFunctions.attach(Pair(this.item, this.registryAccess())))
+                }
+            }
+
+            else -> {
+                ObjectValue(this).also { objectValue ->
+                    objectValue.addStandardFunctions()
+                    objectValue.addFunctions(EntityMoLangFunctions.attach(this))
+                    if (this is LivingEntity) {
+                        objectValue.addFunctions(LivingEntityMoLangFunctions.attach(this))
+                    }
                 }
             }
         }
-    }
 
     fun <T> Holder<T>.asMoLangValue(key: ResourceKey<Registry<T>>): ObjectValue<Holder<T>> {
-        val value = ObjectValue(
-            obj = this,
-            stringify = { it.unwrapKey().get().location().toString() }
-        )
-        value.functions["is_in"] = Function put@{ params: MoParams ->
-            val tag = TagKey.create(key, ResourceLocation.parse(params.getString(0).replace("#", "")))
-            return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
-        }
-        value.functions["is_of"] = Function put@{ params: MoParams ->
-            val identifier = ResourceLocation.parse(params.getString(0))
-            return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
-        }
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = {
+                    it
+                        .unwrapKey()
+                        .get()
+                        .location()
+                        .toString()
+                },
+            )
+        value.functions["is_in"] =
+            Function put@{ params: MoParams ->
+                val tag = TagKey.create(key, ResourceLocation.parse(params.getString(0).replace("#", "")))
+                return@put DoubleValue(if (value.obj.`is`(tag)) 1.0 else 0.0)
+            }
+        value.functions["is_of"] =
+            Function put@{ params: MoParams ->
+                val identifier = ResourceLocation.parse(params.getString(0))
+                return@put DoubleValue(if (value.obj.`is`(identifier)) 1.0 else 0.0)
+            }
         return value
     }
 
     fun QueryStruct.addStandardFunctions(): QueryStruct {
-        addFunctions(GeneralMoLangFunctions.holder)
+        addFunctions(GeneralMoLangFunctions.functions)
         return this
     }
 
@@ -370,23 +403,17 @@ object MoLangFunctions {
         return this
     }
 
-    fun moLangFunctionMap(
-        vararg functions: Pair<String, (MoParams) -> MoValue>
-    ): Map<String, (MoParams) -> MoValue> {
-        return functions.toMap()
-    }
+    fun moLangFunctionMap(vararg functions: Pair<String, (MoParams) -> MoValue>): Map<String, (MoParams) -> MoValue> = functions.toMap()
 
-    fun queryStructOf(
-        vararg functions: Pair<String, (MoParams) -> MoValue>
-    ): QueryStruct {
-        return QueryStruct(
+    fun queryStructOf(vararg functions: Pair<String, (MoParams) -> MoValue>): QueryStruct =
+        QueryStruct(
             hashMapOf<String, Function<MoParams, Any>>(
-                *functions.map { (name, func) ->
-                    name to Function<MoParams, Any> { params -> func(params) }
-                }.toTypedArray()
-            )
+                *functions
+                    .map { (name, func) ->
+                        name to Function<MoParams, Any> { params -> func(params) }
+                    }.toTypedArray(),
+            ),
         )
-    }
 
     fun MoLangRuntime.setup(): MoLangRuntime {
         environment.query.addStandardFunctions()
@@ -395,8 +422,14 @@ object MoLangFunctions {
 
     fun writeMoValueToNBT(value: MoValue): Tag? {
         return when (value) {
-            is DoubleValue -> DoubleTag.valueOf(value.value)
-            is StringValue -> StringTag.valueOf(value.value)
+            is DoubleValue -> {
+                DoubleTag.valueOf(value.value)
+            }
+
+            is StringValue -> {
+                StringTag.valueOf(value.value)
+            }
+
             is ArrayStruct -> {
                 val list = value.map.values
                 val nbtList = ListTag()
@@ -413,14 +446,22 @@ object MoLangFunctions {
                 nbt
             }
 
-            else -> null
+            else -> {
+                null
+            }
         }
     }
 
-    fun readMoValueFromNBT(nbt: Tag): MoValue {
-        return when (nbt) {
-            is DoubleTag -> DoubleValue(nbt.asDouble)
-            is StringTag -> StringValue(nbt.asString)
+    fun readMoValueFromNBT(nbt: Tag): MoValue =
+        when (nbt) {
+            is DoubleTag -> {
+                DoubleValue(nbt.asDouble)
+            }
+
+            is StringTag -> {
+                StringValue(nbt.asString)
+            }
+
             is ListTag -> {
                 val array = ArrayStruct(hashMapOf())
                 var index = 0
@@ -441,9 +482,10 @@ object MoLangFunctions {
                 variable
             }
 
-            else -> VariableStruct()
+            else -> {
+                VariableStruct()
+            }
         }
-    }
 }
 
 // TODO: this one is unused. Should we move it to [MoLangFunctions] object?

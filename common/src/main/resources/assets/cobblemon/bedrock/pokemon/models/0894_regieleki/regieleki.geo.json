@@ -79,6 +79,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_middle",
+					"parent": "eye_center",
+					"pivot": [0, 20.5, -8.5],
+					"locators": {
+						"eye7": [0, 20.5, -8.5]
+					}
+				},
+				{
 					"name": "eyelid_center",
 					"parent": "eye_center",
 					"pivot": [0, 20.5, -8.41],
@@ -93,6 +101,14 @@
 					"cubes": [
 						{"origin": [1.5, 19.5, -8.51], "size": [2, 2, 0], "uv": [4, 0]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2.5, 20.5, -8.5],
+					"locators": {
+						"eye2": [2.5, 20.5, -8.5]
+					}
 				},
 				{
 					"name": "eyelid_left",
@@ -119,6 +135,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left2",
+					"parent": "eye_left_top",
+					"pivot": [5, 22, -8.5],
+					"locators": {
+						"eye4": [5, 22, -8.5]
+					}
+				},
+				{
 					"name": "eye_left_bottom",
 					"parent": "eyes",
 					"pivot": [5, 19, -8.51],
@@ -135,12 +159,28 @@
 					]
 				},
 				{
+					"name": "locator_eye_left3",
+					"parent": "eye_left_bottom",
+					"pivot": [5, 19, -8.5],
+					"locators": {
+						"eye6": [5, 19, -8.5]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "eyes",
 					"pivot": [-2.5, 20.5, -8.51],
 					"cubes": [
 						{"origin": [-3.5, 19.5, -8.51], "size": [2, 2, 0], "uv": [0, 10], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2.5, 20.5, -8.5],
+					"locators": {
+						"eye1": [-2.5, 20.5, -8.5]
+					}
 				},
 				{
 					"name": "eyelid_right",
@@ -167,6 +207,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right2",
+					"parent": "eye_right_top",
+					"pivot": [-5, 22, -8.5],
+					"locators": {
+						"eye3": [-5, 22, -8.5]
+					}
+				},
+				{
 					"name": "eye_right_bottom",
 					"parent": "eyes",
 					"pivot": [-5, 19, -8.51],
@@ -181,6 +229,14 @@
 					"cubes": [
 						{"origin": [-6, 18, -8.41], "size": [2, 2, 1], "inflate": 0.01, "uv": [11, 14], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right3",
+					"parent": "eye_right_bottom",
+					"pivot": [-5, 19, -8.5],
+					"locators": {
+						"eye5": [-5, 19, -8.5]
+					}
 				},
 				{
 					"name": "arms",

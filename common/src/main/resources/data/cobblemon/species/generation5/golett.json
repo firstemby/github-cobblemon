@@ -69,11 +69,19 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "golurk",
+          "pokemon": "golett alpha",
           "tier": 1
+        },
+        {
+          "pokemon": "golurk mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "golurk mega",
+          "tier": 2
         }
       ]
     },

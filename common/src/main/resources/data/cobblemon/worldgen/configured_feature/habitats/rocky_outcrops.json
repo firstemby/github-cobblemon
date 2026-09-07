@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/rocky_outcrop1",
+            "cobblemon:habitats/rocky_outcrop2",
+            "cobblemon:habitats/rocky_outcrop3",
+            "cobblemon:habitats/rocky_outcrop4",
+            "cobblemon:habitats/rocky_outcrop5",
+            "cobblemon:habitats/rocky_outcrop6",
+            "cobblemon:habitats/rocky_outcrop7",
+            "cobblemon:habitats/rocky_outcrop8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/rocky_outcrop"
+    }
+}

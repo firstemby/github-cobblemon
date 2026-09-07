@@ -16,6 +16,11 @@
         "locators": ["target"]
       },
       {
+        "type": "entity_molang",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "expressions": ["q.sound('move.lightscreen.actor');"]
+      },
+      {
         "type": "pause",
         "pause": 0.07
       },

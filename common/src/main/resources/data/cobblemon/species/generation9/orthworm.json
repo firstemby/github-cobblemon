@@ -84,6 +84,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "orthworm alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

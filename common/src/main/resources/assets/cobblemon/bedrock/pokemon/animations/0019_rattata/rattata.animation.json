@@ -390,6 +390,14 @@
 					}
 				}
 			}
-		}
+		},
+      "animation.rattata.cry": {
+        "animation_length": 1,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.rattata.cry"
+          }
+        }
+      }
 	}
 }

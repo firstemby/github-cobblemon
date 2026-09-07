@@ -69,8 +69,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "armaldo alpha",
+          "tier": 1
+        },
         {
           "pokemon": "anorith",
           "tier": 1

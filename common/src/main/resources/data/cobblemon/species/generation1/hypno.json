@@ -70,6 +70,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hypno alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "komala",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

@@ -59,6 +59,15 @@
       ],
       "drowsyChance": 0.0033,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "slitherwing alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

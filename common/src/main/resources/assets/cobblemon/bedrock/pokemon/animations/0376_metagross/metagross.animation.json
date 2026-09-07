@@ -3,7 +3,7 @@
 	"animations": {
 		"animation.metagross.ground_idle": {
 			"loop": true,
-			"animation_length": 0,
+			"animation_length": 8,
 			"bones": {
 				"body2": {
 					"position": [0, -11.9, 0]
@@ -54,8 +54,7 @@
 				},
 				"torso": {
 					"rotation": {
-						"0.0": ["2+1*math.sin(q.anim_time*90*0.5)", "0.1*math.sin(q.anim_time*90*1-60)", "0.1*math.sin(q.anim_time*90*2-60)"],
-						"11.4167": ["2.5796+1*math.sin(q.anim_time*90*0.5)", "0.3148+0.1*math.sin(q.anim_time*90*1-60)", "2.4153+0.1*math.sin(q.anim_time*90*2-60)"]
+						"0.0": ["2+1*math.sin(q.anim_time*90*0.5)", "0.1*math.sin(q.anim_time*90*1-60)", "0.1*math.sin(q.anim_time*90*2-60)"]
 					},
 					"position": [0, "0.2*math.sin(q.anim_time*90*0.5-60)", 0]
 				}

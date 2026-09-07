@@ -62,7 +62,13 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "noctowl alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

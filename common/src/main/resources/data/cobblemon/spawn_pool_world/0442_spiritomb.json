@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 60.0,
+            "weight": 600.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -29,7 +29,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 100.0,
+            "weight": 1000.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -47,7 +47,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 100.0,
+            "weight": 1000.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -69,7 +69,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 100.0,
+            "weight": 1000.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"
@@ -82,17 +82,17 @@
             "pokemon": "spiritomb",
             "presets": [
                 "natural",
-                "desert_pyramid"
+                "jungle_pyramid"
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 100.0,
+            "weight": 1000.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
-                    "#cobblemon:is_desert"
+                    "#cobblemon:is_jungle"
                 ],
                 "minY": 48
             }
@@ -102,17 +102,17 @@
             "pokemon": "spiritomb",
             "presets": [
                 "natural",
-                "jungle_pyramid"
+                "desert_pyramid"
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 100.0,
+            "weight": 1000.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
-                    "#cobblemon:is_jungle"
+                    "#cobblemon:is_desert"
                 ],
                 "minY": 48
             }
@@ -124,7 +124,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "24-49",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

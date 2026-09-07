@@ -71,15 +71,23 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "totodile alpha",
+          "tier": 1
+        },
         {
           "pokemon": "croconaw",
           "tier": 1
         },
         {
-          "pokemon": "feraligatr",
+          "pokemon": "feraligatr mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "feraligatr mega",
+          "tier": 3
         }
       ]
     },

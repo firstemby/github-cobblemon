@@ -31,6 +31,7 @@ class OpenStarterUIPacket internal constructor(val categories: List<RenderableSt
             buffer.writeInt(category.order)
             buffer.writeInt(category.pokemon.size)
             category.pokemon.forEach { it.saveToBuffer(buffer) }
+            buffer.writeBoolean(category.randomStarter)
         }
     }
 
@@ -48,12 +49,14 @@ class OpenStarterUIPacket internal constructor(val categories: List<RenderableSt
                 repeat(numProperties) {
                     renderablePokemon.add(RenderablePokemon.loadFromBuffer(buffer))
                 }
+                val randomStarter = buffer.readBoolean()
                 categories.add(
                     RenderableStarterCategory(
                         name = name,
                         order = order,
                         displayName = displayName,
-                        pokemon = renderablePokemon
+                        pokemon = renderablePokemon,
+                        randomStarter = randomStarter
                     )
                 )
             }

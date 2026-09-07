@@ -72,6 +72,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "liepard alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -116,7 +125,6 @@
     "tm:assurance",
     "tm:batonpass",
     "tm:burningjealousy",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:cut",

@@ -68,7 +68,16 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "centiskorch alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 2,

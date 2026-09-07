@@ -76,7 +76,7 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "bouffalant",
@@ -330,7 +330,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "bouffalant",
@@ -519,7 +519,7 @@
         },
         "fireImmune": true,
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "tauros bull_breed=blaze",
@@ -713,7 +713,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "tauros bull_breed=aqua",

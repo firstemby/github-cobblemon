@@ -64,7 +64,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "chansey",
@@ -178,7 +178,6 @@
     "tm:megakick",
     "tm:megapunch",
     "tm:metronome",
-    "tm:naturalgift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",

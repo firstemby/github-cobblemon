@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.rattata.ground_idle": {
+		"animation.rattata_alolan.ground_idle": {
 			"loop": true,
 			"animation_length": 21.375,
 			"bones": {
@@ -55,7 +55,7 @@
 				}
 			}
 		},
-		"animation.rattata.ground_walk": {
+		"animation.rattata_alolan.ground_walk": {
 			"loop": true,
 			"bones": {
 				"body": {
@@ -124,7 +124,7 @@
 				}
 			}
 		},
-		"animation.rattata.faint": {
+		"animation.rattata_alolan.faint": {
 			"animation_length": 3,
 			"bones": {
 				"body": {
@@ -311,7 +311,7 @@
 				}
 			}
 		},
-		"animation.rattata.mouth_open": {
+		"animation.rattata_alolan.mouth_open": {
 			"animation_length": 1.25,
 			"bones": {
 				"jaw": {
@@ -333,7 +333,7 @@
 				}
 			}
 		},
-		"animation.rattata.sleep": {
+		"animation.rattata_alolan.sleep": {
 			"loop": true,
 			"bones": {
 				"body": {
@@ -390,7 +390,7 @@
 				}
 			}
 		},
-		"animation.rattata.blink": {
+		"animation.rattata_alolan.blink": {
 			"animation_length": 0.1667,
 			"bones": {
 				"eyelid_right": {
@@ -407,7 +407,7 @@
 				}
 			}
 		},
-		"animation.rattata.blink2": {
+		"animation.rattata_alolan.blink2": {
 			"animation_length": 0.16667,
 			"bones": {
 				"eyelid_right": {
@@ -425,6 +425,14 @@
 					}
 				}
 			}
-		}
+		},
+      "animation.rattata_alolan.cry": {
+        "animation_length": 1,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.rattata_alolan.cry"
+          }
+        }
+      }
 	}
 }

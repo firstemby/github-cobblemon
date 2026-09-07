@@ -13,19 +13,28 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
-            "weight": 5.7,
-            "weightMultiplier": {
-                "multiplier": 5.0,
-                "condition": {
-                    "isThundering": true
+            "weight": 19.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 5.0,
+                    "condition": {
+                        "isThundering": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_freshwater"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

@@ -28,6 +28,11 @@
       "locator": "target"
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.suckerpunch.target');"]
+    },
+    {
       "type": "pause",
       "pause": 0.2
     },

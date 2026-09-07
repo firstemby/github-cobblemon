@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "goldeen",
@@ -160,7 +160,6 @@
     "tm:blizzard",
     "tm:bounce",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:confuseray",

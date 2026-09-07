@@ -25,62 +25,63 @@ import java.util.*
 object ServerMoLangFunctions : AbstractMoLangFunctionHolder<MinecraftServer>() {
     override fun MinecraftServer.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val server = this
-        val map = mutableMapOf<String, (MoParams) -> Any>()
+        val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        map["get_world"] = getWorld@{ params ->
-            val world = server.getLevel(
-                ResourceKey.create(
-                    Registries.DIMENSION,
-                    params.getString(0).asIdentifierDefaultingNamespace(namespace = "minecraft")
-                )
-            ) ?: return@getWorld DoubleValue.ZERO
+        functions["get_world"] = getWorld@{ params ->
+            val world =
+                server.getLevel(
+                    ResourceKey.create(
+                        Registries.DIMENSION,
+                        params.getString(0).asIdentifierDefaultingNamespace(namespace = "minecraft"),
+                    ),
+                ) ?: return@getWorld DoubleValue.ZERO
 
-            return@getWorld world
+            world
                 .registryAccess()
                 .registryOrThrow(Registries.DIMENSION)
                 .wrapAsHolder(world)
                 .asWorldMoLangValue()
         }
 
-        map["broadcast"] = { params ->
+        functions["broadcast"] = { params ->
             val message = params.getString(0)
             server.playerList.broadcastSystemMessage(message.text(), params.getBooleanOrNull(1) == true)
             DoubleValue.ONE
         }
 
-        map["get_player_by_uuid"] = getPlayerByUuid@{ params ->
+        functions["get_player_by_uuid"] = getPlayerByUuid@{ params ->
             val uuid = UUID.fromString(params.getString(0))
             val player = server.playerList.getPlayer(uuid) ?: return@getPlayerByUuid DoubleValue.ZERO
-            return@getPlayerByUuid player.asMoLangValue()
+            player.asMoLangValue()
         }
 
-        map["get_player_by_username"] = getPlayerByUsername@{ params ->
+        functions["get_player_by_username"] = getPlayerByUsername@{ params ->
             val username = params.getString(0)
             val player = server.playerList.getPlayerByName(username) ?: return@getPlayerByUsername DoubleValue.ZERO
-            return@getPlayerByUsername player.asMoLangValue()
+            player.asMoLangValue()
         }
 
-        map["data"] = { params ->
+        functions["data"] = { params ->
             Cobblemon.molangData.load(
                 UUID(0L, 0L),
-                params.getStringOrNull(0)
+                params.getStringOrNull(0),
             )
         }
 
-        map["save_data"] = { params ->
+        functions["save_data"] = { params ->
             Cobblemon.molangData.save(
                 UUID(0L, 0L),
-                params.getStringOrNull(index = 0)
+                params.getStringOrNull(index = 0),
             )
             DoubleValue.ONE
         }
 
         // Maybe later...
-//            map.put("stop") { params ->
+//            functions.put("stop") { params ->
 //                Cobblemon.LOGGER.warn("Server is being stopped from a MoLang script.")
 //                server.stopServer()
 //            }
 
-        return map
+        return functions
     }
 }

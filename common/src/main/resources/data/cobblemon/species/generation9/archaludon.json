@@ -46,9 +46,9 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.6,
     "height": 2.5,
-    "fixed": false
+    "fixed": false,
+    "width": 1.6
   },
   "riding": {
     "behaviours": {
@@ -56,11 +56,11 @@
         "key": "cobblemon:land/horse",
         "rideSounds": [],
         "stats": {
-          "ACCELERATION": "5-20",
-          "JUMP": "5-15",
+          "ACCELERATION": "45-70",
+          "JUMP": "25-30",
           "SKILL": "5-25",
-          "SPEED": "25-60",
-          "STAMINA": "40-80"
+          "SPEED": "5-10",
+          "STAMINA": "50-90"
         }
       }
     },
@@ -69,6 +69,37 @@
         "locator": "seat_1"
       }
     ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.15
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0014,
+      "rouseChance": 0.0042,
+      "times": [
+        "any"
+      ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "archaludon alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "moves": [
     "1:electroshot",
@@ -114,6 +145,7 @@
     "tm:hyperbeam",
     "tm:irondefense",
     "tm:ironhead",
+    "tm:laserfocus",
     "tm:lightscreen",
     "tm:metalclaw",
     "tm:metalsound",
@@ -127,12 +159,14 @@
     "tm:rocksmash",
     "tm:rocktomb",
     "tm:scaryface",
+    "tm:screech",
     "tm:sleeptalk",
     "tm:smackdown",
     "tm:snarl",
     "tm:solarbeam",
     "tm:stealthrock",
     "tm:steelbeam",
+    "tm:steelroller",
     "tm:stoneedge",
     "tm:substitute",
     "tm:swordsdance",
@@ -151,6 +185,7 @@
     "tutor:hyperbeam",
     "tutor:irondefense",
     "tutor:ironhead",
+    "tutor:laserfocus",
     "tutor:meteorbeam",
     "tutor:outrage",
     "tutor:rest",
@@ -160,6 +195,7 @@
     "tutor:snarl",
     "tutor:stealthrock",
     "tutor:steelbeam",
+    "tutor:steelroller",
     "tutor:stoneedge",
     "tutor:thunderbolt",
     "legacy:attract",
@@ -168,27 +204,5 @@
     "legacy:stompingtantrum"
   ],
   "preEvolution": "duraludon",
-  "evolutions": [],
-  "behaviour": {
-    "moving": {
-      "walk": {
-        "walkSpeed": 0.15
-      },
-      "swim": {
-        "avoidsWater": true
-      }
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "times": [
-        "any"
-      ],
-      "drowsyChance": 0.0014,
-      "rouseChance": 0.0042
-    }
-  }
+  "evolutions": []
 }

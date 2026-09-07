@@ -103,7 +103,6 @@
     "tm:bodyslam",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:curse",
@@ -134,10 +133,8 @@
     "tm:lastresort",
     "tm:mudslap",
     "tm:mysticalfire",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:payday",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -180,7 +177,6 @@
     "tutor:lastresort",
     "tutor:mudslap",
     "tutor:mysticalfire",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rocksmash",
     "tutor:scorchingsands",
@@ -196,6 +192,7 @@
     "legacy:hiddenpower",
     "legacy:leer",
     "legacy:mimic",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:reflect",
     "legacy:return",
@@ -213,7 +210,41 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vaporeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "jolteon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flareon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "espeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "umbreon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "leafeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "glaceon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sylveon alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

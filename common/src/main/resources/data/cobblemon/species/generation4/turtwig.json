@@ -67,7 +67,7 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "turtwig",
@@ -145,7 +145,6 @@
     "tm:heavyslam",
     "tm:ironhead",
     "tm:irontail",
-    "tm:leafage",
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",

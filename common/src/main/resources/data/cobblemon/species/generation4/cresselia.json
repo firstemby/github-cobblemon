@@ -52,7 +52,7 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "cresselia",
@@ -128,7 +128,6 @@
     "tm:magicroom",
     "tm:mudslap",
     "tm:powergem",
-    "tm:powershift",
     "tm:powerswap",
     "tm:protect",
     "tm:psybeam",
@@ -176,7 +175,6 @@
     "tutor:magiccoat",
     "tutor:magicroom",
     "tutor:mudslap",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:psychocut",
     "tutor:recycle",
@@ -196,6 +194,7 @@
     "legacy:frustration",
     "legacy:hiddenpower",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

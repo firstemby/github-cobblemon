@@ -68,7 +68,17 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "armarouge alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "ceruledge alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

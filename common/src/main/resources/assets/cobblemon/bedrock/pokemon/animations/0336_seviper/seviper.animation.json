@@ -408,6 +408,14 @@
 					"position": [-0.1, 0, -0.1]
 				}
 			}
-		}
+		},
+      "animation.seviper.cry": {
+        "animation_length": 1.5,
+        "sound_effects": {
+          "0.0417": {
+            "effect": "pokemon.seviper.cry"
+          }
+        }
+      }
 	}
 }

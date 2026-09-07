@@ -280,7 +280,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "8"
+          "maxSize": 8
         },
         "moving": {
           "swim": {
@@ -303,7 +303,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "blaziken alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

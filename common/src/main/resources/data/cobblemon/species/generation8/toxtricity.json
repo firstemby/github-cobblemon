@@ -497,7 +497,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "toxtricity alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

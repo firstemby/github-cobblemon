@@ -192,6 +192,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "yungoos alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gumshoos alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }
