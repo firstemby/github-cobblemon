@@ -1967,14 +1967,6 @@
 					"position": [0, 0, -1]
 				}
 			},
-			"sound_effects": {
-				"0.0417": {
-					"effect": "animation.plumage_wing_flap_medium_8"
-				},
-				"1.375": {
-					"effect": "animation.plumage_wing_flap_medium_2"
-				}
-			},
 			"timeline": {
 				"0.0417": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
 				"1.375": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };"
@@ -2226,20 +2218,6 @@
 				"locator_seat_1": {
 					"rotation": ["10-math.sin(q.anim_time*90*4-120)*-2", 0, 0],
 					"position": [0, 0, 2]
-				}
-			},
-			"sound_effects": {
-				"0.7083": {
-					"effect": "animation.plumage_wing_flap_medium_2"
-				},
-				"1.6667": {
-					"effect": "animation.plumage_wing_flap_medium_8"
-				},
-				"2.7083": {
-					"effect": "animation.plumage_wing_flap_medium_2"
-				},
-				"3.6667": {
-					"effect": "animation.plumage_wing_flap_medium_8"
 				}
 			},
 			"timeline": {

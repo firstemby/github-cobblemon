@@ -19,26 +19,26 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Evolution>() {
     override fun Evolution.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val evolution = this
-        val map = hashMapOf<String, (MoParams) -> Any>()
+        val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        map["result"] = { evolution.result.asMoLangValue() }
-        map["is_optional"] = { DoubleValue(evolution.optional) }
-        map["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
+        functions["result"] = { evolution.result.asMoLangValue() }
+        functions["is_optional"] = { DoubleValue(evolution.optional) }
+        functions["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
 
         when (evolution) {
             is LevelUpEvolution -> {
-                map["is_level_up"] = { DoubleValue.ONE }
+                functions["is_level_up"] = { DoubleValue.ONE }
             }
 
             is TradeEvolution -> {
-                map["is_trade"] = { DoubleValue.ONE }
+                functions["is_trade"] = { DoubleValue.ONE }
             }
 
             is ItemInteractionEvolution -> {
-                map["is_item"] = { DoubleValue.ONE }
+                functions["is_item"] = { DoubleValue.ONE }
             }
         }
 
-        return map
+        return functions
     }
 }

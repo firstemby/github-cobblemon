@@ -17,10 +17,10 @@ import com.cobblemon.mod.common.api.storage.factory.PokemonStoreFactory
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.google.gson.JsonObject
-import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import java.util.UUID
 
 /**
  * The base class for all stores of [Pokemon]. A store specifies the kind of coordinate it needs to be given
@@ -77,7 +77,6 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         remove(pokemon)
         val position = getFirstAvailablePosition() ?: return false // Couldn't fit, shrug emoji
         set(position, pokemon)
-        Cobblemon.playerDataManager.getTMData(uuid)?.syncTMsFromPokemon(pokemon)
         return true
     }
 

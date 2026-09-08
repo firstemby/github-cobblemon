@@ -25,7 +25,8 @@ object PokedexHandler : EventHandler {
     }
 
     fun onPokemonGained(event: PokemonGainedEvent) {
-        Cobblemon.playerDataManager.getPokedexData(event.playerId).catch(event.pokemon)
+        Cobblemon.playerDataManager.getPokedexData(event.playerId).obtain(event.pokemon)
+        Cobblemon.playerDataManager.getTMData(event.playerId).syncTMsFromPokemon(event.pokemon)
     }
 
     fun onPokemonSeen(event: PokemonSeenEvent) {
@@ -34,7 +35,7 @@ object PokedexHandler : EventHandler {
 
     fun onPokemonAspectsChanged(event: PokemonAspectsChangedEvent) {
         if (event.ownerId != null) {
-            Cobblemon.playerDataManager.getPokedexData(event.ownerId).catch(event.pokemon)
+            Cobblemon.playerDataManager.getPokedexData(event.ownerId).obtain(event.pokemon)
         }
     }
 
