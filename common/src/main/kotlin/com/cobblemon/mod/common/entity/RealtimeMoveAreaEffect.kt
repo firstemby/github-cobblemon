@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonEntities.REALTIME_MOVE_PROJECTILE_AOE
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
+import com.cobblemon.mod.common.pokemon.ai.moves.AreaOfEffectMove
 import com.cobblemon.mod.common.pokemon.ai.moves.AreaOfEffectMoveInstance
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -25,15 +26,29 @@ class RealtimeMoveAreaEffect(
     var areaOfEffectMoveInstance: AreaOfEffectMoveInstance? = null // TODO make non-nullable
     private var delayTicks = 0
     private var durationTicks = 0
+
+    // These only really matter for client syncing
+    // TODO: I'm basically copying the move properties that the client needs, probably need a cleaner way of doing this
     var radius = 0f
+    var shape: AreaOfEffectMove.Companion.AOEShape = AreaOfEffectMove.Companion.AOEShape.CYLINDER
+    var height = 0f // Cylinders only
+
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
         builder.define(RADIUS, 0f)
+        builder.define(HEIGHT, 0f)
+        builder.define(SHAPE, AreaOfEffectMove.Companion.AOEShape.CYLINDER.shape)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
         if (RADIUS == data) {
             val i = entityData.get(RADIUS) as Float
             this.radius = if (i > 0) i else 0f
+        } else if (SHAPE == data) {
+            val i = entityData.get(SHAPE) as Int
+            this.shape = AreaOfEffectMove.Companion.AOEShape.entries[i]
+        } else if (HEIGHT == data) {
+            val i = entityData.get(HEIGHT) as Float
+            this.height = if (i > 0) i else 0f
         }
 
         super.onSyncedDataUpdated(data)
@@ -52,17 +67,13 @@ class RealtimeMoveAreaEffect(
     ) {
         this.areaOfEffectMoveInstance = realTimeMoveInstance
         entityData.set(RADIUS, areaOfEffectMoveInstance?.areaOfEffectMove?.radius ?: 0f)
-
-    }
-
-    override fun remove(reason: Entity.RemovalReason) {
-        println("Entity removed: $this, reason=$reason")
-        super.remove(reason)
+        entityData.set(HEIGHT, areaOfEffectMoveInstance?.areaOfEffectMove?.height ?: 0f)
+        entityData.set(SHAPE, areaOfEffectMoveInstance?.areaOfEffectMove?.shape?.ordinal ?: 0)
     }
 
     override fun tick() {
         super.tick()
-        if(level().isClientSide) return
+        if (level().isClientSide) return
         if (areaOfEffectMoveInstance == null) {
             if (this.tickCount > 0) {
                 discard()
@@ -112,10 +123,14 @@ class RealtimeMoveAreaEffect(
         )
 
         val entities = level().getEntities(this, searchBox)
-            .filter { it is LivingEntity
-                    && it.uuid != areaOfEffectMoveInstance!!.pokemonEntity.uuid
-                    && it.uuid != areaOfEffectMoveInstance!!.pokemonEntity.owner?.uuid
-                    && intersectsCylinder(it)
+            .filter {
+                it is LivingEntity
+                        && it.uuid != areaOfEffectMoveInstance!!.pokemonEntity.uuid
+                        && it.uuid != areaOfEffectMoveInstance!!.pokemonEntity.owner?.uuid
+                        && when (shape) {
+                    AreaOfEffectMove.Companion.AOEShape.CYLINDER -> intersectsCylinder(it)
+                    AreaOfEffectMove.Companion.AOEShape.SPHERE -> intersectsSphere(it)
+                }
             }
 
         return entities
@@ -129,7 +144,8 @@ class RealtimeMoveAreaEffect(
 
         // Y overlap
         if (box.maxY < (y)
-            || box.minY > (y + moveData.height) ) {
+            || box.minY > (y + moveData.height)
+        ) {
             return false
         }
 
@@ -142,6 +158,22 @@ class RealtimeMoveAreaEffect(
         val dz = z - closestZ
 
         return dx * dx + dz * dz <= moveData.radius * moveData.radius
+    }
+
+    fun intersectsSphere(entity: Entity): Boolean {
+        val moveData = areaOfEffectMoveInstance!!.areaOfEffectMove
+
+        val box = entity.boundingBox
+
+        val closestX = x.coerceIn(box.minX, box.maxX)
+        val closestY = y.coerceIn(box.minY, box.maxY)
+        val closestZ = z.coerceIn(box.minZ, box.maxZ)
+
+        val dx = x - closestX
+        val dy = y - closestY
+        val dz = z - closestZ
+
+        return dx * dx + dy * dy + dz * dz <= moveData.radius * moveData.radius
     }
 
 //    fun end() {
@@ -164,5 +196,9 @@ class RealtimeMoveAreaEffect(
     companion object {
         val RADIUS =
             SynchedEntityData.defineId(RealtimeMoveAreaEffect::class.java, EntityDataSerializers.FLOAT)
+        val HEIGHT =
+            SynchedEntityData.defineId(RealtimeMoveAreaEffect::class.java, EntityDataSerializers.FLOAT)
+        val SHAPE =
+            SynchedEntityData.defineId(RealtimeMoveAreaEffect::class.java, EntityDataSerializers.INT)
     }
 }

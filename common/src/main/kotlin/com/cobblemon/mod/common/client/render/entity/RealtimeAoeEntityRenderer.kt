@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import com.cobblemon.mod.common.pokemon.ai.moves.AreaOfEffectMove
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.renderer.MultiBufferSource
@@ -32,32 +33,33 @@ class RealtimeAoeEntityRenderer(
         packedLight: Int
     ) {
         poseStack.pushPose()
-        val height = 0.5f
         // Move origin to entity center
-        poseStack.translate(0.0, height * 0.5, 0.0)
 
         val consumer = buffer.getBuffer(RenderType.lines())
-        // TODO: AOE shape differentiation
-//        if (entity.renderSphere) {
-//            drawSphere(
-//                poseStack,
-//                consumer,
-//                entity.radius,
-//                32,
-//                1f, 0f, 0f, 1f
-//            )
-//        } else {
-            drawCylinder(
-                poseStack,
-                consumer,
-                entity.radius.toFloat(),
-                height,//entity.height.toFloat(),
-                32,
-                0f, 1f, 0f, 1f
-            )
-//        }
+        when (entity.shape) {
+            AreaOfEffectMove.Companion.AOEShape.CYLINDER -> {
+                poseStack.translate(0.0, entity.height * 0.5, 0.0)
+                drawCylinder(
+                    poseStack,
+                    consumer,
+                    entity.radius,
+                    entity.height,
+                    32,
+                    0f, 1f, 0f, 1f
+                )
+                poseStack.popPose()
 
-        poseStack.popPose()
+            }
+            AreaOfEffectMove.Companion.AOEShape.SPHERE -> {
+                drawSphere(
+                    poseStack,
+                    consumer,
+                    entity.radius,
+                    32,
+                    1f, 0f, 0f, 1f
+                )
+            }
+        }
 
         super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight)
     }
