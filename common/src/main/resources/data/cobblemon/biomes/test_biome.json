@@ -37,20 +37,20 @@
       "max": 2
     },
     "continentalness": {
-      "min": 6,
-      "max": 6
+      "min": 2,
+      "max": 2
     },
     "erosion": {
-      "min": 4,
-      "max": 4
+      "min": 2,
+      "max": 2
     },
     "depth": {
       "min": 0.0,
       "max": 0.0
     },
     "weirdness": {
-      "min": 6,
-      "max": 6
+      "min": 2,
+      "max": 2
     },
     "offset": 0.0
   }

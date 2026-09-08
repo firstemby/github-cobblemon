@@ -1,5 +1,6 @@
 package com.cobblemon.mod.common.world.biome.parse
 
+import com.cobblemon.mod.common.Cobblemon
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mojang.serialization.JsonOps
@@ -14,15 +15,21 @@ object ClimateParametersSectionParser : CobblemonBiomeSectionParser {
 		ops: RegistryOps<JsonElement>,
 		builder: CobblemonBiomeParseBuilder
 	): Boolean {
-		val params = root.getAsJsonObject("parameters") ?: return false
-		val parameterPoint = Climate.ParameterPoint.CODEC
-			.parse(JsonOps.INSTANCE, params)
-			.result()
-			.orElse(null)
-			?: return false
+		val params = root.getAsJsonObject("parameters")
+		if (params == null) {
+			Cobblemon.LOGGER.error("MEALAM Missing 'parameters' section in biome JSON")
+			return false
+		}
+
+		val result = Climate.ParameterPoint.CODEC.parse(JsonOps.INSTANCE, params)
+		val parameterPoint = result.result().orElse(null)
+		if (parameterPoint == null) {
+			val errorMessage = result.error().map { it.message() }.orElse("unknown error")
+			Cobblemon.LOGGER.error("MEALAM Failed to parse climate parameters: {}", errorMessage)
+			return false
+		}
 
 		builder.parameters = parameterPoint
 		return true
 	}
 }
-
