@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
@@ -95,30 +96,39 @@ class Defensive(
         return if (trackedEntity != null) ObjectiveStatus.ACTIVE else ObjectiveStatus.INACTIVE
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
-        if (memory == MemoryModuleType.HURT_BY_ENTITY) {
-            if (value != null) {
-                // Something just smacked us, see if we should get mad about it.
-                val livingEntity = value as LivingEntity
-                val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
-                val shouldTarget = runtime.resolveBoolean(condition)
-                if (shouldTarget) {
-                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity,
-                        runtime.resolveInt(maxAttackDuration).toLong()
-                    )
-                    brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
-                    trackedEntity = livingEntity
-                }
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = MemoryModuleType.HURT_BY_ENTITY
+        ) { value, labels -> onHurtByEntityChanged(brain, value, labels) }
+
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = CobblemonMemories.ATTACK_TARGET_DATA
+        ) { value, labels -> onAttackTargetDataChanged(brain, value, labels) }
+    }
+
+    fun onHurtByEntityChanged(brain: BiggerBrain, livingEntity: LivingEntity?, labels: MutableSet<String>): Boolean {
+        if (livingEntity != null) {
+            // Something just smacked us, see if we should get mad about it.
+            val livingEntity = livingEntity as LivingEntity
+            val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
+            val shouldTarget = runtime.resolveBoolean(condition)
+            if (shouldTarget) {
+                brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity,
+                    runtime.resolveInt(maxAttackDuration).toLong()
+                )
+                brain.eraseMemory(MemoryModuleType.AVOID_TARGET)
+                trackedEntity = livingEntity
             }
-        } else if (memory == CobblemonMemories.ATTACK_TARGET_DATA && value != null) {
+        }
+        return true
+    }
+
+    fun onAttackTargetDataChanged(brain: BiggerBrain, attackData: CobblemonAttackTargetData?, labels: MutableSet<String>): Boolean {
+        if (attackData != null) {
             // We smacked them, check if it's time for tactical retreat
-            val attackData = value as CobblemonAttackTargetData
-            val livingEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return
+            val livingEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return true
             val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
             if (attackData.hitsLanded >= runtime.resolveInt(retaliationHitCount)) {
                 // Justice served, carry on
@@ -127,6 +137,7 @@ class Defensive(
                 brain.setMemory(MemoryModuleType.AVOID_TARGET, trackedEntity)
             }
         }
+        return true // Other listeners can handle it that's fine
     }
 
     class Config : ObjectiveConfig {

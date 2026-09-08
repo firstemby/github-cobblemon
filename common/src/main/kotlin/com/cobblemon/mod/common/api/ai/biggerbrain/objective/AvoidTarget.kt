@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
@@ -137,19 +138,18 @@ class AvoidTarget(
         return ObjectiveStatus.ACTIVE
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
-        if (memory == MemoryModuleType.AVOID_TARGET) {
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = MemoryModuleType.AVOID_TARGET
+        ) { value, labels ->
             if (value == null) {
                 if (brain.isFixation(movementTask)) {
                     brain.distract(Distraction.FORCE)
                     movementTask = null
                 }
             }
+            return@subscribe true
         }
     }
 

@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.api.ai.biggerbrain
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.api.PrioritizedList
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
@@ -23,11 +25,10 @@ import com.cobblemon.mod.common.net.messages.client.debug.UpdateTrackedBrainData
 import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.withQueryValue
-import java.util.UUID
-import kotlin.collections.mutableListOf
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
+import java.util.UUID
 
 /**
  * A better* version of Minecraft's [net.minecraft.world.entity.ai.Brain] system that makes development more
@@ -65,7 +66,22 @@ class BiggerBrain(val entity: LivingEntity) {
 
     val senses = mutableListOf<Sense>()
     val objectives = mutableListOf<Objective>()
-    val observedMemories = mutableMapOf<MemoryModuleType<*>, MutableList<Objective>>()
+    val subscriptions = mutableMapOf<MemoryModuleType<*>, PrioritizedList<MemorySubscription<*>>>()
+
+    class MemorySubscription<U>(
+        val subscription: (U?, labels: MutableSet<String>) -> Boolean
+    ) {
+        fun handle(value: Any?, labels: MutableSet<String>): Boolean {
+            val castValue = value as? U
+            return subscription(castValue, labels)
+        }
+    }
+
+    fun <U, M : MemoryModuleType<U>> subscribe(priority: Priority = Priority.NORMAL, memory: M, handler: (U?, labels: MutableSet<String>) -> Boolean) {
+        subscriptions
+            .getOrPut(memory, ::PrioritizedList)
+            .add(priority, MemorySubscription(handler))
+    }
 
     var fixation: EntityFixation? = null
 
@@ -73,10 +89,7 @@ class BiggerBrain(val entity: LivingEntity) {
 
     fun registerObjective(objective: Objective) {
         objectives.add(objective)
-        for (memory in objective.observedMemories) {
-            val list = this.observedMemories.getOrPut(memory, ::ArrayList)
-            list.add(objective)
-        }
+        objective.onRegister(entity, this)
     }
 
     fun isFixation(fixation: EntityFixation?): Boolean {
@@ -148,9 +161,8 @@ class BiggerBrain(val entity: LivingEntity) {
         } else {
             entity.brain.setMemory(memory, value)
         }
-        observedMemories[memory]?.forEach { objective ->
-            objective.onMemoryChanged(entity, this, memory, value)
-        }
+        val labels = mutableSetOf<String>()
+        subscriptions[memory]?.forEach { it.handle(value = value, labels = labels) }
     }
 
     fun <T> setMemoryIfChanged(memory: MemoryModuleType<T>, value: T, expiry: Long? = null) {
@@ -161,9 +173,8 @@ class BiggerBrain(val entity: LivingEntity) {
 
     fun <T> eraseMemory(memory: MemoryModuleType<T>) {
         entity.brain.eraseMemory(memory)
-        observedMemories[memory]?.forEach { objective ->
-            objective.onMemoryChanged(entity, this, memory, null)
-        }
+        val labels = mutableSetOf<String>()
+        subscriptions[memory]?.forEach { it.handle(value = null, labels = labels) }
     }
 
     fun <T> eraseMemoryIfPresent(memory: MemoryModuleType<T>) {

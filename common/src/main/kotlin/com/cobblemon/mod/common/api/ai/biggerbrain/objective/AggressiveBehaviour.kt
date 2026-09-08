@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
@@ -110,21 +111,19 @@ class AggressiveBehaviour(
         return if (trackedEntity != null) ObjectiveStatus.ACTIVE else ObjectiveStatus.INACTIVE
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
-        if (memory == CobblemonMemories.ATTACK_TARGET_DATA && value != null) {
-
-            val livingEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return
-            if (trackedEntity?.uuid == livingEntity.uuid) {
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = CobblemonMemories.ATTACK_TARGET_DATA
+        ) { attackData, labels ->
+            val targetEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return@subscribe true
+            if (trackedEntity?.uuid == targetEntity.uuid) {
                 // We smacked them, refresh our attack timer
-                val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
+                val runtime = mainThreadRuntime.withQueryValue("entity", (targetEntity).asMostSpecificMoLangValue())
                 val attackDuration = runtime.resolveInt(maxAttackDuration)
-                brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity, attackDuration.toLong())
+                brain.setMemory(MemoryModuleType.ATTACK_TARGET, targetEntity, attackDuration.toLong())
             }
+            return@subscribe true
         }
     }
 

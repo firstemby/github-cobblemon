@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
@@ -126,19 +127,18 @@ class AttackTargetMelee(
         return ObjectiveStatus.FIXATED
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
-        if (memory == MemoryModuleType.ATTACK_TARGET) {
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = MemoryModuleType.ATTACK_TARGET
+        ) { value, labels ->
             if (value == null) {
                 if (brain.isFixation(movementTask)) {
                     brain.distract(Distraction.FORCE)
                     movementTask = null
                 }
             }
+            return@subscribe true
         }
     }
 

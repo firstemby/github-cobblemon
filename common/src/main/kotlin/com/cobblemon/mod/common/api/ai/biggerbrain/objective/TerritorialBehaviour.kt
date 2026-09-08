@@ -10,8 +10,8 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.ai.CobblemonAttackTargetData
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -150,36 +150,40 @@ class TerritorialBehaviour(
         return if (trackedEntity != null) ObjectiveStatus.ACTIVE else ObjectiveStatus.INACTIVE
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
         // TODO: handle conflicts between different behaviours
-        if (memory == CobblemonMemories.ATTACK_TARGET_DATA && value != null) {
-
-            val livingEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return
-            if (trackedEntity?.uuid == livingEntity.uuid) {
-                val attackData = value as CobblemonAttackTargetData
-                if (attackData.hitsLanded >= satiationHitCount) {
-                    // Justice served, give the fool a chance to back off
-                    proximityAttackCooldown = PROXIMITY_AGGRO_COOLDOWN_TICKS
-                    brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
-                    brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
-                } else {
-                    // We smacked them, refresh our attack timer
-                    val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
-                    val attackDuration = runtime.resolveInt(maxAttackDuration)
-                    brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity, attackDuration.toLong())
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = CobblemonMemories.ATTACK_TARGET_DATA
+        ) { value, labels ->
+            if (value != null) {
+                val livingEntity = brain.getMemory(MemoryModuleType.ATTACK_TARGET) ?: return@subscribe true
+                if (trackedEntity?.uuid == livingEntity.uuid) {
+                    val attackData = value
+                    if (attackData.hitsLanded >= satiationHitCount) {
+                        // Justice served, give the fool a chance to back off
+                        proximityAttackCooldown = PROXIMITY_AGGRO_COOLDOWN_TICKS
+                        brain.eraseMemory(CobblemonMemories.ATTACK_TARGET_DATA)
+                        brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
+                    } else {
+                        // We smacked them, refresh our attack timer
+                        val runtime = mainThreadRuntime.withQueryValue("entity", (livingEntity).asMostSpecificMoLangValue())
+                        val attackDuration = runtime.resolveInt(maxAttackDuration)
+                        brain.setMemory(MemoryModuleType.ATTACK_TARGET, livingEntity, attackDuration.toLong())
+                    }
                 }
-
             }
-        } else if (memory == MemoryModuleType.HURT_BY_ENTITY) {
+            return@subscribe true
+        }
+
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = MemoryModuleType.HURT_BY_ENTITY
+        ) { value, labels ->
             // Of course you know this means war.
             if (value != null) {
                 // Something just smacked us, see if we should get mad about it.
-                val livingEntity = value as LivingEntity
+                val livingEntity = value
                 val runtime = mainThreadRuntime.withQueryValue("entity", (entity).asMostSpecificMoLangValue())
                     .withQueryValue("target", livingEntity.asMostSpecificMoLangValue())
                 val shouldTarget = runtime.resolveBoolean(condition) && runtime.resolveBoolean(targetCondition)
@@ -200,6 +204,7 @@ class TerritorialBehaviour(
                     )
                 }
             }
+            return@subscribe true
         }
     }
 

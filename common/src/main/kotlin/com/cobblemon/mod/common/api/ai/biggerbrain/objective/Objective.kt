@@ -37,12 +37,6 @@ interface Objective {
     fun getDescription(entity: LivingEntity): String
     /** Performs this objective's logic for a tick. */
     fun perform(entity: LivingEntity, brain: BiggerBrain, activeObjectiveTags: MutableSet<String>): ObjectiveStatus
-
-    /**
-     * A subscription handler called for when a memory is set or removed (not expired). For a memory to trigger this
-     * function, it must be in [observedMemories].
-     */
-    fun <T> onMemoryChanged(entity: LivingEntity, brain: BiggerBrain, memory: MemoryModuleType<T>, value: T?) {
-        // Default implementation does nothing
-    }
+    /** Runs when an objective is added to a [BiggerBrain]. Prime opportunity to register memory subscriptions. */
+    fun onRegister(entity: LivingEntity, brain: BiggerBrain) {}
 }
