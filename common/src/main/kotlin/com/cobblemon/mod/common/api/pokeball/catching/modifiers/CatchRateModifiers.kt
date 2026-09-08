@@ -54,22 +54,20 @@ object CatchRateModifiers {
 
     /**
      * Used by [PokeBalls.LOVE_BALL].
-     * Boosts the catch rate if the Pokémon is of the same species and opposite gender
+     * Boosts the catch rate 2.5× if any of the player's active Pokémon is of the opposite gender,
+     * or 8× if that Pokémon is also of the same species.
      */
     val LOVE = BattleModifier { _, playerPokemon, pokemon ->
-        if (
-            pokemon.gender != Gender.GENDERLESS
-            && playerPokemon.mapNotNull { it.battlePokemon?.originalPokemon }
-                .any {
-                    it.gender != Gender.GENDERLESS &&
-                            it.species.name.equals(pokemon.species.name, true) &&
-                            it.gender != pokemon.gender
-                }
-        ) {
-            if (playerPokemon.any { it.battlePokemon?.originalPokemon?.species?.resourceIdentifier == pokemon.species.resourceIdentifier }) 8F else 2.5F
+        if (pokemon.gender == Gender.GENDERLESS) {
+            return@BattleModifier 1F
         }
-        else {
-            1F
+        val oppositeGender = playerPokemon
+            .mapNotNull { it.battlePokemon?.originalPokemon }
+            .filter { it.gender != Gender.GENDERLESS && it.gender != pokemon.gender }
+        when {
+            oppositeGender.any { it.species.resourceIdentifier == pokemon.species.resourceIdentifier } -> 8F
+            oppositeGender.isNotEmpty() -> 2.5F
+            else -> 1F
         }
     }
 
@@ -81,7 +79,7 @@ object CatchRateModifiers {
      * 1× otherwise.
      */
     val MOON_PHASES: CatchRateModifier = WorldStateModifier { _, entity ->
-        if (entity.level().gameTime in 12000..24000)
+        if (entity.level().dayTime % 24000 < 12000)
             return@WorldStateModifier 1F
         when (entity.level().moonPhase) {
             2, 6 -> 1.5F
