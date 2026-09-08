@@ -70,7 +70,8 @@ open class TemporaryForm (
             ?: throw Exception()
 
     val revertActionEffect: ActionEffectTimeline
-        get() = ActionEffects.actionEffects[actionEffectIdentifier?.withPath { "revert" } ?: cobblemonResource("form_${name.lowercase()}_revert")]
+        get() = actionEffectIdentifier?.withSuffix("_revert")?.let(ActionEffects.actionEffects::get)
+            ?: ActionEffects.actionEffects[cobblemonResource("form_${name.lowercase()}_revert")]
             ?: ActionEffects.actionEffects["generic_form_revert".asIdentifierDefaultingNamespace()]
             ?: throw Exception()
 
