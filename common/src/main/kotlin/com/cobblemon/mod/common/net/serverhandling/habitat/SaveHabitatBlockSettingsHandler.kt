@@ -18,6 +18,11 @@ import net.minecraft.server.level.ServerPlayer
 
 object SaveHabitatBlockSettingsHandler : ServerNetworkPacketHandler<SaveHabitatBlockSettingsPacket> {
     override fun handle(packet: SaveHabitatBlockSettingsPacket, server: MinecraftServer, player: ServerPlayer) {
+        if (!player.isCreative) {
+            // mf does not have permission
+            return
+        }
+
         val world = player.serverLevel()
         val blockEntity = world.getBlockEntity(packet.blockPos) as? HabitatBlockEntity ?: return // it's broken
         val pre = SaveHabitatBlockSettingsEvent.Pre(
@@ -27,11 +32,6 @@ object SaveHabitatBlockSettingsHandler : ServerNetworkPacketHandler<SaveHabitatB
             habitatBlockEntity = blockEntity,
             settings = packet.settings
         )
-
-        if (!player.isCreative) {
-            // mf does not have permission
-            return
-        }
 
         CobblemonEvents.HABITAT_SETTINGS_SAVED_PRE.postThen(pre) {
             blockEntity.applySettings(habitatSettingsDTO = packet.settings)

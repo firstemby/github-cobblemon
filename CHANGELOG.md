@@ -18,6 +18,9 @@
 - Fixed NPCs getting their own TM progress file.
 - Fixed the TM Machine refusing move selections that the `unlockAllMoveDexMovesByDefault` config had made visible, leaving the move slot blank and the craft button unresponsive.
 - Fixed Rufflet, Braviary, and Hisuian Braviary flooding logs with errors about missing sound events.
+- Fixed pokemon property typos in Pangoro and Dedenne herd spawn files.
+- Fixed form typo in Rockruff dusk spawn entry.
+- Fixed a potential world gen stall with the Type Gem clusters.
 
 ### Developer
 

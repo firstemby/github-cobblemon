@@ -33,7 +33,7 @@
         },
         {
             "id": "rockruff-dusk-2",
-            "pokemon": "rockruff dusk",
+            "pokemon": "rockruff wolf_form=dusk",
             "presets": [
                 "natural",
                 "wild"
