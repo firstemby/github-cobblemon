@@ -42,7 +42,7 @@ abstract class EntityResponseObjective(
     open fun scanForValidTargets(entity: LivingEntity, brain: BiggerBrain): LivingEntity? {
 
         //TODO: need to apply some sort of awareness modifier
-        // Sleep obviously should dramatically effect this but it's not hard to imagine other things that could do this
+        // Sleep obviously should dramatically affect this but it's not hard to imagine other things that could do this
         if (entity.isSleeping || (entity is PokemonEntity && entity.pokemon.status?.status == Statuses.SLEEP)) {
             // Also why doesn't entity.isSleeping for PokemonEntities return true if the sleep status is applied?
             return null
