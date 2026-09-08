@@ -26,44 +26,43 @@ object ItemStackMoLangFunctions : AbstractMoLangFunctionHolder<Pair<ItemStack, R
         val registryAccess = this.second
         val itemRegistry = registryAccess.registryOrThrow(Registries.ITEM)
         val holder = itemRegistry.wrapAsHolder(stack.item)
-        val functions = mutableMapOf<String, (MoParams) -> Any>()
 
-        functions["item"] = { holder.asMoLangValue(Registries.ITEM) }
-        functions["count"] = { DoubleValue(stack.count.toDouble()) }
-        functions["damage_value"] = { DoubleValue(stack.damageValue) }
-        functions["max_damage"] = { DoubleValue(stack.maxDamage) }
-        functions["is_empty"] = { DoubleValue(stack.isEmpty) }
-        functions["shrink"] = { params -> stack.shrink(params.getInt(0)) }
-        functions["grow"] = { params -> stack.grow(params.getInt(0)) }
-        functions["is_of"] = { params ->
+        val map = hashMapOf<String, (MoParams) -> Any>()
+        map["item"] = { _ -> holder.asMoLangValue(Registries.ITEM) }
+        map["count"] = { _ -> DoubleValue(stack.count.toDouble()) }
+        map["damage_value"] = { _ -> DoubleValue(stack.damageValue) }
+        map["max_damage"] = { _ -> DoubleValue(stack.maxDamage) }
+        map["is_empty"] = { _ -> DoubleValue(stack.isEmpty) }
+        map["shrink"] = { params -> stack.shrink(params.getInt(0)) }
+        map["grow"] = { params -> stack.grow(params.getInt(0)) }
+        map["is_of"] = { params ->
             DoubleValue(
                 holder.`is`(
-                    params.getString(0).asIdentifierDefaultingNamespace(),
-                ),
+                    params.getString(0).asIdentifierDefaultingNamespace()
+                )
             )
         }
-        functions["is_in"] = { params ->
+        map["is_in"] = { params ->
             DoubleValue(
                 holder.`is`(
                     TagKey.create(
                         Registries.ITEM,
-                        params.getString(0).replace("#", "").asIdentifierDefaultingNamespace(),
-                    ),
-                ),
+                        params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()
+                    )
+                )
             )
         }
-        functions["is_food"] = { DoubleValue(stack.has(DataComponents.FOOD)) }
-        functions["is_enchanted"] = { DoubleValue(stack.hasFoil()) }
-        functions["has_enchantment"] = hasEnchantment@{ params ->
+        map["is_food"] = { _ -> DoubleValue(stack.has(DataComponents.FOOD)) }
+        map["is_enchanted"] = { _ -> DoubleValue(stack.hasFoil()) }
+        map["has_enchantment"] = put@{ params ->
             val enchantmentId = params.getString(0).asIdentifierDefaultingNamespace()
             val minLevel = params.getIntOrNull(1) ?: 1
             val enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
             val holder =
-                enchantmentRegistry.getHolder(enchantmentId).orElse(null) ?: return@hasEnchantment DoubleValue.ZERO
+                enchantmentRegistry.getHolder(enchantmentId).orElse(null) ?: return@put DoubleValue.ZERO
             val level = EnchantmentHelper.getItemEnchantmentLevel(holder, stack)
-            DoubleValue(level >= minLevel)
+            return@put DoubleValue(level >= minLevel)
         }
-
-        return functions
+        return map
     }
 }

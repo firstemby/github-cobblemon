@@ -14,9 +14,6 @@ import net.minecraft.world.level.dimension.DimensionType
 
 object DimensionTypeMoLangFunctions : AbstractMoLangFunctionHolder<Holder<DimensionType>>() {
     override fun Holder<DimensionType>.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
-        val dimension = this
-        val functions = hashMapOf<String, (MoParams) -> Any>()
-
-        return functions
+        return mutableMapOf()
     }
 }

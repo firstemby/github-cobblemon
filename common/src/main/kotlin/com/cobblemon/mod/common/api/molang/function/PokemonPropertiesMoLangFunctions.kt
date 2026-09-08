@@ -20,50 +20,52 @@ import com.cobblemon.mod.common.util.getStringOrNull
 object PokemonPropertiesMoLangFunctions : AbstractMoLangFunctionHolder<PokemonProperties>() {
     override fun PokemonProperties.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val props = this
-        val functions = hashMapOf<String, (MoParams) -> Any>()
+        val map = mutableMapOf<String, (MoParams) -> Any>()
 
-        functions["level"] = { DoubleValue(props.level?.toDouble() ?: 0) }
-        functions["set_level"] = { params ->
+        map["level"] = { DoubleValue(props.level?.toDouble() ?: 0) }
+        map["set_level"] = { params ->
             props.level = params.getIntOrNull(0)
             DoubleValue.ONE
         }
-        functions["shiny"] = { DoubleValue(props.shiny) }
-        functions["set_shiny"] = { params ->
+        map["shiny"] = { DoubleValue(props.shiny) }
+        map["set_shiny"] = { params ->
             props.shiny = params.getBooleanOrNull(0)
             DoubleValue.ONE
         }
-        functions["species"] = { props.species?.let { StringValue(it) } ?: DoubleValue.ZERO }
-        functions["set_species"] = { params ->
+        map["species"] = { props.species?.let { StringValue(it) } ?: DoubleValue.ZERO }
+        map["set_species"] = { params ->
             props.species = params.getStringOrNull(0)
             DoubleValue.ONE
         }
-        functions["gender"] = { props.gender?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
-        functions["set_gender"] = { params ->
+        map["gender"] = { props.gender?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
+        map["set_gender"] = { params ->
             props.gender = params.getStringOrNull(0)?.let { Gender.valueOf(it) }
             DoubleValue.ONE
         }
-        functions["form"] = { props.form?.let { StringValue(it) } ?: DoubleValue.ZERO }
-        functions["ivs"] = ivs@{
+        map["form"] = { props.form?.let { StringValue(it) } ?: DoubleValue.ZERO }
+        map["ivs"] = ivs@{
             val ivs = props.ivs ?: return@ivs DoubleValue.ZERO
 
-            ivs.struct
+            return@ivs ivs.struct
         }
-        functions["evs"] = evs@{
+        map["evs"] = evs@{
             val evs = props.evs ?: return@evs DoubleValue.ZERO
 
-            evs.struct
+            return@evs evs.struct
         }
-        functions["friendship"] = { DoubleValue(props.friendship?.toDouble() ?: DoubleValue.ZERO) }
-        functions["set_friendship"] = { params ->
+        map["friendship"] = { DoubleValue(props.friendship?.toDouble() ?: DoubleValue.ZERO) }
+        map["set_friendship"] = { params ->
             props.friendship = params.getIntOrNull(0)
             DoubleValue.ONE
         }
-        functions["create"] = { (props.create()).struct }
-        functions["to_string"] = { params ->
+        map["create"] = {
+            val pokemon = props.create()
+            pokemon.struct
+        }
+        map["to_string"] = { params ->
             val separator = params.getStringOrNull(0) ?: " "
             StringValue(props.asString(separator = separator))
         }
-
-        return functions
+        return map
     }
 }

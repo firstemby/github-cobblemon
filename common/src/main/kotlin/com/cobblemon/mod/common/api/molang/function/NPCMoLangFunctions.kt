@@ -50,23 +50,18 @@ import kotlin.collections.any
 object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity>() {
     override fun NPCEntity.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val npc = this
-        val functions = hashMapOf<String, (MoParams) -> Any>()
-
-        functions["class"] = { StringValue(npc.npc.id.toString()) }
-        functions["name"] = { StringValue(npc.name.string) }
-        functions["level"] = { DoubleValue(npc.level) }
-        functions["has_aspect"] = { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
-        functions["in_battle"] = { DoubleValue(npc.isInBattle()) }
-        functions["battles"] = {
-            ArrayStruct(
-                npc.battleIds
-                    .mapNotNull { BattleRegistry.getBattle(it)?.struct }
-                    .mapIndexed { index, value -> "$index" to value }
-                    .toMap(),
-            )
+        val map = hashMapOf<String, (MoParams) -> Any>()
+        map["class"] = { StringValue(npc.npc.id.toString()) }
+        map["name"] = { StringValue(npc.name.string) }
+        map["level"] = { DoubleValue(npc.level) }
+        map["has_aspect"] = { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
+        map["in_battle"] = { DoubleValue(npc.isInBattle()) }
+        map["battles"] = {
+            ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }
+                .mapIndexed { index, value -> "$index" to value }.toMap())
         }
-        functions["stop_battles"] = { npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
-        functions["run_script_on_client"] = { params ->
+        map["stop_battles"] = { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
+        map["run_script_on_client"] = { params ->
             val world = npc.level()
             if (world is ServerLevel) {
                 val script = params.getString(0)
@@ -75,142 +70,141 @@ object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity>() {
             }
             Unit
         }
-        functions["run_script"] = { params ->
+        map["run_script"] = { params ->
             val script = params.getString(0).asIdentifierDefaultingNamespace()
             val runtime = MoLangRuntime()
             runtime.environment.cloneFrom(params.environment)
             CobblemonScripts.run(script, runtime) ?: DoubleValue(0)
         }
-        functions["set_movable"] = { params ->
+        map["set_movable"] = put@{ params ->
             val movable = params.getBooleanOrNull(0) != false
             npc.isMovable = movable
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_invulnerable"] = { params ->
+        map["set_invulnerable"] = put@{ params ->
             val invulnerable = params.getBooleanOrNull(0) != false
             npc.isInvulnerable = invulnerable
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_leashable"] = { params ->
+        map["set_leashable"] = put@{ params ->
             val leashable = params.getBooleanOrNull(0) != false
             npc.isLeashable = leashable
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_allow_projectile_hits"] = { params ->
+        map["set_allow_projectile_hits"] = put@{ params ->
             val allowProjectileHits = params.getBooleanOrNull(0) != false
             npc.allowProjectileHits = allowProjectileHits
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_name_tag_visible"] = { params ->
+        map["set_name_tag_visible"] = put@{ params ->
             val nameTagVisible = params.getBooleanOrNull(0) != false
             npc.hideNameTag = !nameTagVisible
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["unset_interaction"] = {
+        map["unset_interaction"] = put@{
             npc.interaction = null
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_dialogue_interaction"] = { params ->
+        map["set_dialogue_interaction"] = put@{ params ->
             val dialogue = params.getString(0).asIdentifierDefaultingNamespace()
-            npc.interaction =
-                DialogueNPCInteractionConfiguration().also {
-                    it.dialogue = dialogue
-                }
-            DoubleValue.ONE
+            npc.interaction = DialogueNPCInteractionConfiguration().also {
+                it.dialogue = dialogue
+            }
+            return@put DoubleValue.ONE
         }
-        functions["set_script_interaction"] = { params ->
+        map["set_script_interaction"] = put@{ params ->
             val script = params.getString(0).asIdentifierDefaultingNamespace()
-            npc.interaction =
-                ScriptNPCInteractionConfiguration().also {
-                    it.script = script
-                }
-            DoubleValue.ONE
+            npc.interaction = ScriptNPCInteractionConfiguration().also {
+                it.script = script
+            }
+            return@put DoubleValue.ONE
         }
-        functions["set_player_texture"] = setPlayerTexture@{ params ->
+        map["set_player_texture"] = put@{ params ->
             val username = params.getString(0)
             // Re-applying it would be unnecessarily laggy.
             if (username == npc.data.map["player_texture_username"]?.asString()) {
-                return@setPlayerTexture DoubleValue.ZERO
+                return@put DoubleValue.ZERO
             }
             npc.loadTextureFromGameProfileName(username)
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["unset_player_texture"] = {
+        map["unset_player_texture"] = put@{
             npc.unloadTexture()
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_resource_identifier"] = { params ->
+        map["set_resource_identifier"] = put@{ params ->
             val identifier = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
             npc.forcedResourceIdentifier = identifier
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["unset_resource_identifier"] = {
+        map["unset_resource_identifier"] = put@{
             npc.forcedResourceIdentifier = null
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["set_class"] = setClass@{ params ->
+        map["set_class"] = put@{ params ->
             val identifier = params.getString(0).asIdentifierDefaultingNamespace()
             val npcClass = NPCClasses.getByIdentifier(identifier)
             if (npcClass != null) {
                 npc.npc = npcClass
-                return@setClass DoubleValue.ONE
+                return@put DoubleValue.ONE
+            } else {
+                Cobblemon.LOGGER.error("Unknown NPC class: $identifier")
+                return@put DoubleValue.ZERO
             }
-            Cobblemon.LOGGER.error("Unknown NPC class: $identifier")
-            DoubleValue.ZERO
         }
-        functions["set_render_scale"] = { params ->
+        map["set_render_scale"] = put@{ params ->
             val scale = params.getDouble(0)
             npc.renderScale = scale.toFloat()
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["render_scale"] = { DoubleValue(npc.renderScale) }
-        functions["set_hitbox_scale"] = { params ->
+        map["render_scale"] = { _ -> DoubleValue(npc.renderScale) }
+        map["set_hitbox_scale"] = put@{ params ->
             val scale = params.getDouble(0).toFloat()
             npc.hitboxScale = scale
             npc.refreshDimensions()
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["hitbox_scale"] = { DoubleValue(npc.hitboxScale) }
-        functions["set_hitbox"] = setHitbox@{ params ->
+        map["hitbox_scale"] = { _ -> DoubleValue(npc.hitboxScale) }
+        map["set_hitbox"] = put@{ params ->
             if (params.params.isEmpty()) {
                 npc.hitbox = null
-                return@setHitbox DoubleValue.ONE
+                return@put DoubleValue.ONE
             }
             val width = params.getDouble(0).toFloat()
             val height = params.getDouble(1).toFloat()
             val eyeHeight = params.getDoubleOrNull(2)?.toFloat() ?: (height * 0.85F)
             npc.hitbox = EntityDimensions.scalable(width, height).withEyeHeight(eyeHeight)
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["unset_hitbox"] = {
+        map["unset_hitbox"] = put@{
             npc.hitbox = null
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["aspects"] = {
+        map["aspects"] = put@{
             val aspects = npc.aspects
-            aspects.asArrayValue { StringValue(it) }
+            return@put aspects.asArrayValue { StringValue(it) }
         }
-        functions["add_aspect"] = { params ->
+        map["add_aspect"] = put@{ params ->
             val aspects = params.params.map { it.asString() }
             npc.appliedAspects.addAll(aspects)
             npc.updateAspects()
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["remove_aspect"] = { params ->
+        map["remove_aspect"] = put@{ params ->
             val aspects = params.params.map { it.asString() }
             npc.appliedAspects.removeAll(aspects.toSet())
             npc.updateAspects()
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-        functions["party"] = party@{
-            val party = npc.party ?: return@party DoubleValue.ZERO
-            party.asMoLangValue()
+        map["party"] = put@{
+            val party = npc.party ?: return@put DoubleValue.ZERO
+            return@put party.asMoLangValue()
         }
-        functions["create_npc_party"] = {
+        map["create_npc_party"] = put@{
             val party = NPCPartyStore(npc)
-            party.asMoLangValue()
+            return@put party.asMoLangValue()
         }
-        functions["set_npc_party"] = { params ->
+        map["set_npc_party"] = { params ->
             val party = params.get<MoValue>(0)
             if (party is ObjectValue<*>) {
                 npc.party = party.obj as NPCPartyStore
@@ -219,19 +213,18 @@ object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity>() {
             }
             DoubleValue.ONE
         }
-        functions["run_action_effect"] = runActionEffect@{ params ->
+        map["run_action_effect"] = put@{ params ->
             val runtime = MoLangRuntime().setup()
             runtime.environment.cloneFrom(params.environment)
             runtime.withNPCValue(value = npc)
             val actionEffect = ActionEffects.actionEffects[params.getString(0).asIdentifierDefaultingNamespace()]
             if (actionEffect != null) {
-                val context =
-                    ActionEffectContext(
-                        actionEffect = actionEffect,
-                        providers = mutableListOf(NPCProvider(npc)),
-                        runtime = runtime,
-                        level = npc.level(),
-                    )
+                val context = ActionEffectContext(
+                    actionEffect = actionEffect,
+                    providers = mutableListOf(NPCProvider(npc)),
+                    runtime = runtime,
+                    level = npc.level()
+                )
                 npc.actionEffect = context
                 npc.brain.setMemory(CobblemonMemories.ACTIVE_ACTION_EFFECT, context)
                 npc.brain.setActiveActivityIfPossible(CobblemonActivities.ACTION_EFFECT)
@@ -243,40 +236,37 @@ object NPCMoLangFunctions : AbstractMoLangFunctionHolder<NPCEntity>() {
                     }
                 }
 
-                return@runActionEffect DoubleValue.ONE
+                return@put DoubleValue.ONE
             }
-            DoubleValue.ZERO
+            return@put DoubleValue.ZERO
         }
-        functions["put_pokemon_in_healer"] = putPokeInHealer@{ params ->
-            val healer =
-                npc
-                    .level()
-                    .getBlockEntity(params.get<ArrayStruct>(0).asBlockPos(), CobblemonBlockEntities.HEALING_MACHINE)
-                    .orElse(null) ?: return@putPokeInHealer DoubleValue.ZERO
-            val party = npc.party ?: return@putPokeInHealer DoubleValue.ZERO
+        map["put_pokemon_in_healer"] = put@{ params ->
+            val healer = npc.level()
+                .getBlockEntity(params.get<ArrayStruct>(0).asBlockPos(), CobblemonBlockEntities.HEALING_MACHINE)
+                .orElse(null) ?: return@put DoubleValue.ZERO
+            val party = npc.party ?: return@put DoubleValue.ZERO
             if (healer.canHeal(party)) {
                 healer.activate(npc.uuid, party)
-                return@putPokeInHealer DoubleValue.ONE
+                return@put DoubleValue.ONE
+            } else {
+                return@put DoubleValue.ZERO
             }
-            DoubleValue.ZERO
         }
-        functions["look_at_position"] = { params ->
+        map["look_at_position"] = { params ->
             val pos = Vec3(params.getDouble(0), params.getDouble(1), params.getDouble(2))
             npc.lookAt(EntityAnchorArgument.Anchor.EYES, pos)
         }
-        functions["environment"] = { npc.runtime.environment }
-        functions["party"] = { npc.party?.struct ?: DoubleValue.ZERO }
-        functions["has_party"] = { DoubleValue(npc.party != null) }
-        functions["is_npc"] = { DoubleValue.ONE }
-        functions["can_battle"] = {
-            DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false)
-        }
-        functions["set_battle_theme"] = { params ->
+        map["environment"] = { _ -> npc.runtime.environment }
+        map["party"] = { npc.party?.struct ?: DoubleValue.ZERO }
+        map["has_party"] = { DoubleValue(npc.party != null) }
+        map["is_npc"] = { DoubleValue.ONE }
+        map["can_battle"] =
+            { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) }
+        map["set_battle_theme"] = put@{ params ->
             val soundId = params.getString(0).asResource()
             npc.npc.battleTheme = soundId
-            DoubleValue.ONE
+            return@put DoubleValue.ONE
         }
-
-        return functions
+        return map
     }
 }

@@ -42,7 +42,7 @@ class PokedexManager(
     }
 
     // Java interop isn't great lol
-    @Deprecated("Use obtain(Pokemon) instead")
+    @Deprecated("Use encounter(PokedexEntityData) instead")
     fun catch(pokemon: Pokemon) {
         obtain(pokemon)
     }

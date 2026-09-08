@@ -33,214 +33,218 @@ import com.cobblemon.mod.common.util.getDoubleOrNull
 import com.cobblemon.mod.common.util.getIntOrNull
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toProperties
-import net.minecraft.resources.ResourceLocation
 import kotlin.random.Random
+import net.minecraft.resources.ResourceLocation
 
 object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
     override fun Pokemon.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val pokemon = this
-        val functions = hashMapOf<String, (MoParams) -> Any>()
-
-        functions["id"] = { StringValue(pokemon.uuid.toString()) }
-        functions["nickname"] = { StringValue(pokemon.nickname.toString()) }
-        functions["level"] = { DoubleValue(pokemon.level.toDouble()) }
-        functions["max_hp"] = { DoubleValue(pokemon.maxHealth.toDouble()) }
-        functions["current_hp"] = { DoubleValue(pokemon.currentHealth.toDouble()) }
-        functions["friendship"] = { DoubleValue(pokemon.friendship.toDouble()) }
-        functions["max_fullness"] = { DoubleValue(pokemon.getMaxFullness().toDouble()) }
-        functions["fullness"] = { DoubleValue(pokemon.currentFullness.toDouble()) }
-        functions["lose_fullness"] = { params ->
+        val map = mutableMapOf<String, (MoParams) -> Any>()
+        map["id"] = { StringValue(pokemon.uuid.toString()) }
+        map["nickname"] = { StringValue(pokemon.nickname.toString()) }
+        map["level"] = { DoubleValue(pokemon.level.toDouble()) }
+        map["max_hp"] = { DoubleValue(pokemon.maxHealth.toDouble()) }
+        map["current_hp"] = { DoubleValue(pokemon.currentHealth.toDouble()) }
+        map["friendship"] = { DoubleValue(pokemon.friendship.toDouble()) }
+        map["max_fullness"] = { DoubleValue(pokemon.getMaxFullness().toDouble()) }
+        map["fullness"] = { DoubleValue(pokemon.currentFullness.toDouble()) }
+        map["lose_fullness"] = { params ->
             val amount = params.getDouble(0)
             pokemon.loseFullness(amount.toInt())
         }
-        functions["feed_pokemon"] = { params ->
+        map["feed_pokemon"] = { params ->
             val amount = params.getDouble(0)
             val playSound = params.getBooleanOrNull(1) ?: true
             pokemon.feedPokemon(amount.toInt(), playSound)
         }
-        functions["behaviour"] = { pokemon.form.behaviour.struct }
-        functions["behavior"] = { pokemon.form.behaviour.struct } // Inferior
-        functions["pokeball"] = { StringValue(pokemon.caughtBall.toString()) }
-        functions["ability"] = { StringValue(pokemon.ability.name) }
-        functions["has_learned"] = hasLearned@{ params ->
+        map["behaviour"] = { pokemon.form.behaviour.struct }
+        map["behavior"] = { pokemon.form.behaviour.struct } // Inferior
+        map["pokeball"] = { StringValue(pokemon.caughtBall.toString()) }
+        map["ability"] = { StringValue(pokemon.ability.name) }
+        map["has_learned"] = put@{ params ->
             val moveName = params.getString(0)
             val move = pokemon.allAccessibleMoves.find { it.name == moveName }
-            if (move != null) return@hasLearned DoubleValue.ONE
-            DoubleValue.ZERO
+            if (move != null) {
+                return@put DoubleValue.ONE
+            } else {
+                return@put DoubleValue.ZERO
+            }
         }
-        functions["moveset"] = {
+        map["moveset"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, move) in pokemon.moveSet.withIndex()) {
                 struct.addFunction(index.toString()) { move.struct }
             }
             struct
         }
-        functions["evs"] = {
+        map["evs"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in Stats.PERMANENT) {
                 struct.addFunction(stat.showdownId) { DoubleValue(pokemon.evs.getOrDefault(stat).toDouble()) }
             }
             struct
         }
-        functions["ivs"] = {
+        map["ivs"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in Stats.PERMANENT) {
                 struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.getOrDefault(stat).toDouble()) }
             }
             struct
         }
-        functions["hyper_trained_ivs"] = {
+        map["hyper_trained_ivs"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in Stats.PERMANENT) {
                 struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.hyperTrainedIVs[stat] ?: -1.0) }
             }
             struct
         }
-        functions["ride_boosts"] = {
+        map["ride_boosts"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in RidingStat.entries) {
                 struct.addFunction(stat.name.lowercase()) { DoubleValue(pokemon.getRideBoost(stat)) }
             }
             struct
         }
-        functions["natdex_number"] = {
+        map["natdex_number"] = {
             DoubleValue(pokemon.species.nationalPokedexNumber.toDouble())
         }
-        functions["types"] = {
-            pokemon.form.types
-                .map { it.showdownId }
-                .asArrayValue(::StringValue)
+        map["types"] = {
+            pokemon.form.types.map { it.showdownId }.asArrayValue(::StringValue)
         }
-        functions["gender_ratio"] = {
+        map["gender_ratio"] = {
             DoubleValue(pokemon.form.maleRatio.toDouble())
         }
-        functions["ev_yield"] = {
+        map["ev_yield"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in Stats.PERMANENT) {
                 struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.evYield[stat]?.toDouble()) }
             }
             struct
         }
-        functions["base_stats"] = {
+        map["base_stats"] = {
             val struct = QueryStruct(hashMapOf())
             for (stat in Stats.PERMANENT) {
                 struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.baseStats[stat]?.toDouble()) }
             }
             struct
         }
-        functions["catch_rate"] = {
+        map["catch_rate"] = {
             DoubleValue(pokemon.form.catchRate.toDouble())
         }
-        functions["base_experience_yield"] = {
+        map["base_experience_yield"] = {
             DoubleValue(pokemon.form.baseExperienceYield.toDouble())
         }
-        functions["drops"] = {
+        map["drops"] = {
             val struct = QueryStruct(hashMapOf())
-            for ((index, drop) in pokemon.form.drops.entries
-                .withIndex()) {
+            for ((index, drop) in pokemon.form.drops.entries.withIndex()) {
                 struct.addFunction(index.toString()) { drop }
             }
             struct
         }
-        functions["tm_learnset"] = {
+        map["tm_learnset"] = {
             val struct = QueryStruct(hashMapOf())
-            for ((index, move) in pokemon.form.moves.tmMoves
-                .withIndex()) {
+            for ((index, move) in pokemon.form.moves.tmMoves.withIndex()) {
                 struct.addFunction(index.toString()) { move.struct }
             }
             struct
         }
-        functions["egg_learnset"] = {
+        map["egg_learnset"] = {
             val struct = QueryStruct(hashMapOf())
-            for ((index, move) in pokemon.form.moves.eggMoves
-                .withIndex()) {
+            for ((index, move) in pokemon.form.moves.eggMoves.withIndex()) {
                 struct.addFunction(index.toString()) { move.struct }
             }
             struct
         }
-        functions["tutor_learnset"] = {
+        map["tutor_learnset"] = {
             val struct = QueryStruct(hashMapOf())
-            for ((index, move) in pokemon.form.moves.tutorMoves
-                .withIndex()) {
+            for ((index, move) in pokemon.form.moves.tutorMoves.withIndex()) {
                 struct.addFunction(index.toString()) { move.struct }
             }
             struct
         }
-        functions["level_learnset"] = {
+        map["level_learnset"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, move) in pokemon.form.moves.levelUpMoves) {
                 struct.addFunction(index.toString()) { move }
             }
             struct
         }
-        functions["ability_pool"] = {
+        map["ability_pool"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, ability) in pokemon.form.abilities.withIndex()) {
                 struct.addFunction(index.toString()) { StringValue(ability.toString()) }
             }
             struct
         }
-        functions["egg_groups"] = {
+        map["egg_groups"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, group) in pokemon.form.eggGroups.withIndex()) {
                 struct.addFunction(index.toString()) { StringValue(group.toString()) }
             }
             struct
         }
-        functions["egg_cycles"] = {
+        map["egg_cycles"] = {
             DoubleValue(pokemon.species.eggCycles.toDouble())
         }
-        functions["labels"] = {
+        map["labels"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, label) in pokemon.form.labels.withIndex()) {
                 struct.addFunction(index.toString()) { StringValue(label) }
             }
             struct
         }
-        functions["aspects"] = {
+        map["aspects"] = {
             val aspects = pokemon.aspects
             aspects.asArrayValue { StringValue(it) }
         }
-        functions["form_aspects"] = {
+        map["form_aspects"] = {
             val aspects = pokemon.form.aspects
             aspects.asArrayValue { StringValue(it) }
         }
-        functions["form_name"] = {
+        map["form_name"] = {
             StringValue(pokemon.form.name)
         }
         // Yes, this is the lazy call for a single hardcoded pre-evolution.
         // Lol. Lmao, even.
         // TO-DO: Subscribe to [PokemonSpecies.observable].
-        functions["pre_evolution"] = { pokemon.species.preEvolution ?: DoubleValue.ZERO }
-        functions["nature"] = { StringValue(pokemon.nature.toString()) }
-        functions["is_wild"] = { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
-        functions["is_shiny"] = { DoubleValue(pokemon.shiny) }
-        functions["is_in_party"] = { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
-        functions["species"] = { pokemon.species.struct }
-        functions["form"] = { StringValue(pokemon.form.name) }
-        functions["weight"] = { DoubleValue(pokemon.species.weight.toDouble()) }
-        functions["matches"] = { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
-        functions["apply"] = { params ->
+        // Gito: surely this is just a typo, right? not touching the function name just in case
+        map["prevolution"] = preEvolution@{
+            val preEvolution = pokemon.species.preEvolution ?: return@preEvolution DoubleValue.ZERO
+            return@preEvolution preEvolution
+        }
+        map["nature"] = { StringValue(pokemon.nature.toString()) }
+        map["is_wild"] = { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
+        map["is_shiny"] = { DoubleValue(pokemon.shiny) }
+        map["is_in_party"] = { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
+        map["species"] = { pokemon.species.struct }
+        map["form"] = { StringValue(pokemon.form.name) }
+        map["weight"] = { DoubleValue(pokemon.species.weight.toDouble()) }
+        map["matches"] = { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
+        map["apply"] = { params ->
             params.getString(0).toProperties().apply(pokemon)
             DoubleValue.ONE
         }
-        functions["owner"] = { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
-        functions["held_item"] = { pokemon.heldItem().asMoLangValue(server()!!.registryAccess()) }
-        functions["remove_held_item"] = { pokemon.removeHeldItem() }
-        functions["add_aspects"] = { params ->
+        map["owner"] = { pokemon.getOwnerPlayer()?.asMoLangValue() ?: DoubleValue.ZERO }
+        map["held_item"] = { pokemon.heldItem().asMoLangValue(server()!!.registryAccess()) }
+        map["remove_held_item"] = { _ ->
+            pokemon.removeHeldItem()
+        }
+        map["add_aspects"] = { params ->
             for (aspect in params.params) pokemon.forcedAspects += aspect.asString()
             pokemon.updateAspects()
         }
-        functions["remove_aspects"] = { params ->
+        map["remove_aspects"] = { params ->
             for (aspect in params.params) pokemon.forcedAspects -= aspect.asString()
             pokemon.updateAspects()
         }
-        functions["cosmetic_item"] = {
+        map["cosmetic_item"] = {
             pokemon.cosmeticItem().asMoLangValue(server()!!.registryAccess())
         }
-        functions["remove_cosmetic_item"] = { pokemon.removeCosmeticItem() }
-        functions["marks"] = { pokemon.marks.asArrayValue { StringValue(it.identifier.toString()) } }
-        functions["has_mark"] = { params ->
+        map["remove_cosmetic_item"] = { _ ->
+            pokemon.removeCosmeticItem()
+        }
+        map["marks"] = { _ -> pokemon.marks.asArrayValue { StringValue(it.identifier.toString()) } }
+        map["has_mark"] = { params ->
             var hasMark = false
             val identifier = params.getString(0).asIdentifierDefaultingNamespace()
             val mark = Marks.getByIdentifier(identifier)
@@ -250,7 +254,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
             DoubleValue(hasMark)
         }
-        functions["remove_marks"] = { params ->
+        map["remove_marks"] = { params ->
             var removedMark = false
             for (param in params.params) {
                 val identifier = param.asString().asIdentifierDefaultingNamespace()
@@ -263,7 +267,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
             DoubleValue(removedMark)
         }
-        functions["add_marks"] = { params ->
+        map["add_marks"] = { params ->
             var appliedMark = false
             for (param in params.params) {
                 val identifier = param.asString().asIdentifierDefaultingNamespace()
@@ -276,7 +280,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
             DoubleValue(appliedMark)
         }
-        functions["add_marks_with_chance"] = { params ->
+        map["add_marks_with_chance"] = { params ->
             var appliedMark = false
             for (param in params.params) {
                 val identifier = param.asString().asIdentifierDefaultingNamespace()
@@ -294,15 +298,17 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
             DoubleValue(appliedMark)
         }
-        functions["add_potential_marks"] = { params ->
+        map["add_potential_marks"] = { params ->
             for (param in params.params) {
                 val identifier = param.asString().asIdentifierDefaultingNamespace()
                 val mark = Marks.getByIdentifier(identifier)
                 if (mark != null) pokemon.addPotentialMark(mark)
             }
         }
-        functions["apply_potential_marks"] = { DoubleValue(pokemon.applyPotentialMarks()) }
-        functions["hyper_train_iv"] = hyperTrainIv@{ params ->
+        map["apply_potential_marks"] = put@{
+            return@put DoubleValue(pokemon.applyPotentialMarks())
+        }
+        map["hyper_train_iv"] = hyperTrainIv@{ params ->
             val statId = params.getString(0)
             val stat = Stats.getStat(statId)
             val value = params.getIntOrNull(1) ?: IVs.MAX_VALUE
@@ -315,12 +321,12 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
                 return@hyperTrainIv DoubleValue.ZERO
             }
         }
-        functions["add_exp"] = { params ->
+        map["add_exp"] = { params ->
             val exp = params.getDouble(0).toInt()
             pokemon.addExperience(SidemodExperienceSource("molang"), exp)
             DoubleValue.ONE
         }
-        functions["set_iv"] = setIv@{ params ->
+        map["set_iv"] = setIv@{ params ->
             val statId = params.getString(0)
             val stat = Stats.getStat(statId)
             val value = params.getIntOrNull(1)?.coerceIn(0, IVs.MAX_VALUE) ?: IVs.MAX_VALUE
@@ -332,7 +338,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
                 return@setIv DoubleValue.ZERO
             }
         }
-        functions["set_ev"] = setEv@{ params ->
+        map["set_ev"] = setEv@{ params ->
             val statId = params.getString(0)
             val stat = Stats.getStat(statId)
             val value = (params.getIntOrNull(1) ?: 0).coerceIn(0, 255)
@@ -344,54 +350,49 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
                 return@setEv DoubleValue.ZERO
             }
         }
-        functions["set_ride_boost"] = setRideBoost@{ params ->
+        map["set_ride_boost"] = setRideBoost@{ params ->
             val statName = params.getString(0).uppercase()
-            val stat =
-                RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }
-                    ?: return@setRideBoost DoubleValue.ZERO
+            val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }
+                ?: return@setRideBoost DoubleValue.ZERO
             val value = params.getDoubleOrNull(1)?.toFloat() ?: return@setRideBoost DoubleValue.ZERO
 
             pokemon.setRideBoost(stat, value)
-            DoubleValue.ONE
+            return@setRideBoost DoubleValue.ONE
         }
-        functions["add_ride_boost"] = addRideBoost@{ params ->
+        map["add_ride_boost"] = addRideBoost@{ params ->
             val statName = params.getString(0).uppercase()
-            val stat =
-                RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }
-                    ?: return@addRideBoost DoubleValue.ZERO
+            val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }
+                ?: return@addRideBoost DoubleValue.ZERO
             val value = params.getDoubleOrNull(1)?.toFloat() ?: return@addRideBoost DoubleValue.ZERO
 
-            DoubleValue(if (pokemon.addRideBoost(stat, value)) 1.0 else 0.0)
+            return@addRideBoost DoubleValue(if (pokemon.addRideBoost(stat, value)) 1.0 else 0.0)
         }
-        functions["initialize_moveset"] = initializeMoveset@{ params ->
+        map["initialize_moveset"] = put@{ params ->
             val param = params.get<MoValue>(0) ?: StringValue(pokemon.form.defaultWildMovesetBuilder.toString())
             if (param is DoubleValue) {
                 pokemon.initializeMoveset(param == DoubleValue.ONE)
             } else {
                 val movesetBuilderId = ResourceLocation.parse(param.asString())
-                val movesetBuilder =
-                    CobblemonMovesetBuilders.movesetBuilders[movesetBuilderId]
-                        ?: run {
-                            Cobblemon.LOGGER.error(
-                                "Tried initializing moveset from moveset builder ${param.asString()} but it does not exist.",
-                            )
-                            return@initializeMoveset DoubleValue.ZERO
-                        }
+                val movesetBuilder = CobblemonMovesetBuilders.movesetBuilders[movesetBuilderId]
+                    ?: run {
+                        Cobblemon.LOGGER.error("Tried initializing moveset from moveset builder ${param.asString()} but it does not exist.")
+                        return@put DoubleValue.ZERO
+                    }
                 pokemon.initializeMovesetFrom(movesetBuilder)
             }
             DoubleValue.ONE
         }
-        functions["validate_moveset"] = { params ->
+        map["validate_moveset"] = { params ->
             val includeLegacy = params.getBooleanOrNull(0) ?: true
             pokemon.validateMoveset(includeLegacy)
             DoubleValue.ONE
         }
-        functions["teach_learnable_moves"] = { params ->
+        map["teach_learnable_moves"] = { params ->
             val includeLegacy = params.getBooleanOrNull(0) ?: true
             pokemon.teachLearnableMoves(includeLegacy)
             DoubleValue.ONE
         }
-        functions["teach_move"] = teachMove@{ params ->
+        map["teach_move"] = teachMove@{ params ->
             val moveName = params.getString(0)
             val moveTemplate = Moves.getByName(moveName) ?: return@teachMove DoubleValue.ZERO
             val bypass = params.getBooleanOrNull(1) ?: false
@@ -401,9 +402,8 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
                 return@teachMove DoubleValue.ZERO
             }
 
-            val alreadyKnows =
-                pokemon.moveSet.getMoves().any { it.template == moveTemplate } ||
-                    pokemon.benchedMoves.any { it.moveTemplate == moveTemplate }
+            val alreadyKnows = pokemon.moveSet.getMoves().any { it.template == moveTemplate } ||
+                pokemon.benchedMoves.any { it.moveTemplate == moveTemplate }
             if (alreadyKnows) {
                 return@teachMove DoubleValue.ZERO
             }
@@ -416,43 +416,42 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
             DoubleValue.ONE
         }
-        functions["can_learn_move"] = canLearnMove@{ params ->
+        map["can_learn_move"] = canLearnMove@{ params ->
             val moveName = params.getString(0)
             val moveTemplate = Moves.getByName(moveName) ?: return@canLearnMove DoubleValue.ZERO
             val includeLegacy = params.getBooleanOrNull(1) ?: true
 
-            val canLearn =
-                if (includeLegacy) {
-                    LearnsetQuery.ANY.canLearn(moveTemplate, pokemon.form.moves)
-                } else {
-                    LearnsetQuery.LEGAL.canLearn(moveTemplate, pokemon.form.moves)
-                }
-
-            DoubleValue(if (canLearn) 1.0 else 0.0)
+            val canLearn = if (includeLegacy) {
+                LearnsetQuery.ANY.canLearn(moveTemplate, pokemon.form.moves)
+            } else {
+                LearnsetQuery.LEGAL.canLearn(moveTemplate, pokemon.form.moves)
+            }
+            return@canLearnMove DoubleValue(if (canLearn) 1.0 else 0.0)
         }
-        functions["unlearn_move"] = unlearnMove@{ params ->
+        map["unlearn_move"] = unlearnMove@{ params ->
             val moveName = params.getString(0)
             val moveTemplate = Moves.getByName(moveName)
             if (moveTemplate != null) {
                 pokemon.unlearnMove(moveTemplate)
                 return@unlearnMove DoubleValue.ONE
+            } else {
+                return@unlearnMove DoubleValue.ZERO
             }
-
-            DoubleValue.ZERO
         }
-        functions["can_evolve"] = { DoubleValue(pokemon.evolutions.any()) }
-        functions["force_evolve"] = forceEvolve@{ params ->
+        map["can_evolve"] = { _ ->
+            DoubleValue(pokemon.evolutions.any())
+        }
+        map["force_evolve"] = forceEvolve@{ params ->
             val idx = params.getInt(0)
-            val evolution =
-                if (idx >= 0) pokemon.evolutions.elementAtOrNull(idx) else return@forceEvolve DoubleValue.ZERO
+            val evolution = if (idx >= 0) pokemon.evolutions.elementAtOrNull(idx) else return@forceEvolve DoubleValue.ZERO
             evolution?.forceEvolve(pokemon)
             StringValue(evolution.toString())
         }
 
-        functions["entity"] = { pokemon.entity?.asMoLangValue() ?: DoubleValue.ZERO }
-        functions["is_alpha"] = { DoubleValue(pokemon.isAlpha) }
-        functions["size_category"] = { StringValue(pokemon.getSizeCategory().name) }
+        map["entity"] = { pokemon.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+        map["is_alpha"] = { DoubleValue(pokemon.isAlpha) }
+        map["size_category"] = { _ -> StringValue(pokemon.getSizeCategory().name) }
 
-        return functions
+        return map
     }
 }
