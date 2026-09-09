@@ -7,6 +7,7 @@ loop(t.depth, {
     t.i = t.i + 1;
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/mud') ? return q.sound('stepsound.mud.standard.large', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/sand') ? return q.sound('stepsound.sand.standard.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/snow') ? return q.sound('stepsound.snow.standard.large', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/grass') ? return q.sound('stepsound.grass.standard.large', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/dirt') ? return q.sound('stepsound.dirt.standard.large', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.standard.large', t.volume, t.pitch);

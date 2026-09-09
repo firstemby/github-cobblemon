@@ -1965,6 +1965,32 @@
       { "name": "cobblemon:stepsound/sand/standard/medium/stepsound_sand_standard_medium_8", "volume": 0.1 }
     ]
   },
+  "stepsound.snow.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.snow.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_8", "volume": 0.1 }
+    ]
+  },
   "stepsound.dirt.hoof.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
@@ -2142,6 +2168,15 @@
       { "name": "step/sand3", "volume": 0.08 },
       { "name": "step/sand4", "volume": 0.08 },
       { "name": "step/sand5", "volume": 0.08 }
+    ]
+  },
+  "stepsound.snow.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/snow1", "volume": 0.08 },
+      { "name": "step/snow2", "volume": 0.08 },
+      { "name": "step/snow3", "volume": 0.08 },
+      { "name": "step/snow4", "volume": 0.08 }
     ]
   },
   "ride.loop.wind.mono": {
