@@ -9,11 +9,13 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.add
@@ -185,7 +187,9 @@ class EvolutionTreeWidget(
     private fun buildEvolutionTree(
         pokedexEntry: PokedexEntry,
         pokedexForm: PokedexForm,
-        evolution: Evolution? = null
+        evolution: Evolution? = null,
+        resultProperties: PokemonProperties? = evolution?.result,
+        renderData: RenderEvolutionData? = evolution?.let { renderEvolutionData(it) }
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
 
@@ -194,41 +198,50 @@ class EvolutionTreeWidget(
         val parentSpecies = Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)!!
         val parentPokedexForm = parentSpecies.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
 
-        val aspects = evolution?.result?.aspects?.toMutableSet() ?: mutableSetOf()
+        val aspects = resultProperties?.aspects?.toMutableSet() ?: mutableSetOf()
         form?.aspects?.let { aspects.addAll(it) }
 
         val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects)
 
         val evolutions = form?.evolutions ?: species.evolutions
-        val drawData = evolution?.let { renderEvolutionData(evolution) }
 
-        val children = evolutions.mapNotNull { evolution ->
-            // Avoid evolution.result.create() here: it builds a full battle-ready Pokemon (initializeMovesetFromDefault
-            // etc.) which relies on server-only data like CobblemonMovesetBuilders and crashes on the client
-            val resultProperties = evolution.result
-            val resultSpecies = resultProperties.species
-                ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
-                ?: return@mapNotNull null
+        // Avoid evolution.result.create() here: it builds a full battle-ready Pokemon (initializeMovesetFromDefault
+        // etc.) which relies on server-only data like CobblemonMovesetBuilders and crashes on the client
+        val children = evolutions.flatMap { evolution ->
+            val baseRenderData = renderEvolutionData(evolution)
 
-            // Forms like regional variants (e.g. "raichu alolan") are selected by aspect, not by an explicit
-            // form= property, so resolve the same way Pokemon.updateForm() does rather than matching .form directly
-            val resultForm = resultSpecies.getForm(resultProperties.aspects)
+            listOfNotNull(evolution.result, evolution.shedder).mapNotNull { resultProperties ->
+                val resultSpecies = resultProperties.species
+                    ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+                    ?: return@mapNotNull null
 
-            val speciesId = resultSpecies.resourceIdentifier
-            val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)
+                val resultForm = resultSpecies.getForm(resultProperties.aspects)
 
-            if (childPokedexEntry == null) {
-                Cobblemon.LOGGER.warn("Dex entry not found for species: $speciesId")
-                return@mapNotNull null
+                val speciesId = resultSpecies.resourceIdentifier
+                val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)
+
+                if (childPokedexEntry == null) {
+                    Cobblemon.LOGGER.warn("Dex entry not found for species: $speciesId")
+                    return@mapNotNull null
+                }
+
+                val formEquivalents = Dexes.getFormEquivalents(resultForm.name.lowercase())
+                val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
+
+                val childRenderData = if (resultProperties === evolution.shedder) {
+                    RenderEvolutionData(
+                        icons = (baseRenderData?.icons ?: emptyList()) + CobblemonItems.POKE_BALL,
+                        tooltips = (baseRenderData?.tooltips ?: emptyList()) + lang("ui.pokedex.evolution.shedder.tooltip"),
+                    )
+                } else {
+                    baseRenderData
+                }
+
+                return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution, resultProperties, childRenderData)
             }
-
-            val formEquivalents = Dexes.getFormEquivalents(resultForm.name.lowercase())
-            val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
-
-            return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution)
         }
 
-        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, children, drawData)
+        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, children, renderData)
     }
 
     private fun renderTreeDrawingNode(

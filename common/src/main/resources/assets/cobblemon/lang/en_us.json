@@ -1467,6 +1467,7 @@
   "cobblemon.ui.pokedex.evolution.item_interact.tooltip": "Needs %1$s item to evolve",
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_species": "Evolves when traded with %1$s",
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_any_species": "Evolves when traded",
+  "cobblemon.ui.pokedex.evolution.shedder.tooltip": "Also requires a spare Poké Ball and an empty party slot",
 
   "cobblemon.ui.pokedex.requirement.advancement.tooltip": "Player must have %1$s advancement",
   "cobblemon.ui.pokedex.requirement.battle_critical_hits.tooltip": "Must hit %1$s critical-hits in battle",

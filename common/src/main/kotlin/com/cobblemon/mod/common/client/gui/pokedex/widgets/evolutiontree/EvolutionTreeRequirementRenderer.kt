@@ -200,7 +200,7 @@ fun renderMoonPhaseRequirement(moonPhaseRequirement: MoonPhaseRequirement): Rend
 }
 
 fun renderMoveSetRequirement(moveSetRequirement: MoveSetRequirement): RenderRequirementData? {
-    val icon = CobblemonItems.PP_MAX
+    val icon = CobblemonItems.TECHNICAL_MACHINE
     val tooltip = lang("ui.pokedex.requirement.has_move.tooltip", moveSetRequirement.move.displayName.green())
 
     return RenderRequirementData(icon, tooltip)
