@@ -250,14 +250,6 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
         }
     }
 
-    fun updateLevelAndPos(level: Level, pos: BlockPos) {
-        val block = this.blockState.block
-        if (block is HabitatBlock) {
-            block.level = level
-            block.pos = pos
-        }
-    }
-
     override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean {
         val spawningStyle = spawningStyle
         return if (spawningStyle is NaturalHabitatSpawning) {

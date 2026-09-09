@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.block.habitat
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.block.SoundBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
@@ -17,6 +18,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
@@ -36,10 +38,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
-    var level: Level? = null
-    var pos: BlockPos? = null
-
+class HabitatBlock(properties: Properties) : Block(properties), EntityBlock, SoundBlock {
     companion object {
         val CANCELS_REGULAR_SPAWNS = BooleanProperty.create("cancels_regular_spawns")
         val ACTIVATED_STYLE = BooleanProperty.create("activated_style")
@@ -51,6 +50,10 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
             .setValue(CANCELS_REGULAR_SPAWNS, false)
             .setValue(ACTIVATED_STYLE, true)
         )
+    }
+
+    private fun getBlockEntity(level: BlockGetter, pos: BlockPos): HabitatBlockEntity? {
+        return level.getBlockEntity(pos) as? HabitatBlockEntity
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
@@ -96,8 +99,8 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
 
         if (player?.isCreative == true) return mutableListOf()
 
-        val mimic = blockEntity?.mimickedState?.block ?: return mutableListOf()
-        return mutableListOf(ItemStack(mimic))
+        val mimic = blockEntity?.mimickedState ?: return mutableListOf()
+        return mimic.getDrops(params)
     }
 
     override fun getRenderShape(state: BlockState): RenderShape {
@@ -144,17 +147,12 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock {
         mimicState.block.spawnDestroyParticles(level, player, pos, mimicState)
     }
 
-    override fun onPlace(state: BlockState, level: Level, pos: BlockPos, oldState: BlockState, isMoving: Boolean) {
-        super.onPlace(state, level, pos, oldState, isMoving)
-        val blockEntity = level.getBlockEntity(pos) as? HabitatBlockEntity
-        blockEntity?.updateLevelAndPos(level, pos)
+    override fun getSoundType(state: BlockState, level: BlockGetter, pos: BlockPos): SoundType {
+        return getBlockEntity(level, pos)?.mimickedState?.soundType ?: getSoundType(state)
     }
 
-    override fun getSoundType(state: BlockState): SoundType {
-        val level = this.level ?: return super.getSoundType(state)
-        val pos = this.pos ?: return super.getSoundType(state)
-        val blockEntity = level.getBlockEntity(pos) as? HabitatBlockEntity
-        val mimicState = blockEntity?.mimickedState ?: return super.getSoundType(state)
-        return mimicState.soundType
+    override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
+        val mimicState = getBlockEntity(level, pos)?.mimickedState ?: return super.getDestroyProgress(state, player, level, pos)
+        return super.getDestroyProgress(mimicState, player, level, pos) * 0.5F // Habitat Mimic Block breaks twice as long
     }
 }
