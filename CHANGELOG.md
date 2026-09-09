@@ -27,6 +27,8 @@
 - Fixed form typo in Rockruff dusk spawn entry.
 - Fixed a potential world gen stall with the Type Gem clusters.
 - Fixed Rowap and Jacoba berries not correctly altering Pokémon sizes when used as bait
+- Fixed Ampharos' eyes not emitting particles
+- Fixed Alolan Raticate's cry not playing
 
 ### Developer
 
