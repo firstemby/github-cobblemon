@@ -3,7 +3,7 @@ import utilities.writeVersion
 
 plugins {
     id("cobblemon.base-conventions")
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 writeVersion(type = VersionType.FULL)

@@ -128,8 +128,8 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(
                 "version" to rootProject.version,
-                "fabric_loader_version" to libs.fabric.loader.get().version,
-                "fabric_api_version" to libs.fabric.api.get().version,
+                "fabric_loader_version" to libs.fabric.loader.get().version.toString(),
+                "fabric_api_version" to libs.fabric.api.get().version.toString(),
                 "minecraft_version" to rootProject.property("mc_version").toString(),
                 "java_version" to rootProject.property("java_version").toString()
             )

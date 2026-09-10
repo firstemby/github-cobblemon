@@ -3,8 +3,8 @@
 kotlin = "2.2.20"
 
 # Plugins
-licenser = "0.6.1"
-shadow = "8.1.1"
+licenser = "0.7.5"
+shadow = "8.3.10"
 blossom = "2.1.0"
 idea-ext = "1.1.7"
 versioning = "3.1.0"
@@ -55,10 +55,10 @@ kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", versio
 loom = { group = "dev.architectury", name = "architectury-loom", version.ref = "loom" }
 neoforge-moddev = { group = "net.neoforged", name = "moddev-gradle", version.ref = "moddev" }
 architectury = { group = "architectury-plugin", name = "architectury-plugin.gradle.plugin", version.ref = "architectury-plugin" }
-shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
+shadow = { group = "com.gradleup.shadow", name = "com.gradleup.shadow.gradle.plugin", version.ref = "shadow" }
 blossom = { group = "net.kyori", name = "blossom", version.ref = "blossom" }
 ideaExt = { group = "org.jetbrains.gradle.plugin.idea-ext", name = "org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "idea-ext"}
-licenser = { group = "gradle.plugin.org.cadixdev.gradle", name = "licenser", version.ref = "licenser" }
+licenser = { group = "net.neoforged.licenser", name = "net.neoforged.licenser.gradle.plugin", version.ref = "licenser" }
 versioning = { group = "net.nemerosa.versioning", name = "net.nemerosa.versioning.gradle.plugin", version.ref = "versioning" }
 
 # Kotlin
