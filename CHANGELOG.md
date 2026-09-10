@@ -83,6 +83,7 @@
 - Fixed Diglett line not having their faint animations
 - Fixed Kingambit moving its legs while walking
 - Fixed `/spectatebattle` not starting the battle theme music, unlike spectating through the interaction wheel
+- Fixed spectating not being cancelled when a battle starts for the spectator, which merged the two battles into an unplayable state, and fixed spectating a second battle leaving the first one still sending updates
 
 
 ### Developer

@@ -71,6 +71,7 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
 
         val battle = BattleRegistry.getBattleByParticipatingPlayer(target) ?: return
 
+        BattleRegistry.stopSpectating(player.uuid)
         battle.spectators.add(player.uuid)
         player.sendPacket(BattleInitializePacket(battle, null))
         player.sendPacket(BattleMessagePacket(battle.chatLog))

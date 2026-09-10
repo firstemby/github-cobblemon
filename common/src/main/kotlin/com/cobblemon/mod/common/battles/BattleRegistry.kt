@@ -202,6 +202,7 @@ object BattleRegistry {
     ): BattleStartResult {
         val battle = PokemonBattle(battleFormat, side1, side2)
         val start: () -> Unit = {
+            battle.playerUUIDs.forEach { stopSpectating(it) }
             battleMap[battle.battleId] = battle
             startShowdown(battle)
         }
@@ -222,6 +223,11 @@ object BattleRegistry {
         battle.onEndHandlers.forEach { it(battle) }
         battleMap.remove(battle.battleId)
         ShowdownService.service.endBattle(battle)
+    }
+
+    @JvmStatic
+    fun stopSpectating(playerId: UUID) {
+        battleMap.values.forEach { it.spectators.remove(playerId) }
     }
 
     @JvmStatic
