@@ -35,8 +35,6 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
     ) {
         val battle = BattleRegistry.getBattleByParticipatingPlayerId(packet.targetedEntityId)
         if (battle != null && Cobblemon.config.allowSpectating) {
-            val target = battle.actors.filterIsInstance<PlayerBattleActor>().firstOrNull { it.uuid == packet.targetedEntityId }
-
             // Check los and range
             val targetedPlayerEntity = packet.targetedEntityId.getPlayer() ?: return
             if (player.traceFirstEntityCollision(
@@ -49,9 +47,6 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
             }
 
             this.spectateBattle(targetedPlayerEntity, player)
-
-            // Handle music
-            target?.battleTheme?.let { player.sendPacket(BattleMusicPacket(it)) }
         }
         else {
             LOGGER.error("Battle of player id ${packet.targetedEntityId} not found (${player.uuid} tried spectating)")
@@ -79,6 +74,11 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
         battle.spectators.add(player.uuid)
         player.sendPacket(BattleInitializePacket(battle, null))
         player.sendPacket(BattleMessagePacket(battle.chatLog))
+
+        battle.actors.filterIsInstance<PlayerBattleActor>()
+            .firstOrNull { it.uuid == target.uuid }
+            ?.battleTheme
+            ?.let { player.sendPacket(BattleMusicPacket(it)) }
     }
 
 }
