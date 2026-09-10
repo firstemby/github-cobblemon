@@ -24,6 +24,14 @@
 - Fixed the TM Machine refusing move selections that the `unlockAllMoveDexMovesByDefault` config had made visible, leaving the move slot blank and the craft button unresponsive.
 - Fixed Rufflet, Braviary, and Hisuian Braviary flooding logs with errors about missing sound events.
 - Fixed Pokémon property typos in Pangoro and Dedenne herd spawn files.
+- Fixed form typo in Rockruff dusk spawn entry.
+- Fixed a potential world gen stall with the Type Gem clusters.
+- Fixed Rowap and Jacoba berries not correctly altering Pokémon sizes when used as bait
+- Fixed Ampharos' eyes not emitting particles
+- Fixed Alolan Raticate's cry not playing
+- Fixed unintentional watermelon cosmetic for Hisuian Electrode. 
+- Fixed Blastoise having an unintentional passenger seat
+- Fixed odd NeoForge crash due to a dependency being outdated. It will now flag the dependency for being outdated correctly.
 - Fixed form typo in Rockruff-Dusk spawn, preventing it from being able to spawn.
 - Fixed a potential world gen stall caused by Type Gem clusters.
 - Fixed Rowap and Jacoba berries not correctly altering Pokémon sizes when used as bait.
@@ -32,6 +40,7 @@
 - Fixed odd NeoForge crash due to a dependency being outdated. It will now correctly flag the dependency for being outdated.
 - Fixed several incorrect light-based spawning conditions for ghosts and bugs. 
 - Removed unused, placeholder habitat pools.
+- Fixed Mantyke, Mantine, and Quaxly getting stuck in a recoil 'expression' during battles due to a having an expression mistakenly assigned as a recoil animation. 
 
 ### Developer
 
