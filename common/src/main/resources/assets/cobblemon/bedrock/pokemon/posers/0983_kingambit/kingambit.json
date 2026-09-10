@@ -18,8 +18,7 @@
       "poseTypes": ["WALK"],
       "animations": [
         "q.look('head')",
-        "q.bedrock('kingambit', 'ground_idle')",
-        "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+        "q.bedrock('kingambit', 'ground_idle')"
       ],
       "quirks": ["q.bedrock_quirk('kingambit', 'blink')"]
     }

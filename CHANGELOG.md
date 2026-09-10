@@ -42,6 +42,13 @@
 - Removed unused, placeholder habitat pools.
 - Fixed Mantyke, Mantine, and Quaxly getting stuck in a recoil 'expression' during battles due to a having an expression mistakenly assigned as a recoil animation. 
 - Fixed Pokémon on shoulders not animating if they are visibly holding a held item.
+- Fixed Mantyke, Mantine, and Quaxly getting stuck in a recoil 'expression' during battles due to a having an expression mistakenly assigned as a recoil animation.
+- Fixed Lycanroc's head movement
+- Added head movement to Archaludon
+- Fixed Duraludon line not having their sleep animations
+- Fixed Diglett line not having their faint animations
+- Fixed Kingambit moving its legs while walking
+
 
 ### Developer
 
