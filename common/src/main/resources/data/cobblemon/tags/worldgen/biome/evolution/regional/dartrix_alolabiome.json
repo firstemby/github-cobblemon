@@ -1,8 +1,28 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_beach",
-    "#cobblemon:is_ocean",
-    "#cobblemon:is_tropical_island"
+    "#c:is_deep_ocean",
+    "#c:is_ocean",
+    "#minecraft:is_beach",
+    "#minecraft:is_deep_ocean",
+    "#minecraft:is_ocean",
+    "biomesoplenty:dune_beach",
+    "biomesoplenty:tropics",
+    "biomeswevegone:lush_stacks",
+    "blooming_biosphere:tidepools",
+    "clifftree:stone_ocean",
+    "minecraft:cold_ocean",
+    "minecraft:deep_cold_ocean",
+    "minecraft:deep_lukewarm_ocean",
+    "minecraft:deep_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:ocean",
+    "minecraft:warm_ocean",
+    "wythers:guelta",
+    "wythers:sand_dunes",
+    "wythers:tropical_beach",
+    "wythers:tropical_island",
+    "wythers:tropical_volcano",
+    "wythers:warm_stony_shore"
   ]
 }

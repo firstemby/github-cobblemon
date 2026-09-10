@@ -247,6 +247,10 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
+        },
+        {
+          "variant": "biome",
+          "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_kantobiome"
         }
       ],
       "requiredContext": "cobblemon:leaf_stone"
@@ -274,6 +278,16 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "exeggcute_exeggutoralola",
+          "variant": "item_interact",
+          "result": "exeggutor alolan",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "dragonhammer"
+          ],
+          "requiredContext": "cobblemon:leaf_stone"
+        },
+        {
           "id": "exeggcute_exeggutor",
           "variant": "item_interact",
           "result": "exeggutor",
@@ -284,18 +298,12 @@
           "requirements": [
             {
               "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
+            },
+            {
+              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/exeggcute_kantobiome"
             }
-          ],
-          "requiredContext": "cobblemon:leaf_stone"
-        },
-        {
-          "id": "exeggcute_exeggutoralola",
-          "variant": "item_interact",
-          "result": "exeggutor alolan",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "dragonhammer"
           ],
           "requiredContext": "cobblemon:leaf_stone"
         }

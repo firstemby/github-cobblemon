@@ -302,31 +302,6 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
-          "id": "cubone_marowak",
-          "variant": "level_up",
-          "result": "marowak",
-          "consumeHeldItem": false,
-          "learnableMoves": [],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 28
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/cubone_alolabiome"
-            },
-            {
-              "variant": "biome",
-              "biomeCondition": "#cobblemon:evolution/regional/cubone_kantobiome"
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#minecraft:is_nether"
-            }
-          ]
-        },
-        {
           "id": "cubone_marowakalola",
           "variant": "level_up",
           "result": "marowak alolan",
@@ -371,6 +346,31 @@
             {
               "variant": "biome",
               "biomeCondition": "#minecraft:is_nether"
+            }
+          ]
+        },
+        {
+          "id": "cubone_marowak",
+          "variant": "level_up",
+          "result": "marowak",
+          "consumeHeldItem": false,
+          "learnableMoves": [],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 28
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/cubone_alolabiome"
+            },
+            {
+              "variant": "biome",
+              "biomeCondition": "#cobblemon:evolution/regional/cubone_kantobiome"
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#minecraft:is_nether"
             }
           ]
         }

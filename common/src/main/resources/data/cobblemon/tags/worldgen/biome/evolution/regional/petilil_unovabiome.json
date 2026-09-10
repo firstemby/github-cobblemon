@@ -1,8 +1,29 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_floral",
-    "#cobblemon:is_forest",
-    "#cobblemon:is_tropical_island"
+    "#c:flower_forest",
+    "#c:is_floral",
+    "biomesoplenty:field",
+    "biomesoplenty:lavender_field",
+    "biomesoplenty:lavender_forest",
+    "biomesoplenty:lush_savanna",
+    "biomesoplenty:mystic_grove",
+    "biomesoplenty:orchard",
+    "biomeswevegone:rose_fields",
+    "biomeswevegone:sakura_grove",
+    "biomeswevegone:skyris_vale",
+    "minecraft:cherry_grove",
+    "minecraft:flower_forest",
+    "minecraft:sunflower_plains",
+    "terralith:cloud_forest",
+    "terralith:lavender_forest",
+    "terralith:sakura_grove",
+    "wythers:autumnal_flower_forest",
+    "wythers:flowering_pantanal",
+    "wythers:jacaranda_savanna",
+    "wythers:lapacho_plains",
+    "wythers:sakura_forest",
+    "wythers:spring_flower_fields",
+    "wythers:spring_flower_forest"
   ]
 }

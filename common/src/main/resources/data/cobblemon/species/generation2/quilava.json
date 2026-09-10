@@ -268,6 +268,21 @@
       "preEvolution": "cyndaquil",
       "evolutions": [
         {
+          "id": "quilava_typhlosionhisui",
+          "variant": "level_up",
+          "result": "typhlosion hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "infernalparade"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 36
+            }
+          ]
+        },
+        {
           "id": "quilava_typhlosion",
           "variant": "level_up",
           "result": "typhlosion",
@@ -281,21 +296,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/quilava_johtobiome"
-            }
-          ]
-        },
-        {
-          "id": "quilava_typhlosionhisui",
-          "variant": "level_up",
-          "result": "typhlosion hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "infernalparade"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 36
             }
           ]
         }

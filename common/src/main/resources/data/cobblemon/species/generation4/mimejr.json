@@ -255,6 +255,19 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "mimejr_mrmimegalar",
+          "variant": "level_up",
+          "result": "mrmime galarian",
+          "consumeHeldItem": false,
+          "learnableMoves": [],
+          "requirements": [
+            {
+              "variant": "has_move",
+              "move": "mimic"
+            }
+          ]
+        },
+        {
           "id": "mimejr_mrmime",
           "variant": "level_up",
           "result": "mrmime",
@@ -268,19 +281,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/mimejr_sinnohbiome"
-            }
-          ]
-        },
-        {
-          "id": "mimejr_mrmimegalar",
-          "variant": "level_up",
-          "result": "mrmime galarian",
-          "consumeHeldItem": false,
-          "learnableMoves": [],
-          "requirements": [
-            {
-              "variant": "has_move",
-              "move": "mimic"
             }
           ]
         }

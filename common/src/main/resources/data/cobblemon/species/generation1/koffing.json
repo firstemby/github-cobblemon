@@ -261,6 +261,21 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "koffing_weezinggalar",
+          "variant": "level_up",
+          "result": "weezing galarian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "doublehit"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 35
+            }
+          ]
+        },
+        {
           "id": "koffing_weezing",
           "variant": "level_up",
           "result": "weezing",
@@ -276,21 +291,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/koffing_kantobiome"
-            }
-          ]
-        },
-        {
-          "id": "koffing_weezinggalar",
-          "variant": "level_up",
-          "result": "weezing galarian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "doublehit"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 35
             }
           ]
         }

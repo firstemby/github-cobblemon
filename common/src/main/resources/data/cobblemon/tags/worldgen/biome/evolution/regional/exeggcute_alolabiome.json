@@ -1,7 +1,12 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_beach",
-    "#cobblemon:is_tropical_island"
+    "#minecraft:is_beach",
+    "biomesoplenty:dune_beach",
+    "biomesoplenty:tropics",
+    "wythers:guelta",
+    "wythers:sand_dunes",
+    "wythers:tropical_beach",
+    "wythers:tropical_volcano"
   ]
 }

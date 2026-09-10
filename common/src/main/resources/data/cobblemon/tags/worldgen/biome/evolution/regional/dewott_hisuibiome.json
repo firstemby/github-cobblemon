@@ -1,8 +1,25 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_coast",
+    "#c:is_beach",
+    "#c:is_stony_shores",
+    "#clifftree:is_cliff",
+    "#minecraft:is_beach",
     "minecraft:snowy_beach",
-    "#cobblemon:is_cold_ocean"
+    "minecraft:stony_shore",
+    "terralith:basalt_cliffs",
+    "terralith:granite_cliffs",
+    "terralith:white_cliffs",
+    "wythers:calcite_coast",
+    "wythers:coastal_mangroves",
+    "wythers:cold_island",
+    "wythers:cold_stony_shore",
+    "wythers:deepslate_shore",
+    "wythers:frigid_island",
+    "wythers:frozen_island",
+    "wythers:gravelly_beach",
+    "wythers:icy_shore",
+    "wythers:mediterranean_island",
+    "wythers:temperate_island"
   ]
 }
