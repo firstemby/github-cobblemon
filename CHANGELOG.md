@@ -28,6 +28,9 @@
 - Fixed the Pokédex evolution tree crashing with a stack overflow on evolutions that loop back on themselves.
 - Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
 - Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
+- Correctly grants "They're Minerals!" advancement when planting a type gem
+- Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
+- Corrected the TM Recipes for Charge Beam and Payday
 - Fixed the `stat_compare` and `stat_equal` evolution requirements crashing the game when given `special_attack` or `special_defence`, and made them treat any non-permanent stat as a failed requirement instead of crashing.
 - Fixed the Beast Ball not applying its 0.1× penalty to Pokémon that are not Ultra Beasts
 - Fixed the Moon Ball reading the world's total elapsed time instead of the time of day, so its moon phase bonus applied during the day
