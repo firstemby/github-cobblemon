@@ -145,6 +145,11 @@
                 "biomes": [
                     "#cobblemon:is_glacial"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ]
             }
         }
     ]

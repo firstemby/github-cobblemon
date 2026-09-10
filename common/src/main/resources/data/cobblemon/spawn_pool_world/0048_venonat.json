@@ -17,7 +17,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLight": 1
+                    "minLight": 8
                 }
             },
             "condition": {
@@ -44,7 +44,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLight": 1
+                    "minLight": 8
                 }
             },
             "condition": {
@@ -76,7 +76,7 @@
                     "#cobblemon:is_forest"
                 ],
                 "timeRange": "night",
-                "maxLight": 0
+                "maxLight": 7
             }
         },
         {
@@ -98,7 +98,7 @@
                 ],
                 "timeRange": "night",
                 "isRaining": true,
-                "maxLight": 0
+                "maxLight": 7
             }
         },
         {
@@ -119,7 +119,7 @@
                     "#cobblemon:is_forest"
                 ],
                 "timeRange": "night",
-                "minLight": 1
+                "minLight": 8
             }
         },
         {
@@ -141,7 +141,7 @@
                 ],
                 "timeRange": "night",
                 "isRaining": true,
-                "minLight": 1
+                "minLight": 8
             }
         }
     ]

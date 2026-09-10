@@ -18,15 +18,16 @@ import com.cobblemon.mod.common.util.getOrNull
 object DropEntryMoLangFunctions : AbstractMoLangFunctionHolder<DropEntry>() {
     override fun DropEntry.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val drop = this
-        val map = mutableMapOf<String, (MoParams) -> Any>()
+        val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        map["percentage"] = { DoubleValue(drop.percentage.toDouble()) }
-        map["quantity"] = { DoubleValue(drop.quantity.toDouble()) }
-        map["max_selectable_times"] = { DoubleValue(drop.maxSelectableTimes.toDouble()) }
-        map["can_drop"] = { params ->
+        functions["percentage"] = { DoubleValue(drop.percentage.toDouble()) }
+        functions["quantity"] = { DoubleValue(drop.quantity.toDouble()) }
+        functions["max_selectable_times"] = { DoubleValue(drop.maxSelectableTimes.toDouble()) }
+        functions["can_drop"] = { params ->
             val pokemon = params.getOrNull<ObjectValue<Pokemon>>(0)?.obj
             DoubleValue(if (drop.canDrop(pokemon)) 1.0 else 0.0)
         }
-        return map
+
+        return functions
     }
 }

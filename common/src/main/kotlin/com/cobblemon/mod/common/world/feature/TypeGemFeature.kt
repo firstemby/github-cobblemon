@@ -8,16 +8,11 @@
 
 package com.cobblemon.mod.common.world.feature
 
-import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonBlocks.TYPE_GEM_CORE
 import com.cobblemon.mod.common.CobblemonBlocks.typeGemBlocks
-import com.cobblemon.mod.common.CobblemonBlocks.typeGemClusters
-import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import com.cobblemon.mod.common.block.TypeGemCoreBlock
-import com.cobblemon.mod.common.util.random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Block.UPDATE_ALL
@@ -47,9 +42,12 @@ class TypeGemFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.
         val gemState = gemBlock.defaultBlockState()
         val coreState = TYPE_GEM_CORE.defaultBlockState()
 
-        // Place core and initial gem
+        // Place the gem first then make sure it placed before placing the core.
         worldGenLevel.setBlock(origin, coreState, UPDATE_ALL)
-        worldGenLevel.setBlock(chosenPos, gemState, UPDATE_ALL)
+        if (!worldGenLevel.getBlockState(chosenPos).`is`(gemBlock)) {
+            return false
+        }
+        worldGenLevel.setBlock(origin, coreState, UPDATE_ALL)
 
         // Trigger forced growth with clusters
         val coreBlock = coreState.block as TypeGemCoreBlock

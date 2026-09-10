@@ -29,7 +29,7 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "ferrothorn held_item=cobblemon:stee;_gem alpha=true",
+          "pokemon": "ferrothorn held_item=cobblemon:steel_gem alpha=true",
           "weight": 30.0,
           "levelRange": "1-100",
           "maxTimes": 1,
@@ -86,7 +86,7 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "ferrothorn held_item=cobblemon:stee;_gem alpha=true",
+          "pokemon": "ferrothorn held_item=cobblemon:steel_gem alpha=true",
           "weight": 30.0,
           "levelRange": "1-100",
           "maxTimes": 1,

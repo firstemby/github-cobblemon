@@ -23,7 +23,7 @@
           "#cobblemon:is_snowy"
         ],
         "timeRange": "night",
-        "minLight": 1
+        "minLight": 8
       },
       "herdablePokemon": [
         {

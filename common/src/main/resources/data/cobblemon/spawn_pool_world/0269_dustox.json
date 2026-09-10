@@ -18,7 +18,7 @@
             "weightMultiplier": {
                 "multiplier": 11.0,
                 "condition": {
-                    "minLight": 1
+                    "minLight": 8
                 }
             },
             "condition": {
@@ -47,7 +47,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLight": 1
+                    "minLight": 8
                 }
             },
             "condition": {

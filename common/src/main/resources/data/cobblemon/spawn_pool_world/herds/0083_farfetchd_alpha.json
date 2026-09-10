@@ -33,7 +33,7 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "farfetchd held_item=minecraft.stick alpha=true",
+          "pokemon": "farfetchd held_item=minecraft:stick alpha=true",
           "weight": 30.0,
           "levelRange": "1-100",
           "maxTimes": 1,

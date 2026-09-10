@@ -20,27 +20,34 @@ import net.minecraft.server.level.ServerPlayer
 object SpawnablePositionMoLangFunctions : AbstractMoLangFunctionHolder<SpawnablePosition>() {
     override fun SpawnablePosition.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val spawningContext = this
-        val map = mutableMapOf<String, (MoParams) -> Any>()
-        val worldValue = spawningContext.world.registryAccess().registryOrThrow(Registries.DIMENSION)
-            .wrapAsHolder(spawningContext.world).asWorldMoLangValue()
-        val biomeValue = spawningContext.biomeHolder.asBiomeMoLangValue()
-        map["biome"] = { _ -> biomeValue }
-        map["world"] = { _ -> worldValue }
-        map["light"] = { _ -> DoubleValue(spawningContext.light.toDouble()) }
-        map["x"] = { _ -> DoubleValue(spawningContext.position.x.toDouble()) }
-        map["y"] = { _ -> DoubleValue(spawningContext.position.y.toDouble()) }
-        map["z"] = { _ -> DoubleValue(spawningContext.position.z.toDouble()) }
-        map["moon_phase"] = { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) }
-        map["can_see_sky"] = { _ -> DoubleValue(spawningContext.canSeeSky) }
-        map["sky_light"] = { _ -> DoubleValue(spawningContext.skyLight.toDouble()) }
-        map["player"] = put@{ _ ->
-            val causeEntity = spawningContext.cause.entity ?: return@put DoubleValue.ZERO
-            if (causeEntity is ServerPlayer) {
-                return@put causeEntity.asMoLangValue()
-            } else {
-                return@put DoubleValue.ZERO
-            }
+        val worldValue =
+            spawningContext
+                .world
+                .registryAccess()
+                .registryOrThrow(Registries.DIMENSION)
+                .wrapAsHolder(spawningContext.world)
+                .asWorldMoLangValue()
+        val biomeValue =
+            spawningContext
+                .biomeHolder
+                .asBiomeMoLangValue()
+        val functions = hashMapOf<String, (MoParams) -> Any>()
+
+        functions["biome"] = { biomeValue }
+        functions["world"] = { worldValue }
+        functions["light"] = { DoubleValue(spawningContext.light.toDouble()) }
+        functions["x"] = { DoubleValue(spawningContext.position.x.toDouble()) }
+        functions["y"] = { DoubleValue(spawningContext.position.y.toDouble()) }
+        functions["z"] = { DoubleValue(spawningContext.position.z.toDouble()) }
+        functions["moon_phase"] = { DoubleValue(spawningContext.moonPhase.toDouble()) }
+        functions["can_see_sky"] = { DoubleValue(spawningContext.canSeeSky) }
+        functions["sky_light"] = { DoubleValue(spawningContext.skyLight.toDouble()) }
+        functions["player"] = player@{
+            val causeEntity = spawningContext.cause.entity ?: return@player DoubleValue.ZERO
+            if (causeEntity is ServerPlayer) return@player causeEntity.asMoLangValue()
+            DoubleValue.ZERO
         }
-        return map
+
+        return functions
     }
 }

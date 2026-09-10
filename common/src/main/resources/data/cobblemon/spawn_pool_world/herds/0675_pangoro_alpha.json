@@ -23,7 +23,7 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "pangoroheld_item=cobblemon:fighting_gem alpha=true",
+          "pokemon": "pangoro held_item=cobblemon:fighting_gem alpha=true",
           "weight": 30.0,
           "levelRange": "1-100",
           "maxTimes": 1,
