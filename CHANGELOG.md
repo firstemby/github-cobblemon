@@ -48,6 +48,7 @@
 - Fixed Duraludon line not having their sleep animations
 - Fixed Diglett line not having their faint animations
 - Fixed Kingambit moving its legs while walking
+- Fixed Illusion, Imposter and Transform overwriting the species, form and EXP group of the owner's party Pokémon on the client, which made its level and HP display incorrectly and could leave the copied form showing in the party after battle
 
 
 ### Developer

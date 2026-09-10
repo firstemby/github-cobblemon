@@ -63,6 +63,8 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         const val SHINY_PARTICLE_COOLDOWN = 3.5F
     }
 
+    var storedPokemon: Pokemon? = null
+
     override val schedulingTracker: SchedulingTracker
         get() = currentEntity.schedulingTracker
 
@@ -107,8 +109,18 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         if (this::currentEntity.isInitialized) {
             if (data == PokemonEntity.SPECIES) {
                 val identifier = ResourceLocation.parse(currentEntity.entityData.get(PokemonEntity.SPECIES))
+                val species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
+                val stored = storedPokemon
+                if (stored != null) {
+                    val disguised = species != stored.species && currentEntity.battleId != null
+                    if (disguised) {
+                        if (currentEntity.pokemon === stored) currentEntity.pokemon = renderCopy(stored)
+                    } else if (currentEntity.pokemon !== stored) {
+                        currentEntity.pokemon = stored
+                    }
+                }
                 currentPose = null
-                currentEntity.pokemon.species = PokemonSpecies.getByIdentifier(identifier)!! // TODO exception handling
+                currentEntity.pokemon.species = species
                 // force a model update - handles edge case where the PosableState's tracked PosableModel isn't updated until the LivingEntityRenderer render is run
                 currentModel = VaryingModelRepository.getPoser(identifier, this)
                 currentEntity.refreshRiding()
@@ -351,6 +363,22 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
 
     override fun changePokemon(pokemon: Pokemon) {
         pokemon.isClient = true
+    }
+
+    private fun renderCopy(source: Pokemon) = Pokemon().apply {
+        isClient = true
+        uuid = source.uuid
+        scaleModifier = source.scaleModifier
+        species = source.species
+        form = source.form
+        gender = source.gender
+        shiny = source.shiny
+        forcedAspects = source.forcedAspects
+        nickname = source.nickname
+        activeMark = source.activeMark
+        caughtBall = source.caughtBall
+        isAlpha = source.isAlpha
+        level = source.level
     }
 
     override fun addToStruct(struct: QueryStruct) {
