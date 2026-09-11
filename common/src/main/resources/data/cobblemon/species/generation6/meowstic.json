@@ -59,7 +59,7 @@
       "maxSize": 3,
       "toleratedLeaders": [
         {
-          "pokemon": "meowstic alpha",
+          "pokemon": "meowstic",
           "tier": 1
         }
       ]

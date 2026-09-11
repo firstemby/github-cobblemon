@@ -64,7 +64,7 @@
       }
     },
     "herd": {
-      "maxSize": 7,
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "meganium mega=false",
@@ -166,7 +166,6 @@
     "tm:magicalleaf",
     "tm:magiccoat",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:outrage",
     "tm:petalblizzard",

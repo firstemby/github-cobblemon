@@ -36,7 +36,6 @@ class ModelWidget(
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
-        var render = true
         const val MAX_SECONDS_LOOKING = 6L
     }
 
@@ -59,8 +58,10 @@ class ModelWidget(
     var currentYawAndPitch: Pair<Float, Float> = Pair(0f, 0f)
     val rotationVector = Vector3f(13F, rotationY, 0F)
 
+    var shouldRender = true
+
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, partialTicks: Float) {
-        if (!render) {
+        if (!shouldRender) {
             return
         }
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height

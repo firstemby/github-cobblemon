@@ -4,6 +4,9 @@
   "profileScale": 0.8,
   "profileTranslation": [0.09,0.6,0],
   "rootBone": "mawile",
+  "animations": {
+    "cry": "q.bedrock_stateful('mawile', 'cry')"
+  },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],

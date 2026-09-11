@@ -22,6 +22,11 @@
       "targetLocators": ["target"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.hydropump.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.03
     },
@@ -45,6 +50,11 @@
       "type": "animation",
       "animation": ["recoil"],
       "entityCondition": "q.entity.is_user == false && q.hurt(q.entity.uuid) == true && q.missed(q.entity.uuid) == false"
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.hydropump.target');"]
     },
     {
       "type": "pause",

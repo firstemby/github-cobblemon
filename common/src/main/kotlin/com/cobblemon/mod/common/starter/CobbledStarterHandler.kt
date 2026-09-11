@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.starter.StarterChosenEvent
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.starter.StarterHandler
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.api.text.red
@@ -21,6 +22,7 @@ import com.cobblemon.mod.common.net.messages.client.starter.OpenStarterUIPacket
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.server.level.ServerPlayer
+import kotlin.random.Random
 
 open class CobblemonStarterHandler : StarterHandler {
 
@@ -55,11 +57,15 @@ open class CobblemonStarterHandler : StarterHandler {
 
         val category = getStarterList(player).find { it.name == categoryName } ?: return
 
-        if (index < 0 || index >= category.pokemon.size) {
+        if (index < 0 || index > category.pokemon.size) {
             return
         }
+        val properties = if (index == category.pokemon.size) { // means random
+            getStarterList(player).flatMap { it.pokemon }.random()
+        } else {
+            category.pokemon[index]
+        }
 
-        val properties = category.pokemon[index]
         val pokemon = properties.create(player)
 
         CobblemonEvents.STARTER_CHOSEN.postThen(StarterChosenEvent(player, properties, pokemon)) {

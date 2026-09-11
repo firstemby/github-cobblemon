@@ -368,7 +368,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             ?: entity.mainHandItem
         }.copy()
         /* Hide items tagged as hidden (If the item is in this list, it will not render) */
-        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS)) ItemStack.EMPTY else it}
+        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS) || (entity.pokemon.isAlpha && entity.pokemon.isWild())) ItemStack.EMPTY else it}
 
         entity.entityData.set(PokemonEntity.SHOWN_HELD_ITEM, trackedShownItem)
     }

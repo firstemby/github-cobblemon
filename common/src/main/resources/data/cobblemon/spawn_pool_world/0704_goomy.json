@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -35,7 +35,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -57,7 +57,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -75,7 +75,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -92,7 +92,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -109,7 +109,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -138,7 +138,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -158,7 +158,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -187,7 +187,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -206,14 +206,11 @@
         {
             "id": "goomy-hisui-10",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -229,14 +226,11 @@
         {
             "id": "goomy-hisui-11",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -256,14 +250,11 @@
         {
             "id": "goomy-hisui-12",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "5-30",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -283,14 +274,11 @@
         {
             "id": "goomy-hisui-13",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -311,14 +299,11 @@
         {
             "id": "goomy-hisui-14",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.8,
+            "weight": 18.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -338,14 +323,11 @@
         {
             "id": "goomy-hisui-15",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "5-30",
-            "weight": 7.5,
+            "weight": 75.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -365,14 +347,11 @@
         {
             "id": "goomy-hisui-16",
             "pokemon": "goomy region_bias=hisui",
-            "presets": [
-                "natural"
-            ],
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "5-30",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {

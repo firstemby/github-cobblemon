@@ -5,9 +5,9 @@
   "profileTranslation": [0, 0.71, 0],
   "rootBone": "grimer",
   "animations": {
-    "cry": "q.bedrock_stateful('grimer_alolan', 'cry')",
-    "recoil": "q.bedrock_stateful('grimer_alolan', 'recoil')",
-    "status": "q.bedrock_stateful('grimer_alolan', 'status', q.curve('symmetrical_wide'))"
+    "cry": "q.bedrock_stateful('grimer', 'cry')",
+    "recoil": "q.bedrock_stateful('grimer', 'recoil')",
+    "status": "q.bedrock_stateful('grimer', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "battle-standing": {

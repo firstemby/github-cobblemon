@@ -10,7 +10,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "14-36",
-            "weight": 0.9,
+            "weight": 5.4,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -19,7 +19,8 @@
                     "#cobblemon:is_sky",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-50",
-            "weight": 6.0,
+            "weight": 20.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -31,7 +31,8 @@
                 ],
                 "neededNearbyBlocks": [
                     "minecraft:water"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -44,7 +45,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "25-50",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -54,11 +55,12 @@
                     "#cobblemon:is_swamp",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             }
         },
         {
-            "id": "flamigo-4",
+            "id": "flamigo-3",
             "pokemon": "flamigo",
             "presets": [
                 "natural"
@@ -67,7 +69,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "25-50",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -76,7 +78,8 @@
                 ],
                 "neededNearbyBlocks": [
                     "minecraft:water"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

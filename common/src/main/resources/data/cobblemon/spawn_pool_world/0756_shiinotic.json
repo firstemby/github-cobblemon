@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-41",
-            "weight": 0.2,
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#aether:is_aether",
@@ -34,7 +40,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-41",
-            "weight": 0.2,
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -60,7 +72,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-41",
-            "weight": 1.0,
+            "weight": 3.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_fungus"
@@ -82,7 +100,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-41",
-            "weight": 0.2,
+            "weight": 1.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

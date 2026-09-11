@@ -19,7 +19,7 @@ form_entry_mapping = {
     "Alolan": "Alola",
     "Galarian": "Galar",
     "Hisuian": "Hisui",
-    "Paldean": "Paldea",
+    "Paldean": "Paldea"
 }
 #
 # controller_keys = {
@@ -119,7 +119,12 @@ def modify_files(file, pokemon_data_dir, behaviour_dict):
         file_forms = set(form['name'] for form in data['forms']) if 'forms' in data else set()
         # always add None to the file_forms set, as the base form is always present in the files
         file_forms.add(None)
-        behaviour_dict_forms = set(row['forms'] for row in behaviour_dict[pokemon] if row['forms'] != '')
+        behaviour_dict_forms = []
+        for row in behaviour_dict[pokemon]:
+            if row['forms'] == '':
+               behaviour_dict_forms.append(None)
+            else:
+               behaviour_dict_forms.append(row['forms'])
         # apply the mapping to all the behaviour_forms
         behaviour_dict_forms = set(form_entry_mapping.get(form, form) for form in behaviour_dict_forms)
 

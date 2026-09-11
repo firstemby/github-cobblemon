@@ -198,10 +198,10 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": 3,
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "mienshao alpha",
+          "pokemon": "mienshao",
           "tier": 1
         }
       ]

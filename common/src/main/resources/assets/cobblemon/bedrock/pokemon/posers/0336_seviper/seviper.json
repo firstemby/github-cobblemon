@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.74, 0],
   "rootBone": "seviper",
   "animations": {
+    "cry": "q.bedrock_stateful('seviper', 'cry')"
   },
   "poses": {
     "standing": {

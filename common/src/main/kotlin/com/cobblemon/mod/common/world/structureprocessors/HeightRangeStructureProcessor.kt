@@ -17,33 +17,33 @@ import net.minecraft.world.level.LevelHeightAccessor
 import net.minecraft.world.level.chunk.ChunkGenerator
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.levelgen.RandomState
+import net.minecraft.world.level.levelgen.structure.BoundingBox
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
 
+/**
+ * Restricts the height range a structure piece is allowed to generate in, relative to a [HeightReference].
+ *
+ * The range is enforced while the structure start is still being built,
+ * by `StructureMixin`, which gets rid of the entire start when any piece falls outside of its range. Voiding
+ * blocks here instead would run after terrain adaptation has already deformed the terrain, leaving behind
+ * random pockets of land and the `/locate` command would incorrectly find a structure that was never placed.
+ */
 class HeightRangeStructureProcessor(
 	val minOffset: Int,
 	val maxOffset: Int,
 	val reference: HeightReference = HeightReference.SEA_LEVEL
 ) : StructureProcessor() {
 
-	fun isValidPlacement(world: LevelReader, pos: BlockPos): Boolean {
-		val referenceY = reference.getY(world, pos)
-		val minY = referenceY + minOffset
-		val maxY = referenceY + maxOffset
-		return pos.y in minY..maxY
-	}
-
 	fun isValidPlacement(
 		chunkGenerator: ChunkGenerator,
 		heightAccessor: LevelHeightAccessor,
 		randomState: RandomState,
-		pos: BlockPos
+		box: BoundingBox
 	): Boolean {
-		val referenceY = reference.getY(chunkGenerator, heightAccessor, randomState, pos)
-		val minY = referenceY + minOffset
-		val maxY = referenceY + maxOffset
-		return pos.y in minY..maxY
+		val referenceY = reference.getY(chunkGenerator, heightAccessor, randomState, box.center)
+		return box.minY() in (referenceY + minOffset)..(referenceY + maxOffset)
 	}
 
 	override fun processBlock(
@@ -53,13 +53,7 @@ class HeightRangeStructureProcessor(
 		originalBlockInfo: StructureTemplate.StructureBlockInfo,
 		currentBlockInfo: StructureTemplate.StructureBlockInfo,
 		data: StructurePlaceSettings
-	): StructureTemplate.StructureBlockInfo? {
-		return if (isValidPlacement(world, pos)) {
-			currentBlockInfo
-		} else {
-			null
-		}
-	}
+	): StructureTemplate.StructureBlockInfo = currentBlockInfo
 
 	override fun getType() = CobblemonProcessorTypes.HEIGHT_RANGE
 
@@ -73,15 +67,6 @@ class HeightRangeStructureProcessor(
 		MOTION_BLOCKING_NO_LEAVES("motion_blocking_no_leaves", Heightmap.Types.MOTION_BLOCKING_NO_LEAVES);
 
 		fun getSerializedName(): String = id
-
-		@Suppress("DEPRECATION")
-		fun getY(world: LevelReader, pos: BlockPos): Int {
-			return if (this == SEA_LEVEL) {
-				world.seaLevel
-			} else {
-				world.getHeight(type ?: Heightmap.Types.WORLD_SURFACE_WG, pos.x, pos.z)
-			}
-		}
 
 		fun getY(
 			chunkGenerator: ChunkGenerator,

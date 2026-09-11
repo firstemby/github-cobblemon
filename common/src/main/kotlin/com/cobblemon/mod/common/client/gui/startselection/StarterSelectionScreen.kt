@@ -66,12 +66,14 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         private val platformShadow = cobblemonResource("textures/gui/pokedex/platform_shadow.png")
         private val typeSpacerResource = cobblemonResource("textures/gui/starterselection/type_spacer_single.png")
         private val ballResource = cobblemonResource("textures/item/poke_balls/poke_ball.png")
+
+        private val unknownResource = cobblemonResource("textures/gui/pokedex/platform_unknown.png")
     }
 
     var currentSelection = 0
     lateinit var currentCategory: RenderableStarterCategory
     private lateinit var modelWidget: ModelWidget
-    private lateinit var currentPokemon: RenderablePokemon
+    private var currentPokemon: RenderablePokemon? = null
 
     var ticksElapsed = 0
     var currentBallBackgroundFrame = 0
@@ -98,9 +100,9 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         }
 
         currentCategory = categories.first()
-        currentPokemon = currentCategory.pokemon[currentSelection]
+        currentPokemon = currentCategory.pokemon[0]
 
-        with(currentPokemon) {
+        with(currentPokemon!!) {
             modelWidget = ModelWidget(
                 pX = x + 6, pY = y + 17,
                 pWidth = 118, pHeight = 100,
@@ -188,7 +190,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             width = 113,
             height = 32
         )
-        val typePlatform = getPlatformResource(currentPokemon.form.primaryType)
+        val typePlatform = currentPokemon?.let { getPlatformResource(it.form.primaryType) }
         if (typePlatform != null) {
             blitk(
                 matrixStack = matrices,
@@ -209,6 +211,18 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
             scale = 0.5F
         )
 
+        if (currentPokemon == null) { // Model widget won't render
+            blitk(
+                matrixStack = matrices,
+                texture = unknownResource,
+                x = (x + 36) / 0.15f,
+                y = (y + 36) / 0.15f,
+                width = 390,
+                height = 444,
+                scale = 0.15f
+            )
+        }
+
         //Base
         blitk(
             matrixStack = matrices,
@@ -220,23 +234,25 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         )
 
         //Type Icon
-        TypeIcon(
-            x = x + 65,
-            y = y + 120,
-            type = currentPokemon.form.primaryType,
-            secondaryType = currentPokemon.form.secondaryType,
-            centeredX = true
-        ).render(context)
+        if (currentPokemon != null) {
+            TypeIcon(
+                x = x + 65,
+                y = y + 120,
+                type = currentPokemon!!.form.primaryType,
+                secondaryType = currentPokemon!!.form.secondaryType,
+                centeredX = true
+            ).render(context)
 
-        if (currentPokemon.form.secondaryType == null) {
-            blitk(
-                matrixStack = matrices,
-                texture = typeSpacerResource,
-                x = x + 47,
-                y = y + 123,
-                width = 36,
-                height = 12
-            )
+            if (currentPokemon!!.form.secondaryType == null) {
+                blitk(
+                    matrixStack = matrices,
+                    texture = typeSpacerResource,
+                    x = x + 47,
+                    y = y + 123,
+                    width = 36,
+                    height = 12
+                )
+            }
         }
 
         //Name
@@ -253,7 +269,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = currentPokemon.species.translatedName.bold(),
+            text = currentPokemon?.species?.translatedName?.bold() ?: lang("ui.starter.random").bold(),
             x = x + 14,
             y = y + 2,
             shadow = true
@@ -261,11 +277,13 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
 
         // Pokédex Number
         // Add preceding zeroes if Pokédex number is less than 4 digits
-        var dexNo = currentPokemon.species.nationalPokedexNumber.toString()
-        while (dexNo.length < 4) {
-            dexNo = "0$dexNo"
-        }
-        dexNo = "#$dexNo"
+        var dexNo = currentPokemon?.species?.nationalPokedexNumber?.toString()
+        if (dexNo != null) {
+            while (dexNo!!.length < 4) {
+                dexNo = "0$dexNo"
+            }
+            dexNo = "#$dexNo"
+        } else dexNo = "#????"
 
         drawScaledText(
             context = context,
@@ -290,10 +308,12 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         //Description Text
         val smallTextScale = 0.5F
 
+        val textEntry = currentPokemon?.form?.pokedex?.first()?.asTranslated() ?: lang("ui.starter.random_description")
+
         matrices.pushPose()
         matrices.scale(smallTextScale, smallTextScale, 1F)
         MultiLineLabelK.create(
-            component = currentPokemon.form.pokedex.first().asTranslated(),
+            component = textEntry,
             width = 114 / smallTextScale,
             maxLines = 5
         ).renderLeftAligned(
@@ -320,8 +340,14 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
     fun selectPokemon(category: RenderableStarterCategory, slot: Int) {
         currentCategory = category
         currentSelection = slot
-        currentPokemon = currentCategory.pokemon[currentSelection].also {
-            modelWidget.pokemon = it
+        if (currentSelection < currentCategory.pokemon.size) {
+            currentPokemon = currentCategory.pokemon[currentSelection].also {
+                modelWidget.pokemon = it
+            }
+            modelWidget.shouldRender = true
+        } else {
+            currentPokemon = null
+            modelWidget.shouldRender = false
         }
     }
 

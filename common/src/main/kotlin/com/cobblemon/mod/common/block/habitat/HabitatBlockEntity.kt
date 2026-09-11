@@ -278,7 +278,7 @@ class HabitatBlockEntity(pos: BlockPos, state: BlockState) :
     override fun injectSpawns(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail>? {
         val spawningStyle = spawningStyle
         return if (spawningStyle is NaturalHabitatSpawning) {
-            spawnDetails.filter { it.spawnablePositionType.clazz == spawnablePosition::class.java && it.isSatisfiedBy(spawnablePosition) }
+            spawnDetails.filter { it.bucket == bucket && it.spawnablePositionType.clazz == spawnablePosition::class.java && it.isSatisfiedBy(spawnablePosition) }
         } else {
             null
         }

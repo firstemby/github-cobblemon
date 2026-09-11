@@ -71,11 +71,11 @@
       "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "psyduck alpha",
+          "pokemon": "golduck alpha",
           "tier": 1
         },
         {
-          "pokemon": "golduck alpha",
+          "pokemon": "psyduck",
           "tier": 1
         }
       ]

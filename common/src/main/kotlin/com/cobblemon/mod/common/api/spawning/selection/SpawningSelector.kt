@@ -47,7 +47,7 @@ interface SpawningSelector<T : SpawnSelectionData> {
         val spawnActions = selectionData.spawnActions
 
         while (spawnActions.size < maxSpawns) {
-            val bucket = bucketSelector()
+            val bucket = selectionData.guaranteedBucket ?: bucketSelector()
             val spawnAction = selectSpawnAction(
                 spawner = spawner,
                 bucket = bucket,

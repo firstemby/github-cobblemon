@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 1.68,
+            "weight": 2.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -36,7 +36,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 5.04,
+            "weight": 7.8,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -53,7 +53,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "4-29",
-            "weight": 84.0,
+            "weight": 130.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_overworld"

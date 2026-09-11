@@ -4,13 +4,57 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "dewpider-1",
+            "pokemon": "dewpider",
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "2-27",
+            "weight": 84.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_freshwater"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
+            "id": "dewpider-2",
+            "pokemon": "dewpider",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "seafloor",
+            "bucket": "common",
+            "level": "2-27",
+            "weight": 18.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_freshwater"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
             "id": "dewpider-3",
             "pokemon": "dewpider",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "2-27",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -34,7 +78,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "2-27",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -64,7 +108,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "2-27",
-            "weight": 5.04,
+            "weight": 50.4,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -90,7 +134,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "2-27",
-            "weight": 1.8,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
@@ -108,50 +152,6 @@
                     "#cobblemon:is_jungle"
                 ],
                 "minLureLevel": 1
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "dewpider-1",
-            "pokemon": "dewpider",
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "2-27",
-            "weight": 8.4,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater"
-                ]
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "dewpider-2",
-            "pokemon": "dewpider",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "seafloor",
-            "bucket": "common",
-            "level": "2-27",
-            "weight": 1.8,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_freshwater"
-                ]
             },
             "anticondition": {
                 "biomes": [

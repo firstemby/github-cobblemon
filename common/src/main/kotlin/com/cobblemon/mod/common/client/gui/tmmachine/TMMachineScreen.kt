@@ -1267,6 +1267,19 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 
+    override fun hasClickedOutside(
+        mouseX: Double,
+        mouseY: Double,
+        guiLeft: Int,
+        guiTop: Int,
+        mouseButton: Int
+    ): Boolean {
+        partySlotList.forEach {
+            if (it.pokemon != null && it.isMouseOver(mouseX, mouseY)) return false
+        }
+        return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, mouseButton)
+    }
+
     class MoveDescriptionWidget(pX: Int, pY: Int, width: Int, height: Int) : ScrollingWidget<MoveDescriptionWidget.TextSlot>(
         left = pX,
         top = pY - height,

@@ -813,7 +813,7 @@
       "spawnablePositionType": "grounded",
       "weight": 5.94,
       "levelRange": "6-31",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "20",
       "timeRange": "night"
     },
@@ -823,7 +823,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.06,
       "levelRange": "6-31",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "20",
       "timeRange": "night"
     },
@@ -833,7 +833,7 @@
       "spawnablePositionType": "grounded",
       "weight": 5.94,
       "levelRange": "6-31",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "20",
       "timeRange": "day"
     },
@@ -843,7 +843,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.06,
       "levelRange": "6-31",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "20",
       "timeRange": "day"
     },
@@ -853,7 +853,7 @@
       "spawnablePositionType": "grounded",
       "weight": 5.94,
       "levelRange": "6-31",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "1-19, 21-25",
       "timeRange": "night"
     },
@@ -863,7 +863,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.06,
       "levelRange": "6-31",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "1-19, 21-25",
       "timeRange": "night"
     },
@@ -873,7 +873,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.96,
       "levelRange": "26-51",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "20",
       "timeRange": "night"
     },
@@ -883,7 +883,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.04,
       "levelRange": "26-51",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "20",
       "timeRange": "night"
     },
@@ -893,7 +893,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.96,
       "levelRange": "26-51",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "20",
       "timeRange": "day"
     },
@@ -903,7 +903,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.04,
       "levelRange": "26-51",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "20",
       "timeRange": "day"
     },
@@ -913,7 +913,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.96,
       "levelRange": "26-51",
-      "modifiers": "phony",
+      "modifiers": "tea_authenticity=phony",
       "phases": "1-19, 21-25",
       "timeRange": "night"
     },
@@ -923,7 +923,7 @@
       "spawnablePositionType": "grounded",
       "weight": 0.04,
       "levelRange": "26-51",
-      "modifiers": "antique",
+      "modifiers": "tea_authenticity=antique",
       "phases": "1-19, 21-25",
       "timeRange": "night"
     },

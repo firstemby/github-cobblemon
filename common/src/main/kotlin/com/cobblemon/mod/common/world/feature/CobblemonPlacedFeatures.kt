@@ -97,6 +97,8 @@ object CobblemonPlacedFeatures {
     val STRANGE_WARPED_FUNGAL_DWELLINGS = of("habitats/strange_warped_fungal_dwellings")
     @JvmField
     val VOLCANIC_PLUMES = of("habitats/volcanic_plumes")
+    @JvmField
+    val ROCKY_OUTCROPS = of("habitats/rocky_outcrops")
 
     @JvmField
     val PREHISTORIC_BIRCH_TREE = of("fossils/prehistoric_birch_tree")
@@ -208,6 +210,7 @@ object CobblemonPlacedFeatures {
         Cobblemon.implementation.addFeatureToWorldGen(CRUMBLING_ARCH, GenerationStep.Decoration.UNDERGROUND_DECORATION, BiomeTags.IS_OVERWORLD)
         Cobblemon.implementation.addFeatureToWorldGen(DEEP_CRYPT, GenerationStep.Decoration.UNDERGROUND_DECORATION, CobblemonBiomeTags.IS_DEEP_DARK)
         Cobblemon.implementation.addFeatureToWorldGen(ROOTED_ARCH, GenerationStep.Decoration.UNDERGROUND_DECORATION, CobblemonBiomeTags.IS_LUSH)
+        Cobblemon.implementation.addFeatureToWorldGen(ROCKY_OUTCROPS, GenerationStep.Decoration.UNDERGROUND_DECORATION, CobblemonBiomeTags.IS_MOUNTAIN)
     }
 
     private fun of(id: String): ResourceKey<PlacedFeature> = ResourceKey.create(Registries.PLACED_FEATURE, cobblemonResource(id))

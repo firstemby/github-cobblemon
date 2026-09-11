@@ -64,7 +64,7 @@
       }
     },
     "herd": {
-      "maxSize": 5,
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "bayleef",
@@ -158,7 +158,6 @@
     "tm:magicalleaf",
     "tm:magiccoat",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:reflect",

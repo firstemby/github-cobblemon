@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluenc
 import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.rules.SpawnRule
+import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.util.mutableLazy
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -66,10 +67,10 @@ object PokeSnackSpawnerFactory {
         },
     )
 
-    fun create(ctx: Context): FixedAreaSpawner {
+    fun create(ctx: Context): PokeSnackBlockEntity.Spawner {
         val influences = influenceBuilders.mapNotNull { it(ctx) }
 
-        return FixedAreaSpawner(
+        return PokeSnackBlockEntity.Spawner(
             name = ctx.name,
             spawnPool = spawnPool,
             buckets = Cobblemon.bestSpawner.config.pokeSnackBuckets,

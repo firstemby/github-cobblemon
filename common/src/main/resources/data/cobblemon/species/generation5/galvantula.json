@@ -45,10 +45,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.3,
+    "height": 0.8,
     "fixed": false
   },
+  "standingEyeHeight": 0.5,
   "behaviour": {
     "moving": {
       "walk": {

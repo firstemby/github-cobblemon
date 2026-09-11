@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.0,
+            "weight": 54.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -25,7 +25,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_savanna"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -38,14 +39,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "6-31",
-            "weight": 9.0,
+            "weight": 54.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "aether:skyroot_grove",
                     "aether:skyroot_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

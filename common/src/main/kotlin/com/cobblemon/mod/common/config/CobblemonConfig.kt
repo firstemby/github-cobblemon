@@ -91,6 +91,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "enable_spawning", SERVER)
     var enableSpawning = true
 
+    @CobblemonConfigField(Category.Spawning, lang = "world_spawning_blocklist", SERVER)
+    var worldSpawningBlocklist = mutableSetOf<ResourceLocation>()
+
     @CobblemonConfigField(Category.Spawning, lang = "minimum_distance_between_entities", SERVER)
     var minimumDistanceBetweenEntities = 8.0
 

@@ -1,5 +1,5 @@
 modLoader="kotlinforforge" #mandatory
-loaderVersion="[5.3,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[5.10,)" # checked against the installed kotlin for forge version
 license="MPL2.0"
 issueTrackerURL="https://gitlab.com/cable-mc/cobblemon/-/issues"
 

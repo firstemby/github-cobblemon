@@ -40,6 +40,10 @@ import kotlin.math.*
 class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     companion object {
         val KEY = cobblemonResource("air/bird")
+
+        private const val FLY_POSE_SPEED = 0.1
+        private const val GLIDE_ENTRY_SPEED = 0.19
+        private const val GLIDE_EXIT_SPEED = 0.13
     }
 
     override val key: ResourceLocation = KEY
@@ -49,7 +53,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     }
 
     val poseProvider = PoseProvider<BirdSettings, BirdState>(PoseType.HOVER)
-        .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVelocity.get().z > 0.2 })
+        .with(PoseOption(PoseType.FLY) { _, state, _ -> state.rideVelocity.get().z > FLY_POSE_SPEED })
 
     val globalBird: BirdSettings
         get() = CobblemonRideSettings.bird
@@ -192,21 +196,23 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         }
 
         // speed up and slow down based on input
-        if (driver.zza != 0.0f && state.stamina.get() > 0.0 && newVelocity.length() < glideTopSpeed) {
-            //make sure it can't exceed top speed
-            val forwardInput = when {
-                state.stamina.get() == 0.0f -> 0.0
-                driver.zza > 0 && newVelocity.z > topSpeed -> 0.0
-                driver.zza < 0 && newVelocity.z < (-topSpeed / 3.0) -> 0.0
-                else -> driver.zza.sign
-            }
-
-            newVelocity = Vec3(
-                newVelocity.x,
-                newVelocity.y,
-                (newVelocity.z + (accel * forwardInput.toDouble())))
-
+        if (driver.zza != 0.0f && state.stamina.get() > 0.0) {
             activeInput = true
+
+            if (newVelocity.length() < glideTopSpeed) {
+                //make sure it can't exceed top speed
+                val forwardInput = when {
+                    state.stamina.get() == 0.0f -> 0.0
+                    driver.zza > 0 && newVelocity.z > topSpeed -> 0.0
+                    driver.zza < 0 && newVelocity.z < (-topSpeed / 3.0) -> 0.0
+                    else -> driver.zza.sign
+                }
+
+                newVelocity = Vec3(
+                    newVelocity.x,
+                    newVelocity.y,
+                    (newVelocity.z + (accel * forwardInput.toDouble())))
+            }
         }
 
         val controller = (vehicle as? OrientationControllable)?.orientationController
@@ -264,11 +270,9 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
 
         //Check if the ride should be gliding
         if (driver.isLocalPlayer) {
-            if ((activeInput && state.stamina.get() > 0.0) || state.rideVelocity.get().z < 0.2) {
-                state.gliding.set(false)
-            } else {
-                state.gliding.set(true)
-            }
+            val powered = activeInput && state.stamina.get() > 0.0
+            val requiredSpeed = if (state.gliding.get()) GLIDE_EXIT_SPEED else GLIDE_ENTRY_SPEED
+            state.gliding.set(!powered && newVelocity.z >= requiredSpeed)
         }
 
         //air resistance

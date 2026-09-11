@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "14-39",
-            "weight": 5.52,
+            "weight": 55.2,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -37,7 +37,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "14-39",
-            "weight": 1.84,
+            "weight": 18.4,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_basalt"

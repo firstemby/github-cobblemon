@@ -52,6 +52,8 @@
   "behaviour": {
     "moving": {
       "swim": {
+        "canSwimInWater": false,
+        "canBreatheUnderwater": true,
         "swimSpeed": 0.3
       },
       "walk": {
