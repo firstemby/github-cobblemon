@@ -46,6 +46,16 @@ class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage
         }
 
         battle.dispatchWaiting {
+            pokemon.transformed = targetPokemon
+            pokemon.statChanges.clear()
+            pokemon.statChanges.putAll(targetPokemon.statChanges)
+            for (index in pokemon.revealedMoves.indices) {
+                pokemon.revealedMoves[index] = targetPokemon.moveSet.get(index)?.let {
+                    com.cobblemon.mod.common.net.messages.client.battle.MoveDTO(it.displayName, 0)
+                }
+            }
+            pokemon.revealedAbility = targetPokemon.effectedPokemon.ability.name
+            pokemon.sendUpdate()
             val mock = pokemon.entity?.effects?.mockEffect?.mock
             val pokemonName = pokemon.getName()
             val targetPokemonName = targetPokemon.getName()

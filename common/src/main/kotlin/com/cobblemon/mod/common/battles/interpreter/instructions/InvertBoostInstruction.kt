@@ -28,6 +28,8 @@ class InvertBoostInstruction(val message: BattleMessage): InterpreterInstruction
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting {
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
+            pokemon.statChanges.replaceAll { _, value -> -value }
+            pokemon.sendUpdate()
             val name = pokemon.getName()
             battle.broadcastChatMessage(battleLang("invertboost", name))
 

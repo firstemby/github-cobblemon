@@ -8,6 +8,24 @@
 
 package com.cobblemon.mod.common.battles.pokemon
 
+import net.minecraft.world.item.ItemStack
+
+import com.cobblemon.mod.common.util.getPlayer
+
+import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattlePokemonDTO
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorInformationPacket
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
+
+import com.cobblemon.mod.common.api.types.tera.TeraType
+
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
@@ -120,6 +138,13 @@ open class BattlePokemon(
 
     val contextManager = ContextManager()
 
+    var revealed = false
+    var revealedAbility: String? = null
+    val revealedMoves: MutableList<MoveDTO?> = mutableListOf(null, null, null, null)
+    var revealedHeldItem: ItemStack? = null
+    var transformed: BattlePokemon? = null
+    var terastallized: TeraType? = null
+
     open fun getName(): MutableComponent {
         val displayPokemon = getIllusion()?.effectedPokemon ?: effectedPokemon
         return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
@@ -129,8 +154,68 @@ open class BattlePokemon(
         }
     }
 
+    fun toBattleDTO(ally: Boolean, forceReveal: Boolean = true): BattlePokemonDTO {
+        val moves = (transformed?.effectedPokemon ?: effectedPokemon).moveSet.getMovesWithNulls().map { move ->
+            move?.let { MoveDTO(it.displayName, revealedMoves.firstOrNull { known -> known?.move == it.displayName }?.timesUsed ?: 0) }
+        }
+
+        val boostMultipliers = statChanges.entries.mapNotNull { (stat, stage) ->
+            val standardStat = stat as? Stats ?: return@mapNotNull null
+            val base = if (standardStat == Stats.ACCURACY || standardStat == Stats.EVASION) 3.0 else 2.0
+            val clamped = stage.coerceIn(-6, 6)
+            standardStat to if (clamped >= 0) (base + clamped) / base else base / (base - clamped)
+        }.toMap().filterValues { it != 1.0 }
+
+        val isTeamSheet = ::actor.isInitialized && actor.isInitialized() && actor.battle.format.isOpenTeamSheet
+        if (ally || isTeamSheet) {
+            val allyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, ally, getIllusion())
+            return BattlePokemonDTO(
+                this.effectedPokemon.uuid,
+                this.effectedPokemon.isFainted(),
+                (transformed?.effectedPokemon ?: effectedPokemon).ability.name,
+                moves,
+                this.effectedPokemon.heldItem,
+                boostMultipliers,
+                if (ally) effectedPokemon.speed else null,
+                terastallized = terastallized,
+                allyDto
+            )
+        }
+        else {
+            val nonAllyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, false, getIllusion())
+            return BattlePokemonDTO(
+                this.effectedPokemon.uuid,
+                this.effectedPokemon.isFainted(),
+                revealedAbility,
+                revealedMoves,
+                revealedHeldItem,
+                boostMultipliers,
+                speed = null,
+                terastallized = terastallized,
+                if (forceReveal || revealed) nonAllyDto else null
+            )
+        }
+    }
+
+    fun updateBattleActorInformation(uuids: List<UUID>) {
+        uuids.forEach {
+            if (actor.uuid == it) {
+                it.getPlayer()?.sendPacket(
+                    BattleActorInformationPacket(actor.uuid, toBattleDTO(true))
+                )
+            }
+            else {
+                it.getPlayer()?.sendPacket(
+                    BattleActorInformationPacket(actor.uuid, toBattleDTO(false))
+                )
+            }
+        }
+    }
+
     fun sendUpdate() {
         actor.sendUpdate(BattleUpdateTeamPokemonPacket(effectedPokemon))
+        revealed = revealed || isSentOut()
+        updateBattleActorInformation(actor.battle.actors.flatMap { it.getPlayerUUIDs() } + actor.battle.spectators)
     }
 
     fun isSentOut() = actor.battle.activePokemon.any { it.battlePokemon == this }
@@ -141,5 +226,7 @@ open class BattlePokemon(
             !isSentOut() && !willBeSwitchedIn && health > 0
         }
 
-    fun getIllusion(): BattlePokemon? = this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
+    fun getIllusion(): BattlePokemon? = if (::actor.isInitialized) {
+        actor.activePokemon.find { it.battlePokemon == this }?.illusion
+    } else null
 }

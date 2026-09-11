@@ -30,6 +30,8 @@ class TerastallizeInstruction(val message: BattleMessage): InterpreterInstructio
         val battlePokemon = message.battlePokemon(0, battle) ?: return
         val type = message.effectAt(1)?.let { TeraTypes.get(it.id) } ?: return
         battle.dispatchWaiting {
+            battlePokemon.terastallized = type
+            battlePokemon.sendUpdate()
             val pokemonName = battlePokemon.getName()
             battle.broadcastChatMessage(battleLang("terastallize", pokemonName, type.displayName).yellow())
             CobblemonEvents.TERASTALLIZATION.post(TerastallizationEvent(battle, battlePokemon, type))

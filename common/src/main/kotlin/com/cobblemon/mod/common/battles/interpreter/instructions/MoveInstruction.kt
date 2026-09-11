@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
+import com.cobblemon.mod.common.net.messages.client.battle.MoveDTO
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
@@ -74,6 +76,14 @@ class MoveInstruction(
         battle.dispatch { UntilDispatch { instructionSet.getMostRecentInstruction<MoveInstruction>(this)?.future?.isDone != false } }
 
         battle.dispatch {
+            val knownMove = userPokemon.revealedMoves.firstOrNull { it?.move == move.displayName }
+            if (knownMove != null) {
+                knownMove.timesUsed++
+            } else {
+                val slot = userPokemon.revealedMoves.indexOfFirst { it == null }
+                if (slot >= 0) userPokemon.revealedMoves[slot] = MoveDTO(move.displayName, 1)
+            }
+            userPokemon.sendUpdate()
             val pokemonName = userPokemon.getName()
             ShowdownInterpreter.lastCauser[battle.battleId] = message
             // For Spread targets the message data only gives the pnx strings. So we can't know what pokemon are actually targeted until the previous messages have been interpreted

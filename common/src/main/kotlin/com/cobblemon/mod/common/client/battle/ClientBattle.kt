@@ -84,6 +84,7 @@ class ClientBattle(
                     pendingActionRequests.map { it.response!! }
                 )
             )
+            ClientBattleInformationRepository.mustChooseBy = null
             mustChoose = false
         }
     }

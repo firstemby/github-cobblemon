@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.net.serverhandling.battle
 
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorTeamPacket
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
@@ -79,6 +81,10 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
         battle.spectators.add(player.uuid)
         player.sendPacket(BattleInitializePacket(battle, null))
         player.sendPacket(BattleMessagePacket(battle.chatLog))
+        battle.notifyOfUpdates(listOf(player.uuid))
+        battle.actors.forEach { actor ->
+            player.sendPacket(BattleActorTeamPacket(actor.uuid, actor.pokemonList.map { it.toBattleDTO(false) }))
+        }
     }
 
 }

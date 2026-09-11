@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -27,6 +29,12 @@ class SetBoostInstruction(val message: BattleMessage): InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
+            val stat = message.argumentAt(1)?.let { Stats.getStat(it) }
+            val amount = message.argumentAt(2)?.toIntOrNull()
+            if (stat != null && amount != null) {
+                pokemon.statChanges[stat] = amount.coerceIn(-6, 6)
+                pokemon.sendUpdate()
+            }
             val pokemonName = pokemon.getName()
             val effectID = message.effect()?.id ?: return@dispatchWaiting
             val lang = battleLang("setboost.$effectID", pokemonName)

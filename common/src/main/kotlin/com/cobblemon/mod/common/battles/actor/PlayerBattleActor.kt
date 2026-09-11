@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.battles.actor
 
+import com.cobblemon.mod.common.battles.timers.PlayerBattleTimer
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
@@ -32,6 +34,8 @@ class PlayerBattleActor(
     uuid: UUID,
     pokemonList: List<BattlePokemon>,
 ) : BattleActor(uuid, pokemonList.toMutableList()), EntityBackedBattleActor<ServerPlayer> {
+
+    var timer: PlayerBattleTimer? = null
 
     override val initialPos: Vec3?
     override val entity: ServerPlayer?

@@ -32,6 +32,10 @@ class CopyBoostInstruction(val message: BattleMessage): InterpreterInstruction {
             val lang = battleLang("copyboost.generic", pokemonName, targetPokemonName)
             battle.broadcastChatMessage(lang)
 
+            val changes = targetPokemon.statChanges.toMap()
+            pokemon.statChanges.clear()
+            pokemon.statChanges.putAll(changes)
+            pokemon.sendUpdate()
             pokemon.contextManager.copy(targetPokemon.contextManager, BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
             battle.minorBattleActions[pokemon.uuid] = message
         }

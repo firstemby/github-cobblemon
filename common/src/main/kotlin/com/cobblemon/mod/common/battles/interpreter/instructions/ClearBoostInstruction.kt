@@ -30,6 +30,8 @@ class ClearBoostInstruction(val message: BattleMessage): InterpreterInstruction 
             val pokemonName = battlePokemon.getName()
             val lang = battleLang("clearboost", pokemonName)
             battle.broadcastChatMessage(lang)
+            battlePokemon.statChanges.clear()
+            battlePokemon.sendUpdate()
             battlePokemon.contextManager.clear(BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
             battle.minorBattleActions[battlePokemon.uuid] = message
         }

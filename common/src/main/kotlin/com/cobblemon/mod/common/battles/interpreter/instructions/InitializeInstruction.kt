@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorTeamPacket
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -58,6 +60,11 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
 
         battle.actors.forEach { actor ->
             actor.sendUpdate(BattleSetTeamPokemonPacket(actor.pokemonList.map { it.effectedPokemon }))
+            battle.actors.forEach { viewer ->
+                viewer.sendUpdate(BattleActorTeamPacket(actor.uuid, actor.pokemonList.map {
+                    it.toBattleDTO(ally = viewer == actor)
+                }))
+            }
             val req = actor.request ?: return@forEach
             actor.sendUpdate(BattleQueueRequestPacket(req))
         }
@@ -68,6 +75,7 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
 
         battle.dispatchGo {
             battle.started = true
+            battle.notifyAllOfUpdates()
             battle.side1.playCries()
             afterOnServer(seconds = 1.0F) { battle.side2.playCries() }
         }

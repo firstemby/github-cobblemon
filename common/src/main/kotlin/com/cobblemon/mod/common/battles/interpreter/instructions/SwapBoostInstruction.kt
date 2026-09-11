@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
+import com.cobblemon.mod.common.api.pokemon.stats.Stats
+
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -29,6 +31,15 @@ class SwapBoostInstruction(val message: BattleMessage): InterpreterInstruction {
             val pokemonName = pokemon.getName()
             val targetPokemon = message.battlePokemon(1, battle) ?: return@dispatchWaiting
             val targetPokemonName = targetPokemon.getName()
+            val stats = message.argumentAt(2)?.split(',')?.map { Stats.getStat(it.trim()) }
+                ?: (pokemon.statChanges.keys + targetPokemon.statChanges.keys).toList()
+            stats.forEach { stat ->
+                val previous = pokemon.statChanges[stat] ?: 0
+                pokemon.statChanges[stat] = targetPokemon.statChanges[stat] ?: 0
+                targetPokemon.statChanges[stat] = previous
+            }
+            pokemon.sendUpdate()
+            targetPokemon.sendUpdate()
             val effectID = message.effect()?.id ?: return@dispatchWaiting
             val lang = when (effectID) {
                 "guardswap", "powerswap", "heartswap" -> battleLang("swapboost.$effectID", pokemonName)

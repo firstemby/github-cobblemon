@@ -28,6 +28,7 @@ data class BattleFormat(
     var ruleSet: Set<String> = setOf(),
     val gen: Int = 9,
     var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
+    val isOpenTeamSheet: Boolean = false,
 ) {
     companion object {
         fun setBattleRules(
