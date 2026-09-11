@@ -1,8 +1,0 @@
-{
-  "parent": "cobblemon:display_case",
-  "model": "cobblemon:display_case",
-  "id": 0,
-  "shape": [
-    [0, 0, 0, 16, 16, 16]
-  ]
-}

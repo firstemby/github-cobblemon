@@ -34,10 +34,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val HEALING_MACHINE: BlockEntityType<HealingMachineBlockEntity> = this.create("healing_machine", BlockEntityType.Builder.of(::HealingMachineBlockEntity, CobblemonBlocks.HEALING_MACHINE).build(null))
 
     @JvmField
-    val PC: BlockEntityType<PCBlockEntity> = this.create(
-        "pc",
-        BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC, *CobblemonModificationBlocks.pcVariantBlocks().toTypedArray()).build(null)
-    )
+    val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC).build(null))
+
+    @JvmField
+    val MOD_VARIANT: BlockEntityType<ModVariantBlockEntity> = this.create("mod_variant", BlockEntityType.Builder.of(::ModVariantBlockEntity, CobblemonBlocks.MOD_VARIANT).build(null))
 
     @JvmField
     val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))
@@ -92,11 +92,7 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
 
     @JvmField
     val DISPLAY_CASE: BlockEntityType<DisplayCaseBlockEntity> = this.create("display_case",
-        BlockEntityType.Builder.of(
-            ::DisplayCaseBlockEntity,
-            CobblemonBlocks.DISPLAY_CASE,
-            *CobblemonModificationBlocks.displayCaseVariantBlocks().toTypedArray()
-        ).build(null)
+        BlockEntityType.Builder.of(::DisplayCaseBlockEntity, CobblemonBlocks.DISPLAY_CASE).build(null)
     )
 
     // TODO after 1.7

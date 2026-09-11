@@ -1,8 +1,7 @@
 {
   "parent": "cobblemon:display_case",
-  "model": "cobblemon:mod_station/display_case/display_case_stone_no_glass_color_14",
-  "id": 14,
-  "shape": [
-    [0, 0, 0, 16, 16, 16]
-  ]
+  "model": "cobblemon:block/mod_station/display_case/display_case_stone_no_glass_color_14",
+  "size": { "height": 1, "depth": 1 },
+  "order": 41,
+  "translucent": false
 }

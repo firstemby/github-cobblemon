@@ -15,13 +15,14 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
-import com.cobblemon.mod.common.CobblemonModificationBlocks
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.block.entity.ModVariantBlockEntity
+import com.cobblemon.mod.common.block.entity.PCBlockEntity
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
@@ -41,6 +42,7 @@ import com.cobblemon.mod.common.client.render.block.DisplayCaseRenderer
 import com.cobblemon.mod.common.client.render.block.FossilAnalyzerRenderer
 import com.cobblemon.mod.common.client.render.block.GildedChestBlockRenderer
 import com.cobblemon.mod.common.client.render.block.HealingMachineRenderer
+import com.cobblemon.mod.common.client.render.block.ModificationVariantRenderer
 import com.cobblemon.mod.common.client.render.block.LecternBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.PokeSnackBlockEntityRenderer
 import com.cobblemon.mod.common.client.render.block.RestorationTankRenderer
@@ -335,9 +337,6 @@ object CobblemonClient {
             CobblemonBlocks.SKY_TUMBLESTONE_CLUSTER,
             CobblemonBlocks.GIMMIGHOUL_CHEST,
             CobblemonBlocks.DISPLAY_CASE,
-            *CobblemonModificationBlocks.displayCaseNonTintedVariantBlocks().toTypedArray(),
-            *CobblemonModificationBlocks.domeFossilVariantBlocks().toTypedArray(),
-            *CobblemonModificationBlocks.pcVariantBlocks().toTypedArray(),
             CobblemonBlocks.SACCHARINE_DOOR,
             CobblemonBlocks.SACCHARINE_TRAPDOOR,
             CobblemonBlocks.SACCHARINE_SIGN,
@@ -401,11 +400,6 @@ object CobblemonClient {
             CobblemonBlocks.TM_MACHINE
         )
 
-        this.implementation.registerBlockRenderType(
-            RenderType.translucent(),
-            *CobblemonModificationBlocks.displayCaseTintedVariantBlocks().toTypedArray()
-        )
-
         this.createBoatModelLayers()
     }
 
@@ -453,6 +447,8 @@ object CobblemonClient {
         )
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.PC) { ModificationVariantRenderer<PCBlockEntity>(it) }
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.MOD_VARIANT) { ModificationVariantRenderer<ModVariantBlockEntity>(it) }
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.CAMPFIRE, ::CampfireBlockEntityRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)

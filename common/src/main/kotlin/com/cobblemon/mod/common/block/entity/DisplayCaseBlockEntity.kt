@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.block.entity
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonModificationBlocks
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.core.BlockPos
@@ -18,9 +16,6 @@ import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.protocol.Packet
-import net.minecraft.network.protocol.game.ClientGamePacketListener
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.ContainerHelper
 import net.minecraft.world.InteractionHand
@@ -31,16 +26,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.resources.ResourceLocation
 
-class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.DISPLAY_CASE, pos, state),
+class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : ModificationVariantBlockEntity(CobblemonBlockEntities.DISPLAY_CASE, pos, state),
     WorldlyContainer {
 
     val inv: NonNullList<ItemStack> = NonNullList.withSize(1, ItemStack.EMPTY)
-    var variantIdentifier: ResourceLocation? = null
-        private set
 
     /**
      * Updates the [ItemStack] stored in this entity
@@ -103,60 +94,20 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
         onItemUpdated(level, oldState, level.getBlockState(blockPos))
     }
 
-    fun applyVariantFromStack(stack: ItemStack) {
-        val stackVariant = stack.get(CobblemonItemComponents.MODIFICATION_VARIANT)?.variant
-        val blockVariant = CobblemonModificationBlocks.displayCaseVariantIdentifier(blockState.block)
-        updateVariantIdentifier(stackVariant ?: blockVariant)
-    }
-
-    fun updateVariantIdentifier(identifier: ResourceLocation?) {
-        if (variantIdentifier == identifier) {
-            return
-        }
-
-        variantIdentifier = identifier
-        val level = level
-        if (level != null) {
-            onVariantUpdated(level)
-        } else {
-            setChanged()
-        }
-    }
-
     override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(nbt, registryLookup)
         ContainerHelper.saveAllItems(nbt, inv, true, registryLookup)
-        variantIdentifier?.let { nbt.putString(MODIFICATION_VARIANT_TAG, it.toString()) }
     }
 
     override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.loadAdditional(nbt, registryLookup)
         inv.clear()
         ContainerHelper.loadAllItems(nbt, inv, registryLookup)
-        variantIdentifier = if (nbt.contains(MODIFICATION_VARIANT_TAG)) {
-            ResourceLocation.tryParse(nbt.getString(MODIFICATION_VARIANT_TAG))
-        } else {
-            null
-        }
-    }
-
-    override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
-        return ClientboundBlockEntityDataPacket.create(this)
-    }
-
-    override fun getUpdateTag(registryLookup: HolderLookup.Provider): CompoundTag {
-        return this.saveWithoutMetadata(registryLookup)
     }
 
     private fun onItemUpdated(world: Level, oldState: BlockState, newState: BlockState) {
         world.sendBlockUpdated(blockPos, oldState, newState, Block.UPDATE_CLIENTS)
         world.updateNeighbourForOutputSignal(blockPos, world.getBlockState(blockPos).block)
-        setChanged()
-    }
-
-    private fun onVariantUpdated(world: Level) {
-        val state = world.getBlockState(blockPos)
-        world.sendBlockUpdated(blockPos, state, state, Block.UPDATE_CLIENTS)
         setChanged()
     }
 
@@ -213,8 +164,4 @@ class DisplayCaseBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cob
 
     override fun canPlaceItemThroughFace(slot: Int, stack: ItemStack, dir: Direction?): Boolean = (getStack().isEmpty)
     override fun canTakeItemThroughFace(slot: Int, stack: ItemStack, direction: Direction): Boolean = (direction == Direction.DOWN)
-
-    companion object {
-        const val MODIFICATION_VARIANT_TAG = "ModificationVariant"
-    }
 }

@@ -11,10 +11,13 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.modification.ModificationVariant
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
 import com.cobblemon.mod.common.api.storage.pc.link.ProximityPCLink
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.block.entity.PCBlockEntity
+import com.cobblemon.mod.common.block.modification.ModificationVariantBlock
+import com.cobblemon.mod.common.block.modification.ModificationVariantStructures
 import com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
 import com.cobblemon.mod.common.util.isInBattle
 import com.cobblemon.mod.common.util.lang
@@ -50,7 +53,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleWaterloggedBlock {
+class PCBlock(properties: Properties): ModificationVariantBlock(properties), SimpleWaterloggedBlock {
     companion object {
         val CODEC = simpleCodec(::PCBlock)
         val PART = EnumProperty.create("part", PCPart::class.java)
@@ -129,7 +132,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
     }
 
     init {
-        registerDefaultState(stateDefinition.any()
+        registerDefaultState(unmodifiedState()
             .setValue(HorizontalDirectionalBlock.FACING, Direction.NORTH)
             .setValue(PART, PCPart.BOTTOM)
             .setValue(ON, false)
@@ -140,7 +143,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
 
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState) = if (blockState.getValue(PART) == PCPart.BOTTOM) PCBlockEntity(blockPos, blockState) else null
 
-    override fun getShape(
+    override fun stockShape(
         blockState: BlockState,
         blockGetter: BlockGetter,
         blockPos: BlockPos,
@@ -163,7 +166,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
         }
     }
 
-    open fun getPositionOfOtherPart(state: BlockState, pos: BlockPos): BlockPos {
+    fun getPositionOfOtherPart(state: BlockState, pos: BlockPos): BlockPos {
         return if (state.getValue(PART) == PCPart.BOTTOM) {
             pos.above()
         } else {
@@ -171,7 +174,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
         }
     }
 
-    open fun getBasePosition(state: BlockState, pos: BlockPos): BlockPos {
+    fun getBasePosition(state: BlockState, pos: BlockPos): BlockPos {
         return if (isBase(state)) {
             pos
         } else {
@@ -181,7 +184,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
 
     private fun isBase(state: BlockState): Boolean = state.getValue(PART) == PCPart.BOTTOM
 
-    override fun setPlacedBy(
+    override fun onStockPlaced(
         world: Level,
         pos: BlockPos,
         state: BlockState,
@@ -197,10 +200,11 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
         state.updateNeighbourShapes(world, pos, 3)
     }
 
-    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState? {
+    override fun stockPlacementState(blockPlaceContext: BlockPlaceContext, variant: ModificationVariant?): BlockState? {
         val abovePosition = blockPlaceContext.clickedPos.above()
         val world = blockPlaceContext.level
-        if (world.getBlockState(abovePosition).canBeReplaced(blockPlaceContext) && !world.isOutsideBuildHeight(abovePosition)) {
+        val hasRoom = variant != null || (world.getBlockState(abovePosition).canBeReplaced(blockPlaceContext) && !world.isOutsideBuildHeight(abovePosition))
+        if (hasRoom) {
             return defaultBlockState()
                 .setValue(HorizontalDirectionalBlock.FACING, blockPlaceContext.horizontalDirection)
                 .setValue(PART, PCPart.BOTTOM)
@@ -209,6 +213,8 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
 
         return null
     }
+
+    override fun anchorPosition(state: BlockState, pos: BlockPos): BlockPos = getBasePosition(state, pos)
 
     override fun canSurvive(state: BlockState, world: LevelReader, pos: BlockPos): Boolean {
         val blockPos = pos.below()
@@ -238,7 +244,7 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
         pathComputationType: PathComputationType
     ): Boolean = false
 
-    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+    override fun addStockProperties(builder: StateDefinition.Builder<Block, BlockState>) {
         builder.add(HorizontalDirectionalBlock.FACING, NATURAL)
         builder.add(PART)
         builder.add(ON)
@@ -256,10 +262,6 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
         return blockState.rotate(mirror.getRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
     }
 
-    override fun onRemove(state: BlockState, world: Level, pos: BlockPos, newState: BlockState, moved: Boolean) {
-        if (!state.`is`(newState.block)) super.onRemove(state, world, pos, newState, moved)
-    }
-
     override fun useWithoutItem(
         blockState: BlockState,
         world: Level,
@@ -271,8 +273,10 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
 
         val basePos = getBasePosition(blockState, blockPos)
 
-        // Remove any duplicate block entities that may exist
-        world.getBlockEntity(basePos.above())?.setRemoved()
+        if (!ModificationVariantStructures.isModified(blockState)) {
+            // Remove any duplicate block entities that may exist
+            world.getBlockEntity(basePos.above())?.setRemoved()
+        }
 
         val baseEntity = world.getBlockEntity(basePos)
         if (baseEntity !is PCBlockEntity) return InteractionResult.SUCCESS
@@ -319,6 +323,9 @@ open class PCBlock(properties: Properties): BaseEntityBlock(properties), SimpleW
     ): BlockState {
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
+        }
+        if (ModificationVariantStructures.isModified(state)) {
+            return state
         }
 
         val isPC = neighborState.`is`(this)

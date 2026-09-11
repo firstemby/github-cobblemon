@@ -1,5 +1,10 @@
 {
   "parent": "cobblemon:pc",
-  "model": "cobblemon:mod_station/pc/pc_bw",
-  "id": 4
+  "model": "cobblemon:block/mod_station/pc/pc_bw",
+  "blockstates": {
+    "on=true": "cobblemon:block/mod_station/pc/pc_bw_on"
+  },
+  "size": { "height": 2, "depth": 1 },
+  "hitbox": [[4, 0, 7, 12, 2, 13], [6, 2, 9, 10, 9, 11], [2, 9, 4, 14, 15, 15], [0, 15, 7, 16, 31, 15]],
+  "order": 4
 }

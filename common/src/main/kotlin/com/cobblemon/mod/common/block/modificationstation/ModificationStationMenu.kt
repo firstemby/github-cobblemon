@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.block.modificationstation
 
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonMenuType
-import com.cobblemon.mod.common.api.modification.ModificationVariant
 import com.cobblemon.mod.common.api.modification.ModificationVariants
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
@@ -25,10 +24,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess
 import net.minecraft.world.inventory.DataSlot
 import net.minecraft.world.inventory.ResultContainer
 import net.minecraft.world.inventory.Slot
-import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.world.level.Level
 
 class ModificationStationMenu(
     containerId: Int,
@@ -36,12 +32,11 @@ class ModificationStationMenu(
     private val access: ContainerLevelAccess
 ) : AbstractContainerMenu(CobblemonMenuType.MODIFICATION_STATION, containerId) {
 
-    private val selectedVariantIndex = DataSlot.standalone()
-    private val level: Level = playerInventory.player.level()
-    private var variants: List<ModificationVariant> = emptyList()
-    private var variantOutputs: List<ItemStack> = emptyList()
-    private var input: ItemStack = ItemStack.EMPTY
+    private val selectedOutputIndex = DataSlot.standalone()
+    private var outputs: List<ItemStack> = emptyList()
+    private var lastInput: ItemStack = ItemStack.EMPTY
     private var lastSoundTime: Long = 0L
+    private var slotUpdateListener: Runnable = Runnable {}
 
     val container: Container = object : SimpleContainer(1) {
         override fun setChanged() {
@@ -54,11 +49,10 @@ class ModificationStationMenu(
     private val resultContainer = ResultContainer()
     val inputSlot: Slot
     val resultSlot: Slot
-    private var slotUpdateListener: Runnable = Runnable {}
 
     init {
         inputSlot = addSlot(object : Slot(container, INPUT_SLOT, 20, 33) {
-            override fun mayPlace(stack: ItemStack): Boolean = hasVariantsFor(stack)
+            override fun mayPlace(stack: ItemStack): Boolean = ModificationVariants.hasVariantsFor(stack)
         })
 
         resultSlot = addSlot(object : Slot(resultContainer, RESULT_SLOT, 143, 33) {
@@ -71,7 +65,7 @@ class ModificationStationMenu(
                 if (inputSlot.hasItem()) {
                     setupResultSlot()
                 } else {
-                    selectedVariantIndex.set(-1)
+                    selectedOutputIndex.set(-1)
                     this.set(ItemStack.EMPTY)
                 }
 
@@ -88,82 +82,46 @@ class ModificationStationMenu(
         })
 
         for (row in 0 until 3) {
-            for (col in 0 until 9) {
-                addSlot(Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18))
+            for (column in 0 until 9) {
+                addSlot(Slot(playerInventory, column + row * 9 + 9, 8 + column * 18, 84 + row * 18))
             }
         }
 
-        for (hotbar in 0 until 9) {
-            addSlot(Slot(playerInventory, hotbar, 8 + hotbar * 18, 142))
+        for (hotbarSlot in 0 until 9) {
+            addSlot(Slot(playerInventory, hotbarSlot, 8 + hotbarSlot * 18, 142))
         }
 
-        addDataSlot(selectedVariantIndex)
+        addDataSlot(selectedOutputIndex)
     }
 
     constructor(containerId: Int, playerInventory: Inventory) : this(containerId, playerInventory, ContainerLevelAccess.NULL)
 
-    fun getSelectedVariantIndex(): Int = selectedVariantIndex.get()
-    fun getVariants(): List<ModificationVariant> = variants
-    fun getVariantOutputs(): List<ItemStack> = variantOutputs
-    fun getNumVariants(): Int = variants.size
+    fun getSelectedOutputIndex(): Int = selectedOutputIndex.get()
 
-    fun hasInputItem(): Boolean = inputSlot.hasItem() && variants.isNotEmpty()
+    fun getOutputs(): List<ItemStack> = outputs
 
-    override fun stillValid(player: Player): Boolean {
-        return stillValid(access, player, CobblemonBlocks.MODIFICATION_STATION)
-    }
-
-    override fun clickMenuButton(player: Player, id: Int): Boolean {
-        if (isValidVariantIndex(id)) {
-            selectedVariantIndex.set(id)
-            setupResultSlot()
-        }
-
-        return true
-    }
-
-    private fun isValidVariantIndex(index: Int): Boolean = index >= 0 && index < variants.size
-
-    override fun slotsChanged(container: Container) {
-        val inputStack = inputSlot.item
-        if (!inputStack.`is`(input.item)) {
-            input = inputStack.copy()
-            setupVariantList(inputStack)
-        }
-    }
-
-    private fun setupVariantList(inputStack: ItemStack) {
-        variants = emptyList()
-        variantOutputs = emptyList()
-        selectedVariantIndex.set(-1)
-        resultSlot.set(ItemStack.EMPTY)
-
-        if (!inputStack.isEmpty) {
-            val parentId = getParentIdentifier(inputStack)
-            if (parentId != null) {
-                val resolvedVariants = ModificationVariants.forParent(parentId)
-                    .mapNotNull { variant ->
-                        val output = createVariantOutput(variant) ?: return@mapNotNull null
-                        variant to output
-                    }
-
-                variants = resolvedVariants.map { it.first }
-                variantOutputs = resolvedVariants.map { it.second }
-            }
-        }
-    }
-
-    private fun setupResultSlot() {
-        if (isValidVariantIndex(selectedVariantIndex.get())) {
-            resultSlot.set(variantOutputs[selectedVariantIndex.get()].copy())
-        } else {
-            resultSlot.set(ItemStack.EMPTY)
-        }
-        broadcastChanges()
-    }
+    fun hasInputItem(): Boolean = inputSlot.hasItem() && outputs.isNotEmpty()
 
     fun registerUpdateListener(listener: Runnable) {
         slotUpdateListener = listener
+    }
+
+    override fun stillValid(player: Player): Boolean = stillValid(access, player, CobblemonBlocks.MODIFICATION_STATION)
+
+    override fun clickMenuButton(player: Player, id: Int): Boolean {
+        if (isValidOutputIndex(id)) {
+            selectedOutputIndex.set(id)
+            setupResultSlot()
+        }
+        return true
+    }
+
+    override fun slotsChanged(container: Container) {
+        val inputStack = inputSlot.item
+        if (!ItemStack.isSameItemSameComponents(inputStack, lastInput)) {
+            lastInput = inputStack.copy()
+            setupOutputs(inputStack)
+        }
     }
 
     override fun canTakeItemForPickAll(stack: ItemStack, slot: Slot): Boolean {
@@ -171,52 +129,39 @@ class ModificationStationMenu(
     }
 
     override fun quickMoveStack(player: Player, index: Int): ItemStack {
-        var copiedStack = ItemStack.EMPTY
         val slot = slots[index]
+        if (!slot.hasItem()) {
+            return ItemStack.EMPTY
+        }
+        val movedStack = slot.item
+        val copiedStack = movedStack.copy()
 
-        if (slot.hasItem()) {
-            val movedStack = slot.item
-            val movedItem = movedStack.item
-            copiedStack = movedStack.copy()
-
-            if (index == RESULT_SLOT) {
-                movedItem.onCraftedBy(movedStack, player.level(), player)
-                if (!moveItemStackTo(movedStack, INV_SLOT_START, USE_ROW_SLOT_END, true)) {
-                    return ItemStack.EMPTY
-                }
-                slot.onQuickCraft(movedStack, copiedStack)
-            } else if (index == INPUT_SLOT) {
-                if (!moveItemStackTo(movedStack, INV_SLOT_START, USE_ROW_SLOT_END, false)) {
-                    return ItemStack.EMPTY
-                }
-            } else if (hasVariantsFor(movedStack)) {
-                if (!moveItemStackTo(movedStack, INPUT_SLOT, RESULT_SLOT, false)) {
-                    return ItemStack.EMPTY
-                }
-            } else if (index in INV_SLOT_START until INV_SLOT_END) {
-                if (!moveItemStackTo(movedStack, USE_ROW_SLOT_START, USE_ROW_SLOT_END, false)) {
-                    return ItemStack.EMPTY
-                }
-            } else if (index in USE_ROW_SLOT_START until USE_ROW_SLOT_END) {
-                if (!moveItemStackTo(movedStack, INV_SLOT_START, INV_SLOT_END, false)) {
-                    return ItemStack.EMPTY
-                }
+        val wasMoved = when {
+            index == RESULT_SLOT -> {
+                movedStack.item.onCraftedBy(movedStack, player.level(), player)
+                moveItemStackTo(movedStack, INV_SLOT_START, USE_ROW_SLOT_END, true).also { if (it) slot.onQuickCraft(movedStack, copiedStack) }
             }
-
-            if (movedStack.isEmpty) {
-                slot.setByPlayer(ItemStack.EMPTY)
-            } else {
-                slot.setChanged()
-            }
-
-            if (movedStack.count == copiedStack.count) {
-                return ItemStack.EMPTY
-            }
-
-            slot.onTake(player, movedStack)
-            broadcastChanges()
+            index == INPUT_SLOT -> moveItemStackTo(movedStack, INV_SLOT_START, USE_ROW_SLOT_END, false)
+            ModificationVariants.hasVariantsFor(movedStack) -> moveItemStackTo(movedStack, INPUT_SLOT, RESULT_SLOT, false)
+            index in INV_SLOT_START until INV_SLOT_END -> moveItemStackTo(movedStack, USE_ROW_SLOT_START, USE_ROW_SLOT_END, false)
+            index in USE_ROW_SLOT_START until USE_ROW_SLOT_END -> moveItemStackTo(movedStack, INV_SLOT_START, INV_SLOT_END, false)
+            else -> false
+        }
+        if (!wasMoved) {
+            return ItemStack.EMPTY
         }
 
+        if (movedStack.isEmpty) {
+            slot.setByPlayer(ItemStack.EMPTY)
+        } else {
+            slot.setChanged()
+        }
+        if (movedStack.count == copiedStack.count) {
+            return ItemStack.EMPTY
+        }
+
+        slot.onTake(player, movedStack)
+        broadcastChanges()
         return copiedStack
     }
 
@@ -226,34 +171,31 @@ class ModificationStationMenu(
         access.execute { _, _ -> clearContainer(player, container) }
     }
 
-    private fun hasVariantsFor(stack: ItemStack): Boolean {
-        val parentId = getParentIdentifier(stack) ?: return false
-        return ModificationVariants.forParent(parentId).isNotEmpty()
+    private fun isValidOutputIndex(index: Int): Boolean = index in outputs.indices
+
+    private fun setupOutputs(inputStack: ItemStack) {
+        outputs = emptyList()
+        selectedOutputIndex.set(-1)
+        resultSlot.set(ItemStack.EMPTY)
+        if (inputStack.isEmpty) {
+            return
+        }
+
+        val parent = ModificationVariants.parentOf(inputStack)
+        val variantOutputs = ModificationVariants.forParent(parent).map { it.createStack() }.filterNot { it.isEmpty }
+        if (variantOutputs.isEmpty()) {
+            return
+        }
+        outputs = (listOfNotNull(stockOutputFor(parent)) + variantOutputs)
+            .filterNot { ItemStack.isSameItemSameComponents(it, inputStack) }
     }
 
-    private fun getParentIdentifier(stack: ItemStack): ResourceLocation? {
-        val blockItem = stack.item as? BlockItem
-        if (blockItem != null) {
-            val blockIdentifier = BuiltInRegistries.BLOCK.getKey(blockItem.block)
-            return ModificationVariants.getByIdentifier(blockIdentifier)?.parent ?: blockIdentifier
-        }
+    private fun stockOutputFor(parent: ResourceLocation): ItemStack? = BuiltInRegistries.ITEM.getOptional(parent).map(::ItemStack).orElse(null)
 
-        val itemIdentifier = BuiltInRegistries.ITEM.getKey(stack.item)
-        return itemIdentifier
-    }
-
-    private fun createVariantOutput(variant: ModificationVariant): ItemStack? {
-        if (!BuiltInRegistries.BLOCK.containsKey(variant.identifier)) {
-            return null
-        }
-
-        val block = BuiltInRegistries.BLOCK.get(variant.identifier) ?: return null
-        val item = block.asItem()
-        if (item == Items.AIR) {
-            return null
-        }
-
-        return ItemStack(item)
+    private fun setupResultSlot() {
+        val selectedIndex = selectedOutputIndex.get()
+        resultSlot.set(if (isValidOutputIndex(selectedIndex)) outputs[selectedIndex].copy() else ItemStack.EMPTY)
+        broadcastChanges()
     }
 
     companion object {

@@ -256,7 +256,6 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerItems() {
         CobblemonItems.register { identifier, item -> Registry.register(CobblemonItems.registry, identifier, item) }
-        CobblemonModificationItems.register { identifier, item -> Registry.register(CobblemonModificationItems.registry, identifier, item) }
         CobblemonItemGroups.register { provider ->
             Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, provider.key, FabricItemGroup.builder()
                 .title(provider.displayName)
@@ -275,7 +274,6 @@ object CobblemonFabric : CobblemonImplementation {
 
     override fun registerBlocks() {
         CobblemonBlocks.register { identifier, item -> Registry.register(CobblemonBlocks.registry, identifier, item) }
-        CobblemonModificationBlocks.register { identifier, block -> Registry.register(CobblemonModificationBlocks.registry, identifier, block) }
         CobblemonBlocks.strippedBlocks().forEach(StrippableBlockRegistry::register)
     }
 

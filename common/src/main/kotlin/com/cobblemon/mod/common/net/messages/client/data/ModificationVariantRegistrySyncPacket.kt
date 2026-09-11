@@ -26,15 +26,11 @@ class ModificationVariantRegistrySyncPacket(variants: Collection<ModificationVar
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: ModificationVariant) {
-        buffer.writeUtf(ModificationVariants.gson.toJson(entry))
-    }
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: ModificationVariant) = entry.encode(buffer)
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): ModificationVariant {
-        return ModificationVariants.gson.fromJson(buffer.readUtf(), ModificationVariant::class.java)
-    }
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): ModificationVariant = ModificationVariant.decode(buffer)
 
     override fun synchronizeDecoded(entries: Collection<ModificationVariant>) {
-        ModificationVariants.reloadEntries(entries)
+        ModificationVariants.replaceEntries(entries)
     }
 }

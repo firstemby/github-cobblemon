@@ -461,6 +461,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MODIFICATION_STATION = blockItem("modification_station", CobblemonBlocks.MODIFICATION_STATION)
     @JvmField
+    val MOD_VARIANT = blockItem("mod_variant", CobblemonBlocks.MOD_VARIANT)
+    @JvmField
     val TM_SHELF = blockItem("tm_shelf", CobblemonBlocks.TM_SHELF)
     @JvmField
     val PASTURE = blockItem("pasture", CobblemonBlocks.PASTURE)

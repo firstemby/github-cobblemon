@@ -10,13 +10,18 @@ package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.ModAPI;
+import com.cobblemon.mod.common.client.render.modification.ModificationVariantModels;
 import com.cobblemon.mod.common.item.PokeBallItem;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.cobblemon.mod.common.item.WearableItem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -48,12 +53,19 @@ public abstract class ItemRendererMixin {
 
     @Shadow public abstract void render(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay, BakedModel model);
 
+    @Shadow protected abstract void renderModelLists(BakedModel model, ItemStack stack, int light, int overlay, PoseStack matrices, VertexConsumer consumer);
+
     @Inject(
         method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V",
         at = @At("HEAD"),
         cancellable = true
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
+        if (!model.isCustomRenderer() && ModificationVariantModels.isTranslucentVariant(stack)) {
+            cobblemon$renderTranslucentVariant(stack, renderMode, leftHanded, matrices, multiBufferSource, light, overlay, model);
+            ci.cancel();
+            return;
+        }
         boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED;
         ResourceLocation resourceLocation = null;
         if (shouldBe2d) {
@@ -73,6 +85,11 @@ public abstract class ItemRendererMixin {
 
     @Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
     private void cobblemon$getItemModel(ItemStack stack, Level world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
+        BakedModel variantModel = ModificationVariantModels.itemModel(stack);
+        if (variantModel != null) {
+            cir.setReturnValue(variantModel);
+            return;
+        }
         ResourceLocation resourceLocation = null;
         if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel3d();
         else if (stack.getItem() instanceof PokedexItem pokedexItem) {
@@ -88,6 +105,20 @@ public abstract class ItemRendererMixin {
             BakedModel overriddenModel = model.getOverrides().resolve(model, stack, clientWorld, entity, seed);
             cir.setReturnValue(overriddenModel == null ? this.itemModelShaper.getModelManager().getMissingModel() : overriddenModel);
         }
+    }
+
+    @Unique
+    private void cobblemon$renderTranslucentVariant(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model) {
+        boolean isDirect = renderMode == ItemDisplayContext.GUI || renderMode.firstPerson();
+        RenderType renderType = isDirect && Minecraft.useShaderTransparency() ? Sheets.translucentItemSheet() : Sheets.translucentCullBlockSheet();
+        VertexConsumer consumer = isDirect
+            ? ItemRenderer.getFoilBufferDirect(multiBufferSource, renderType, true, stack.hasFoil())
+            : ItemRenderer.getFoilBuffer(multiBufferSource, renderType, true, stack.hasFoil());
+        matrices.pushPose();
+        model.getTransforms().getTransform(renderMode).apply(leftHanded, matrices);
+        matrices.translate(-0.5F, -0.5F, -0.5F);
+        this.renderModelLists(model, stack, light, overlay, matrices, consumer);
+        matrices.popPose();
     }
 
     // this method aims to cover an issue with modernfixes and it's "dynamic resource" causing the usual .equals check to always fail, resulting in a StackOverflow

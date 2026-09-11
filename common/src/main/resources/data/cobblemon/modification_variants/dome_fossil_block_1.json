@@ -1,8 +1,8 @@
 {
   "parent": "cobblemon:dome_fossil",
-  "model": "cobblemon:mod_station/dome_fossil/dome_fossil_block_1",
-  "id": 1,
-  "shape": [
-    [4, 0, 3, 12, 2.75, 13]
-  ]
+  "block": "cobblemon:mod_variant",
+  "model": "cobblemon:block/mod_station/dome_fossil/dome_fossil_block_1",
+  "size": { "height": 1, "depth": 1 },
+  "hitbox": [[4, 0, 3, 12, 3, 13]],
+  "order": 1
 }

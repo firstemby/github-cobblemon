@@ -13,13 +13,13 @@ import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
 import com.cobblemon.mod.common.api.storage.pc.link.ProximityPCLink
 import com.cobblemon.mod.common.block.PCBlock
+import com.cobblemon.mod.common.block.modification.ModificationVariantStructures
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.entity.EntityTypeTest
@@ -28,7 +28,7 @@ import net.minecraft.world.phys.AABB
 class PCBlockEntity(
     blockPos: BlockPos,
     blockState: BlockState
-) : BlockEntity(CobblemonBlockEntities.PC, blockPos, blockState) {
+) : ModificationVariantBlockEntity(CobblemonBlockEntities.PC, blockPos, blockState) {
 
     companion object {
         internal val TICKER = BlockEntityTicker<PCBlockEntity> { world, _, _, blockEntity ->
@@ -43,6 +43,10 @@ class PCBlockEntity(
 
         val world = level
         if (world != null && !world.isClientSide) {
+            if (ModificationVariantStructures.isModified(blockState)) {
+                toggleModifiedPCOn(world, on)
+                return
+            }
             val posBottom = pcBlock.getBasePosition(blockState, blockPos)
             val stateBottom = world.getBlockState(posBottom)
 
@@ -67,6 +71,14 @@ class PCBlockEntity(
                 ))
             }
         }
+    }
+
+    private fun toggleModifiedPCOn(world: Level, on: Boolean) {
+        val state = world.getBlockState(blockPos)
+        if (state.hasProperty(PCBlock.ON) && state.getValue(PCBlock.ON) != on) {
+            world.setBlockAndUpdate(blockPos, state.setValue(PCBlock.ON, on))
+        }
+        ModificationVariantStructures.setFillersLit(world, blockPos, on)
     }
 
     private fun isPlayerViewing(player: Player): Boolean {

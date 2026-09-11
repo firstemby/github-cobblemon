@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides;
+import com.cobblemon.mod.common.client.render.modification.ModificationVariantModels;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.color.block.BlockColors;
@@ -45,5 +47,16 @@ public abstract class ModelLoaderMixin {
             var unbakedModel = this.getModel(bakingOverride.getModelLocation());
             this.registerModel(bakingOverride.getModelIdentifier(), unbakedModel);
         });
+        ModificationVariantModels.clearCache();
+        List<ResourceLocation> variantModelLocations = jsonUnbakedModels.keySet().stream()
+            .map(ModelBakery.MODEL_LISTER::fileToId)
+            .filter(ModificationVariantModels::isVariantModel)
+            .toList();
+        variantModelLocations.forEach(modelLocation -> {
+            UnbakedModel unbakedModel = this.getModel(modelLocation);
+            unbakedModel.resolveParents(this::getModel);
+            this.registerModel(ModificationVariantModels.bakedIdentifier(modelLocation), unbakedModel);
+        });
+        Cobblemon.LOGGER.info("Registered {} modification variant models", variantModelLocations.size());
     }
 }

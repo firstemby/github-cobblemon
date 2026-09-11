@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.DisplayCaseBlock
 import com.cobblemon.mod.common.block.entity.DisplayCaseBlockEntity
+import com.cobblemon.mod.common.client.render.modification.ModificationVariantModels
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.item.PokedexItem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -43,6 +44,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         light: Int,
         overlay: Int
     ) {
+        ModificationVariantModels.renderBlock(entity, matrices, vertexConsumers, light, overlay)
         val stack: ItemStack = if (entity.getStack().`is`(CobblemonItems.RELIC_COIN_POUCH)) {
             coinPouchStack
         } else {

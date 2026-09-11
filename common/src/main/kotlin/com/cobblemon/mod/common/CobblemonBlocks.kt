@@ -22,6 +22,9 @@ import com.cobblemon.mod.common.block.sign.CobblemonHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallSignBlock
+import com.cobblemon.mod.common.block.modification.ModVariantBlock
+import com.cobblemon.mod.common.block.modification.ModFillerBlock
+import com.cobblemon.mod.common.block.modification.ModificationVariantBlock
 import com.cobblemon.mod.common.block.tmmachine.TMMachineBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
@@ -664,7 +667,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val HEALING_MACHINE = create("healing_machine", HealingMachineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if (it.getValue(HealingMachineBlock.CHARGE_LEVEL) >= HealingMachineBlock.MAX_CHARGE_LEVEL) 12 else 5 }))
 
     @JvmField
-    val PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if ((it.getValue(PCBlock.ON) as Boolean) && (it.getValue(PCBlock.PART) == PCBlock.PCPart.TOP)) 13 else 0 }))
+    val PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().dynamicShape().lightLevel { if (it.getValue(PCBlock.ON) && (it.getValue(PCBlock.PART) == PCBlock.PCPart.TOP || it.getValue(ModificationVariantBlock.MODIFIED))) 13 else 0 }))
 
     val TM_MACHINE = create(
             "tm_machine",
@@ -686,10 +689,39 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
                 .mapColor(MapColor.STONE)
                 .sound(SoundType.STONE)
                 .strength(3.5F)
+                .noOcclusion()
                 .requiresCorrectToolForDrops()
         )
     )
 
+    @JvmField
+    val MOD_FILLER = create(
+        "mod_filler",
+        ModFillerBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.NONE)
+                .pushReaction(PushReaction.BLOCK)
+                .strength(2F)
+                .noOcclusion()
+                .dynamicShape()
+                .noLootTable()
+                .lightLevel { if (it.getValue(BlockStateProperties.LIT)) 13 else 0 }
+        )
+    )
+
+    @JvmField
+    val MOD_VARIANT = create(
+        "mod_variant",
+        ModVariantBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .sound(SoundType.STONE)
+                .pushReaction(PushReaction.BLOCK)
+                .strength(0.8F)
+                .noOcclusion()
+                .dynamicShape()
+        )
+    )
 
     @JvmField
     val LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava().lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }))
@@ -698,7 +730,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val TM_SHELF = create("tm_shelf", TMShelfBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.METAL).strength(2.5F)))
 
     @JvmField
-    val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F).requiresCorrectToolForDrops()))
+    val DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().dynamicShape().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F).requiresCorrectToolForDrops()))
 
     // TODO after 1.7
 //    @JvmField

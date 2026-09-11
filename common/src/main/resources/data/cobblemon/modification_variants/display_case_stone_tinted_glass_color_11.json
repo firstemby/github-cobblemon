@@ -1,8 +1,7 @@
 {
   "parent": "cobblemon:display_case",
-  "model": "cobblemon:mod_station/display_case/display_case_stone_tinted_glass_color_11",
-  "id": 11,
-  "shape": [
-    [0, 0, 0, 16, 16, 16]
-  ]
+  "model": "cobblemon:block/mod_station/display_case/display_case_stone_tinted_glass_color_11",
+  "size": { "height": 1, "depth": 1 },
+  "order": 33,
+  "translucent": true
 }

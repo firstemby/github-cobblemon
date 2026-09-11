@@ -1,5 +1,10 @@
 {
   "parent": "cobblemon:pc",
-  "model": "cobblemon:mod_station/pc/pc_dppt",
-  "id": 5
+  "model": "cobblemon:block/mod_station/pc/pc_dppt",
+  "blockstates": {
+    "on=true": "cobblemon:block/mod_station/pc/pc_dppt_on"
+  },
+  "size": { "height": 2, "depth": 1 },
+  "hitbox": [[2.5, 0, 2.5, 13.5, 16, 13.5], [6.5, 16, 9.5, 9.5, 20, 12.5], [0, 20, 8.5, 16, 31, 13.5]],
+  "order": 5
 }

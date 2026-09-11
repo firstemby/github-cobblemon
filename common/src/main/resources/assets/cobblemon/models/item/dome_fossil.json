@@ -1,3 +1,6 @@
 {
-  "parent": "cobblemon:item/mod_station/dome_fossil_block_1"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cobblemon:item/fossils/dome_fossil"
+  }
 }

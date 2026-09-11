@@ -7,7 +7,17 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:display_case"
+          "name": "cobblemon:display_case",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "cobblemon:modification_variant",
+                "minecraft:item_name"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

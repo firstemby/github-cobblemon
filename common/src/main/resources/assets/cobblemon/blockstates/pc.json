@@ -1,64 +1,68 @@
 {
-  "variants": {
-    "facing=south,part=top,on=false": {
-      "model": "cobblemon:block/pc_top"
+  "multipart": [
+    {
+      "when": { "modified": "false", "part": "top", "on": "false", "facing": "south" },
+      "apply": { "model": "cobblemon:block/pc_top" }
     },
-    "facing=west,part=top,on=false": {
-      "model": "cobblemon:block/pc_top",
-      "y": 90
+    {
+      "when": { "modified": "false", "part": "top", "on": "false", "facing": "west" },
+      "apply": { "model": "cobblemon:block/pc_top", "y": 90 }
     },
-    "facing=north,part=top,on=false": {
-      "model": "cobblemon:block/pc_top",
-      "y": 180
+    {
+      "when": { "modified": "false", "part": "top", "on": "false", "facing": "north" },
+      "apply": { "model": "cobblemon:block/pc_top", "y": 180 }
     },
-    "facing=east,part=top,on=false": {
-      "model": "cobblemon:block/pc_top",
-      "y": 270
+    {
+      "when": { "modified": "false", "part": "top", "on": "false", "facing": "east" },
+      "apply": { "model": "cobblemon:block/pc_top", "y": 270 }
     },
-    "facing=south,part=top,on=true": {
-      "model": "cobblemon:block/pc_top_on"
+    {
+      "when": { "modified": "false", "part": "top", "on": "true", "facing": "south" },
+      "apply": { "model": "cobblemon:block/pc_top_on" }
     },
-    "facing=west,part=top,on=true": {
-      "model": "cobblemon:block/pc_top_on",
-      "y": 90
+    {
+      "when": { "modified": "false", "part": "top", "on": "true", "facing": "west" },
+      "apply": { "model": "cobblemon:block/pc_top_on", "y": 90 }
     },
-    "facing=north,part=top,on=true": {
-      "model": "cobblemon:block/pc_top_on",
-      "y": 180
+    {
+      "when": { "modified": "false", "part": "top", "on": "true", "facing": "north" },
+      "apply": { "model": "cobblemon:block/pc_top_on", "y": 180 }
     },
-    "facing=east,part=top,on=true": {
-      "model": "cobblemon:block/pc_top_on",
-      "y": 270
+    {
+      "when": { "modified": "false", "part": "top", "on": "true", "facing": "east" },
+      "apply": { "model": "cobblemon:block/pc_top_on", "y": 270 }
     },
-    "facing=south,part=bottom,on=false": {
-      "model": "cobblemon:block/pc_bottom"
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "false", "facing": "south" },
+      "apply": { "model": "cobblemon:block/pc_bottom" }
     },
-    "facing=west,part=bottom,on=false": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 90
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "false", "facing": "west" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 90 }
     },
-    "facing=north,part=bottom,on=false": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 180
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "false", "facing": "north" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 180 }
     },
-    "facing=east,part=bottom,on=false": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 270
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "false", "facing": "east" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 270 }
     },
-    "facing=south,part=bottom,on=true": {
-      "model": "cobblemon:block/pc_bottom"
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "true", "facing": "south" },
+      "apply": { "model": "cobblemon:block/pc_bottom" }
     },
-    "facing=west,part=bottom,on=true": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 90
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "true", "facing": "west" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 90 }
     },
-    "facing=north,part=bottom,on=true": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 180
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "true", "facing": "north" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 180 }
     },
-    "facing=east,part=bottom,on=true": {
-      "model": "cobblemon:block/pc_bottom",
-      "y": 270
+    {
+      "when": { "modified": "false", "part": "bottom", "on": "true", "facing": "east" },
+      "apply": { "model": "cobblemon:block/pc_bottom", "y": 270 }
     }
-  }
+  ]
 }
