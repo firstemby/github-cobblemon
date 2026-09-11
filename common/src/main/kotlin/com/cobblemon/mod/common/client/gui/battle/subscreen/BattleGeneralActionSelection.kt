@@ -42,17 +42,6 @@ class BattleGeneralActionSelection(
     val backButton = BattleBackButton(BattleGUI.OPTION_ROOT_X - 3F, Minecraft.getInstance().window.guiScaledHeight - 22F)
     val lastAnwseredRequest = CobblemonClient.battle?.getLastAnsweredRequest()
 
-    val infoTile = BattleOptionTile(
-        battleGUI = battleGUI,
-        x = BattleGUI.OPTION_ROOT_X + 25,
-        y = Minecraft.getInstance().window.guiScaledHeight - 28,
-        resource = cobblemonResource("textures/gui/battle/team_info.png"),
-        text = battleLang("ui.team_info.button"),
-        onClick = {
-            battleGUI.changeActionSelection(BattleTeamInfoSelection(battleGUI, request))
-            playDownSound(Minecraft.getInstance().soundManager)
-        }
-    )
     val tiles = mutableListOf<BattleOptionTile>()
     init {
         var rank = 0
@@ -87,6 +76,12 @@ class BattleGeneralActionSelection(
                     battleGUI.changeActionSelection(ForfeitConfirmationSelection(battleGUI, request))
                     playDownSound(Minecraft.getInstance().soundManager)
                 }
+                if (battle.side2.actors.all { it.type == ActorType.PLAYER }) {
+                    addOption(rank++, battleLang("ui.team_info.button"), cobblemonResource("textures/gui/battle/team_info.png")) {
+                        battleGUI.changeActionSelection(BattleTeamInfoSelection(battleGUI, request))
+                        playDownSound(Minecraft.getInstance().soundManager)
+                    }
+                }
             }
         }
     }
@@ -111,7 +106,6 @@ class BattleGeneralActionSelection(
         if(lastAnwseredRequest != null) {
             backButton.render(context, mouseX, mouseY, delta)
         }
-        infoTile.render(context, mouseX, mouseY, delta)
         for (tile in tiles) {
             tile.render(context, mouseX, mouseY, delta)
         }
@@ -124,7 +118,7 @@ class BattleGeneralActionSelection(
             battleGUI.selectAction(request, null)
             battleGUI.changeActionSelection(null)
         }
-        return infoTile.mousePrimaryClicked(mouseX, mouseY) || tiles.any { it.mousePrimaryClicked(mouseX, mouseY) }
+        return tiles.any { it.mousePrimaryClicked(mouseX, mouseY) }
     }
 
     override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
