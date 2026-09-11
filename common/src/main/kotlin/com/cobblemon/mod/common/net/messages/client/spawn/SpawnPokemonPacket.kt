@@ -75,7 +75,7 @@ class SpawnPokemonPacket(
         entity.ownerUUID,
         entity.pokemon.uuid,
         entity.pokemon.storeCoordinates.get()?.store?.uuid,
-        entity.pokemon.scaleModifier,
+        entity.entityData.get(PokemonEntity.SCALE_MODIFIER),
         entity.exposedSpecies.resourceIdentifier,
         entity.pokemon.gender,
         entity.pokemon.shiny,
