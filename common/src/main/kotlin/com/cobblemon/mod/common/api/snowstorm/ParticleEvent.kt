@@ -129,7 +129,12 @@ class ParticleEvent(
                 onDespawn = {},
                 getParticleColor = storm.getParticleColor,
                 targetPos = storm.targetPos,
-                runtime = MoLangRuntime().setup(),
+                runtime = MoLangRuntime().setup().also { runtime ->
+                    // Weather sub-emitters share the parent's lifetime condition.
+                    storm.runtime.environment.query.functions["is_weather_active"]?.let {
+                        runtime.environment.query.addFunction("is_weather_active", it)
+                    }
+                },
                 entity = storm.entity
             )
             //The reason this doesn't use the newStorms runtime is that the parent storm can add queries AFTER

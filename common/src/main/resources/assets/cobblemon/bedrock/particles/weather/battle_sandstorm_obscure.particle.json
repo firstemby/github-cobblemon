@@ -1,0 +1,59 @@
+{
+	"format_version": "1.10.0",
+	"particle_effect": {
+		"description": {
+			"identifier": "cobblemon:battle_sandstorm_obscure",
+			"basic_render_parameters": {
+				"material": "particles_blend",
+				"texture": "textures/particles/weather/battle_sand_dust"
+			}
+		},
+		"components": {
+			"minecraft:emitter_rate_steady": {
+				"spawn_rate": 200,
+				"max_particles": 300
+			},
+			"minecraft:emitter_lifetime_expression": {
+				"activation_expression": 1,
+				"expiration_expression": "q.is_weather_active == 0"
+			},
+			"minecraft:emitter_shape_disc": {
+				"offset": [-8, "math.random(0,8)", 0],
+				"radius": "math.random(4,8)",
+				"direction": [6, 1, "math.random(-2,2)"]
+			},
+			"minecraft:particle_lifetime_expression": {
+				"max_lifetime": "math.random(0.7,1.6)"
+			},
+			"minecraft:particle_initial_spin": {
+				"rotation": "math.random_integer(1,4) * 90"
+			},
+			"minecraft:particle_initial_speed": 12,
+			"minecraft:particle_motion_dynamic": {
+				"linear_acceleration": [0, 1, 0],
+				"linear_drag_coefficient": 1
+			},
+			"minecraft:particle_appearance_billboard": {
+				"size": [0.7, 0.7],
+				"facing_camera_mode": "rotate_xyz",
+				"uv": {
+					"texture_width": 64,
+					"texture_height": 16,
+					"uv": ["math.floor(v.particle_random_2 * 4) * 16", 0],
+					"uv_size": [16, 16]
+				}
+			},
+			"minecraft:particle_appearance_tinting": {
+				"color": {
+					"interpolant": "v.particle_age / v.particle_lifetime",
+					"gradient": {
+						"0.0": "#00FFFFFF",
+						"0.24": "#8FFFFFFF",
+						"0.69": "#6EFFFFFF",
+						"1.0": "#00FFFFFF"
+					}
+				}
+			}
+		}
+	}
+}
