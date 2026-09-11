@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,6 +33,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -150,5 +152,14 @@ public abstract class EntityMixin {
         }
 
         original.call(pusher, d * pusheeReceivedForce.get(), 0.0, e * pusheeReceivedForce.get());
+    }
+
+    @ModifyVariable(
+            method = "play",
+            at = @At(value = "STORE"),
+            name = "soundType"
+    )
+    public SoundType customCombinedStepSounds(SoundType soundType, @Local(argsOnly = true) ) {
+
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
 
-interface SoundBlock { // Exist only to have better Sound Calls
+interface BlockExtensions { // Exist only to have better Sound Calls
     fun getSoundType(state: BlockState, level: BlockGetter, pos: BlockPos): SoundType
+    fun getExplosionResistance(state: BlockState, level: BlockGetter, pos: BlockPos): Float
 }

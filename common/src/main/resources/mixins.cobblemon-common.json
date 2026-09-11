@@ -59,6 +59,7 @@
     "EntitySkeletonMixin",
     "EntityStorageMixin",
     "EntityVillagerMixin",
+    "ExplosionDamageCalculatorMixin",
     "ItemStackComponentizationFixMixin",
     "LecternBlockMixin",
     "LightningBoltMixin",

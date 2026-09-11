@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
-import com.cobblemon.mod.common.block.SoundBlock;
+import com.cobblemon.mod.common.block.BlockExtensions;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {
@@ -32,8 +31,8 @@ public class MultiPlayerGameModeMixin {
             name = "soundType"
     )
     private SoundType customSoundType(SoundType soundType, @Local(name = "posBlock") BlockPos posBlock, @Local(name = "blockState") BlockState blockState) {
-        if (blockState.getBlock() instanceof SoundBlock) {
-            return ((SoundBlock)blockState.getBlock()).getSoundType(blockState, minecraft.player.level(), posBlock);
+        if (blockState.getBlock() instanceof BlockExtensions) {
+            return ((BlockExtensions)blockState.getBlock()).getSoundType(blockState, minecraft.player.level(), posBlock);
         }
         return soundType;
     }

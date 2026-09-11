@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.block.habitat
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
-import com.cobblemon.mod.common.block.SoundBlock
+import com.cobblemon.mod.common.block.BlockExtensions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionResult
@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.EntityBlock
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
@@ -27,7 +26,6 @@ import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.block.entity.CommandBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -38,7 +36,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class HabitatBlock(properties: Properties) : Block(properties), EntityBlock, SoundBlock {
+class HabitatBlock(properties: Properties) : Block(properties), EntityBlock, BlockExtensions {
     companion object {
         val CANCELS_REGULAR_SPAWNS = BooleanProperty.create("cancels_regular_spawns")
         val ACTIVATED_STYLE = BooleanProperty.create("activated_style")
@@ -151,8 +149,16 @@ class HabitatBlock(properties: Properties) : Block(properties), EntityBlock, Sou
         return getBlockEntity(level, pos)?.mimickedState?.soundType ?: getSoundType(state)
     }
 
+    override fun getSoundType(state: BlockState): SoundType {
+        return super.getSoundType(state)
+    }
+
     override fun getDestroyProgress(state: BlockState, player: Player, level: BlockGetter, pos: BlockPos): Float {
         val mimicState = getBlockEntity(level, pos)?.mimickedState ?: return super.getDestroyProgress(state, player, level, pos)
         return super.getDestroyProgress(mimicState, player, level, pos) * 0.5F // Habitat Mimic Block breaks twice as long
+    }
+
+    override fun getExplosionResistance(state: BlockState, level: BlockGetter, pos: BlockPos): Float {
+        return getBlockEntity(level, pos)?.mimickedState?.block?.explosionResistance ?: getExplosionResistance()
     }
 }
