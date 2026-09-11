@@ -37,7 +37,10 @@ object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, R
     val PC: BlockEntityType<PCBlockEntity> = this.create("pc", BlockEntityType.Builder.of(::PCBlockEntity, CobblemonBlocks.PC).build(null))
 
     @JvmField
-    val MOD_VARIANT: BlockEntityType<ModVariantBlockEntity> = this.create("mod_variant", BlockEntityType.Builder.of(::ModVariantBlockEntity, CobblemonBlocks.MOD_VARIANT).build(null))
+    val MOD_VARIANT: BlockEntityType<ModVariantBlockEntity> = this.create(
+        "mod_variant",
+        BlockEntityType.Builder.of(::ModVariantBlockEntity, CobblemonBlocks.MOD_VARIANT).build(null)
+    )
 
     @JvmField
     val LECTERN: BlockEntityType<LecternBlockEntity> = this.create("lectern", BlockEntityType.Builder.of(::LecternBlockEntity, CobblemonBlocks.LECTERN).build(null))
