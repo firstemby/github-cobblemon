@@ -57,6 +57,10 @@ object BattlePokemonInfoPanel {
 
     private val multiplierFormat = DecimalFormat("0.##")
 
+    // Boost value slots span x=46..65; leave one pixel of padding at the battle text scale.
+    internal const val BOOST_VALUE_CENTER_X = 55.5
+    internal const val BOOST_VALUE_MAX_WIDTH = 36 // 18 GUI pixels at BattleOverlay.SCALE.
+
     fun render(
         context: GuiGraphics,
         tileX: Float,
@@ -148,11 +152,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.ATTACK, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 31.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -170,11 +175,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.DEFENCE, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 39.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -192,11 +198,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.SPECIAL_ATTACK, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 47.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -214,11 +221,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.SPECIAL_DEFENCE, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 55.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -236,11 +244,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.SPEED, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 63.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -258,11 +267,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.ACCURACY, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 71.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
 
@@ -280,11 +290,12 @@ object BattlePokemonInfoPanel {
             drawScaledText(
                 context = context,
                 text = getBoostText(Stats.EVASION, it),
-                x = startX + 44,
+                x = startX + BOOST_VALUE_CENTER_X,
                 y = startY + 79.5,
                 scale = BattleOverlay.SCALE,
+                maxCharacterWidth = BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
-                centered = false
+                centered = true
             )
         }
         } else {

@@ -1186,12 +1186,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.ATTACK, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 42.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1210,12 +1211,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.DEFENCE, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 50.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1234,12 +1236,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.SPECIAL_ATTACK, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 58.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1258,12 +1261,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.SPECIAL_DEFENCE, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 66.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1282,12 +1286,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.SPEED, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 74.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1306,12 +1311,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.ACCURACY, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 82.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 
@@ -1330,12 +1336,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
             drawScaledText(
                 context = context,
                 text = BattlePokemonInfoPanel.getBoostText(Stats.EVASION, it),
-                x = startX + 50,
+                x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                 y = startY + 90.5,
                 scale = SCALE,
+                maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                 shadow = true,
                 opacity = opacity,
-                centered = false
+                centered = true
             )
         }
 

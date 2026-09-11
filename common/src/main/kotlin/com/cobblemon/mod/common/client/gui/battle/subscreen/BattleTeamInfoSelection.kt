@@ -416,11 +416,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.ATTACK, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 31.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -438,11 +439,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.DEFENCE, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 39.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -460,11 +462,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.SPECIAL_ATTACK, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 47.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -482,11 +485,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.SPECIAL_DEFENCE, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 55.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -504,11 +508,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.SPEED, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 63.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -526,11 +531,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.ACCURACY, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 71.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
@@ -548,11 +554,12 @@ class BattleTeamInfoSelection(
                 drawScaledText(
                     context = context,
                     text = BattlePokemonInfoPanel.getBoostText(Stats.EVASION, it),
-                    x = startX + 50,
+                    x = startX + BattlePokemonInfoPanel.BOOST_VALUE_CENTER_X,
                     y = startY + 79.5,
                     scale = BattleOverlay.Companion.SCALE,
+                    maxCharacterWidth = BattlePokemonInfoPanel.BOOST_VALUE_MAX_WIDTH,
                     shadow = true,
-                    centered = false
+                    centered = true
                 )
             }
 
