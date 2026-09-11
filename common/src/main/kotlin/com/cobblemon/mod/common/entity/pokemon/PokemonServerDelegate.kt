@@ -232,14 +232,15 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
         val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.effectiveScale
+        val trackedAlpha = mock?.isAlpha ?: entity.pokemon.isAlpha
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
         }
-        if (entity.entityData.get(PokemonEntity.IS_ALPHA) != entity.pokemon.isAlpha) {
-            entity.entityData.set(PokemonEntity.IS_ALPHA, entity.pokemon.isAlpha)
+        if (entity.entityData.get(PokemonEntity.IS_ALPHA) != trackedAlpha) {
+            entity.entityData.set(PokemonEntity.IS_ALPHA, trackedAlpha)
         }
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
