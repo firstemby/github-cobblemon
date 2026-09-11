@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.battles.TeamPreviewManager
+
 import com.cobblemon.mod.common.CobblemonBuildDetails.smallCommitHash
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.SeasonResolver
@@ -254,6 +256,7 @@ object Cobblemon {
         }
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
+            TeamPreviewManager.remove(it.player)
             BattleRegistry.onPlayerDisconnect(it.player)
             storage.onPlayerDisconnect(it.player)
             playerDataManager.onPlayerDisconnect(it.player)
@@ -450,6 +453,7 @@ object Cobblemon {
         }
 
         PlatformEvents.SERVER_STOPPED.subscribe {
+            TeamPreviewManager.clear()
             storage.unregisterAll(it.server.registryAccess())
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()
