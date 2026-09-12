@@ -1641,7 +1641,7 @@ open class Pokemon : ShowdownIdentifiable {
             return false
         }
         if (sanitizedAmount > this.friendship) {
-            MegaImprinting.onFriendshipGained(this, sanitizedAmount - this.friendship)
+            MegaImprinting.increaseBond(this, sanitizedAmount - this.friendship)
         }
         this.friendship = sanitizedAmount
         return true
@@ -1657,7 +1657,7 @@ open class Pokemon : ShowdownIdentifiable {
      * @return True if mutation was successful
      */
     fun incrementFriendship(amount : Int, coerceSafe: Boolean = true): Boolean {
-        MegaImprinting.onFriendshipGained(this, amount.absoluteValue)
+        MegaImprinting.increaseBond(this, amount.absoluteValue)
         val sanitizedAmount = if (coerceSafe) amount.absoluteValue.coerceAtMost(Cobblemon.config.maxPokemonFriendship - this.friendship) else amount.absoluteValue
         val newValue = this.friendship + sanitizedAmount
         if (this.isPossibleFriendship(newValue)) {

@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.item
 
 import com.cobblemon.mod.common.api.data.DataRegistry
+import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
@@ -51,7 +52,7 @@ object HeldItems : DataRegistry {
             val jsItem = itemsJson[i].asJsonObject
             showdownItems += jsItem.get("id").asString
             if (jsItem.has("megaEvolves")) {
-                megaStones[jsItem.get("id").asString] = jsItem.get("megaEvolves").asString.lowercase().replace(Regex("[^a-z0-9]"), "")
+                megaStones[jsItem.get("id").asString] = ShowdownIdentifiable.REGEX.replace(jsItem.get("megaEvolves").asString.lowercase(), "")
             }
         }
 

@@ -15,63 +15,49 @@ import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.item.components.MegaBondComponent
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.HeldItemUpdatePacket
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 
 object MegaImprinting {
 
-    fun onFriendshipGained(pokemon: Pokemon, amount: Int) {
-        if (pokemon.isClient || amount <= 0) {
+    fun increaseBond(pokemon: Pokemon, amount: Int) {
+        // exit early if it is on the client, friendship is not a positive numbah or if the item held isn't a dormant megga stone
+        if (pokemon.isClient || amount <= 0 || !pokemon.heldItemNoCopy().`is`(CobblemonItems.DORMANT_MEGA_STONE)) {
             return
         }
-        val stack = pokemon.heldItemNoCopy()
-        if (!stack.`is`(CobblemonItems.DORMANT_MEGA_STONE)) {
-            return
-        }
-        val speciesId = normalizedSpeciesId(pokemon)
+
+        val speciesId = pokemon.species.showdownId()
         if (!HeldItems.megaStones.containsValue(speciesId)) {
             return
         }
-        val component = stack.get(CobblemonItemComponents.MEGA_BOND)
-        val matched = matches(component, pokemon, speciesId)
-        val bond = (if (matched) component!!.bond + amount else amount).coerceAtMost(Cobblemon.config.maxPokemonFriendship)
-        val species = if (matched) component!!.species else null
-        val owner = if (species == null) pokemon.uuid else null
-        stack.set(CobblemonItemComponents.MEGA_BOND, MegaBondComponent(owner, species, bond))
-        pokemon.onChange(HeldItemUpdatePacket({ pokemon }, stack))
-        tryConvert(pokemon)
+        // keep the existing bond only if the stone is already tied to the current pokemon and if not start back at no bondd
+        val existingBond = pokemon.heldItemNoCopy().get(CobblemonItemComponents.MEGA_BOND)?.takeIf { it.owner == pokemon.uuid }?.bond ?: 0
+        val bond = (existingBond + amount).coerceAtMost(Cobblemon.config.maxPokemonFriendship)
+        pokemon.heldItemNoCopy().set(CobblemonItemComponents.MEGA_BOND, MegaBondComponent(pokemon.uuid, bond))
+        pokemon.onChange(HeldItemUpdatePacket({ pokemon }, pokemon.heldItemNoCopy()))
+        convertToMegaStone(pokemon)
     }
 
-    fun tryConvert(pokemon: Pokemon): Item? {
-        if (pokemon.isClient) {
+    fun convertToMegaStone(pokemon: Pokemon): Item? {
+        // putting this check here again because we may want to keep the command version of setting the mega bond
+        // we may want to keep the client check too?
+        if (!pokemon.heldItemNoCopy().`is`(CobblemonItems.DORMANT_MEGA_STONE)) {
             return null
         }
-        val stack = pokemon.heldItemNoCopy()
-        if (!stack.`is`(CobblemonItems.DORMANT_MEGA_STONE)) {
+        val stoneMegaBond = pokemon.heldItemNoCopy().get(CobblemonItemComponents.MEGA_BOND) ?: return null
+        // is the dormant stone already bonded with the current pokemon? Maybe it came from another pokemon and needs reset
+        if (stoneMegaBond.owner != pokemon.uuid || stoneMegaBond.bond < Cobblemon.config.maxPokemonFriendship) {
             return null
         }
-        val component = stack.get(CobblemonItemComponents.MEGA_BOND) ?: return null
-        val speciesId = normalizedSpeciesId(pokemon)
-        if (!matches(component, pokemon, speciesId) || component.bond < Cobblemon.config.maxPokemonFriendship) {
-            return null
-        }
-        val stone = HeldItems.megaStones.filterValues { it == speciesId }.keys.mapNotNull(::stoneItem).randomOrNull() ?: return null
-        pokemon.swapHeldItem(ItemStack(stone), decrement = false)
-        return stone
+        val speciesId = pokemon.species.showdownId()
+        // we gotta get the mega stone that it should turn into which is kind of a task
+        val megaStone = HeldItems.megaStones.filterValues { it == speciesId }.keys.mapNotNull(::getCobblemonItemFromShowdownID).randomOrNull() ?: return null
+        pokemon.swapHeldItem(ItemStack(megaStone), decrement = false)
+        return megaStone
     }
 
-    fun normalizedSpeciesId(pokemon: Pokemon) = pokemon.species.resourceIdentifier.path.replace("_", "")
-
-    private fun matches(component: MegaBondComponent?, pokemon: Pokemon, speciesId: String): Boolean {
-        if (component == null) {
-            return false
-        }
-        return if (component.species != null) component.species == speciesId else component.owner == pokemon.uuid
-    }
-
-    private fun stoneItem(showdownId: String): Item? = BuiltInRegistries.ITEM.firstOrNull {
-        val key = BuiltInRegistries.ITEM.getKey(it)
-        key.namespace == Cobblemon.MODID && key.path.replace("_", "") == showdownId
-    }
+    // The mega stones ids come from showdown I think so we cant look them up by a resource location directly
+    fun getCobblemonItemFromShowdownID(showdownId: String): Item? = BuiltInRegistries.ITEM.firstOrNull { CobblemonHeldItemManager.showdownIdOf(it) == showdownId }
 }
