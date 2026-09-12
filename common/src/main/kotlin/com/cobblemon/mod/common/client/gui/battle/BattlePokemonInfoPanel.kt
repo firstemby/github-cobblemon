@@ -61,6 +61,44 @@ object BattlePokemonInfoPanel {
     internal const val BOOST_VALUE_CENTER_X = 55.5
     internal const val BOOST_VALUE_MAX_WIDTH = 36 // 18 GUI pixels at BattleOverlay.SCALE.
 
+    fun renderUnknownTile(context: GuiGraphics, x: Float, y: Float, reversed: Boolean, scale: Float = 1F, opacity: Number = 1F) {
+        val matrices = context.pose()
+        val insetX = if (reversed) 8 else 5
+        matrices.pushPose()
+        matrices.translate(x.toDouble(), y.toDouble(), 0.0)
+        matrices.scale(scale, scale, scale)
+        blitk(
+            matrixStack = matrices,
+            texture = BattleOverlay.battleInfoUnderlay,
+            x = insetX,
+            y = 4,
+            width = 28,
+            height = 28,
+            alpha = opacity
+        )
+        // Draw the complete 8x10 asset at twice its size, centred in the portrait window.
+        blitk(
+            matrixStack = matrices,
+            texture = BattleOverlay.questionMarkIcon,
+            x = (insetX + 6) / 2F,
+            y = 4,
+            width = 8,
+            height = 10,
+            scale = 2F,
+            alpha = opacity
+        )
+        blitk(
+            matrixStack = matrices,
+            texture = if (reversed) BattleOverlay.partyColumnTileReversed else BattleOverlay.partyColumnTile,
+            x = 0,
+            y = 0,
+            width = 41,
+            height = 39,
+            alpha = opacity
+        )
+        matrices.popPose()
+    }
+
     fun render(
         context: GuiGraphics,
         tileX: Float,

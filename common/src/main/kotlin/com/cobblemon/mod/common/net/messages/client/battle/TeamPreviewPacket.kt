@@ -58,7 +58,7 @@ class TeamPreviewPacket : NetworkPacket<TeamPreviewPacket> {
     ) {
         this.selections = selections
         this.team = team.map { it?.let { BattlePokemon(it).toBattleDTO(true) } }
-        this.opponent = opponent.map { it?.let { BattlePokemon(it).toBattleDTO(openTeamSheet) } }
+        this.opponent = opponent.map { it?.let { BattlePokemon(it).toBattleDTO(openTeamSheet, forceReveal = true) } }
         this.mustPickBy = mustPickBy
         this.opponentName = opponentName
     }

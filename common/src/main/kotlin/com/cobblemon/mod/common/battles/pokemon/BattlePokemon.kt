@@ -154,7 +154,7 @@ open class BattlePokemon(
         }
     }
 
-    fun toBattleDTO(ally: Boolean, forceReveal: Boolean = true): BattlePokemonDTO {
+    fun toBattleDTO(ally: Boolean, forceReveal: Boolean = false): BattlePokemonDTO {
         val moves = (transformed?.effectedPokemon ?: effectedPokemon).moveSet.getMovesWithNulls().map { move ->
             move?.let { MoveDTO(it.displayName, revealedMoves.firstOrNull { known -> known?.move == it.displayName }?.timesUsed ?: 0) }
         }
@@ -166,7 +166,8 @@ open class BattlePokemon(
             standardStat to if (clamped >= 0) (base + clamped) / base else base / (base - clamped)
         }.toMap().filterValues { it != 1.0 }
 
-        val isTeamSheet = ::actor.isInitialized && actor.isInitialized() && actor.battle.format.isOpenTeamSheet
+        val format = if (::actor.isInitialized && actor.isInitialized()) actor.battle.format else null
+        val isTeamSheet = format?.isOpenTeamSheet == true
         if (ally || isTeamSheet) {
             val allyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, ally, getIllusion())
             return BattlePokemonDTO(
@@ -182,7 +183,10 @@ open class BattlePokemon(
             )
         }
         else {
-            val nonAllyDto = BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, false, getIllusion())
+            // Team Preview reveals identities, while moves, abilities and items still require discovery.
+            val nonAllyDto = if (forceReveal || revealed || format?.hasTeamPreview == true) {
+                BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(this, false, getIllusion())
+            } else null
             return BattlePokemonDTO(
                 this.effectedPokemon.uuid,
                 this.effectedPokemon.isFainted(),
@@ -192,7 +196,7 @@ open class BattlePokemon(
                 boostMultipliers,
                 speed = null,
                 terastallized = terastallized,
-                if (forceReveal || revealed) nonAllyDto else null
+                nonAllyDto
             )
         }
     }

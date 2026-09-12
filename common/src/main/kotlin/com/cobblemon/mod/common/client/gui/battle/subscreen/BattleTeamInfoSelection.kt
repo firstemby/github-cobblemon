@@ -46,7 +46,6 @@ import com.cobblemon.mod.common.client.gui.battle.BattlePokemonInfoPanel
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.PORTRAIT_DIAMETER
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay.Companion.questionMarkIcon
 import com.cobblemon.mod.common.client.gui.battle.preview.TeamPreviewWidget
-import com.cobblemon.mod.common.client.gui.battle.preview.TeamPreviewWidget.PokemonTile
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
@@ -121,14 +120,12 @@ class BattleTeamInfoSelection(
         val displayOrder = if (actors.last().uuid == Minecraft.getInstance().player?.uuid) actors.reversed() else actors
         val actorToPokemon = displayOrder.map { it to ClientBattleInformationRepository.actors[it.uuid] }
         actorToPokemon.first().second?.forEachIndexed { index, pokemon ->
-            if (pokemon == null) return@forEachIndexed
             val (slotX, slotY) = getSlotPosition(index, 1)
-            teamTiles.add(PokemonTile(slotX, slotY, pokemon, this, false))
+            teamTiles.add(PokemonTile(slotX, slotY, pokemon, this, false, actorToPokemon.first().first))
         }
         actorToPokemon.last().second?.forEachIndexed { index, pokemon ->
-            if (pokemon == null) return@forEachIndexed
             val (slotX, slotY) = getSlotPosition(index, 2)
-            opponentTiles.add(PokemonTile(slotX, slotY, pokemon, this, true))
+            opponentTiles.add(PokemonTile(slotX, slotY, pokemon, this, true, actorToPokemon.last().first))
         }
     }
 
@@ -144,7 +141,7 @@ class BattleTeamInfoSelection(
 
     private fun getHoveredTile(team: Boolean, mouseX: Int, mouseY: Int): Int {
         val tiles = if (team) teamTiles else opponentTiles
-        return tiles.indexOfFirst { it.isHovered(mouseX.toDouble(), mouseY.toDouble()) }
+        return tiles.indexOfFirst { it.pokemonDto.activeBattlePokemonDTO != null && it.isHovered(mouseX.toDouble(), mouseY.toDouble()) }
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -228,9 +225,10 @@ class BattleTeamInfoSelection(
     class PokemonTile(
         val x: Float,
         val y: Float,
-        val pokemonDto: BattlePokemonDTO,
+        private val initialPokemonDto: BattlePokemonDTO,
         val widget: BattleTeamInfoSelection,
-        val reversed: Boolean
+        val reversed: Boolean,
+        val actor: ClientBattleActor
     ) {
         companion object {
             const val SELECT_WIDTH = 41
@@ -256,10 +254,17 @@ class BattleTeamInfoSelection(
 
         val state = FloatingState()
 
+        val pokemonDto: BattlePokemonDTO
+            get() = ClientBattleInformationRepository.actors[actor.uuid]?.firstOrNull { it.uuid == initialPokemonDto.uuid } ?: initialPokemonDto
+
         fun isHovered(mouseX: Double, mouseY: Double) = mouseX in x..(x + SELECT_WIDTH) && mouseY in (y..(y + SELECT_HEIGHT))
 
         fun render(context: GuiGraphics, mouseX: Double, mouseY: Double, deltaTicks: Float) {
-            val pokemon = pokemonDto.activeBattlePokemonDTO ?: return
+            val pokemon = pokemonDto.activeBattlePokemonDTO
+            if (pokemon == null) {
+                BattlePokemonInfoPanel.renderUnknownTile(context, x, y, reversed)
+                return
+            }
             val battlePokemon = ClientBattlePokemon(
                 uuid = pokemon.uuid,
                 properties = pokemon.properties,

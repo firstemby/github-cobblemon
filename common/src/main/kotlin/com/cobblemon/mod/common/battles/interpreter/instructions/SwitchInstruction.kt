@@ -223,6 +223,8 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
         }
 
         private fun broadcastSwitch(battle: PokemonBattle, actor: BattleActor, newPokemon: BattlePokemon, illusion: BattlePokemon?) {
+            // The active slot and its illusion are now set, so reveal the identity that entered battle.
+            newPokemon.sendUpdate()
             val publicPokemon = (illusion ?: newPokemon).effectedPokemon
             val publicLang = publicPokemon.nickname?.let { nickname ->
                 battleLang("switch.other.nickname", actor.getName(), nickname, publicPokemon.species.translatedName)

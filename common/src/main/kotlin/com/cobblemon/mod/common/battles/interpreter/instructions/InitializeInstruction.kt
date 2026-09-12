@@ -75,6 +75,7 @@ class InitializeInstruction(val instructionSet: InstructionSet, val message: Bat
 
         battle.dispatchGo {
             battle.started = true
+            battle.activePokemon.mapNotNull { it.battlePokemon }.forEach { it.sendUpdate() }
             battle.notifyAllOfUpdates()
             battle.side1.playCries()
             afterOnServer(seconds = 1.0F) { battle.side2.playCries() }

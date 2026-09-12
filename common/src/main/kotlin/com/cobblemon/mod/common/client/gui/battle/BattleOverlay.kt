@@ -1844,18 +1844,13 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
                 }
             }
             else {
-                // Defensive fallback: species not transmitted (no team preview) — show an unrevealed ball.
-                blitk(
-                    matrixStack = matrixStack,
-                    texture = partyPokeballIcon,
+                BattlePokemonInfoPanel.renderUnknownTile(
+                    context = context,
                     x = cellX,
                     y = cellY,
-                    width = cellWidth,
-                    height = cellHeight,
-                    textureHeight = 76,
-                    textureWidth = 18,
-                    vOffset = 36,
-                    alpha = opacity
+                    reversed = reversed,
+                    scale = f,
+                    opacity = opacity
                 )
             }
         }
