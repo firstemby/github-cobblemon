@@ -106,7 +106,6 @@
     "tm:batonpass",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:confuseray",
     "tm:covet",
@@ -137,10 +136,8 @@
     "tm:lastresort",
     "tm:lightscreen",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:payback",
     "tm:payday",
-    "tm:powershift",
     "tm:protect",
     "tm:psychic",
     "tm:psychup",
@@ -190,7 +187,6 @@
     "tutor:lashout",
     "tutor:lastresort",
     "tutor:mudslap",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:shadowball",
@@ -211,6 +207,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:return",
     "legacy:round",
@@ -226,7 +223,41 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vaporeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "jolteon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flareon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "espeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "umbreon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "leafeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "glaceon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sylveon alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

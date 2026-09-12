@@ -67,8 +67,12 @@
       }
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
+        {
+          "pokemon": "tyrunt alpha",
+          "tier": 1
+        },
         {
           "pokemon": "tyrantrum",
           "tier": 1

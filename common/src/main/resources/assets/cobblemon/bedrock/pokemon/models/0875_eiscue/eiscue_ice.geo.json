@@ -65,6 +65,22 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "head_angle",
+					"pivot": [4, 20.1, -7.54],
+					"locators": {
+						"eye2": [4, 20.1, -7.54]
+					}
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "head_angle",
+					"pivot": [-4, 20.1, -7.54],
+					"locators": {
+						"eye1": [-4, 20.1, -7.54]
+					}
+				},
+				{
 					"name": "hair",
 					"parent": "head_angle",
 					"pivot": [0, 26.6, -0.5],

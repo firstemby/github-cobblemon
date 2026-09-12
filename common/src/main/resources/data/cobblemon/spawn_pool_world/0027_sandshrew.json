@@ -13,10 +13,29 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "5-30",
-            "weight": 9.0,
+            "weight": 90.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_arid"
+                ]
+            }
+        },
+        {
+            "id": "sandshrew-alolan-1",
+            "pokemon": "sandshrew alolan",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "5-30",
+            "weight": 90.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_snowy_forest",
+                    "#cobblemon:is_snowy_taiga",
+                    "#cobblemon:is_tundra"
                 ]
             }
         }

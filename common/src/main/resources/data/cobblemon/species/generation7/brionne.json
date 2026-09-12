@@ -64,7 +64,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "dewgong",
@@ -139,7 +139,6 @@
     "tm:blizzard",
     "tm:bodyslam",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

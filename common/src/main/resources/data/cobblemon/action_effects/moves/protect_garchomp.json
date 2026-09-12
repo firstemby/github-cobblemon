@@ -1,0 +1,44 @@
+{
+    "timeline": [
+      {
+        "type": "add_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "animation",
+        "animation": ["special"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.55
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:protect_actor1",
+        "locators": ["root"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.1
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:protect_actorcolor1",
+        "locators": ["root"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.7
+      },
+      {
+        "type": "remove_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "pause",
+        "pause": 1.2
+      }
+    ]
+  }

@@ -13,7 +13,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "27-52",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -31,7 +31,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-52",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -49,7 +49,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "27-52",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -67,7 +67,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "27-52",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -87,7 +87,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-52",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -101,13 +101,13 @@
             }
         },
         {
-            "id": "dhelmise-7",
+            "id": "dhelmise-6",
             "pokemon": "dhelmise",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "rare",
             "level": "27-52",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -118,7 +118,7 @@
             }
         },
         {
-            "id": "dhelmise-8",
+            "id": "dhelmise-7",
             "pokemon": "dhelmise",
             "presets": [
                 "water"
@@ -127,7 +127,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "27-52",
-            "weight": 20.0,
+            "weight": 200.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_ocean"
@@ -140,13 +140,13 @@
             }
         },
         {
-            "id": "dhelmise-9",
+            "id": "dhelmise-8",
             "pokemon": "dhelmise",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "27-52",
-            "weight": 20.0,
+            "weight": 200.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_ocean"

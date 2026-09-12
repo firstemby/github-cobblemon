@@ -18,17 +18,23 @@ import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
+import net.minecraft.Util
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.client.renderer.texture.TextureAtlas
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FormattedCharSequence
+import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
+import kotlin.math.cos
+import kotlin.math.sin
 
 fun renderScaledGuiItemIcon(itemStack: ItemStack, x: Double, y: Double, scale: Double = 1.0, zTranslation: Float = 100.0F, matrixStack: PoseStack? = null) {
     val itemRenderer = Minecraft.getInstance().itemRenderer
@@ -97,6 +103,55 @@ fun getDepletableRedGreen(
     return r.toFloat() to g.toFloat()
 }
 
+fun drawScrollingText(
+    context: GuiGraphics,
+    font: Font,
+    text: Component,
+    minX: Int,
+    minY: Int,
+    maxX: Int,
+    maxY: Int,
+    colour: Int,
+    minScrollVelocity: Double? = 10.0
+) {
+    val textWidth = font.width(text)
+    val fittedMaxX = if (textWidth <= maxX - minX) minX + textWidth else maxX
+    renderScrollingString(context, font, text, minX, minY, fittedMaxX, maxY, colour, minScrollVelocity)
+}
+
+/** Copied from [net.minecraft.client.gui.components.AbstractWidget.renderScrollingString] **/
+fun renderScrollingString(
+    context: GuiGraphics,
+    font: Font,
+    text: Component,
+    minX: Int,
+    minY: Int,
+    maxX: Int,
+    maxY: Int,
+    colour: Int,
+    minScrollVelocity: Double? = 10.0
+) {
+    val textWidth = font.width(text)
+    val centerY = (minY + maxY - 9) / 2 + 1
+    val boxWidth = maxX - minX
+    if (textWidth <= boxWidth) {
+        val centerX = Mth.clamp((minX + maxX) / 2, minX + textWidth / 2, maxX - textWidth / 2)
+        context.drawCenteredString(font, text, centerX, centerY, colour)
+        return
+    }
+
+    val overflow = textWidth - boxWidth
+    var period = (overflow * 0.5).coerceAtLeast(3.0)
+    if (minScrollVelocity != null) {
+        period = period.coerceAtMost(2 * overflow / minScrollVelocity)
+    }
+    val time = Util.getMillis() / 1000.0
+    val easedProgress = sin((Math.PI / 2) * cos(2 * Math.PI * time / period)) / 2.0 + 0.5
+    val offset = Mth.lerp(easedProgress, 0.0, overflow.toDouble())
+    context.enableScissor(minX, minY, maxX, maxY)
+    context.drawString(font, text, minX - offset.toInt(), centerY, colour)
+    context.disableScissor()
+}
 
 fun drawScaledText(
     context: GuiGraphics,

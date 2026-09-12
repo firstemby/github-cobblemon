@@ -58,15 +58,19 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "servine",
+          "pokemon": "snivy alpha",
           "tier": 1
         },
         {
-          "pokemon": "serperior",
-          "tier": 2
+          "pokemon": "servine alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "serperior alpha",
+          "tier": 1
         }
       ]
     },
@@ -118,7 +122,6 @@
     "tm:bind",
     "tm:bulletseed",
     "tm:calmmind",
-    "tm:captivate",
     "tm:cut",
     "tm:defog",
     "tm:doubleedge",
@@ -139,7 +142,6 @@
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:protect",

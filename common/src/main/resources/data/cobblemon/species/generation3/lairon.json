@@ -57,7 +57,17 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "lairon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "aggron alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

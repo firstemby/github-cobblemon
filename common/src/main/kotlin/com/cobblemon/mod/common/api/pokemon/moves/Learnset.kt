@@ -109,8 +109,10 @@ open class Learnset {
                 evolutionMoves
     }
 
-    // We only sync level up moves atm
+    // Syncs level up, TM, and egg moves.
     fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves
+            || other.tmMoves != this.tmMoves
+            || other.eggMoves != this.eggMoves
 
     fun decode(buffer: RegistryFriendlyByteBuf) {
         this.levelUpMoves.clear()
@@ -122,6 +124,8 @@ open class Learnset {
             }
             levelUpMoves[level] = moves
         }
+        decodeMoveList(buffer, this.tmMoves)
+        decodeMoveList(buffer, this.eggMoves)
     }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
@@ -132,6 +136,22 @@ open class Learnset {
             for (move in moves) {
                 buffer.writeInt(move.num)
             }
+        }
+        encodeMoveList(buffer, this.tmMoves)
+        encodeMoveList(buffer, this.eggMoves)
+    }
+
+    private fun decodeMoveList(buffer: RegistryFriendlyByteBuf, list: MutableList<MoveTemplate>) {
+        list.clear()
+        repeat(times = buffer.readSizedInt(IntSize.U_SHORT)) {
+            Moves.getByNumericalId(buffer.readInt())?.let(list::add)
+        }
+    }
+
+    private fun encodeMoveList(buffer: RegistryFriendlyByteBuf, list: List<MoveTemplate>) {
+        buffer.writeSizedInt(IntSize.U_SHORT, list.size)
+        for (move in list) {
+            buffer.writeInt(move.num)
         }
     }
 }

@@ -4,6 +4,9 @@
   "profileScale": 0.61,
   "profileTranslation": [ 0, 0.83, 0],
   "rootBone": "cherrim",
+  "animations": {
+    "cry": "q.bedrock_stateful('cherrim_overcast', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

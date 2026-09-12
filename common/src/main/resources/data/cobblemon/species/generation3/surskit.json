@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "surskit alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "masquerain alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

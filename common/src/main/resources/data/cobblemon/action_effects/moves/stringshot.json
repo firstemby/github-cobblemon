@@ -12,13 +12,13 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:stringshot_actorspray",
-      "locators": ["special", "target"],
+      "locators": ["mouth", "special", "target"],
       "targetLocators": ["middle"]
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:stringshot_actor",
-      "locators": ["special", "target"],
+      "locators": ["mouth", "special", "target"],
       "targetLocators": ["middle"]
     },
     {
@@ -41,6 +41,12 @@
       "type": "entity_particles",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "effect": "cobblemon:stringshot_target2",
+      "locators": ["middle"]
+    },
+    {
+      "type": "entity_particles",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "effect": "cobblemon:stringshot_targetwrap",
       "locators": ["middle"]
     },
     {

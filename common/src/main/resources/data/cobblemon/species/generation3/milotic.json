@@ -45,9 +45,9 @@
   "baseFriendship": 50,
   "baseScale": 1.1,
   "hitbox": {
-    "width": 1.4,
     "height": 2.3,
-    "fixed": false
+    "fixed": false,
+    "width": 1.4
   },
   "riding": {
     "behaviours": {
@@ -95,11 +95,11 @@
           }
         ],
         "stats": {
-          "ACCELERATION": "45-70",
-          "JUMP": "40-65",
-          "SKILL": "45-70",
+          "ACCELERATION": "40-55",
+          "JUMP": "25-40",
+          "SKILL": "65-90",
           "SPEED": "45-70",
-          "STAMINA": "35-60"
+          "STAMINA": "45-60"
         }
       }
     },
@@ -110,23 +110,13 @@
     ]
   },
   "behaviour": {
-    "moving": {
-      "walk": {
-        "avoidsLand": true,
-        "walkSpeed": 0.3
-      },
-      "swim": {
-        "swimSpeed": 0.3,
-        "canBreatheUnderwater": true
-      }
-    },
-    "resting": {
-      "canSleep": true,
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "dragonair",
@@ -142,10 +132,20 @@
         }
       ]
     },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
+    "moving": {
+      "swim": {
+        "canBreatheUnderwater": true,
+        "swimSpeed": 0.3
+      },
+      "walk": {
+        "avoidsLand": true,
+        "walkSpeed": 0.3
+      }
+    },
+    "resting": {
+      "canSleep": true,
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
     }
   },
   "drops": {
@@ -204,7 +204,6 @@
     "tm:brine",
     "tm:brutalswing",
     "tm:bulldoze",
-    "tm:captivate",
     "tm:chillingwater",
     "tm:confuseray",
     "tm:disarmingvoice",

@@ -14,13 +14,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 8.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -47,13 +55,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 8.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -84,13 +100,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 8.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -109,13 +133,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 8.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -138,13 +170,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 6.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 48.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -171,13 +211,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "28-44",
-            "weight": 6.0,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 48.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -197,7 +245,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "28-44",
-            "weight": 9.6,
+            "weight": 76.8,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

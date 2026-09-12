@@ -72,7 +72,20 @@
       "willDefendOwner": true,
       "willFlee": false
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "boldore alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gigalith alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 5,

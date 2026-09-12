@@ -53,9 +53,9 @@
 				{
 					"name": "locator_item_hat",
 					"parent": "head",
-					"pivot": [0, 16, 0],
+					"pivot": [0, 15.9, -0.5],
 					"locators": {
-						"item_hat": [0, 16.39905, -0.47821]
+						"item_hat": [0, 15.9, -0.5]
 					}
 				},
 				{

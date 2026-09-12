@@ -64,7 +64,17 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gurdurr alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "conkeldurr alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

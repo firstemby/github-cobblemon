@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:thunder_actorfloorscorch",
 			"basic_render_parameters": {
 				"material": "particles_blend",
-				"texture": "textures/particles/moves/explosion_floorscorch"
+				"texture": "textures/particles/generic/scorch/floorscorch_big"
 			}
 		},
 		"components": {

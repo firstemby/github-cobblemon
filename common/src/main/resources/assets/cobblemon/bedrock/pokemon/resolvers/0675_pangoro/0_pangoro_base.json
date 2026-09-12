@@ -20,6 +20,18 @@
           "texture": "cobblemon:textures/pokemon/0675_pangoro/pangoro_serenaglasses.png"
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0674_pancham/pancham_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

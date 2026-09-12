@@ -63,7 +63,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "donphan",
@@ -171,7 +171,6 @@
     "tm:lastresort",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:playrough",
     "tm:poisonjab",
     "tm:powerwhip",

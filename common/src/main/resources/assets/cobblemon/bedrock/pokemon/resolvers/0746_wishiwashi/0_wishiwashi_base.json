@@ -46,7 +46,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0746_wishiwashi/wishiwashi_solo_alpha.png",
           "emissive": true
         }
       ]

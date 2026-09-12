@@ -16,24 +16,20 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
-import net.minecraft.world.ContainerHelper
-import net.minecraft.world.Containers
-import net.minecraft.world.InteractionResult
-import net.minecraft.world.ItemInteractionResult
-import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.*
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.level.gameevent.GameEvent
-import java.util.OptionalInt
+import net.minecraft.world.phys.BlockHitResult
+import java.util.*
 import kotlin.math.pow
 
 class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.DISC_SHELF, pos, state), WorldlyContainer {
@@ -134,25 +130,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
         return stack.item is TechnicalMachineItem
                 || stack.item == CobblemonItems.UPGRADE
                 || stack.item == CobblemonItems.DUBIOUS_DISC
-                || stack.item == Items.MUSIC_DISC_13
-                || stack.item == Items.MUSIC_DISC_CAT
-                || stack.item == Items.MUSIC_DISC_BLOCKS
-                || stack.item == Items.MUSIC_DISC_CHIRP
-                || stack.item == Items.MUSIC_DISC_FAR
-                || stack.item == Items.MUSIC_DISC_MALL
-                || stack.item == Items.MUSIC_DISC_MELLOHI
-                || stack.item == Items.MUSIC_DISC_STAL
-                || stack.item == Items.MUSIC_DISC_STRAD
-                || stack.item == Items.MUSIC_DISC_WARD
-                || stack.item == Items.MUSIC_DISC_11
-                || stack.item == Items.MUSIC_DISC_WAIT
-                || stack.item == Items.MUSIC_DISC_OTHERSIDE
-                || stack.item == Items.MUSIC_DISC_5
-                || stack.item == Items.MUSIC_DISC_RELIC
-                || stack.item == Items.MUSIC_DISC_PRECIPICE
-                || stack.item == Items.MUSIC_DISC_CREATOR
-                || stack.item == Items.MUSIC_DISC_CREATOR_MUSIC_BOX
-                || stack.item == Items.MUSIC_DISC_PIGSTEP
+                || stack.has(DataComponents.JUKEBOX_PLAYABLE)
     }
 
     fun onNoteBlockPulse(level: Level, noteBlockPos: BlockPos, soundEvent: SoundEvent) {

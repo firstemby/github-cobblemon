@@ -10,7 +10,7 @@
       "layers": [
         {
           "name": "emissive",
-          "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_fire_emissive.png",
+          "texture": "cobblemon:textures/pokemon/0157_typhlosion/typhlosion_emissive.png",
           "emissive": true,
           "translucent": true
         }

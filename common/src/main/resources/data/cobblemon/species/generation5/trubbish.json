@@ -56,8 +56,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "trubbish alpha",
+          "tier": 1
+        },
         {
           "pokemon": "garbodor",
           "tier": 1

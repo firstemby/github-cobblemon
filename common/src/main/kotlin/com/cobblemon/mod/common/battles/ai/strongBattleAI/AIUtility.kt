@@ -166,7 +166,7 @@ object AIUtility {
         "geargrind" to Pair(2, 2),
         "twinbeam" to Pair(2, 2),
         "twineedle" to Pair(2, 2),
-        "suringstrikes" to Pair(3, 3),
+        "surgingstrikes" to Pair(3, 3),
         "tripledive" to Pair(3, 3),
         "watershuriken" to Pair(3, 3),
 

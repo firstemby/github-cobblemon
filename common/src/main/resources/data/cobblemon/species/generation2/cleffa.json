@@ -225,7 +225,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "cleffa",
@@ -236,8 +236,12 @@
           "tier": 2
         },
         {
-          "pokemon": "clefable",
+          "pokemon": "clefable mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "clefable mega",
+          "tier": 4
         }
       ]
     },

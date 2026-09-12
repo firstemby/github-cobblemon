@@ -76,9 +76,9 @@
 				{
 					"name": "locator_seat_1",
 					"parent": "torso",
-					"pivot": [0, 17.5, 3.75],
+					"pivot": [0, 21, 3.75],
 					"locators": {
-						"seat_1": [0, 17.5, 3.75]
+						"seat_1": [0, 21, 3.75]
 					}
 				},
 				{

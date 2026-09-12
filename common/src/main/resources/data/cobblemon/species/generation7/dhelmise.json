@@ -136,6 +136,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dhelmise alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

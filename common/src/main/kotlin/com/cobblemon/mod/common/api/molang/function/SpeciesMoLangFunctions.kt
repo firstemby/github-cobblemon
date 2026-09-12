@@ -17,23 +17,23 @@ import com.cobblemon.mod.common.util.asArrayValue
 object SpeciesMoLangFunctions : AbstractMoLangFunctionHolder<Species>() {
     override fun Species.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val species = this
-        val map = mutableMapOf<String, (MoParams) -> Any>(
-            "identifier" to { StringValue(species.resourceIdentifier.toString()) },
-            "name" to { StringValue(species.name) },
-            "primary_type" to { StringValue(species.primaryType.showdownId) },
-            "secondary_type" to { StringValue(species.secondaryType?.showdownId ?: "null") },
-            "experience_group" to { StringValue(species.experienceGroup.name) },
-            "height" to { DoubleValue(species.height) },
-            "weight" to { DoubleValue(species.weight) },
-            "base_scale" to { DoubleValue(species.baseScale) },
-            "hitbox_width" to { DoubleValue(species.hitbox.width) },
-            "hitbox_height" to { DoubleValue(species.hitbox.height) },
-            "hitbox_fixed" to { DoubleValue(species.hitbox.fixed) },
-            "catch_rate" to { DoubleValue(species.catchRate) },
-            "labels" to { species.labels.asArrayValue { StringValue(it) } },
-            "has_label" to { params -> DoubleValue(species.labels.contains(params.getString(0))) }
-        )
+        val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        return map
+        functions["identifier"] = { StringValue(species.resourceIdentifier.toString()) }
+        functions["name"] = { StringValue(species.name) }
+        functions["primary_type"] = { StringValue(species.primaryType.showdownId) }
+        functions["secondary_type"] = { StringValue(species.secondaryType?.showdownId ?: "null") }
+        functions["experience_group"] = { StringValue(species.experienceGroup.name) }
+        functions["height"] = { DoubleValue(species.height) }
+        functions["weight"] = { DoubleValue(species.weight) }
+        functions["base_scale"] = { DoubleValue(species.baseScale) }
+        functions["hitbox_width"] = { DoubleValue(species.hitbox.width) }
+        functions["hitbox_height"] = { DoubleValue(species.hitbox.height) }
+        functions["hitbox_fixed"] = { DoubleValue(species.hitbox.fixed) }
+        functions["catch_rate"] = { DoubleValue(species.catchRate) }
+        functions["labels"] = { species.labels.asArrayValue { StringValue(it) } }
+        functions["has_label"] = { params -> DoubleValue(species.labels.contains(params.getString(0))) }
+
+        return functions
     }
 }

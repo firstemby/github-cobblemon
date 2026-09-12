@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.45,
+            "weight": 4.5,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,7 +32,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.03,
+            "weight": 0.3,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -51,7 +51,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.03,
+            "weight": 0.3,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -70,7 +70,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.03,
+            "weight": 0.3,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -89,7 +89,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.03,
+            "weight": 0.3,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -108,7 +108,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.03,
+            "weight": 0.3,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -127,7 +127,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-45",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:nether/is_desert"

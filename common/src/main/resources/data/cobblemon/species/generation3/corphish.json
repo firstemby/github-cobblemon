@@ -71,6 +71,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "corphish alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "crawdaunt alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

@@ -68,7 +68,17 @@
       }
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "croconaw alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "feraligatr alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

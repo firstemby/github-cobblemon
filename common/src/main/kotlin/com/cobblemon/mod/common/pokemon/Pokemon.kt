@@ -356,7 +356,6 @@ open class Pokemon : ShowdownIdentifiable {
             if (experienceGroup.getLevel(experience) != boundedValue || value == Cobblemon.config.maxPokemonLevel) {
                 experience = experienceGroup.getExperience(boundedValue)
             }
-//            _level.emit(value)
 
             currentHealth = ceil(hpRatio * maxHealth).coerceIn(0..maxHealth)
         }
@@ -425,14 +424,18 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var friendship = this.form.baseFriendship
         private set(value) {
+            val earned = this.friendshipEarned
+            this.friendshipEarned = false
             if (!this.isPossibleFriendship(value)) {
                 return
             }
-            FRIENDSHIP_UPDATED.post(FriendshipUpdatedEvent(this, value)) {
+            FRIENDSHIP_UPDATED.post(FriendshipUpdatedEvent(this, value, earned)) {
                 field = it.newFriendship
                 onChange(FriendshipUpdatePacket({ this }, it.newFriendship))
             }
         }
+
+    private var friendshipEarned = false
 
     var currentFullness = 0
         set(value) {
@@ -629,7 +632,7 @@ open class Pokemon : ShowdownIdentifiable {
     var scaleModifier: Float = 1F
         set(value) {
             if (field != value) {
-                field = value
+                field = value.coerceAtLeast(0.05F)
                 onChange(ScaleModifierUpdatePacket({ this }, value))
             }
         }
@@ -1087,6 +1090,10 @@ open class Pokemon : ShowdownIdentifiable {
 
     fun isFireImmune(): Boolean {
         return ElementalTypes.FIRE in types || form.behaviour.moving.swim.canSwimInLava || form.behaviour.fireImmune
+    }
+
+    fun isFreezeImmune(): Boolean {
+        return ElementalTypes.ICE in types || form.behaviour.freezeImmune
     }
 
     fun dampensVibrations(): Boolean = form.behaviour.dampensVibrations
@@ -1662,6 +1669,7 @@ open class Pokemon : ShowdownIdentifiable {
         val sanitizedAmount = if (coerceSafe) amount.absoluteValue.coerceAtMost(Cobblemon.config.maxPokemonFriendship - this.friendship) else amount.absoluteValue
         val newValue = this.friendship + sanitizedAmount
         if (this.isPossibleFriendship(newValue)) {
+            this.friendshipEarned = true
             this.friendship = newValue
         }
         return this.friendship == newValue
@@ -1785,12 +1793,22 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
         if (reassess) {
-            gender = if (form.maleRatio !in 0F..1F) {
-                Gender.GENDERLESS
-            } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
-                Gender.MALE
+            val allForms = form.species.forms
+            val isGenderedForms = allForms.any { it.maleRatio == 1F } && allForms.any { it.maleRatio == 0F }
+            gender = if (isGenderedForms) {
+                if (Random.nextBoolean()) {
+                    Gender.FEMALE
+                } else {
+                    Gender.MALE
+                }
             } else {
-                Gender.FEMALE
+                if (form.maleRatio !in 0F..1F) {
+                    Gender.GENDERLESS
+                } else if (form.maleRatio == 1F || Random.nextFloat() <= form.maleRatio) {
+                    Gender.MALE
+                } else {
+                    Gender.FEMALE
+                }
             }
         }
     }

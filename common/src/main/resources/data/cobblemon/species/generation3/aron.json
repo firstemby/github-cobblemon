@@ -67,8 +67,12 @@
       ]
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "aron alpha",
+          "tier": 1
+        },
         {
           "pokemon": "lairon",
           "tier": 1

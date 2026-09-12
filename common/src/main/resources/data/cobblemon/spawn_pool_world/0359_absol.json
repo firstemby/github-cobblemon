@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "22-47",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -27,6 +27,32 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_volcanic"
+                ]
+            }
+        },
+        {
+            "id": "absol-2",
+            "pokemon": "absol",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "rare",
+            "level": "22-47",
+            "weight": 100.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "isThundering": true
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_arid",
+                    "#cobblemon:is_freezing"
                 ]
             }
         }

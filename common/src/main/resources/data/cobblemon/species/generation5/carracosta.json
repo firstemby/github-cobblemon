@@ -53,7 +53,7 @@
   },
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "carracosta",

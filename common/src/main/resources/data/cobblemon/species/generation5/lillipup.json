@@ -53,8 +53,12 @@
       "avoidedBySkeleton": true
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "lillipup alpha",
+          "tier": 1
+        },
         {
           "pokemon": "herdier",
           "tier": 1

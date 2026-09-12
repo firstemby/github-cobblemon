@@ -275,6 +275,14 @@
 					"pivot": [0, 9, -6]
 				},
 				{
+				"name": "locator_seat_1",
+				"parent": "lower_gear_rotation",
+				"pivot": [0, 10.5, -4.5],
+				"locators": {
+				"seat_1": [0, 10.5, -4.5]
+					}
+				},
+				{
 					"name": "gear4",
 					"parent": "lower_gear",
 					"pivot": [0, 9, -6],

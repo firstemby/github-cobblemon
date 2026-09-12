@@ -41,6 +41,19 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "whiscash_nero",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0340_whiscash/whiscash_nero_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

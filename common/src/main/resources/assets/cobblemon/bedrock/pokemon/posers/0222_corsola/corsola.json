@@ -5,7 +5,8 @@
   "profileTranslation": [0.01, 0.45, 0],
   "rootBone": "corsola",
   "animations": {
-    "cry": "q.bedrock_stateful('corsola', 'cry')"
+    "cry": "q.bedrock_stateful('corsola', 'cry')",
+    "physical": "q.bedrock_primary('corsola', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "battle-standing": {

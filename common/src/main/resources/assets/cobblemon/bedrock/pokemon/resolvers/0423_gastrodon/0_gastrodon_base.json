@@ -38,7 +38,7 @@
       "layers": [
         {
           "name": "alpha_eyes",
-          "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_alpha.png",
+          "texture": "cobblemon:textures/pokemon/0423_gastrodon/gastrodon_west_alpha.png",
           "emissive": true
         }
       ]

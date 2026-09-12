@@ -374,7 +374,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "3"
+          "maxSize": 4
         },
         "moving": {
           "swim": {
@@ -398,7 +398,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "hoopa unbound",

@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.LinkedHashMap;
+
 @Mixin(ServerEntity.class)
 public class ServerEntityMixin {
 
@@ -39,12 +41,12 @@ public class ServerEntityMixin {
         if (!(entity instanceof PokemonEntity pokemon)) return;
         if (pokemon.getOccupiedSeats().isEmpty()) return;
 
+        var assignments = new LinkedHashMap<String, Integer>();
         pokemon.getOccupiedSeats().forEach((seat, passenger) -> {
             if (seat.getLocator() == null) return;
-            CobblemonNetwork.INSTANCE.sendPacketToPlayer(
-                    player,
-                    new ClientboundSeatAssignmentPacket(passenger.getId(), pokemon.getId(), seat.getLocator())
-            );
+            if (passenger == null) return;
+            assignments.put(seat.getLocator(), passenger.getId());
         });
+        CobblemonNetwork.INSTANCE.sendPacketToPlayer(player, new ClientboundSeatAssignmentPacket(pokemon.getId(), assignments));
     }
 }

@@ -63,7 +63,21 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gloom alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vileplume alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "bellossom alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -138,7 +152,6 @@
     "tm:infestation",
     "tm:leafstorm",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pollenpuff",

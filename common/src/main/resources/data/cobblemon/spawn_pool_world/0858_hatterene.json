@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "42-51",
-            "weight": 0.16,
+            "weight": 0.8,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,12 +32,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "42-51",
-            "weight": 0.02,
+            "weight": 0.1,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_overworld"
+                    "#cobblemon:is_swamp"
                 ],
                 "structures": [
                     "minecraft:swamp_hut"
@@ -54,7 +54,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "42-51",
-            "weight": 0.02,
+            "weight": 0.1,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [

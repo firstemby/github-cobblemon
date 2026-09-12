@@ -56,11 +56,15 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "grapploct",
+          "pokemon": "clobbopus",
           "tier": 1
+        },
+        {
+          "pokemon": "grapploct",
+          "tier": 2
         }
       ]
     },

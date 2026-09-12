@@ -12,6 +12,19 @@
     {
       "aspects": ["paldean", "shiny"],
       "texture": "cobblemon:textures/pokemon/0194_wooper/wooper_paldean_shiny.png"
+    },
+    {
+      "aspects": [
+        "paldean",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0194_wooper/wooper_paldean_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

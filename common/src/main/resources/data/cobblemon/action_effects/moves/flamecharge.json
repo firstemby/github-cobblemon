@@ -52,7 +52,7 @@
     },
     {
       "type": "pause",
-      "pause": 1.6
+      "pause": 0.6
     }
   ]
 }

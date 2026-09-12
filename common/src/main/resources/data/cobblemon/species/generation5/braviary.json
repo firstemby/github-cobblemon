@@ -98,7 +98,7 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "braviary",
@@ -365,7 +365,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "9",
+          "maxSize": 9,
           "toleratedLeaders": [
             {
               "pokemon": "braviary",
@@ -432,12 +432,14 @@
         "tm:agility",
         "tm:aircutter",
         "tm:airslash",
+        "tm:assurance",
         "tm:bodyslam",
         "tm:bravebird",
         "tm:bulkup",
         "tm:calmmind",
         "tm:closecombat",
         "tm:confuseray",
+        "tm:cut",
         "tm:dazzlinggleam",
         "tm:defog",
         "tm:doubleedge",
@@ -460,7 +462,7 @@
         "tm:mysticalfire",
         "tm:nightshade",
         "tm:ominouswind",
-        "tm:powershift",
+        "tm:pluck",
         "tm:protect",
         "tm:psybeam",
         "tm:psychic",
@@ -470,6 +472,7 @@
         "tm:psyshock",
         "tm:raindance",
         "tm:rest",
+        "tm:retaliate",
         "tm:reversal",
         "tm:rockslide",
         "tm:rocksmash",
@@ -479,9 +482,12 @@
         "tm:shadowball",
         "tm:shadowclaw",
         "tm:skyattack",
+        "tm:skydrop",
         "tm:sleeptalk",
         "tm:snarl",
+        "tm:steelwing",
         "tm:storedpower",
+        "tm:strength",
         "tm:substitute",
         "tm:sunnyday",
         "tm:superpower",
@@ -491,6 +497,7 @@
         "tm:terablast",
         "tm:uturn",
         "tm:vacuumwave",
+        "tm:workup",
         "tm:zenheadbutt",
         "tutor:aerialace",
         "tutor:aircutter",
@@ -508,7 +515,6 @@
         "tutor:icywind",
         "tutor:mysticalfire",
         "tutor:ominouswind",
-        "tutor:powershift",
         "tutor:psychic",
         "tutor:rest",
         "tutor:rockslide",
@@ -529,6 +535,7 @@
         "legacy:doubleteam",
         "legacy:frustration",
         "legacy:hiddenpower",
+        "legacy:powershift",
         "legacy:return",
         "legacy:round",
         "legacy:secretpower",

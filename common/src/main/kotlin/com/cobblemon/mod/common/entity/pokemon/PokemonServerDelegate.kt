@@ -14,7 +14,6 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
@@ -31,7 +30,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -43,8 +41,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
-import org.joml.Matrix3f
-import org.joml.Vector3f
 import java.util.*
 import kotlin.math.*
 
@@ -52,6 +48,7 @@ import kotlin.math.*
 class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
     var acknowledgedHPValue = -1
+    var acknowledgedLevel = -1
     val passengerOffsets = mutableMapOf<Int, Vec3>()
 
     /** Mocked properties exposed to the client [PokemonEntity]. */
@@ -304,6 +301,11 @@ class PokemonServerDelegate : PokemonSideDelegate {
             if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
         }
 
+        if (acknowledgedLevel != entity.pokemon.level) {
+            acknowledgedLevel = entity.pokemon.level
+            updateAttributes(entity.pokemon)
+        }
+
         val tethering = entity.tethering
         if (tethering != null && entity.pokemon.tetheringId != tethering.tetheringId) {
             return entity.discard()
@@ -375,7 +377,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             ?: entity.mainHandItem
         }.copy()
         /* Hide items tagged as hidden (If the item is in this list, it will not render) */
-        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS)) ItemStack.EMPTY else it}
+        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS) || (entity.pokemon.isAlpha && entity.pokemon.isWild())) ItemStack.EMPTY else it}
 
         entity.entityData.set(PokemonEntity.SHOWN_HELD_ITEM, trackedShownItem)
     }

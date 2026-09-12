@@ -132,9 +132,6 @@
     "seats": [
       {
         "locator": "seat_1"
-      },
-      {
-        "locator": "seat_2"
       }
     ]
   },
@@ -145,7 +142,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "blastoise alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -417,7 +420,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "6"
+          "maxSize": 6
         },
         "moving": {
           "swim": {

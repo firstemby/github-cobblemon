@@ -68,7 +68,17 @@
       }
     },
     "herd": {
-      "maxSize": "9"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "caterpie alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "butterfree alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

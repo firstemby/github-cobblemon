@@ -70,6 +70,9 @@
     },
     "combat": {
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5
     }
   },
   "drops": {

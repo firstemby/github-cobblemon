@@ -3,39 +3,207 @@
   "type": "cobblemon:natural",
   "spawns": [
     {
-      "species": "cobblemon:geodude",
+      "species": "Paras",
       "bucket": "common",
       "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 10
+      "weight": 6.0,
+      "levelRange": "4-29",
+      "phases": "1"
     },
     {
-      "species": "cobblemon:zubat",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "35-45",
-      "weight": 9
-    },
-    {
-      "species": "cobblemon:machop",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "levelRange": "36-46",
-      "weight": 8
-    },
-    {
-      "species": "cobblemon:graveler",
+      "species": "Paras",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 6.0,
+      "levelRange": "4-29",
+      "phases": "2-6"
     },
     {
-      "species": "cobblemon:golbat",
+      "species": "Parasect",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-41",
+      "phases": "1"
+    },
+    {
+      "species": "Parasect",
       "bucket": "uncommon",
       "spawnablePositionType": "grounded",
-      "levelRange": "40-50",
-      "weight": 6
+      "weight": 4.0,
+      "levelRange": "24-41",
+      "phases": "2-6"
+    },
+    {
+      "species": "Tangela",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "19-44",
+      "phases": "1-6"
+    },
+    {
+      "species": "Carnivine",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 10.0,
+      "levelRange": "20-45",
+      "phases": "1-6"
+    },
+    {
+      "species": "Tangrowth",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-54",
+      "phases": "1-6"
+    },
+    {
+      "species": "Sewaddle",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "2"
+    },
+    {
+      "species": "Swadloon",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "20-38",
+      "phases": "2"
+    },
+    {
+      "species": "Leavanny",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "33-50",
+      "phases": "2"
+    },
+    {
+      "species": "Venipede",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "1-26",
+      "phases": "1-6"
+    },
+    {
+      "species": "Whirlipede",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "22-36",
+      "phases": "1-6"
+    },
+    {
+      "species": "Scolipede",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "30-49",
+      "phases": "1-6"
+    },
+    {
+      "species": "Ferroseed",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "6-31",
+      "phases": "3"
+    },
+    {
+      "species": "Ferrothorn",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "40-49",
+      "phases": "3"
+    },
+    {
+      "species": "Goomy",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "5-30",
+      "modifiers": "hisuibias",
+      "phases": "4"
+    },
+    {
+      "species": "Sliggoo",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "40-45",
+      "modifiers": "hisuian",
+      "phases": "4"
+    },
+    {
+      "species": "Goodra",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "50-60",
+      "modifiers": "hisuian",
+      "phases": "4"
+    },
+    {
+      "species": "Morelull",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "4-29",
+      "phases": "5"
+    },
+    {
+      "species": "Morelull",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "4-29",
+      "phases": "1-4, 6"
+    },
+    {
+      "species": "Shiinotic",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-41",
+      "phases": "5"
+    },
+    {
+      "species": "Shiinotic",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "24-41",
+      "phases": "1-4, 6"
+    },
+    {
+      "species": "Hatenna",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "2-27",
+      "phases": "6"
+    },
+    {
+      "species": "Hattrem",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 3.0,
+      "levelRange": "32-37",
+      "phases": "6"
+    },
+    {
+      "species": "Hatterene",
+      "bucket": "common",
+      "spawnablePositionType": "grounded",
+      "weight": 1.0,
+      "levelRange": "42-51",
+      "phases": "6"
     }
   ]
 }

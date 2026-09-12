@@ -117,6 +117,15 @@
       "times": [
         "167-11833,13702-22299"
       ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "heracross alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -315,6 +324,9 @@
           "times": [
             "167-11833,13702-22299"
           ]
+        },
+        "herd": {
+          "maxSize": 4
         }
       },
       "evolutions": [],

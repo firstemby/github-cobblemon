@@ -68,7 +68,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "seel",
@@ -152,7 +152,6 @@
     "tm:babydolleyes",
     "tm:blizzard",
     "tm:brine",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

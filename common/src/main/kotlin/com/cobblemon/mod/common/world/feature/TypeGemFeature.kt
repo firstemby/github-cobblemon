@@ -42,9 +42,12 @@ class TypeGemFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.
         val gemState = gemBlock.defaultBlockState()
         val coreState = TYPE_GEM_CORE.defaultBlockState()
 
-        // Place core and initial gem
+        // Place the gem first then make sure it placed before placing the core.
         worldGenLevel.setBlock(origin, coreState, UPDATE_ALL)
-        worldGenLevel.setBlock(chosenPos, gemState, UPDATE_ALL)
+        if (!worldGenLevel.getBlockState(chosenPos).`is`(gemBlock)) {
+            return false
+        }
+        worldGenLevel.setBlock(origin, coreState, UPDATE_ALL)
 
         // Trigger forced growth with clusters
         val coreBlock = coreState.block as TypeGemCoreBlock

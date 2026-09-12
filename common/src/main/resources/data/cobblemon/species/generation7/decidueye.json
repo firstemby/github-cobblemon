@@ -62,7 +62,13 @@
       }
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "decidueye alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -312,9 +318,11 @@
         "tm:closecombat",
         "tm:coaching",
         "tm:confuseray",
+        "tm:covet",
         "tm:defog",
         "tm:doubleteam",
         "tm:dualwingbeat",
+        "tm:echoedvoice",
         "tm:endure",
         "tm:energyball",
         "tm:facade",
@@ -341,6 +349,7 @@
         "tm:lowsweep",
         "tm:magicalleaf",
         "tm:nastyplot",
+        "tm:naturepower",
         "tm:nightshade",
         "tm:pluck",
         "tm:protect",
@@ -351,12 +360,15 @@
         "tm:rocksmash",
         "tm:rocktomb",
         "tm:roost",
+        "tm:safeguard",
         "tm:scaryface",
         "tm:seedbomb",
         "tm:shadowclaw",
+        "tm:skyattack",
         "tm:sleeptalk",
         "tm:smackdown",
         "tm:solarbeam",
+        "tm:steelwing",
         "tm:substitute",
         "tm:suckerpunch",
         "tm:sunnyday",
@@ -370,10 +382,13 @@
         "tm:trailblaze",
         "tm:upperhand",
         "tm:uturn",
+        "tm:workup",
+        "tm:worryseed",
         "tutor:aerialace",
         "tutor:aircutter",
         "tutor:bulkup",
         "tutor:coaching",
+        "tutor:covet",
         "tutor:defog",
         "tutor:dualwingbeat",
         "tutor:energyball",
@@ -396,11 +411,13 @@
         "tutor:roost",
         "tutor:seedbomb",
         "tutor:shadowclaw",
+        "tutor:skyattack",
         "tutor:sleeptalk",
         "tutor:suckerpunch",
         "tutor:swift",
         "tutor:synthesis",
         "tutor:tailwind",
+        "tutor:worryseed",
         "legacy:attract",
         "legacy:confide",
         "legacy:curse",
@@ -418,7 +435,13 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "7"
+          "maxSize": 7,
+          "toleratedLeaders": [
+            {
+              "pokemon": "decidueye alpha",
+              "tier": 1
+            }
+          ]
         },
         "moving": {
           "swim": {

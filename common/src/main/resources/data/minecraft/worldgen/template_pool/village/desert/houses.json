@@ -335,7 +335,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert1",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1
@@ -345,7 +345,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert2",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1
@@ -355,7 +355,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert3",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1
@@ -365,7 +365,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert4",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1
@@ -375,7 +375,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert5",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1
@@ -385,7 +385,7 @@
         "element_type": "minecraft:single_pool_element",
         "location": "cobblemon:habitats/village_desert6",
         "override_liquid_settings": "ignore_waterlogging",
-        "processors": "cobblemon:habitats/abandoned_village_structures",
+        "processors": "cobblemon:habitats/abandoned_village_desert",
         "projection": "rigid"
       },
       "weight": 1

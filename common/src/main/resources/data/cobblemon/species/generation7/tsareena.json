@@ -90,7 +90,6 @@
     "tm:acrobatics",
     "tm:bounce",
     "tm:bulletseed",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:dazzlinggleam",
@@ -178,7 +177,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "tsareena alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

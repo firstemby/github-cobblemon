@@ -66,6 +66,27 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "kleavor alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "scyther",
+          "tier": 1
+        },
+        {
+          "pokemon": "scizor mega=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "scizor mega",
+          "tier": 3
+        }
+      ]
     }
   },
   "drops": {

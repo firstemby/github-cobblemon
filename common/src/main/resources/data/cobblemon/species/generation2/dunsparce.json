@@ -57,6 +57,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dunsparce alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dudunsparce alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "baseExperienceYield": 145,

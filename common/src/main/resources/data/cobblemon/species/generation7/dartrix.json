@@ -62,7 +62,17 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dartrix alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "decidueye alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

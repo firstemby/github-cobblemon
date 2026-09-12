@@ -11,6 +11,18 @@
       {
         "aspects": ["shiny"],
         "texture": "cobblemon:textures/pokemon/0842_appletun/appletun_shiny.png"  
+      },
+      {
+        "aspects": [
+          "alpha_eyes"
+        ],
+        "layers": [
+          {
+            "name": "alpha_eyes",
+            "texture": "cobblemon:textures/pokemon/0842_appletun/appletun_alpha.png",
+            "emissive": true
+          }
+        ]
       }
     ]
   }

@@ -85,7 +85,6 @@
     "tm:allyswitch",
     "tm:attract",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:covet",
@@ -174,7 +173,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "spritzee",

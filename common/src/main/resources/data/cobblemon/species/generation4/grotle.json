@@ -64,7 +64,7 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "grotle",
@@ -139,7 +139,6 @@
     "tm:heavyslam",
     "tm:ironhead",
     "tm:irontail",
-    "tm:leafage",
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",

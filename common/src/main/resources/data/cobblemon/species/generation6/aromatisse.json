@@ -89,7 +89,6 @@
     "tm:allyswitch",
     "tm:attract",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:covet",
@@ -172,7 +171,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "aromatisse",

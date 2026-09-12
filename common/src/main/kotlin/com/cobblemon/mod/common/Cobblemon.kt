@@ -108,6 +108,7 @@ import com.cobblemon.mod.common.pokemon.helditem.CobblemonHeldItemManager
 import com.cobblemon.mod.common.pokemon.properties.AspectPropertyType
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.FreezeFrameProperty
+import com.cobblemon.mod.common.pokemon.properties.HeldItemVisibleProperty
 import com.cobblemon.mod.common.pokemon.properties.HiddenAbilityPropertyType
 import com.cobblemon.mod.common.pokemon.properties.LabelProperty
 import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
@@ -304,7 +305,9 @@ object Cobblemon {
             this.config.maxPokemonLevel,
             this.config.maxPokemonFriendship,
             this.config.maxDynamaxLevel,
-            this.config.unlockAllMoveDexMovesByDefault
+            this.config.unlockAllMoveDexMovesByDefault,
+            this.config.pokemonIntrinsicSizeMin,
+            this.config.pokemonIntrinsicSizeMax
         ).sendToPlayer(player)
     }
 
@@ -345,6 +348,7 @@ object Cobblemon {
         CustomPokemonProperty.register(UnaspectPropertyType)
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
+        CustomPokemonProperty.register(HeldItemVisibleProperty)
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 

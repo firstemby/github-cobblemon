@@ -65,7 +65,7 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "torterra",
@@ -151,7 +151,6 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:irontail",
-    "tm:leafage",
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",

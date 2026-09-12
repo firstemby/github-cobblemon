@@ -40,7 +40,7 @@ class SinisterTeaItem : Item(
                     val holder = inst.effect
                     val effect = holder.value()
 
-                    if (effect.isInstantenous) {
+                    if (effect.isInstantenous && (inst.duration <= 1)) {
                         effect.applyInstantenousEffect(user as? Player, null, user, inst.amplifier, 1.0)
                     } else {
                         user.addEffect(inst)

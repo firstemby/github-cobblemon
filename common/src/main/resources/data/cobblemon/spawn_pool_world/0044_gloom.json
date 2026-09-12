@@ -13,13 +13,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.95,
-            "weightMultiplier": {
-                "multiplier": 0.25,
-                "condition": {
-                    "timeRange": "day"
+            "weight": 7.6,
+            "weightMultipliers": [
+                {
+                    "multiplier": 0.25,
+                    "condition": {
+                        "timeRange": "day"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -38,13 +46,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.19,
-            "weightMultiplier": {
-                "multiplier": 0.25,
-                "condition": {
-                    "timeRange": "day"
+            "weight": 1.52,
+            "weightMultipliers": [
+                {
+                    "multiplier": 0.25,
+                    "condition": {
+                        "timeRange": "day"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -63,13 +79,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-40",
-            "weight": 0.19,
-            "weightMultiplier": {
-                "multiplier": 0.25,
-                "condition": {
-                    "timeRange": "day"
+            "weight": 1.52,
+            "weightMultipliers": [
+                {
+                    "multiplier": 0.25,
+                    "condition": {
+                        "timeRange": "day"
+                    }
+                },
+                {
+                    "multiplier": 1.25,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

@@ -63,15 +63,32 @@
     },
     "resting": {
       "times": [
-        "any"
+        "day"
       ],
-      "drowsyChance": 0.0014,
+      "drowsyChance": 0.0033,
       "rouseChance": 0.0042
     },
     "combat": {
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "honedge alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "doublade alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "aegislash alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

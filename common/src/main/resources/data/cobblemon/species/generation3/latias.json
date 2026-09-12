@@ -106,7 +106,7 @@
       }
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "latias mega=false",
@@ -361,7 +361,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "7",
+          "maxSize": 7,
           "toleratedLeaders": [
             {
               "pokemon": "latias mega",

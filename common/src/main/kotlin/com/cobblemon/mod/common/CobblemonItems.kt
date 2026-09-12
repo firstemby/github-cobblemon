@@ -405,7 +405,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BIG_MALASADA = regionalFoodItem("big_malasada", 64, 7, 0.3f, false)
     @JvmField
-    val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 64, 10, 0.6f, false, ItemStack(Items.BOWL, 1))
+    val SMOKED_TAIL_CURRY = regionalFoodItem("smoked_tail_curry", 64, 10, 0.6f, false)
     @JvmField
     val JUBILIFE_MUFFIN = regionalFoodItem("jubilife_muffin", 64, 7, 0.3f, false)
     @JvmField
