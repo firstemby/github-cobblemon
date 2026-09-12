@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.entity.projectile
 
 import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -18,21 +17,27 @@ import com.cobblemon.mod.common.client.entity.FallingStarClientDelegate
 import com.cobblemon.mod.common.entity.PosableEntity
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.net.messages.client.spawn.SpawnFallingStarPacket
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.core.registries.Registries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.protocol.Packet
+import net.minecraft.resources.ResourceKey
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.network.syncher.SynchedEntityData
 import net.minecraft.server.level.ServerEntity
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.projectile.ThrowableProjectile
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.loot.LootParams
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.Vec3
@@ -99,10 +104,18 @@ class FallingStarEntity(
             val vec3 = result.getLocation().subtract(this.x, this.y, this.z)
             val vec32 = vec3.normalize().scale(0.05)
             this.setPosRaw(this.x - vec32.x, this.y - vec32.y, this.z - vec32.z)
-            // based on our result type we should probably choose the item based on a loot table we make or a list of our spawns (not sure if that exists yet but maybe 🤔)
-            // for now I guess just minior and moon stone for testing
+            // based on our result type we should probably choose the item based on a loot table (not sure if we want other mons besides minior though..)
             when (resultType) {
-                FallingStarResultType.ITEM -> level().addFreshEntity(ItemEntity(level(), result.location.x, result.location.y, result.location.z, ItemStack(CobblemonItems.MOON_STONE)))
+                FallingStarResultType.ITEM -> {
+                    val world = level() as ServerLevel
+                    val lootTable = world.server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, cobblemonResource("gameplay/falling_star")))
+                    val lootParams = LootParams.Builder(world)
+                        .withParameter(LootContextParams.ORIGIN, result.location)
+                        .create(LootContextParamSets.COMMAND)
+                    lootTable.getRandomItems(lootParams).forEach { stack ->
+                        world.addFreshEntity(ItemEntity(world, result.location.x, result.location.y, result.location.z, stack).also { it.setDefaultPickUpDelay() })
+                    }
+                }
                 else -> level().addFreshEntity(PokemonProperties.parse("minior").createEntity(level()).also { it.moveTo(result.location.x, result.location.y, result.location.z) })
             }
             level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.NEUTRAL, 1F, 1F)

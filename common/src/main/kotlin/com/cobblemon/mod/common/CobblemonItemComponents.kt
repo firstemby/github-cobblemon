@@ -34,6 +34,12 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         .build())
 
     @JvmField
+    val MEGA_BOND: DataComponentType<MegaBondComponent> = create("mega_bond", DataComponentType.builder<MegaBondComponent>()
+        .persistent(MegaBondComponent.CODEC)
+        .networkSynchronized(MegaBondComponent.PACKET_CODEC)
+        .build())
+
+    @JvmField
     val BAIT: DataComponentType<RodBaitComponent> = create("bait", DataComponentType.builder<RodBaitComponent>()
         .persistent(RodBaitComponent.CODEC)
         .networkSynchronized(RodBaitComponent.PACKET_CODEC)

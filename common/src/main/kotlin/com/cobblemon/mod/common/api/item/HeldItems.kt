@@ -29,9 +29,11 @@ object HeldItems : DataRegistry {
     // val heldItems = PrioritizedList<BagItemLike>()
     internal val heldItemsScripts = mutableMapOf<String, String>() // showdown item ID to JavaScript
     val showdownItems = hashSetOf<String>()
+    val megaStones = hashMapOf<String, String>()
 
     override fun reload(manager: ResourceManager) {
         heldItemsScripts.clear()
+        megaStones.clear()
         ShowdownService.service.resetRegistryData("heldItem")
         manager.listResources("held_items") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
@@ -48,6 +50,9 @@ object HeldItems : DataRegistry {
         for (i in 0 until itemsJson.size()) {
             val jsItem = itemsJson[i].asJsonObject
             showdownItems += jsItem.get("id").asString
+            if (jsItem.has("megaEvolves")) {
+                megaStones[jsItem.get("id").asString] = jsItem.get("megaEvolves").asString.lowercase().replace(Regex("[^a-z0-9]"), "")
+            }
         }
 
         CobblemonHeldItemManager.load()

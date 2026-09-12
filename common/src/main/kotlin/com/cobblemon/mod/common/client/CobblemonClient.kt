@@ -61,6 +61,7 @@ import com.cobblemon.mod.common.client.tooltips.AprijuiceTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.CobblemonTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.FishingBaitTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.FishingRodTooltipGenerator
+import com.cobblemon.mod.common.client.tooltips.MegaBondTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.PokePuffTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
@@ -206,6 +207,7 @@ object CobblemonClient {
         TooltipManager.registerTooltipGenerator(AprijuiceTooltipGenerator)
         TooltipManager.registerTooltipGenerator(TechnicalMachineTooltipGenerator)
         TooltipManager.registerTooltipGenerator(PokePuffTooltipGenerator)
+        TooltipManager.registerTooltipGenerator(MegaBondTooltipGenerator)
     }
 
     fun registerFlywheelRenderers() {

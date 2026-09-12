@@ -97,6 +97,7 @@ import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
+import com.cobblemon.mod.common.pokemon.megastone.MegaImprinting
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
@@ -1639,6 +1640,9 @@ open class Pokemon : ShowdownIdentifiable {
         if (!this.isPossibleFriendship(sanitizedAmount)) {
             return false
         }
+        if (sanitizedAmount > this.friendship) {
+            MegaImprinting.onFriendshipGained(this, sanitizedAmount - this.friendship)
+        }
         this.friendship = sanitizedAmount
         return true
     }
@@ -1653,6 +1657,7 @@ open class Pokemon : ShowdownIdentifiable {
      * @return True if mutation was successful
      */
     fun incrementFriendship(amount : Int, coerceSafe: Boolean = true): Boolean {
+        MegaImprinting.onFriendshipGained(this, amount.absoluteValue)
         val sanitizedAmount = if (coerceSafe) amount.absoluteValue.coerceAtMost(Cobblemon.config.maxPokemonFriendship - this.friendship) else amount.absoluteValue
         val newValue = this.friendship + sanitizedAmount
         if (this.isPossibleFriendship(newValue)) {

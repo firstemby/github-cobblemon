@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " M ",
+        "MSM",
+        " M "
+    ],
+    "key": {
+        "M": {
+            "item": "cobblemon:mega_shard"
+        },
+        "S": {
+            "tag": "cobblemon:evolution_stones"
+        }
+    },
+    "result": {
+        "id": "cobblemon:dormant_mega_stone"
+    }
+}

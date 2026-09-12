@@ -914,6 +914,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val THUNDER_STONE = noSettingsItem("thunder_stone")
     @JvmField
     val WATER_STONE = noSettingsItem("water_stone")
+    @JvmField
+    val MEGA_SHARD = noSettingsItem("mega_shard")
+    @JvmField
+    val DORMANT_MEGA_STONE = heldItem("dormant_mega_stone")
 
     val wearables = mutableListOf<WearableItem>()
     //Wearable items (these items should have a corresponding 3D model)
@@ -951,6 +955,10 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val CELL_BATTERY = heldItem("cell_battery")
     @JvmField
     val CHARCOAL = heldItem("charcoal_stick", remappedName = "charcoal")
+    @JvmField
+    val CHARIZARDITE_X = heldItem("charizardite_x")
+    @JvmField
+    val CHARIZARDITE_Y = heldItem("charizardite_y")
     @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
     @JvmField

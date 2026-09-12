@@ -41,6 +41,8 @@ object CobblemonCommands {
         HeldItemCommand.register(dispatcher, registry)
         PcCommand.register(dispatcher)
         SpawnPokemonFromPool.register(dispatcher)
+        SpawnMeteorCommand.register(dispatcher)
+        SetMegaBondCommand.register(dispatcher)
         PokeboxCommand.register(dispatcher)
         PokedexCommand.register(dispatcher)
         TestStoreCommand.register(dispatcher)
