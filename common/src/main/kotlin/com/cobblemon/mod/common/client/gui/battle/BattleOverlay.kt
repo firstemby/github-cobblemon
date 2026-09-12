@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
@@ -115,6 +116,8 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         const val ROLE_CYCLE_SECONDS = 2.5
 
         const val SCALE = 0.5F
+        private const val ALPHA_ICON_SIZE = 8
+        private const val ALPHA_ICON_SPACING = 2
 
         private val PROMPT_TEXT_OPACITY_CURVE = sineFunction(period = 4F, verticalShift = 0.5F, amplitude = 0.5F)
 
@@ -139,6 +142,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         val expandedPokemonInfoRight = cobblemonResource("textures/gui/battle/expanded_pokemon_info_right.png")
         val expandedPokemonInfoCompactRight = cobblemonResource("textures/gui/battle/expanded_pokemon_info_compact_right.png")
         val questionMarkIcon = cobblemonResource("textures/gui/battle/question_mark.png")
+        private val alphaIcon = cobblemonResource("textures/gui/battle/alpha_icon.png")
 
         val healthBar = cobblemonResource("textures/gui/battle/health_bar.png")
         val healthBarFlipped = cobblemonResource("textures/gui/battle/health_bar_flipped.png")
@@ -724,16 +728,36 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         // Draw labels
         val infoBoxX = x + if (!reversed) (portraitDiameter + portraitOffsetX + infoOffsetX) else infoOffsetX
 
-        val displayNameToShow = hoveredPartyPokemon?.displayName ?: displayName
+        val displayNameToShow = (hoveredPartyPokemon?.displayName ?: displayName).copy().bold().font(CobblemonResources.DEFAULT_LARGE)
+        val nameOffsetX = if (dexState == PokedexEntryProgress.OWNED) 7 else 0
+        val nameX = infoBoxX + nameOffsetX
+        val nameY = y + if (isCompact) 5 else 7
+        val isAlpha = "alpha" in (hoveredPartyPokemon?.state ?: state).currentAspects
+        // Keep the icon and its spacing before the gender/level labels, even for long names.
+        val maxNameWidth = if (isAlpha) 63 - nameOffsetX - ALPHA_ICON_SIZE - ALPHA_ICON_SPACING * 2 else Int.MAX_VALUE
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = displayNameToShow.bold(),
-            x = infoBoxX + (if (dexState == PokedexEntryProgress.OWNED) 7 else 0),
-            y = y + if (isCompact) 5 else 7,
+            text = displayNameToShow,
+            x = nameX,
+            y = nameY,
+            maxCharacterWidth = maxNameWidth,
             opacity = opacity,
             shadow = true
         )
+
+        if (isAlpha) {
+            val nameWidth = min(Minecraft.getInstance().font.width(displayNameToShow), maxNameWidth)
+            blitk(
+                matrixStack = matrixStack,
+                texture = alphaIcon,
+                x = nameX + nameWidth + ALPHA_ICON_SPACING,
+                y = nameY + 1,
+                width = ALPHA_ICON_SIZE,
+                height = ALPHA_ICON_SIZE,
+                alpha = opacity
+            )
+        }
 
         val genderToDisplay = hoveredPartyPokemon?.gender ?: gender
         if (genderToDisplay != Gender.GENDERLESS) {
