@@ -15,7 +15,7 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.command.argument.PartySlotArgumentType
 import com.cobblemon.mod.common.item.components.MegaBondComponent
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.HeldItemUpdatePacket
-import com.cobblemon.mod.common.pokemon.megastone.MegaImprinting
+import com.cobblemon.mod.common.pokemon.megastone.MegaBondImprinting
 import com.cobblemon.mod.common.util.commandLang
 import com.cobblemon.mod.common.util.permission
 import com.mojang.brigadier.Command

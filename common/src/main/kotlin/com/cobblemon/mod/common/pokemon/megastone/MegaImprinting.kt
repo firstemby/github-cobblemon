@@ -20,7 +20,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 
-object MegaImprinting {
+object MegaBondImprinting {
 
     fun increaseBond(pokemon: Pokemon, amount: Int) {
         // exit early if it is on the client, friendship is not a positive numbah or if the item held isn't a dormant megga stone
