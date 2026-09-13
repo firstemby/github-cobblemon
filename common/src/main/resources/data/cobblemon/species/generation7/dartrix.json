@@ -278,6 +278,21 @@
       "preEvolution": "rowlet",
       "evolutions": [
         {
+          "id": "dartrix_decidueyehisui",
+          "variant": "level_up",
+          "result": "decidueye hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "triplearrows"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 36
+            }
+          ]
+        },
+        {
           "id": "dartrix_decidueye",
           "variant": "level_up",
           "result": "decidueye",
@@ -293,21 +308,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dartrix_alolabiome"
-            }
-          ]
-        },
-        {
-          "id": "dartrix_decidueyehisui",
-          "variant": "level_up",
-          "result": "decidueye hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "triplearrows"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 36
             }
           ]
         }

@@ -271,6 +271,21 @@
       "preEvolution": "oshawott",
       "evolutions": [
         {
+          "id": "dewott_samurotthisui",
+          "variant": "level_up",
+          "result": "samurott hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "ceaselessedge"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 36
+            }
+          ]
+        },
+        {
           "id": "dewott_samurott",
           "variant": "level_up",
           "result": "samurott",
@@ -286,21 +301,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dewott_unovabiome"
-            }
-          ]
-        },
-        {
-          "id": "dewott_samurotthisui",
-          "variant": "level_up",
-          "result": "samurott hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "ceaselessedge"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 36
             }
           ]
         }

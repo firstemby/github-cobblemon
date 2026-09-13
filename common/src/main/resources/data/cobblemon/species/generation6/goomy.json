@@ -197,6 +197,21 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "goomy_sliggoohisui",
+          "variant": "level_up",
+          "result": "sliggoo hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "shelter"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 40
+            }
+          ]
+        },
+        {
           "id": "goomy_sliggoo",
           "variant": "level_up",
           "result": "sliggoo",
@@ -212,21 +227,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/goomy_kalosbiome"
-            }
-          ]
-        },
-        {
-          "id": "goomy_sliggoohisui",
-          "variant": "level_up",
-          "result": "sliggoo hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "shelter"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 40
             }
           ]
         }

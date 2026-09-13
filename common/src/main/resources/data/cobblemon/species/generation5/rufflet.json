@@ -263,6 +263,21 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "rufflet_braviaryhisui",
+          "variant": "level_up",
+          "result": "braviary hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "esperwing"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 54
+            }
+          ]
+        },
+        {
           "id": "rufflet_braviary",
           "variant": "level_up",
           "result": "braviary",
@@ -278,21 +293,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
-            }
-          ]
-        },
-        {
-          "id": "rufflet_braviaryhisui",
-          "variant": "level_up",
-          "result": "braviary hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "esperwing"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 54
             }
           ]
         }

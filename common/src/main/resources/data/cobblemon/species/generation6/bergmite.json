@@ -240,6 +240,25 @@
       "dynamaxBlocked": false,
       "evolutions": [
         {
+          "id": "bergmite_avalugghisui",
+          "variant": "level_up",
+          "result": "avalugg hisuian",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "rockslide"
+          ],
+          "requirements": [
+            {
+              "variant": "level",
+              "minLevel": 37
+            },
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
+            }
+          ]
+        },
+        {
           "id": "bergmite_avalugg",
           "variant": "level_up",
           "result": "avalugg",
@@ -259,25 +278,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
-            }
-          ]
-        },
-        {
-          "id": "bergmite_avalugghisui",
-          "variant": "level_up",
-          "result": "avalugg hisuian",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "rockslide"
-          ],
-          "requirements": [
-            {
-              "variant": "level",
-              "minLevel": 37
-            },
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/bergmite_kalosbiome"
             }
           ]
         }

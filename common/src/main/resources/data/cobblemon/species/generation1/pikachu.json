@@ -389,6 +389,22 @@
       "preEvolution": "pichu",
       "evolutions": [
         {
+          "id": "pikachu_raichualola",
+          "variant": "item_interact",
+          "result": "raichu alolan",
+          "consumeHeldItem": false,
+          "learnableMoves": [
+            "psychic"
+          ],
+          "requirements": [
+            {
+              "variant": "biome",
+              "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
+            }
+          ],
+          "requiredContext": "cobblemon:thunder_stone"
+        },
+        {
           "id": "pikachu_raichu",
           "variant": "item_interact",
           "result": "raichu",
@@ -404,22 +420,6 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
-            }
-          ],
-          "requiredContext": "cobblemon:thunder_stone"
-        },
-        {
-          "id": "pikachu_raichualola",
-          "variant": "item_interact",
-          "result": "raichu alolan",
-          "consumeHeldItem": false,
-          "learnableMoves": [
-            "psychic"
-          ],
-          "requirements": [
-            {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
             }
           ],
           "requiredContext": "cobblemon:thunder_stone"
