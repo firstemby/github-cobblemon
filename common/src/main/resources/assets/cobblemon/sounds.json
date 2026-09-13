@@ -1478,13 +1478,16 @@
     "sounds": [ { "name": "cobblemon:move/lightscreen/lightscreen_actor", "volume": 1.0 } ]
   },
   "move.playrough.actor_1": {
-    "sounds": [ { "name": "cobblemon:move/playrough/playrough_actor_1", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/playrough/playrough_actor_1", "volume": 1.0 } ]
   },
   "move.playrough.actor_2": {
-    "sounds": [ { "name": "cobblemon:move/playrough/playrough_actor_2", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/playrough/playrough_actor_2", "volume": 1.0 } ],
+  },
+  "move.playrough.actor_3": {
+    "sounds": [ { "name": "cobblemon:move/playrough/playrough_actor_3", "volume": 1.0 } ]
   },
   "move.playrough.target": {
-    "sounds": [ { "name": "cobblemon:move/playrough/playrough_target", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/playrough/playrough_target", "volume": 1.0 } ]
   },
   "impact.normal": {
     "sounds": [

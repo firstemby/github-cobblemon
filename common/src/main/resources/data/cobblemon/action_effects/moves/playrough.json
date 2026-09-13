@@ -20,13 +20,13 @@
       "expressions": ["q.sound('move.playrough.actor_1');"]
     },
     {
+      "type": "pause",
+      "pause": 0.125
+    },
+    {
       "type": "entity_molang",
       "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
       "expressions": ["q.sound('move.playrough.actor_2');"]
-    },
-    {
-      "type": "pause",
-      "pause": 0.125
     },
     {
       "type": "entity_particles",
@@ -45,16 +45,21 @@
     },
     {
       "type": "pause",
-      "pause": 0.625
+      "pause": 0.5
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.playrough.actor_3');"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false  && q.missed(q.entity.uuid) == false",
       "expressions": ["q.sound('move.playrough.target');"]
     },
     {
       "type": "pause",
-      "pause": 0.725
+      "pause": 0.225
     },
     {
       "type": "remove_holds",
