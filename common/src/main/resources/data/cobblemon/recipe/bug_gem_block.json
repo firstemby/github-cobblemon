@@ -13,31 +13,5 @@
   "result": {
     "id": "cobblemon:bug_gem_block",
     "count": 1
-  },
-  "criteria": {
-    "has_bug_gem": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "cobblemon:bug_gem"
-            ]
-          }
-        ]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "cobblemon:bug_gem_block"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_bug_gem",
-      "has_the_recipe"
-    ]
-  ]
+  }
 }
