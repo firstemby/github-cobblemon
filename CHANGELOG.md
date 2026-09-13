@@ -29,6 +29,7 @@
 ### Changes
 
 ### Fixes
+- Correctly grants "They're Minerals!" advancement when planting a type gem
 - Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
 
 ### Developer
