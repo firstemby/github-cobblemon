@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/never_melt_ice",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/never_melt_ice",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/never_melt_ice"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/never_melt_ice",
+      "y": 90
+    }
+  }
+}
