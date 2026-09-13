@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:dark_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_dark_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:dark_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:dark_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dark_gem",
+      "has_the_recipe"
+    ]
+  ]
+}
