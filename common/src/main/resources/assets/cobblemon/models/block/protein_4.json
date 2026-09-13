@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/vitamin_4",
+  "textures": {
+        "texture": "cobblemon:block/decorative/protein",
+        "particle": "cobblemon:block/decorative/protein"
+  }
+}
