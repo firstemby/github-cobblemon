@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/galarica_cuff",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/galarica_cuff",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/galarica_cuff"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/galarica_cuff",
+      "y": 90
+    }
+  }
+}

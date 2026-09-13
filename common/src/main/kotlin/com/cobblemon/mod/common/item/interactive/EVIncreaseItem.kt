@@ -11,28 +11,27 @@ package com.cobblemon.mod.common.item.interactive
 import com.cobblemon.mod.common.api.item.PokemonSelectingItem
 import com.cobblemon.mod.common.api.pokemon.stats.ItemEvSource
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
-import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.pokemon.EVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import net.minecraft.world.level.Level
 
-abstract class EVIncreaseItem(
-    val stat: Stat,
-    val evIncreaseAmount: Int,
-) : CobblemonItem(Properties()), PokemonSelectingItem {
-    override val bagItem = null
+interface EVIncreaseItem: PokemonSelectingItem {
+    val stat: Stat
+    val evIncreaseAmount: Int
+
+    override val bagItem: BagItem?
+        get() = null
+
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
             super.canUseOnPokemon(stack, pokemon)
 
-    abstract val sound: SoundEvent
+    val sound: SoundEvent
 
     override fun applyToPokemon(
         player: ServerPlayer,
@@ -50,12 +49,5 @@ abstract class EVIncreaseItem(
         } else {
             InteractionResultHolder.fail(stack)
         }
-    }
-
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
-        if (user is ServerPlayer) {
-            return use(user, user.getItemInHand(hand))
-        }
-        return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 }
