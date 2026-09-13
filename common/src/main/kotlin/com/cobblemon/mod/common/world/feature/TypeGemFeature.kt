@@ -43,7 +43,7 @@ class TypeGemFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.
         val coreState = TYPE_GEM_CORE.defaultBlockState()
 
         // Place the gem first then make sure it placed before placing the core.
-        worldGenLevel.setBlock(origin, coreState, UPDATE_ALL)
+        worldGenLevel.setBlock(chosenPos, gemState, UPDATE_ALL)
         if (!worldGenLevel.getBlockState(chosenPos).`is`(gemBlock)) {
             return false
         }
