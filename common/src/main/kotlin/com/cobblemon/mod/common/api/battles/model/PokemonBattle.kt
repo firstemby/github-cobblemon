@@ -35,6 +35,7 @@ import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.BattleCaptureAction
 import com.cobblemon.mod.common.battles.BattleFormat
 import com.cobblemon.mod.common.battles.BattleRegistry
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleSession
 import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.FleeAttemptActionResponse
 import com.cobblemon.mod.common.battles.ForfeitActionResponse
@@ -80,14 +81,18 @@ import net.minecraft.world.item.ItemStack
 open class PokemonBattle(
     val format: BattleFormat,
     val side1: BattleSide,
-    val side2: BattleSide
+    val side2: BattleSide,
+    initializeProgress: Boolean = true
 ) {
     /** Whether logging will be silenced for this battle. */
     var mute = !CobblemonBuildDetails.SNAPSHOT
     val struct = this.asMoLangValue()
-    val runtime = MoLangRuntime().also { it.environment.query = struct }
+    val runtime = MoLangRuntime().also {
+        it.environment.query = struct
+    }
 
     val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf()
+    var stadiumSession: StadiumBattleSession? = null
 
     val battlePartyStores = mutableListOf<PlayerPartyStore>()
 
@@ -96,6 +101,12 @@ open class PokemonBattle(
         side2.battle = this
         this.actors.forEach { actor ->
             actor.battle = this
+        }
+        if (initializeProgress) resetEvolutionProgress()
+    }
+
+    internal fun resetEvolutionProgress() {
+        actors.forEach { actor ->
             actor.pokemonList.forEach { battlePokemon ->
                 battlePokemon.effectedPokemon.evolutionProxy.current().progress()
                     .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
@@ -237,7 +248,9 @@ open class PokemonBattle(
     }
 
     fun turn(newTurnNumber: Int) {
-        actors.forEach { it.turn() }
+        // Prepare all actors before notifying synchronous AI, or its first response can clear other actors' requests.
+        actors.forEach { it.prepareTurn() }
+        actors.forEach { it.fireChoiceRequest() }
         // TODO: If a pokemon switches in the same turn another pokemon is KO'd it will not receive exp for the KO
         for (side in sides) {
             val opposite = side.getOppositeSide()
@@ -250,6 +263,7 @@ open class PokemonBattle(
     }
 
     fun end() {
+        if (ended) return
         ended = true
         val awardToFainted = Cobblemon.config.awardExperienceToFaintedPokemon
         val awardOnLoss = Cobblemon.config.awardExperienceOnBattleLoss
@@ -464,7 +478,7 @@ open class PokemonBattle(
             val message = battleLang("crash").red()
             this.actors.filterIsInstance<PlayerBattleActor>().forEach { it.entity?.sendSystemMessage(message) }
             this.saveBattleLog()
-            this.stop()
+            if (stadiumSession != null) BattleRegistry.abortStadiumBattle(battleId) else this.stop()
             return
         }
 
@@ -472,6 +486,7 @@ open class PokemonBattle(
             ticks++
             if (isPvW && !ended && dispatches.isEmpty()) checkFlee()
         }
+        stadiumSession?.tick()
     }
 
     open fun checkFlee() {
@@ -507,6 +522,7 @@ open class PokemonBattle(
     }
 
     fun stop() {
+        if (ended) return
         writeShowdownAction(">forcetie") // This will terminate the Showdown connection
         end()
     }

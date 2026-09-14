@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.mixin.entity;
 
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.api.cinematic.runtime.CinematicViewerScopedEntity;
+import com.cobblemon.mod.common.api.cinematic.runtime.pathfinding.NativeMotionEntity;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
@@ -25,6 +27,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,10 +39,34 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Set;
+import java.util.UUID;
+
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class EntityMixin implements CinematicViewerScopedEntity {
+
+    @Unique
+    @Nullable
+    private Set<UUID> cobblemon$sceneViewers = null;
+
+    @Nullable
+    @Override
+    public Set<UUID> getCobblemonSceneViewers() {
+        return cobblemon$sceneViewers;
+    }
+
+    @Override
+    public void setCobblemonSceneViewers(@Nullable Set<UUID> viewers) {
+        this.cobblemon$sceneViewers = viewers;
+    }
 
     @Shadow @Nullable public abstract Entity getVehicle();
+
+    @WrapOperation(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;stepOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/Entity;)V"))
+    private void cobblemon$skipSimulatedFootsteps(Block block, Level level, BlockPos pos, BlockState state,
+                                                Entity entity, Operation<Void> original) {
+        if (!(entity instanceof NativeMotionEntity)) original.call(block, level, pos, state, entity);
+    }
 
     @Inject(method = "updateInWaterStateAndDoWaterCurrentPushing", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/Entity;wasTouchingWater:Z", ordinal = 1), cancellable = true)
     public void cobblemon$verifyActuallyTouchingWater(CallbackInfo ci) {

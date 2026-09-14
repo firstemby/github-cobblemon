@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.util.adapters
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelTextureSupplier
 import com.cobblemon.mod.common.client.render.StaticModelTextureSupplier
+import com.cobblemon.mod.common.client.render.SpriteSheetModelTextureSupplier
 import com.cobblemon.mod.common.client.render.VariableModelTextureSupplier
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -38,6 +39,17 @@ object ModelTextureSupplierAdapter : JsonDeserializer<ModelTextureSupplier> {
             val jsonObject = json as JsonObject
             val loop = jsonObject.get("loop")?.asBoolean != false
             val fps = jsonObject.get("fps")?.asFloat ?: 1F
+            jsonObject.get("spriteSheet")?.let { sheet ->
+                val count = jsonObject.get("frameCount")
+                    ?: throw IllegalArgumentException("Sprite sheet textures require 'frameCount'")
+                require(count.isJsonPrimitive && count.asJsonPrimitive.isNumber) { "Sprite sheet frameCount must be an integer" }
+                return SpriteSheetModelTextureSupplier(
+                    texture = ResourceLocation.parse(sheet.asString),
+                    frameCount = count.asBigDecimal.intValueExact(),
+                    fps = fps,
+                    loop = loop
+                )
+            }
             val frames = jsonObject.get("frames")?.asJsonArray?.map { ResourceLocation.parse(it.asString) }
                 ?: throw IllegalArgumentException("Animated textures require a 'frames' value.")
             val interpolation = jsonObject.get("interpolation")?.asBoolean == true

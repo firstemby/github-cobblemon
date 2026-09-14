@@ -26,7 +26,9 @@ class ShowdownActionRequest(
     var active: MutableList<ShowdownMoveset>? = null,
     var forceSwitch: List<Boolean> = emptyList(),
     var noCancel: Boolean = false,
-    var side: ShowdownSide? = null
+    var side: ShowdownSide? = null,
+    var teamPreview: Boolean = false,
+    var rqid: Int = 0
 ) {
     fun <T, E : Targetable> iterate(activePokemon: List<E>, iterator: (E, ShowdownMoveset?, forceSwitch: Boolean) -> T): List<T> {
         val size = max(active?.size ?: 0, forceSwitch.size)

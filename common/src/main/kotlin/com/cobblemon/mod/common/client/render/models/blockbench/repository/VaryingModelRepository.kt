@@ -48,6 +48,7 @@ import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.cobblemon.mod.common.client.render.ModelTextureSupplier
 import com.google.gson.JsonObject
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -642,11 +643,19 @@ object VaryingModelRepository {
     fun getTexture(name: ResourceLocation, state: PosableState): ResourceLocation {
         try {
             val texture = this.variations[name]?.getTexture(state)
+            if (texture != null) return texture
+        } catch (_: IllegalStateException) { }
+        return this.variations[fallback]!!.getTexture(state)
+    }
+
+    fun getTextureSupplier(name: ResourceLocation, state: PosableState): ModelTextureSupplier {
+        try {
+            val texture = this.variations[name]?.getTextureSupplier(state)
             if (texture != null) {
                 return texture
             }
         } catch(_: IllegalStateException) { }
-        return this.variations[fallback]!!.getTexture(state)
+        return this.variations[fallback]!!.getTextureSupplier(state)
     }
 
     fun getTextureNoSubstitute(name: ResourceLocation, state: PosableState): ResourceLocation? {

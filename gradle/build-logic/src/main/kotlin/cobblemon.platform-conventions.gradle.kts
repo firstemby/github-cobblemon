@@ -49,6 +49,7 @@ tasks {
         mergeServiceFiles()
 
         relocate ("com.oracle", "com.cobblemon.mod.relocations.oracle")
+        relocate ("imgui", "com.cobblemon.mod.relocations.imgui")
     }
 
     remapJar {

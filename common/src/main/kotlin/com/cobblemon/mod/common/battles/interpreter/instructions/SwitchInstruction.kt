@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.battles.interpreter.instructions
 
+import com.cobblemon.mod.common.api.cinematic.runtime.CinematicManager
 import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
@@ -77,16 +78,28 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
                         battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, pokemon, true, illusion), BattleSwitchPokemonPacket(pnx, pokemon, false, illusion))
                         broadcastSwitch(battle, actor, pokemon, illusion)
                         afterOnServer(seconds = battleSendoutCount * SEND_OUT_STAGGER_BASE_DURATION + if (battleSendoutCount > 0) Random.nextFloat() * SEND_OUT_STAGGER_RANDOM_MAX_DURATION else 0F ) {
-                            pokemon.effectedPokemon.sendOutWithAnimation(
-                                    source = entity,
-                                    battleId = battle.battleId,
-                                    level = entity.level() as ServerLevel,
-                                    doCry = false,
-                                    position = targetPos,
-                                    illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                            ).thenApply {
+                            val sideSuffix = actor.showdownId.substring(0, 2)
+                            val pending = if (battle.ended) null else CinematicManager.sceneForBattle(battle.battleId)?.let { sceneId ->
+                                    CinematicManager.setSceneVec3(sceneId, "send_out_position_$sideSuffix", targetPos)
+                                    CinematicManager.acquireSceneCounter(sceneId, "send_out_pending_$sideSuffix")
+                                }
+                            val animation = try {
+                                pokemon.effectedPokemon.sendOutWithAnimation(
+                                        source = entity,
+                                        battleId = battle.battleId,
+                                        level = entity.level() as ServerLevel,
+                                        doCry = false,
+                                        position = targetPos,
+                                        illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
+                                )
+                            } catch (error: Exception) {
+                                pending?.close()
+                                throw error
+                            }
+                            animation.thenApply {
                                 actor.stillSendingOutCount--
                             }
+                            animation.whenComplete { _, _ -> pending?.close() }
                             WaitDispatch(0.5F)  // we're already waiting 1.5 seconds. this prevents flooding from consecutive SwitchInstructions
                         }
                     }
@@ -165,52 +178,122 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
             val pokemonEntity = activePokemon.battlePokemon?.entity
             // If we can't find the entity for some reason then we're going to skip the recall animation
             val sendOutFuture = CompletableFuture<Unit>()
-            (pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)).thenApply {
-                if (battle.ended) {
-                    sendOutFuture.complete(Unit)
-                    return@thenApply
-                }
+            val targetPos = pokemonEntity?.position()
+                ?: (if (battle.format.battleType.pokemonPerSide == 1) activePokemon.getSendOutPosition()
+                    else activePokemon.position?.second)
+                ?: entity.position()
 
-                // Queue actual swap and send-in after the animation has ended
-                actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
-                activePokemon.battlePokemon = newPokemon
-                activePokemon.illusion = illusion
-                battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
-                val newEntity = newPokemon.entity
-                if (newEntity != null) {
-                    illusion?.let { IllusionEffect(it.effectedPokemon).start(newEntity) }
-                    afterOnServer(seconds = SEND_OUT_DURATION) {
-                        if (!imposter) newPokemon.entity?.cry()
+            val sideSuffix = actor.showdownId.substring(0, 2)
+            val pending = CinematicManager.sceneForBattle(battle.battleId)?.let { sceneId ->
+                CinematicManager.setSceneVec3(sceneId, "send_out_position_$sideSuffix", targetPos)
+                CinematicManager.acquireSceneCounter(sceneId, "send_out_pending_$sideSuffix")
+            }
+
+            val recall = try {
+                pokemonEntity?.recallWithAnimation() ?: CompletableFuture.completedFuture(Unit)
+            } catch (error: Exception) {
+                pending?.close()
+                sendOutFuture.completeExceptionally(error)
+                return UntilDispatch { sendOutFuture.isDone }
+            }
+            recall.whenComplete { _, recallError ->
+                if (recallError != null) {
+                    pending?.close()
+                    sendOutFuture.completeExceptionally(recallError)
+                    return@whenComplete
+                }
+                try {
+                    if (battle.ended) {
+                        pending?.close()
                         sendOutFuture.complete(Unit)
+                        return@whenComplete
                     }
-                } else {
-                    // For Singles, we modify the sendout position based on the pokemon's hitbox size
-                    val pos = (if (battle.format.battleType.pokemonPerSide == 1) activePokemon.getSendOutPosition()
-                        else  activePokemon.position?.second) ?: entity.position()
-                    // Send out at previous Pokémon's location if it is known, otherwise actor location
-                    val world = entity.level() as ServerLevel
-                    newPokemon.effectedPokemon.sendOutWithAnimation(
-                        source = entity,
-                        battleId = battle.battleId,
-                        level = world,
-                        position = pos,
-                        doCry = !imposter,
-                        illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
-                    ).thenAccept { sendOutFuture.complete(Unit) }
-                }
 
-                broadcastSwitch(battle, actor, newPokemon, illusion)
+                    // Queue actual swap and send-in after the animation has ended
+                    actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
+                    activePokemon.battlePokemon = newPokemon
+                    activePokemon.illusion = illusion
+                    battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
+                    val newEntity = newPokemon.entity
+                    if (newEntity != null) {
+                        illusion?.let { IllusionEffect(it.effectedPokemon).start(newEntity) }
+                        try {
+                            afterOnServer(seconds = SEND_OUT_DURATION) {
+                                try {
+                                    if (!imposter) newPokemon.entity?.cry()
+                                    sendOutFuture.complete(Unit)
+                                } catch (error: Exception) {
+                                    sendOutFuture.completeExceptionally(error)
+                                } finally {
+                                    pending?.close()
+                                }
+                            }
+                        } catch (error: Exception) {
+                            pending?.close()
+                            sendOutFuture.completeExceptionally(error)
+                        }
+                    } else {
+                        // For Singles, we modify the sendout position based on the pokemon's hitbox size
+                        val pos = (if (battle.format.battleType.pokemonPerSide == 1) activePokemon.getSendOutPosition()
+                            else  activePokemon.position?.second) ?: entity.position()
+                        // Send out at previous Pokémon's location if it is known, otherwise actor location
+                        val world = entity.level() as ServerLevel
+
+                        val animation = newPokemon.effectedPokemon.sendOutWithAnimation(
+                                source = entity,
+                                battleId = battle.battleId,
+                                level = world,
+                                position = pos,
+                                doCry = !imposter,
+                                illusion = illusion?.let { IllusionEffect(it.effectedPokemon) }
+                            )
+                        animation.whenComplete { _, sendOutError ->
+                            pending?.close()
+                            if (sendOutError == null) {
+                                sendOutFuture.complete(Unit)
+                            } else {
+                                sendOutFuture.completeExceptionally(sendOutError)
+                            }
+                        }
+                    }
+
+                    broadcastSwitch(battle, actor, newPokemon, illusion)
+                } catch (error: Exception) {
+                    pending?.close()
+                    sendOutFuture.completeExceptionally(error)
+                }
             }
 
             return UntilDispatch { sendOutFuture.isDone }
         }
 
         fun createNonEntitySwitch(battle: PokemonBattle, actor: BattleActor, pnx: String, activePokemon: ActiveBattlePokemon, newPokemon: BattlePokemon, illusion: BattlePokemon? = null): DispatchResult {
-            actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
-            activePokemon.battlePokemon = newPokemon
-            activePokemon.illusion = illusion
-            battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
-            broadcastSwitch(battle, actor, newPokemon, illusion)
+            val targetPos = activePokemon.battlePokemon?.entity?.position()
+                ?: activePokemon.position?.second
+
+            val sideSuffix = actor.showdownId.substring(0, 2)
+            val pending = targetPos?.let { position ->
+                CinematicManager.sceneForBattle(battle.battleId)?.let { sceneId ->
+                    CinematicManager.setSceneVec3(sceneId, "send_out_position_$sideSuffix", position)
+                    CinematicManager.acquireSceneCounter(sceneId, "send_out_pending_$sideSuffix")
+                }
+            }
+
+            try {
+                actor.pokemonList.swap(actor.activePokemon.indexOf(activePokemon), actor.pokemonList.indexOf(newPokemon))
+                activePokemon.battlePokemon = newPokemon
+                activePokemon.illusion = illusion
+                battle.sendSidedUpdate(actor, BattleSwitchPokemonPacket(pnx, newPokemon, true, illusion), BattleSwitchPokemonPacket(pnx, newPokemon, false, illusion))
+                broadcastSwitch(battle, actor, newPokemon, illusion)
+
+                afterOnServer(seconds = SEND_OUT_DURATION) {
+                    pending?.close()
+                }
+            } catch (error: Exception) {
+                pending?.close()
+                throw error
+            }
+
             return WaitDispatch(SEND_OUT_DURATION)
         }
 

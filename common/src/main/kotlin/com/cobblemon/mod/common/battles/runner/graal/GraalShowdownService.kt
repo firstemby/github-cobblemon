@@ -10,11 +10,10 @@ package com.cobblemon.mod.common.battles.runner.graal
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
-import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.runner.ShowdownService
+import com.cobblemon.mod.common.battles.stadium.StadiumShowdownProtocol
 import com.google.gson.Gson
 import com.google.gson.JsonArray
-import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.nio.file.AccessMode
@@ -55,12 +54,16 @@ class GraalShowdownService : ShowdownService {
 
     override fun openConnection() {
         unbundler.attemptUnbundle()
-        createContext()
-        boot()
+        openConnection(Paths.get("./showdown"))
     }
 
-    private fun createContext() {
-        val wd = Paths.get("./showdown")
+    internal fun openConnection(directory: Path) {
+        createContext(directory.toAbsolutePath().normalize())
+        context.eval("js", directory.resolve("index.js").toFile().readText())
+        sendBattleMessageFunction = context.getBindings("js").getMember("sendBattleMessage")
+    }
+
+    private fun createContext(wd: Path) {
         val access = HostAccess.newBuilder(HostAccess.EXPLICIT)
             .allowIterableAccess(true)
             .allowArrayAccess(true)
@@ -97,7 +100,7 @@ class GraalShowdownService : ShowdownService {
             .logHandler(GraalLogger)
             .option("engine.WarnInterpreterOnly", "false")
             .option("js.commonjs-require", "true")
-            .option("js.commonjs-require-cwd", "showdown")
+            .option("js.commonjs-require-cwd", wd.toString())
             .option(
                 "js.commonjs-core-modules-replacements",
                 "buffer:buffer/,crypto:crypto-browserify,path:path-browserify"
@@ -120,19 +123,41 @@ class GraalShowdownService : ShowdownService {
         context.close()
     }
 
-    private fun boot() {
-        context.eval("js", File("showdown/index.js").readText())
-        sendBattleMessageFunction = context.getBindings("js").getMember("sendBattleMessage")
-    }
-
     override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
         val startBattleFunction = context.getBindings("js").getMember("startBattle")
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
     }
 
+    override fun getStadiumCapabilities(): StadiumShowdownProtocol.Capabilities {
+        val function = context.getBindings("js").getMember("getStadiumCapabilities")
+        return if (function?.canExecute() == true) StadiumShowdownProtocol.capabilities(function.execute().asString())
+            else StadiumShowdownProtocol.Capabilities()
+    }
+
+    override fun validateStadiumBattle(request: String): StadiumShowdownProtocol.Result {
+        val function = context.getBindings("js").getMember("validateStadiumBattle")
+        return if (function?.canExecute() == true) StadiumShowdownProtocol.result(function.execute(request).asString())
+            else StadiumShowdownProtocol.failure("unsupported_engine", "Stadium validation is unavailable.")
+    }
+
+    override fun startStadiumBattle(battle: PokemonBattle, request: String): StadiumShowdownProtocol.Result {
+        val function = context.getBindings("js").getMember("startStadiumBattle")
+        return if (function?.canExecute() == true) StadiumShowdownProtocol.result(function.execute(this, battle.battleId.toString(), request).asString())
+            else StadiumShowdownProtocol.failure("unsupported_engine", "Acknowledged stadium startup is unavailable.")
+    }
+
     override fun endBattle(battle: PokemonBattle) {
         val endBattleFunction = context.getBindings("js").getMember("endBattle")
         endBattleFunction.execute(battle.battleId.toString())
+    }
+
+    override fun sendStadiumChoice(battleId: UUID, request: String) = stadiumAction("sendStadiumChoice", battleId, request)
+    override fun resolveStadiumTimeout(battleId: UUID, request: String) = stadiumAction("resolveStadiumTimeout", battleId, request)
+
+    private fun stadiumAction(name: String, battleId: UUID, request: String): StadiumShowdownProtocol.Result {
+        val function = context.getBindings("js").getMember(name)
+        return if (function?.canExecute() == true) StadiumShowdownProtocol.result(function.execute(battleId.toString(), request).asString())
+        else StadiumShowdownProtocol.failure("unsupported_engine", "This stadium action is unavailable.")
     }
 
     override fun send(battleId: UUID, messages: Array<String>) {
@@ -179,7 +204,7 @@ class GraalShowdownService : ShowdownService {
 
     @Export
     fun sendFromShowdown(battleId: String, message: String) {
-        ShowdownInterpreter.interpretMessage(UUID.fromString(battleId), message)
+        ShowdownService.stadiumOutput.receive(UUID.fromString(battleId), message)
     }
 
     @Export

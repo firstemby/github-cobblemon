@@ -1,0 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.client.gui.molangui.renderer
+
+import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
+import com.bedrockk.molang.runtime.MoLangRuntime
+import net.minecraft.client.gui.GuiGraphics
+
+interface WidgetRenderer {
+    fun render(
+        widget: WidgetInstance,
+        guiGraphics: GuiGraphics,
+        runtime: MoLangRuntime,
+        mouseX: Float,
+        mouseY: Float,
+        delta: Float
+    )
+}

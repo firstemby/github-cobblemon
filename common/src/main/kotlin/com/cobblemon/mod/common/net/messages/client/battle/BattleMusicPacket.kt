@@ -22,6 +22,7 @@ import net.minecraft.resources.ResourceLocation
  *
  * @property music The location of the sound to play during a battle. If null, gracefully ends the currently playing sound.
  * @property restartExisting If true and the location of [music] matches the currently playing sound, will restart from the beginning.
+ * @property loopMusic Optional music to play after [music] finishes. If provided, [music] plays once (intro) then [loopMusic] loops.
  *
  * @author Segfault Guy
  * @since April 20th, 2023
@@ -30,7 +31,10 @@ class BattleMusicPacket(
     var music: ResourceLocation? = null,
     var volume: Float = 1.0f,
     var pitch: Float = 1.0f,
-    var restartExisting: Boolean = true
+    var restartExisting: Boolean = true,
+    var loopMusic: ResourceLocation? = null,
+    var loopVolume: Float = 1.0f,
+    var loopPitch: Float = 1.0f
 ) : NetworkPacket<BattleMusicPacket> {
 
     companion object {
@@ -39,7 +43,10 @@ class BattleMusicPacket(
             music = buffer.readNullable { it.readIdentifier() },
             volume = buffer.readFloat(),
             pitch = buffer.readFloat(),
-            restartExisting = buffer.readBoolean()
+            restartExisting = buffer.readBoolean(),
+            loopMusic = buffer.readNullable { it.readIdentifier() },
+            loopVolume = buffer.readFloat(),
+            loopPitch = buffer.readFloat()
         )
     }
 
@@ -50,5 +57,8 @@ class BattleMusicPacket(
         buffer.writeFloat(volume)
         buffer.writeFloat(pitch)
         buffer.writeBoolean(restartExisting)
+        buffer.writeNullable(loopMusic) { buf, value -> buf.writeIdentifier(value) }
+        buffer.writeFloat(loopVolume)
+        buffer.writeFloat(loopPitch)
     }
 }

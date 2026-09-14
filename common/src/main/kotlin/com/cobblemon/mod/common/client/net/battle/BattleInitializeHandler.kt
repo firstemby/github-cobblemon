@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.battle.ClientBattleActor
 import com.cobblemon.mod.common.client.battle.ClientBattlePokemon
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
+import com.cobblemon.mod.common.client.gui.stadium.StadiumSpectatorScreen
+import com.cobblemon.mod.common.client.net.stadium.StadiumSpectateStateHandler
 import com.cobblemon.mod.common.net.messages.client.battle.BattleInitializePacket
 import net.minecraft.client.Minecraft
 
@@ -49,7 +51,10 @@ object BattleInitializeHandler : ClientNetworkPacketHandler<BattleInitializePack
             this.wildActor = this.findWildActor()
         }
 
-        Minecraft.getInstance().setScreen(BattleGUI())
+        if (StadiumSpectateStateHandler.watching && CobblemonClient.battle?.spectating == true) {
+            CobblemonClient.battle?.minimised = true
+            client.setScreen(StadiumSpectatorScreen())
+        } else client.setScreen(BattleGUI())
     }
 
     fun actorFromDTO(actorDTO: BattleInitializePacket.BattleActorDTO, isAlly: Boolean): ClientBattleActor {

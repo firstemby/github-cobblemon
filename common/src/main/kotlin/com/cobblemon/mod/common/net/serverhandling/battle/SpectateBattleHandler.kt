@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.net.serverhandling.battle
 
+import com.cobblemon.mod.common.api.cinematic.runtime.CinematicManager
+
+import com.cobblemon.mod.common.battles.stadium.StadiumSpectating
+
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
@@ -35,6 +39,10 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
     ) {
         val battle = BattleRegistry.getBattleByParticipatingPlayerId(packet.targetedEntityId)
         if (battle != null && Cobblemon.config.allowSpectating) {
+            if (battle.stadiumSession != null) {
+                StadiumSpectating.joinBattle(player, battle.battleId)
+                return
+            }
             val target = battle.actors.filterIsInstance<PlayerBattleActor>().firstOrNull { it.uuid == packet.targetedEntityId }
 
             // Check los and range
@@ -76,9 +84,19 @@ object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> 
 
         val battle = BattleRegistry.getBattleByParticipatingPlayer(target) ?: return
 
+        if (battle.stadiumSession != null) {
+            StadiumSpectating.joinBattle(player, battle.battleId)
+            return
+        }
+        if (!Cobblemon.config.allowSpectating || BattleRegistry.getBattleBySpectatingPlayer(player.uuid) != null ||
+            CinematicManager.getActiveScenes().any {
+                player.uuid in it.networkSync.viewerIdsSnapshot()
+            }) return
+
         battle.spectators.add(player.uuid)
         player.sendPacket(BattleInitializePacket(battle, null))
         player.sendPacket(BattleMessagePacket(battle.chatLog))
+
     }
 
 }

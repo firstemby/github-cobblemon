@@ -8,10 +8,12 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.client.imgui.CobblemonImGui;
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.editor.cinematic.viewport.EditorViewportState;
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding;
 import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding;
 import com.cobblemon.mod.common.duck.RidePassenger;
@@ -34,6 +36,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.cobblemon.mod.common.client.gui.party.PartyTutorialToasts;
 
@@ -58,6 +61,17 @@ public abstract class MouseHandlerMixin {
     @Shadow private double accumulatedDX;
 
     @Shadow private double accumulatedDY;
+
+    // Offset cursor positions into the viewport; the constant offset cancels out of look deltas.
+    @ModifyVariable(method = "onMove", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private double cobblemon$offsetViewportCursorX(double x) {
+        return EditorViewportState.INSTANCE.getActive() ? x - EditorViewportState.INSTANCE.getFrameX() : x;
+    }
+
+    @ModifyVariable(method = "onMove", at = @At("HEAD"), argsOnly = true, ordinal = 1)
+    private double cobblemon$offsetViewportCursorY(double y) {
+        return EditorViewportState.INSTANCE.getActive() ? y - EditorViewportState.INSTANCE.getFrameY() : y;
+    }
 
     @Shadow private double lastHandleMovementTime;
 
@@ -317,6 +331,13 @@ public abstract class MouseHandlerMixin {
         playerRotater.cobblemon$setRideYRot(Mth.clamp(playerRotater.cobblemon$getRideYRot(), -105.0F, 105.0F));
         if (player.getVehicle() != null) {
             player.getVehicle().onPassengerTurned(player);
+        }
+    }
+
+    @Inject(method = "grabMouse", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$preventGrabWhenImGuiActive(CallbackInfo ci) {
+        if (CobblemonImGui.INSTANCE.wantCaptureMouse()) {
+            ci.cancel();
         }
     }
 

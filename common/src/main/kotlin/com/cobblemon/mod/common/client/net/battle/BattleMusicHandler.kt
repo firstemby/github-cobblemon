@@ -26,18 +26,35 @@ object BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
     override fun handle(packet: BattleMusicPacket, client: Minecraft) {
         val soundManager = client.soundManager
         val currMusic = BattleMusicController.music
-        val newMusic = packet.music?.let {
-            val event = SoundEvent.createVariableRangeEvent(it)
-            BattleMusicInstance(event, packet.volume, packet.pitch)
+
+        if (packet.music == null) {
+            BattleMusicController.endMusic()
+            return
         }
 
-        if (newMusic == null)
-            BattleMusicController.endMusic()
-        else if (!soundManager.isActive(currMusic))
-            BattleMusicController.initializeMusic(newMusic)
-        else if (currMusic.location == newMusic.location && !packet.restartExisting)
-            return
-        else
-            BattleMusicController.switchMusic(newMusic)
+        val musicEvent = SoundEvent.createVariableRangeEvent(packet.music!!)
+
+        if (packet.loopMusic != null) {
+            val loopEvent = SoundEvent.createVariableRangeEvent(packet.loopMusic!!)
+
+            if (soundManager.isActive(currMusic) && currMusic.location == musicEvent.location && !packet.restartExisting) return
+            BattleMusicController.initializeIntroWithLoop(
+                introSound = musicEvent,
+                introVolume = packet.volume,
+                introPitch = packet.pitch,
+                loopSound = loopEvent,
+                loopVolume = packet.loopVolume,
+                loopPitch = packet.loopPitch
+            )
+        } else {
+            val newMusic = BattleMusicInstance(musicEvent, packet.volume, packet.pitch, shouldLoop = true)
+
+            if (!soundManager.isActive(currMusic))
+                BattleMusicController.initializeMusic(newMusic)
+            else if (currMusic.location == newMusic.location && !packet.restartExisting)
+                return
+            else
+                BattleMusicController.switchMusic(newMusic)
+        }
     }
 }

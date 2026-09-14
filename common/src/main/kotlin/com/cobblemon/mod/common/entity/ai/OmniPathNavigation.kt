@@ -44,7 +44,7 @@ import kotlin.math.acos
  * @author Hiroku
  * @since April 18th, 2025
  */
-class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigation(entity, world) {
+open class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigation(entity, world) {
     val pather = entity as OmniPathingEntity
 
     var cachedCurrentNode: Node? = null

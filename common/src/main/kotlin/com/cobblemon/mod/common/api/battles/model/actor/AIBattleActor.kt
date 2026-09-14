@@ -11,8 +11,9 @@ package com.cobblemon.mod.common.api.battles.model.actor
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.battles.DefaultActionResponse
+import com.cobblemon.mod.common.battles.ForcePassActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
-import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.exception.IllegalActionChoiceException
 import com.cobblemon.mod.common.net.messages.client.battle.BattleFaintPacket
@@ -49,36 +50,40 @@ abstract class AIBattleActor(
      * Called when the AI is requested to make a choice.
      */
     open fun onChoiceRequested() {
+        val req = request
+        if (req == null) {
+            responses.clear()
+            expectingPassActions.clear()
+            mustChoose = false
+            battle.checkForInputDispatch()
+            return
+        }
+        val passActions = expectingPassActions.toList()
         try {
-            request?.let {
-                setActionResponses(it.iterate(this.activePokemon) { battleMon, moveset, forceSwitch ->
-                    battleAI.choose(battleMon, battle, getSide(), moveset, forceSwitch)
-                })
-                pokemonList.forEach { pokemon ->
-                    pokemon.willBeSwitchedIn = false
-                }
-            } ?: {
-                val response = mutableListOf<ShowdownActionResponse>()
-                repeat(activePokemon.size) {
-                    response.add(PassActionResponse)
-                }
-                setActionResponses(response)
-                LOGGER.warn("AI requested choice, but no request was set. Returning PassActionResponses.")
-            }
+            setActionResponses(req.iterate(this.activePokemon) { battleMon, moveset, forceSwitch ->
+                battleAI.choose(battleMon, battle, getSide(), moveset, forceSwitch)
+            })
         } catch (exception: IllegalActionChoiceException) {
+            // Validation may have consumed forced passes and accepted a prefix before rejecting a later slot.
+            responses.clear()
+            expectingPassActions.clear()
+            expectingPassActions.addAll(passActions)
+            if (req.forceSwitch.any { it }) {
+                LOGGER.error("AI could not choose replacements; using Showdown's default choices", exception)
+                setActionResponses(req.iterate(activePokemon) { _, _, _ -> DefaultActionResponse() })
+                return
+            }
             LOGGER.error("AI was unable to choose an action, we're going to need to pass!")
             exception.printStackTrace()
-            request?.let {
-                setActionResponses(it.iterate(this.activePokemon) { _, _ , _->
-                    PassActionResponse
-                })
-            } ?: {
-                val response = mutableListOf<ShowdownActionResponse>()
-                repeat(activePokemon.size) {
-                    response.add(PassActionResponse)
-                }
-                setActionResponses(response)
-            }
+            var forcedPasses = passActions.size
+            setActionResponses(req.iterate(this.activePokemon) { _, moveset, forceSwitch ->
+                if (!forceSwitch && moveset != null && forcedPasses > 0) {
+                    forcedPasses--
+                    ForcePassActionResponse()
+                } else PassActionResponse
+            })
+        } finally {
+            pokemonList.forEach { it.willBeSwitchedIn = false }
         }
     }
 }

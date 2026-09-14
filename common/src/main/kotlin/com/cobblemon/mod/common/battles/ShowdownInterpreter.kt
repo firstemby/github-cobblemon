@@ -107,6 +107,7 @@ object ShowdownInterpreter {
         updateInstructionParser["-waiting"]              = { _, _, message, _ -> WaitingInstruction(message) }
         updateInstructionParser["-weather"]              = { _, _, message, _ -> WeatherInstruction(message) }
         updateInstructionParser["win"]                   = { _, _, message, _ -> WinInstruction(message) }
+        updateInstructionParser["tie"]                   = { battle, _, message, _ -> if (battle.stadiumSession != null) StadiumTieInstruction else UnknownInstruction(message) }
         updateInstructionParser["-zbroken"]              = { _, _, message, _ -> ZBrokenInstruction(message) }
         updateInstructionParser["-zpower"]               = { _, _, message, _ -> ZPowerInstruction(message) }
 
@@ -134,6 +135,10 @@ object ShowdownInterpreter {
     }
 
     fun interpretMessage(battleId: UUID, message: String) {
+        if (message.startsWith("stadiumerror\n")) {
+            runOnServer { BattleRegistry.abortStadiumBattle(battleId) }
+            return
+        }
         // Check key map and use function if matching
         if (message.startsWith("{\"winner\":\"")) {
             // The post-win message is something we don't care about just yet. It's basically a summary of what happened in the battle.
@@ -149,6 +154,7 @@ object ShowdownInterpreter {
         }
 
         runOnServer {
+            if (battle.ended || BattleRegistry.getBattle(battleId) !== battle) return@runOnServer
             battle.showdownMessages.add(message)
             interpret(battle, message)
         }

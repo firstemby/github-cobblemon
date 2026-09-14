@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.util.pauseSounds
 import com.cobblemon.mod.common.util.resumeSounds
 import net.minecraft.client.Minecraft
 import net.minecraft.sounds.SoundSource
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 
 /**
@@ -26,6 +27,9 @@ object BattleMusicController {
     /** The last [BattleMusicInstance] played. */
     var music = BattleMusicInstance(SoundEvents.EMPTY, 0.0F, 0.0F)
         private set
+
+    private data class Sequence(val intro: BattleMusicInstance, val loop: BattleMusicInstance)
+    private var pendingSequence: Sequence? = null
 
     /**
      * The [SoundSource]s that are filtered while the [SoundManager] is playing a [BattleMusicInstance].
@@ -46,14 +50,47 @@ object BattleMusicController {
         }
     }
 
+    fun initializeIntroWithLoop(
+        introSound: SoundEvent,
+        introVolume: Float,
+        introPitch: Float,
+        loopSound: SoundEvent,
+        loopVolume: Float,
+        loopPitch: Float
+    ) {
+        val intro = BattleMusicInstance(introSound, introVolume, introPitch, shouldLoop = false)
+        val loop = BattleMusicInstance(loopSound, loopVolume, loopPitch, shouldLoop = true)
+        pendingSequence = null
+        manager.stop(music)
+        initializeMusic(intro)
+        pendingSequence = Sequence(intro, loop)
+    }
+
+    fun tick() {
+        val sequence = pendingSequence ?: return
+        if (music !== sequence.intro || music.isFading()) {
+            pendingSequence = null
+            return
+        }
+        if (!manager.isActive(music)) {
+            pendingSequence = null
+            music = sequence.loop
+            manager.play(music)
+        }
+    }
+
     /** Switch to a new [BattleMusicInstance] if one is already playing. */
     fun switchMusic(newMusic: BattleMusicInstance) {
+        pendingSequence = null
         manager.stop(music)
         music = newMusic
         manager.play(music)
     }
 
     /** Fade out and end the current [BattleMusicInstance]. */
-    fun endMusic() = music.setFade()
+    fun endMusic() {
+        pendingSequence = null
+        music.setFade()
+    }
 
 }

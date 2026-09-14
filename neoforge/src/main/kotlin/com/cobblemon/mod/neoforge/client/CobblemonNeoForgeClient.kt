@@ -11,8 +11,10 @@ package com.cobblemon.mod.neoforge.client
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.camera.ClientCameraController
 import com.cobblemon.mod.common.client.CobblemonClient.pokedexUsageContext
 import com.cobblemon.mod.common.client.CobblemonClient.reloadCodedAssets
 import com.cobblemon.mod.common.client.gui.config.CobblemonConfigScreen
@@ -192,15 +194,35 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
 
     var lastUpdateTime: Long? = null
 
+    private val LAYER_TO_HUD_ELEMENT = mapOf(
+        VanillaGuiLayers.CROSSHAIR to HudElement.CROSSHAIR,
+        VanillaGuiLayers.HOTBAR to HudElement.HOTBAR,
+        VanillaGuiLayers.EXPERIENCE_BAR to HudElement.EXPERIENCE_BAR,
+        VanillaGuiLayers.EXPERIENCE_LEVEL to HudElement.EXPERIENCE_BAR,
+        VanillaGuiLayers.PLAYER_HEALTH to HudElement.PLAYER_HEALTH,
+        VanillaGuiLayers.ARMOR_LEVEL to HudElement.ARMOR,
+        VanillaGuiLayers.FOOD_LEVEL to HudElement.FOOD,
+        VanillaGuiLayers.EFFECTS to HudElement.EFFECTS,
+        VanillaGuiLayers.BOSS_OVERLAY to HudElement.BOSS_BAR,
+        VanillaGuiLayers.SCOREBOARD_SIDEBAR to HudElement.SCOREBOARD,
+        VanillaGuiLayers.CHAT to HudElement.CHAT,
+        VanillaGuiLayers.TAB_LIST to HudElement.PLAYER_LIST,
+        VanillaGuiLayers.SELECTED_ITEM_NAME to HudElement.SELECTED_ITEM_NAME,
+    )
+
     private fun onRenderGuiOverlayEvent(event: RenderGuiLayerEvent.Pre) {
         if (event.name == VanillaGuiLayers.CHAT) {
             val lastUpdateTime = lastUpdateTime
             if (lastUpdateTime != null) {
                 // "Why don't you just use the event.partialDeltaTicks"
                 // Well JAMES it's because for some reason the value is like 2.8x too big. Forge bug? Weird event structure? Don't know don't care
-                CobblemonClient.beforeChatRender(event.guiGraphics, (System.currentTimeMillis() - lastUpdateTime) / 1000F * 20F)
+                CobblemonClient.beforeChatRender(event.guiGraphics, event.partialTick)
             }
             this.lastUpdateTime = System.currentTimeMillis()
+        }
+        val hudElement = LAYER_TO_HUD_ELEMENT[event.name]
+        if (hudElement != null && ClientCameraController.shouldHideElement(hudElement)) {
+            event.isCanceled = true
         }
     }
 

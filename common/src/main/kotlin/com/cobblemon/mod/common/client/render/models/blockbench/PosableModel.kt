@@ -19,6 +19,7 @@ import com.cobblemon.mod.common.client.ClientMoLangFunctions.animationFunctions
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
+import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ScrollingTextureSettings
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
@@ -796,7 +797,93 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         // Entities' locators are positioned upside-down so this fixes that
         if(entity != null) matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
 
+        updateTrackedBones(matrixStack, entity, state)
         locatorAccess.update(matrixStack, entity, scale, state.locatorStates, isRoot = true)
+    }
+
+    private fun updateTrackedBones(
+        baseMatrix: PoseStack,
+        entity: Entity?,
+        state: PosableState
+    ) {
+        val entityId = entity?.id ?: return
+        val bonesToTrack = BoneTracker.getTrackedBones(entityId)
+        if (state.trackedBoneModel !== this) state.trackedBoneStates.clear()
+        state.trackedBoneModel = this
+        state.trackedBoneStates.keys.removeAll { it !in bonesToTrack }
+
+        val entityPosition = entity.position()
+        for (boneName in bonesToTrack) {
+            updateSingleBonePosition(baseMatrix, boneName, entityPosition, state)
+        }
+    }
+
+    private fun updateSingleBonePosition(
+        baseMatrix: PoseStack,
+        boneName: String,
+        entityPosition: Vec3,
+        state: PosableState
+    ) {
+        val bone = findBoneByName(rootPart, boneName) ?: run {
+            state.trackedBoneStates.remove(boneName)
+            return
+        }
+        val hierarchy = buildBoneHierarchy(bone)
+        if (hierarchy.isEmpty()) return
+
+        val matrixStack = PoseStack()
+        matrixStack.last().pose().set(baseMatrix.last().pose())
+        matrixStack.last().normal().set(baseMatrix.last().normal())
+
+        for (bone in hierarchy) {
+            bone.transform(matrixStack)
+        }
+
+        // Undo the Z-flip like locators do
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180f))
+
+        state.trackedBoneStates.getOrPut(boneName) { MatrixWrapper() }
+            .updateMatrix(matrixStack.last().pose())
+            .updatePosition(entityPosition)
+    }
+
+    private fun findBoneByName(root: Bone, name: String): Bone? {
+        val directChild = root.children[name]
+        if (directChild != null) {
+            return directChild
+        }
+
+        for ((_, child) in root.children) {
+            val found = findBoneByName(child, name)
+            if (found != null) return found
+        }
+
+        return null
+    }
+
+    private fun buildBoneHierarchy(targetBone: Bone): List<Bone> {
+        val hierarchy = mutableListOf<Bone>()
+        var current: Bone? = targetBone
+
+        while (current != null) {
+            hierarchy.add(0, current)
+            current = findParentBone(current)
+        }
+
+        return hierarchy
+    }
+
+    private fun findParentBone(bone: Bone): Bone? {
+        fun searchBone(searchIn: Bone): Bone? {
+            for ((_, child) in searchIn.children) {
+                if (child == bone) return searchIn
+                val found = searchBone(child)
+                if (found != null) return found
+            }
+            return null
+        }
+
+        return searchBone(rootPart)
     }
 
     fun ModelPart.translation(

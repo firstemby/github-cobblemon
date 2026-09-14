@@ -1,0 +1,380 @@
+{
+  "version": 2,
+  "sceneId": "cobblemon:colosseum_battle",
+  "startBeatId": "intro",
+
+  "parameters": {
+    "arena_center": {
+      "type": "vec3",
+      "description": "Center point of the arena for camera positioning",
+      "default": { "x": -103.5, "y": 64, "z": 410.5 }
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Side-1 display name, shown in the intro overlay",
+      "default": ""
+    },
+    "opponent_name": {
+      "type": "string",
+      "description": "Side-2 display name, shown in the intro overlay",
+      "default": ""
+    },
+    "player_party_count": {
+      "type": "number",
+      "description": "Side-1 party count, shown as ball-icon pips in the intro overlay",
+      "default": 6
+    },
+    "opponent_party_count": {
+      "type": "number",
+      "description": "Side-2 party count, shown as ball-icon pips in the intro overlay",
+      "default": 6
+    }
+  },
+
+  "shots": {
+    "intro_shot": {
+      "id": "intro_shot",
+      "position": {
+        "type": "fixed",
+        "position": { "x": -103.5, "y": 65, "z": 403.5 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": { "type": "position", "x": -103.5, "y": 65, "z": 394.5 }
+      },
+      "fov": { "type": "fixed", "value": 70 }
+    },
+    "intro_shot_side_b": {
+      "id": "intro_shot_side_b",
+      "position": {
+        "type": "fixed",
+        "position": { "x": -103.5, "y": 65, "z": 417.5 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": { "type": "position", "x": -103.5, "y": 65, "z": 426.5 }
+      },
+      "fov": { "type": "fixed", "value": 70 }
+    },
+    "orbit_shot": {
+      "id": "orbit_shot",
+      "position": {
+        "type": "keyframe",
+        "keyframes": [
+          { "time": 0.0,  "position": { "x": -104, "y": 70, "z": 396 } },
+          { "time": 2.0,  "position": { "x": -97,  "y": 70, "z": 400 } },
+          { "time": 4.0,  "position": { "x": -95,  "y": 70, "z": 410 } },
+          { "time": 6.0,  "position": { "x": -97,  "y": 70, "z": 420 } },
+          { "time": 8.0,  "position": { "x": -104, "y": 70, "z": 424 } },
+          { "time": 10.0, "position": { "x": -111, "y": 70, "z": 420 } },
+          { "time": 12.0, "position": { "x": -113, "y": 70, "z": 410 } },
+          { "time": 14.0, "position": { "x": -111, "y": 70, "z": 400 } },
+          { "time": 16.0, "position": { "x": -104, "y": 70, "z": 396 } }
+        ]
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": { "type": "position", "x": -103.5, "y": 64, "z": 410.5 }
+      },
+      "fov": { "type": "fixed", "value": 70 }
+    },
+    "user_focus_shot": {
+      "id": "user_focus_shot",
+      "position": {
+        "type": "follow_actor",
+        "actorId": "user",
+        "offset": { "x": 0.0, "y": 3.0, "z": -4.0 },
+        "fallback": { "x": -103.5, "y": 67, "z": 406.5 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": { "type": "actor", "actorId": "user" }
+      },
+      "fov": { "type": "fixed", "value": 60 }
+    },
+    "target_focus_shot": {
+      "id": "target_focus_shot",
+      "position": {
+        "type": "follow_actor",
+        "actorId": "target",
+        "offset": { "x": 0.0, "y": 3.0, "z": 4.0 },
+        "fallback": { "x": -103.5, "y": 67, "z": 414.5 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": { "type": "actor", "actorId": "target" }
+      },
+      "fov": { "type": "fixed", "value": 60 }
+    },
+    "send_out_shot_p1": {
+      "id": "send_out_shot_p1",
+      "position": {
+        "type": "expression_vec3",
+        "x": "v.send_out_position_p1_x - (v.send_out_position_p1_x - v.arena_center_x) * math.lerp(1.3, 1.1, math.clamp(v.time_on_current_path / 1.2, 0, 1))",
+        "y": "v.send_out_position_p1_y + math.lerp(2, 2.5, math.clamp(v.time_on_current_path / 0.6, 0, 1))",
+        "z": "v.send_out_position_p1_z - (v.send_out_position_p1_z - v.arena_center_z) * math.lerp(1.3, 1.1, math.clamp(v.time_on_current_path / 1.2, 0, 1))",
+        "fallback": { "x": -103.5, "y": 66.5, "z": 407 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": {
+          "type": "expression",
+          "x": "v.send_out_position_p1_x + (v.send_out_position_p1_x - v.arena_center_x) * 0.2 * (1 - math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "y": "v.send_out_position_p1_y + math.lerp(1.5, 1, math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "z": "v.send_out_position_p1_z + (v.send_out_position_p1_z - v.arena_center_z) * 0.2 * (1 - math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "fallback": { "x": -103.5, "y": 64, "z": 410.5 }
+        }
+      },
+      "fov": { "type": "fixed", "value": 65 }
+    },
+    "send_out_shot_p2": {
+      "id": "send_out_shot_p2",
+      "position": {
+        "type": "expression_vec3",
+        "x": "v.send_out_position_p2_x - (v.send_out_position_p2_x - v.arena_center_x) * math.lerp(1.3, 1.1, math.clamp(v.time_on_current_path / 1.2, 0, 1))",
+        "y": "v.send_out_position_p2_y + math.lerp(2, 2.5, math.clamp(v.time_on_current_path / 0.6, 0, 1))",
+        "z": "v.send_out_position_p2_z - (v.send_out_position_p2_z - v.arena_center_z) * math.lerp(1.3, 1.1, math.clamp(v.time_on_current_path / 1.2, 0, 1))",
+        "fallback": { "x": -103.5, "y": 66.5, "z": 414 }
+      },
+      "rotation": {
+        "type": "look_at",
+        "target": {
+          "type": "expression",
+          "x": "v.send_out_position_p2_x + (v.send_out_position_p2_x - v.arena_center_x) * 0.2 * (1 - math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "y": "v.send_out_position_p2_y + math.lerp(1.5, 1, math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "z": "v.send_out_position_p2_z + (v.send_out_position_p2_z - v.arena_center_z) * 0.2 * (1 - math.clamp(v.time_on_current_path / 1.0, 0, 1))",
+          "fallback": { "x": -103.5, "y": 64, "z": 410.5 }
+        }
+      },
+      "fov": { "type": "fixed", "value": 65 }
+    }
+  },
+
+  "actors": {
+    "user":   { "id": "user",   "kind": "real_entity" },
+    "target": { "id": "target", "kind": "real_entity" }
+  },
+
+  "feeds": [
+    { "id": "primary",       "kind": { "type": "fullscreen" } },
+    { "id": "intro_side_a",  "kind": { "type": "diagonal", "half": "upper" } },
+    { "id": "intro_side_b",  "kind": { "type": "diagonal", "half": "lower" } }
+  ],
+
+  "beats": {
+    "intro": {
+      "id": "intro",
+      "duration": 4.0,
+      "cues": [{ "id": "battle_launch", "time": 4.0 }],
+      "isLooping": false,
+      "cuts": {
+        "intro_side_a": {
+          "entries": [
+            { "time": 0.0, "shotId": "intro_shot", "transition": { "type": "instant" } }
+          ]
+        },
+        "intro_side_b": {
+          "entries": [
+            { "time": 0.0, "shotId": "intro_shot_side_b", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "guiTrack": {
+        "actions": [
+          {
+            "time": 0.1,
+            "action": "OPEN",
+            "guiId": "cobblemon:battle_intro",
+            "args": {
+              "player_name":          { "type": "expression", "value": "v.player_name" },
+              "opponent_name":        { "type": "expression", "value": "v.opponent_name" },
+              "player_party_count":   { "type": "expression", "value": "v.player_party_count" },
+              "opponent_party_count": { "type": "expression", "value": "v.opponent_party_count" }
+            }
+          },
+          { "time": 3.9, "action": "CLOSE", "guiId": "cobblemon:battle_intro" }
+        ]
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    },
+    "idle_orbit": {
+      "id": "idle_orbit",
+      "duration": 16.0,
+      "isLooping": true,
+      "cuts": {
+        "primary": {
+          "entries": [
+            { "time": 0.0, "shotId": "orbit_shot", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    },
+    "user_focus": {
+      "id": "user_focus",
+      "isLooping": true,
+      "speed": 1.2,
+      "cuts": {
+        "primary": {
+          "entries": [
+            { "time": 0.0, "shotId": "user_focus_shot", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    },
+    "target_focus": {
+      "id": "target_focus",
+      "isLooping": true,
+      "speed": 1.2,
+      "cuts": {
+        "primary": {
+          "entries": [
+            { "time": 0.0, "shotId": "target_focus_shot", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    },
+    "send_out_focus_p1": {
+      "id": "send_out_focus_p1",
+      "isLooping": false,
+      "cuts": {
+        "primary": {
+          "entries": [
+            { "time": 0.0, "shotId": "send_out_shot_p1", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    },
+    "send_out_focus_p2": {
+      "id": "send_out_focus_p2",
+      "isLooping": false,
+      "cuts": {
+        "primary": {
+          "entries": [
+            { "time": 0.0, "shotId": "send_out_shot_p2", "transition": { "type": "instant" } }
+          ]
+        }
+      },
+      "renderPlayerBody": false,
+      "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
+    }
+  },
+
+  "transitions": [
+    {
+      "sourceBeatId": "intro",
+      "targetBeatId": "idle_orbit",
+      "condition": "v.battle_launched == 1",
+      "transition": { "type": "instant" }
+    },
+
+    {
+      "sourceBeatId": "idle_orbit",
+      "targetBeatId": "send_out_focus_p1",
+      "condition": "v.send_out_pending_p1 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "idle_orbit",
+      "targetBeatId": "send_out_focus_p2",
+      "condition": "v.send_out_pending_p2 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "idle_orbit",
+      "targetBeatId": "user_focus",
+      "condition": "v.camera_focus_count > 0 && v.camera_focus_role == 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "idle_orbit",
+      "targetBeatId": "target_focus",
+      "condition": "v.camera_focus_count > 0 && v.camera_focus_role == 1",
+      "transition": { "type": "instant" }
+    },
+
+    {
+      "sourceBeatId": "send_out_focus_p1",
+      "targetBeatId": "send_out_focus_p2",
+      "condition": "v.send_out_pending_p1 == 0 && v.send_out_pending_p2 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "send_out_focus_p1",
+      "targetBeatId": "idle_orbit",
+      "condition": "v.send_out_pending_p1 == 0 && v.send_out_pending_p2 == 0",
+      "transition": { "type": "instant" }
+    },
+
+    {
+      "sourceBeatId": "send_out_focus_p2",
+      "targetBeatId": "send_out_focus_p1",
+      "condition": "v.send_out_pending_p1 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "send_out_focus_p2",
+      "targetBeatId": "idle_orbit",
+      "condition": "v.send_out_pending_p1 == 0 && v.send_out_pending_p2 == 0",
+      "transition": { "type": "instant" }
+    },
+
+    {
+      "sourceBeatId": "user_focus",
+      "targetBeatId": "send_out_focus_p1",
+      "condition": "v.send_out_pending_p1 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "user_focus",
+      "targetBeatId": "send_out_focus_p2",
+      "condition": "v.send_out_pending_p2 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "target_focus",
+      "targetBeatId": "send_out_focus_p1",
+      "condition": "v.send_out_pending_p1 > 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "target_focus",
+      "targetBeatId": "send_out_focus_p2",
+      "condition": "v.send_out_pending_p2 > 0",
+      "transition": { "type": "instant" }
+    },
+
+    {
+      "sourceBeatId": "user_focus",
+      "targetBeatId": "idle_orbit",
+      "condition": "v.camera_focus_count == 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "target_focus",
+      "targetBeatId": "idle_orbit",
+      "condition": "v.camera_focus_count == 0",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "user_focus",
+      "targetBeatId": "target_focus",
+      "condition": "v.camera_focus_count > 0 && v.camera_focus_role == 1",
+      "transition": { "type": "instant" }
+    },
+    {
+      "sourceBeatId": "target_focus",
+      "targetBeatId": "user_focus",
+      "condition": "v.camera_focus_count > 0 && v.camera_focus_role == 0",
+      "transition": { "type": "instant" }
+    }
+  ]
+}
