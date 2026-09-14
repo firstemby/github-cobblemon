@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the Oven appliance stuff
-class CopperOvenBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperOvenBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperOvenBlock> = RecordCodecBuilder.mapCodec {

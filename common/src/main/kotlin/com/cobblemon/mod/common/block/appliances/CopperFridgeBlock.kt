@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the 2 block tall stuff
 //TODO: All the Fridge appliance stuff
-class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFridgeBlock> = RecordCodecBuilder.mapCodec {

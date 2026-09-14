@@ -21,7 +21,7 @@ import java.util.function.Function
 
 //I just cloned WeatheringCopperFullBlock.class into here the best I could, this likely needs a *lot* of clean up, plus a bit of code from WeatheringCopperDoorBlock.class to get it to sync, hopefully
 class WeatheringCopperFridgeBlock(weatherState: WeatheringCopper.WeatherState, settings: Properties) : CopperFridgeBlock(settings), WeatheringCopper {
-    val CODEC: MapCodec<WeatheringCopperFridgeBlock?> =
+    /*val CODEC: MapCodec<WeatheringCopperFridgeBlock?> =
         RecordCodecBuilder.mapCodec<WeatheringCopperFridgeBlock?>(Function { instance: RecordCodecBuilder.Instance<WeatheringCopperFridgeBlock?>? ->
             instance!!.group(
                 WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state")
@@ -35,22 +35,18 @@ class WeatheringCopperFridgeBlock(weatherState: WeatheringCopper.WeatherState, s
                         properties
                     )
                 })
-        })
+        })*/
     private var weatherState: WeatheringCopper.WeatherState? = null
 
-    override fun codec(): MapCodec<WeatheringCopperFridgeBlock?> {
+    /*override fun codec(): MapCodec<WeatheringCopperFridgeBlock?> {
         return CODEC
-    }
+    }*/
 
-    fun WeatheringCopperFridgeBlock(weatherState: WeatheringCopper.WeatherState, properties: Properties) {
-        super(properties)
-        this.weatherState = weatherState
-    }
-
+    //the commented out stuff here becomes relevant once the fridge is using the 2 block tall code
     override fun randomTick(state: BlockState, level: ServerLevel?, pos: BlockPos?, random: RandomSource?) {
-        if (state.getValue<DoubleBlockHalf?>(HALF) == DoubleBlockHalf.LOWER) {
+        //if (state.getValue<DoubleBlockHalf?>(HALF) == DoubleBlockHalf.LOWER) {
             this.changeOverTime(state, level, pos, random)
-        }
+        //}
     }
 
     override fun isRandomlyTicking(state: BlockState): Boolean {

@@ -20,8 +20,8 @@ import java.util.function.BiFunction
 import java.util.function.Function
 
 //I just cloned WeatheringCopperFullBlock.class into here the best I could, this likely needs a *lot* of clean up
-class WeatheringCopperOvenBlock(weatherState: WeatherState, settings: Properties) : CopperOvenBlock(settings), WeatheringCopper {
-    val CODEC: MapCodec<WeatheringCopperOvenBlock?> =
+class WeatheringCopperOvenBlock(weatherState: WeatheringCopper.WeatherState, settings: Properties) : CopperOvenBlock(settings), WeatheringCopper {
+    /*val CODEC: MapCodec<WeatheringCopperOvenBlock?> =
         RecordCodecBuilder.mapCodec<WeatheringCopperOvenBlock?>(Function { instance: RecordCodecBuilder.Instance<WeatheringCopperOvenBlock?>? ->
             instance!!.group(
                 WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state")
@@ -35,17 +35,12 @@ class WeatheringCopperOvenBlock(weatherState: WeatherState, settings: Properties
                         properties
                     )
                 })
-        })
+        })*/
     private var weatherState: WeatheringCopper.WeatherState? = null
 
-    override fun codec(): MapCodec<WeatheringCopperOvenBlock?> {
+    /*override fun codec(): MapCodec<WeatheringCopperOvenBlock?> {
         return CODEC
-    }
-
-    fun WeatheringCopperOvenBlock(weatherState: WeatheringCopper.WeatherState, properties: Properties) {
-        super(properties)
-        this.weatherState = weatherState
-    }
+    }*/
 
     override fun randomTick(state: BlockState?, level: ServerLevel?, pos: BlockPos?, random: RandomSource?) {
         this.changeOverTime(state, level, pos, random)

@@ -21,7 +21,7 @@ import java.util.function.Function
 
 //I just cloned WeatheringCopperFullBlock.class into here the best I could, this likely needs a *lot* of clean up
 class WeatheringCopperMowerBlock(weatherState: WeatheringCopper.WeatherState, settings: Properties) : CopperMowerBlock(settings), WeatheringCopper {
-    val CODEC: MapCodec<WeatheringCopperMowerBlock?> =
+    /*val CODEC: MapCodec<WeatheringCopperMowerBlock?> =
         RecordCodecBuilder.mapCodec<WeatheringCopperMowerBlock?>(Function { instance: RecordCodecBuilder.Instance<WeatheringCopperMowerBlock?>? ->
             instance!!.group(
                 WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state")
@@ -35,17 +35,12 @@ class WeatheringCopperMowerBlock(weatherState: WeatheringCopper.WeatherState, se
                         properties
                     )
                 })
-        })
+        })*/
     private var weatherState: WeatheringCopper.WeatherState? = null
 
-    override fun codec(): MapCodec<WeatheringCopperMowerBlock?> {
+    /*override fun codec(): MapCodec<WeatheringCopperMowerBlock?> {
         return CODEC
-    }
-
-    fun WeatheringCopperMowerBlock(weatherState: WeatheringCopper.WeatherState, properties: Properties) {
-        super(properties)
-        this.weatherState = weatherState
-    }
+    }*/
 
     override fun randomTick(state: BlockState?, level: ServerLevel?, pos: BlockPos?, random: RandomSource?) {
         this.changeOverTime(state, level, pos, random)

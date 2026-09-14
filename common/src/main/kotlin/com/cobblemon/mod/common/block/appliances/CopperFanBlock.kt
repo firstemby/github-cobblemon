@@ -28,7 +28,7 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the Mower appliance stuff
-class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFanBlock> = RecordCodecBuilder.mapCodec {
