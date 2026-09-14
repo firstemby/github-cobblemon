@@ -45,7 +45,7 @@ object TestPartySlotCommand {
         val player = context.player(PLAYER)
         val slot = IntegerArgumentType.getInteger(context, SLOT)
         val properties = PokemonPropertiesArgumentType.getPokemonProperties(context, PROPERTIES)
-        return if (player.party().get(slot - 1)?.createPokemonProperties(PokemonPropertyExtractor.ALL)
-                ?.let { properties.isSubSetOf(it) } == true) Command.SINGLE_SUCCESS else NO_SUCCESS
+        val target = player.party().get(slot - 1) ?: return NO_SUCCESS
+        return if (properties.matches(target)) Command.SINGLE_SUCCESS else NO_SUCCESS
     }
 }
