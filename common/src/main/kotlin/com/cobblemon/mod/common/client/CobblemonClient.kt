@@ -414,7 +414,16 @@ object CobblemonClient {
             CobblemonBlocks.NEVER_MELT_ICE,
             CobblemonBlocks.WIDE_LENS,
             CobblemonBlocks.ZOOM_LENS,
-            CobblemonBlocks.SCOPE_LENS
+            CobblemonBlocks.SCOPE_LENS,
+
+            CobblemonBlocks.COPPER_FAN,
+            CobblemonBlocks.EXPOSED_COPPER_FAN,
+            CobblemonBlocks.WEATHERED_COPPER_FAN,
+            CobblemonBlocks.OXIDIZED_COPPER_FAN,
+            CobblemonBlocks.WAXED_COPPER_FAN,
+            CobblemonBlocks.WAXED_EXPOSED_COPPER_FAN,
+            CobblemonBlocks.WAXED_WEATHERED_COPPER_FAN,
+            CobblemonBlocks.WAXED_OXIDIZED_COPPER_FAN
         )
 
         this.createBoatModelLayers()

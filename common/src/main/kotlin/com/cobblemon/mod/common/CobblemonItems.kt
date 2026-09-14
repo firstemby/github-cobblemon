@@ -1517,6 +1517,87 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val BLANK_TM = this.create("blank_tm", CobblemonItem(Item.Properties()))
 
+    @JvmField
+    val COPPER_OVEN = this.create("copper_oven", BlockItem(CobblemonBlocks.COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val EXPOSED_COPPER_OVEN = this.create("exposed_copper_oven", BlockItem(CobblemonBlocks.EXPOSED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val WEATHERED_COPPER_OVEN = this.create("weathered_copper_oven", BlockItem(CobblemonBlocks.WEATHERED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val OXIDIZED_COPPER_OVEN = this.create("oxidized_copper_oven", BlockItem(CobblemonBlocks.OXIDIZED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val WAXED_COPPER_OVEN = this.create("waxed_copper_oven", BlockItem(CobblemonBlocks.WAXED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val WAXED_EXPOSED_COPPER_OVEN = this.create("waxed_exposed_copper_oven", BlockItem(CobblemonBlocks.WAXED_EXPOSED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val WAXED_WEATHERED_COPPER_OVEN = this.create("waxed_weathered_copper_oven", BlockItem(CobblemonBlocks.WAXED_WEATHERED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val WAXED_OXIDIZED_COPPER_OVEN = this.create("waxed_oxidized_copper_oven", BlockItem(CobblemonBlocks.WAXED_OXIDIZED_COPPER_OVEN, Item.Properties()))
+    @JvmField
+    val COPPER_WASHER = this.create("copper_washer", BlockItem(CobblemonBlocks.COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val EXPOSED_COPPER_WASHER = this.create("exposed_copper_washer", BlockItem(CobblemonBlocks.EXPOSED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val WEATHERED_COPPER_WASHER = this.create("weathered_copper_washer", BlockItem(CobblemonBlocks.WEATHERED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val OXIDIZED_COPPER_WASHER = this.create("oxidized_copper_washer", BlockItem(CobblemonBlocks.OXIDIZED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val WAXED_COPPER_WASHER = this.create("waxed_copper_washer", BlockItem(CobblemonBlocks.WAXED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val WAXED_EXPOSED_COPPER_WASHER = this.create("waxed_exposed_copper_washer", BlockItem(CobblemonBlocks.WAXED_EXPOSED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val WAXED_WEATHERED_COPPER_WASHER = this.create("waxed_weathered_copper_washer", BlockItem(CobblemonBlocks.WAXED_WEATHERED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val WAXED_OXIDIZED_COPPER_WASHER = this.create("waxed_oxidized_copper_washer", BlockItem(CobblemonBlocks.WAXED_OXIDIZED_COPPER_WASHER, Item.Properties()))
+    @JvmField
+    val COPPER_FAN = this.create("copper_fan", BlockItem(CobblemonBlocks.COPPER_FAN, Item.Properties()))
+    @JvmField
+    val EXPOSED_COPPER_FAN = this.create("exposed_copper_fan", BlockItem(CobblemonBlocks.EXPOSED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val WEATHERED_COPPER_FAN = this.create("weathered_copper_fan", BlockItem(CobblemonBlocks.WEATHERED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val OXIDIZED_COPPER_FAN = this.create("oxidized_copper_fan", BlockItem(CobblemonBlocks.OXIDIZED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val WAXED_COPPER_FAN = this.create("waxed_copper_fan", BlockItem(CobblemonBlocks.WAXED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val WAXED_EXPOSED_COPPER_FAN = this.create("waxed_exposed_copper_fan", BlockItem(CobblemonBlocks.WAXED_EXPOSED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val WAXED_WEATHERED_COPPER_FAN = this.create("waxed_weathered_copper_fan", BlockItem(CobblemonBlocks.WAXED_WEATHERED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val WAXED_OXIDIZED_COPPER_FAN = this.create("waxed_oxidized_copper_fan", BlockItem(CobblemonBlocks.WAXED_OXIDIZED_COPPER_FAN, Item.Properties()))
+    @JvmField
+    val COPPER_MOWER = this.create("copper_mower", BlockItem(CobblemonBlocks.COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val EXPOSED_COPPER_MOWER = this.create("exposed_copper_mower", BlockItem(CobblemonBlocks.EXPOSED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val WEATHERED_COPPER_MOWER = this.create("weathered_copper_mower", BlockItem(CobblemonBlocks.WEATHERED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val OXIDIZED_COPPER_MOWER = this.create("oxidized_copper_mower", BlockItem(CobblemonBlocks.OXIDIZED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val WAXED_COPPER_MOWER = this.create("waxed_copper_mower", BlockItem(CobblemonBlocks.WAXED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val WAXED_EXPOSED_COPPER_MOWER = this.create("waxed_exposed_copper_mower", BlockItem(CobblemonBlocks.WAXED_EXPOSED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val WAXED_WEATHERED_COPPER_MOWER = this.create("waxed_weathered_copper_mower", BlockItem(CobblemonBlocks.WAXED_WEATHERED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val WAXED_OXIDIZED_COPPER_MOWER = this.create("waxed_oxidized_copper_mower", BlockItem(CobblemonBlocks.WAXED_OXIDIZED_COPPER_MOWER, Item.Properties()))
+    @JvmField
+    val COPPER_FRIDGE = this.create("copper_fridge", BlockItem(CobblemonBlocks.COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val EXPOSED_COPPER_FRIDGE = this.create("exposed_copper_fridge", BlockItem(CobblemonBlocks.EXPOSED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val WEATHERED_COPPER_FRIDGE = this.create("weathered_copper_fridge", BlockItem(CobblemonBlocks.WEATHERED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val OXIDIZED_COPPER_FRIDGE = this.create("oxidized_copper_fridge", BlockItem(CobblemonBlocks.OXIDIZED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val WAXED_COPPER_FRIDGE = this.create("waxed_copper_fridge", BlockItem(CobblemonBlocks.WAXED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val WAXED_EXPOSED_COPPER_FRIDGE = this.create("waxed_exposed_copper_fridge", BlockItem(CobblemonBlocks.WAXED_EXPOSED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val WAXED_WEATHERED_COPPER_FRIDGE = this.create("waxed_weathered_copper_fridge", BlockItem(CobblemonBlocks.WAXED_WEATHERED_COPPER_FRIDGE, Item.Properties()))
+    @JvmField
+    val WAXED_OXIDIZED_COPPER_FRIDGE = this.create("waxed_oxidized_copper_fridge", BlockItem(CobblemonBlocks.WAXED_OXIDIZED_COPPER_FRIDGE, Item.Properties()))
+
     // Type Gems
     @JvmField
     val NORMAL_GEM = this.create("normal_gem", GemItem(Item.Properties(), CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL))
