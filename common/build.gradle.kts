@@ -28,6 +28,7 @@ architectury {
 }
 
 repositories {
+    maven(url = "${rootProject.projectDir}/deps")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.neoforged.net/releases")
     maven(url = "https://maven.gegy.dev")
