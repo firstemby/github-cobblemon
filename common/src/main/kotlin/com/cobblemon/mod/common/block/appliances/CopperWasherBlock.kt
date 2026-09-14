@@ -34,8 +34,8 @@ class CopperWasherBlock(settings: Properties) : HorizontalDirectionalBlock(setti
             it.group(propertiesCodec()).apply(it, ::CopperWasherBlock) }
         val POWERED = BooleanProperty.create("powered")
 
-        fun getShape(): VoxelShape {
-        }
+        /*fun getShape(): VoxelShape {
+        }*/
     }
 
     init {
@@ -62,10 +62,10 @@ class CopperWasherBlock(settings: Properties) : HorizontalDirectionalBlock(setti
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape(type))
-    }
+        return rotateShape(Direction.NORTH, direction, getShape())
+    }*/
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return getCollisionShape(state, level, pos, context).singleEncompassing()
