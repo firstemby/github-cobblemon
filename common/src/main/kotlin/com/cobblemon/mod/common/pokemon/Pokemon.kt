@@ -1648,7 +1648,7 @@ open class Pokemon : ShowdownIdentifiable {
             return false
         }
         if (sanitizedAmount > this.friendship) {
-            MegaImprinting.increaseBond(this, sanitizedAmount - this.friendship)
+            MegaBondImprinting.increaseBond(this, sanitizedAmount - this.friendship)
         }
         this.friendship = sanitizedAmount
         return true

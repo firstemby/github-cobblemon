@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.tms.TechnicalMachineRegistrySyncPacket
 import com.cobblemon.mod.common.util.adapters.TMObtainMethodAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
-import com.cobblemon.mod.common.util.adapters.TMObtainMethodAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken

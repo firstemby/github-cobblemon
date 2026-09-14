@@ -51,7 +51,7 @@ object SetMegaBondCommand {
         }
         stack.set(CobblemonItemComponents.MEGA_BOND, MegaBondComponent(pokemon.uuid, bond))
         pokemon.onChange(HeldItemUpdatePacket({ pokemon }, stack))
-        val converted = MegaImprinting.convertToMegaStone(pokemon)
+        val converted = MegaBondImprinting.convertToMegaStone(pokemon)
         if (converted != null) {
             context.source.sendSystemMessage(commandLang("$NAME.converted", pokemon.getDisplayName(), converted.description).green())
         } else {
