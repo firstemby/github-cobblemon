@@ -936,13 +936,33 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ABILITY_SHIELD = heldItem("ability_shield")
     @JvmField
+    val ABOMASITE = heldItem("abomasite")
+    @JvmField
+    val ABSOLITE = heldItem("absolite")
+    @JvmField
     val ABSORB_BULB = heldItem("absorb_bulb")
     @JvmField
+    val AERODACTYLITE = heldItem("aerodactylite")
+    @JvmField
+    val AGGRONITE = heldItem("aggronite")
+    @JvmField
     val AIR_BALLOON = heldItem("air_balloon")
+    @JvmField
+    val ALAKAZITE = heldItem("alakazite")
+    @JvmField
+    val ALTARIANITE = heldItem("altarianite")
+    @JvmField
+    val AMPHAROSITE = heldItem("ampharosite")
     @JvmField
     val ASSAULT_VEST = heldItem("assault_vest")
     @JvmField
     val BIG_ROOT = compostableBlockItem("big_root", CobblemonBlocks.BIG_ROOT, 0.30f)
+    @JvmField
+    val AUDINITE = heldItem("audinite")
+    @JvmField
+    val BANETTITE = heldItem("banettite")
+    @JvmField
+    val BEEDRILLITE = heldItem("beedrillite")
     @JvmField
     val BINDING_BAND = heldItem("binding_band")
     @JvmField
@@ -951,6 +971,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val BLACK_SLUDGE = heldItem("black_sludge")
     @JvmField
     val BLUNDER_POLICY = itemNameBlockItem("blunder_policy", CobblemonBlocks.BLUNDER_POLICY)
+    @JvmField
+    val BLASTOISINITE = heldItem("blastoisinite")
+    @JvmField
+    val BLAZIKENITE = heldItem("blazikenite")
+    @JvmField
+    val CAMERUPTITE = heldItem("cameruptite")
     @JvmField
     val CELL_BATTERY = heldItem("cell_battery")
     @JvmField
@@ -969,6 +995,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val COVERT_CLOAK = heldItem("covert_cloak")
     @JvmField
     val DESTINY_KNOT = heldItem("destiny_knot")
+    @JvmField
+    val DIANCITE = heldItem("diancite")
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField
@@ -992,19 +1020,41 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val FOCUS_SASH = heldItem("focus_sash")
     @JvmField
+    val GALLADITE = heldItem("galladite")
+    @JvmField
+    val GARCHOMPITE = heldItem("garchompite")
+    @JvmField
+    val GARDEVOIRITE = heldItem("gardevoirite")
+    @JvmField
+    val GENGARITE = heldItem("gengarite")
+    @JvmField
+    val GLALITITE = heldItem("glalitite")
+    @JvmField
     val GRASSY_SEED = heldItem("grassy_seed")
     @JvmField
     val GRIP_CLAW = heldItem("grip_claw")
+    @JvmField
+    val GYARADOSITE = heldItem("gyaradosite")
     @JvmField
     val HARD_STONE = heldItem("hard_stone")
     @JvmField
     val HEAVY_DUTY_BOOTS = heldItem("heavy_duty_boots")
     @JvmField
+    val HERACRONITE = heldItem("heracronite")
+    @JvmField
+    val HOUNDOOMINITE = heldItem("houndoominite")
+    @JvmField
     val IRON_BALL = heldItem("iron_ball")
+    @JvmField
+    val KANGASKHANITE = heldItem("kangaskhanite")
     @JvmField
     val LAGGING_TAIL = heldItem("lagging_tail")
     @JvmField
     val LEFTOVERS = compostableHeldItem("leftovers", null, 0.50f)
+    @JvmField
+    val LATIASITE = heldItem("latiasite")
+    @JvmField
+    val LATIOSITE = heldItem("latiosite")
     @JvmField
     val LIFE_ORB = heldItem("life_orb")
     @JvmField
@@ -1014,19 +1064,39 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val LOADED_DICE = heldItem("loaded_dice")
     @JvmField
+    val LOPUNNITE = heldItem("lopunnite")
+    @JvmField
+    val LUCARIONITE = heldItem("lucarionite")
+    @JvmField
     val LUCKY_EGG = heldItem("lucky_egg")
     @JvmField
     val LUMINOUS_MOSS = heldItem("luminous_moss")
     @JvmField
     val MAGNET = heldItem("magnet")
     @JvmField
+    val MANECTITE = heldItem("manectite")
+    @JvmField
+    val MAWILITE = heldItem("mawilite")
+    @JvmField
+    val MEDICHAMITE = heldItem("medichamite")
+    @JvmField
+    val METAGROSSITE = heldItem("metagrossite")
+    @JvmField
     val METRONOME = heldItem("metronome")
+    @JvmField
+    val MEWTWONITE_X = heldItem("mewtwonite_x")
+    @JvmField
+    val MEWTWONITE_Y = heldItem("mewtwonite_y")
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
     @JvmField
     val NEVER_MELT_ICE = heldItem("never_melt_ice")
+    @JvmField
+    val PIDGEOTITE = heldItem("pidgeotite")
+    @JvmField
+    val PINSIRITE = heldItem("pinsirite")
     @JvmField
     val POISON_BARB = heldItem("poison_barb")
     @JvmField
@@ -1056,9 +1126,19 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val ROOM_SERVICE = heldItem("room_service")
     @JvmField
+    val SABLENITE = heldItem("sablenite")
+    @JvmField
+    val SALAMENCITE = heldItem("salamencite")
+    @JvmField
+    val SCEPTILITE = heldItem("sceptilite")
+    @JvmField
+    val SCIZORITE = heldItem("scizorite")
+    @JvmField
     val SCOPE_LENS = heldItem("scope_lens")
     @JvmField
     val SHARP_BEAK = heldItem("sharp_beak")
+    @JvmField
+    val SHARPEDONITE = heldItem("sharpedonite")
     @JvmField
     val SHED_SHELL = heldItem("shed_shell")
     @JvmField
@@ -1068,6 +1148,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SILVER_POWDER = heldItem("silver_powder")
     @JvmField
+    val SLOWBRONITE = heldItem("slowbronite")
+    @JvmField
     val SOFT_SAND = heldItem("soft_sand")
     @JvmField
     val SPELL_TAG = itemNameBlockItem("spell_tag", CobblemonBlocks.SPELL_TAG)
@@ -1076,7 +1158,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SOOTHE_BELL = heldItem("soothe_bell")
     @JvmField
+    val STEELIXITE = heldItem("steelixite")
+    @JvmField
     val STICKY_BARB = heldItem("sticky_barb")
+    @JvmField
+    val SWAMPERTITE = heldItem("swampertite")
     @JvmField
     val TERRAIN_EXTENDER = heldItem("terrain_extender")
     @JvmField
@@ -1086,9 +1172,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val TWISTED_SPOON = heldItem("twisted_spoon")
     @JvmField
+    val TYRANITARITE = heldItem("tyranitarite")
+    @JvmField
     val UTILITY_UMBRELLA = heldItem("utility_umbrella")
     @JvmField
     val WEAKNESS_POLICY = itemNameBlockItem("weakness_policy", CobblemonBlocks.WEAKNESS_POLICY)
+    @JvmField
+    val VENUSAURITE = heldItem("venusaurite")
     @JvmField
     val WIDE_LENS = heldItem("wide_lens")
     @JvmField
