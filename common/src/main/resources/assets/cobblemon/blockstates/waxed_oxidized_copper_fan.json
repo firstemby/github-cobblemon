@@ -1,0 +1,469 @@
+{
+  "variants": {
+    "facing=east,power=0": {
+      "model": "cobblemon:block/oxidized_copper_fan_unpowered",
+      "y": 90
+    },
+    "facing=north,power=0": {
+      "model": "cobblemon:block/oxidized_copper_fan_unpowered"
+    },
+    "facing=south,power=0": {
+      "model": "cobblemon:block/oxidized_copper_fan_unpowered",
+      "y": 180
+    },
+    "facing=west,power=0": {
+      "model": "cobblemon:block/oxidized_copper_fan_unpowered",
+      "y": 270
+    },
+    "facing=east,power=1,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=1,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=1,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=1,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=1,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=1,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=1,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=1,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=2,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=2,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=2,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=2,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=2,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=2,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=2,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=2,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=3,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=3,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=3,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=3,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=3,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=3,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=3,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=3,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=4,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=4,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=4,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=4,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=4,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=4,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=4,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=4,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=5,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=5,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=5,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=5,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=5,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=5,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=5,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=5,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=6,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=6,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=6,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=6,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=6,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=6,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=6,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=6,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=7,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 90
+    },
+    "facing=north,power=7,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative"
+    },
+    "facing=south,power=7,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 180
+    },
+    "facing=west,power=7,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative",
+      "y": 270
+    },
+    "facing=east,power=7,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 90
+    },
+    "facing=north,power=7,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing"
+    },
+    "facing=south,power=7,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 180
+    },
+    "facing=west,power=7,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing",
+      "y": 270
+    },
+    "facing=east,power=8,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=8,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=8,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=8,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=8,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=8,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=8,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=8,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=9,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=9,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=9,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=9,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=9,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=9,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=9,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=9,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=10,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=10,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=10,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=10,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=10,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=10,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=10,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=10,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=11,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=11,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=11,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=11,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=11,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=11,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=11,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=11,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=12,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=12,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=12,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=12,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=12,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=12,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=12,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=12,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=13,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=13,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=13,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=13,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=13,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=13,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=13,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=13,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=14,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=14,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=14,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=14,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=14,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=14,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=14,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=14,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    },
+    "facing=east,power=15,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 90
+    },
+    "facing=north,power=15,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong"
+    },
+    "facing=south,power=15,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 180
+    },
+    "facing=west,power=15,push=false": {
+      "model": "cobblemon:block/oxidized_copper_fan_decorative_strong",
+      "y": 270
+    },
+    "facing=east,power=15,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 90
+    },
+    "facing=north,power=15,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong"
+    },
+    "facing=south,power=15,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 180
+    },
+    "facing=west,power=15,push=true": {
+      "model": "cobblemon:block/oxidized_copper_fan_pushing_strong",
+      "y": 270
+    }
+  }
+}

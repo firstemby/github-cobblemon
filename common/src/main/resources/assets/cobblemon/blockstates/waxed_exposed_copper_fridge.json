@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,part=bottom": {
+      "model": "cobblemon:block/exposed_copper_fridge_bottom",
+      "y": 90
+    },
+    "facing=north,part=bottom": {
+      "model": "cobblemon:block/exposed_copper_fridge_bottom"
+    },
+    "facing=south,part=bottom": {
+      "model": "cobblemon:block/exposed_copper_fridge_bottom",
+      "y": 180
+    },
+    "facing=west,part=bottom": {
+      "model": "cobblemon:block/exposed_copper_fridge_bottom",
+      "y": 270
+    },
+    "facing=east,part=top": {
+      "model": "cobblemon:block/exposed_copper_fridge_top",
+      "y": 90
+    },
+    "facing=north,part=top": {
+      "model": "cobblemon:block/exposed_copper_fridge_top"
+    },
+    "facing=south,part=top": {
+      "model": "cobblemon:block/exposed_copper_fridge_top",
+      "y": 180
+    },
+    "facing=west,part=top": {
+      "model": "cobblemon:block/exposed_copper_fridge_top",
+      "y": 270
+    }
+  }
+}

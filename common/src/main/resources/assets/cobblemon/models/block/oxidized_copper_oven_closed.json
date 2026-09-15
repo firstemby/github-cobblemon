@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/copper_oven_closed",
+	"textures": {
+		"texture": "cobblemon:block/functional/copper_appliances/oxidized_copper_oven",
+		"particle": "block/oxidized_chiseled_copper"
+	}
+}

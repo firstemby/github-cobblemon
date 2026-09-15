@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/copper_mower",
+	"textures": {
+		"texture": "cobblemon:block/functional/copper_appliances/exposed_copper_mower",
+		"particle": "block/exposed_chiseled_copper"
+	}
+}

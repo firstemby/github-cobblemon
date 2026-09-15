@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/copper_fridge_top",
+	"textures": {
+		"texture": "cobblemon:block/functional/copper_appliances/exposed_copper_fridge",
+		"particle": "block/exposed_chiseled_copper"
+	}
+}

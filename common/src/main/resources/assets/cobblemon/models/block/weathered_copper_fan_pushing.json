@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/copper_fan_pushing",
+	"textures": {
+		"texture": "cobblemon:block/functional/copper_appliances/weathered_copper_fan",
+		"particle": "block/weathered_chiseled_copper"
+	}
+}

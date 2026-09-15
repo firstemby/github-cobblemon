@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/copper_washer",
+	"textures": {
+		"texture": "cobblemon:block/functional/copper_appliances/weathered_copper_washer",
+		"particle": "block/weathered_chiseled_copper"
+	}
+}

@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=east,cooking=closed,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 90
+    },
+    "facing=north,cooking=closed,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed"
+    },
+    "facing=south,cooking=closed,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 180
+    },
+    "facing=west,cooking=closed,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 270
+    },
+    "facing=east,cooking=open,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 90
+    },
+    "facing=north,cooking=open,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_open"
+    },
+    "facing=south,cooking=open,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 180
+    },
+    "facing=west,cooking=open,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 270
+    },
+    "facing=east,cooking=cooking,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 90
+    },
+    "facing=north,cooking=cooking,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed"
+    },
+    "facing=south,cooking=cooking,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 180
+    },
+    "facing=west,cooking=cooking,ejecting=false": {
+      "model": "cobblemon:block/oxidized_copper_oven_closed",
+      "y": 270
+    },
+    "facing=east,ejecting=true": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 90
+    },
+    "facing=north,ejecting=true": {
+      "model": "cobblemon:block/oxidized_copper_oven_open"
+    },
+    "facing=south,ejecting=true": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 180
+    },
+    "facing=west,ejecting=true": {
+      "model": "cobblemon:block/oxidized_copper_oven_open",
+      "y": 270
+    }
+  }
+}

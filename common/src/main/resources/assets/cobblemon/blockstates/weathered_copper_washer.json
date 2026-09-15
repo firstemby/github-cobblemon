@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cobblemon:block/weathered_copper_washer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/weathered_copper_washer"
+    },
+    "facing=south": {
+      "model": "cobblemon:block/weathered_copper_washer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/weathered_copper_washer",
+      "y": 270
+    }
+  }
+}
