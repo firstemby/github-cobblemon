@@ -10,176 +10,184 @@ package com.cobblemon.mod.common.client.gui.molangui
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molangui.GuiMode
+import com.cobblemon.mod.common.api.molangui.MolangUiDefinition
+import com.cobblemon.mod.common.api.molangui.MolangUiParameters
 import com.cobblemon.mod.common.api.molangui.MolangUiRegistry
-import com.cobblemon.mod.common.api.molangui.container.ClientCollectionLayout
-import com.cobblemon.mod.common.api.molangui.container.CollectionConfig
 import com.cobblemon.mod.common.api.molangui.container.MolangContainerMenu
-import com.cobblemon.mod.common.api.molangui.container.ShiftClickRule
 import com.cobblemon.mod.common.api.molangui.container.SlotLayout
-import com.cobblemon.mod.common.api.molangui.widget.WidgetTree
 import com.cobblemon.mod.common.client.net.molangui.MolangUiCompatibilityRequestHandler
 import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiClosedPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 object MolangUiClientManager {
-
-    private val activeOverlays = ConcurrentHashMap<UUID, MolangUiOverlay>()
-    private val activeScreens = ConcurrentHashMap<UUID, Screen>()
-
-    private data class PendingContainerScreen(
-        val sessionId: UUID,
-        val widgetTree: MolangUiWidgetTree,
+    private class Session(
+        var definition: MolangUiDefinition,
+        val tree: MolangUiWidgetTree,
         val slotLayouts: Map<String, SlotLayout>,
-        val preparedAtNanos: Long
-    )
+        val preparedAtNanos: Long = System.nanoTime()
+    ) {
+        var screen: Screen? = null
+        val overlay = if (definition.mode == GuiMode.OVERLAY) {
+            MolangUiOverlay(tree, definition.exclusive)
+        } else null
+    }
 
-    private var pendingContainerData: PendingContainerScreen? = null
+    private val sessions = linkedMapOf<UUID, Session>()
+    private var pendingContainerId: UUID? = null
 
     fun open(
         sessionId: UUID, guiId: ResourceLocation, contractVersion: String, mode: GuiMode, args: Map<String, String>,
-        blocksInput: Boolean, exclusive: Boolean = false,
+        exclusive: Boolean = false,
         hasContainer: Boolean = false, slotLayouts: Map<String, SlotLayout> = emptyMap()
     ) {
+        if (sessionId in sessions) return
+        tick()
         val definition = MolangUiRegistry.getDefinition(guiId)
         if (definition == null || definition.contractVersion != contractVersion || definition.mode != mode ||
-            definition.blocksInput != blocksInput || definition.exclusive != exclusive) {
-            Cobblemon.LOGGER.error("Rejected incompatible Molang UI open for '$guiId'")
-            MolangUiClosedPacket(sessionId).sendToServer()
+            definition.exclusive != exclusive ||
+            (hasContainer && mode != GuiMode.SCREEN)) {
+            Cobblemon.LOGGER.error("Rejected incompatible Molang UI open for '{}'", guiId)
+            notifyClosed(sessionId)
             return
         }
-        val widgetTree = MolangUiWidgetTree(guiId, sessionId, definition.root, args, definition.variables)
-
-        when (mode) {
-            GuiMode.OVERLAY -> {
-                if (activeOverlays.size >= 8) {
-                    MolangUiClosedPacket(sessionId).sendToServer()
-                    return
-                }
-                val overlay = MolangUiOverlay(sessionId, widgetTree, blocksInput, exclusive)
-                activeOverlays[sessionId] = overlay
-            }
-            GuiMode.SCREEN -> {
-                if (hasContainer) {
-                    pruneStalePending()
-                    pendingContainerData?.let { MolangUiClosedPacket(it.sessionId).sendToServer() }
-                    pendingContainerData = PendingContainerScreen(sessionId, widgetTree, slotLayouts, System.nanoTime())
-                } else {
-                    activeScreens.keys.toList().forEach(::close)
-                    val screen = MolangUiScreen(sessionId, widgetTree)
-                    activeScreens[sessionId] = screen
-                    Minecraft.getInstance().execute {
-                        Minecraft.getInstance().setScreen(screen)
-                    }
+        if (mode == GuiMode.OVERLAY && sessions.values.count { it.overlay != null } >= 8) {
+            notifyClosed(sessionId)
+            return
+        }
+        val tree = try {
+            MolangUiWidgetTree(guiId, sessionId, definition.root,
+                MolangUiParameters.decode(definition.parameters, args), definition.variables)
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.error("Failed to prepare Molang UI '{}'", guiId, error)
+            notifyClosed(sessionId)
+            return
+        }
+        if (mode == GuiMode.SCREEN) {
+            sessions.filterValues { it.definition.mode == GuiMode.SCREEN }.keys.toList().forEach { close(it, true) }
+        }
+        val session = Session(definition, tree, slotLayouts.toMap())
+        sessions[sessionId] = session
+        if (mode == GuiMode.SCREEN) {
+            if (hasContainer) {
+                pendingContainerId = sessionId
+            } else {
+                val screen = MolangUiScreen(sessionId, tree)
+                session.screen = screen
+                val client = Minecraft.getInstance()
+                client.execute {
+                    if (sessions[sessionId] === session) client.setScreen(screen)
                 }
             }
         }
     }
 
-    fun createContainerScreen(
-        menu: MolangContainerMenu,
-        playerInventory: Inventory
-    ): MolangUiContainerScreen? {
-        pruneStalePending()
-        val pending = pendingContainerData ?: return null
-        pendingContainerData = null
-
-        val clientLayouts = pending.slotLayouts
-            .filter { it.key !in ShiftClickRule.PLAYER_SIDE_NAMES }
-            .map { (name, layout) ->
-                ClientCollectionLayout(name, CollectionConfig(size = layout.slotCount, layout = layout), layout)
-            }
-        menu.initializeClient(clientLayouts)
-
-        val screen = MolangUiContainerScreen(menu, playerInventory, pending.sessionId, pending.widgetTree)
-        activeScreens[pending.sessionId] = screen
-        return screen
+    fun createContainerScreen(menu: MolangContainerMenu, playerInventory: Inventory): AbstractContainerScreen<MolangContainerMenu> {
+        tick()
+        val id = pendingContainerId
+        pendingContainerId = null
+        val session = id?.let(sessions::get)
+            ?: return RejectedMolangUiContainerScreen(menu, playerInventory)
+        return try {
+            menu.initializeClient(session.slotLayouts)
+            MolangUiContainerScreen(menu, playerInventory, session.tree.sessionId, session.tree).also { session.screen = it }
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.error("Failed to prepare Molang UI container '{}'", session.tree.guiId, error)
+            close(session.tree.sessionId, true)
+            RejectedMolangUiContainerScreen(menu, playerInventory)
+        }
     }
 
-    fun close(sessionId: UUID) {
-        activeOverlays.remove(sessionId)?.close()
-        activeScreens.remove(sessionId)?.let { screen ->
-            Minecraft.getInstance().execute {
-                if (Minecraft.getInstance().screen == screen) {
-                    Minecraft.getInstance().setScreen(null)
-                }
+    fun close(sessionId: UUID) = close(sessionId, false)
+
+    private fun close(sessionId: UUID, notifyServer: Boolean) {
+        val session = sessions.remove(sessionId) ?: return
+        if (pendingContainerId == sessionId) pendingContainerId = null
+        session.tree.cleanup()
+        if (notifyServer) notifyClosed(sessionId)
+        val screen = session.screen ?: return
+        val client = Minecraft.getInstance()
+        client.execute {
+            if (client.screen === screen) {
+                if (screen is MolangUiContainerScreen && client.player?.containerMenu === screen.menu) {
+                    if (notifyServer) client.player?.closeContainer() else client.player?.clientSideCloseContainer()
+                } else client.setScreen(null)
             }
         }
     }
 
-    private fun Screen.widgetTreeOrNull(): MolangUiWidgetTree? = when (this) {
-        is MolangUiScreen -> widgetTree
-        is MolangUiContainerScreen -> widgetTree
-        else -> null
+    internal fun onScreenRemoved(sessionId: UUID, screen: Screen, tree: MolangUiWidgetTree) {
+        tree.cleanup()
+        if (sessions[sessionId]?.screen !== screen) return
+        sessions.remove(sessionId)
+        notifyClosed(sessionId)
     }
 
     fun updateArgs(sessionId: UUID, args: Map<String, String>, variables: Map<String, Double> = emptyMap()) {
-        val widgetTree = activeOverlays[sessionId]?.widgetTree ?: activeScreens[sessionId]?.widgetTreeOrNull()
-        if (widgetTree == null) {
-            return
+        val session = sessions[sessionId] ?: return
+        try {
+            val parameters = MolangUiParameters.decode(session.definition.parameters, args)
+            MolangUiParameters.validateVariables(variables)
+            if (variables.isNotEmpty()) session.tree.updateVariables(variables)
+            if (parameters.isNotEmpty()) session.tree.updateParameters(parameters)
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.warn("Rejected invalid Molang UI update for '{}'", session.tree.guiId, error)
+            close(sessionId, true)
         }
-        if (variables.isNotEmpty()) widgetTree.updateVariables(variables)
-        if (args.isNotEmpty()) widgetTree.updateParameters(args)
     }
 
     fun renderOverlays(guiGraphics: GuiGraphics, delta: Float) {
-        for ((_, overlay) in activeOverlays) {
-            overlay.render(guiGraphics, delta)
-        }
-    }
-
-    fun onScreenClosed(sessionId: UUID) {
-        activeScreens.remove(sessionId)
+        sessions.values.toList().forEach { it.overlay?.render(guiGraphics, delta) }
     }
 
     fun cleanup() {
-        activeOverlays.values.forEach { it.close() }
-        activeOverlays.clear()
-        activeScreens.values.forEach { it.widgetTreeOrNull()?.cleanup() }
-        activeScreens.clear()
-        pendingContainerData?.let { MolangUiClosedPacket(it.sessionId).sendToServer() }
-        pendingContainerData = null
+        val old = sessions.values.toList()
+        sessions.clear()
+        pendingContainerId = null
+        old.forEach { it.tree.cleanup() }
     }
 
-    fun hasExclusiveOverlay(): Boolean = activeOverlays.values.any { it.exclusive }
-
-    fun hasActiveOverlays(): Boolean = activeOverlays.isNotEmpty()
-    fun hasActiveScreens(): Boolean = activeScreens.isNotEmpty()
+    fun hasExclusiveOverlay(): Boolean = sessions.values.any { it.overlay?.exclusive == true }
 
     fun onResourceReload() {
-        for ((sessionId, overlay) in activeOverlays.toMap()) {
-            val newDef = MolangUiRegistry.getDefinition(overlay.widgetTree.guiId)
-            if (newDef == null) {
-                close(sessionId)
-                Cobblemon.LOGGER.warn("[MolangUiClientManager] Molang UI definition removed during reload: ${overlay.widgetTree.guiId}")
+        for ((id, session) in sessions.toMap()) {
+            val previous = session.definition
+            val definition = MolangUiRegistry.getDefinition(session.tree.guiId)
+            if (definition == null || definition.contractVersion != previous.contractVersion ||
+                definition.mode != previous.mode ||
+                definition.exclusive != previous.exclusive || definition.parameters != previous.parameters ||
+                definition.actions != previous.actions) {
+                close(id, true)
                 continue
             }
-            overlay.widgetTree.rebuildFromDefinition(newDef)
-        }
-
-        for ((sessionId, screen) in activeScreens.toMap()) {
-            val widgetTree = screen.widgetTreeOrNull() ?: continue
-            val newDef = MolangUiRegistry.getDefinition(widgetTree.guiId)
-            if (newDef == null) {
-                close(sessionId)
-                Cobblemon.LOGGER.warn("[MolangUiClientManager] Molang UI definition removed during reload: ${widgetTree.guiId}")
-                continue
+            try {
+                session.tree.rebuildFromDefinition(definition)
+                session.definition = definition
+            } catch (error: Exception) {
+                Cobblemon.LOGGER.error("Failed to reload Molang UI '{}'", session.tree.guiId, error)
+                close(id, true)
             }
-            widgetTree.rebuildFromDefinition(newDef)
         }
         MolangUiCompatibilityRequestHandler.respond()
     }
 
-    private fun pruneStalePending() {
-        val pending = pendingContainerData ?: return
-        if (System.nanoTime() - pending.preparedAtNanos > 5_000_000_000L) {
-            pendingContainerData = null
-            MolangUiClosedPacket(pending.sessionId).sendToServer()
+    fun tick(nowNanos: Long = System.nanoTime()) {
+        val id = pendingContainerId ?: return
+        val session = sessions[id] ?: return
+        if (nowNanos - session.preparedAtNanos > 5_000_000_000L) close(id, true)
+    }
+
+    private fun notifyClosed(sessionId: UUID) {
+        if (Minecraft.getInstance().connection == null) return
+        try {
+            MolangUiClosedPacket(sessionId).sendToServer()
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.warn("Failed to notify server of closed Molang UI '{}'", sessionId, error)
         }
     }
 }

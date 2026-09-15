@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.molangui
 
+import com.bedrockk.molang.runtime.MoLangRuntime
+import net.minecraft.core.BlockPos
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molangui.container.CollectionSource
 import com.cobblemon.mod.common.api.molangui.container.MolangContainerMenu
@@ -33,27 +35,30 @@ internal class MolangUiSession(
     val player: ServerPlayer,
     val contract: MolangUiContract,
     initialParameters: Map<String, ParameterValue>,
-    val blockPos: net.minecraft.core.BlockPos?
+    val blockPos: BlockPos?
 ) : MolangUiSessionHandle {
     override var state: SessionState = SessionState.OPENING
         private set
     private val parameters = initialParameters.toMutableMap()
-    private val closeListeners = mutableListOf<() -> Unit>()
     internal var containerMenu: MolangContainerMenu? = null
     private var clientWasNotified = false
 
     override fun updateParameters(parameters: Map<String, ParameterValue>): Boolean {
         assertServerThread()
         if (state != SessionState.ACTIVE || !validateParameterUpdate(parameters)) return false
-        this.parameters.putAll(parameters)
         MolangUiUpdatePacket(sessionId, parameters.mapValues { it.value.asWireValue() }).sendToPlayer(player)
+        this.parameters.putAll(parameters)
         return true
     }
 
     override fun updateVariables(variables: Map<String, Double>): Boolean {
         assertServerThread()
         if (state != SessionState.ACTIVE || variables.size > MolangUiPacketLimits.MAX_ACTION_FIELDS) return false
-        if (variables.any { (name, value) -> name.length > MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH || !value.isFinite() }) return false
+        try {
+            MolangUiParameters.validateVariables(variables)
+        } catch (error: IllegalArgumentException) {
+            return false
+        }
         MolangUiUpdatePacket(sessionId, emptyMap(), variables).sendToPlayer(player)
         return true
     }
@@ -70,17 +75,16 @@ internal class MolangUiSession(
     }
 
     internal fun notifyOpened(hasContainer: Boolean) {
+        check(state == SessionState.OPENING)
+        clientWasNotified = true
         MolangUiOpenPacket(
             sessionId, uiId, contract.contractVersion, contract.mode,
-            parameters.mapValues { it.value.asWireValue() }, contract.blocksInput, contract.exclusive,
+            parameters.mapValues { it.value.asWireValue() }, contract.exclusive,
             hasContainer, contract.collections.mapValues { it.value.layout }
         ).sendToPlayer(player)
-        clientWasNotified = true
     }
 
     internal fun getParameter(name: String): ParameterValue? = parameters[name]
-    internal fun allParameters(): Map<String, ParameterValue> = parameters.toMap()
-    internal fun addCloseListener(listener: () -> Unit) { closeListeners += listener }
 
     private fun validateParameterUpdate(values: Map<String, ParameterValue>): Boolean =
         values.size <= MolangUiPacketLimits.MAX_ACTION_FIELDS && values.all { (name, value) ->
@@ -91,14 +95,28 @@ internal class MolangUiSession(
         assertServerThread()
         if (state == SessionState.CLOSING || state == SessionState.CLOSED) return
         state = SessionState.CLOSING
-        if (notifyClient && clientWasNotified) MolangUiClosePacket(sessionId).sendToPlayer(player)
-        if (closeMenu && player.containerMenu === containerMenu) player.closeContainer()
-        containerMenu?.releaseOwnedItemsOnce(player)
-        closeListeners.toList().forEach { listener -> runCatching(listener).onFailure {
-            Cobblemon.LOGGER.error("Molang UI close listener failed for $sessionId", it)
-        } }
-        state = SessionState.CLOSED
-        MolangUiService.remove(sessionId)
+        val menu = containerMenu
+        containerMenu = null
+        try {
+            cleanup("notify client") {
+                if (notifyClient && clientWasNotified) MolangUiClosePacket(sessionId).sendToPlayer(player)
+            }
+            cleanup("close container") {
+                if (closeMenu && menu != null && player.containerMenu === menu) player.closeContainer()
+            }
+            cleanup("release items") { menu?.releaseOwnedItemsOnce(player) }
+        } finally {
+            state = SessionState.CLOSED
+            MolangUiService.remove(sessionId)
+        }
+    }
+
+    private inline fun cleanup(operation: String, action: () -> Unit) {
+        try {
+            action()
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.error("Failed to $operation while closing Molang UI session $sessionId", error)
+        }
     }
 
     private fun assertServerThread() {
@@ -116,6 +134,7 @@ object MolangUiService {
         check(player.server.isSameThread) { "MolangUiService.open must run on the server thread" }
         val contract = MolangUiContractRegistry.getContract(request.uiId)
             ?: return MolangUiOpenResult.Rejected(RejectionReason.UNKNOWN_UI, "Unknown Molang UI '${request.uiId}'")
+        // Intentionally does not wait for the compatibility round-trip; the client re-validates on open.
         if (disabled[player.uuid]?.contains(request.uiId) == true) {
             return MolangUiOpenResult.Rejected(RejectionReason.INCOMPATIBLE_CLIENT, "Client view is missing or incompatible")
         }
@@ -125,20 +144,28 @@ object MolangUiService {
         if (contract.mode == GuiMode.OVERLAY && playerSessions.count { it.contract.mode == GuiMode.OVERLAY } >= MAX_OVERLAYS_PER_PLAYER) {
             return MolangUiOpenResult.Rejected(RejectionReason.SESSION_LIMIT, "At most $MAX_OVERLAYS_PER_PLAYER overlays may be active")
         }
-        if (contract.mode == GuiMode.SCREEN) {
-            playerSessions.filter { it.contract.mode == GuiMode.SCREEN }.forEach(MolangUiSession::close)
+        val collectionSetup = try {
+            createCollections(player, contract, request.blockPos)
+                ?: return MolangUiOpenResult.Rejected(RejectionReason.INVALID_CONTAINER, "The bound block container is unavailable or invalid")
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.error("Failed to prepare Molang UI '${request.uiId}'", error)
+            return MolangUiOpenResult.Rejected(RejectionReason.INTERNAL_ERROR, error.message ?: "Unable to prepare UI")
         }
-        val collectionSetup = createCollections(player, contract, request.blockPos)
-            ?: return MolangUiOpenResult.Rejected(RejectionReason.INVALID_CONTAINER, "The bound block container is unavailable or invalid")
         val session = MolangUiSession(UUID.randomUUID(), request.uiId, player, contract, parameters, request.blockPos)
         sessions[session.sessionId] = session
+        MolangUiDiagnostics.sessionOpened()
         return try {
+            if (contract.mode == GuiMode.SCREEN) {
+                playerSessions.filter { it.contract.mode == GuiMode.SCREEN }.forEach(MolangUiSession::close)
+            }
+            check(session.state == SessionState.OPENING) { "Molang UI closed while replacing its previous screen" }
             MolangUiActionRegistry.executeOnOpen(session)
+            check(session.state == SessionState.OPENING) { "Molang UI closed during on_open" }
             val hasContainer = contract.collections.isNotEmpty()
             session.notifyOpened(hasContainer)
+            check(session.state == SessionState.OPENING) { "Molang UI closed while notifying the client" }
             if (hasContainer) openContainer(session, collectionSetup)
             session.activate()
-            MolangUiDiagnostics.sessionOpened()
             MolangUiOpenResult.Opened(session)
         } catch (error: Exception) {
             Cobblemon.LOGGER.error("Failed to open Molang UI '${request.uiId}'", error)
@@ -222,7 +249,7 @@ object MolangUiService {
             val value = suppliedValue ?: when (val default = definition.default) {
                 is ParameterDefault.Literal -> default.value
                 is ParameterDefault.Molang -> runCatching {
-                    val result = default.expression.asExpressionLike().resolveString(com.bedrockk.molang.runtime.MoLangRuntime())
+                    val result = default.expression.asExpressionLike().resolveString(MoLangRuntime())
                     ParameterValue.parse(definition.type, result)
                 }.getOrNull()
                 null -> null
@@ -239,7 +266,7 @@ object MolangUiService {
     private fun createCollections(
         player: ServerPlayer,
         contract: MolangUiContract,
-        blockPos: net.minecraft.core.BlockPos?
+        blockPos: BlockPos?
     ): List<ServerCollectionSetup>? {
         val setups = mutableListOf<ServerCollectionSetup>()
         for ((name, config) in contract.collections) {
@@ -247,12 +274,14 @@ object MolangUiService {
                 CollectionSource.SESSION -> SimpleContainer(config.size)
                 CollectionSource.BLOCK_ENTITY -> {
                     val pos = blockPos ?: return null
+                    if (player.distanceToSqr(pos.x + .5, pos.y + .5, pos.z + .5) > 64.0 || !player.level().hasChunk(pos.x shr 4, pos.z shr 4)) return null
                     val blockEntity = player.level().getBlockEntity(pos)
-                    if (blockEntity !is Container || player.distanceToSqr(pos.x + .5, pos.y + .5, pos.z + .5) > 64.0) return null
+                    if (blockEntity !is Container) return null
+                    if ((config.slots ?: (0 until config.size).toList()).any { it >= blockEntity.containerSize }) return null
                     blockEntity
                 }
             }
-            setups += ServerCollectionSetup(name, config, config.layout, container)
+            setups += ServerCollectionSetup(name, config, container)
         }
         return setups
     }
@@ -263,12 +292,12 @@ object MolangUiService {
             override fun getDisplayName() = Component.empty()
             override fun createMenu(containerId: Int, inventory: Inventory, player: Player): AbstractContainerMenu =
                 MolangContainerMenu(containerId, inventory).also { menu ->
+                    check(session.state == SessionState.OPENING) { "Molang UI closed before creating its container" }
+                    session.containerMenu = menu
                     menu.initializeServer(
                         setup, session.contract.shiftClickRules, owned, session.contract.closeItemsPolicy,
-                        owner = session.player, session = session, blockPos = session.blockPos,
-                        onSlotChange = { _, _ -> }
+                        owner = session.player, session = session, blockPos = session.blockPos
                     )
-                    session.containerMenu = menu
                 }
         })
         check(opened.isPresent) { "player rejected the Molang UI container menu" }

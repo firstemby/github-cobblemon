@@ -34,7 +34,7 @@ class MolangContainerMenu(
     private val playerInventory: Inventory
 ) : AbstractContainerMenu(CobblemonMenuType.MOLANG_UI, containerId) {
 
-    val collections: MutableMap<String, Container> = mutableMapOf()
+    private val collections: MutableMap<String, Container> = mutableMapOf()
 
     private val collectionRanges: MutableList<CollectionSlotRange> = mutableListOf()
     private var playerInventoryStart: Int = 0
@@ -59,8 +59,7 @@ class MolangContainerMenu(
         closeItemsPolicy: CloseItemsPolicy = CloseItemsPolicy.RETURN,
         owner: ServerPlayer,
         session: MolangUiSession,
-        blockPos: BlockPos? = null,
-        onSlotChange: ((collectionName: String, slotIndex: Int) -> Unit)? = null
+        blockPos: BlockPos? = null
     ) {
         this.shiftClickRules = shiftClickRules
         this.sessionOwnedCollections.addAll(sessionOwned)
@@ -70,13 +69,13 @@ class MolangContainerMenu(
         this.blockPos = blockPos
 
         for (setup in collectionSetup) {
-            val (name, config, layout, container) = setup
+            val (name, config, container) = setup
             collections[name] = container
             if (config.source == CollectionSource.BLOCK_ENTITY) originalBlockContainer = container
             collectionConfigs[name] = config
 
             val startIndex = slots.size
-            addCollectionSlots(name, config, layout, container, onSlotChange)
+            addCollectionSlots(name, config, container)
             val endIndex = slots.size
             collectionRanges.add(CollectionSlotRange(name, startIndex, endIndex))
         }
@@ -85,15 +84,17 @@ class MolangContainerMenu(
     }
 
     fun initializeClient(
-        collectionLayouts: List<ClientCollectionLayout>
+        collectionLayouts: Map<String, SlotLayout>
     ) {
-        for ((name, config, layout) in collectionLayouts) {
+        SlotLayout.validateCollections(collectionLayouts)
+        for ((name, layout) in collectionLayouts) {
+            val config = CollectionConfig(size = layout.slotCount, layout = layout)
             val container = SimpleContainer(layout.slotCount)
             collections[name] = container
             collectionConfigs[name] = config
 
             val startIndex = slots.size
-            addCollectionSlots(name, config, layout, container)
+            addCollectionSlots(name, config, container)
             val endIndex = slots.size
             collectionRanges.add(CollectionSlotRange(name, startIndex, endIndex))
         }
@@ -104,16 +105,14 @@ class MolangContainerMenu(
     private fun addCollectionSlots(
         name: String,
         config: CollectionConfig,
-        layout: SlotLayout,
-        container: Container,
-        onSlotChange: ((collectionName: String, slotIndex: Int) -> Unit)? = null
+        container: Container
     ) {
+        val layout = config.layout
         var containerIndex = 0
         for (row in 0 until layout.rows) {
             for (col in 0 until layout.columns) {
                 val x = layout.offsetX + col * (layout.slotWidth + layout.spacingX)
                 val y = layout.offsetY + row * (layout.slotHeight + layout.spacingY)
-                val capturedIndex = containerIndex
                 val mappedIndex = config.slots?.getOrNull(containerIndex) ?: containerIndex
                 require(mappedIndex in 0 until container.containerSize) { "collection '$name' maps outside its container" }
                 addSlot(MolangSlot(
@@ -121,8 +120,7 @@ class MolangContainerMenu(
                     index = mappedIndex,
                     x = x,
                     y = y,
-                    collectionConfig = config,
-                    onSlotChange = if (onSlotChange != null) { { onSlotChange(name, capturedIndex) } } else null
+                    collectionConfig = config
                 ))
                 containerIndex++
             }
@@ -150,11 +148,9 @@ class MolangContainerMenu(
         playerHotbarEnd = slots.size
     }
 
-    fun getCollection(name: String): Container? = collections[name]
-
     override fun quickMoveStack(player: Player, index: Int): ItemStack {
         val slot = slots.getOrNull(index) ?: return ItemStack.EMPTY
-        if (!slot.hasItem()) return ItemStack.EMPTY
+        if (!slot.hasItem() || !slot.mayPickup(player)) return ItemStack.EMPTY
 
         val slotItem = slot.item
         val original = slotItem.copy()
@@ -163,28 +159,17 @@ class MolangContainerMenu(
         val isPlayerInventory = index >= playerInventoryStart && index < playerInventoryEnd()
         val isHotbar = index >= playerHotbarStart && index < playerHotbarEnd
 
-        if (clickedCollection != null) {
-            val rule = findShiftClickRule(clickedCollection.name)
-            if (rule != null) {
-                val moved = tryMoveToCollections(slotItem, rule.to)
-                if (!moved) return ItemStack.EMPTY
-            } else {
-                if (!moveItemStackTo(slotItem, playerInventoryStart, playerHotbarEnd, false)) {
-                    return ItemStack.EMPTY
-                }
-            }
-        } else if (isPlayerInventory || isHotbar) {
-            val rule = findShiftClickRuleFromPlayer()
-            if (rule != null) {
-                val moved = tryMoveToCollections(slotItem, rule.to)
-                if (!moved) return ItemStack.EMPTY
-            } else {
-                val firstRange = collectionRanges.firstOrNull()
-                if (firstRange == null || !moveItemStackTo(slotItem, firstRange.startIndex, firstRange.endIndex, false)) {
-                    return ItemStack.EMPTY
-                }
-            }
+        val sourceName = clickedCollection?.name ?: when {
+            isPlayerInventory -> ShiftClickRule.PLAYER_INVENTORY
+            isHotbar -> ShiftClickRule.PLAYER_HOTBAR
+            else -> return ItemStack.EMPTY
         }
+        val destinations = findShiftClickRule(sourceName)?.to ?: if (clickedCollection != null) {
+            ShiftClickRule.PLAYER_SIDE_NAMES
+        } else {
+            collectionRanges.map { it.name }
+        }
+        if (!tryMoveToCollections(slotItem, slot, destinations)) return ItemStack.EMPTY
 
         if (slotItem.isEmpty) {
             slot.setByPlayer(ItemStack.EMPTY)
@@ -199,7 +184,7 @@ class MolangContainerMenu(
     }
 
     override fun stillValid(player: Player): Boolean {
-        val expectedOwner = owner ?: return true
+        val expectedOwner = owner ?: return true // client menu
         if (player.uuid != expectedOwner.uuid || owningSession?.state != SessionState.ACTIVE) return false
         val pos = blockPos ?: return true
         if (player.distanceToSqr(pos.x + .5, pos.y + .5, pos.z + .5) > 64.0) return false
@@ -207,10 +192,15 @@ class MolangContainerMenu(
     }
 
     override fun removed(player: Player) {
-        super.removed(player)
-
-        releaseOwnedItemsOnce(player)
-        owningSession?.closeFromMenu()
+        try {
+            super.removed(player)
+        } finally {
+            try {
+                releaseOwnedItemsOnce(player)
+            } finally {
+                owningSession?.closeFromMenu()
+            }
+        }
     }
 
     fun releaseOwnedItemsOnce(player: Player) {
@@ -227,9 +217,7 @@ class MolangContainerMenu(
     }
 
     fun getStack(collection: String, index: Int): ItemStack? {
-        val container = collections[collection] ?: return null
-        if (index !in 0 until container.containerSize) return null
-        return container.getItem(index)
+        return collectionSlot(collection, index)?.item
     }
 
     fun replaceSlotAtomically(
@@ -242,22 +230,23 @@ class MolangContainerMenu(
         outputCount: Int
     ): Boolean {
         if (consumeCount <= 0 || outputCount <= 0) return false
-        val input = collections[inputCollection] ?: return false
-        val output = collections[outputCollection] ?: return false
-        if (inputIndex !in 0 until input.containerSize || outputIndex !in 0 until output.containerSize) return false
+        val input = collectionSlot(inputCollection, inputIndex) ?: return false
+        val output = collectionSlot(outputCollection, outputIndex) ?: return false
         val id = ResourceLocation.tryParse(outputItemId)?.takeIf(BuiltInRegistries.ITEM::containsKey) ?: return false
         val produced = ItemStack(BuiltInRegistries.ITEM.get(id), outputCount)
         val outputConfig = collectionConfigs[outputCollection] ?: return false
-        if (!outputConfig.takeOnly && !outputConfig.isItemAllowed(produced)) return false
-        val source = input.getItem(inputIndex)
+        if (!outputConfig.matchesFilter(produced)) return false
+        val source = input.item
         if (source.count < consumeCount) return false
-        val existing = output.getItem(outputIndex)
-        if (!existing.isEmpty && (!ItemStack.isSameItemSameComponents(existing, produced) || existing.count + outputCount > existing.maxStackSize)) return false
-        if (existing.isEmpty) output.setItem(outputIndex, produced) else existing.grow(outputCount)
-        source.shrink(consumeCount)
-        if (source.isEmpty) input.setItem(inputIndex, ItemStack.EMPTY)
-        input.setChanged()
-        output.setChanged()
+        val remaining = source.copyWithCount(source.count - consumeCount)
+        val sameSlot = input.container === output.container && input.containerSlot == output.containerSlot
+        val existing = if (sameSlot) remaining else output.item
+        if (!existing.isEmpty && !ItemStack.isSameItemSameComponents(existing, produced)) return false
+        val limit = output.getMaxStackSize(produced)
+        if (existing.count > limit || outputCount > limit - existing.count) return false
+        val result = if (existing.isEmpty) produced else existing.copyWithCount(existing.count + outputCount)
+        if (!sameSlot) input.set(remaining)
+        output.set(result)
         return true
     }
 
@@ -269,24 +258,31 @@ class MolangContainerMenu(
         }
     }
 
-    private fun findShiftClickRuleFromPlayer(): ShiftClickRule? {
-        return shiftClickRules.firstOrNull { rule ->
-            rule.from.any { it in ShiftClickRule.PLAYER_SIDE_NAMES }
-        }
+    private fun collectionSlot(name: String, index: Int): Slot? {
+        val range = collectionRanges.firstOrNull { it.name == name } ?: return null
+        if (index !in 0 until range.endIndex - range.startIndex) return null
+        return slots[range.startIndex + index]
     }
 
-    private fun tryMoveToCollections(stack: ItemStack, toNames: List<String>): Boolean {
+    private fun tryMoveToCollections(stack: ItemStack, source: Slot, toNames: List<String>): Boolean {
+        val originalCount = stack.count
         for (name in toNames) {
-            if (name == ShiftClickRule.PLAYER_INVENTORY) {
-                if (moveItemStackTo(stack, playerInventoryStart, playerInventoryEnd(), false)) return true
-            } else if (name == ShiftClickRule.PLAYER_HOTBAR) {
-                if (moveItemStackTo(stack, playerHotbarStart, playerHotbarEnd, false)) return true
-            } else {
-                val range = collectionRanges.firstOrNull { it.name == name } ?: continue
-                if (moveItemStackTo(stack, range.startIndex, range.endIndex, false)) return true
+            val indices = when (name) {
+                ShiftClickRule.PLAYER_INVENTORY -> playerInventoryStart until playerHotbarStart
+                ShiftClickRule.PLAYER_HOTBAR -> playerHotbarStart until playerHotbarEnd
+                else -> collectionRanges.firstOrNull { it.name == name }?.let { it.startIndex until it.endIndex } ?: continue
+            }
+            for (merge in listOf(true, false)) {
+                for (index in indices) {
+                    if (stack.isEmpty) return true
+                    val destination = slots[index]
+                    if (destination.container === source.container && destination.containerSlot == source.containerSlot) continue
+                    if (destination.hasItem() != merge || destination.item.count >= destination.getMaxStackSize(stack)) continue
+                    destination.safeInsert(stack)
+                }
             }
         }
-        return false
+        return stack.count < originalCount
     }
 
     private fun returnItemsToPlayer(player: Player, container: Container) {

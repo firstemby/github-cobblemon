@@ -101,6 +101,7 @@ open class FlatSpawnablePositionWeightedSelector : SpawningSelector<FlatSpawnabl
         val spawner: Spawner,
         val spawnablePositions: List<SpawnablePosition>
     ) : SpawnSelectionData {
+        override var guaranteedBucket: String? = null
         override val spawnActions = mutableListOf<SpawnAction<*>>()
         override val context = mutableMapOf<String, Any>()
 

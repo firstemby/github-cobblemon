@@ -156,16 +156,16 @@
       "maxSize": 2,
       "toleratedLeaders": [
         {
-          "pokemon": "hatenna alpha",
-          "tier": 1
-        },
-        {
           "pokemon": "hatterene alpha",
           "tier": 1
         },
         {
-          "pokemon": "hattrem",
+          "pokemon": "hatenna",
           "tier": 1
+        },
+        {
+          "pokemon": "hattrem",
+          "tier": 2
         }
       ]
     },

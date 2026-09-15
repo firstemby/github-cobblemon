@@ -125,10 +125,6 @@
     {
       "aspects": ["magikarp-jump-violet-saucy"],
       "texture": "cobblemon:textures/pokemon/0130_gyarados/magikarp_jump/gyarados_violet_saucy.png"
-    },
-    {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0130_gyarados/gyarados_shiny.png"
     }
   ]
 }

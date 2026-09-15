@@ -8,10 +8,7 @@
 
 package com.cobblemon.mod.common.client.gui.molangui.renderer
 
-import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.cobblemon.mod.common.api.molangui.widget.WidgetType
-import com.bedrockk.molang.runtime.MoLangRuntime
-import net.minecraft.client.gui.GuiGraphics
 
 object WidgetRendererRegistry {
     private val renderers = mutableMapOf<WidgetType, WidgetRenderer>()
@@ -29,23 +26,9 @@ object WidgetRendererRegistry {
         register(WidgetType.FILL, FillRenderer)
         register(WidgetType.BUTTON, ButtonRenderer)
         register(WidgetType.PROGRESS_BAR, ProgressBarRenderer)
-        register(WidgetType.LIST, ListRenderer)
         register(WidgetType.NUMBER_INPUT, NumberInputRenderer)
         register(WidgetType.ITEM_SLOT, ItemSlotRenderer)
         register(WidgetType.SCROLL_PANEL, PanelRenderer)
         register(WidgetType.POKEMON_RENDER, PokemonRenderRenderer)
-        register(WidgetType.SLOT_GRID, NoOpRenderer)
-    }
-}
-
-private object NoOpRenderer : WidgetRenderer {
-    override fun render(
-        widget: WidgetInstance,
-        guiGraphics: GuiGraphics,
-        runtime: MoLangRuntime,
-        mouseX: Float,
-        mouseY: Float,
-        delta: Float
-    ) {
     }
 }

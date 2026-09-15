@@ -27,13 +27,25 @@ object LabelRenderer : WidgetRenderer {
         val color = widget.definition.getProperty("color")?.resolveInt(runtime) ?: 0xFFFFFF
         val shadow = widget.definition.getProperty("shadow")?.resolveBoolean(runtime) ?: false
         val alignment = widget.definition.getStringProperty("alignment") ?: "left"
+        val scale = widget.definition.getProperty("scale")?.resolveFloat(runtime) ?: 1f
+        if (!scale.isFinite() || scale <= 0f) return
+        val textWidth = font.width(text) * scale
 
         val x = when (alignment) {
-            "center" -> widget.absoluteX + widget.computedWidth / 2f - font.width(text) / 2f
-            "right" -> widget.absoluteX + widget.computedWidth - font.width(text)
+            "center" -> widget.absoluteX + widget.computedWidth / 2f - textWidth / 2f
+            "right" -> widget.absoluteX + widget.computedWidth - textWidth
             else -> widget.absoluteX
         }
 
-        guiGraphics.drawString(font, text, x.toInt(), widget.absoluteY.toInt(), color, shadow)
+        if (!textWidth.isFinite() || !x.isFinite() || !widget.absoluteY.isFinite()) return
+        val pose = guiGraphics.pose()
+        pose.pushPose()
+        try {
+            pose.translate(x, widget.absoluteY, 0f)
+            pose.scale(scale, scale, 1f)
+            guiGraphics.drawString(font, text, 0, 0, color, shadow)
+        } finally {
+            pose.popPose()
+        }
     }
 }

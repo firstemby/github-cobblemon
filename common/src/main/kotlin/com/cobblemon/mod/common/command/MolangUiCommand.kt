@@ -11,12 +11,12 @@ import com.cobblemon.mod.common.api.molangui.MolangUiContractRegistry
 import com.cobblemon.mod.common.api.molangui.MolangUiOpenRequest
 import com.cobblemon.mod.common.api.molangui.MolangUiOpenResult
 import com.cobblemon.mod.common.api.molangui.MolangUiService
+import com.cobblemon.mod.common.util.lang
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.ResourceLocationArgument
-import net.minecraft.network.chat.Component
 
 object MolangUiCommand {
     private const val UI_ID = "ui"
@@ -28,17 +28,19 @@ object MolangUiCommand {
                     val id = ResourceLocationArgument.getId(context, UI_ID)
                     when (val result = MolangUiService.open(context.source.playerOrException, MolangUiOpenRequest(id))) {
                         is MolangUiOpenResult.Opened -> {
-                            context.source.sendSuccess({ Component.literal("Opened '$id' (${result.session.sessionId})") }, false)
+                            context.source.sendSuccess({ lang("molang_ui.command.opened", id.toString(), result.session.sessionId.toString()) }, false)
                             Command.SINGLE_SUCCESS
                         }
                         is MolangUiOpenResult.Rejected -> {
-                            context.source.sendFailure(Component.literal("Could not open '$id': ${result.detail}")); 0
+                            context.source.sendFailure(lang("molang_ui.command.rejected", id.toString(),
+                                lang("molang_ui.rejection.${result.reason.name.lowercase()}")))
+                            0
                         }
                     }
                 }))
             .then(Commands.literal("list").executes { context ->
                 val contracts = MolangUiContractRegistry.getAllContracts()
-                context.source.sendSuccess({ Component.literal("Molang UIs (${contracts.size}): ${contracts.keys.joinToString()}") }, false)
+                context.source.sendSuccess({ lang("molang_ui.command.list", contracts.size, contracts.keys.joinToString()) }, false)
                 Command.SINGLE_SUCCESS
             }))
     }

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.api.molangui.widget
 
+import com.cobblemon.mod.common.api.molangui.ActionKey
+
 data class WidgetDefinition(
     val id: String,
     val type: WidgetType,
@@ -16,10 +18,6 @@ data class WidgetDefinition(
     val events: Map<String, ServerWidgetEvent> = emptyMap(),
     val clientEvents: Map<String, String> = emptyMap(),
     val hoverOverrides: Map<String, WidgetProperty> = emptyMap(),
-    val transitions: Map<String, TransitionConfig> = emptyMap(),
-    val enterAnimation: AnimationConfig? = null,
-    val exitAnimation: AnimationConfig? = null,
-    val isStatic: Boolean = false,
     val itemTemplate: WidgetDefinition? = null
 ) {
     fun getProperty(name: String): WidgetProperty? = properties[name]
@@ -28,19 +26,8 @@ data class WidgetDefinition(
 }
 
 data class ServerWidgetEvent(
-    val action: com.cobblemon.mod.common.api.molangui.ActionKey,
+    val action: ActionKey,
     val parameters: Map<String, WidgetProperty> = emptyMap()
-)
-
-data class TransitionConfig(
-    val duration: Float,
-    val easing: String = "ease_out"
-)
-
-data class AnimationConfig(
-    val type: String,
-    val duration: Float = 0.3f,
-    val easing: String = "ease_out"
 )
 
 enum class WidgetType(val id: String) {
@@ -49,14 +36,10 @@ enum class WidgetType(val id: String) {
     IMAGE("image"),
     FILL("fill"),
     BUTTON("button"),
-    TOGGLE("toggle"),
-    SLIDER("slider"),
-    TEXT_INPUT("text_input"),
     LIST("list"),
     PROGRESS_BAR("progress_bar"),
     SCROLL_PANEL("scroll_panel"),
     POKEMON_RENDER("pokemon_render"),
-    MOVE_DISPLAY("move_display"),
     NUMBER_INPUT("number_input"),
     ITEM_SLOT("item_slot"),
     SLOT_GRID("slot_grid");

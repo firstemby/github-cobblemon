@@ -8,9 +8,7 @@
 
 package com.cobblemon.mod.common.api.molangui
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
-import com.cobblemon.mod.common.util.asExpressionLike
 import java.util.concurrent.ConcurrentHashMap
 
 object MolangUiActionRegistry {

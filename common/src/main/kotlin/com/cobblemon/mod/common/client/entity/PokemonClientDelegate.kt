@@ -470,7 +470,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 val random = currentEntity.level().random
                 when (particleData) {
                     is ParticleData.SnowstormParticle -> {
-                        val locators = particleData.locatorResolver(locatorStates).ifEmpty { listOf("root") }.filter(::isLocatorVisible)
+                        val locators = particleData.locatorResolver(locatorStates).filter(::isLocatorVisible)
                         if (particleData.chance > random.nextDouble()) {
                             locators.forEach { locator ->
                                 repeat(particleData.amount) {
@@ -518,15 +518,14 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         }
     }
 
-    fun getSeatLocator(passenger: Entity): String {
-        val seat = this.getEntity().occupiedSeats.entries
+    fun getSeatLocator(passenger: Entity): String? {
+        return this.getEntity().occupiedSeats.entries
             .firstOrNull { it.value == passenger }?.key
-            ?: throw IllegalArgumentException("Entity is not currently riding a seat")
-        return seat.locator
+            ?.locator
     }
 
     override fun positionRider(passenger: Entity, positionUpdater: MoveFunction) {
-        val locatorName = getSeatLocator(passenger)
+        val locatorName = getSeatLocator(passenger) ?: return
         val locator = this.locatorStates[locatorName] ?: return
 
         val locatorOffset = locator.matrix.getTranslation(Vector3f())

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.molangui
 
+import com.cobblemon.mod.common.api.molangui.container.SlotLayout
 import com.cobblemon.mod.common.api.molangui.container.CollectionConfig
 import com.cobblemon.mod.common.api.molangui.container.CloseItemsPolicy
 import com.cobblemon.mod.common.api.molangui.container.ShiftClickRule
@@ -100,9 +101,13 @@ data class MolangUiContract(
     val collections: Map<String, CollectionConfig>,
     val shiftClickRules: List<ShiftClickRule>,
     val closeItemsPolicy: CloseItemsPolicy,
-    val blocksInput: Boolean,
     val exclusive: Boolean
-)
+) {
+    init {
+        require(mode == GuiMode.SCREEN || collections.isEmpty()) { "overlay views cannot have container collections" }
+        SlotLayout.validateCollections(collections.mapValues { it.value.layout })
+    }
+}
 
 data class MolangUiOpenRequest(
     val uiId: ResourceLocation,

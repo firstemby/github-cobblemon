@@ -9,6 +9,7 @@ package com.cobblemon.mod.common.net.messages.client.molangui
 
 import com.cobblemon.mod.common.api.molangui.GuiMode
 import com.cobblemon.mod.common.api.molangui.MolangUiPacketLimits
+import com.cobblemon.mod.common.api.molangui.MolangUiParameters
 import com.cobblemon.mod.common.api.molangui.container.SlotLayout
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -18,19 +19,32 @@ import java.util.UUID
 
 class MolangUiOpenPacket(
     val sessionId: UUID, val guiId: ResourceLocation, val contractVersion: String, val mode: GuiMode,
-    val args: Map<String, String>, val blocksInput: Boolean, val exclusive: Boolean,
+    val args: Map<String, String>, val exclusive: Boolean,
     val hasContainer: Boolean = false, val slotLayouts: Map<String, SlotLayout> = emptyMap()
 ) : NetworkPacket<MolangUiOpenPacket> {
+    init {
+        MolangUiPacketLimits.requireIdentifier(guiId.toString(), "UI id")
+        MolangUiPacketLimits.requireIdentifier(contractVersion, "contract version")
+        require(args.size <= MolangUiPacketLimits.MAX_ACTION_FIELDS) { "too many UI parameters" }
+        args.forEach { (name, value) ->
+            MolangUiParameters.requireName(name)
+            MolangUiPacketLimits.requireValue(value, "parameter '$name'")
+        }
+        require(hasContainer == slotLayouts.isNotEmpty()) { "container flag and slot layouts disagree" }
+        require(!hasContainer || mode == GuiMode.SCREEN) { "overlay views cannot have containers" }
+        SlotLayout.validateCollections(slotLayouts)
+    }
+
     override val id = ID
     override fun encode(buffer: RegistryFriendlyByteBuf) {
-        require(args.size <= MolangUiPacketLimits.MAX_ACTION_FIELDS && slotLayouts.size <= MolangUiPacketLimits.MAX_CONTRACTS)
+        val startIndex = buffer.writerIndex()
         buffer.writeUUID(sessionId)
         buffer.writeUtf(guiId.toString(), MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH)
         buffer.writeUtf(contractVersion, MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH)
         buffer.writeEnum(mode)
         buffer.writeVarInt(args.size)
         args.forEach { (key, value) -> buffer.writeUtf(key, MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH).writeUtf(value, MolangUiPacketLimits.MAX_VALUE_LENGTH) }
-        buffer.writeBoolean(blocksInput).writeBoolean(exclusive).writeBoolean(hasContainer)
+        buffer.writeBoolean(exclusive).writeBoolean(hasContainer)
         if (hasContainer) {
             buffer.writeVarInt(slotLayouts.size)
             slotLayouts.forEach { (name, layout) ->
@@ -39,6 +53,7 @@ class MolangUiOpenPacket(
                     .forEach(buffer::writeVarInt)
             }
         }
+        require(buffer.writerIndex() - startIndex <= MolangUiPacketLimits.MAX_PACKET_BYTES) { "UI open packet is too large" }
     }
     companion object {
         val ID = cobblemonResource("molang_ui_open")
@@ -51,8 +66,11 @@ class MolangUiOpenPacket(
             val argCount = buffer.readVarInt()
             require(argCount in 0..MolangUiPacketLimits.MAX_ACTION_FIELDS)
             val args = linkedMapOf<String, String>()
-            repeat(argCount) { args[buffer.readUtf(MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH)] = buffer.readUtf(MolangUiPacketLimits.MAX_VALUE_LENGTH) }
-            val blocksInput = buffer.readBoolean()
+            repeat(argCount) {
+                val name = buffer.readUtf(MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH)
+                require(name !in args) { "duplicate UI parameter '$name'" }
+                args[name] = buffer.readUtf(MolangUiPacketLimits.MAX_VALUE_LENGTH)
+            }
             val exclusive = buffer.readBoolean()
             val hasContainer = buffer.readBoolean()
             val layouts = linkedMapOf<String, SlotLayout>()
@@ -61,10 +79,12 @@ class MolangUiOpenPacket(
                 require(count in 0..MolangUiPacketLimits.MAX_CONTRACTS)
                 repeat(count) {
                     val name = buffer.readUtf(MolangUiPacketLimits.MAX_IDENTIFIER_LENGTH)
+                    require(name !in layouts) { "duplicate container collection '$name'" }
                     layouts[name] = SlotLayout(buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt())
                 }
             }
-            return MolangUiOpenPacket(sessionId, guiId, version, mode, args, blocksInput, exclusive, hasContainer, layouts)
+            require(!buffer.isReadable) { "unexpected trailing UI open data" }
+            return MolangUiOpenPacket(sessionId, guiId, version, mode, args, exclusive, hasContainer, layouts)
         }
     }
 }

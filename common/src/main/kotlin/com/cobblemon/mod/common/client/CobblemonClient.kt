@@ -169,6 +169,7 @@ object CobblemonClient {
 
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
         WidgetRendererRegistry.registerDefaults()
+        PlatformEvents.CLIENT_TICK_POST.subscribe { MolangUiClientManager.tick() }
         PlatformEvents.CLIENT_TICK_POST.subscribe { event ->
             val player = event.client.player
             if (player != null) {
@@ -423,7 +424,6 @@ object CobblemonClient {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
         MenuScreens.register(CobblemonMenuType.MOLANG_UI) { menu, playerInventory, _ ->
             MolangUiClientManager.createContainerScreen(menu, playerInventory)
-                ?: throw IllegalStateException("No prepared Molang UI container screen")
         }
         MenuScreens.register(CobblemonMenuType.TM_MACHINE, ::TMMachineScreen)
     }

@@ -13,13 +13,14 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-54",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_freshwater",
                     "#cobblemon:is_ocean"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -29,46 +30,10 @@
                 "water"
             ],
             "type": "pokemon",
-            "spawnablePositionType": "surface",
-            "bucket": "uncommon",
-            "level": "20-54",
-            "weight": 0.16,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_freshwater",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "gyarados-3",
-            "pokemon": "gyarados",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "20-54",
-            "weight": 1.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#aether:is_aether",
-                    "#cobblemon:is_overworld"
-                ]
-            }
-        },
-        {
-            "id": "gyarados-4",
-            "pokemon": "gyarados",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-54",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -76,6 +41,44 @@
                 "biomes": [
                     "#cobblemon:is_freshwater",
                     "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "gyarados-3",
+            "pokemon": "gyarados",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "surface",
+            "bucket": "uncommon",
+            "level": "20-54",
+            "weight": 1.6,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "gyarados-4",
+            "pokemon": "gyarados",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "20-54",
+            "weight": 10.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#aether:is_aether",
+                    "#cobblemon:is_overworld"
                 ]
             }
         },
@@ -86,7 +89,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-54",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,

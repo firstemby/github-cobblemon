@@ -148,6 +148,14 @@
 					"rotation": [27.5, 0, 0]
 				}
 			}
+		},
+		"animation.appletun.cry": {
+			"animation_length": 1.2,
+			"sound_effects": {
+				"0.04": {
+					"effect": "pokemon.appletun.cry"
+				}
+			}
 		}
 	}
 }

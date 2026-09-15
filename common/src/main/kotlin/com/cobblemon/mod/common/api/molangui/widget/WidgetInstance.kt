@@ -8,8 +8,9 @@
 
 package com.cobblemon.mod.common.api.molangui.widget
 
-import com.cobblemon.mod.common.api.molangui.animation.TransitionState
 import com.cobblemon.mod.common.api.molangui.layout.SizeExpression
+import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.QueryStruct
 
 class WidgetInstance(
     val definition: WidgetDefinition,
@@ -25,21 +26,42 @@ class WidgetInstance(
     var offsetXExpr: SizeExpression = SizeExpression.Pixels(0f)
     var offsetYExpr: SizeExpression = SizeExpression.Pixels(0f)
 
+    internal val paddingProperties: List<WidgetProperty> =
+        (definition.getProperty("padding")?.raw as? List<*>)?.map {
+            when (it) {
+                is Number -> WidgetProperty.literal(it)
+                is WidgetExpression -> WidgetProperty.molang(it.source)
+                else -> throw IllegalArgumentException("invalid padding at '${definition.id}'")
+            }
+        } ?: List(4) { WidgetProperty.literal(0) }
+
     val children: MutableList<WidgetInstance> = mutableListOf()
-    val transitions: MutableMap<String, TransitionState> = mutableMapOf()
 
     var visible: Boolean = true
+    var enabled: Boolean = true
     var hovered: Boolean = false
-    var pressed: Boolean = false
-    var focused: Boolean = false
 
-    var enterProgress: Float = -1f
-    var exitProgress: Float = -1f
     var scrollOffset: Float = 0f
     var rendererState: Any? = null
+    var itemContext: QueryStruct? = null
+
+    inline fun <T> withItemContext(runtime: MoLangRuntime, action: () -> T): T =
+        withItemContext(runtime, itemContext, action)
 
     fun containsPoint(x: Float, y: Float): Boolean {
         return x >= absoluteX && x <= absoluteX + computedWidth &&
                y >= absoluteY && y <= absoluteY + computedHeight
+    }
+}
+
+inline fun <T> withItemContext(runtime: MoLangRuntime, context: QueryStruct?, action: () -> T): T {
+    val functions = runtime.environment.query.functions
+    val previous = functions.remove("item")
+    if (context != null) runtime.environment.query.addFunction("item") { context }
+    try {
+        return action()
+    } finally {
+        functions.remove("item")
+        if (previous != null) functions["item"] = previous
     }
 }

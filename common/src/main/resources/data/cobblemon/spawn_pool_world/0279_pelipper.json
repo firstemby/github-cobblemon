@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-44",
-            "weight": 1.0,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -25,7 +25,8 @@
                     "#cobblemon:is_sky",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             }
         },
         {
@@ -38,7 +39,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "25-44",
-            "weight": 1.0,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -47,7 +48,8 @@
                     "#cobblemon:is_sky",
                     "#cobblemon:is_tropical_island"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             }
         }
     ]

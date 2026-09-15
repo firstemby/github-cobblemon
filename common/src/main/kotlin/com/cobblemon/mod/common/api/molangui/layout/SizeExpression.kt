@@ -17,30 +17,26 @@ sealed class SizeExpression {
     abstract fun resolve(parentSize: Float, runtime: MoLangRuntime): Float
 
     data class Pixels(val value: Float) : SizeExpression() {
+        init { require(value.isFinite()) { "pixel size must be finite" } }
         override fun resolve(parentSize: Float, runtime: MoLangRuntime) = value
     }
 
     data class Percent(val fraction: Float) : SizeExpression() {
+        init { require(fraction.isFinite()) { "percentage must be finite" } }
         override fun resolve(parentSize: Float, runtime: MoLangRuntime) = parentSize * fraction
     }
 
     data class PercentWithOffset(val fraction: Float, val offset: Float) : SizeExpression() {
+        init { require(fraction.isFinite() && offset.isFinite()) { "percentage and offset must be finite" } }
         override fun resolve(parentSize: Float, runtime: MoLangRuntime) = parentSize * fraction + offset
     }
 
-    data object Auto : SizeExpression() {
-        override fun resolve(parentSize: Float, runtime: MoLangRuntime) = 0f
-    }
-
     data object Fill : SizeExpression() {
-        override fun resolve(parentSize: Float, runtime: MoLangRuntime) = 0f
+        override fun resolve(parentSize: Float, runtime: MoLangRuntime) = parentSize
     }
 
-    data class MolangSize(val expression: ExpressionLike, val isPercent: Boolean = false) : SizeExpression() {
-        override fun resolve(parentSize: Float, runtime: MoLangRuntime): Float {
-            val value = expression.resolveFloat(runtime)
-            return if (isPercent) parentSize * value / 100f else value
-        }
+    data class MolangSize(val expression: ExpressionLike) : SizeExpression() {
+        override fun resolve(parentSize: Float, runtime: MoLangRuntime) = expression.resolveFloat(runtime)
     }
 
     companion object {
@@ -52,14 +48,13 @@ sealed class SizeExpression {
                 is Number -> Pixels(value.toFloat())
                 is String -> parseString(value)
                 is WidgetExpression -> MolangSize(value.source.asExpressionLike())
-                else -> Pixels(0f)
+                else -> throw IllegalArgumentException("size must be a number, percentage, fill, or explicit Molang expression")
             }
         }
 
         private fun parseString(value: String): SizeExpression {
             val trimmed = value.trim()
             return when {
-                trimmed == "auto" -> Auto
                 trimmed == "fill" -> Fill
                 trimmed.toFloatOrNull() != null -> Pixels(trimmed.toFloat())
                 PERCENT_PATTERN.matches(trimmed) -> {
@@ -73,15 +68,7 @@ sealed class SizeExpression {
                     val offset = match.groupValues[3].toFloat() * sign
                     PercentWithOffset(pct, offset)
                 }
-                else -> {
-                    val isPercent = trimmed.endsWith("%")
-                    val exprStr = if (isPercent) trimmed.dropLast(1).trim() else trimmed
-                    try {
-                        MolangSize(exprStr.asExpressionLike(), isPercent)
-                    } catch (e: Exception) {
-                        Pixels(0f)
-                    }
-                }
+                else -> throw IllegalArgumentException("invalid size '$value'; Molang requires an explicit expression object")
             }
         }
     }

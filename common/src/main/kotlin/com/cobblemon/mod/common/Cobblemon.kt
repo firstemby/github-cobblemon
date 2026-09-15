@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.molangui.MolangUiActionRegistry
+import com.cobblemon.mod.common.api.molangui.MolangUiService
 import com.cobblemon.mod.common.api.permission.PermissionValidator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculator
 import com.cobblemon.mod.common.api.pokeball.catching.calculators.CaptureCalculators
@@ -261,7 +262,7 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
-            com.cobblemon.mod.common.api.molangui.MolangUiService.closeAllForPlayer(it.player.uuid)
+            MolangUiService.closeAllForPlayer(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -458,7 +459,7 @@ object Cobblemon {
         }
 
         PlatformEvents.SERVER_STOPPED.subscribe {
-            com.cobblemon.mod.common.api.molangui.MolangUiService.closeAll()
+            MolangUiService.closeAll()
             storage.unregisterAll(it.server.registryAccess())
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()

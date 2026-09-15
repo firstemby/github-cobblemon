@@ -50,10 +50,12 @@
 					"rotation": ["-15+Math.cos((query.anim_time-0.4) * 90 * 2) * 2", 0, 0]
 				},
 				"thigh_right": {
-					"rotation": [0, 22.5, 0]
+					"rotation": [0, 22.5, 0],
+					"position": [0, 0, 0.1]
 				},
 				"thigh_left": {
-					"rotation": [0, -7.5, 0]
+					"rotation": [0, -7.5, 0],
+					"position": [0, 0, -0.25]
 				},
 				"scalchop_hand_right": {
 					"position": [2.5, -0.55, 0]
@@ -178,6 +180,12 @@
 						"1.25": [-7.5, 0, 0],
 						"1.5": [7.5, 0, 0]
 					}
+				},
+				"skirt_right": {
+					"rotation": [0, 0, 5]
+				},
+				"skirt_left": {
+					"rotation": [0, 0, -5]
 				}
 			}
 		},
@@ -272,7 +280,5 @@
 				}
 			}
 		}
-	},
-
-	"geckolib_format_version": 2
+	}
 }

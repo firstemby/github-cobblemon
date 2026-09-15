@@ -27,11 +27,15 @@ data class CollectionConfig(
         require(layout.slotCount == size) { "collection size must match its grid dimensions" }
         require(slots == null || slots.size == size) { "block collection slot mapping must match collection size" }
         require(slots == null || slots.distinct().size == slots.size) { "block collection slot mapping contains duplicates" }
+        require(slots == null || slots.all { it >= 0 }) { "block collection slot indices must be nonnegative" }
         require(source == CollectionSource.BLOCK_ENTITY || slots == null) { "slot mapping is only valid for block_entity sources" }
     }
 
     fun isItemAllowed(stack: ItemStack): Boolean {
-        if (takeOnly) return false
+        return !takeOnly && matchesFilter(stack)
+    }
+
+    fun matchesFilter(stack: ItemStack): Boolean {
         if (allowedItems.isEmpty()) return true
         return allowedItems.any { it.matches(stack) }
     }

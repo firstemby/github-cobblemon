@@ -14,34 +14,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "28-52",
-            "weight": 0.48,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ]
-            }
-        },
-        {
-            "id": "cetitan-2",
-            "pokemon": "cetitan",
-            "presets": [
-                "natural",
-                "wild"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "uncommon",
-            "level": "28-52",
-            "weight": 0.8,
+            "weight": 9.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

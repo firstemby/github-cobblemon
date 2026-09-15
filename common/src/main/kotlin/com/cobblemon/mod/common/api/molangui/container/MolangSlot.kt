@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.molangui.container
 
 import net.minecraft.world.Container
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 
@@ -18,20 +17,12 @@ class MolangSlot(
     index: Int,
     x: Int,
     y: Int,
-    private val collectionConfig: CollectionConfig,
-    private val onSlotChange: (() -> Unit)? = null
+    private val collectionConfig: CollectionConfig
 ) : Slot(container, index, x, y) {
 
     override fun mayPlace(stack: ItemStack): Boolean {
-        return collectionConfig.isItemAllowed(stack)
+        return collectionConfig.isItemAllowed(stack) && container.canPlaceItem(containerSlot, stack)
     }
 
-    override fun mayPickup(player: Player): Boolean {
-        return true
-    }
-
-    override fun setChanged() {
-        super.setChanged()
-        onSlotChange?.invoke()
-    }
+    override fun getMaxStackSize(stack: ItemStack): Int = container.getMaxStackSize(stack)
 }

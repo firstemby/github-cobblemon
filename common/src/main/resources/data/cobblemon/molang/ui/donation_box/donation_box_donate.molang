@@ -1,7 +1,0 @@
-t.amount = v.amount;
-q.count_item('minecraft:emerald') >= t.amount ? {
-    q.remove_items('minecraft:emerald', t.amount);
-    t.total = q.to_number(q.parameter('total_donated')) + t.amount;
-    q.update_parameter('total_donated', q.format(t.total, 0));
-    q.update_variable('v.feedback_type', 1);
-} : q.update_variable('v.feedback_type', 2);

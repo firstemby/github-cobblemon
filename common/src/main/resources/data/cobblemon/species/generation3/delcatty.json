@@ -70,7 +70,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": 3,
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "delcatty alpha",
@@ -128,7 +128,6 @@
     "tm:blizzard",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:cosmicpower",

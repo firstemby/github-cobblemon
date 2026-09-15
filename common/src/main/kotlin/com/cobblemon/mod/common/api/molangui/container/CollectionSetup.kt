@@ -13,12 +13,5 @@ import net.minecraft.world.Container
 data class ServerCollectionSetup(
     val name: String,
     val config: CollectionConfig,
-    val layout: SlotLayout,
     val container: Container
-)
-
-data class ClientCollectionLayout(
-    val name: String,
-    val config: CollectionConfig,
-    val layout: SlotLayout
 )

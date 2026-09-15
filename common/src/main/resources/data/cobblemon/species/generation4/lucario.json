@@ -55,7 +55,7 @@
       "avoidedBySkeleton": true
     },
     "herd": {
-      "maxSize": 3,
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "lucario alpha",
@@ -310,7 +310,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": 4
+          "maxSize": 6
         },
         "moving": {
           "swim": {

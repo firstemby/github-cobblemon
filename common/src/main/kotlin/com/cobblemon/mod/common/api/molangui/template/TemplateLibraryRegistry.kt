@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
 import com.cobblemon.mod.common.Cobblemon
 
+
 object TemplateLibraryRegistry {
     private val gson = Gson()
     private val libraries: MutableMap<ResourceLocation, Map<String, TemplateDefinition>> = mutableMapOf()
@@ -41,16 +42,16 @@ object TemplateLibraryRegistry {
     }
 
     fun getTemplate(qualifiedName: String): TemplateDefinition? {
-        val dotIndex = qualifiedName.indexOf('.')
+        val dotIndex = qualifiedName.lastIndexOf('.')
         if (dotIndex == -1) return null
         val libraryName = qualifiedName.substring(0, dotIndex)
         val templateName = qualifiedName.substring(dotIndex + 1)
-        for ((libId, templates) in libraries) {
-            if (libId.path == libraryName || libId.toString() == libraryName) {
-                templates[templateName]?.let { return it }
-            }
+        val library = if (':' in libraryName) {
+            ResourceLocation.tryParse(libraryName)?.let(libraries::get)
+        } else {
+            libraries.entries.singleOrNull { it.key.path == libraryName }?.value
         }
-        return null
+        return library?.get(templateName)
     }
 
     private fun parseTemplates(json: JsonObject, namespace: String): Map<String, TemplateDefinition> {
@@ -62,11 +63,11 @@ object TemplateLibraryRegistry {
             templateJson.getAsJsonObject("inputs")?.let { inputsObj ->
                 for ((inputName, inputEl) in inputsObj.entrySet()) {
                     val inputObj = inputEl.asJsonObject
-                    inputs[inputName] = TemplateInput(
-                        type = TemplateInputType.fromId(inputObj.get("type")?.asString ?: "string")
-                            ?: throw IllegalArgumentException("unknown template input type for '$inputName'"),
-                        default = inputObj.get("default")?.deepCopy()
-                    )
+                    val type = TemplateInputType.fromId(inputObj.get("type")?.asString ?: "string")
+                        ?: throw IllegalArgumentException("unknown template input type for '$inputName'")
+                    val default = inputObj.get("default")
+                    require(default == null || type.accepts(default)) { "invalid template default at '$name.$inputName'" }
+                    inputs[inputName] = TemplateInput(type, default)
                 }
             }
             val extends = templateJson.get("extends")?.asString
@@ -100,9 +101,11 @@ enum class TemplateInputType(val id: String) {
 
     fun accepts(value: JsonElement): Boolean = when (this) {
         STRING -> value.isJsonPrimitive && value.asJsonPrimitive.isString
-        NUMBER -> value.isJsonPrimitive && value.asJsonPrimitive.isNumber
+        NUMBER -> value.isJsonPrimitive && value.asJsonPrimitive.isNumber && value.asDouble.isFinite()
         BOOLEAN -> value.isJsonPrimitive && value.asJsonPrimitive.isBoolean
-        EXPRESSION -> value.isJsonObject && value.asJsonObject.size() == 1 && value.asJsonObject.get("molang")?.isJsonPrimitive == true
+        EXPRESSION -> value.isJsonObject && value.asJsonObject.size() == 1 && value.asJsonObject.get("molang")?.let {
+            it.isJsonPrimitive && it.asJsonPrimitive.isString
+        } == true
         OBJECT -> value.isJsonObject
         ARRAY -> value.isJsonArray
     }

@@ -227,7 +227,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": 2,
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "cleffa",

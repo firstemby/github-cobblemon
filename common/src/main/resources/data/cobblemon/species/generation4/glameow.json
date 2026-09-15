@@ -70,7 +70,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": 2,
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "glameow alpha",
@@ -116,7 +116,6 @@
     "tm:aerialace",
     "tm:assurance",
     "tm:attract",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:cut",

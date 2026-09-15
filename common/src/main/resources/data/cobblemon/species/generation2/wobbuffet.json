@@ -63,10 +63,10 @@
       }
     },
     "herd": {
-      "maxSize": 3,
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "wobbuffet alpha",
+          "pokemon": "wobbuffet",
           "tier": 1
         }
       ]

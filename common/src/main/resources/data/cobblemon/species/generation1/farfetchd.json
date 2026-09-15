@@ -408,7 +408,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": 9,
+          "maxSize": 4,
           "toleratedLeaders": [
             {
               "pokemon": "farfetchd alpha",

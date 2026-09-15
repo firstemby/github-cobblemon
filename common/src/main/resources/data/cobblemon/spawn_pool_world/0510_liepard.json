@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 0.2,
+            "weight": 2.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -41,7 +41,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 0.2,
+            "weight": 2.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -67,7 +67,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -100,7 +100,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -137,7 +137,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -162,7 +162,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -190,7 +190,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -208,7 +208,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-45",
-            "weight": 6.0,
+            "weight": 60.0,
             "weightMultiplier": {
                 "multiplier": 1.5,
                 "condition": {
@@ -219,7 +219,7 @@
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_overworld"
+                    "#cobblemon:is_swamp"
                 ],
                 "isRaining": false,
                 "structures": [

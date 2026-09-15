@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
-import com.cobblemon.mod.common.pokemon.Species
 import com.bedrockk.molang.runtime.MoLangRuntime
 import net.minecraft.client.gui.GuiGraphics
 import org.joml.Quaternionf
@@ -41,36 +40,37 @@ object PokemonRenderRenderer : WidgetRenderer {
         val scale = widget.definition.getProperty("scale")?.resolveFloat(runtime) ?: 2.5f
         val rotY = widget.definition.getProperty("rotation_y")?.resolveFloat(runtime) ?: 35f
         val rotX = widget.definition.getProperty("rotation_x")?.resolveFloat(runtime) ?: 13f
+        if (!scale.isFinite() || scale <= 0f || !rotX.isFinite() || !rotY.isFinite()) return
 
         val renderablePokemon = RenderablePokemon(species, aspects)
 
         val state = (widget.rendererState as? FloatingState) ?: FloatingState().also { widget.rendererState = it }
-        state.updatePartialTicks(delta)
 
         val x = widget.absoluteX
         val y = widget.absoluteY
         val w = widget.computedWidth
         val h = widget.computedHeight
+        if (!x.isFinite() || !y.isFinite() || !w.isFinite() || !h.isFinite() || w <= 0f || h <= 0f) return
 
         val matrices = guiGraphics.pose()
-        matrices.pushPose()
-
         guiGraphics.enableScissor(x.toInt(), y.toInt(), (x + w).toInt(), (y + h).toInt())
-
-        matrices.translate((x + w * 0.5).toDouble(), y.toDouble(), 0.0)
-        matrices.scale(scale, scale, scale)
-        matrices.pushPose()
-
-        drawProfilePokemon(
-            renderablePokemon = renderablePokemon,
-            matrixStack = matrices,
-            rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(rotX, rotY, 0f)),
-            state = state,
-            partialTicks = delta
-        )
-
-        matrices.popPose()
-        matrices.popPose()
-        guiGraphics.disableScissor()
+        try {
+            matrices.pushPose()
+            try {
+                matrices.translate((x + w * 0.5).toDouble(), y.toDouble(), 0.0)
+                matrices.scale(scale, scale, scale)
+                drawProfilePokemon(
+                    renderablePokemon = renderablePokemon,
+                    matrixStack = matrices,
+                    rotation = Quaternionf().fromEulerXYZDegrees(Vector3f(rotX, rotY, 0f)),
+                    state = state,
+                    partialTicks = delta
+                )
+            } finally {
+                matrices.popPose()
+            }
+        } finally {
+            guiGraphics.disableScissor()
+        }
     }
 }

@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-48",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -22,7 +22,8 @@
                     "#cobblemon:is_temperate",
                     "#cobblemon:is_sky"
                 ],
-                "timeRange": "day"
+                "timeRange": "day",
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -31,7 +32,7 @@
             }
         },
         {
-            "id": "pidgeot-3",
+            "id": "pidgeot-2",
             "pokemon": "pidgeot",
             "presets": [
                 "natural",
@@ -41,14 +42,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "36-48",
-            "weight": 0.1,
+            "weight": 0.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "aether:skyroot_forest",
                     "aether:skyroot_woodland"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

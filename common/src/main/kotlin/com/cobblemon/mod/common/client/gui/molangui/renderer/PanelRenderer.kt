@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.client.gui.molangui.renderer
 import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.bedrockk.molang.runtime.MoLangRuntime
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
 
 object PanelRenderer : WidgetRenderer {
     override fun render(
@@ -31,16 +30,6 @@ object PanelRenderer : WidgetRenderer {
                 color.resolveInt(runtime)
             )
         }
-        val texture = widget.definition.getProperty("texture")
-        if (texture != null) {
-            val texId = ResourceLocation.parse(texture.resolveString(runtime))
-            guiGraphics.blit(
-                texId,
-                widget.absoluteX.toInt(), widget.absoluteY.toInt(),
-                0f, 0f,
-                widget.computedWidth.toInt(), widget.computedHeight.toInt(),
-                widget.computedWidth.toInt(), widget.computedHeight.toInt()
-            )
-        }
+        ImageRenderer.render(widget, guiGraphics, runtime, mouseX, mouseY, delta)
     }
 }

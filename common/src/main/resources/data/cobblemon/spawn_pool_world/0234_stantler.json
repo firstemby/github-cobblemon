@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-47",
-            "weight": 5.4,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -28,7 +28,8 @@
                     "#cobblemon:is_snowy_forest",
                     "#cobblemon:is_snowy_taiga",
                     "#cobblemon:is_tundra"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -41,7 +42,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "22-47",
-            "weight": 100.0,
+            "weight": 900.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -51,7 +52,8 @@
                 "neededNearbyBlocks": [
                     "aether:holiday_leaves",
                     "aether:decorated_holiday_leaves"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

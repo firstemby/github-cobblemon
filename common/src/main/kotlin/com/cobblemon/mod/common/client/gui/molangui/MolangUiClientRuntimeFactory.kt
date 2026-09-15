@@ -11,18 +11,24 @@ package com.cobblemon.mod.common.client.gui.molangui
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.function.GeneralMoLangFunctions
+import com.cobblemon.mod.common.api.molangui.MolangUiParameters
+import com.cobblemon.mod.common.api.molangui.ParameterValue
+import com.cobblemon.mod.common.api.molangui.asMoLangValue
+import net.minecraft.client.resources.language.I18n
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 
 internal object MolangUiClientRuntimeFactory {
-    private val SAFE_FUNCTIONS = setOf("format", "to_string", "to_number", "to_int", "is_number", "is_int", "is_blank", "clamp")
-
-    fun create(guiId: ResourceLocation, parameters: Map<String, String>, variables: Map<String, Double>) =
+    fun create(guiId: ResourceLocation, parameters: Map<String, ParameterValue>, variables: Map<String, Double>) =
         MoLangRuntime().also { runtime ->
-            runtime.environment.query.addFunctions(GeneralMoLangFunctions.holder.filterKeys { it in SAFE_FUNCTIONS })
+            GeneralMoLangFunctions.functions.filterKeys { it in MolangUiParameters.GENERAL_FUNCTIONS }.forEach { (name, function) ->
+                runtime.environment.query.addFunction(name) { function(it) }
+            }
             runtime.environment.query.addFunction("gui_id") { StringValue(guiId.toString()) }
+            runtime.environment.query.addFunction("translate") { params ->
+                StringValue(I18n.get(params.getString(0), *params.params.drop(1).map { it.asString() }.toTypedArray()))
+            }
             runtime.environment.query.addFunction("item_name") { params ->
                 val id = ResourceLocation.tryParse(params.getString(0))
                 val item = id?.takeIf(BuiltInRegistries.ITEM::containsKey)?.let(BuiltInRegistries.ITEM::get)
@@ -41,12 +47,18 @@ internal object MolangUiClientRuntimeFactory {
         runtime.environment.query.addFunction("mouse_y") { DoubleValue(mouseY) }
     }
 
-    fun updateParameters(runtime: MoLangRuntime, parameters: Map<String, String>) = parameters.forEach { (key, value) ->
-        val number = value.toDoubleOrNull()
-        runtime.environment.query.addFunction(key) { if (number != null) DoubleValue(number) else StringValue(value) }
+    fun updateParameters(runtime: MoLangRuntime, parameters: Map<String, ParameterValue>) {
+        MolangUiParameters.validate(parameters)
+        parameters.forEach { (key, value) ->
+            val resolved = value.asMoLangValue()
+            runtime.environment.query.addFunction(key) { resolved }
+        }
     }
 
-    fun updateVariables(runtime: MoLangRuntime, variables: Map<String, Double>) = variables.forEach { (key, value) ->
-        runtime.environment.setSimpleVariable(key.removePrefix("v."), DoubleValue(value))
+    fun updateVariables(runtime: MoLangRuntime, variables: Map<String, Double>) {
+        MolangUiParameters.validateVariables(variables)
+        variables.forEach { (key, value) ->
+            runtime.environment.setSimpleVariable(key.removePrefix("v."), DoubleValue(value))
+        }
     }
 }

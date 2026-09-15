@@ -138,6 +138,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
             val pokemon = get(slot) ?: continue
             pokemon.storeCoordinates.set(StoreCoordinates(this, PartyPosition(slot)))
         }
+        rebuildPokemonByUuid()
     }
 
     override fun onPokemonChanged(pokemon: Pokemon) {
@@ -279,7 +280,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
             }
         }
 
-        return result
+        return result.sortedBy { it.health <= 0 }
     }
     fun clearParty() {
         forEach {

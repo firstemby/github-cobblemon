@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.client.gui.molangui.renderer
 
 import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.bedrockk.molang.runtime.MoLangRuntime
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation

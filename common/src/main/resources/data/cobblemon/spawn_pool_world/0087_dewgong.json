@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -26,7 +26,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_frozen_ocean"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -39,13 +40,21 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 0.25,
-                "condition": {
-                    "timeRange": "day"
+            "weight": 3.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 0.25,
+                    "condition": {
+                        "timeRange": "day"
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -60,7 +69,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultipliers": [
                 {
                     "multiplier": 0.25,
@@ -94,13 +103,21 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
-            "weightMultiplier": {
-                "multiplier": 0.25,
-                "condition": {
-                    "timeRange": "day"
+            "weight": 3.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 0.25,
+                    "condition": {
+                        "timeRange": "day"
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -117,7 +134,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "34-48",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultipliers": [
                 {
                     "multiplier": 0.25,

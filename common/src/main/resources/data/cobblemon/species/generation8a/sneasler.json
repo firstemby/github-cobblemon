@@ -174,7 +174,6 @@
     "tm:nastyplot",
     "tm:poisonjab",
     "tm:poisontail",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -221,7 +220,6 @@
     "tutor:lashout",
     "tutor:lowkick",
     "tutor:poisonjab",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -233,7 +231,8 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:powershift"
   ],
   "preEvolution": "sneasel hisuian",
   "evolutions": []

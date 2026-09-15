@@ -24,6 +24,7 @@
       "isBattle": false,
       "condition": "!q.in_air",
       "animations": [
+        "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_idle')",
         {
           "condition": "q.is_ridden && q.has_entity",
@@ -42,6 +43,7 @@
       "isBattle": true,
       "condition": "!q.in_air",
       "animations": [
+        "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'battle_idle')"
       ],
       "namedAnimations": {
@@ -58,6 +60,7 @@
       ],
       "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
+        "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_walk')",
         {
           "condition": "q.is_ridden && q.has_entity",
@@ -75,6 +78,7 @@
       ],
       "condition": "!q.in_air && q.is_sprinting",
       "animations": [
+        "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_run')",
         {
           "condition": "q.is_ridden && q.has_entity",
@@ -89,6 +93,7 @@
       "poseTypes": ["STAND", "WALK"],
       "condition": "q.in_air",
       "animations": [
+        "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ride_jump')",
         {
           "condition": "q.is_ridden",
@@ -100,6 +105,13 @@
       ],
       "transformTicks": 5,
       "transformToTicks": 5
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('archaludon', 'sleep')"]
     }
   }
 }

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.client.gui.molangui
 
-import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiClosedPacket
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
@@ -39,11 +38,12 @@ class MolangUiScreen(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun onClose() {
-        widgetTree.cleanup()
-        MolangUiClosedPacket(sessionId).sendToServer()
-        MolangUiClientManager.onScreenClosed(sessionId)
-        super.onClose()
+    override fun removed() {
+        try {
+            super.removed()
+        } finally {
+            MolangUiClientManager.onScreenRemoved(sessionId, this, widgetTree)
+        }
     }
 
     override fun isPauseScreen(): Boolean = false

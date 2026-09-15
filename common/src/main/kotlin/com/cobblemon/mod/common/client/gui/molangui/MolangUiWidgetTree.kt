@@ -9,118 +9,190 @@
 package com.cobblemon.mod.common.client.gui.molangui
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.mojang.blaze3d.systems.RenderSystem
+import com.cobblemon.mod.common.client.render.RenderAlphaScope
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molangui.MolangUiDefinition
+import com.cobblemon.mod.common.api.molangui.ParameterValue
 import com.cobblemon.mod.common.api.molangui.event.ClientEventProcessor
 import com.cobblemon.mod.common.api.molangui.event.WidgetEvent
 import com.cobblemon.mod.common.api.molangui.event.WidgetEventType
 import com.cobblemon.mod.common.api.molangui.layout.LayoutEngine
-import com.cobblemon.mod.common.api.molangui.layout.SizeExpression
 import com.cobblemon.mod.common.api.molangui.widget.WidgetDefinition
+import com.cobblemon.mod.common.api.molangui.widget.WidgetExpansion
 import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.cobblemon.mod.common.api.molangui.widget.WidgetType
 import com.cobblemon.mod.common.client.gui.molangui.renderer.NumberInputRenderer
-import com.cobblemon.mod.common.client.gui.molangui.renderer.ListRenderer
 import com.cobblemon.mod.common.client.gui.molangui.renderer.WidgetRendererRegistry
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.Minecraft
+import com.cobblemon.mod.common.util.lang
 import net.minecraft.resources.ResourceLocation
+import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
 import java.util.UUID
 
 class MolangUiWidgetTree(
     val guiId: ResourceLocation,
     val sessionId: UUID,
     var rootDefinition: WidgetDefinition,
-    parameters: Map<String, String>,
-    variables: Map<String, Double>
+    parameters: Map<String, ParameterValue>,
+    variables: Map<String, Double>,
+    private val nanoTime: () -> Long = System::nanoTime
 ) {
-    private val mutableVariables: MutableMap<String, Double> = variables.toMutableMap()
-    private val currentParameters: MutableMap<String, String> = parameters.toMutableMap()
-    val runtime: MoLangRuntime = MolangUiClientRuntimeFactory.create(guiId, parameters, mutableVariables)
-    var root: WidgetInstance = buildInstance(rootDefinition, null)
+    private val startedAt = nanoTime()
+    private var previousFrame = startedAt
+    private val currentParameters = parameters.toMutableMap()
+    val runtime: MoLangRuntime = MolangUiClientRuntimeFactory.create(guiId, parameters, variables)
+    var root: WidgetInstance = WidgetExpansion.refresh(rootDefinition, runtime)
         private set
-    private var guiTime: Float = 0f
-    private var hoveredWidget: WidgetInstance? = null
+    private var hoveredPath: List<WidgetInstance> = emptyList()
+    private var hoverRevision = 0L
+    private var expansionError: String? = null
+    private var closed = false
+    private var lastWidth = 0
+    private var lastHeight = 0
 
-    fun updateParameters(parameters: Map<String, String>) {
-        currentParameters.putAll(parameters)
+    fun updateParameters(parameters: Map<String, ParameterValue>) {
         MolangUiClientRuntimeFactory.updateParameters(runtime, parameters)
-        rebuildInstances()
-    }
-
-    private fun rebuildInstances() {
-        root.children.clear()
-        for (childDef in rootDefinition.children) {
-            root.children.add(buildInstance(childDef, root))
-        }
+        currentParameters.putAll(parameters)
     }
 
     fun updateVariables(variables: Map<String, Double>) {
-        mutableVariables.putAll(variables)
         MolangUiClientRuntimeFactory.updateVariables(runtime, variables)
     }
 
     fun rebuildFromDefinition(newDefinition: MolangUiDefinition) {
         this.rootDefinition = newDefinition.root
 
-        for ((key, value) in newDefinition.variables) {
-            if (!mutableVariables.containsKey(key)) {
-                mutableVariables[key] = value
-            }
-        }
-
-        MolangUiClientRuntimeFactory.updateVariables(runtime, mutableVariables)
+        val newVariables = newDefinition.variables.filterKeys { it.removePrefix("v.") !in runtime.environment.variable.map }
+        MolangUiClientRuntimeFactory.updateVariables(runtime, newVariables)
 
         MolangUiClientRuntimeFactory.updateParameters(runtime, currentParameters)
 
-        root = buildInstance(rootDefinition, null)
+        prepare(lastWidth, lastHeight)
+    }
+
+    internal fun prepare(width: Int, height: Int): Boolean {
+        if (closed) return false
+        lastWidth = width
+        lastHeight = height
+        try {
+            root = WidgetExpansion.refresh(rootDefinition, runtime, root)
+            fun visibility(widget: WidgetInstance, parentEnabled: Boolean) {
+                widget.withItemContext(runtime) {
+                    widget.visible = widget.definition.getProperty("visible")?.resolveBoolean(runtime) ?: true
+                    widget.enabled = parentEnabled && (widget.definition.getProperty("enabled")?.resolveBoolean(runtime) ?: true)
+                }
+                widget.children.forEach { visibility(it, widget.enabled) }
+            }
+            visibility(root, true)
+            LayoutEngine.layout(root, width.toFloat(), height.toFloat(), runtime)
+            clampScrollOffsets(root)
+            expansionError = null
+            return true
+        } catch (error: Exception) {
+            clearHover()
+            val reason = error.message ?: error.javaClass.simpleName
+            if (reason != expansionError) Cobblemon.LOGGER.warn("Invalid Molang UI {}: {}", guiId, reason)
+            expansionError = reason
+            return false
+        }
     }
 
     fun render(guiGraphics: GuiGraphics, screenWidth: Int, screenHeight: Int, mouseX: Double, mouseY: Double, delta: Float) {
-        guiTime += delta
-        MolangUiClientRuntimeFactory.updateFrame(runtime, guiTime, delta, screenWidth, screenHeight, mouseX, mouseY)
-
-        val newHovered = ClientEventProcessor.hitTest(root, mouseX.toFloat(), mouseY.toFloat())
-        if (newHovered != hoveredWidget) {
-            hoveredWidget?.hovered = false
-            newHovered?.hovered = true
-            hoveredWidget = newHovered
+        if (closed) return
+        val now = nanoTime()
+        val elapsed = ((now - startedAt).coerceAtLeast(0) / 1_000_000_000.0).toFloat()
+        val frameDuration = ((now - previousFrame).coerceAtLeast(0) / 1_000_000_000.0).toFloat()
+        previousFrame = now
+        MolangUiClientRuntimeFactory.updateFrame(runtime, elapsed, frameDuration, screenWidth, screenHeight, mouseX, mouseY)
+        if (!prepare(screenWidth, screenHeight)) {
+            if (!closed) guiGraphics.drawString(Minecraft.getInstance().font, lang("molang_ui.invalid_view"), 8, 8, 0xFFFFFF)
+            return
         }
 
-        LayoutEngine.layout(root, screenWidth.toFloat(), screenHeight.toFloat(), runtime)
+        if (!updateHover(mouseX.toFloat(), mouseY.toFloat())) return
 
         renderWidget(root, guiGraphics, mouseX.toFloat(), mouseY.toFloat(), delta)
     }
 
+    private fun updateHover(mouseX: Float, mouseY: Float): Boolean {
+        val target = ClientEventProcessor.hitTest(root, mouseX, mouseY)
+        val next = generateSequence(target) { it.parent }.toList().asReversed()
+        if (next == hoveredPath) return true
+        val previous = hoveredPath
+        val shared = previous.zip(next).takeWhile { (old, new) -> old === new }.size
+        val exited = previous.drop(shared).asReversed()
+        val entered = next.drop(shared)
+        exited.forEach { it.hovered = false }
+        entered.forEach { it.hovered = true }
+        hoveredPath = next
+        val revision = ++hoverRevision
+        var handled = false
+        for (widget in exited) {
+            handled = dispatchHover(widget, WidgetEventType.HOVER_EXIT) || handled
+            if (closed || hoverRevision != revision) return false
+        }
+        for (widget in entered) {
+            handled = dispatchHover(widget, WidgetEventType.HOVER_ENTER) || handled
+            if (closed || hoverRevision != revision) return false
+        }
+        return !handled || prepare(lastWidth, lastHeight)
+    }
+
+    private fun dispatchHover(widget: WidgetInstance, type: WidgetEventType): Boolean {
+        val definition = widget.definition
+        if (type.id !in definition.events && type.clientId !in definition.clientEvents) return false
+        widget.withItemContext(runtime) {
+            ClientEventProcessor.processEvent(WidgetEvent(type, definition.id), definition, runtime, sessionId)
+        }
+        return true
+    }
+
+    private fun clearHover() {
+        hoveredPath.forEach { it.hovered = false }
+        hoveredPath = emptyList()
+        hoverRevision++
+    }
+
     fun onClick(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (!prepare(lastWidth, lastHeight)) return false
         val hit = ClientEventProcessor.hitTest(root, mouseX.toFloat(), mouseY.toFloat()) ?: return false
 
-        if (hit.definition.type == WidgetType.NUMBER_INPUT) {
-            if (NumberInputRenderer.handleClick(hit, runtime, mouseX.toFloat(), mouseY.toFloat())) {
+        if (button == 0 && hit.definition.type == WidgetType.NUMBER_INPUT) {
+            var contentY = mouseY.toFloat()
+            var parent = hit.parent
+            while (parent != null) {
+                if (parent.definition.type == WidgetType.SCROLL_PANEL) contentY -= parent.scrollOffset
+                parent = parent.parent
+            }
+            if (hit.withItemContext(runtime) {
+                NumberInputRenderer.handleClick(hit, runtime, mouseX.toFloat(), contentY) { value ->
+                    bubbleEvent(hit, WidgetEventType.CHANGE, mapOf("value" to value.toDouble()))
+                }
+            }) {
                 return true
             }
         }
 
-        val data = mapOf("button" to button.toString())
-        bubbleEvent(hit, WidgetEventType.CLICK, data)
-        return true
+        val data = mapOf("button" to button.toDouble())
+        return bubbleEvent(hit, WidgetEventType.CLICK, data)
     }
 
     fun onScroll(mouseX: Double, mouseY: Double, amount: Double): Boolean {
+        if (!amount.isFinite() || !prepare(lastWidth, lastHeight)) return false
         val hit = ClientEventProcessor.hitTest(root, mouseX.toFloat(), mouseY.toFloat()) ?: return false
 
         val scrollPanel = findParentOfType(hit, WidgetType.SCROLL_PANEL)
         if (scrollPanel != null) {
-            val scrollSpeed = 10f
-            val contentHeight = getContentHeight(scrollPanel)
-            scrollPanel.scrollOffset += (amount * scrollSpeed).toFloat()
-            val maxScroll = 0f
-            val minScroll = -(contentHeight - scrollPanel.computedHeight).coerceAtLeast(0f)
-            scrollPanel.scrollOffset = scrollPanel.scrollOffset.coerceIn(minScroll, maxScroll)
+            scrollPanel.scrollOffset = (scrollPanel.scrollOffset.toDouble() + amount * 10.0)
+                .coerceIn(minimumScroll(scrollPanel).toDouble(), 0.0).toFloat()
+            bubbleEvent(hit, WidgetEventType.SCROLL, mapOf("amount" to amount))
             return true
         }
 
-        val data = mapOf("amount" to amount.toString())
-        bubbleEvent(hit, WidgetEventType.SCROLL, data)
-        return true
+        val data = mapOf("amount" to amount)
+        return bubbleEvent(hit, WidgetEventType.SCROLL, data)
     }
 
     private fun findParentOfType(widget: WidgetInstance, type: WidgetType): WidgetInstance? {
@@ -132,56 +204,64 @@ class MolangUiWidgetTree(
         return null
     }
 
-    private fun bubbleEvent(target: WidgetInstance, type: WidgetEventType, data: Map<String, String>) {
+    private fun bubbleEvent(target: WidgetInstance, type: WidgetEventType, data: Map<String, Double>): Boolean {
         var current: WidgetInstance? = target
         while (current != null) {
             val def = current.definition
             val hasServer = def.events.containsKey(type.id)
             val hasClient = def.clientEvents.containsKey(type.clientId)
             if (hasServer || hasClient) {
-                restoreListItemContext(current)
-                val event = WidgetEvent(type, def.id, data)
-                ClientEventProcessor.processEvent(event, def, runtime, sessionId)
-                return
+                val event = WidgetEvent(type, target.definition.id, data)
+                target.withItemContext(runtime) { ClientEventProcessor.processEvent(event, def, runtime, sessionId) }
+                return true
             }
             current = current.parent
         }
-    }
-
-    private fun restoreListItemContext(widget: WidgetInstance) {
-        val parent = widget.parent ?: return
-        if (parent.definition.type == WidgetType.LIST) {
-            val index = parent.children.indexOf(widget)
-            if (index >= 0) {
-                val sourceType = parent.definition.getStringProperty("source_type") ?: "array"
-                val dataItems = if (sourceType == "data") ListRenderer.parseDataSource(parent, runtime) else null
-                ListRenderer.setItemContext(runtime, index, dataItems?.getOrNull(index))
-            }
-        }
+        return false
     }
 
     fun onKeyPress(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (keyCode == GLFW_KEY_ESCAPE || !prepare(lastWidth, lastHeight) || !root.visible || !root.enabled) return false
         val target = root
         val hasHandler = target.definition.events.containsKey("on_key") || target.definition.clientEvents.containsKey("on_key_client")
         if (!hasHandler) return false
         val event = WidgetEvent(WidgetEventType.KEY, target.definition.id,
-            mapOf("key" to keyCode.toString(), "scan" to scanCode.toString(), "modifiers" to modifiers.toString()))
-        ClientEventProcessor.processEvent(event, target.definition, runtime, sessionId)
+            mapOf("key" to keyCode.toDouble(), "scan" to scanCode.toDouble(), "modifiers" to modifiers.toDouble()))
+        target.withItemContext(runtime) { ClientEventProcessor.processEvent(event, target.definition, runtime, sessionId) }
         return true
     }
 
     fun cleanup() {
+        closed = true
+        clearHover()
+        root.children.clear()
+        root.rendererState = null
     }
 
-    private fun renderWidget(widget: WidgetInstance, guiGraphics: GuiGraphics, mouseX: Float, mouseY: Float, delta: Float) {
-        val visibleProp = widget.definition.getProperty("visible")
-        if (visibleProp != null && !visibleProp.isStatic) {
-            widget.visible = visibleProp.resolveBoolean(runtime)
-        }
+    private fun renderWidget(widget: WidgetInstance, guiGraphics: GuiGraphics, mouseX: Float, mouseY: Float, delta: Float): Unit = widget.withItemContext(runtime) {
         if (!widget.visible) return
-        val renderer = WidgetRendererRegistry.get(widget.definition.type)
-        renderer?.render(widget, guiGraphics, runtime, mouseX, mouseY, delta)
+        val opacity = widget.definition.getProperty("opacity")?.resolveFloat(runtime) ?: 1f
+        if (!opacity.isFinite() || opacity <= 0f) return
+        if (opacity >= 1f) {
+            renderContents(widget, guiGraphics, mouseX, mouseY, delta)
+            return
+        }
+        val color = RenderSystem.getShaderColor().copyOf()
+        try {
+            guiGraphics.setColor(color[0], color[1], color[2], color[3] * opacity)
+            renderContents(widget, guiGraphics, mouseX, mouseY, delta)
+        } finally {
+            guiGraphics.setColor(color[0], color[1], color[2], color[3])
+        }
+    }
 
+    private fun renderContents(widget: WidgetInstance, guiGraphics: GuiGraphics, mouseX: Float, mouseY: Float, delta: Float) {
+        val renderer = WidgetRendererRegistry.get(widget.definition.type)
+        if (widget.definition.type == WidgetType.POKEMON_RENDER || widget.definition.type == WidgetType.ITEM_SLOT) {
+            RenderAlphaScope.render { renderer?.render(widget, guiGraphics, runtime, mouseX, mouseY, delta) }
+        } else {
+            renderer?.render(widget, guiGraphics, runtime, mouseX, mouseY, delta)
+        }
         val isScrollPanel = widget.definition.type == WidgetType.SCROLL_PANEL
         val scrollOffset = widget.scrollOffset
         if (isScrollPanel) {
@@ -190,22 +270,12 @@ class MolangUiWidgetTree(
             val w = widget.computedWidth.toInt()
             val h = widget.computedHeight.toInt()
             guiGraphics.enableScissor(x, y, x + w, y + h)
-            applyScrollOffset(widget, scrollOffset)
         }
 
         try {
-            if (widget.definition.type == WidgetType.LIST) {
-                val sourceType = widget.definition.getStringProperty("source_type") ?: "array"
-                val dataItems = if (sourceType == "data") ListRenderer.parseDataSource(widget, runtime) else null
-                for ((index, child) in widget.children.withIndex()) {
-                    val itemData = dataItems?.getOrNull(index)
-                    ListRenderer.setItemContext(runtime, index, itemData)
-                    renderWidget(child, guiGraphics, mouseX, mouseY, delta)
-                }
-            } else {
-                for (child in widget.children) {
-                    renderWidget(child, guiGraphics, mouseX, mouseY, delta)
-                }
+            if (isScrollPanel) applyScrollOffset(widget, scrollOffset)
+            for (child in widget.children) {
+                renderWidget(child, guiGraphics, mouseX, mouseY, delta)
             }
         } finally {
             if (isScrollPanel) {
@@ -222,55 +292,25 @@ class MolangUiWidgetTree(
         }
     }
 
-    private fun getContentHeight(widget: WidgetInstance): Float {
-        var minY = Float.MAX_VALUE
-        var maxY = -Float.MAX_VALUE
-        collectLeafBounds(widget, { y -> if (y < minY) minY = y }, { y -> if (y > maxY) maxY = y })
-        return if (maxY > minY) maxY - minY else 0f
+    private fun clampScrollOffsets(widget: WidgetInstance) {
+        if (!widget.visible) return
+        if (widget.definition.type == WidgetType.SCROLL_PANEL) {
+            widget.scrollOffset = if (widget.scrollOffset.isFinite()) {
+                widget.scrollOffset.coerceIn(minimumScroll(widget), 0f)
+            } else 0f
+        }
+        widget.children.forEach(::clampScrollOffsets)
     }
 
-    private fun collectLeafBounds(widget: WidgetInstance, onMinY: (Float) -> Unit, onMaxY: (Float) -> Unit) {
-        if (widget.children.isEmpty()) {
-            onMinY(widget.absoluteY)
-            onMaxY(widget.absoluteY + widget.computedHeight)
-        } else {
-            for (child in widget.children) {
-                collectLeafBounds(child, onMinY, onMaxY)
-            }
+    private fun minimumScroll(widget: WidgetInstance): Float {
+        val viewportBottom = widget.absoluteY.toDouble() + widget.computedHeight
+        var contentBottom = viewportBottom
+        fun collect(node: WidgetInstance) {
+            if (!node.visible) return
+            contentBottom = maxOf(contentBottom, node.absoluteY.toDouble() + node.computedHeight)
+            if (node.definition.type != WidgetType.SCROLL_PANEL) node.children.forEach(::collect)
         }
-    }
-
-    private fun buildInstance(definition: WidgetDefinition, parent: WidgetInstance?): WidgetInstance {
-        val instance = WidgetInstance(definition, parent)
-
-        val sizeRaw = definition.getProperty("size")?.raw
-        if (sizeRaw is List<*> && sizeRaw.size == 2) {
-            instance.widthExpr = SizeExpression.parse(sizeRaw[0] ?: 0)
-            instance.heightExpr = SizeExpression.parse(sizeRaw[1] ?: 0)
-        }
-
-        val offsetRaw = definition.getProperty("offset")?.raw
-        if (offsetRaw is List<*> && offsetRaw.size == 2) {
-            instance.offsetXExpr = SizeExpression.parse(offsetRaw[0] ?: 0)
-            instance.offsetYExpr = SizeExpression.parse(offsetRaw[1] ?: 0)
-        }
-
-        val visibleProp = definition.getProperty("visible")
-        if (visibleProp != null) {
-            instance.visible = visibleProp.resolveBoolean(runtime)
-        }
-
-        if (definition.type == WidgetType.LIST) {
-            val expandedChildren = ListRenderer.expandListChildren(instance, runtime)
-            for (childDef in expandedChildren) {
-                instance.children.add(buildInstance(childDef, instance))
-            }
-        } else {
-            for (childDef in definition.children) {
-                instance.children.add(buildInstance(childDef, instance))
-            }
-        }
-
-        return instance
+        widget.children.forEach(::collect)
+        return (viewportBottom - contentBottom).toFloat()
     }
 }

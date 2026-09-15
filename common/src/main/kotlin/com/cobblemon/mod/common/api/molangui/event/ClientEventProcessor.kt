@@ -9,6 +9,10 @@
 package com.cobblemon.mod.common.api.molangui.event
 
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molangui.MolangUiPacketLimits
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molangui.widget.WidgetDefinition
 import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
@@ -25,29 +29,35 @@ object ClientEventProcessor {
         runtime: MoLangRuntime,
         sessionId: UUID
     ) {
-        val clientHandler = widget.clientEvents[event.type.clientId]
-        if (clientHandler != null) {
-            try {
-                val expression = clientHandler.asExpressionLike()
-                expression.resolve(runtime)
-            } catch (e: Exception) {
-                Cobblemon.LOGGER.warn("[ClientEventProcessor] Failed to execute client event '${event.type.clientId}' on widget '${event.widgetId}': ${e.message}")
+        val context = QueryStruct(hashMapOf())
+        event.data.forEach { (key, value) -> context.addFunction(key) { DoubleValue(value) } }
+        context.addFunction("type") { StringValue(event.type.id) }
+        context.addFunction("widget_id") { StringValue(event.widgetId) }
+        val functions = runtime.environment.query.functions
+        val previous = functions.remove("event")
+        runtime.environment.query.addFunction("event") { context }
+        try {
+            widget.clientEvents[event.type.clientId]?.asExpressionLike()?.resolve(runtime)
+            widget.events[event.type.id]?.let { serverHandler ->
+                // Action arguments may depend on variables changed by the client handler.
+                val parameters = serverHandler.parameters.mapValues { (_, property) -> property.resolveString(runtime) }
+                require(parameters.size <= MolangUiPacketLimits.MAX_ACTION_FIELDS) { "too many action parameters" }
+                parameters.forEach { (name, value) ->
+                    MolangUiPacketLimits.requireIdentifier(name, "action parameter")
+                    MolangUiPacketLimits.requireValue(value, name)
+                }
+                MolangUiActionPacket(sessionId, serverHandler.action.value, parameters).sendToServer()
             }
-        }
-
-        val serverHandler = widget.events[event.type.id]
-        if (serverHandler != null) {
-            val parameters = serverHandler.parameters.mapValues { (_, property) -> property.resolveString(runtime) }
-            val packet = MolangUiActionPacket(
-                sessionId = sessionId,
-                action = serverHandler.action.value,
-                data = parameters
-            )
-            packet.sendToServer()
+        } catch (error: Exception) {
+            Cobblemon.LOGGER.warn("Failed UI event {} on widget {}: {}", event.type.id, event.widgetId, error.message)
+        } finally {
+            functions.remove("event")
+            if (previous != null) functions["event"] = previous
         }
     }
 
     fun hitTest(root: WidgetInstance, x: Float, y: Float): WidgetInstance? {
+        if (!root.visible || !root.enabled) return null
         val isScrollPanel = root.definition.type == WidgetType.SCROLL_PANEL
         if (isScrollPanel && !root.containsPoint(x, y)) return null
 
@@ -64,7 +74,6 @@ object ClientEventProcessor {
 enum class WidgetEventType(val id: String) {
     CLICK("on_click"),
     CHANGE("on_change"),
-    SUBMIT("on_submit"),
     HOVER_ENTER("on_hover_enter"),
     HOVER_EXIT("on_hover_exit"),
     SCROLL("on_scroll"),
@@ -76,5 +85,5 @@ enum class WidgetEventType(val id: String) {
 data class WidgetEvent(
     val type: WidgetEventType,
     val widgetId: String,
-    val data: Map<String, String> = emptyMap()
+    val data: Map<String, Double> = emptyMap()
 )

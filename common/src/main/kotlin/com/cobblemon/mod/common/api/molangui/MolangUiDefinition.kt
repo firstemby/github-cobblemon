@@ -18,9 +18,7 @@ data class MolangUiDefinition(
     val mode: GuiMode,
     val parameters: Map<String, ParameterType>,
     val actions: Set<ActionKey>,
-    val blocksInput: Boolean,
     val exclusive: Boolean,
     val root: WidgetDefinition,
-    val variables: Map<String, Double>,
-    val imports: List<String>
+    val variables: Map<String, Double>
 )

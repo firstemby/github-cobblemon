@@ -4,7 +4,7 @@
             "processor_type": "cobblemon:height_range",
             "reference": "sea_level",
             "min_offset": 2,
-            "max_offset": 35
+            "max_offset": 125
         },
         {
             "processor_type": "minecraft:rule",

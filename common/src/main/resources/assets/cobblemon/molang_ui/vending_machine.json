@@ -2,7 +2,6 @@
   "format_version": 1,
   "contract_version": "1.1.0",
   "mode": "screen",
-  "blocks_input": true,
   "actions": ["buy", "vending_page"],
   "parameters": {
     "page": "number",

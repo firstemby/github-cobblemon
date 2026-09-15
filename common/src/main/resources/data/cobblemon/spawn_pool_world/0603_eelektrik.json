@@ -10,7 +10,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -40,7 +40,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.95,
+            "weight": 9.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -68,7 +68,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.19,
+            "weight": 1.9,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,
@@ -103,12 +103,13 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.19,
+            "weight": 1.9,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ],
-                "maxY": 48
+                "maxY": 48,
+                "isPokeSnack": true
             }
         },
         {
@@ -121,14 +122,15 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "39-41",
-            "weight": 0.712,
+            "weight": 7.12,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ],
-                "maxY": 48
+                "maxY": 48,
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [
@@ -151,7 +153,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "39-41",
-            "weight": 0.57,
+            "weight": 5.7,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
@@ -161,7 +163,8 @@
                     "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
                 ],
                 "minY": -60,
-                "maxY": 13
+                "maxY": 13,
+                "isPokeSnack": true
             }
         }
     ]

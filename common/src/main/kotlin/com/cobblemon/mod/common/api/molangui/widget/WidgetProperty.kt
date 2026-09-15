@@ -15,8 +15,6 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 class WidgetProperty private constructor(val raw: Any, expressionSource: String?) {
     val expression: ExpressionLike? = expressionSource?.asExpressionLike()
 
-    val isStatic: Boolean get() = expression == null
-
     fun resolveDouble(runtime: MoLangRuntime): Double {
         return expression?.resolveDouble(runtime) ?: when (raw) {
             is Number -> raw.toDouble()
@@ -52,7 +50,7 @@ class WidgetProperty private constructor(val raw: Any, expressionSource: String?
         fun literal(value: Any): WidgetProperty = WidgetProperty(value, null)
         fun molang(source: String): WidgetProperty = WidgetProperty(source, source)
 
-        fun parseNumericString(value: String): Double {
+        private fun parseNumericString(value: String): Double {
             value.toDoubleOrNull()?.let { return it }
             if (value.startsWith("0x", ignoreCase = true)) {
                 value.substring(2).toLongOrNull(16)?.let { return it.toDouble() }

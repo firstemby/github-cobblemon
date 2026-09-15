@@ -10,25 +10,19 @@ package com.cobblemon.mod.common.client.gui.molangui
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import java.util.UUID
 
 class MolangUiOverlay(
-    val sessionId: UUID,
-    val widgetTree: MolangUiWidgetTree,
-    val blocksInput: Boolean,
+    private val widgetTree: MolangUiWidgetTree,
     val exclusive: Boolean
 ) {
     fun render(guiGraphics: GuiGraphics, delta: Float) {
         val mc = Minecraft.getInstance()
         val screenWidth = mc.window.guiScaledWidth
         val screenHeight = mc.window.guiScaledHeight
+        if (screenWidth <= 0 || screenHeight <= 0 || mc.window.screenWidth <= 0 || mc.window.screenHeight <= 0) return
         val mouseX = (mc.mouseHandler.xpos() * screenWidth / mc.window.screenWidth)
         val mouseY = (mc.mouseHandler.ypos() * screenHeight / mc.window.screenHeight)
 
         widgetTree.render(guiGraphics, screenWidth, screenHeight, mouseX, mouseY, delta)
-    }
-
-    fun close() {
-        widgetTree.cleanup()
     }
 }

@@ -2,7 +2,6 @@
   "format_version": 1,
   "contract_version": "1.1.0",
   "mode": "screen",
-  "blocks_input": true,
   "parameters": {
     "page": { "type": "number", "required": false, "default": 0 },
     "page_count": { "type": "number", "required": false, "default": 1 },

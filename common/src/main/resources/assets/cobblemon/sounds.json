@@ -1346,7 +1346,7 @@
     "sounds": [ { "name": "cobblemon:move/icebeam/icebeam_target_1", "volume": 0.8 } ]
   },
   "move.icebeam.target_2": {
-    "sounds": [ { "name": "cobblemon:move/icebeam/icebeam_target_2", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/icebeam/icebeam_target_2", "volume": 0.5 } ]
   },
   "move.infestation.actor": {
     "sounds": [ { "name": "cobblemon:move/infestation/infestation_actor", "volume": 0.8 } ]
@@ -1452,6 +1452,36 @@
   },
   "move.waterpulse.target": {
     "sounds": [ { "name": "cobblemon:move/waterpulse/waterpulse_target", "volume": 0.8 } ]
+  },
+  "move.leafstorm.actor": {
+    "sounds": [ { "name": "cobblemon:move/leafstorm/leafstorm_actor", "volume": 1.0 } ]
+  },
+  "move.leafstorm.target": {
+    "sounds": [ { "name": "cobblemon:move/leafstorm/leafstorm_target", "volume": 1.0 } ]
+  },
+  "move.suckerpunch.target": {
+    "sounds": [ { "name": "cobblemon:move/suckerpunch/suckerpunch_target", "volume": 1.0 } ]
+  },
+  "move.blizzard.actor": {
+    "sounds": [ { "name": "cobblemon:move/blizzard/blizzard_actor", "volume": 1.0 } ]
+  },
+  "move.blizzard.target": {
+    "sounds": [ { "name": "cobblemon:move/blizzard/blizzard_target", "volume": 1.0 } ]
+  },
+  "move.hydropump.actor": {
+    "sounds": [ { "name": "cobblemon:move/hydropump/hydropump_actor", "volume": 1.0 } ]
+  },
+  "move.hydropump.target": {
+    "sounds": [ { "name": "cobblemon:move/hydropump/hydropump_target", "volume": 1.0 } ]
+  },
+  "move.lightscreen.actor": {
+    "sounds": [ { "name": "cobblemon:move/lightscreen/lightscreen_actor", "volume": 1.0 } ]
+  },
+  "move.horndrill.target_1": {
+    "sounds": [ { "name": "cobblemon:move/horndrill/horndrill_target_1", "volume": 0.8 } ]
+  },
+  "move.horndrill.target_2": {
+    "sounds": [ { "name": "cobblemon:move/horndrill/horndrill_target_2", "volume": 1.0 } ]
   },
   "impact.normal": {
     "sounds": [
@@ -6380,6 +6410,9 @@
   "pokemon.cherrim.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/cherrim/cherrim_cry", "volume": 0.8 } ]
   },
+  "pokemon.cherrim_sunshine.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/cherrim/cherrim_sunshine_cry", "volume": 0.8 } ]
+  },
   "pokemon.shellos.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/shellos/shellos_cry", "volume": 0.8 } ]
   },
@@ -7403,8 +7436,14 @@
   "pokemon.rockruff.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/rockruff/rockruff_cry", "volume": 0.8 } ]
   },
-  "pokemon.lycanroc.cry": {
-    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_cry", "volume": 0.8 } ]
+  "pokemon.lycanroc_midday.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_midday_cry", "volume": 0.8 } ]
+  },
+  "pokemon.lycanroc_midnight.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_midnight_cry", "volume": 0.8 } ]
+  },
+  "pokemon.lycanroc_dusk.cry": {
+    "sounds": [ { "name": "cobblemon:pokemon/lycanroc/lycanroc_dusk_cry", "volume": 0.8 } ]
   },
   "pokemon.wishiwashi.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/wishiwashi/wishiwashi_cry", "volume": 0.8 } ]
@@ -7825,6 +7864,9 @@
   },
   "pokemon.duraludon.cry": {
     "sounds": [ { "name": "cobblemon:pokemon/duraludon/duraludon_cry", "volume": 0.8 } ]
+  },
+  "pokemon.duraludon.bonk": {
+    "sounds": [ { "name": "cobblemon:pokemon/duraludon/duraludon_bonk", "volume": 0.8 } ]
   },
   "pokemon.dreepy.cry": {
     "sounds": [ {  "name": "cobblemon:pokemon/dreepy/dreepy_cry", "volume": 0.8 } ]

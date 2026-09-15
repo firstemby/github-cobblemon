@@ -22,12 +22,11 @@ object ButtonRenderer : WidgetRenderer {
         mouseY: Float,
         delta: Float
     ) {
-        val enabled = widget.definition.getProperty("enabled")?.resolveBoolean(runtime) ?: true
+        val enabled = widget.enabled
         val baseColor = widget.definition.getProperty("color")?.resolveInt(runtime) ?: 0xFF555555.toInt()
 
         val color = when {
             !enabled -> 0xFF333333.toInt()
-            widget.pressed -> 0xFF333333.toInt()
             widget.hovered -> widget.definition.hoverOverrides["color"]?.resolveInt(runtime) ?: 0xFF777777.toInt()
             else -> baseColor
         }
@@ -39,13 +38,26 @@ object ButtonRenderer : WidgetRenderer {
             color
         )
 
-        val text = widget.definition.getProperty("text")?.resolveString(runtime) ?: ""
-        if (text.isNotEmpty()) {
-            val font = Minecraft.getInstance().font
-            val textX = widget.absoluteX + widget.computedWidth / 2f - font.width(text) / 2f
-            val textY = widget.absoluteY + widget.computedHeight / 2f - font.lineHeight / 2f
-            val textColor = if (enabled) 0xFFFFFF else 0xAAAAAA
-            guiGraphics.drawString(font, text, textX.toInt(), textY.toInt(), textColor, true)
+        val text = widget.definition.getProperty("text")?.resolveString(runtime) ?: return
+        val contentWidth = (widget.computedWidth.toInt() - 4).coerceAtLeast(0)
+        if (text.isEmpty() || contentWidth == 0) return
+        val font = Minecraft.getInstance().font
+        if (widget.computedHeight < font.lineHeight + 2) return
+        val displayed = if (font.width(text) <= contentWidth) text else {
+            val suffix = "?"
+            val suffixWidth = font.width(suffix)
+            if (suffixWidth > contentWidth) return
+            font.plainSubstrByWidth(text, contentWidth - suffixWidth) + suffix
+        }
+        val textX = widget.absoluteX + (widget.computedWidth - font.width(displayed)) / 2f
+        val textY = widget.absoluteY + (widget.computedHeight - font.lineHeight) / 2f
+        val textColor = if (enabled) 0xFFFFFF else 0xAAAAAA
+        guiGraphics.enableScissor(widget.absoluteX.toInt(), widget.absoluteY.toInt(),
+            (widget.absoluteX + widget.computedWidth).toInt(), (widget.absoluteY + widget.computedHeight).toInt())
+        try {
+            guiGraphics.drawString(font, displayed, textX.toInt(), textY.toInt(), textColor, true)
+        } finally {
+            guiGraphics.disableScissor()
         }
     }
 }

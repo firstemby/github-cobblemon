@@ -13,14 +13,15 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
-            "level": "3-27",
-            "weight": 8.4,
+            "level": "2-27",
+            "weight": 42.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_savanna"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

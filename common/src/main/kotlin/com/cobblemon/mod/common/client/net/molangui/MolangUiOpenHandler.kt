@@ -15,6 +15,6 @@ import net.minecraft.client.Minecraft
 
 object MolangUiOpenHandler : ClientNetworkPacketHandler<MolangUiOpenPacket> {
     override fun handle(packet: MolangUiOpenPacket, client: Minecraft) {
-        MolangUiClientManager.open(packet.sessionId, packet.guiId, packet.contractVersion, packet.mode, packet.args, packet.blocksInput, packet.exclusive, packet.hasContainer, packet.slotLayouts)
+        MolangUiClientManager.open(packet.sessionId, packet.guiId, packet.contractVersion, packet.mode, packet.args, packet.exclusive, packet.hasContainer, packet.slotLayouts)
     }
 }

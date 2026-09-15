@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.client.gui.molangui.renderer
 
 import com.cobblemon.mod.common.api.molangui.widget.WidgetInstance
 import com.bedrockk.molang.runtime.MoLangRuntime
+import com.cobblemon.mod.common.client.render.withStandardBlend
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 
@@ -23,37 +24,37 @@ object ImageRenderer : WidgetRenderer {
         delta: Float
     ) {
         val textureStr = widget.definition.getProperty("texture")?.resolveString(runtime) ?: return
-        val texture = ResourceLocation.parse(textureStr)
-        val uv = widget.definition.getProperty("uv")
-        val textureSize = widget.definition.getProperty("texture_size")
-
-        if (uv != null && uv.raw is List<*>) {
-            val uvList = uv.raw as List<*>
-            val u = (uvList.getOrNull(0) as? Number)?.toFloat() ?: 0f
-            val v = (uvList.getOrNull(1) as? Number)?.toFloat() ?: 0f
-            val uvW = (uvList.getOrNull(2) as? Number)?.toFloat() ?: widget.computedWidth
-            val uvH = (uvList.getOrNull(3) as? Number)?.toFloat() ?: widget.computedHeight
-            val texW = if (textureSize != null && textureSize.raw is List<*>)
-                ((textureSize.raw as List<*>).getOrNull(0) as? Number)?.toInt() ?: 256
-            else 256
-            val texH = if (textureSize != null && textureSize.raw is List<*>)
-                ((textureSize.raw as List<*>).getOrNull(1) as? Number)?.toInt() ?: 256
-            else 256
+        val texture = ResourceLocation.tryParse(textureStr) ?: return
+        if (!widget.absoluteX.isFinite() || !widget.absoluteY.isFinite()) return
+        val width = pixelSize(widget.computedWidth) ?: return
+        val height = pixelSize(widget.computedHeight) ?: return
+        val uvProperty = widget.definition.getProperty("uv")
+        val uv = uvProperty?.raw as? List<*>
+        if (uvProperty != null && uv == null) return
+        val sizeProperty = widget.definition.getProperty("texture_size")
+        val textureSize = sizeProperty?.raw as? List<*>
+        if (sizeProperty != null && textureSize == null) return
+        val texW = pixelSize(component(textureSize, 0, if (uv == null) width.toFloat() else 256f)) ?: return
+        val texH = pixelSize(component(textureSize, 1, if (uv == null) height.toFloat() else 256f)) ?: return
+        val u = component(uv, 0, 0f) ?: return
+        val v = component(uv, 1, 0f) ?: return
+        val uvW = pixelSize(component(uv, 2, if (uv == null) texW.toFloat() else width.toFloat())) ?: return
+        val uvH = pixelSize(component(uv, 3, if (uv == null) texH.toFloat() else height.toFloat())) ?: return
+        withStandardBlend {
             guiGraphics.blit(
                 texture,
-                widget.absoluteX.toInt(), widget.absoluteY.toInt(),
-                u, v,
-                widget.computedWidth.toInt(), widget.computedHeight.toInt(),
-                texW, texH
-            )
-        } else {
-            guiGraphics.blit(
-                texture,
-                widget.absoluteX.toInt(), widget.absoluteY.toInt(),
-                0f, 0f,
-                widget.computedWidth.toInt(), widget.computedHeight.toInt(),
-                widget.computedWidth.toInt(), widget.computedHeight.toInt()
+                widget.absoluteX.toInt(), widget.absoluteY.toInt(), width, height,
+                u, v, uvW, uvH, texW, texH
             )
         }
     }
+
+    private fun component(values: List<*>?, index: Int, default: Float): Float? {
+        if (values == null || index >= values.size) return default
+        return (values[index] as? Number)?.toFloat()?.takeIf { it.isFinite() }
+    }
+
+    private fun pixelSize(value: Float?): Int? = value?.takeIf {
+        it.isFinite() && it >= 1f && it.toDouble() <= Int.MAX_VALUE.toDouble()
+    }?.toInt()
 }

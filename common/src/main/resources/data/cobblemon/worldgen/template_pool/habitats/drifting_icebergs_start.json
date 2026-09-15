@@ -23,46 +23,6 @@
             }
         },
         {
-            "weight": 1,
-            "element": {
-                "location": "cobblemon:habitats/drifting_iceberg3",
-                "element_type": "minecraft:single_pool_element",
-                "override_liquid_settings": "apply_waterlogging",
-                "processors": "cobblemon:habitats/drifting_icebergs_start",
-                "projection": "rigid"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "location": "cobblemon:habitats/drifting_iceberg4",
-                "element_type": "minecraft:single_pool_element",
-                "override_liquid_settings": "apply_waterlogging",
-                "processors": "cobblemon:habitats/drifting_icebergs_start",
-                "projection": "rigid"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "location": "cobblemon:habitats/drifting_iceberg5",
-                "element_type": "minecraft:single_pool_element",
-                "override_liquid_settings": "apply_waterlogging",
-                "processors": "cobblemon:habitats/drifting_icebergs_start",
-                "projection": "rigid"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "location": "cobblemon:habitats/drifting_iceberg6",
-                "element_type": "minecraft:single_pool_element",
-                "override_liquid_settings": "apply_waterlogging",
-                "processors": "cobblemon:habitats/drifting_icebergs_start",
-                "projection": "rigid"
-            }
-        },
-        {
             "weight": 2,
             "element": {
                 "location": "cobblemon:habitats/drifting_iceberg7",
