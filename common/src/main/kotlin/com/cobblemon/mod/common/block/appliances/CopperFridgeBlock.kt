@@ -8,20 +8,29 @@
 
 package com.cobblemon.mod.common.block.appliances
 
+import com.cobblemon.mod.common.block.PCBlock
+import com.cobblemon.mod.common.block.PCBlock.PCPart
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.StringRepresentable
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.*
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
@@ -34,6 +43,7 @@ class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(setti
     companion object {
         val CODEC: MapCodec<CopperFridgeBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperFridgeBlock) }
+        val PART = EnumProperty.create("part", FridgeHalf::class.java)
         val POWERED = BooleanProperty.create("powered")
 
         val LOWER_HITBOX = Shapes.or(
@@ -47,9 +57,16 @@ class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(setti
         //The handles get ignored by entity collission, because it feels nicer, but still count as part of the hitbox
     }
 
+    enum class FridgeHalf : StringRepresentable {
+        TOP,
+        BOTTOM;
+        override fun getSerializedName(): String = this.name.lowercase()
+    }
+
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(HORIZONTAL_FACING, Direction.NORTH)
+            .setValue(PART, FridgeHalf.BOTTOM)
             .setValue(WATERLOGGED, false)
             .setValue(POWERED, false)
         )
@@ -58,7 +75,7 @@ class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(setti
     override fun codec(): MapCodec<CopperFridgeBlock> = CODEC
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(HORIZONTAL_FACING, WATERLOGGED, POWERED)
+        builder.add(HORIZONTAL_FACING, PART, WATERLOGGED, POWERED)
     }
 
     override fun getFluidState(blockState: BlockState): FluidState? = if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState)
@@ -67,22 +84,76 @@ class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(setti
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world))
         }
-        return if (state.getValue(HORIZONTAL_FACING).opposite == direction && !state.canSurvive(world, pos)) Blocks.AIR.defaultBlockState()
-        else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
+
+        val isFridge = neighborState.`is`(this)
+        val part = state.getValue(PART)
+        if (!isFridge && part == FridgeHalf.TOP && neighborPos == pos.below()) {
+            return Blocks.AIR.defaultBlockState()
+        } else if (!isFridge && part == FridgeHalf.BOTTOM && neighborPos == pos.above()) {
+            return Blocks.AIR.defaultBlockState()
+        }
+        return state
     }
 
     override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        //val hitbox = state.getValue(HALF)
-        return rotateShape(Direction.NORTH, direction, LOWER_HITBOX)
+        return if (state.getValue(PART) == FridgeHalf.BOTTOM) {
+            rotateShape(Direction.NORTH, direction, LOWER_HITBOX)
+        } else {
+            rotateShape(Direction.NORTH, direction, UPPER_COLLISSIONBOX)
+        }
     }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return getCollisionShape(state, level, pos, context)
+        val direction = state.getValue(HORIZONTAL_FACING)
+        return if (state.getValue(PART) == FridgeHalf.BOTTOM) {
+            rotateShape(Direction.NORTH, direction, LOWER_HITBOX)
+        } else {
+            rotateShape(Direction.NORTH, direction, UPPER_HITBOX)
+        }
     }
 
-    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
-        val fluidState = context.level.getFluidState(context.clickedPos)
-        return super.getStateForPlacement(context)?.setValue(HORIZONTAL_FACING, context.horizontalDirection.opposite)?.setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
+    override fun setPlacedBy(world: Level, pos: BlockPos, state: BlockState, placer: LivingEntity?, itemStack: ItemStack) {
+        world.setBlock(pos.above(),
+            state
+                .setValue(PART, FridgeHalf.TOP)
+                .setValue(WATERLOGGED, world.getFluidState((pos.above())).type == Fluids.WATER)
+            , 3)
+        world.blockUpdated(pos, Blocks.AIR)
+        state.updateNeighbourShapes(world, pos, 3)
+    }
+
+    override fun getStateForPlacement(blockPlaceContext: BlockPlaceContext): BlockState? {
+        val abovePosition = blockPlaceContext.clickedPos.above()
+        val world = blockPlaceContext.level
+        if (world.getBlockState(abovePosition).canBeReplaced(blockPlaceContext) && !world.isOutsideBuildHeight(abovePosition)) {
+            return defaultBlockState()
+                .setValue(FACING, blockPlaceContext.horizontalDirection.opposite)
+                .setValue(PART, FridgeHalf.BOTTOM)
+                .setValue(WATERLOGGED, blockPlaceContext.level.getFluidState(blockPlaceContext.clickedPos).type == Fluids.WATER)
+        }
+        return null
+    }
+
+    override fun canSurvive(state: BlockState, world: LevelReader, pos: BlockPos): Boolean {
+        val blockPos = pos.below()
+        val blockState = world.getBlockState(blockPos)
+        return if (state.getValue(PART) == FridgeHalf.BOTTOM) blockState.isFaceSturdy(world, blockPos, Direction.UP) else blockState.`is`(this)
+    }
+
+    override fun playerWillDestroy(world: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
+        if (!world.isClientSide && player?.isCreative == true) {
+            var blockPos: BlockPos = BlockPos.ZERO
+            var blockState: BlockState = state
+            val part = state.getValue(PART)
+            if (part == FridgeHalf.TOP && world.getBlockState(pos.below().also { blockPos = it }).also { blockState = it }.`is`(state.block) && blockState.getValue(
+                    PART
+                ) == FridgeHalf.BOTTOM) {
+                val blockState2 = if (blockState.fluidState.`is`(Fluids.WATER)) Blocks.WATER.defaultBlockState() else Blocks.AIR.defaultBlockState()
+                world.setBlock(blockPos, blockState2, UPDATE_ALL or UPDATE_SUPPRESS_DROPS)
+                world.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, getId(blockState))
+            }
+        }
+        return super.playerWillDestroy(world, pos, state, player)
     }
 }
