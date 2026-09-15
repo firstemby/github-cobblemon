@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/orb_ceiling",
+  "textures": {
+        "texture": "cobblemon:block/decorative/orb_toxic",
+        "particle": "cobblemon:item/held_items/toxic_orb"
+  }
+}

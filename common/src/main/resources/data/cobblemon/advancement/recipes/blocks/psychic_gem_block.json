@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:psychic_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_psychic_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:psychic_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:psychic_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_psychic_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

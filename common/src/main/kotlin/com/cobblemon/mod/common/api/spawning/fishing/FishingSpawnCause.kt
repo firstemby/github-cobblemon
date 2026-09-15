@@ -71,7 +71,7 @@ class FishingSpawnCause(
         }
 
         fun alterSize(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {
-            pokemonEntity.pokemon.scaleModifier *= effect.value.toFloat() / 1000.0f
+            pokemonEntity.pokemon.scaleModifier += effect.value.toFloat() / 1000.0f
         }
 
         fun saveDropsReroll(pokemonEntity: PokemonEntity, effect: SpawnBait.Effect) {

@@ -20,7 +20,7 @@
           "#aether:is_aether",
           "#cobblemon:is_overworld"
         ],
-        "maxLight": 0
+        "maxLight": 7
       },
       "anticondition": {
         "biomes": [
@@ -126,7 +126,7 @@
         "biomes": [
           "#cobblemon:is_spooky"
         ],
-        "maxLight": 0
+        "maxLight": 7
       },
       "herdablePokemon": [
         {

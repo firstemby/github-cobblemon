@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/destiny_knot",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/destiny_knot",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/destiny_knot"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/destiny_knot",
+      "y": 90
+    }
+  }
+}

@@ -32,6 +32,11 @@ object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMove
         val menu = player.containerMenu as? TMMachineMenu ?: return
         val inventory = menu.inventory ?: return
 
+        // This is checked on the client, but a modified client could still try to teach an illegal move.
+        if (moveTemplate !in pokemon.form.moves.tmLearnableMoves()) {
+            return
+        }
+
         if (ItemStack.isSameItemSameComponents(packet.heldStack, menu.carried) &&
             moveTemplate == TMMoveComponent.getTMMove(packet.heldStack) &&
             packet.heldStack.count == menu.carried.count &&

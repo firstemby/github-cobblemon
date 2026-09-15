@@ -384,14 +384,18 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var friendship = this.form.baseFriendship
         private set(value) {
+            val earned = this.friendshipEarned
+            this.friendshipEarned = false
             if (!this.isPossibleFriendship(value)) {
                 return
             }
-            FRIENDSHIP_UPDATED.post(FriendshipUpdatedEvent(this, value)) {
+            FRIENDSHIP_UPDATED.post(FriendshipUpdatedEvent(this, value, earned)) {
                 field = it.newFriendship
                 onChange(FriendshipUpdatePacket({ this }, it.newFriendship))
             }
         }
+
+    private var friendshipEarned = false
 
     var currentFullness = 0
         set(value) {
@@ -588,7 +592,7 @@ open class Pokemon : ShowdownIdentifiable {
     var scaleModifier: Float = 1F
         set(value) {
             if (field != value) {
-                field = value
+                field = value.coerceAtLeast(0.05F)
                 onChange(ScaleModifierUpdatePacket({ this }, value))
             }
         }
@@ -1604,6 +1608,7 @@ open class Pokemon : ShowdownIdentifiable {
         val sanitizedAmount = if (coerceSafe) amount.absoluteValue.coerceAtMost(Cobblemon.config.maxPokemonFriendship - this.friendship) else amount.absoluteValue
         val newValue = this.friendship + sanitizedAmount
         if (this.isPossibleFriendship(newValue)) {
+            this.friendshipEarned = true
             this.friendship = newValue
         }
         return this.friendship == newValue

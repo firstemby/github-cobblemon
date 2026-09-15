@@ -100,6 +100,13 @@
       ],
       "transformTicks": 5,
       "transformToTicks": 5
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('duraludon', 'sleep')"]
     }
   }
 }

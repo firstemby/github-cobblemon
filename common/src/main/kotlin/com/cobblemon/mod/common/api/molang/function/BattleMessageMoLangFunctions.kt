@@ -16,17 +16,19 @@ import com.cobblemon.mod.common.util.getStringOrNull
 object BattleMessageMoLangFunctions : AbstractMoLangFunctionHolder<BattleMessage>() {
     override fun BattleMessage.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val battleMessage = this
-        return mutableMapOf(
-            "has_argument_at" to { params ->
-                val index = params.getInt(0)
-                val value = params.getStringOrNull(1) ?: ""
-                DoubleValue(value == battleMessage.argumentAt(index))
-            },
-            "has_argument" to { params ->
-                val argumentName = params.getString(0)
-                val value = params.getStringOrNull(1) ?: ""
-                DoubleValue(value == battleMessage.optionalArgument(argumentName))
-            }
-        )
+        val functions = hashMapOf<String, (MoParams) -> Any>()
+
+        functions["has_argument_at"] = { params ->
+            val index = params.getInt(0)
+            val value = params.getStringOrNull(1) ?: ""
+            DoubleValue(value == battleMessage.argumentAt(index))
+        }
+        functions["has_argument"] = { params ->
+            val argumentName = params.getString(0)
+            val value = params.getStringOrNull(1) ?: ""
+            DoubleValue(value == battleMessage.optionalArgument(argumentName))
+        }
+
+        return functions
     }
 }

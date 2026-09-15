@@ -2544,20 +2544,6 @@
 					"rotation": [7.5, 0, "math.sin(q.anim_time*90-90)*3"]
 				}
 			},
-			"sound_effects": {
-				"0.7083": {
-					"effect": "animation.plumage_wing_flap_medium_2"
-				},
-				"1.6667": {
-					"effect": "animation.plumage_wing_flap_medium_8"
-				},
-				"2.7083": {
-					"effect": "animation.plumage_wing_flap_medium_2"
-				},
-				"3.6667": {
-					"effect": "animation.plumage_wing_flap_medium_8"
-				}
-			},
 			"timeline": {
 				"0.7083": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",
 				"1.6667": "q.has_entity ? { q.sound('animation.plumage.wing_flap.medium'); };",

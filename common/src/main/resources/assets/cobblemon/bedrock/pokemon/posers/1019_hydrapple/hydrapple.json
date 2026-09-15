@@ -15,7 +15,7 @@
 		"q.look('main_head_neck_end_bend', 1, 1, 5, -5, 15, -15)",
 		"q.look('main_head_neck_tip', 1, 1, 5, -5, 15, -15)",
 		"q.look('head_ai', 1, -1, 15, -15, 15, -15)",
-        "q.bedrock('hydrapple', 'ground_idle')"
+        "q.bedrock('hydrapple', 'battle_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('hydrapple', 'blink')"

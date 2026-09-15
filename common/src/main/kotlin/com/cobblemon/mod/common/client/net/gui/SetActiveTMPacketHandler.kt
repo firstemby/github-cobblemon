@@ -21,7 +21,10 @@ object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> 
         val menu = player.containerMenu as? TMMachineMenu ?: return
         val tmData = Cobblemon.playerDataManager.getTMData(player)
 
-        if (packet.tm != null && (!packet.tm.isPassivelyObtained() && packet.tm.id !in tmData.learnedTMs)) {
+        if (packet.tm != null
+            && !Cobblemon.config.unlockAllMoveDexMovesByDefault
+            && !packet.tm.isPassivelyObtained()
+            && packet.tm.id !in tmData.learnedTMs) {
             return // Hacker smh
         }
 
