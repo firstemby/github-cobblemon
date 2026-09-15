@@ -17,6 +17,8 @@ import com.cobblemon.mod.common.util.*
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.item.Items
 import java.lang.Integer.max
 import java.lang.reflect.Type
 import java.util.*
@@ -80,7 +82,8 @@ class ShowdownActionRequest(
                     ShowdownMoveset.Gimmick.TERASTALLIZATION -> cobblemonResource("tera_orb")
                     else -> cobblemonResource("z_ring")
                 }
-                if (!player.hasKeyItem(triggerItem)) moveset.blockGimmick(gimmick)
+                // lets do something silly like an iron helmet for now in place of a keystone TODO change this later lol
+                if (!player.hasKeyItem(triggerItem) && !player.getItemBySlot(EquipmentSlot.HEAD).`is`(Items.IRON_HELMET)) moveset.blockGimmick(gimmick)
             }
         }
     }
