@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.api.pokemon.aspect
 
 import com.cobblemon.mod.common.CobblemonBlocks
-import com.cobblemon.mod.common.api.ai.config.task.PollinateFlowerTaskConfig
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.GatherNectar
 import com.cobblemon.mod.common.api.spawning.influence.SaccharineLogSlatheredInfluence
 import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
@@ -30,7 +30,7 @@ val aspectParticleMap: Map<String, ParticleData> = mapOf(
             ParticleTypes.BLOCK,
             CobblemonBlocks.POKE_SNACK.defaultBlockState()
         ), 0.05, 3),
-    PollinateFlowerTaskConfig.HAS_NECTAR_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_NECTAR, 0.075, 1),
+    GatherNectar.HAS_NECTAR_ASPECT to ParticleData.MinecraftParticle(ParticleTypes.FALLING_NECTAR, 0.075, 1),
     "alpha_eyes" to ParticleData.SnowstormParticle(cobblemonResource("alpha_eyes"), 0.25, 1, LocatorResolvers.containing("eye"))
 )
 

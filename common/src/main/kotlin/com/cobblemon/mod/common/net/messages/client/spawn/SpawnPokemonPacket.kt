@@ -66,6 +66,7 @@ class SpawnPokemonPacket(
     var silent: Boolean,
     var busy: Boolean,
     var riders: List<Int>,
+    var busy: Boolean,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
@@ -102,6 +103,7 @@ class SpawnPokemonPacket(
         entity.isSilent,
         entity.isBusy,
         entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
+        entity.isBusy,
         vanillaSpawnPacket
     )
 
@@ -140,6 +142,7 @@ class SpawnPokemonPacket(
         buffer.writeBoolean(silent)
         buffer.writeBoolean(busy)
         buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
+        buffer.writeBoolean(busy)
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
@@ -235,6 +238,7 @@ class SpawnPokemonPacket(
             val silent = buffer.readBoolean()
             val busy = buffer.readBoolean()
             val riders = buffer.readList { it.readInt() }.toList()
+            val busy = buffer.readBoolean()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
             return SpawnPokemonPacket(
@@ -268,6 +272,7 @@ class SpawnPokemonPacket(
                 silent,
                 busy,
                 riders,
+                busy,
                 vanillaPacket
             )
         }

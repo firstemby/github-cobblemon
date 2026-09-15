@@ -28,7 +28,8 @@ open class LookAndMoveFixation(
     /** How to describe the fixation in the debug overlay. */
     val description: String,
     override val lookingTracker: LookingTracker,
-    override val movementTracker: MovementTracker
+    override val movementTracker: MovementTracker,
+    val onMovementComplete: ((entity: LivingEntity, brain: BiggerBrain) -> Unit)? = null
 ): EntityFixation, LookingTrackerFixation, MovementTrackerFixation {
     override fun getDescription(entity: LivingEntity) = description
 
@@ -42,6 +43,10 @@ open class LookAndMoveFixation(
 
     override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
         lookingTracker.tick()
-        return tickMovementFixation() == MovementStatus.PENDING
+        val continueFixation = tickMovementFixation() == MovementStatus.PENDING
+        if (!continueFixation && onMovementComplete != null) {
+            onMovementComplete.invoke(entity, brain)
+        }
+        return continueFixation
     }
 }

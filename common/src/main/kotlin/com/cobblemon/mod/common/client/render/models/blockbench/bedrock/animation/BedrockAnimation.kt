@@ -194,7 +194,7 @@ data class BedrockAnimation(
         intensity: Float
     ): Boolean {
         var animationSeconds = animationSeconds
-        if (shouldLoop) {
+        if (shouldLoop && animationLength > 0) {
             animationSeconds %= animationLength.toFloat()
         } else if (animationSeconds > animationLength && animationLength > 0) {
             return false

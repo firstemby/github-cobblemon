@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
@@ -23,13 +24,14 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixati
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.ai.resolveBoolean
 import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -71,7 +73,7 @@ class FocusDuringBattle(
         }
 
         val isInBattle = isInBattle(entity)
-        if (fixation == brain.fixation) {
+        if (brain.isFixation(fixation)) {
             if (isInBattle) {
                 // Ok this is fine
                 return ObjectiveStatus.FIXATED
@@ -89,6 +91,16 @@ class FocusDuringBattle(
             // We need to start focusing
             if (brain.distract(Distraction.FORCE)) {
                 fixation = if (entity is NPCEntity) NPCFocusFixation(this) else PokemonFocusFixation(this)
+                // Handle kick starting flight for flying pokemon over water
+                if (entity is PokemonEntity && entity.exposedForm.behaviour.moving.fly.canFly) {
+                    if (entity.ticksLived >= 0 && entity.navigation.isAirborne(entity.level(), entity.blockPosition())) {
+                        // Let flyers fly in battle if they're in the air
+                        entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
+                        afterOnServer(0.1F) {
+                            entity.navigation.moveTo(entity.x, entity.y + 0.2, entity.z, 1.0)
+                        }
+                    }
+                }
                 brain.fixation = fixation
                 return ObjectiveStatus.FIXATED
             } else {
@@ -97,9 +109,15 @@ class FocusDuringBattle(
         }
     }
 
-    override fun <T> onMemoryChanged(entity: LivingEntity, brain: BiggerBrain, memory: MemoryModuleType<T>, value: T?) {
-        if (brain.isFixation(fixation) && memory == MemoryModuleType.HURT_BY && value != null && stopBattleIfHurt) {
-            brain.distract(HurtDistraction(value as DamageSource))
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(
+            priority = Priority.LOW,
+            memory = MemoryModuleType.HURT_BY
+        ) { value, labels ->
+            if (brain.isFixation(fixation) && value != null && stopBattleIfHurt) {
+                brain.distract(HurtDistraction(value))
+            }
+            return@subscribe true
         }
     }
 

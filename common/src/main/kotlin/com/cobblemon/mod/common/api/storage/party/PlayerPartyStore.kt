@@ -21,14 +21,19 @@ import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
-import com.cobblemon.mod.common.util.*
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.network.chat.Component
-import java.util.*
+import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.isPokemonEntity
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.updateShoulderNbt
+import java.util.UUID
 import kotlin.math.ceil
 import kotlin.math.round
 import kotlin.random.Random
 import net.minecraft.core.RegistryAccess
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 
 /**
  * A [PartyStore] used for a single player. This uses the player's UUID as the store's UUID, and is declared as its own
@@ -158,13 +163,18 @@ open class PlayerPartyStore(
                 }
 
                 // Interaction Cooldown
-                if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown(20)
+                pokemon.tickInteractionCooldown(20)
+
+                val entity = pokemon.entity
+                // Recover attack cooldowns from here only when they're recalled. Otherwise rely on entity ticking
+                // since that works for non-owned pokemon too and is more precise
+                if (entity != null) {
+                    pokemon.tickRealTimeMoveCooldowns(ticks = 20)
                 }
 
                 pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.serverLevel(), pokemon, null) }
 
-                if (pokemon.entity?.passengers?.isNotEmpty() != true) {
+                if (entity?.passengers?.isNotEmpty() != true) {
                     pokemon.rideStamina += 0.1F // Recover all stamina in 10 seconds, as long as no one's on it
                 }
             }

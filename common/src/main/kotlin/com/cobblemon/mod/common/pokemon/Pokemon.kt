@@ -152,7 +152,6 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.ceil
 import net.minecraft.util.Mth.clamp
-import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobSpawnType
@@ -420,6 +419,8 @@ open class Pokemon : ShowdownIdentifiable {
         }
 
     var interactionCooldowns: MutableMap<ResourceLocation, Int> = mutableMapOf()
+    /** Cooldowns, in ticks, for the usable real time moves for this Pokémon. The key is the move's identifier. */
+    var realTimeMoveCooldowns = mutableMapOf<ResourceLocation, Int>()
 
     var state: PokemonState = InactivePokemonState()
         set(value) {
@@ -1132,6 +1133,23 @@ open class Pokemon : ShowdownIdentifiable {
                 entry.setValue(newValue)
             }
         }
+        onChange()
+    }
+
+    fun tickRealTimeMoveCooldowns(ticks: Int = 1) {
+        if (realTimeMoveCooldowns.isEmpty()) {
+            return
+        }
+        val attackKeys = realTimeMoveCooldowns.keys.toList()
+        for (key in attackKeys) {
+            val newValue = realTimeMoveCooldowns[key]!! - ticks
+            if (newValue <= 0) {
+                realTimeMoveCooldowns.remove(key)
+            } else {
+                realTimeMoveCooldowns[key] = newValue
+            }
+        }
+        onChange()
     }
 
     fun isOnInteractionCooldown(group: ResourceLocation): Boolean {

@@ -20,6 +20,7 @@
     "accessor.RecipeBookComponentAccessor",
     "client.AbstractClientPlayerMixin",
     "client.AgeableListModelMixin",
+    "client.AIDebugGlowMixin",
     "client.CameraMixin",
     "client.ChannelMixin",
     "client.ClientRecipeBookMixin",

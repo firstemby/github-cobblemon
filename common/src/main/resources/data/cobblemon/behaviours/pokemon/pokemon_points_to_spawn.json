@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.behaviour.pokemon_points_to_spawn.name",
+  "description": "cobblemon.behaviour.pokemon_points_to_spawn.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "5": [
+          "cobblemon:point_to_spawn"
+        ]
+      }
+    }
+  ]
+}

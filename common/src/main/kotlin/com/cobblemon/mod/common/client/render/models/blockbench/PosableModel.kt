@@ -660,7 +660,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         if (primaryAnimation != null) {
             // The pose intensity is the complement of the primary animation's curve. This is used to blend the primary.
-            state.poseIntensity = 1 - primaryAnimation.curve((state.animationSeconds - primaryAnimation.started) / primaryAnimation.duration)
+            state.poseIntensity = 1 - primaryAnimation.curve((state.animationSeconds - primaryAnimation.started) / (primaryAnimation.duration.takeIf { it > 0 } ?: 3F))
             // If the primary animation is done after running we're going to clean things up.
             //Set headYaw and headPitch to zero if Pokemon shouldn't move head during riding
             if (!primaryAnimation.run(

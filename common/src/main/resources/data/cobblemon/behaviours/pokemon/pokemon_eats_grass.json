@@ -4,24 +4,6 @@
   "entityType": "cobblemon:pokemon",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
-        "2": [
-          "eat_grass"
-        ]
-      }
-    },
-    {
-      "type": "add_tasks_to_activity",
-      "activity": "cobblemon:pokemon_herd",
-      "tasksByPriority": {
-        "2": [
-          "eat_grass"
-        ]
-      }
-    },
-    {
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "5": [

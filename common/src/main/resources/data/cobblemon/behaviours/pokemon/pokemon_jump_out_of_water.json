@@ -1,0 +1,15 @@
+{
+  "name": "cobblemon.behaviour.pokemon_jump_out_of_water.name",
+  "description": "cobblemon.behaviour.pokemon_jump_out_of_water.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "3": [
+          "cobblemon:jump_out_of_water"
+        ]
+      }
+    }
+  ]
+}
