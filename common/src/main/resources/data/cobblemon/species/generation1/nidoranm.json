@@ -43,6 +43,7 @@
   "catchRate": 235,
   "eggCycles": 20,
   "baseFriendship": 50,
+  "shoulderMountable": true,
   "baseScale": 0.6,
   "hitbox": {
     "width": 0.7,
@@ -58,7 +59,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "nidoranf",
@@ -87,6 +88,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -138,7 +142,6 @@
     "tm:beatup",
     "tm:blizzard",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:cut",
     "tm:dig",
     "tm:drillrun",

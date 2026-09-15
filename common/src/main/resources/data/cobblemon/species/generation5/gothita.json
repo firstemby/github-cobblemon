@@ -91,7 +91,6 @@
     "egg:torment",
     "tm:allyswitch",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:darkpulse",
@@ -210,7 +209,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "gothita",

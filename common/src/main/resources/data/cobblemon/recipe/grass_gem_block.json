@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:grass_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:grass_gem_block",
+    "count": 1
+  }
+}

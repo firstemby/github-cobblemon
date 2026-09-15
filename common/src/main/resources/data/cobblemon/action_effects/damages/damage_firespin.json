@@ -11,6 +11,11 @@
         "locators": ["root"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false",
+      "expressions": ["q.sound('move.firespin.target');"]
+    },
+    {
       "type": "remove_holds",
       "holds": ["effects"]
     },

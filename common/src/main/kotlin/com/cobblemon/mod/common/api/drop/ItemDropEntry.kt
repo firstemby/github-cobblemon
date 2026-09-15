@@ -14,9 +14,11 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.toBlockPos
-import net.minecraft.core.component.DataComponentMap
+import com.google.gson.JsonElement
+import com.mojang.serialization.JsonOps
 import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.registries.Registries
+import net.minecraft.resources.RegistryOps
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -40,7 +42,7 @@ open class ItemDropEntry : DropEntry {
     override var maxSelectableTimes = 1
     open val dropMethod: ItemDropMethod? = null
     open var item = ResourceLocation.parse("minecraft:fish")
-    open val components: DataComponentMap? = null
+    open val components: JsonElement? = null
 
     override fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?) {
         val item = world.registryAccess().registryOrThrow(Registries.ITEM).get(item) ?: return LOGGER.error("Unable to load drop item: $item")
@@ -53,11 +55,15 @@ open class ItemDropEntry : DropEntry {
                 it
             }
         }
-        val builder = DataComponentPatch.builder()
-        components?.forEach {
-            builder.set(it)
+        if (components != null) {
+            val registryOps = RegistryOps.create(JsonOps.INSTANCE, world.registryAccess())
+            val decodeResult = DataComponentPatch.CODEC.parse(registryOps, components)
+            decodeResult.ifSuccess { patch ->
+                stack.applyComponentsAndValidate(patch)
+            }.ifError { error ->
+                LOGGER.error("Unable to parse components for drop item $item: ${error.message()}")
+            }
         }
-        stack.applyComponentsAndValidate(builder.build())
 
         if (dropMethod == ItemDropMethod.ON_PLAYER && player != null) {
             world.addFreshEntity(ItemEntity(player.level(), player.x, player.y, player.z, stack))

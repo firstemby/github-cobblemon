@@ -44,7 +44,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
             InteractionResultHolder.consume(stack)
         } else {
             if (world is ServerLevel && user is ServerPlayer) {
-                return super<PokemonSelectingItem>.use(user, stack)
+                return super<PokemonSelectingItem>.use(user, stack, false)
             }
             InteractionResultHolder.pass(stack)
         }
@@ -59,6 +59,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         val prefixKey = when {
             hasBoosts && quality == CookingQuality.HIGH -> "item.cobblemon.aprijuice.prefix.delicious"
             hasBoosts && quality == CookingQuality.MEDIUM -> "item.cobblemon.aprijuice.prefix.tasty"
+            hasBoosts && quality == CookingQuality.LOW -> "item.cobblemon.aprijuice.prefix.plain"
             !hasBoosts -> "item.cobblemon.aprijuice.prefix.plain"
             else -> null
         }
@@ -75,7 +76,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
 
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
         val boosts = getBoosts(stack)
-        return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key) } && super.canUseOnPokemon(stack, pokemon)
+        return boosts.isNotEmpty() && boosts.any { pokemon.canApplyRideBoost(it.key, it.value < 0) } && super.canUseOnPokemon(stack, pokemon)
     }
 
     fun getBoosts(stack: ItemStack): Map<RidingStat, Int> {

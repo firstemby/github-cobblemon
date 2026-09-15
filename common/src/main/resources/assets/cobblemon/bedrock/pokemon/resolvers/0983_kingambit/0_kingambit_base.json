@@ -1,0 +1,28 @@
+{
+    "species": "cobblemon:kingambit",
+    "order": 0,
+    "variations": [
+      {
+        "aspects": [],
+        "poser": "cobblemon:kingambit",
+        "model": "cobblemon:kingambit.geo",
+        "texture": "cobblemon:textures/pokemon/0983_kingambit/kingambit.png"
+        },
+      {
+        "aspects": ["shiny"],
+        "texture": "cobblemon:textures/pokemon/0983_kingambit/kingambit_shiny.png"
+      },
+	      {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0983_kingambit/kingambit_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+    ]
+  }

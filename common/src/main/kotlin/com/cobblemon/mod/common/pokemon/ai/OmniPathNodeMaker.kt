@@ -318,7 +318,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
         // Hitbox thing looks confusing but if the hitbox volume is more than like, 5, it starts getting pretty
         // fucking slow to use the findAcceptedNodeWalk function
-        val strictlyWalkPathing = !canFly() && !mob.isInWater && mob.boundingBox.size < MAX_HITBOX_SIZE_FOR_WALKING
+        val strictlyWalkPathing = !canFly() && !mob.isInWater
         val doVerticalNeighbourChecks = (canFly() || mob.isInWater) && mob.boundingBox.size < MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS
 
         // Non-diagonal surroundings in 3d space
@@ -562,8 +562,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
 ////            PathType.WALKABLE
 ////        } else if (blockState.canPathfindThrough(world, pos, NavigationType.AIR) && !blockStateBelow.isSideSolid(world, below, Direction.UP, SideShapeType.FULL)) {
 ////            PathType.OPEN
-//        } else if (blockState.`is`(BlockTags.LEAVES) && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
-//            return PathType.OPEN
+        if (canPathThroughLeaves() && blockState.block == CobblemonBlocks.SACCHARINE_LEAVES)
+            return PathType.OPEN
 //        } else PathType.BLOCKED
 
         // This is the 1.6.1 logic but with some optimizations
@@ -623,9 +623,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     override fun getPathTypeOfMob(pfContext: PathfindingContext, x: Int, y: Int, z: Int, mob: Mob): PathType {
         val set = EnumSet.noneOf(PathType::class.java)
-        val sizeX = (mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1
-        val sizeY = (mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1
-        val sizeZ = (mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1
+        // Capping the observed size of hitboxes here to put an upper limit on the cost of larger hitbox mobs
+        // Mobs larger than these caps will inevitably become stuck on obstacles as their pathing will be flawed
+        val sizeX = ((mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1).coerceAtMost(2)
+        val sizeY = ((mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1).coerceAtMost(3)
+        val sizeZ = ((mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1).coerceAtMost(2)
 
         // TODO -- This is experimental code to see if this is meaningful. We should clean this up later when time permits.
         val returnedEarlyPathType = mutableListOf<PathType>()
@@ -633,9 +635,6 @@ class OmniPathNodeMaker : NodeEvaluator() {
             pfContext, x, y, z, sizeX, sizeY, sizeZ, canOpenDoors, canPassDoors, set, PathType.BLOCKED, BlockPos(x, y, z), returnedEarlyPathType
         )
 
-        if (PathType.LEAVES in set) {
-            return PathType.OPEN
-        }
 
         if (PathType.FENCE in set) {
             return PathType.FENCE
@@ -755,7 +754,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         } else if (type == PathType.RAIL && block !is BaseRailBlock && pfContext.getCachedBlockState(pos.below()).block !is BaseRailBlock) {
             PathType.UNPASSABLE_RAIL
         } else if (type == PathType.LEAVES) {
-            if (blockState.block === CobblemonBlocks.SACCHARINE_LEAVES && canPathThroughLeaves()) {
+            if (canPathThroughLeaves() && blockState.block === CobblemonBlocks.SACCHARINE_LEAVES) {
                 PathType.OPEN
             } else {
                 PathType.BLOCKED

@@ -48,7 +48,6 @@ tasks {
         configurations = listOf(bundle)
         mergeServiceFiles()
 
-        relocate ("org.graalvm", "com.cobblemon.mod.relocations.graalvm")
         relocate ("com.oracle", "com.cobblemon.mod.relocations.oracle")
     }
 

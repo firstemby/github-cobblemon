@@ -203,6 +203,23 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "pikachu",
+              "tier": 1
+            },
+            {
+              "pokemon": "morpeko",
+              "tier": 2
+            },
+            {
+              "pokemon": "raichu",
+              "tier": 3
+            }
+          ]
         }
       }
     }
@@ -222,7 +239,8 @@
           "pokemon": "raichu",
           "tier": 3
         }
-      ]
+      ],
+      "maxSize": 3
     },
     "resting": {
       "willSleepOnBed": true,

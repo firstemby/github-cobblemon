@@ -67,6 +67,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   },
   "drops": {
@@ -406,11 +409,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
+        "locator": "seat_1"
       }
     ],
     "behaviour": null

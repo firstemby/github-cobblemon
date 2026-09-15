@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:fire_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:fire_gem_block",
+    "count": 1
+  }
+}

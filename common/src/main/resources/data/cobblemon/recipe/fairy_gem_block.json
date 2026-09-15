@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:fairy_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:fairy_gem_block",
+    "count": 1
+  }
+}

@@ -18,14 +18,22 @@ import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Gender
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.readText
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeString
+import com.cobblemon.mod.common.util.writeText
+import java.util.UUID
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
-import java.util.*
 
 class SpawnPokemonPacket(
     var ownerId: UUID?,
@@ -51,12 +59,13 @@ class SpawnPokemonPacket(
     var spawnYaw: Float,
     var friendship: Int,
     var freezeFrame: Float,
-    var passengers: IntArray,
     var tickSpawned: Int,
     var rideBoosts: Map<RidingStat, Float>,
     var rideStamina: Float,
+    var isAlpha: Boolean,
     var silent: Boolean,
     var busy: Boolean,
+    var riders: List<Int>,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
@@ -86,12 +95,13 @@ class SpawnPokemonPacket(
         entity.entityData.get(PokemonEntity.SPAWN_DIRECTION),
         entity.entityData.get(PokemonEntity.FRIENDSHIP),
         entity.entityData.get(PokemonEntity.FREEZE_FRAME),
-        entity.passengers.map { it.id }.toIntArray(),
         entity.tickCount,
         entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
+        entity.entityData.get(PokemonEntity.IS_ALPHA),
         entity.isSilent,
         entity.isBusy,
+        entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
         vanillaSpawnPacket
     )
 
@@ -119,7 +129,6 @@ class SpawnPokemonPacket(
         buffer.writeFloat(this.spawnYaw)
         buffer.writeInt(this.friendship)
         buffer.writeFloat(this.freezeFrame)
-        buffer.writeVarIntArray(this.passengers)
         buffer.writeInt(this.tickSpawned)
         buffer.writeMap(
             rideBoosts,
@@ -127,8 +136,10 @@ class SpawnPokemonPacket(
             { _, value -> buffer.writeFloat(value) }
         )
         buffer.writeFloat(rideStamina)
+        buffer.writeBoolean(isAlpha)
         buffer.writeBoolean(silent)
         buffer.writeBoolean(busy)
+        buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
@@ -174,16 +185,16 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
+        entity.entityData.set(PokemonEntity.IS_ALPHA, isAlpha)
         entity.isSilent = silent
         entity.isBusy = busy
 
-        entity.ejectPassengers()
-        passengers.forEach {
-            val passenger = level.getEntity(it) ?: return@forEach
-            passenger.startRiding(entity)
-        }
         entity.tickSpawned = this.tickSpawned
         entity.delegate.updateAge(this.tickSpawned)
+
+        if (this.riders.isNotEmpty()) {
+            this.riders.forEach { level.getEntity(it)?.startRiding(entity) }
+        }
     }
 
     override fun checkType(entity: Entity): Boolean = entity is PokemonEntity
@@ -214,15 +225,16 @@ class SpawnPokemonPacket(
             val spawnAngle = buffer.readFloat()
             val friendship = buffer.readInt()
             val freezeFrame = buffer.readFloat()
-            val passengers = buffer.readVarIntArray()
             val tickSpawned = buffer.readInt()
             val rideBoosts = buffer.readMap(
                 { buffer.readEnumConstant(RidingStat::class.java) },
                 { buffer.readFloat() }
             )
             val rideStamina = buffer.readFloat()
+            val isAlpha = buffer.readBoolean()
             val silent = buffer.readBoolean()
             val busy = buffer.readBoolean()
+            val riders = buffer.readList { it.readInt() }.toList()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
             return SpawnPokemonPacket(
@@ -249,12 +261,13 @@ class SpawnPokemonPacket(
                 spawnAngle,
                 friendship,
                 freezeFrame,
-                passengers,
                 tickSpawned,
                 rideBoosts,
                 rideStamina,
+                isAlpha,
                 silent,
                 busy,
+                riders,
                 vanillaPacket
             )
         }

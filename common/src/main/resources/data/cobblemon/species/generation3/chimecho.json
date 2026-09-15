@@ -70,11 +70,15 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
-          "pokemon": "chimecho",
+          "pokemon": "chimecho mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "chimecho mega",
+          "tier": 2
         }
       ]
     },

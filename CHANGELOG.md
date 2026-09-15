@@ -1,39 +1,45 @@
 # Changelog
-## [1.7.2 (MONTH Xth, YEAR)](#1-7-2)
+## [1.8.2 (MONTH xth, 2026)](#1-8-2)
 
 ### Additions
-- Added riding statistics: `Distance by Pokémon on Land`, `Distance by Pokémon in Air` and `Distance by Pokémon in Liquid`.
-- Added the Partner Mark, which party Pokémon have a very small chance to earn as the player walks, provided they have enough friendship.
-- Added trades for Saccharine Saplings, Hearty Grains, Chipped Pot, and Masterpiece Teacup to the Wandering Trader.
-- Added brewing recipe for Throat Spray.
+- The following items can now be placed on the ground as blocks:
+  - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
+  - Iron Ball, Metal Coat, Throat Spray, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
+- The following items can now be placed on various surfaces:
+  - Galarica Wreath, Magnet, Flame Orb, Life Orb, Toxic Orb, Light Ball, and Smoke Ball.
+- The following items can now be placed as blocks, and have additional functionality:
+  - Ring Target, Metronome, and Eject Button.
+- The following items can now be worn by Players and Pokémon:
+  - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
+- Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
+  - Wearable items that can be placed down are exempt from this behaviour.
+
+### New rideable Pokémon
+
+### Pokémon Added
+
+#### Regional Forms
+
+### Model updates for the following Pokémon
+
+### Animation updates for the following Pokémon
+
+#### Added sounds to the following moves
 
 ### Changes
-- Ride sounds have been separated into stereo for passengers and mono for other players. Riding will now sound more spacious.
 
 ### Fixes
-- Fixed orientation not getting reset after crashing while flying and getting back on the Pokémon.
-- Fixed Furfrou not being trimmable on NeoForge.
-- Fixed shiny Pokémon not respecting the silent flag on spawn.
-- Fixed honey from Saccharine Leaves being harvestable at less than the max age.
-- Items given from interacting with Saccharine Leaves are placed in the active hotbar slot if possible.
-- Fix all Pokémon being saved to chunks and never despawning.
-- Fixed PokeSnacks crashing if there was no available spawn.
-- Fixed Pokémon spawn influences not being specific to regional forms
-- Fixed crashing when viewing another player in spectator mode
-- Fixed missing apricorn textures for Adorn blocks
-- Fixed crashing when riding due to malformed json file, instead resetting it
-- Fixed mochi items consuming two items at a time
-- Fix item interaction sometimes not working properly when playing on servers.
-- Fixed Soothe Bell not being properly tagged as a held item.
+- Correctly grants "They're Minerals!" advancement when planting a type gem
+- Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
+- Corrected the TM Recipes for Charge Beam and Payday
 
 ### Developer
-- Changed the `owner` parameter in the `OwnerQueryRequirement` interface from `ServerPlayer` to `Player`. This method is now also called on the client to verify whether a Pokémon interaction succeeded, so make sure to update your implementations to handle both server and client contexts. 
 
 ### Molang & Datapacks
-- Ride sounds can now be set as exclusive to passengers
-- Ride sounds no longer play when submerged unless specified with a new setting
 
 ### Particles
+
+#### New Move Animations
 
 ### Localization
 - Updated translations for:

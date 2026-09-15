@@ -1,0 +1,185 @@
+{
+    "timeline": [
+        {
+            "type": "add_holds",
+            "holds": ["effects"]
+        },
+        {
+            "type": "animation",
+            "animation": ["dracometeor", "dragon", "status"]
+        },
+        {
+            "type": "pause",
+            "pause": 1.17
+        },
+        {
+            "type": "entity_particles",
+            "effect": "cobblemon:dracometeor_actorpulse",
+            "locators": ["mouth", "special", "target"]
+        },
+        {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == true",
+            "expressions": ["q.sound('move.dracometeor.actor_1');"]
+        },
+        {
+            "type": "pause",
+            "pause": 0.7
+        },
+        {
+            "type": "entity_particles",
+            "effect": "cobblemon:dracometeor_accent",
+            "locator": ["root"]
+        },
+        {
+            "type": "pause",
+            "pause": 0.25
+        },
+        {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == true",
+            "expressions": ["q.sound('move.dracometeor.actor_2');"]
+        },
+        {
+            "type": "pause",
+            "pause": 0.75
+        },
+        {
+            "type": "sequence",
+            "keyframes": [
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteor1",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                },
+                {
+                    "type": "pause",
+                    "pause": 0.05
+                },
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteortrail1",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                }
+            ]
+        },
+        {
+            "type": "pause",
+            "pause": 0.25
+        },
+        {
+            "type": "sequence",
+            "keyframes": [
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteor2",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                },
+                {
+                    "type": "pause",
+                    "pause": 0.05
+                },
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteortrail2",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                }
+            ]
+        },
+        {
+            "type": "pause",
+            "pause": 0.125
+        },
+        {
+            "type": "animation",
+            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+            "animation": ["recoil"]
+        },
+        {
+            "type": "sequence",
+            "keyframes": [
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteor3",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                },
+                {
+                    "type": "pause",
+                    "pause": 0.05
+                },
+                {
+                    "type": "entity_molang",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "expressions": ["q.sound('move.dracometeor.target_1');"]
+                },
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteortrail3",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                }
+            ]
+        },
+        {
+            "type": "pause",
+            "pause": 0.5
+        },
+        {
+            "type": "sequence",
+            "keyframes": [
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteor4",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                },
+                {
+                    "type": "pause",
+                    "pause": 0.05
+                },
+                {
+                    "type": "entity_particles",
+                    "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+                    "effect": "cobblemon:dracometeor_meteortrail4",
+                    "locator": ["root"],
+                    "targetLocators": ["root"]
+                }
+            ]
+        },
+        {
+            "type": "pause",
+            "pause": 0.6
+        },
+        {
+            "type": "entity_molang",
+            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+            "expressions": ["q.sound('move.dracometeor.target_3');"]
+        },
+        {
+            "type": "pause",
+            "pause": 0.15
+        },
+        {
+            "type": "entity_particles",
+            "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+            "effect": "cobblemon:dracometeor_targetfloorscorch",
+            "locator": ["root"]
+        },
+        {
+            "type": "remove_holds",
+            "holds": ["effects"]
+        }
+    ]
+}

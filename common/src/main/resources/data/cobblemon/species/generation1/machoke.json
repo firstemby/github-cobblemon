@@ -238,7 +238,17 @@
   },
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "machoke alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "machamp alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

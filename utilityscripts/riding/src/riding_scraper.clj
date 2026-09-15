@@ -2,11 +2,12 @@
   (:require
     [clj-http.client :as client]
     [clojure.data.csv :as csv]
-    [clojure.string :as s :refer [upper-case blank? split trim ends-with? includes? lower-case]]
+    [clojure.string :as s :refer [upper-case blank? split trim lower-case]]
     [clojure.java.io :refer [file]]
     [clojure.data.json :refer [read-str write-str]])
   (:import (com.cobblemon.mod.common.api.pokemon PokemonSpecies)
            (com.cobblemon.mod.common.client.gui PokemonGuiUtilsKt)
+           (com.cobblemon.mod.common.client.gui ProfileTransformType)
            (com.cobblemon.mod.common.client.render.models.blockbench FloatingState)
            (com.cobblemon.mod.common.client.render.pokemon PokemonRenderer)
            (com.cobblemon.mod.common.entity PoseType)
@@ -52,7 +53,7 @@
     (.rotateZ quaternion (float 3.14))
     (.translate pose-stack ^Float (:x translation-offset) ^Float (:y translation-offset) ^Float (:z translation-offset))
     (.setCurrentAspects state (.getAspects renderable))
-    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) false true 1 1 1 1 0 0)
+    (PokemonGuiUtilsKt/drawProfilePokemon renderable pose-stack quaternion pose-type state 0 (float 1) ProfileTransformType/PROFILE true 1 1 1 1 0 0 13)
     (let [seat-locators (filter #(s/starts-with? % "seat_") (.keySet (.getLocatorStates state)))]
       (when (not-empty seat-locators)
         (into {} (map (fn [x] [x (get-seat-locator state x)]) seat-locators))))))
@@ -223,13 +224,19 @@
          (:body)
          (csv/read-csv))))
 
+(defn normalize-sound-json [v]
+      (cond
+        (vector? v) v
+        (map? v)    [v]
+        :else       []))
+
 (defn get-sound-mappings []
   (let [data (->> (client/get "https://docs.google.com/spreadsheets/u/1/d/1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0/export?format=csv&id=1YhQlnH6m-tlkVbopIg5KLV8BFaaDCgZNkx3dIAy5PZ0&gid=513653624")
                   (:body)
                   (csv/read-csv)
                   (rest)
                   (into {}))]
-    (update-vals data #(read-str % :key-fn keyword))))
+    (update-vals data #(-> % (read-str :key-fn keyword) normalize-sound-json))))
 
 (def sound-headers
   [:generation :dex-no :species
@@ -246,10 +253,12 @@
        (map #(assoc % :form (or (:form %) "Normal")))))
 
 (defn condense-sound-type [sound-data sound-mappings riding-type]
-  (let [keys (map #(concat-keyword riding-type (str "riding-sound-" %)) [1 2 3 4 5])
-        values (vec (filter not-empty (map #(get sound-data %) keys)))
-        json (map #(get sound-mappings %) values)]
-    (vec json)))
+      (->> (map #(concat-keyword riding-type (str "riding-sound-" %)) [1 2 3 4 5])
+           (map #(get sound-data %))
+           (filter not-empty)
+           (mapcat #(get sound-mappings %))
+           vec))
+
 
 (defn sound-data->json [sound-mappings sound-data riding-type]
   (->> (map #(assoc % :sound-json (condense-sound-type % sound-mappings riding-type)) sound-data)
@@ -405,15 +414,15 @@
       (s/replace "é" "e")))
 
 (defn get-file-for-species
-  "Return the first JSON file from `files` whose name matches `species`.
-   - Only considers files whose names end with \".json\"
-   - Selects the first file whose name contains the normalized species token.
+  "Return the JSON file from `files` whose name is exactly the normalized
+   species token followed by \".json\", so species whose names are prefixes of
+   others (e.g. \"pidgeot\" vs \"pidgeotto\") resolve to the correct file.
    Returns a java.io.File or nil if no match is found."
   [species files]
-  (->> files
-       (filter #(ends-with? (.getName %) ".json"))
-       (filter #(includes? (.getName %) (sanitize-species-name species)))
-       (first)))
+  (let [file-name (str (sanitize-species-name species) ".json")]
+    (->> files
+         (filter #(= (.getName %) file-name))
+         (first))))
 
 (defn read-species-json
   "Read a species JSON file from disk and parse it into Clojure data.
@@ -560,7 +569,7 @@
 (defn generate-seat-data
   "Generates per-pose seat data for a species (and optional form)"
   [species-data]
-  (let [species (.getByName PokemonSpecies/INSTANCE (sanitize-species-name (:species species-data)))
+  (let [species (PokemonSpecies/getByName (sanitize-species-name (:species species-data)))
         form (.getFormByName species (sanitize-species-name (or (:form species-data) "Normal")))
         seat-data (map (fn [x] {(.name x) (render-pokemon species form x)}) (remove ignored-poses (PoseType/getEntries)))
         non-nil-seat-data (filter #(val (first %)) seat-data)]

@@ -1,0 +1,19 @@
+{
+  "moveName": "infestation",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 2
+    },
+    {
+      "item": "minecraft:string",
+      "count": 1
+    }
+  ]
+}

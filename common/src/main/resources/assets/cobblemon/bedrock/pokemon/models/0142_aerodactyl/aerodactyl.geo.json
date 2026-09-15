@@ -6,7 +6,7 @@
 				"identifier": "geometry.aerodactyl",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 12,
+				"visible_bounds_width": 13,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -234,6 +234,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [5, 21.8, -33.5],
+					"locators": {
+						"eye2": [5, 21.8, -33.5]
+					}
+				},
+				{
 					"name": "eyelid_base_left",
 					"parent": "eye_left",
 					"pivot": [4, 22.84997, -31],
@@ -304,6 +312,14 @@
 					"cubes": [
 						{"origin": [-5, 20.34997, -33.5], "size": [1, 3, 2], "inflate": 0.02, "uv": [204, 150]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-5, 21.8, -33.5],
+					"locators": {
+						"eye1": [-5, 21.8, -33.5]
+					}
 				},
 				{
 					"name": "eyelid_base_right",

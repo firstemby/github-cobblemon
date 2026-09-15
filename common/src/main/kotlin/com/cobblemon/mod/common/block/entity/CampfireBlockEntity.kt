@@ -346,13 +346,11 @@ class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlock
 
     fun getSeasonings(): List<ItemStack> =
         items.subList(SEASONING_SLOTS.first, SEASONING_SLOTS.last + 1)
-            .filterNotNull()
-            .filter { !it.isEmpty }
+            .filter { it != null && !it.isEmpty }
 
     fun getIngredients(): List<ItemStack> =
         items.subList(CRAFTING_GRID_SLOTS.first, CRAFTING_GRID_SLOTS.last + 1)
-            .filterNotNull()
-            .filter { !it.isEmpty }
+            .filter { it != null && !it.isEmpty }
 
     override fun getDefaultName(): Component {
         return Component.translatable("cobblemon.container.campfire_pot")

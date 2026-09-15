@@ -135,6 +135,22 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.95, 5.25, -5],
+					"locators": {
+						"eye1": [-2.95, 5.25, -5]
+					}
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "pupil_right",
+					"pivot": [2.95, 5.25, -5],
+					"locators": {
+						"eye2": [2.95, 5.25, -5]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_right",
 					"pivot": [-3, 5.25, -4.43],

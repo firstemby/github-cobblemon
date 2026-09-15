@@ -456,7 +456,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3
     },
     "moving": {
       "swim": {

@@ -64,19 +64,23 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "meganium",
+          "pokemon": "meganium mega=false",
           "tier": 1
         },
         {
-          "pokemon": "tropius",
+          "pokemon": "meganium mega",
           "tier": 2
         },
         {
-          "pokemon": "aurorus",
+          "pokemon": "tropius",
           "tier": 3
+        },
+        {
+          "pokemon": "aurorus",
+          "tier": 4
         }
       ]
     },
@@ -162,7 +166,6 @@
     "tm:magicalleaf",
     "tm:magiccoat",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:outrage",
     "tm:petalblizzard",

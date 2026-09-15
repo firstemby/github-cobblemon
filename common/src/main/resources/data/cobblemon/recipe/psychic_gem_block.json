@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:psychic_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:psychic_gem_block",
+    "count": 1
+  }
+}

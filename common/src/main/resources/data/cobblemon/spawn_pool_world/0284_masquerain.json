@@ -13,7 +13,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "22-45",
-            "weight": 0.96,
+            "weight": 9.6,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -38,7 +38,7 @@
             "spawnablePositionType": "surface",
             "bucket": "uncommon",
             "level": "22-45",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "biomes": [
                     "#the_bumblezone:the_bumblezone"

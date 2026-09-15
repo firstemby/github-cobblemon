@@ -75,6 +75,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "persian galarian=false alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -130,7 +139,6 @@
     "tm:amnesia",
     "tm:assurance",
     "tm:bodyslam",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",
@@ -346,7 +354,6 @@
         "tm:beatup",
         "tm:bodyslam",
         "tm:burningjealousy",
-        "tm:captivate",
         "tm:charm",
         "tm:chillingwater",
         "tm:confuseray",
@@ -479,6 +486,15 @@
           "willDefendSelf": true,
           "willDefendOwner": true,
           "willFlee": false
+        },
+        "herd": {
+          "maxSize": 5,
+          "toleratedLeaders": [
+            {
+              "pokemon": "persian galarian=false alpha",
+              "tier": 1
+            }
+          ]
         }
       }
     }

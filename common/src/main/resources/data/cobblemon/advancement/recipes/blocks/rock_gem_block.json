@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:rock_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_rock_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:rock_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:rock_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rock_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

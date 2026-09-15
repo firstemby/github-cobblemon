@@ -56,7 +56,13 @@
       }
     },
     "herd": {
-      "maxSize": "8"
+      "maxSize": 8,
+      "toleratedLeaders": [
+        {
+          "pokemon": "seismitoad alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.spawning.influence
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import kotlin.math.pow
 
 /**
@@ -33,7 +32,7 @@ open class BucketNormalizingInfluence(
     val gradient: Float = 0.2F,
     val firstTier: Float = 1.29F
 ) : SpawningInfluence {
-    override fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {
+    override fun affectBucketWeights(bucketWeights: MutableMap<String, Float>) {
         if (tier == 0) {
             return
         }

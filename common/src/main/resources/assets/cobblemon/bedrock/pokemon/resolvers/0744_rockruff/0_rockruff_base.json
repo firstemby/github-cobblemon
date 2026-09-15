@@ -1,0 +1,28 @@
+{
+  "species": "cobblemon:rockruff",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:rockruff",
+      "model": "cobblemon:rockruff.geo",
+      "texture": "cobblemon:textures/pokemon/0744_rockruff/rockruff.png",
+      "layers": []
+    },
+    {
+      "aspects": ["shiny"],
+      "texture": "cobblemon:textures/pokemon/0744_rockruff/rockruff_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": ["alpha_eyes"],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0744_rockruff/rockruff_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

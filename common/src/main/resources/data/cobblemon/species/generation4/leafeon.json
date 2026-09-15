@@ -106,7 +106,6 @@
     "tm:bodyslam",
     "tm:bulletseed",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:curse",
@@ -133,13 +132,11 @@
     "tm:knockoff",
     "tm:laserfocus",
     "tm:lastresort",
-    "tm:leafage",
     "tm:leafblade",
     "tm:leafstorm",
     "tm:magicalleaf",
     "tm:mudshot",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:payday",
     "tm:protect",
@@ -219,7 +216,41 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vaporeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "jolteon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "flareon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "espeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "umbreon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "leafeon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "glaceon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "sylveon alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

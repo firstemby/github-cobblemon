@@ -8,8 +8,23 @@
     "cry": "q.bedrock_stateful('milotic', 'cry')"
   },
   "poses": {
+    "jump": {
+      "poseTypes": ["FLOAT", "SWIM"],
+      "condition": "q.is_ridden",
+      "isTouchingWater": false,
+      "animations": [
+        "q.bedrock('milotic', 'water_swim')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('milotic', 'ride_water_swim')"
+        }
+      ],
+      "transformTicks": 3,
+      "transformToTicks": 3
+    },
     "battle-standing": {
       "poseTypes": ["STAND"],
+      "isTouchingWater": false,
       "isBattle": true,
       "animations": [
         "q.look('head')",
@@ -24,6 +39,7 @@
         "PROFILE",
         "NONE"
       ],
+      "isTouchingWater": false,
       "isBattle": false,
       "animations": [
         "q.look('head')",
@@ -33,6 +49,7 @@
     },
     "walking": {
       "poseTypes": ["WALK"],
+      "isTouchingWater": false,
       "animations": [
         "q.look('head')",
         "q.bedrock('milotic', 'ground_walk')"
@@ -41,17 +58,27 @@
     },
     "float": {
       "poseTypes": ["FLOAT"],
+      "isTouchingWater": true,
       "animations": [
         "q.look('head')",
-        "q.bedrock('milotic', 'water_idle')"
+        "q.bedrock('milotic', 'water_idle')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('milotic', 'ride_water_swim')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('milotic', 'blink')"]
     },
     "swim": {
       "poseTypes": ["SWIM"],
+      "isTouchingWater": true,
       "animations": [
         "q.look('head')",
-        "q.bedrock('milotic', 'water_swim')"
+        "q.bedrock('milotic', 'water_swim')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('milotic', 'ride_water_swim')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('milotic', 'blink')"]
     },

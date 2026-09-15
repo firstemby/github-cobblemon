@@ -10,15 +10,15 @@ package com.cobblemon.mod.common.api.moves
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.data.DataRegistry
-import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.battles.MoveTarget
 import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.net.messages.client.data.MovesRegistrySyncPacket
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.fromJson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import net.minecraft.resources.ResourceLocation
@@ -45,6 +45,14 @@ object Moves : DataRegistry {
         this.allMoves.clear()
         this.idMapping.clear()
         this.moveScripts.clear()
+
+        val weights = mutableMapOf<String, Number>()
+        manager.getResourceStack(cobblemonResource("move_weights.json")).forEach {
+            it.open().use {
+                val map = GsonBuilder().create().fromJson<Map<String, Number>>(it.reader())
+                weights.putAll(map)
+            }
+        }
 
         ShowdownService.service.resetRegistryData("move")
         manager.listResources("moves") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->
@@ -75,6 +83,7 @@ object Moves : DataRegistry {
                 val priority = jsMove.get("priority").asInt
                 val critRatio = jsMove.get("critRatio")?.asDouble ?: 1.0
                 val effectChances = arrayListOf<Double>()
+                val weight = weights[id]?.toFloat() ?: 50F
                 val secondariesMember = jsMove.get("secondaries")
                 val secondaryMember = jsMove.get("secondary")
                 if (secondariesMember != null && secondariesMember is JsonArray) {
@@ -92,7 +101,20 @@ object Moves : DataRegistry {
                         effectChances += secondaryMember.get("chance").asDouble
                     }
                 }
-                val move = MoveTemplate(id, num, elementalType, damageCategory, power, target, accuracy, pp, priority, critRatio, effectChances.toTypedArray())
+                val move = MoveTemplate(
+                    name = id,
+                    num = num,
+                    elementalType = elementalType,
+                    damageCategory = damageCategory,
+                    power = power,
+                    target = target,
+                    accuracy = accuracy,
+                    pp = pp,
+                    priority = priority,
+                    critRatio = critRatio,
+                    effectChances = effectChances.toTypedArray(),
+                    weight = weight
+                )
                 this.register(move)
             } catch (e: Exception) {
                 Cobblemon.LOGGER.error("Caught exception trying to resolve the move '{}'", id, e)
@@ -113,7 +135,7 @@ object Moves : DataRegistry {
     @JvmStatic
     fun getByNameOrDummy(name: String) = allMoves[name.lowercase()] ?: MoveTemplate.dummy(name.lowercase())
     @JvmStatic
-    fun getExceptional() = getByName("tackle") ?: allMoves.values.random()
+    fun getExceptional() = getByName("tackle") ?: allMoves.values.first()
     @JvmStatic
     fun count() = allMoves.size
     @JvmStatic
@@ -129,5 +151,4 @@ object Moves : DataRegistry {
         this.allMoves[move.name] = move
         this.idMapping[move.num] = move
     }
-
 }

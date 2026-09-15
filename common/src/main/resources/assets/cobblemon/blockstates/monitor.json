@@ -164,6 +164,321 @@
     "facing=east,screen=green_progress_9": {
       "model": "cobblemon:block/monitor_locked",
       "y": 270
+    },
+    "facing=south,screen=tm_normal": {
+      "model": "cobblemon:block/monitor_tm_normal"
+    },
+    "facing=west,screen=tm_normal": {
+      "model": "cobblemon:block/monitor_tm_normal",
+      "y": 90
+    },
+    "facing=north,screen=tm_normal": {
+      "model": "cobblemon:block/monitor_tm_normal",
+      "y": 180
+    },
+    "facing=east,screen=tm_normal": {
+      "model": "cobblemon:block/monitor_tm_normal",
+      "y": 270
+    },
+    "facing=south,screen=tm_fire": {
+      "model": "cobblemon:block/monitor_tm_fire"
+    },
+    "facing=west,screen=tm_fire": {
+      "model": "cobblemon:block/monitor_tm_fire",
+      "y": 90
+    },
+    "facing=north,screen=tm_fire": {
+      "model": "cobblemon:block/monitor_tm_fire",
+      "y": 180
+    },
+    "facing=east,screen=tm_fire": {
+      "model": "cobblemon:block/monitor_tm_fire",
+      "y": 270
+    },
+    "facing=south,screen=tm_water": {
+      "model": "cobblemon:block/monitor_tm_water"
+    },
+    "facing=west,screen=tm_water": {
+      "model": "cobblemon:block/monitor_tm_water",
+      "y": 90
+    },
+    "facing=north,screen=tm_water": {
+      "model": "cobblemon:block/monitor_tm_water",
+      "y": 180
+    },
+    "facing=east,screen=tm_water": {
+      "model": "cobblemon:block/monitor_tm_water",
+      "y": 270
+    },
+    "facing=south,screen=tm_grass": {
+      "model": "cobblemon:block/monitor_tm_grass"
+    },
+    "facing=west,screen=tm_grass": {
+      "model": "cobblemon:block/monitor_tm_grass",
+      "y": 90
+    },
+    "facing=north,screen=tm_grass": {
+      "model": "cobblemon:block/monitor_tm_grass",
+      "y": 180
+    },
+    "facing=east,screen=tm_grass": {
+      "model": "cobblemon:block/monitor_tm_grass",
+      "y": 270
+    },
+    "facing=south,screen=tm_electric": {
+      "model": "cobblemon:block/monitor_tm_electric"
+    },
+    "facing=west,screen=tm_electric": {
+      "model": "cobblemon:block/monitor_tm_electric",
+      "y": 90
+    },
+    "facing=north,screen=tm_electric": {
+      "model": "cobblemon:block/monitor_tm_electric",
+      "y": 180
+    },
+    "facing=east,screen=tm_electric": {
+      "model": "cobblemon:block/monitor_tm_electric",
+      "y": 270
+    },
+    "facing=south,screen=tm_ice": {
+      "model": "cobblemon:block/monitor_tm_ice"
+    },
+    "facing=west,screen=tm_ice": {
+      "model": "cobblemon:block/monitor_tm_ice",
+      "y": 90
+    },
+    "facing=north,screen=tm_ice": {
+      "model": "cobblemon:block/monitor_tm_ice",
+      "y": 180
+    },
+    "facing=east,screen=tm_ice": {
+      "model": "cobblemon:block/monitor_tm_ice",
+      "y": 270
+    },
+    "facing=south,screen=tm_fighting": {
+      "model": "cobblemon:block/monitor_tm_fighting"
+    },
+    "facing=west,screen=tm_fighting": {
+      "model": "cobblemon:block/monitor_tm_fighting",
+      "y": 90
+    },
+    "facing=north,screen=tm_fighting": {
+      "model": "cobblemon:block/monitor_tm_fighting",
+      "y": 180
+    },
+    "facing=east,screen=tm_fighting": {
+      "model": "cobblemon:block/monitor_tm_fighting",
+      "y": 270
+    },
+    "facing=south,screen=tm_poison": {
+      "model": "cobblemon:block/monitor_tm_poison"
+    },
+    "facing=west,screen=tm_poison": {
+      "model": "cobblemon:block/monitor_tm_poison",
+      "y": 90
+    },
+    "facing=north,screen=tm_poison": {
+      "model": "cobblemon:block/monitor_tm_poison",
+      "y": 180
+    },
+    "facing=east,screen=tm_poison": {
+      "model": "cobblemon:block/monitor_tm_poison",
+      "y": 270
+    },
+    "facing=south,screen=tm_ground": {
+      "model": "cobblemon:block/monitor_tm_ground"
+    },
+    "facing=west,screen=tm_ground": {
+      "model": "cobblemon:block/monitor_tm_ground",
+      "y": 90
+    },
+    "facing=north,screen=tm_ground": {
+      "model": "cobblemon:block/monitor_tm_ground",
+      "y": 180
+    },
+    "facing=east,screen=tm_ground": {
+      "model": "cobblemon:block/monitor_tm_ground",
+      "y": 270
+    },
+    "facing=south,screen=tm_flying": {
+      "model": "cobblemon:block/monitor_tm_flying"
+    },
+    "facing=west,screen=tm_flying": {
+      "model": "cobblemon:block/monitor_tm_flying",
+      "y": 90
+    },
+    "facing=north,screen=tm_flying": {
+      "model": "cobblemon:block/monitor_tm_flying",
+      "y": 180
+    },
+    "facing=east,screen=tm_flying": {
+      "model": "cobblemon:block/monitor_tm_flying",
+      "y": 270
+    },
+    "facing=south,screen=tm_psychic": {
+      "model": "cobblemon:block/monitor_tm_psychic"
+    },
+    "facing=west,screen=tm_psychic": {
+      "model": "cobblemon:block/monitor_tm_psychic",
+      "y": 90
+    },
+    "facing=north,screen=tm_psychic": {
+      "model": "cobblemon:block/monitor_tm_psychic",
+      "y": 180
+    },
+    "facing=east,screen=tm_psychic": {
+      "model": "cobblemon:block/monitor_tm_psychic",
+      "y": 270
+    },
+    "facing=south,screen=tm_bug": {
+      "model": "cobblemon:block/monitor_tm_bug"
+    },
+    "facing=west,screen=tm_bug": {
+      "model": "cobblemon:block/monitor_tm_bug",
+      "y": 90
+    },
+    "facing=north,screen=tm_bug": {
+      "model": "cobblemon:block/monitor_tm_bug",
+      "y": 180
+    },
+    "facing=east,screen=tm_bug": {
+      "model": "cobblemon:block/monitor_tm_bug",
+      "y": 270
+    },
+    "facing=south,screen=tm_rock": {
+      "model": "cobblemon:block/monitor_tm_rock"
+    },
+    "facing=west,screen=tm_rock": {
+      "model": "cobblemon:block/monitor_tm_rock",
+      "y": 90
+    },
+    "facing=north,screen=tm_rock": {
+      "model": "cobblemon:block/monitor_tm_rock",
+      "y": 180
+    },
+    "facing=east,screen=tm_rock": {
+      "model": "cobblemon:block/monitor_tm_rock",
+      "y": 270
+    },
+    "facing=south,screen=tm_ghost": {
+      "model": "cobblemon:block/monitor_tm_ghost"
+    },
+    "facing=west,screen=tm_ghost": {
+      "model": "cobblemon:block/monitor_tm_ghost",
+      "y": 90
+    },
+    "facing=north,screen=tm_ghost": {
+      "model": "cobblemon:block/monitor_tm_ghost",
+      "y": 180
+    },
+    "facing=east,screen=tm_ghost": {
+      "model": "cobblemon:block/monitor_tm_ghost",
+      "y": 270
+    },
+    "facing=south,screen=tm_dragon": {
+      "model": "cobblemon:block/monitor_tm_dragon"
+    },
+    "facing=west,screen=tm_dragon": {
+      "model": "cobblemon:block/monitor_tm_dragon",
+      "y": 90
+    },
+    "facing=north,screen=tm_dragon": {
+      "model": "cobblemon:block/monitor_tm_dragon",
+      "y": 180
+    },
+    "facing=east,screen=tm_dragon": {
+      "model": "cobblemon:block/monitor_tm_dragon",
+      "y": 270
+    },
+    "facing=south,screen=tm_dark": {
+      "model": "cobblemon:block/monitor_tm_dark"
+    },
+    "facing=west,screen=tm_dark": {
+      "model": "cobblemon:block/monitor_tm_dark",
+      "y": 90
+    },
+    "facing=north,screen=tm_dark": {
+      "model": "cobblemon:block/monitor_tm_dark",
+      "y": 180
+    },
+    "facing=east,screen=tm_dark": {
+      "model": "cobblemon:block/monitor_tm_dark",
+      "y": 270
+    },
+    "facing=south,screen=tm_steel": {
+      "model": "cobblemon:block/monitor_tm_steel"
+    },
+    "facing=west,screen=tm_steel": {
+      "model": "cobblemon:block/monitor_tm_steel",
+      "y": 90
+    },
+    "facing=north,screen=tm_steel": {
+      "model": "cobblemon:block/monitor_tm_steel",
+      "y": 180
+    },
+    "facing=east,screen=tm_steel": {
+      "model": "cobblemon:block/monitor_tm_steel",
+      "y": 270
+    },
+    "facing=south,screen=tm_fairy": {
+      "model": "cobblemon:block/monitor_tm_fairy"
+    },
+    "facing=west,screen=tm_fairy": {
+      "model": "cobblemon:block/monitor_tm_fairy",
+      "y": 90
+    },
+    "facing=north,screen=tm_fairy": {
+      "model": "cobblemon:block/monitor_tm_fairy",
+      "y": 180
+    },
+    "facing=east,screen=tm_fairy": {
+      "model": "cobblemon:block/monitor_tm_fairy",
+      "y": 270
+    },
+    "facing=south,screen=music": {
+      "model": "cobblemon:block/monitor_music"
+    },
+    "facing=west,screen=music": {
+      "model": "cobblemon:block/monitor_music",
+      "y": 90
+    },
+    "facing=north,screen=music": {
+      "model": "cobblemon:block/monitor_music",
+      "y": 180
+    },
+    "facing=east,screen=music": {
+      "model": "cobblemon:block/monitor_music",
+      "y": 270
+    },
+    "facing=south,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid"
+    },
+    "facing=west,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 90
+    },
+    "facing=north,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 180
+    },
+    "facing=east,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 270
+    },
+    "facing=south,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching"
+    },
+    "facing=west,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 90
+    },
+    "facing=north,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 180
+    },
+    "facing=east,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 270
     }
   }
 }

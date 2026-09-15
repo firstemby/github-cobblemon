@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.storage.party.NPCPartyStore
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.util.asArrayValue
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.toProperties
 import com.google.gson.JsonElement
@@ -29,7 +30,7 @@ import net.minecraft.server.level.ServerPlayer
  */
 class SimplePartyProvider : NPCPartyProvider {
     companion object {
-        const val TYPE = "simple"
+        val TYPE = cobblemonResource("simple")
     }
 
     @Transient

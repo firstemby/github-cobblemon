@@ -71,6 +71,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "corphish alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "crawdaunt alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [
@@ -202,7 +215,18 @@
           "variant": "level",
           "minLevel": 30
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

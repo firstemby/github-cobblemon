@@ -78,7 +78,7 @@
           "ACCELERATION": "65-90",
           "SKILL": "70-85",
           "JUMP": "70-85",
-          "STAMINA": "65-90"
+          "STAMINA": "65-85"
         }
       },
       "LAND": {
@@ -96,11 +96,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
+        "locator": "seat_1"
       }
     ]
   },
@@ -114,8 +110,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "lugia alpha",
+          "tier": 1
+        },
         {
           "pokemon": "zapdos galarian=false",
           "tier": 1
@@ -448,7 +448,7 @@
       },
       "behaviour": {
         "herd": {
-          "maxSize": "2",
+          "maxSize": 3,
           "toleratedLeaders": [
             {
               "pokemon": "zapdos galarian",

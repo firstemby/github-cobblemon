@@ -65,89 +65,18 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.019325797,
-              "y": -2.7409186,
-              "z": -0.035812236
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.010157736,
-              "y": -2.7402267,
-              "z": -0.04133668
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019325797,
-              "y": -2.7409186,
-              "z": -0.035812236
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.010157736,
-              "y": -2.7402267,
-              "z": -0.04133668
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019325797,
-              "y": -2.7409186,
-              "z": -0.035812236
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.010157736,
-              "y": -2.7402267,
-              "z": -0.04133668
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.019325797,
-              "y": -2.7409186,
-              "z": -0.035812236
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "farigiraf",
@@ -157,21 +86,16 @@
     },
     "moving": {
       "canWalk": true,
-      "walkSpeed": "0.35",
       "swim": {
         "avoidsWater": true
-      }
+      },
+      "walkSpeed": "0.35"
     },
     "resting": {
       "canSleep": true,
-      "light": "0-4",
       "drowsyChance": 0.0333,
+      "light": "0-4",
       "rouseChance": 0.0042
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
     }
   },
   "drops": {
@@ -236,26 +160,32 @@
     "tm:curse",
     "tm:dazzlinggleam",
     "tm:doubleedge",
+    "tm:dreameater",
     "tm:earthquake",
+    "tm:echoedvoice",
     "tm:endeavor",
     "tm:endure",
     "tm:energyball",
     "tm:expandingforce",
     "tm:facade",
+    "tm:flash",
     "tm:foulplay",
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:grassknot",
     "tm:gravity",
     "tm:guardswap",
+    "tm:headbutt",
     "tm:helpinghand",
     "tm:highhorsepower",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:imprison",
     "tm:ironhead",
+    "tm:irontail",
     "tm:lightscreen",
     "tm:lowkick",
+    "tm:magiccoat",
     "tm:nastyplot",
     "tm:nightshade",
     "tm:powerswap",
@@ -268,19 +198,27 @@
     "tm:psychup",
     "tm:psyshock",
     "tm:raindance",
+    "tm:recycle",
     "tm:reflect",
     "tm:rest",
+    "tm:retaliate",
     "tm:roar",
+    "tm:rocksmash",
     "tm:secretpower",
     "tm:shadowball",
+    "tm:shockwave",
+    "tm:signalbeam",
     "tm:skillswap",
     "tm:sleeptalk",
     "tm:stompingtantrum",
     "tm:storedpower",
+    "tm:strength",
     "tm:substitute",
+    "tm:suckerpunch",
     "tm:sunnyday",
     "tm:swift",
     "tm:takedown",
+    "tm:telekinesis",
     "tm:terablast",
     "tm:thief",
     "tm:thunder",
@@ -290,6 +228,7 @@
     "tm:trick",
     "tm:trickroom",
     "tm:uproar",
+    "tm:workup",
     "tm:zenheadbutt",
     "tutor:allyswitch",
     "tutor:bulldoze",
@@ -307,14 +246,22 @@
     "tutor:hyperbeam",
     "tutor:hypervoice",
     "tutor:ironhead",
+    "tutor:irontail",
     "tutor:lowkick",
+    "tutor:magiccoat",
     "tutor:psychic",
+    "tutor:recycle",
     "tutor:rest",
+    "tutor:rocksmash",
     "tutor:shadowball",
+    "tutor:shockwave",
+    "tutor:signalbeam",
     "tutor:skillswap",
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
+    "tutor:suckerpunch",
     "tutor:swift",
+    "tutor:telekinesis",
     "tutor:thunderbolt",
     "tutor:trick",
     "tutor:uproar",

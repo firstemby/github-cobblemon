@@ -13,14 +13,15 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_floral"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -30,13 +31,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [

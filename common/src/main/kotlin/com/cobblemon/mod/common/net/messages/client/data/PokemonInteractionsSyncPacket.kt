@@ -9,40 +9,30 @@
 package com.cobblemon.mod.common.net.messages.client.data
 
 import com.cobblemon.mod.common.api.interaction.PokemonInteractionSet
-import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.interaction.PokemonInteractions
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class PokemonInteractionsSyncPacket(
-    val speciesInteractions: List<PokemonInteractionSet>,
-    val generalInteractions: List<PokemonInteractionSet>,
-) : NetworkPacket<PokemonInteractionsSyncPacket> {
+    entries: Collection<PokemonInteractionSet>,
+) : DataRegistrySyncPacket<PokemonInteractionSet, PokemonInteractionsSyncPacket>(entries) {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeCollection(speciesInteractions) { it, speciesInteraction ->
-            speciesInteraction.encode(it)
-        }
-        buffer.writeCollection(generalInteractions) { it, generalInteraction ->
-            generalInteraction.encode(it)
-        }
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: PokemonInteractionSet) {
+        entry.encode(buffer)
+    }
+
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): PokemonInteractionSet {
+        return PokemonInteractionSet.decode(buffer)
+    }
+
+    override fun synchronizeDecoded(entries: Collection<PokemonInteractionSet>) {
+        PokemonInteractions.interactions.clear()
+        PokemonInteractions.interactions.addAll(entries)
     }
 
     companion object {
         val ID = cobblemonResource("pokemon_interactions_sync")
-
-        fun decode(buffer: RegistryFriendlyByteBuf): PokemonInteractionsSyncPacket {
-            val speciesInteractions = buffer.readList { it ->
-                PokemonInteractionSet.decode(it)
-            }
-            val generalInteractions = buffer.readList { it ->
-                PokemonInteractionSet.decode(it)
-            }
-
-            return PokemonInteractionsSyncPacket(
-                speciesInteractions,
-                generalInteractions,
-            )
-        }
+        fun decode(buffer: RegistryFriendlyByteBuf): PokemonInteractionsSyncPacket = PokemonInteractionsSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

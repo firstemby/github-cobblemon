@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 682,
   "name": "Spritzee",
   "primaryType": "fairy",
@@ -40,10 +41,10 @@
   "catchRate": 200,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.7,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.6,
+    "height": 0.6,
     "fixed": false
   },
   "drops": {
@@ -84,7 +85,6 @@
     "tm:allyswitch",
     "tm:attract",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:covet",
@@ -171,7 +171,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "spritzee",
@@ -185,6 +185,7 @@
     },
     "resting": {
       "willSleepOnBed": true,
+      "canSleep": true,
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     },

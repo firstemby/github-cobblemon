@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "amount=1,facing=north": {
+      "model": "cobblemon:block/pp_up_1"
+    },
+    "amount=1,facing=east": {
+      "model": "cobblemon:block/pp_up_1",
+      "y": 90
+    },
+    "amount=1,facing=south": {
+      "model": "cobblemon:block/pp_up_1",
+      "y": 180
+    },
+    "amount=1,facing=west": {
+      "model": "cobblemon:block/pp_up_1",
+      "y": 270
+    },
+    "amount=2,facing=north": {
+      "model": "cobblemon:block/pp_up_2"
+    },
+    "amount=2,facing=east": {
+      "model": "cobblemon:block/pp_up_2",
+      "y": 90
+    },
+    "amount=2,facing=south": {
+      "model": "cobblemon:block/pp_up_2",
+      "y": 180
+    },
+    "amount=2,facing=west": {
+      "model": "cobblemon:block/pp_up_2",
+      "y": 270
+    },
+    "amount=3,facing=north": {
+      "model": "cobblemon:block/pp_up_3"
+    },
+    "amount=3,facing=east": {
+      "model": "cobblemon:block/pp_up_3",
+      "y": 90
+    },
+    "amount=3,facing=south": {
+      "model": "cobblemon:block/pp_up_3",
+      "y": 180
+    },
+    "amount=3,facing=west": {
+      "model": "cobblemon:block/pp_up_3",
+      "y": 270
+    },
+    "amount=4,facing=north": {
+      "model": "cobblemon:block/pp_up_4"
+    },
+    "amount=4,facing=east": {
+      "model": "cobblemon:block/pp_up_4",
+      "y": 90
+    },
+    "amount=4,facing=south": {
+      "model": "cobblemon:block/pp_up_4",
+      "y": 180
+    },
+    "amount=4,facing=west": {
+      "model": "cobblemon:block/pp_up_4",
+      "y": 270
+    }
+  }
+}

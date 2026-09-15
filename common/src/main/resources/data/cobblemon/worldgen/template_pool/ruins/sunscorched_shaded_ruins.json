@@ -1,0 +1,16 @@
+{
+    "name": "cobblemon:ruins/sunscorched_shaded_ruins",
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "location": "cobblemon:ruins/sunscorched_shaded_ruins",
+                "element_type": "minecraft:single_pool_element",
+                "override_liquid_settings": "apply_waterlogging",
+                "processors": "cobblemon:ruins/sunscorched_shaded_ruins",
+                "projection": "rigid"
+            }
+        }
+    ]
+}

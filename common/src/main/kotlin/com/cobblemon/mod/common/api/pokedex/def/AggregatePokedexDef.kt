@@ -56,10 +56,8 @@ class AggregatePokedexDef(
             return speciesToEntry.values.toList()
         }
     }
-
-    override fun shouldSynchronize(other: PokedexDef) = true
-
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+	
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         sortOrder = buffer.readSizedInt(IntSize.U_BYTE)
         val size = buffer.readInt()
         for (i in 0 until size) {
@@ -67,7 +65,7 @@ class AggregatePokedexDef(
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeSizedInt(IntSize.U_BYTE, sortOrder)
         buffer.writeInt(subDexIds.size)
         subDexIds.forEach {

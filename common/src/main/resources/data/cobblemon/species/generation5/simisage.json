@@ -121,7 +121,6 @@
     "tm:lowsweep",
     "tm:magicalleaf",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:payback",
     "tm:poweruppunch",
@@ -195,7 +194,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "simisage",

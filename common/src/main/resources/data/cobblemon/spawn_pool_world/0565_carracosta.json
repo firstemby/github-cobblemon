@@ -12,8 +12,8 @@
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
-            "level": "37-57",
-            "weight": 4.0,
+            "level": "37-50",
+            "weight": 40.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,
@@ -31,8 +31,8 @@
             "type": "pokemon",
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
-            "level": "37-57",
-            "weight": 4.0,
+            "level": "37-50",
+            "weight": 40.0,
             "condition": {
                 "minSkyLight": 0,
                 "maxSkyLight": 7,

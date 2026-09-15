@@ -69,7 +69,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "volbeat",
@@ -128,7 +128,6 @@
     "tm:brickbreak",
     "tm:bugbite",
     "tm:bugbuzz",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:confuseray",

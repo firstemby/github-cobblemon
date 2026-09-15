@@ -32,7 +32,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.util.*
-import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -43,8 +42,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
-import org.joml.Matrix3f
-import org.joml.Vector3f
+import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.math.*
 
@@ -52,6 +50,8 @@ import kotlin.math.*
 class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
     var acknowledgedHPValue = -1
+    var acknowledgedLevel = -1
+    val passengerOffsets = mutableMapOf<Int, Vec3>()
 
     /** Mocked properties exposed to the client [PokemonEntity]. */
     private val mock: PokemonProperties?
@@ -231,18 +231,17 @@ class PokemonServerDelegate : PokemonSideDelegate {
     fun updateTrackedValues() {
         val trackedSpecies = mock?.species ?: entity.pokemon.species.resourceIdentifier.toString()
         val trackedNickname =  mock?.nickname ?: entity.pokemon.nickname ?: Component.empty()
-        val trackedMark = entity.pokemon.activeMark?.identifier.toString()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
-        val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.scaleModifier
+        val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.effectiveScale
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
         entity.entityData.set(PokemonEntity.SPECIES, trackedSpecies)
         if (entity.entityData.get(PokemonEntity.NICKNAME) != trackedNickname) {
             entity.entityData.set(PokemonEntity.NICKNAME, trackedNickname)
         }
-        if (entity.entityData.get(PokemonEntity.MARK) !=trackedMark) {
-            entity.entityData.set(PokemonEntity.MARK, trackedMark)
+        if (entity.entityData.get(PokemonEntity.IS_ALPHA) != entity.pokemon.isAlpha) {
+            entity.entityData.set(PokemonEntity.IS_ALPHA, entity.pokemon.isAlpha)
         }
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
@@ -268,6 +267,11 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val newRideBoosts = entity.pokemon.getRideBoosts()
         if (currentRideBoosts.size != newRideBoosts.size || currentRideBoosts.any { (key, value) -> newRideBoosts[key] != value }) {
             entity.entityData.set(PokemonEntity.RIDE_BOOSTS, newRideBoosts)
+        }
+
+        val trackedMark = entity.pokemon.activeMark?.identifier.toString()
+        if (entity.entityData.get(PokemonEntity.MARK) != trackedMark) {
+            entity.entityData.set(PokemonEntity.MARK, trackedMark)
         }
 
         updateShownItem()
@@ -297,6 +301,11 @@ class PokemonServerDelegate : PokemonSideDelegate {
         } else if (entity.pokemon.isNPCOwned()) {
             if (entity.owner?.isAlive != true && entity.battleId == null) return entity.discard()
             if (entity.ownerUUID == null) entity.ownerUUID = entity.pokemon.getOwnerUUID()
+        }
+
+        if (acknowledgedLevel != entity.pokemon.level) {
+            acknowledgedLevel = entity.pokemon.level
+            updateAttributes(entity.pokemon)
         }
 
         val tethering = entity.tethering
@@ -364,7 +373,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
             ?: entity.mainHandItem
         }.copy()
         /* Hide items tagged as hidden (If the item is in this list, it will not render) */
-        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS)) ItemStack.EMPTY else it}
+        .let { if (it.`is`(CobblemonItemTags.HIDDEN_ITEMS) || (entity.pokemon.isAlpha && entity.pokemon.isWild())) ItemStack.EMPTY else it}
 
         entity.entityData.set(PokemonEntity.SHOWN_HELD_ITEM, trackedShownItem)
     }
@@ -425,6 +434,13 @@ class PokemonServerDelegate : PokemonSideDelegate {
         // clear active effects before proceeding
         val owner = entity.owner
         if (!entity.entityData.get(PokemonEntity.DYING_EFFECTS_STARTED)) {
+            if (entity.isPassenger) {
+                entity.stopRiding()
+            }
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.entityData.set(PokemonEntity.DYING_EFFECTS_STARTED, true)
             if (owner is PokemonSender && entity.beamMode == -1) {
                 entity.recallWithAnimation()
@@ -451,33 +467,34 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         if (entity.deathTime == 60) {
+            if (entity.passengers.isNotEmpty()) {
+                entity.ejectPassengers()
+                passengerOffsets.clear()
+            }
             entity.level().broadcastEntityEvent(entity, 60.toByte()) // Sends smoke effect
             if (Cobblemon.config.dropAfterDeathAnimation) doDeathDrops()
             entity.remove(Entity.RemovalReason.KILLED)
         }
     }
 
+    fun updatePassengerPosition(passengerId: Int, offset: Vec3) {
+        // TODO: ensure this is a loose enough check
+        val maxDim = (entity.bbWidth + entity.bbHeight) * entity.pokemon.form.baseScale * entity.pokemon.effectiveScale
+        val maxOffset = maxDim * 2.0
+        if (offset.length() > maxOffset) return
+        passengerOffsets[passengerId] = offset
+    }
+
     override fun positionRider(
         passenger: Entity,
         positionUpdater: Entity.MoveFunction
     ) {
-        val index =
-            this.entity.passengers.indexOf(passenger).takeIf { it >= 0 && it < this.entity.seats.size } ?: return
-        val seat = this.entity.seats[index]
-        val seatOffset = seat.getOffset(this.entity.getCurrentPoseType()).toVector3f()
-        val center = Vector3f(0f, this.entity.bbHeight / 2, 0f)
-
-        val seatToCenter = center.sub(seatOffset, Vector3f())
-        val matrix = (this.entity.passengers.first() as? OrientationControllable)?.orientationController?.orientation
-            ?: Matrix3f().rotate((180f - passenger.yRot).toRadians(), Vector3f(0f, 1f, 0f))
-        val offset =
-            matrix.transform(seatToCenter, Vector3f()).add(center).sub(Vector3f(0f, passenger.bbHeight / 2, 0f))
-
+        val offset = passengerOffsets[passenger.id] ?: Vec3.ZERO
         positionUpdater.accept(
             passenger,
-            this.entity.x + offset.x,
-            this.entity.y + offset.y,
-            this.entity.z + offset.z
+            entity.x + offset.x,
+            entity.y + offset.y,
+            entity.z + offset.z
         )
     }
 }

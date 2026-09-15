@@ -62,7 +62,13 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ninetales alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -132,7 +138,6 @@
     "tm:bodyslam",
     "tm:burningjealousy",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:confuseray",
     "tm:covet",
@@ -342,7 +347,6 @@
         "tm:blizzard",
         "tm:bodyslam",
         "tm:calmmind",
-        "tm:captivate",
         "tm:charm",
         "tm:chillingwater",
         "tm:confuseray",
@@ -445,7 +449,13 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "3"
+          "maxSize": 3,
+          "toleratedLeaders": [
+            {
+              "pokemon": "ninetales alpha",
+              "tier": 1
+            }
+          ]
         },
         "resting": {
           "times": [

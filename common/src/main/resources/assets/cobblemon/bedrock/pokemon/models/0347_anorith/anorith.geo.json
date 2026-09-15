@@ -132,6 +132,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "right_pupil",
+					"pivot": [-5.5, 1.75, -5.25],
+					"locators": {
+						"eye1": [-5.5, 1.75, -5.25]
+					}
+				},
+				{
 					"name": "eye_stem_left",
 					"parent": "eyes",
 					"pivot": [1.9, 1.75, -5.25],
@@ -159,6 +167,14 @@
 					"cubes": [
 						{"origin": [5, 1.25, -5.75], "size": [1, 1, 1], "uv": [29, 30]}
 					]
+				},
+				{
+					"name": "locator_eye_left",
+					"parent": "left_pupil",
+					"pivot": [5.5, 1.75, -5.25],
+					"locators": {
+						"eye2": [5.5, 1.75, -5.25]
+					}
 				},
 				{
 					"name": "abdomen",

@@ -2,9 +2,8 @@
   "item": "cobblemon:hopo_berry",
   "effects": [
     {
-      "type": "cobblemon:level_raise",
-      "chance": 1.0,
-      "value": 10.0
+      "type": "cobblemon:alpha_chance",
+      "chance": 0.02
     }
   ]
 }

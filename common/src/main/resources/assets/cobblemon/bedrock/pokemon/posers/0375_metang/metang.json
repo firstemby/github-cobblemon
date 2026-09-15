@@ -13,7 +13,6 @@
   },
   "poses": {
     "sleep": {
-      "poseName": "sleep",
       "poseTypes": [
         "SLEEP"
       ],
@@ -25,10 +24,10 @@
       }
     },
     "stand": {
-      "poseName": "stand",
       "isBattle": false,
       "poseTypes": [
         "STAND",
+        "HOVER",
         "NONE",
         "PORTRAIT",
         "PROFILE"
@@ -41,11 +40,9 @@
         "q.bedrock_quirk('metang', 'blink')"
       ]
     },
-    "hover": {
-      "poseName": "hover",
+    "float": {
       "isBattle": false,
       "poseTypes": [
-        "HOVER",
         "FLOAT"
       ],
       "animations": [
@@ -55,10 +52,8 @@
         "q.bedrock_quirk('metang', 'blink')"
       ]
     },
-    "fly": {
-      "poseName": "fly",
+    "swim": {
       "poseTypes": [
-        "FLY",
         "SWIM"
       ],
       "animations": [
@@ -69,9 +64,8 @@
       ]
     },
     "walk": {
-      "poseName": "walk",
       "poseTypes": [
-        "WALK"
+        "WALK", "FLY"
       ],
       "animations": [
         "q.bedrock('metang', 'ground_walk')"
@@ -82,7 +76,6 @@
       ]
     },
     "battle_idle": {
-      "poseName": "battle_idle",
       "isBattle": true,
       "poseTypes": [
         "STAND",

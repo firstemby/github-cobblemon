@@ -45,8 +45,7 @@ def main(dex_range=None):
     drops_df['Pokémon'] = drops_df['Pokémon'].apply(lambda san: sanitize_pokemon(san.split("[")[0].strip()))
 
     # Group the drops data by Pokémon names, then convert it to a dictionary
-    drops_dict = drops_df.groupby('Pokémon').apply(lambda x: x.to_dict(orient='records'),
-                                                   include_groups=False).to_dict()
+    drops_dict = drops_df.groupby('Pokémon').apply(lambda x: x.to_dict(orient='records')).to_dict()
     # Filter the filenames by Pokémon names
     files_to_change = filter_filenames_by_pokemon_names(pokemon_data_dir, drops_df['Pokémon'])
 
@@ -81,7 +80,7 @@ def main(dex_range=None):
 
 
 def get_drops_df(dex_range=range(0, 1111)):
-    drops_spreadsheet_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR51bmzKMTvCfa1UKf454nnlNBCUVMtVNQvxdAiYU09E5pWS7mbsrVt45ABsCGZTByt9N_YEgnSwj8V/pub?gid=0&single=true&output=csv'
+    drops_spreadsheet_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTX4d5Ao7ABQRGlBpBv6hWIipbm_SKJuQUj3LXfhkQUvAg6sWM1gspv1cJYOIMPWXs2ehMnxvZsvxDG/pub?gid=0&single=true&output=csv'
     conversion_csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmvHzUc6_UUKbcvRche7AVebNoljqC1bf3iccusJqW9-C3k0KtESJxOCXShykSejIarAB2jHJ2bHCb/pub?gid=0&single=true&output=csv'
     pokemon_data_dir = '../common/src/main/resources/data/cobblemon/species'
     sqlite_db_name = 'pokemon_drops_data.sqlite'

@@ -67,7 +67,7 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "sneasel",
@@ -454,8 +454,12 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
+            {
+              "pokemon": "sneasler alpha",
+              "tier": 1
+            },
             {
               "pokemon": "sneasel",
               "tier": 1

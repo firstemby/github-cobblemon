@@ -7,8 +7,8 @@
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 7,
-				"visible_bounds_height": 4.5,
-				"visible_bounds_offset": [0, 1.75, 0]
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [0, 1.5, 0]
 			},
 			"bones": [
 				{
@@ -88,6 +88,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.15, 31, -4],
+					"locators": {
+						"eye2": [2.15, 31, -4]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "head",
 					"pivot": [-2, 31, -3.5],
@@ -112,6 +120,14 @@
 					"cubes": [
 						{"origin": [-2.65, 30.5, -4], "size": [1, 1, 1], "inflate": 0.02, "uv": [78, 72]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.15, 31, -4],
+					"locators": {
+						"eye1": [-2.15, 31, -4]
+					}
 				},
 				{
 					"name": "head_tentacles",

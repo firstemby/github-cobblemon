@@ -66,6 +66,7 @@ class StatWidget(
         private const val MARKER_WIDTH = 8
         private const val WIDTH = 134
         private const val HEIGHT = 148
+        private const val RIDE_ICON_SIZE = 32
         const val SCALE = 0.5F
 
         private const val WHITE = 0x00FFFFFF
@@ -336,38 +337,50 @@ class StatWidget(
                         colour = pentagonColour
                     )
 
-                    drawScaledText(
-                        context = context,
-                        font = CobblemonResources.DEFAULT_LARGE,
-                        text = lang("ui.ride_style.${selectedBehaviour.key.name.lowercase()}").bold(),
-                        x = x + (WIDTH / 2),
-                        y = y + 66,
-                        shadow = true,
-                        centered = true
+                    val rideStyle = selectedBehaviour.value.key.path.toString().split("/").last().lowercase()
+                    val iconResource = cobblemonResource("textures/gui/summary/icon_ride_${selectedBehaviour.key.toString().lowercase()}_${rideStyle}.png")
+                    blitk(
+                        matrixStack = matrices,
+                        texture = iconResource,
+                        x= (x + 59) / SCALE,
+                        y = (y + 62.5) / SCALE,
+                        width = RIDE_ICON_SIZE,
+                        height = RIDE_ICON_SIZE,
+                        scale = SCALE
                     )
 
+                    val labelsHovered = statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY)
                     // Stat Labels
                     renderPolygonLabels(
                         context = context,
                         labels = RidingStat.entries.toList().map { stat ->
-                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
-                            "${floor(pokemon.getRideStat(selectedBehaviour.key, stat))}/${selectedBehaviour.value.stats[stat]?.endInclusive}".text()
+                            if (labelsHovered) "${floor(pokemon.getRideStat(selectedBehaviour.key, stat))}/${selectedBehaviour.value.stats[stat]?.endInclusive}".text()
                             else lang("ui.stats.ride.${stat.name.lowercase()}").bold()
                         },
-                        verticesOffset = pentagonVerticesOffset
+                        verticesOffset = pentagonVerticesOffset,
+                        labelColours = if (labelsHovered) null else RidingStat.entries.toList().map { it.flavour.colour }
                     )
 
                     // Stat Values
                     renderPolygonLabels(
                         context = context,
                         labels = RidingStat.entries.toList().map { stat ->
-                            if (statLabelsHovered(pentagonVerticesOffset, pMouseX, pMouseY))
-                                "+${floor(pokemon.getRideBoost(stat) / pokemon.getMaxRideBoost(stat) * 100)}%".text()
+                            if (labelsHovered) "+${floor(pokemon.getRideBoost(stat) / pokemon.getMaxRideBoost(stat) * 100)}%".text()
                             else floor(pokemon.getRideStat(selectedBehaviour.key, stat)).toString().text()
                         },
                         verticesOffset = pentagonVerticesOffset,
                         offsetY = 5.5
                     )
+
+                    if (pMouseX >= (x + 59) && pMouseY >= (y + 62.5) && pMouseX <= ((x + 59) + (RIDE_ICON_SIZE * SCALE)) && pMouseY <= ((y + 62.5) + (RIDE_ICON_SIZE * SCALE))) {
+                        context.renderTooltip(
+                            Minecraft.getInstance().font,
+                            lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}.${rideStyle}")
+                                .append(" | ").append(lang("ui.ride_style.${selectedBehaviour.key.toString().lowercase()}")),
+                            pMouseX,
+                            pMouseY
+                        )
+                    }
                 }
 
             } else {
@@ -550,17 +563,20 @@ class StatWidget(
         return WHITE
     }
 
-    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, enableColour: Boolean = false) {
+    private fun renderPolygonLabels(context: GuiGraphics, labels: List<MutableComponent>, verticesOffset: List<Pair<Double, Double>>, offsetY: Double = 0.0, labelColours: List<Int>? = null, enableColour: Boolean = false) {
         if (labels.size != verticesOffset.size) return
 
         labels.forEachIndexed { index, label ->
+            val labelColour = if (labelColours != null) labelColours.getOrElse(index, { WHITE })
+                else getModifiedStatColour(statLabels[label], enableColour)
+
             drawScaledText(
                 context = context,
                 text = label,
                 x = x + verticesOffset[index].first,
                 y = y + verticesOffset[index].second + offsetY,
                 scale = SCALE,
-                colour = getModifiedStatColour(statLabels[label], enableColour),
+                colour = labelColour,
                 centered = true
             )
         }

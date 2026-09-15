@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:bug_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:bug_gem_block",
+    "count": 1
+  }
+}

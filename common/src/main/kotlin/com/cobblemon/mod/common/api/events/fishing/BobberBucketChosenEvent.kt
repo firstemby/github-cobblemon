@@ -8,12 +8,10 @@
 
 package com.cobblemon.mod.common.api.events.fishing
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
-
 /**
  * Event that is fired when a bucket is chosen by the bobber.
  * @param chosenBucket The bucket that is chosen.
  * @param buckets The list of buckets that the bobber can choose from.
  * @param luckOfTheSeaLevel The level of the Luck of the Sea enchantment on the rod.
  */
-class BobberBucketChosenEvent(var chosenBucket: SpawnBucket, val buckets: MutableList<SpawnBucket>, val luckOfTheSeaLevel: Int)
+class BobberBucketChosenEvent(var chosenBucket: String, val buckets: MutableList<String>, val luckOfTheSeaLevel: Int)

@@ -1,0 +1,19 @@
+{
+  "moveName": "drainingkiss",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "fairy",
+  "recipe": [
+    {
+      "item": "cobblemon:fairy_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:big_root",
+      "count": 1
+    }
+  ]
+}

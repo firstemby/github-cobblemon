@@ -154,7 +154,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "accelgor alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

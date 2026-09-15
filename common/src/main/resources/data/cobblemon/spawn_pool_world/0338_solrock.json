@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-46",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -33,7 +33,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-46",
-            "weight": 10.0,
+            "weight": 100.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -58,7 +58,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-46",
-            "weight": 2.0,
+            "weight": 20.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -78,7 +78,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "21-46",
-            "weight": 20.0,
+            "weight": 200.0,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -106,7 +106,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "21-46",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "biomes": [
                     "aether:skyroot_grove",

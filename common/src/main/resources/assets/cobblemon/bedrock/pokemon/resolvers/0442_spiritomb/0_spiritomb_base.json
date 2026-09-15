@@ -23,7 +23,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "layers": [
         {
           "name": "emissive",
@@ -36,6 +38,18 @@
           "emissive": true,
           "texture": "cobblemon:textures/pokemon/0442_spiritomb/spiritomb_shiny_transparency.png",
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0442_spiritomb/spiritomb_alpha.png",
+          "emissive": true
         }
       ]
     }

@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 683,
   "name": "Aromatisse",
   "primaryType": "fairy",
@@ -40,10 +41,10 @@
   "catchRate": 140,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.1,
+    "height": 1.4,
     "fixed": false
   },
   "drops": {
@@ -88,7 +89,6 @@
     "tm:allyswitch",
     "tm:attract",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:covet",
@@ -171,7 +171,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "aromatisse",

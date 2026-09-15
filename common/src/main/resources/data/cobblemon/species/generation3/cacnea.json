@@ -68,6 +68,19 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "cacnea alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "cacturne alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

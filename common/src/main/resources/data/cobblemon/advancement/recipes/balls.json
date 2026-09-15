@@ -1,0 +1,9 @@
+{
+  "parent": "cobblemon:recipes/root",
+  "criteria": {
+    "root": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "sends_telemetry_event": false
+}

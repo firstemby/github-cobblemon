@@ -32,7 +32,6 @@
 					"name": "shouder_left",
 					"parent": "arms",
 					"pivot": [5, 29.75, 0],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [5, 28.25, -1.5], "size": [2, 4, 3], "inflate": 0.01, "uv": [0, 19]},
 						{"origin": [5, 32.25, -1], "size": [1, 2, 2], "inflate": 0.01, "uv": [15, 10]}
@@ -187,7 +186,6 @@
 					"name": "shouder_right",
 					"parent": "arms",
 					"pivot": [-5, 29.75, 0],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{"origin": [-7, 28.25, -1.5], "size": [2, 4, 3], "inflate": 0.01, "uv": [10, 19], "mirror": true},
 						{"origin": [-6, 32.25, -1], "size": [1, 2, 2], "inflate": 0.01, "uv": [29, 3], "mirror": true}
@@ -402,6 +400,14 @@
 					]
 				},
 				{
+					"name": "locator_eye",
+					"parent": "pupil",
+					"pivot": [0, 27.25, -2.5],
+					"locators": {
+						"eye": [0, 27.25, -2.5]
+					}
+				},
+				{
 					"name": "pupil_happy",
 					"parent": "eye",
 					"pivot": [0, 27.3, -2.5],
@@ -474,8 +480,7 @@
 				{
 					"name": "shouder_left_shield",
 					"parent": "arms_shield",
-					"pivot": [5, 29.75, 0],
-					"rotation": [0, 0, 0]
+					"pivot": [5, 29.75, 0]
 				},
 				{
 					"name": "arm_left_shield",

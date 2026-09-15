@@ -1,0 +1,41 @@
+{
+    "timeline": [
+      {
+        "type": "add_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "animation",
+        "animation": ["reflect", "barrier", "screen", "status"],
+      "delay": 1.17
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:reflect_actor",
+        "locators": ["target"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.07
+      },
+      {
+        "type": "entity_particles",
+        "entityCondition": "q.entity.is_user == true && q.failed == false",
+        "effect": "cobblemon:reflect_actoreffect",
+        "locators": ["target"]
+      },
+      {
+        "type": "pause",
+        "pause": 0.66
+      },
+      {
+        "type": "remove_holds",
+        "holds": ["effects"]
+      },
+      {
+        "type": "pause",
+        "pause": 1.2
+      }
+    ]
+  }

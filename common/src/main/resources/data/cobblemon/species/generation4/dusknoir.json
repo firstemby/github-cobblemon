@@ -55,14 +55,23 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          },
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.wind",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "40-60",
-          "JUMP": "50-80",
+          "ACCELERATION": "45-60",
+          "JUMP": "45-80",
           "SKILL": "60-70",
           "SPEED": "15-25",
           "STAMINA": "0-5"
@@ -71,89 +80,24 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -2.800053,
-              "z": 0.15268813
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.041538313,
-              "y": -3.0530646,
-              "z": -0.3417098
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -2.800053,
-              "z": 0.15268813
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.041538313,
-              "y": -3.0530646,
-              "z": -0.3417098
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -2.8875523,
-              "z": -0.09665136
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -2.8875523,
-              "z": -0.09665136
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -2.8875523,
-              "z": -0.09665136
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
   "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dusknoir alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "fly": {
@@ -168,17 +112,12 @@
     },
     "resting": {
       "canSleep": true,
+      "drowsyChance": 0.0033,
       "light": "0-4",
+      "rouseChance": 0.0042,
       "times": [
         "day"
-      ],
-      "drowsyChance": 0.0033,
-      "rouseChance": 0.0042
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
+      ]
     }
   },
   "drops": {
@@ -274,7 +213,6 @@
     "tm:payback",
     "tm:phantomforce",
     "tm:poltergeist",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -325,7 +263,6 @@
     "tutor:ominouswind",
     "tutor:painsplit",
     "tutor:poltergeist",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
@@ -355,6 +292,7 @@
     "legacy:mudslap",
     "legacy:naturalgift",
     "legacy:nightmare",
+    "legacy:powershift",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",

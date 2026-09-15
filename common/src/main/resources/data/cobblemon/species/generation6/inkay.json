@@ -64,15 +64,19 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "inkay",
           "tier": 1
         },
         {
-          "pokemon": "malamar",
+          "pokemon": "malamar mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "malamar mega",
+          "tier": 3
         }
       ]
     },
@@ -275,5 +279,9 @@
         }
       ]
     }
-  ]
+  ],
+  "lightingData": {
+    "lightLevel": 6,
+    "liquidGlowMode": "BOTH"
+  }
 }

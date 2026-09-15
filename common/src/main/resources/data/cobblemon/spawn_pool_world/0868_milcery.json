@@ -10,7 +10,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
-            "weight": 9.5,
+            "weight": 76.0,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#aether:is_aether",
@@ -22,7 +28,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:sugar_cane",
                     "#cobblemon:saccharine_trees"
                 ]
             }
@@ -30,12 +35,23 @@
         {
             "id": "milcery-2",
             "pokemon": "milcery",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
-            "weight": 1.9,
+            "weight": 15.2,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_overworld"
@@ -46,7 +62,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:cake",
                     "minecraft:sugar_cane"
                 ]
             }
@@ -54,12 +69,23 @@
         {
             "id": "milcery-3",
             "pokemon": "milcery",
+            "presets": [
+                "natural"
+            ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "2-27",
-            "weight": 1.84,
+            "weight": 14.72,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_overworld"
@@ -70,7 +96,6 @@
             },
             "anticondition": {
                 "neededNearbyBlocks": [
-                    "minecraft:cake",
                     "#cobblemon:saccharine_trees"
                 ]
             }
@@ -79,22 +104,23 @@
             "id": "milcery-4",
             "pokemon": "milcery",
             "presets": [
-                "mansion"
+                "mansion_dining"
             ],
             "type": "pokemon",
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "2-27",
-            "weight": 1.9,
+            "weight": 15.2,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ],
-                "neededNearbyBlocks": [
-                    "minecraft:light_grey_carpet",
-                    "minecraft:magenta_carpet",
-                    "minecraft:white_carpet"
                 ]
             }
         }

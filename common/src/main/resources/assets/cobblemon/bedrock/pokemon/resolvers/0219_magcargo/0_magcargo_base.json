@@ -29,6 +29,18 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0219_magcargo/magcargo_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

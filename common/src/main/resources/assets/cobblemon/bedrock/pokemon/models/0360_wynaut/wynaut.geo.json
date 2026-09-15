@@ -210,6 +210,15 @@
 					]
 				},
 				{
+					"name": "locator_eye",
+					"parent": "tail_pupil",
+					"pivot": [0, 3, 10],
+					"rotation": [-90, 0, 0],
+					"locators": {
+						"eye1": [0, 3, 10]
+					}
+				},
+				{
 					"name": "tail_eyelid",
 					"parent": "tail3",
 					"pivot": [0, 2.91, 10],
