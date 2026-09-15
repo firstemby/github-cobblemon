@@ -420,7 +420,7 @@
           }
         ]
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",
@@ -444,7 +444,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",
@@ -468,7 +468,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",
@@ -492,7 +492,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",
@@ -515,7 +515,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",
@@ -538,7 +538,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": [
         "crosshair",
         "hotbar",

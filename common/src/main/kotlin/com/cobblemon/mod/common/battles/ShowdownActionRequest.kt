@@ -367,19 +367,24 @@ class ShowdownMoveset {
     }.toList() else listOf() // keep this immutable
 
     /** Map each [InBattleMove] to their respective [InBattleGimmickMove] variant. */
-    fun setGimmickMapping() = (canZMove ?: maxMoves)?.let { gimmickMoves ->
-        moves.forEachIndexed { index, move -> move.gimmickMove = gimmickMoves[index] }
+    fun setGimmickMapping() {
+        val gimmickMoves = canZMove ?: maxMoves
+        moves.forEachIndexed { index, move -> move.gimmickMove = gimmickMoves?.get(index) }
     }
 
     /** Sanitize Moveset by disabling gimmick. */
     fun blockGimmick(gimmick: Gimmick) {
         when (gimmick) {
             Gimmick.MEGA_EVOLUTION -> this.canMegaEvo = false
-            Gimmick.DYNAMAX -> this.canDynamax = false
+            Gimmick.DYNAMAX -> {
+                if (canDynamax) maxMoves = null
+                canDynamax = false
+            }
             Gimmick.ULTRA_BURST -> this.canUltraBurst = false
             Gimmick.Z_POWER -> this.canZMove = null
             else -> this.canTerastallize = null
         }
+        setGimmickMapping()
     }
 }
 class ShowdownSide {

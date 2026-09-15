@@ -195,7 +195,7 @@
           { "time": 3.9, "action": "CLOSE", "guiId": "cobblemon:battle_intro" }
         ]
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     },
     "idle_orbit": {
@@ -209,7 +209,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     },
     "user_focus": {
@@ -223,7 +223,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     },
     "target_focus": {
@@ -237,7 +237,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     },
     "send_out_focus_p1": {
@@ -250,7 +250,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     },
     "send_out_focus_p2": {
@@ -263,7 +263,7 @@
           ]
         }
       },
-      "renderPlayerBody": false,
+      "renderPlayerBody": true,
       "hiddenHudElements": ["crosshair", "hotbar", "experience_bar"]
     }
   },
