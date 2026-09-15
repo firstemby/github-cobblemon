@@ -26,7 +26,9 @@ internal class CobblemonLazyPreEvolution(private val rawData: String) : PreEvolu
     }
 
     private val lazyForm: FormData by lazy {
-        this.properties.form?.let { formId -> this.species.forms.firstOrNull { it.formOnlyShowdownId().equals(formId, true) } } ?: this.species.standardForm
+        val properties = this.properties
+        properties.form?.let { formId -> this.species.forms.firstOrNull { it.formOnlyShowdownId().equals(formId, true) } }
+            ?: this.species.getForm(properties.aspects + this.rawData.split(" ").map { it.lowercase() }.toSet())
     }
 
     override val species: Species

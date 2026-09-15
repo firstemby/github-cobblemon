@@ -214,8 +214,8 @@ class EvolutionTreeWidget(
                 val resultSpecies = resultProperties.species
                     ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
                     ?: return@mapNotNull null
-
-                val resultForm = resultSpecies.getForm(resultProperties.aspects)
+                
+                val resultForm = resultSpecies.getForm(aspects + resultProperties.aspects)
 
                 val speciesId = resultSpecies.resourceIdentifier
                 val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)

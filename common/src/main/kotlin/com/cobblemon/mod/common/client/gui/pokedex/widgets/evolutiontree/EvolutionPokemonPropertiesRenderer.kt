@@ -23,9 +23,11 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.item.Items
 
 internal fun describePokemonProperties(properties: PokemonProperties): MutableComponent? {
     if (hasUndescribedProperty(properties)) {
@@ -55,16 +57,30 @@ internal fun describePokemonProperties(properties: PokemonProperties): MutableCo
         describeCustomProperty(customProperty)?.let { descriptors.add(it) }
     }
 
-    if (descriptors.isEmpty()) {
+    val heldItemDescriptor = properties.heldItem?.let { heldItem ->
+        val itemId = heldItem.substringBefore('[').trim().asIdentifierDefaultingNamespace()
+        val item = BuiltInRegistries.ITEM.get(itemId)
+        if (item == Items.AIR) null else lang("ui.pokedex.requirement.properties.held_item", item.description.plainCopy().green())
+    }
+
+    if (descriptors.isEmpty() && heldItemDescriptor == null) {
         return null
     }
 
-    if (descriptors.size == 1) {
-        return descriptors[0]
+    val mainDescriptor = when {
+        descriptors.isEmpty() -> null
+        descriptors.size == 1 -> descriptors[0]
+        else -> {
+            val allButLast = descriptors.dropLast(1).reduce { acc, next -> acc.add(", ").add(next) }
+            lang("ui.pokedex.requirement.properties.and", allButLast, descriptors.last())
+        }
     }
 
-    val allButLast = descriptors.dropLast(1).reduce { acc, next -> acc.add(", ").add(next) }
-    return lang("ui.pokedex.requirement.properties.and", allButLast, descriptors.last())
+    return when {
+        mainDescriptor != null && heldItemDescriptor != null -> mainDescriptor.add(" ").add(heldItemDescriptor)
+        mainDescriptor != null -> mainDescriptor
+        else -> heldItemDescriptor
+    }
 }
 
 private fun hasUndescribedProperty(properties: PokemonProperties): Boolean {
@@ -84,7 +100,6 @@ private fun hasUndescribedProperty(properties: PokemonProperties): Boolean {
             properties.originalTrainer != null ||
             properties.moves != null ||
             properties.movesetBuilders != null ||
-            properties.heldItem != null ||
             properties.cosmeticItem != null ||
             properties.scaleModifier != null ||
             properties.isAlpha != null ||

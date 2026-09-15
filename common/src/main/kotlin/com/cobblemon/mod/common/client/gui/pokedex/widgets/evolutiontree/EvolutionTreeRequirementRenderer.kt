@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeTagCondition
-import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
@@ -23,7 +22,6 @@ import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.pokemon.requirements.*
 import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
@@ -152,11 +150,11 @@ fun renderDamageTakenRequirement(damageTakenRequirement: DamageTakenRequirement)
 }
 
 fun renderDefeatRequirement(defeatRequirement: DefeatRequirement): RenderRequirementData? {
-    val species = defeatRequirement.target.species?.let { PokemonSpecies.getByIdentifier(cobblemonResource(it)) } ?: return null
+    val description = describePokemonProperties(defeatRequirement.target) ?: return null
     val icon = CobblemonItems.PUNCHING_GLOVE
     val defeatedAmount = defeatRequirement.amount
 
-    val descriptionComponent = Component.literal(defeatedAmount.toString()).plainCopy().add(" ").add(species.translatedName).green()
+    val descriptionComponent = Component.literal(defeatedAmount.toString()).green().add(" ").add(description)
     val tooltip = lang("ui.pokedex.requirement.defeat.tooltip", descriptionComponent)
 
     return RenderRequirementData(icon, tooltip)

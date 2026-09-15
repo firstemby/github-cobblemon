@@ -1489,6 +1489,7 @@
   "cobblemon.ui.pokedex.requirement.pokemon_properties.tooltip": "Must be %1$s",
   "cobblemon.ui.pokedex.requirement.properties.and": "%1$s and %2$s",
   "cobblemon.ui.pokedex.requirement.properties.custom.cocoon_species": "%1$s cocoon",
+  "cobblemon.ui.pokedex.requirement.properties.held_item": "holding %1$s",
   "cobblemon.ui.pokedex.requirement.properties.int_feature": "%1$s %2$s",
   "cobblemon.ui.pokedex.requirement.properties.nature": "%1$s nature",
   "cobblemon.ui.pokedex.requirement.properties.nickname": "named %1$s",
