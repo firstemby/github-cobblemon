@@ -41,16 +41,10 @@
       ],
       "animations": [
         "q.look('head')",
-        "q.bedrock('sableye', 'ground_idle')"
+        "q.bedrock('sableye', 'shoulder_left')"
       ],
       "quirks": [
         "q.bedrock_quirk('sableye', 'blink')"
-      ],
-      "transformedParts": [
-        {
-          "part": "body",
-          "position": [5, 0, 0]
-        }
       ]
     },
     "shoulder_right": {
@@ -60,16 +54,10 @@
       ],
       "animations": [
         "q.look('head')",
-        "q.bedrock('sableye', 'ground_idle')"
+        "q.bedrock('sableye', 'shoulder_right')"
       ],
       "quirks": [
         "q.bedrock_quirk('sableye', 'blink')"
-      ],
-      "transformedParts": [
-        {
-          "part": "body",
-          "position": [-5, 0, 0]
-        }
       ]
     }
   }

@@ -9,14 +9,19 @@
 package com.cobblemon.mod.common.item.interactive
 
 import com.cobblemon.mod.common.CobblemonSounds
-import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 
-class MochiItem(stat: Stats): EVIncreaseItem(stat, 4) {
+class MochiItem(override val stat: Stat): CobblemonItem(Properties()), EVIncreaseItem {
+    override val evIncreaseAmount: Int = 4
     override val sound: SoundEvent = CobblemonSounds.MOCHI_USE
 
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
@@ -27,5 +32,12 @@ class MochiItem(stat: Stats): EVIncreaseItem(stat, 4) {
         pokemon.feedPokemon(1)
         
         return super.applyToPokemon(player, stack, pokemon)
+    }
+
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        if (user is ServerPlayer) {
+            return use(user, user.getItemInHand(hand))
+        }
+        return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 }

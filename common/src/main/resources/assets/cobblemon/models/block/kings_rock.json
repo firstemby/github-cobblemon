@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench",
+    "ambientocclusion": false,
 	"textures": {
 		"particle": "cobblemon:item/wearable/kings_rock",
 		"texture": "cobblemon:item/wearable/kings_rock"
@@ -11,8 +11,8 @@
 			"to": [11, 8, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 7]},
 			"faces": {
-				"north": {"uv": [3, 4, 0, 8], "texture": "#texture"},
-				"south": {"uv": [0, 4, 3, 8], "texture": "#texture"}
+				"north": {"uv": [6, 8, 0, 16], "texture": "#texture"},
+				"south": {"uv": [0, 8, 6, 16], "texture": "#texture"}
 			}
 		},
 		{
@@ -21,8 +21,8 @@
 			"to": [11, 8, 5],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 9]},
 			"faces": {
-				"north": {"uv": [0, 0, 3, 4], "texture": "#texture"},
-				"south": {"uv": [3, 0, 0, 4], "texture": "#texture"}
+				"north": {"uv": [0, 0, 6, 8], "texture": "#texture"},
+				"south": {"uv": [6, 0, 0, 8], "texture": "#texture"}
 			}
 		},
 		{
@@ -31,8 +31,8 @@
 			"to": [11, 8, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4, 8]},
 			"faces": {
-				"east": {"uv": [3, 0, 6, 4], "texture": "#texture"},
-				"west": {"uv": [6, 0, 3, 4], "texture": "#texture"}
+				"east": {"uv": [6, 0, 12, 8], "texture": "#texture"},
+				"west": {"uv": [12, 0, 6, 8], "texture": "#texture"}
 			}
 		},
 		{
@@ -41,15 +41,16 @@
 			"to": [5, 8, 11],
 			"rotation": {"angle": 0, "axis": "y", "origin": [9, 4, 8]},
 			"faces": {
-				"east": {"uv": [6, 4, 3, 8], "texture": "#texture"},
-				"west": {"uv": [3, 4, 6, 8], "texture": "#texture"}
+				"east": {"uv": [12, 8, 6, 16], "texture": "#texture"},
+				"west": {"uv": [6, 8, 12, 16], "texture": "#texture"}
 			}
 		}
 	],
 	"gui_light": "front",
 	"display": {
 		"head": {
-			"translation": [0, 14.75, 0]
+			"translation": [0, 19, 0],
+			"scale": [1.6, 1.6, 1.6]
 		}
 	}
 }

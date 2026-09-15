@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:poison_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_poison_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:poison_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:poison_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_poison_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -13,7 +13,9 @@
       "isBattle": true,
       "animations": [
         "q.look('head')",
-        "q.bedrock('lucario', 'battle_idle')"
+        "q.bedrock('lucario', 'battle_idle')",
+        "q.bedrock('lucario', 'battle_idle_aura_left')",
+        "q.bedrock('lucario', 'battle_idle_aura_right')"
       ],
       "quirks": ["q.bedrock_quirk('lucario', 'blink')", "q.bedrock_quirk('lucario', 'battle_quirk')"]
     },
