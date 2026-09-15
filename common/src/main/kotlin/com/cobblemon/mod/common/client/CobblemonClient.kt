@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client
 
+import com.cobblemon.mod.common.client.cinematic.CinematicClientExtensions
+
 import com.cobblemon.mod.common.api.camera.model.HudElement
 import net.minecraft.client.DeltaTracker
 import com.cobblemon.mod.common.client.net.stadium.StadiumSpectateStateHandler
@@ -90,7 +92,6 @@ import com.cobblemon.mod.common.client.tooltips.RecipeSeasoningAbsorptionTooltip
 import com.cobblemon.mod.common.client.tooltips.SeasoningTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TechnicalMachineTooltipGenerator
 import com.cobblemon.mod.common.client.tooltips.TooltipManager
-import com.cobblemon.mod.common.client.editor.cinematic.overlay.LetterboxHudRenderer
 import com.cobblemon.mod.common.client.trade.ClientTrade
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -435,7 +436,7 @@ object CobblemonClient {
     }
 
     fun beforeChatRender(context: GuiGraphics, deltaTracker: DeltaTracker) {
-        LetterboxHudRenderer.render(context)
+        CinematicClientExtensions.renderHud(context)
         StadiumBattleStateHandler.render(context)
         StadiumSpectateStateHandler.render(context)
         val partialDeltaTicks = deltaTracker.getGameTimeDeltaPartialTick(true)

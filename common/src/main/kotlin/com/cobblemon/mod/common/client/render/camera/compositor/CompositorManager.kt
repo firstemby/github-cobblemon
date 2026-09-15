@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.camera.compositor
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.client.editor.cinematic.SceneEditorOverlay
+import com.cobblemon.mod.common.client.cinematic.CinematicClientExtensions
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.minecraft.client.Minecraft
@@ -88,7 +88,7 @@ object CompositorManager {
         if (compositors.isEmpty()) return emptySet()
         val feeds = mutableSetOf<UUID>()
         for ((id, compositor) in compositors) {
-            if (SceneEditorOverlay.freePreviewSession()?.ownsCompositor(id) == true) continue
+            if (CinematicClientExtensions.suppressCompositor(id)) continue
             feeds.addAll(compositor.layout.requiredFeeds())
         }
         return feeds
@@ -97,7 +97,7 @@ object CompositorManager {
     @JvmStatic
     fun isFullscreenActive(): Boolean {
         val id = fullscreenCompositorId ?: return false
-        if (SceneEditorOverlay.freePreviewSession()?.ownsCompositor(id) == true) return false
+        if (CinematicClientExtensions.suppressCompositor(id)) return false
         return compositors.containsKey(id)
     }
 

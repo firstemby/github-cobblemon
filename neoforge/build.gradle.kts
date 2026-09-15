@@ -68,15 +68,6 @@ dependencies {
         bundle(it)
     }
 
-    listOf(
-        "io.github.spair:imgui-java-binding:1.90.0",
-        "io.github.spair:imgui-java-natives-windows:1.90.0",
-        "io.github.spair:imgui-java-natives-linux:1.90.0",
-        "io.github.spair:imgui-java-natives-macos:1.90.0"
-    ).forEach {
-        bundle(it)
-        forgeRuntimeLibrary(it)
-    }
 
 }
 

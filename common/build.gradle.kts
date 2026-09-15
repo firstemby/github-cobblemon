@@ -41,7 +41,6 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modApi(libs.molang)
 
-    compileOnly("io.github.spair:imgui-java-binding:1.90.0")
 
     // Integrations
     compileOnlyApi(libs.jei.api)
@@ -65,7 +64,6 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
-    testImplementation("io.github.spair:imgui-java-binding:1.90.0")
     testImplementation(libs.graal.sdk)
     testRuntimeOnly(libs.bundles.graal)
 }

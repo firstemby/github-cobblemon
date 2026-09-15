@@ -9,10 +9,12 @@
 package com.cobblemon.mod.common.client.net.editor
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
-import com.cobblemon.mod.common.client.editor.cinematic.EditorRoutePreview
+import com.cobblemon.mod.common.client.cinematic.CinematicClientExtensions
 import com.cobblemon.mod.common.net.messages.client.editor.EditorRouteResultS2CPacket
 import net.minecraft.client.Minecraft
 
 object EditorRouteResultHandler : ClientNetworkPacketHandler<EditorRouteResultS2CPacket> {
-    override fun handle(packet: EditorRouteResultS2CPacket, client: Minecraft) = EditorRoutePreview.accept(packet)
+    override fun handle(packet: EditorRouteResultS2CPacket, client: Minecraft) {
+        CinematicClientExtensions.routeResult(packet, client)
+    }
 }

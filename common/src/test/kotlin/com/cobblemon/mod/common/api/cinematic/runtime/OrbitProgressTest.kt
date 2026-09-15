@@ -15,11 +15,7 @@ import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.FixedFov
 import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.KeyframeFov
 import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.LookAlongPath
 import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.OrbitPosition
-import com.cobblemon.mod.common.client.editor.model.cinematic.SceneSerializer
-import com.cobblemon.mod.common.client.editor.model.cinematic.EditorScene
-import com.cobblemon.mod.common.client.editor.model.cinematic.EditorShot
 import com.cobblemon.mod.common.util.asExpressionLike
-import com.google.gson.JsonParser
 import io.mockk.every
 import io.mockk.mockk
 import net.minecraft.world.phys.Vec3
@@ -186,23 +182,11 @@ class OrbitProgressTest {
         }
     }
 
-    @Test fun `disabled option keeps original beat timing and setting survives editor serialization`() {
+    @Test fun `disabled option keeps original beat timing`() {
         SceneBuiltinSources.register()
         val scene = scene(false)
         val router = FeedRouter(scene)
         assertEquals(orbit.evaluate(5f), sample(router, ShotEvaluator(scene), beat("main", "orbit"), 5f).single().position)
-        val editor = EditorScene.createDefault()
-        val position = JsonParser.parseString("""{"type":"orbit","center":{"x":0,"y":0,"z":0},"radius":10,"angularVelocity":30}""").asJsonObject
-        editor.shots["orbit"] = EditorShot("orbit", position,
-            JsonParser.parseString("""{"type":"fixed","yaw":0,"pitch":0}""").asJsonObject)
-        for (remember in listOf(false, true)) {
-            position.addProperty("rememberProgress", remember)
-            val restored = SceneSerializer.toScene(editor)
-            assertEquals(remember, (restored.shots.getValue("orbit").position as OrbitPosition).rememberProgress)
-        }
-        val json = SceneSerializer.toJson(editor)
-        json.getAsJsonObject("shots").getAsJsonObject("orbit").getAsJsonObject("position").remove("rememberProgress")
-        assertFalse(OrbitPosition.fromJson(json.getAsJsonObject("shots").getAsJsonObject("orbit").getAsJsonObject("position")).rememberProgress)
     }
 
     @Test fun `remembered position time also drives path direction but lens uses beat time`() {

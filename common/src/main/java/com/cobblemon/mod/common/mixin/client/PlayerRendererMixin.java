@@ -9,16 +9,11 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.camera.ClientCameraController;
-import com.cobblemon.mod.common.client.cinematic.ClientSceneSession;
-import com.cobblemon.mod.common.client.cinematic.ClientSceneSessionManager;
-import com.cobblemon.mod.common.client.editor.cinematic.SceneEditorOverlay;
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon;
-import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import java.util.UUID;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -65,10 +60,6 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
             ci.cancel();
             return;
         }
-        if (!CameraFeedHandler.isCapturing()) return;
-        UUID previewId = SceneEditorOverlay.INSTANCE.getPreview().runningSceneInstanceIdOrNull();
-        ClientSceneSession session = previewId == null ? null : ClientSceneSessionManager.INSTANCE.getSession(previewId);
-        if (session != null && session.ownsCamera(CameraFeedHandler.getCurrentlyCapturedCamera())) ci.cancel();
     }
 
     @WrapOperation(method = "getRenderOffset(Lnet/minecraft/client/player/AbstractClientPlayer;F)Lnet/minecraft/world/phys/Vec3;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isCrouching()Z"))

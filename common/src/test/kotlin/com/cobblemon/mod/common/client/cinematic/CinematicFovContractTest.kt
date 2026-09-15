@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.editor.cinematic
+package com.cobblemon.mod.common.client.cinematic
 
 import com.cobblemon.mod.common.mixin.client.GameRendererMixin
 import java.lang.reflect.ParameterizedType

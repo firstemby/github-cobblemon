@@ -39,7 +39,6 @@ object CobblemonKeyBinds {
     val PARTY_OVERLAY_UP = this.queue(UpShiftPartyBinding)
     val SEND_OUT_POKEMON = this.queue(PartySendBinding)
     val RIDING_FREELOOK = this.queue(RidingFreelookBinding)
-    val CAMERA_EDITOR = this.queue(CameraEditorBinding)
     val STADIUM_SPECTATE = this.queue(StadiumSpectateBinding)
 
     fun register(registrar: (KeyMapping) -> Unit) {

@@ -11,9 +11,7 @@ package com.cobblemon.mod.common.client.camera
 import com.cobblemon.mod.common.api.camera.CameraRotation
 import com.cobblemon.mod.common.api.camera.model.HudElement
 import com.cobblemon.mod.common.api.cinematic.model.sources.Lens
-import com.cobblemon.mod.common.client.editor.cinematic.SceneEditorOverlay
-import com.cobblemon.mod.common.client.editor.cinematic.viewport.ViewportCameraMode
-import com.cobblemon.mod.common.client.imgui.CobblemonImGui
+import com.cobblemon.mod.common.client.cinematic.CinematicClientExtensions
 import com.cobblemon.mod.common.client.render.camera.CameraFeedHandler
 import com.cobblemon.mod.common.client.render.camera.compositor.CompositorManager
 import java.util.UUID
@@ -461,6 +459,6 @@ object ClientCameraController {
     @JvmStatic
     fun shouldUseCinematicCamera(): Boolean = usingDedicatedCamera && isActive() &&
         (CameraFeedHandler.isCapturing() ||
-            !CobblemonImGui.isActive() || SceneEditorOverlay.playState.viewportCameraMode != ViewportCameraMode.FREE_FLY)
+            !CinematicClientExtensions.suppressMainCamera())
 
 }

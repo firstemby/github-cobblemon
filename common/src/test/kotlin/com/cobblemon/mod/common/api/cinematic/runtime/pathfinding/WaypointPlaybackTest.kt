@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.cinematic.runtime.pathfinding
 
 import net.minecraft.network.chat.Component
 import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.WaypointPathfinding
-import com.cobblemon.mod.common.client.editor.cinematic.panel.inspector.ActorTrackTypes
 import com.cobblemon.mod.common.entity.PoseType
 import net.minecraft.world.phys.Vec3
 import org.junit.jupiter.api.Assertions.*
@@ -54,10 +53,6 @@ class WaypointPlaybackTest {
     private val end = Vec3(3.0, 0.0, 0.0)
     private fun track(duration: Float = 30f) = WaypointPathfinding(listOf(Vec3.ZERO, end), durationSecs = duration)
 
-    @Test fun `catalog defaults use native speed multiplier`() {
-        val model = WaypointPathfinding.fromJson(ActorTrackTypes.entryFor("pathfinding")!!.defaultBody())
-        assertEquals(1f, model.speedMultiplier)
-    }
 
     @Test fun `delegates motion and jump state to native motor`() {
         val motor = Motor()

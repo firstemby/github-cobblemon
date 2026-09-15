@@ -34,6 +34,7 @@ class ClientCameraPolicyTest {
 
     @AfterEach
     fun cleanup() {
+        CinematicClientExtensions.suppressMainCamera = { false }
         try {
             sessions.forEach { it.stop() }
         } finally {
@@ -89,6 +90,23 @@ class ClientCameraPolicyTest {
         } finally {
             unmockkStatic(CameraFeedHandler::class)
         }
+    }
+
+    @Test
+    fun `optional camera suppression preserves feed captures and resumes normal playback`() {
+        session()
+        assertTrue(ClientCameraController.shouldUseCinematicCamera())
+        CinematicClientExtensions.suppressMainCamera = { true }
+        assertFalse(ClientCameraController.shouldUseCinematicCamera())
+        mockkStatic(CameraFeedHandler::class)
+        try {
+            every { CameraFeedHandler.isCapturing() } returns true
+            assertTrue(ClientCameraController.shouldUseCinematicCamera())
+        } finally {
+            unmockkStatic(CameraFeedHandler::class)
+        }
+        CinematicClientExtensions.suppressMainCamera = { false }
+        assertTrue(ClientCameraController.shouldUseCinematicCamera())
     }
 
     private fun session(): ClientSceneSession =

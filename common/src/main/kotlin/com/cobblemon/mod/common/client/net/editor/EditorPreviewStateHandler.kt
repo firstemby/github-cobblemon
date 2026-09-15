@@ -9,12 +9,12 @@
 package com.cobblemon.mod.common.client.net.editor
 
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
-import com.cobblemon.mod.common.client.editor.cinematic.SceneEditorOverlay
+import com.cobblemon.mod.common.client.cinematic.CinematicClientExtensions
 import com.cobblemon.mod.common.net.messages.client.editor.EditorPreviewStateS2CPacket
 import net.minecraft.client.Minecraft
 
 object EditorPreviewStateHandler : ClientNetworkPacketHandler<EditorPreviewStateS2CPacket> {
     override fun handle(packet: EditorPreviewStateS2CPacket, client: Minecraft) {
-        SceneEditorOverlay.preview.onState(packet)
+        CinematicClientExtensions.previewState(packet, client)
     }
 }

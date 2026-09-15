@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
-import com.cobblemon.mod.common.client.editor.cinematic.viewport.WindowResizeHook;
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
 import com.cobblemon.mod.common.client.camera.GameCamera;
 import com.cobblemon.mod.common.client.camera.ClientCameraController;
@@ -85,12 +84,6 @@ public abstract class GameRendererMixin implements CameraFeedRenderState {
         } else if (cobblemon$usingCinematic) {
             cobblemon$restoreCamera();
         }
-    }
-
-    @Inject(method = "render", at = @At("HEAD"))
-    private void cobblemon$editorViewportResizeCheck(DeltaTracker counter, boolean tick, CallbackInfo ci) {
-        Minecraft mc = Minecraft.getInstance();
-        ((WindowResizeHook) (Object) mc.getWindow()).cobblemon$checkForOverrideResize();
     }
 
     // WrapOperation allows Iris/Sodium to share this call site; Redirect claims it exclusively.

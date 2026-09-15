@@ -8,7 +8,7 @@
 
 package com.cobblemon.mod.common.api.cinematic.model
 
-internal fun <T> orderedKeyframes(keyframes: List<T>, time: (T) -> Float): List<T> {
+fun <T> orderedKeyframes(keyframes: List<T>, time: (T) -> Float): List<T> {
     require(keyframes.isNotEmpty()) { "At least one keyframe is required" }
     require(keyframes.all { time(it).isFinite() && time(it) >= 0f }) { "Keyframe times must be finite and nonnegative" }
     val ordered = ArrayList<T>(keyframes.size)

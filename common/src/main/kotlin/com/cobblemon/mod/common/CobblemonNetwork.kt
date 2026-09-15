@@ -77,7 +77,7 @@ import com.cobblemon.mod.common.client.net.stadium.StadiumSpectateStateHandler
 import com.cobblemon.mod.common.net.messages.client.stadium.StadiumSpectateStatePacket
 import com.cobblemon.mod.common.net.messages.server.stadium.StadiumSpectatePacket
 import com.cobblemon.mod.common.net.serverhandling.stadium.StadiumSpectateHandler
-import com.cobblemon.mod.common.client.editor.cinematic.EditorStadiumBridge
+import com.cobblemon.mod.common.client.net.stadium.StadiumCinematicHandler
 import com.cobblemon.mod.common.net.messages.client.stadium.StadiumCinematicPacket
 import com.cobblemon.mod.common.net.messages.server.stadium.EditStadiumCinematicPacket
 import com.cobblemon.mod.common.net.serverhandling.stadium.EditStadiumCinematicHandler
@@ -583,7 +583,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(OpenStadiumConfigPacket.ID, OpenStadiumConfigPacket::decode, OpenStadiumConfigHandler))
         list.add(PacketRegisterInfo(StadiumConfigResultPacket.ID, StadiumConfigResultPacket::decode, StadiumConfigResultHandler))
         list.add(PacketRegisterInfo(StadiumSpectateStatePacket.ID, StadiumSpectateStatePacket::decode, StadiumSpectateStateHandler))
-        list.add(PacketRegisterInfo(StadiumCinematicPacket.ID, StadiumCinematicPacket::decode, EditorStadiumBridge))
+        list.add(PacketRegisterInfo(StadiumCinematicPacket.ID, StadiumCinematicPacket::decode, StadiumCinematicHandler))
 
         // Orientation
         list.add(PacketRegisterInfo(ClientboundUpdateOrientationPacket.ID, ClientboundUpdateOrientationPacket::decode, ClientboundUpdateOrientationHandler))

@@ -11,8 +11,6 @@ package com.cobblemon.mod.common.client.gui.stadium
 import com.cobblemon.mod.common.battles.stadium.StadiumSpectatorArea
 
 import com.cobblemon.mod.common.CobblemonNetwork
-import com.cobblemon.mod.common.client.editor.cinematic.EditorStadiumBridge
-import com.cobblemon.mod.common.client.editor.cinematic.SceneEditorOverlay
 import com.cobblemon.mod.common.battles.stadium.StadiumBlockData
 import com.cobblemon.mod.common.battles.stadium.StadiumArena
 import com.cobblemon.mod.common.battles.stadium.StadiumBlockLayout
@@ -393,9 +391,9 @@ class StadiumConfigScreen(
             draft.cinematicScene = ResourceLocation.parse("cobblemon:stadium_dynamic")
             rawValues.remove("scene"); invalidFields.remove("scene"); init()
         }, I18n.get("cobblemon.stadium.ui.no_cinematic") to { draft.cinematicScene = null; rawValues.remove("scene"); invalidFields.remove("scene"); init() }))
-        action(I18n.get("cobblemon.stadium.ui.cinematic_authoring"), I18n.get("cobblemon.stadium.ui.save_edit_cinematic")) {
+        if (StadiumCinematicAuthoring.available) action(I18n.get("cobblemon.stadium.ui.cinematic_authoring"), I18n.get("cobblemon.stadium.ui.save_edit_cinematic")) {
             if (minecraft?.player?.hasPermissions(2) != true) status = I18n.get("cobblemon.stadium.ui.cinematic_editing_requires_operator_permission")
-            else if (SceneEditorOverlay.activeScene?.isDirty == true) status = I18n.get("cobblemon.stadium.ui.save_the_current_cinematic_editor_scene")
+            else if (StadiumCinematicAuthoring.hasUnsavedChanges()) status = I18n.get("cobblemon.stadium.ui.save_the_current_cinematic_editor_scene")
             else if (draft.cinematicScene == null) status = I18n.get("cobblemon.stadium.ui.choose_a_cinematic_first")
             else { editAfterSave = true; if (!save()) editAfterSave = false }
         }
@@ -635,7 +633,7 @@ class StadiumConfigScreen(
         status = packet.message.string
         if (packet.success) {
             closing = true; onClose()
-            if (editAfterSave) EditorStadiumBridge.open(blockPos, draft.stadiumId)
+            if (editAfterSave) StadiumCinematicAuthoring.open(blockPos, draft.stadiumId)
         } else { editAfterSave = false; init() }
     }
 

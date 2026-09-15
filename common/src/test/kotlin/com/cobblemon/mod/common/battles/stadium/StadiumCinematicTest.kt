@@ -9,8 +9,6 @@ import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.OrbitPositio
 import com.cobblemon.mod.common.api.cinematic.model.sources.builtin.SmoothingModifier
 import com.cobblemon.mod.common.api.cinematic.registry.SceneSourceRegistry
 import com.cobblemon.mod.common.api.cinematic.runtime.BeatStateMachine
-import com.cobblemon.mod.common.client.editor.cinematic.EditorPreviewScene
-import com.cobblemon.mod.common.client.editor.model.cinematic.SceneSerializer
 import com.google.gson.JsonParser
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.network.chat.contents.TranslatableContents
@@ -19,42 +17,12 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class StadiumCinematicTest {
-    @Test fun `stadium preview uses arena and every custom trainer and pokemon placement`() {
-        val source = template()
-        val origin = Vec3(100.0, 70.0, -200.0)
-        for (count in 3..5) {
-            val data = StadiumBlockData.createDefault().apply {
-                cinematicLayout = "custom"
-                arena = StadiumArena(origin.add(2.0, 0.0, 1.0), 24.0, 16.0)
-                setLayout("custom", StadiumBlockLayout.createDefault().apply {
-                    trainerSlots = count; pokemonSlots = count
-                    listOf(side1, side2).forEachIndexed { side, placements ->
-                        repeat(count) { slot ->
-                            placements.actors.add(StadiumBlockPlacement(origin.add(if (side == 0) -7.0 else 7.0, 0.0, slot.toDouble())))
-                            placements.pokemon.add(StadiumBlockPlacement(origin.add(if (side == 0) -3.0 else 3.0, 0.0, slot.toDouble())))
-                        }
-                    }
-                })
-            }
-            val prepared = StadiumCinematic.forEditor(source, data, origin)
-            val json = JsonParser.parseString(prepared).asJsonObject
-            val scene = StadiumCinematic.parse(prepared)
-            val editor = SceneSerializer.fromScene(scene, sourceJson = json)
-            val orbit = scene.shots.getValue("arena_orbit").position as OrbitPosition
-            assertEquals(data.arena!!.center, orbit.center)
-            assertEquals(24f, orbit.arenaWidth)
-            assertEquals(16f, orbit.arenaDepth)
-            assertEquals(Vec3(7.0, 0.0, (count - 1).toDouble()), editor.actors.getValue("trainer_2_$count").previewOffset)
-            assertEquals(Vec3(3.0, 0.0, (count - 1).toDouble()), editor.actors.getValue("pokemon_2${'a' + count - 1}").previewOffset)
-            assertEquals(4 * count, editor.actors.values.count { it.id !in setOf("user", "target") && it.previewSpecies.isNotBlank() })
-            val runtime = StadiumCinematic.fitArena(StadiumCinematic.parse(source), data.arena)
-            assertEquals(orbit, runtime.shots.getValue("arena_orbit").position)
-            assertEquals(orbit, StadiumCinematic.parse(SceneSerializer.toJson(editor).toString()).shots.getValue("arena_orbit").position)
-            val preview = EditorPreviewScene.build(editor, origin)
-            assertEquals(data.arena!!.center.x, preview.getAsJsonObject("parameters").getAsJsonObject("arena_center")
-                .getAsJsonObject("default").get("x").asDouble)
-        }
-        assertNull((StadiumCinematic.parse(source).shots.getValue("arena_orbit").position as OrbitPosition).arenaWidth)
+
+    @Test fun `adaptive template validates`() {
+        val scene = StadiumCinematic.parse(template())
+        assertEquals("cobblemon:stadium_dynamic", scene.id)
+        assertEquals(7, scene.shots.size)
+        assertTrue(scene.validate().none { it.severity == ValidationError.Severity.ERROR }, scene.validate().toString())
     }
 
     private fun template(): String {
@@ -66,27 +34,6 @@ class StadiumCinematicTest {
         return checkNotNull(javaClass.getResourceAsStream("/data/cobblemon/cinematic_scenes/stadium_dynamic.json")).bufferedReader().use { it.readText() }
     }
 
-    @Test fun `adaptive template validates and survives ImGui round trip`() {
-        val source = template()
-        val scene = StadiumCinematic.parse(source)
-        assertEquals("cobblemon:stadium_dynamic", scene.id)
-        assertEquals(7, scene.shots.size)
-        assertTrue(scene.validate().none { it.severity == ValidationError.Severity.ERROR }, scene.validate().toString())
-        val editor = SceneSerializer.fromScene(scene, sourceJson = JsonParser.parseString(source).asJsonObject)
-        val restored = StadiumCinematic.parse(SceneSerializer.toJson(editor).toString())
-        assertEquals(scene.shots.getValue("arena_orbit").position, restored.shots.getValue("arena_orbit").position)
-        assertEquals(-8.0, editor.actors.getValue("trainer_1").previewOffset.x)
-        val before = JsonParser.parseString(source).asJsonObject
-        val after = SceneSerializer.toJson(editor)
-        assertEquals(before.getAsJsonObject("beats").getAsJsonObject("intro").get("guiTrack"),
-            after.getAsJsonObject("beats").getAsJsonObject("intro").get("guiTrack"))
-        assertEquals(scene.feeds, restored.feeds)
-        assertEquals(scene.transitions.size, restored.transitions.size)
-        scene.beats.forEach { (id, beat) ->
-            assertEquals(beat.hiddenHudElements, restored.beats.getValue(id).hiddenHudElements)
-            assertEquals(beat.renderPlayerBody, restored.beats.getValue(id).renderPlayerBody)
-        }
-    }
 
     @Test fun `adaptive sequence preserves original intro and battle event graph`() {
         val dynamic = JsonParser.parseString(template()).asJsonObject
@@ -149,18 +96,6 @@ class StadiumCinematicTest {
         advance("send_out_focus_p2")
     }
 
-    @Test fun `send out previews use actor positions instead of world origin`() {
-        val source = template()
-        val editor = SceneSerializer.fromScene(StadiumCinematic.parse(source), sourceJson = JsonParser.parseString(source).asJsonObject)
-        val before = SceneSerializer.toJson(editor)
-        val preview = EditorPreviewScene.build(editor, Vec3(100.0, 70.0, 200.0))
-        assertEquals(before, SceneSerializer.toJson(editor))
-        val parameters = preview.getAsJsonObject("parameters")
-        fun x(name: String) = parameters.getAsJsonObject(name).getAsJsonObject("default").get("x").asDouble
-        assertEquals(100.0, x("arena_center"))
-        assertEquals(97.0, x("send_out_position_p1"))
-        assertEquals(103.0, x("send_out_position_p2"))
-    }
 
     @Test fun `block scoped override preserves template and persists through NBT`() {
         val source = template()

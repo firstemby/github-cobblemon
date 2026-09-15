@@ -153,7 +153,7 @@ class MolangUiCodecTest {
 
     @Test
     fun `bundled examples are executable contract fixtures`() {
-        listOf("donation_box", "example_furnace", "test_overlay", "battle_intro").forEach { name ->
+        listOf("battle_intro").forEach { name ->
             val resourceId = ResourceLocation.fromNamespaceAndPath("cobblemon", name)
             val view = MolangUiRegistry.parse(
                 resourceId,

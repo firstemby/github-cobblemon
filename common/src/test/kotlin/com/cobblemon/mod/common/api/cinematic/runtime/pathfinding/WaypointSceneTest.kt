@@ -9,6 +9,7 @@
 
 package com.cobblemon.mod.common.api.cinematic.runtime.pathfinding
 
+import com.google.gson.JsonParser
 import net.minecraft.network.chat.Component
 import com.cobblemon.mod.common.api.cinematic.model.ActorDeclaration
 import com.cobblemon.mod.common.api.cinematic.model.ActorDirection
@@ -22,12 +23,6 @@ import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.PoseLockTrack
 import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.WaypointPathfinding
 import com.cobblemon.mod.common.api.cinematic.registry.SceneBuiltinSources
 import com.cobblemon.mod.common.api.cinematic.registry.SceneSourceRegistry
-import com.cobblemon.mod.common.client.editor.cinematic.panel.inspector.ActorTrackTypes
-import com.cobblemon.mod.common.client.editor.model.EditorTrack
-import com.cobblemon.mod.common.client.editor.model.cinematic.EditorActor
-import com.cobblemon.mod.common.client.editor.model.cinematic.EditorActorDirection
-import com.cobblemon.mod.common.client.editor.model.cinematic.EditorScene
-import com.cobblemon.mod.common.client.editor.model.cinematic.SceneSerializer
 import com.cobblemon.mod.common.entity.PoseType
 import net.minecraft.world.phys.Vec3
 import org.junit.jupiter.api.Assertions.*
@@ -53,21 +48,8 @@ class WaypointSceneTest {
 
     @Test fun `registry can deserialize waypoint track`() {
         SceneBuiltinSources.register()
-        val parsed = SceneSourceRegistry.deserializeActorTrack("pathfinding", ActorTrackTypes.entryFor("pathfinding")!!.defaultBody())
+        val parsed = SceneSourceRegistry.deserializeActorTrack("pathfinding", JsonParser.parseString("""{"controlPoints":[{"x":0,"y":0,"z":0},{"x":3,"y":0,"z":0}]}""").asJsonObject)
         assertInstanceOf(WaypointPathfinding::class.java, parsed)
     }
 
-    @Test fun `waypoint data round trips through editor serialization`() {
-        SceneBuiltinSources.register()
-        val editor = EditorScene.createDefault()
-        editor.actors["hero"] = EditorActor("hero", ActorKind.SynthesizedPokemon)
-        val body = ActorTrackTypes.entryFor("pathfinding")!!.defaultBody()
-        editor.beats.getValue("main").actorDirections["hero"] =
-            EditorActorDirection(tracks = mutableListOf(EditorTrack("pathfinding", body)))
-        val json = SceneSerializer.toJson(editor)
-        val restored = SceneSerializer.fromScene(SceneSerializer.toScene(editor), sourceJson = json)
-        val result = restored.beats.getValue("main").actorDirections.getValue("hero").tracks.single()
-        assertEquals("pathfinding", result.trackType)
-        assertEquals(WaypointPathfinding.fromJson(body), WaypointPathfinding.fromJson(result.data))
-    }
 }
