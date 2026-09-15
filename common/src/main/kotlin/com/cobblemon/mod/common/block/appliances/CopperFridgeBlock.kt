@@ -25,18 +25,26 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the 2 block tall stuff
 //TODO: All the Fridge appliance stuff
-open class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFridgeBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperFridgeBlock) }
         val POWERED = BooleanProperty.create("powered")
 
-        /*fun getShape(): VoxelShape {
-        }*/
+        val LOWER_HITBOX = Shapes.or(
+            Shapes.box(0.0625, 0.0, 0.125, 0.9375, 0.0625, 0.9375),
+            Shapes.box(0.0, 0.0625, 0.0625, 1.0, 1.0, 1.0))
+        val UPPER_HITBOX = Shapes.or(
+            Shapes.box(0.0, 0.0, 0.0625, 1.0, 1.0, 1.0),
+            Shapes.box(0.25, 0.125, 0.0, 0.375, 0.3125, 0.0625),
+            Shapes.box(0.625, 0.125, 0.0, 0.75, 0.3125, 0.0625))
+        val UPPER_COLLISSIONBOX = Shapes.box(0.0, 0.0, 0.0625, 1.0, 1.0, 1.0)
+        //The handles get ignored by entity collission, because it feels nicer, but still count as part of the hitbox
     }
 
     init {
@@ -63,13 +71,14 @@ open class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape())
-    }*/
+        //val hitbox = state.getValue(HALF)
+        return rotateShape(Direction.NORTH, direction, LOWER_HITBOX)
+    }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return getCollisionShape(state, level, pos, context).singleEncompassing()
+        return getCollisionShape(state, level, pos, context)
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {

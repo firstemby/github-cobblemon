@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cobblemon:block/copper_mower",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/copper_mower"
+    },
+    "facing=south": {
+      "model": "cobblemon:block/copper_mower",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/copper_mower",
+      "y": 270
+    }
+  }
+}

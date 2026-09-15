@@ -25,17 +25,30 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the Mower appliance stuff
-open class CopperMowerBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+class CopperMowerBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperMowerBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperMowerBlock) }
         val TRIGGERED = BooleanProperty.create("triggered")
 
-        /*fun getShape(): VoxelShape {
-        }*/
+        val COLLISIONBOX = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.0, 0.8125, 0.375, 0.625),
+            Shapes.box(0.0625, 0.0, 0.625, 0.9375, 0.625, 1.0),
+            Shapes.box(0.125, 0.0, 0.1875, 0.875, 0.3125, 0.5),
+            //The next three lines are just so the handle does have collision, it feels awkward without it but it looks bad as hitbox
+            Shapes.box(0.375, 0.375, 0.375, 0.625, 0.625, 0.5625),
+            Shapes.box(0.4375, 0.5625, 0.5, 0.5625, 0.875, 0.625),
+            Shapes.box(0.25, 0.875, 0.5625, 0.75, 1.0, 0.6875)
+        )
+        val HITBOX = Shapes.or(
+            Shapes.box(0.1875, 0.0, 0.0, 0.8125, 0.375, 0.625),
+            Shapes.box(0.0625, 0.0, 0.625, 0.9375, 0.625, 1.0),
+            Shapes.box(0.125, 0.0, 0.1875, 0.875, 0.3125, 0.5)
+        )
     }
 
     init {
@@ -62,17 +75,18 @@ open class CopperMowerBlock(settings: Properties) : HorizontalDirectionalBlock(s
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape())
-    }*/
+        return rotateShape(Direction.NORTH, direction, COLLISIONBOX)
+    }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return getCollisionShape(state, level, pos, context).singleEncompassing()
+        val direction = state.getValue(HORIZONTAL_FACING)
+        return rotateShape(Direction.NORTH, direction, HITBOX)
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
         val fluidState = context.level.getFluidState(context.clickedPos)
-        return super.getStateForPlacement(context)?.setValue(HORIZONTAL_FACING, context.horizontalDirection.opposite)?.setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
+        return super.getStateForPlacement(context)?.setValue(HORIZONTAL_FACING, context.horizontalDirection)?.setValue(WATERLOGGED, fluidState.type === Fluids.WATER)
     }
 }

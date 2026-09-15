@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/copper_fan_decorative",
+	"textures": {
+		"blades": "cobblemon:block/functional/copper_appliances/copper_fan_blades_fast"
+	}
+}

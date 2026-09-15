@@ -25,17 +25,17 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-open class CopperWasherBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+class CopperWasherBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperWasherBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperWasherBlock) }
         val POWERED = BooleanProperty.create("powered")
 
-        /*fun getShape(): VoxelShape {
-        }*/
+        val HITBOX = Shapes.box(0.0625, 0.0, 0.125, 0.9375, 1.0, 1.0)
     }
 
     init {
@@ -62,10 +62,10 @@ open class CopperWasherBlock(settings: Properties) : HorizontalDirectionalBlock(
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape())
-    }*/
+        return rotateShape(Direction.NORTH, direction, HITBOX)
+    }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return getCollisionShape(state, level, pos, context).singleEncompassing()

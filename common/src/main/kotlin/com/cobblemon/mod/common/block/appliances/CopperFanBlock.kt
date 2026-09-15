@@ -26,35 +26,39 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-//TODO: All the Mower appliance stuff
-open class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+//TODO: All the Fan appliance stuff
+//TODO: Able to place the Fan on Walls, models and hitbox are there (blockstate would need edits to support it)
+class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFanBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperFanBlock) }
         //val FACE = //TODO: Floor/Wall
         val POWER = BlockStateProperties.POWER;
-        val PUSHING = BooleanProperty.create("powered")
+        val PUSH = BooleanProperty.create("push")
 
-        /*fun getShape(): VoxelShape {
-        }*/
+        val FLOOR_HITBOX = Shapes.or(
+            Shapes.box(0.0625, 0.125, 0.4375, 0.9375, 1.0, 0.5625),
+            Shapes.box(0.375, 0.0, 0.375, 0.625, 0.125, 0.625))
+        val WALL_HITBOX = Shapes.box(0.0625, 0.0625, 0.875, 0.9375, 0.9375, 1.0)
     }
 
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(HORIZONTAL_FACING, Direction.NORTH)
             .setValue(WATERLOGGED, false)
-            //.setValue(FACE, AttachFace.WALL)
+            //.setValue(FACE, AttachFace.FLOOR)
             .setValue(POWER, 0)
-            .setValue(PUSHING, false)
+            .setValue(PUSH, true) //If True, fan pushes entities, If False, fan is cosmetic only
         )
     }
 
     override fun codec(): MapCodec<CopperFanBlock> = CODEC
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(HORIZONTAL_FACING, WATERLOGGED, /*FACE,*/ POWER, PUSHING)
+        builder.add(HORIZONTAL_FACING, WATERLOGGED, /*FACE,*/ POWER, PUSH)
     }
 
     override fun getFluidState(blockState: BlockState): FluidState? = if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState)
@@ -67,13 +71,13 @@ open class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(set
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape())
-    }*/
+        return rotateShape(Direction.NORTH, direction, FLOOR_HITBOX)
+    }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
-        return getCollisionShape(state, level, pos, context).singleEncompassing()
+        return getCollisionShape(state, level, pos, context)
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {

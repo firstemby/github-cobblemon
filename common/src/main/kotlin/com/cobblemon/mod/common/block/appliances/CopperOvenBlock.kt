@@ -13,6 +13,7 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.LevelAccessor
@@ -22,36 +23,43 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING
 import net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-//TODO: All the Oven appliance stuff
-open class CopperOvenBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+//TODO: All the Oven appliance stuff - Good Luck Coders
+class CopperOvenBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperOvenBlock> = RecordCodecBuilder.mapCodec {
             it.group(propertiesCodec()).apply(it, ::CopperOvenBlock) }
         val EJECTING = BooleanProperty.create("ejecting")
-        //val COOKING = //TODO: Closed/Open/Cooking
+        val COOKING = EnumProperty.create("cooking", CookingState::class.java)
 
-        /*fun getShape(): VoxelShape {
-        }*/
+        val HITBOX = Shapes.box(0.0625, 0.0, 0.3125, 0.9375, 0.625, 0.9375)
     }
 
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(HORIZONTAL_FACING, Direction.NORTH)
             .setValue(WATERLOGGED, false)
-            //.setValue(COOKING, closed)
+            .setValue(COOKING, CookingState.CLOSED)
             .setValue(EJECTING, false)
         )
+    }
+    enum class CookingState : StringRepresentable {
+        CLOSED, //Door is closed
+        OPEN, //Door is open
+        COOKING; //Door is locked closed and the light level is cranked up, as long as the block is powered by redstone. Acts as closed lid in the original Campfire Pot
+        override fun getSerializedName(): String = this.name.lowercase()
     }
 
     override fun codec(): MapCodec<CopperOvenBlock> = CODEC
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(HORIZONTAL_FACING, WATERLOGGED, /*COOKING,*/ EJECTING)
+        builder.add(HORIZONTAL_FACING, WATERLOGGED, COOKING, EJECTING)
     }
 
     override fun getFluidState(blockState: BlockState): FluidState? = if (blockState.getValue(WATERLOGGED)) Fluids.WATER.getSource(false) else super.getFluidState(blockState)
@@ -64,10 +72,10 @@ open class CopperOvenBlock(settings: Properties) : HorizontalDirectionalBlock(se
         else super.updateShape(state, direction, neighborState, world, pos, neighborPos)
     }
 
-    /*override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
+    override fun getCollisionShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         val direction = state.getValue(HORIZONTAL_FACING)
-        return rotateShape(Direction.NORTH, direction, getShape())
-    }*/
+        return rotateShape(Direction.NORTH, direction, HITBOX)
+    }
 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape {
         return getCollisionShape(state, level, pos, context).singleEncompassing()

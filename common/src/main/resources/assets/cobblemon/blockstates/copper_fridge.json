@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cobblemon:block/copper_fridge_bottom",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/copper_fridge_bottom"
+    },
+    "facing=south": {
+      "model": "cobblemon:block/copper_fridge_bottom",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/copper_fridge_bottom",
+      "y": 270
+    }
+  }
+}
