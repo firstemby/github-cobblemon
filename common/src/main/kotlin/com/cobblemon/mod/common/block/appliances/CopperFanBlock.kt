@@ -30,7 +30,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the Fan appliance stuff
 //TODO: Able to place the Fan on Walls, models and hitbox are there (blockstate would need edits to support it)
-class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperFanBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFanBlock> = RecordCodecBuilder.mapCodec {

@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the Mower appliance stuff
-class CopperMowerBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperMowerBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperMowerBlock> = RecordCodecBuilder.mapCodec {

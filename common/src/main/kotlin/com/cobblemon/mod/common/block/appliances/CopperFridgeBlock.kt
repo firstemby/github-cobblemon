@@ -8,8 +8,6 @@
 
 package com.cobblemon.mod.common.block.appliances
 
-import com.cobblemon.mod.common.block.PCBlock
-import com.cobblemon.mod.common.block.PCBlock.PCPart
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -38,7 +36,7 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 //TODO: All the 2 block tall stuff
 //TODO: All the Fridge appliance stuff
-class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
+open class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 
     companion object {
         val CODEC: MapCodec<CopperFridgeBlock> = RecordCodecBuilder.mapCodec {
