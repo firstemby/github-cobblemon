@@ -149,6 +149,7 @@ object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity>(
         functions["get_wander_control_memory"] = put@{
             val value = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                 ?: CobblemonWanderControl()
+        }
         functions["get_wander_control_memory"] = {
             val value =
                 entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
