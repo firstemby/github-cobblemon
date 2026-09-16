@@ -53,6 +53,7 @@ fun interface PokemonPropertyExtractor {
         val EVS = add { pokemon, properties -> properties.evs = pokemon.evs }
         @JvmField
         val SCALE_MODIFIER = add { pokemon, properties -> properties.scaleModifier = pokemon.scaleModifier }
+        // Copied alongside SCALE_MODIFIER because effectiveScale returns the alpha multiplier and ignores scaleModifier when isAlpha is set
         @JvmField
         val ALPHA = add { pokemon, properties -> properties.isAlpha = pokemon.isAlpha }
 
