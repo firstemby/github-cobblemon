@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "leaf_stone",
     "ingredient": {
         "item": "cobblemon:deepslate_leaf_stone_ore"
