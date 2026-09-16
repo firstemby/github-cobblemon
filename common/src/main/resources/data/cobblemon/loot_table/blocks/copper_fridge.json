@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "cobblemon:copper_fridge",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "cobblemon:copper_fridge",
+              "properties": {
+                "part": "bottom"
+              }
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "waxed_exposed_copper_fan",
+  "ingredients": [
+    {
+      "item": "cobblemon:exposed_copper_fan"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "cobblemon:waxed_exposed_copper_fan"
+  }
+}

@@ -1,0 +1,30 @@
+{
+    "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "copper_fridge",
+    "pattern": [
+        "CIC",
+        "PNP",
+        "CRC"
+    ],
+    "key": {
+        "C": {
+            "tag": "c:ingots/copper"
+        },
+        "P": {
+            "item": "minecraft:packed_ice"
+        },
+        "N": {
+            "item": "cobblemon:never_melt_ice"
+        },
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "R": {
+            "tag": "c:dusts/redstone"
+        }
+    },
+    "result": {
+        "id": "cobblemon:copper_fridge"
+    }
+}

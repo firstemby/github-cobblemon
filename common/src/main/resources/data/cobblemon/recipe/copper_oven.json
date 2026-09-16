@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "copper_oven",
+    "pattern": [
+        "CCC",
+        "CFC",
+        "IRI"
+    ],
+    "key": {
+        "C": {
+            "tag": "c:ingots/copper"
+        },
+        "F": {
+            "item": "minecraft:fire_charge"
+        },
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "R": {
+            "tag": "c:dusts/redstone"
+        }
+    },
+    "result": {
+        "id": "cobblemon:copper_oven"
+    }
+}

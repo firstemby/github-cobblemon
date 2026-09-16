@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "copper_fan",
+    "pattern": [
+        "CIC",
+        "IBI",
+        "CRC"
+    ],
+    "key": {
+        "C": {
+            "tag": "c:ingots/copper"
+        },
+        "B": {
+            "tag": "c:rods/breeze"
+        },
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "R": {
+            "tag": "c:dusts/redstone"
+        }
+    },
+    "result": {
+        "id": "cobblemon:copper_fan"
+    }
+}

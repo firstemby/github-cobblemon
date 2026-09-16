@@ -1,0 +1,42 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:copper_fan"
+    ]
+  },
+  "criteria": {
+    "has_copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:copper_block"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:copper_fan"
+      }
+    },
+    "has_rotom": {
+        "trigger": "cobblemon:aspects_collected",
+        "conditions": {
+            "species": "cobblemon:rotom",
+            "aspects": [" "]
+        }
+    }
+  },
+  "requirements": [
+    [
+      "has_copper",
+      "has_the_recipe",
+      "has_rotom"
+    ]
+  ]
+}

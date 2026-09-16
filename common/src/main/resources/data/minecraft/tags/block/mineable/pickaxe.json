@@ -117,6 +117,7 @@
     "cobblemon:magenta_plaque",
     "cobblemon:pink_plaque",
     "cobblemon:magnet",
-    "cobblemon:eject_button"
+    "cobblemon:eject_button",
+    "#cobblemon:copper_appliances"
     ]
 }

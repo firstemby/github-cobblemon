@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "copper_washer",
+    "pattern": [
+        "CCC",
+        "GWG",
+        "IRI"
+    ],
+    "key": {
+        "C": {
+            "tag": "c:ingots/copper"
+        },
+        "W": {
+            "tag": "c:buckets/water"
+        },
+        "G": {
+            "item": "minecraft:copper_grate"
+        },
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "R": {
+            "tag": "c:dusts/redstone"
+        }
+    },
+    "result": {
+        "id": "cobblemon:copper_washer"
+    }
+}

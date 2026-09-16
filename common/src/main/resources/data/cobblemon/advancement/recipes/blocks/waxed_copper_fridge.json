@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_copper_fridge": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:copper_fridge"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:waxed_copper_fridge_from_honeycomb"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_copper_fridge"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:waxed_copper_fridge_from_honeycomb"
+    ]
+  }
+}

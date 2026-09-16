@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "waxed_oxidized_copper_mower",
+  "ingredients": [
+    {
+      "item": "cobblemon:oxidized_copper_mower"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "cobblemon:waxed_oxidized_copper_mower"
+  }
+}

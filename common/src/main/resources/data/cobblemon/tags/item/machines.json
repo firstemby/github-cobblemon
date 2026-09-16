@@ -7,6 +7,7 @@
     "cobblemon:monitor",
     "cobblemon:damaged_monitor",
     "cobblemon:fossil_analyzer",
-    "cobblemon:tm_machine"
+    "cobblemon:tm_machine",
+    "#cobblemon:copper_appliances"
   ]
 }
