@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.item.interactive
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.item.PokemonAndMoveSelectingItem
 import com.cobblemon.mod.common.api.moves.Move
-import com.cobblemon.mod.common.item.CobblemonItem
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.giveOrDropItemStack
 import net.minecraft.world.entity.player.Player
@@ -19,13 +18,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
 
 class PPUpItem(
-    val amount: Int
-) : CobblemonItem(Properties().apply {
+    val amount: Int, block: Block
+) : ItemNameBlockItem(block, Properties().apply {
     if (amount>1) rarity(Rarity.UNCOMMON)
 }), PokemonAndMoveSelectingItem {
 

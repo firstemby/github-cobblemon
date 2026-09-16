@@ -1,0 +1,8 @@
+{
+  "match": {
+    "items": "cobblemon:bright_powder"
+  },
+  "luminance": {
+    "type": "block_self"
+  }
+}
