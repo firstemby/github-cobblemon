@@ -51,16 +51,11 @@ fun interface PokemonPropertyExtractor {
         val IVS = add { pokemon, properties -> properties.ivs = pokemon.ivs }
         @JvmField
         val EVS = add { pokemon, properties -> properties.evs = pokemon.evs }
-        @JvmField
-        val SCALE_MODIFIER = add { pokemon, properties -> properties.scaleModifier = pokemon.scaleModifier }
-        // Copied alongside SCALE_MODIFIER because effectiveScale returns the alpha multiplier and ignores scaleModifier when isAlpha is set
-        @JvmField
-        val ALPHA = add { pokemon, properties -> properties.isAlpha = pokemon.isAlpha }
 
         @JvmField
-        val ILLUSION = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, NICKNAME, SHINY, POKEBALL, SCALE_MODIFIER, ALPHA)
+        val ILLUSION = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, NICKNAME, SHINY, POKEBALL)
         @JvmField
-        val TRANSFORM = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, SCALE_MODIFIER, ALPHA)
+        val TRANSFORM = mutableListOf(SPECIES, FORM, ASPECTS, GENDER)
 
         fun add(extractor: PokemonPropertyExtractor): PokemonPropertyExtractor {
             ALL.add(extractor)
