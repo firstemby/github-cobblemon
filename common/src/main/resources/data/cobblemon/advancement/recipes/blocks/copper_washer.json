@@ -28,7 +28,7 @@
         "trigger": "cobblemon:aspects_collected",
         "conditions": {
             "species": "cobblemon:rotom",
-            "aspects": [" "]
+            "aspects": ["gender=genderless"]
         }
     }
   },

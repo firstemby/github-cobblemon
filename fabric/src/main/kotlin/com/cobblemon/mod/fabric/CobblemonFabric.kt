@@ -51,6 +51,7 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttribute
 import net.fabricmc.fabric.api.`object`.builder.v1.trade.TradeOfferHelper
 import net.fabricmc.fabric.api.`object`.builder.v1.world.poi.PointOfInterestHelper
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry
+import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
@@ -275,6 +276,8 @@ object CobblemonFabric : CobblemonImplementation {
     override fun registerBlocks() {
         CobblemonBlocks.register { identifier, item -> Registry.register(CobblemonBlocks.registry, identifier, item) }
         CobblemonBlocks.strippedBlocks().forEach(StrippableBlockRegistry::register)
+        CobblemonBlocks.oxidizingBlocks().forEach(OxidizableBlocksRegistry::registerOxidizableBlockPair)
+        CobblemonBlocks.waxingBlocks().forEach(OxidizableBlocksRegistry::registerWaxableBlockPair)
     }
 
     override fun registerEntityTypes() {

@@ -8,16 +8,12 @@
 
 package com.cobblemon.mod.common.block.appliances
 
-import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.WeatheringCopper
 import net.minecraft.world.level.block.state.BlockState
-import java.util.function.Function
 
-//I just cloned WeatheringCopperBulbBlock.class into here the best I could, this likely needs a *lot* of clean up
 class WeatheringCopperWasherBlock(val weatherState: WeatheringCopper.WeatherState, properties: Properties) :
     CopperWasherBlock(properties), WeatheringCopper {
 
@@ -32,18 +28,4 @@ class WeatheringCopperWasherBlock(val weatherState: WeatheringCopper.WeatherStat
     override fun getAge(): WeatheringCopper.WeatherState {
         return this.weatherState
     }
-
-    companion object {
-        val CODEC: MapCodec<WeatheringCopperWasherBlock> =
-            RecordCodecBuilder.mapCodec(Function { instance: RecordCodecBuilder.Instance<WeatheringCopperWasherBlock>? ->
-                instance!!.group(
-                    WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter({ obj: WeatheringCopperWasherBlock -> obj.getAge() }),
-                    propertiesCodec()
-                ).apply(
-                    instance
-                ) { weatherState: WeatheringCopper.WeatherState, properties: Properties -> WeatheringCopperWasherBlock(weatherState, properties)}
-            })
-    }
-
-    override fun codec(): MapCodec<WeatheringCopperWasherBlock> = CODEC
 }

@@ -25,11 +25,11 @@
       }
     },
     "has_rotom": {
-        "trigger": "cobblemon:aspects_collected",
-        "conditions": {
-            "species": "cobblemon:rotom",
-            "aspects": [" "]
-        }
+      "trigger": "cobblemon:aspects_collected",
+      "conditions": {
+        "species": "cobblemon:rotom",
+        "aspects": ["gender=genderless"]
+      }
     }
   },
   "requirements": [
