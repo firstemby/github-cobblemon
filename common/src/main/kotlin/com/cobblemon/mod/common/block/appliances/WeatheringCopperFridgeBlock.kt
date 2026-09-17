@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.WeatheringCopper
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 
 class WeatheringCopperFridgeBlock(val weatherState: WeatheringCopper.WeatherState, properties: Properties) :
     CopperFridgeBlock(properties), WeatheringCopper {

@@ -34,7 +34,7 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-//TODO: All the 2 block tall stuff
+//TODO: Oxidation/Waxing/Scraping not breaking the blocks
 //TODO: All the Fridge appliance stuff
 open class CopperFridgeBlock(settings: Properties) : HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
 

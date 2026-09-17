@@ -807,7 +807,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     //Rotom Blocks
     //Oven
     @JvmField
-    val COPPER_OVEN = create("copper_oven", WeatheringCopperOvenBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER)))
+    val COPPER_OVEN = create("copper_oven", WeatheringCopperOvenBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER).pushReaction(PushReaction.BLOCK)))
     @JvmField
     val EXPOSED_COPPER_OVEN = create("exposed_copper_oven", WeatheringCopperOvenBlock(WeatheringCopper.WeatherState.EXPOSED, BlockBehaviour.Properties.ofFullCopy(COPPER_OVEN).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)))
     @JvmField
@@ -824,7 +824,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val WAXED_OXIDIZED_COPPER_OVEN = create("waxed_oxidized_copper_oven", CopperOvenBlock(BlockBehaviour.Properties.ofFullCopy(OXIDIZED_COPPER_OVEN)))
     //Washer
     @JvmField
-    val COPPER_WASHER = create("copper_washer", WeatheringCopperWasherBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER)))
+    val COPPER_WASHER = create("copper_washer", WeatheringCopperWasherBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER).pushReaction(PushReaction.BLOCK)))
     @JvmField
     val EXPOSED_COPPER_WASHER = create("exposed_copper_washer", WeatheringCopperWasherBlock(WeatheringCopper.WeatherState.EXPOSED, BlockBehaviour.Properties.ofFullCopy(COPPER_WASHER).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)))
     @JvmField
@@ -841,7 +841,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val WAXED_OXIDIZED_COPPER_WASHER = create("waxed_oxidized_copper_washer", CopperWasherBlock(BlockBehaviour.Properties.ofFullCopy(OXIDIZED_COPPER_WASHER)))
     //Fan
     @JvmField
-    val COPPER_FAN = create("copper_fan", WeatheringCopperFanBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER)))
+    val COPPER_FAN = create("copper_fan", WeatheringCopperFanBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER).pushReaction(PushReaction.DESTROY)))
     @JvmField
     val EXPOSED_COPPER_FAN = create("exposed_copper_fan", WeatheringCopperFanBlock(WeatheringCopper.WeatherState.EXPOSED, BlockBehaviour.Properties.ofFullCopy(COPPER_FAN).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)))
     @JvmField
@@ -858,7 +858,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val WAXED_OXIDIZED_COPPER_FAN = create("waxed_oxidized_copper_fan", CopperFanBlock(BlockBehaviour.Properties.ofFullCopy(OXIDIZED_COPPER_FAN)))
     //Mower
     @JvmField
-    val COPPER_MOWER = create("copper_mower", WeatheringCopperMowerBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER)))
+    val COPPER_MOWER = create("copper_mower", WeatheringCopperMowerBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER).pushReaction(PushReaction.NORMAL)))
     @JvmField
     val EXPOSED_COPPER_MOWER = create("exposed_copper_mower", WeatheringCopperMowerBlock(WeatheringCopper.WeatherState.EXPOSED, BlockBehaviour.Properties.ofFullCopy(COPPER_MOWER).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)))
     @JvmField
@@ -875,7 +875,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val WAXED_OXIDIZED_COPPER_MOWER = create("waxed_oxidized_copper_mower", CopperMowerBlock(BlockBehaviour.Properties.ofFullCopy(OXIDIZED_COPPER_MOWER)))
     //Fridge
     @JvmField
-    val COPPER_FRIDGE = create("copper_fridge", WeatheringCopperFridgeBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER)))
+    val COPPER_FRIDGE = create("copper_fridge", WeatheringCopperFridgeBlock(WeatheringCopper.WeatherState.UNAFFECTED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER).pushReaction(PushReaction.BLOCK)))
     @JvmField
     val EXPOSED_COPPER_FRIDGE = create("exposed_copper_fridge", WeatheringCopperFridgeBlock(WeatheringCopper.WeatherState.EXPOSED, BlockBehaviour.Properties.ofFullCopy(COPPER_FRIDGE).mapColor(MapColor.TERRACOTTA_LIGHT_GRAY)))
     @JvmField
