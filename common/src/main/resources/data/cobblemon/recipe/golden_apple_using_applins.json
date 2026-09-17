@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
+  "group": "golden_apple",
   "key": {
     "#": {
       "item": "minecraft:gold_ingot"

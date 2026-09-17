@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "ice_stone",
     "ingredient": {
         "item": "cobblemon:ice_stone_ore"

@@ -1,5 +1,6 @@
 {
     "type": "minecraft:blasting",
+    "category": "misc",
     "group": "fire_stone",
     "ingredient": {
         "item": "cobblemon:fire_stone_ore"

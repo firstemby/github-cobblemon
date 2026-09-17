@@ -27,10 +27,13 @@
 #### Added sounds to the following moves
 
 ### Changes
+- Updated various recipes to display in Recipe Groups within the Recipe Book
+- Updated most recipes to display more logically/consistently within the Recipe Book's categories
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
 - Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
+- Some other recipes without advancements have also been corrected
 - Corrected the TM Recipes for Charge Beam and Payday
 
 ### Developer
