@@ -99,6 +99,7 @@ object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
         functions["is_on_fire"] = { DoubleValue(entity.isOnFire) }
         functions["is_invisible"] = { DoubleValue(entity.isInvisible) }
         functions["is_riding"] = { DoubleValue(entity.isPassenger) }
+        functions["light_level"] = { DoubleValue(entity.level().getMaxLocalRawBrightness(entity.blockPosition())) }
         functions["set_name"] = { params ->
             val name = params.getString(0)
             entity.customName = name.text()

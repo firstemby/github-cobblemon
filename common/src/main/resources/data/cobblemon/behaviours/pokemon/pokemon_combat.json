@@ -1,0 +1,31 @@
+{
+  "name": "cobblemon.behaviour.pokemon_combat.name",
+  "description": "cobblemon.behaviour.pokemon_combat.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "0": [
+          "cobblemon:avoid_target"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.behaviour.combat.will_defend_self",
+      "objectivesByPriority": {
+        "5": [
+          "cobblemon:combat_neutral"
+        ]
+      }
+    },
+
+    {
+      "type": "add_memories_and_sensors",
+      "memories": [
+        "minecraft:avoid_target"
+      ]
+    }
+  ]
+}

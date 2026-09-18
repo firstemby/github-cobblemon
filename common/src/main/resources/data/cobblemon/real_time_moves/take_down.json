@@ -1,0 +1,11 @@
+{
+  "name": "Take Down",
+  "type": "dash",
+  "priority": 0,
+  "power": 1,
+  "cooldownTicks": 100,
+  "minRange": 0.5,
+  "maxRange": 4,
+  "speed": 2.0,
+  "distance": 10
+}

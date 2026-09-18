@@ -16,5 +16,6 @@ import net.minecraft.client.Minecraft
 object UpdateTrackedBrainDataHandler : ClientNetworkPacketHandler<UpdateTrackedBrainDataPacket> {
     override fun handle(packet: UpdateTrackedBrainDataPacket, client: Minecraft) {
         CobblemonClient.biggerBrainDebugData = packet.state
+        CobblemonClient.debuggedEntityId = packet.entityId
     }
 }

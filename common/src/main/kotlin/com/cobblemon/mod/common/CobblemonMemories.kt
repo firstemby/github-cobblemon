@@ -91,8 +91,6 @@ object CobblemonMemories {
     @JvmField
     val DISABLE_WALK_TO_BERRY_BUSH = register<Boolean>("disable_walk_to_berry_bush")
     @JvmField
-    val TIME_TRYING_TO_REACH_BERRY_BUSH = register<Int>("time_trying_to_reach_berry_bush")
-    @JvmField
     val IS_CONSUMING_ITEM = register<Boolean>("is_consuming_item")
     @JvmField
     val HIVE_LOCATION = register<BlockPos>("hive_location", BlockPos.CODEC)

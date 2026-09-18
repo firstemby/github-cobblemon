@@ -102,10 +102,40 @@
     "walking": {
       "walkSpeed": 0.18
     },
+    "moving": {
+      "swim": {
+        "avoidsWater": true
+      }
+    },
+    "combat": {
+      "willDefendSelf": true,
+      "willDefendOwner": true,
+      "willFlee": false,
+      "moves": [
+        "cobblemon:poison_sting",
+        "cobblemon:string_shot"
+      ]
+    },
     "blockInteract": {
       "immuneToCobwebBlock": true
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.is_wild",
+      "objectivesByPriority": {
+        "5": [
+          {
+            "type": "cobblemon:combat_aggressive",
+            "description": "Aggressive in darkness to players",
+            "condition": "q.entity.light_level < 11",
+            "targetCondition": "q.target.type == 'minecraft:player'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 7,
     "entries": [

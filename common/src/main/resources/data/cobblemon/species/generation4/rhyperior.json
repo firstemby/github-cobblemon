@@ -93,7 +93,8 @@
       },
       "walk": {
         "walkSpeed": 0.2
-      }
+      },
+      "canDance": true
     },
     "resting": {
       "drowsyChance": 0.0333,

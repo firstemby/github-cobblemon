@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
-import com.cobblemon.mod.common.entity.pokemon.ai.sensors.SweetBerryBushSensor
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
@@ -39,15 +38,25 @@ interface Sense {
             cobblemonResource("pokemon_disturbance") to PokemonDisturbanceSense::class.java,
             cobblemonResource("hurt_by") to HurtBySense::class.java,
             cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java
-        )
+            cobblemonResource("jukebox_playing") to JukeboxSense::class.java,
+            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java,
+            cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java,
+            cobblemonResource("flower_sense") to FlowerSense.Config::class.java,
+            cobblemonResource("beehive_sense") to BeeHiveSense.Config::class.java,
+            cobblemonResource("sacc_leaf_sense") to SaccLeafSense.Config::class.java,
+
+            )
     }
 
     /** The ticks until it will next be ticked. This is also displayed in the debug overlay. */
     var ticksUntilNextExecution: Int
+
     /** The set of memories that this sense may write to or read from. This ensures they are registered in the brain. */
     val memories: Set<MemoryModuleType<*>>
+
     /** Performs the sensing logic. Alter [ticksUntilNextExecution] to apply a cooldown if necessary. */
     fun tick(entity: LivingEntity, brain: BiggerBrain)
+
     /** Attempts to merge the [other] Sense into this one. Returns true if it was merged and therefore should not be added to the brain separately. */
     fun merge(other: Sense): Boolean
 }

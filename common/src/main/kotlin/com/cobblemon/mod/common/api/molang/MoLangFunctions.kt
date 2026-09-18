@@ -125,7 +125,7 @@ object MoLangFunctions {
     fun Player.asMoLangValue(): ObjectValue<Player> {
         if (this is ServerPlayer && uuid in Cobblemon.serverPlayerStructs) {
             val existing = Cobblemon.serverPlayerStructs[uuid]!!
-            if (existing.obj == this) {
+            if (existing.obj === this) {
                 return existing
             } else {
                 Cobblemon.serverPlayerStructs.remove(uuid)

@@ -10,16 +10,22 @@ package com.cobblemon.mod.common.api.ai.config.sense
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.BattlingPokemonSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.BeeHiveSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.DefendOwnerSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.DrowsySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.EggSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.FlowerSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.HurtBySense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.IdealNestPlacementSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.MateSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.JukeboxSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NPCBattlingSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NestSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonDisturbanceSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SaccLeafSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.Sense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SweetBerryBushSense
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -36,8 +42,10 @@ interface SenseConfig {
     companion object {
         val types = mutableMapOf(
             cobblemonResource("nearby_entities") to NearbyEntitiesSense.Config::class.java,
+            cobblemonResource("defend_owner") to DefendOwnerSense.Config::class.java,
             cobblemonResource("drowsy") to DrowsySense.Config::class.java,
             cobblemonResource("hurt_by") to HurtBySense.Config::class.java,
+            cobblemonResource("jukebox_playing") to JukeboxSense.Config::class.java,
             cobblemonResource("battling_pokemon") to BattlingPokemonSense.Config::class.java,
             cobblemonResource("npc_battling") to NPCBattlingSense.Config::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense.Config::class.java,
@@ -47,8 +55,12 @@ interface SenseConfig {
             cobblemonResource("ideal_nest_location_sensor") to IdealNestPlacementSense.Config::class.java,
             cobblemonResource("pokemon_disturbance") to PokemonDisturbanceSense.Config::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense.Config::class.java,
-            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense.Config::class.java
-        )
+            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense.Config::class.java,
+            cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java,
+            cobblemonResource("flower_sense") to FlowerSense.Config::class.java,
+            cobblemonResource("beehive_sense") to BeeHiveSense.Config::class.java,
+            cobblemonResource("sacc_leaf_sense") to SaccLeafSense.Config::class.java,
+            )
     }
 
     /** The variables that this sense config uses. These are used to declare variables on the entity cleanly. */

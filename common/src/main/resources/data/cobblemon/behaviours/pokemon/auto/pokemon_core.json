@@ -12,7 +12,8 @@
         "cobblemon:core",
         "cobblemon:pokemon_battles",
         "cobblemon:pokemon_breeding",
-        "cobblemon:pokemon_base_senses"
+        "cobblemon:pokemon_base_senses",
+        "cobblemon:pokemon_combat"
       ]
     },
     {
@@ -51,11 +52,18 @@
       ]
     },
     {
-      "type": "add_tasks_to_activity",
-      "activity": "minecraft:idle",
-      "tasksByPriority": {
-        "0": [ "pokemon_wander_control" ]
-      }
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.swim.can_breathe_underwater",
+      "behaviours": [
+        "cobblemon:pokemon_jump_out_of_water"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "q.entity.behaviour.moving.can_dance",
+      "behaviours": [
+        "cobblemon:pokemon_dances"
+      ]
     }
   ]
 }

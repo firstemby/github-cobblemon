@@ -10,6 +10,13 @@ package com.cobblemon.mod.common.data
 
 import com.cobblemon.mod.common.*
 import com.cobblemon.mod.common.Cobblemon.LOGGER
+import com.cobblemon.mod.common.CobblemonBehaviours
+import com.cobblemon.mod.common.CobblemonCallbacks
+import com.cobblemon.mod.common.CobblemonCosmeticItems
+import com.cobblemon.mod.common.CobblemonMechanics
+import com.cobblemon.mod.common.CobblemonRealTimeMoves
+import com.cobblemon.mod.common.CobblemonRideSettings
+import com.cobblemon.mod.common.CobblemonUnlockableWallpapers
 import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRules
@@ -78,6 +85,7 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonMovesetBuilders, reloadable = false)
         this.register(Abilities, reloadable = false)
         this.register(CobblemonBehaviours, reloadable = false)
+        this.register(CobblemonRealTimeMoves, reloadable = false)
         this.register(Marks, reloadable = false)
         this.register(PokemonSpecies, reloadable = false)
         this.register(SpeciesAdditions, reloadable = false)

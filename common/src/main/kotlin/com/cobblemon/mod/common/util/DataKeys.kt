@@ -21,6 +21,7 @@ object DataKeys {
     const val POKEMON_FULLNESS = "Fullness"
     const val POKEMON_INTERACTION_COOLDOWN = "InteractionCooldown"
     const val POKEMON_ALPHA = "Alpha"
+    const val POKEMON_REAL_TIME_MOVE_COOLDOWNS = "RealTimeMoveCooldowns"
 
     const val POKEMON_IVS = "IVs"
     const val POKEMON_IVS_BASE = "Base"

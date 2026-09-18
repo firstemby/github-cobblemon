@@ -3,14 +3,13 @@
   "description": "cobblemon.behaviour.wanders_air.desc",
   "configurations": [
     {
-      "type": "add_tasks_to_activity",
-      "activity": "idle",
-      "tasksByPriority": {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
         "7": [
-          "cobblemon:air_wander"
+          "cobblemon:wander_around"
         ],
         "9": [
-          "cobblemon:fly_in_circles"
+          "cobblemon:circle_around"
         ]
       }
     }

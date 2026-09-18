@@ -2007,6 +2007,7 @@
   "key.cobblemon.translateportraitright": "Translate Portrait Right",
   "key.cobblemon.printmodelsettings": "Print Model Settings",
   "key.cobblemon.toggleridingstatsgui": "Toggle Riding Stats GUI",
+  "key.cobblemon.toggleaidebug": "Toggle Cobblemon AI Debug overlay",
   "key.cobblemon.categories.cobblemon.debug": "Cobblemon Debug",
   "cobblemon.subtitle.poke_ball.capture_succeeded": "Poké Ball capture succeeds",
   "cobblemon.subtitle.pokemon.shiny_shine": "Owned shiny Pokémon shines",
@@ -3791,6 +3792,13 @@
   "cobblemon.behaviour.dialogue_selection.desc": "Allows configuring NPC interaction to open a specific dialogue.",
   "cobblemon.entity.variable.dialogue_selection.name": "Dialogue",
   "cobblemon.entity.variable.dialogue_selection.desc": "The resource identifier of the dialogue to open on interaction, such as cobblemon:your_dialogue",
+
+  "cobblemon.behaviour.pokemon_base_senses.name": "Base Senses",
+  "cobblemon.behaviour.pokemon_base_senses.desc": "Provides basic awareness of nearby entities, who has attacked them, etc.",
+
+  "cobblemon.behaviour.moves_in_fluid.name": "Moves In Fluid",
+  "cobblemon.behaviour.moves_in_fluid.desc": "Supports moving in fluid, particularly the vertical stability while submerged",
+
   "cobblemon.behaviour.chatter_npc.name": "Chatter NPC",
   "cobblemon.behaviour.chatter_npc.desc": "Allows the NPC to talk with the player using the in-game chat when interacted with, optional animation support.",
   "cobblemon.entity.variable.chat_message.name": "Chat Message",

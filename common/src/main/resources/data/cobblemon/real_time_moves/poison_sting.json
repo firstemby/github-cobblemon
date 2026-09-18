@@ -1,0 +1,10 @@
+{
+  "name": "Poison Sting",
+  "type": "raycast",
+  "priority": 0,
+  "power": 1,
+  "cooldownTicks": 10,
+  "minRange": 0.0,
+  "maxRange": 0.5,
+  "effect": "q.target.add_effect('minecraft:poison', 100, 0, true)"
+}

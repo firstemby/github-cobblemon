@@ -79,7 +79,6 @@ object PokemonBrain {
         CobblemonSensors.NEARBY_GROWABLE_CROPS,
         CobblemonSensors.NEARBY_BEE_HIVE,
         CobblemonSensors.NEARBY_FLOWER,
-        CobblemonSensors.NEARBY_SWEET_BERRY_BUSH
 
 //            CobblemonSensors.BATTLING_POKEMON,
 //            CobblemonSensors.NPC_BATTLING
@@ -272,7 +271,7 @@ object PokemonBrain {
 //        add(0 toDF EatGrassTask())
         add(0 toDF AttackAngryAtTask.create())
 //        add(0 toDF MoveToOwnerTask.create(completionRange = 4, maxDistance = 14F, teleportDistance = 24F))
-        add(0 toDF WalkTowardsParentSpeciesTask.create(ADULT_FOLLOW_RANGE, 0.4f))
+//        add(0 toDF WalkTowardsParentSpeciesTask.create(ADULT_FOLLOW_RANGE, 0.4f))
         if (pokemon.form.behaviour.combat.willDefendOwner) {
             add(0 toDF DefendOwnerTask.create())
         }

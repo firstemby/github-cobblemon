@@ -112,9 +112,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 if (pokemon.currentFullness > 0) {
                     pokemon.tickMetabolism(1)
                 }
-                if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown(1)
-                }
+                pokemon.tickInteractionCooldown(1)
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }

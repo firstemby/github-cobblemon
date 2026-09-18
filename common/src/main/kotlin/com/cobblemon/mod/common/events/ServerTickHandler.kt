@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.events
 
 import com.cobblemon.mod.common.battles.BattleRegistry
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMoveManager
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.MinecraftServer
 
@@ -17,6 +18,7 @@ object ServerTickHandler {
 
     fun onTick(server: MinecraftServer) {
         BattleRegistry.tick()
+        RealTimeMoveManager.tick()
 
         secondsTick++
 
