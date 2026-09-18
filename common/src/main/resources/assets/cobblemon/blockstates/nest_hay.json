@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "cobblemon:block/nest_hay"
+      }
+    }
+  ]
+}

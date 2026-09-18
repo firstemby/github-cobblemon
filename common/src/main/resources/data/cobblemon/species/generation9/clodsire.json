@@ -208,5 +208,9 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "wooper paldean",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "watery"
+  ]
 }

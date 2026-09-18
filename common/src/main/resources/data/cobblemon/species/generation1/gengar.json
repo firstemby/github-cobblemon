@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "cursedbody",
+    "cursedbody",
     "h:cursedbody"
   ],
   "eggGroups": [
@@ -297,6 +298,7 @@
       ],
       "abilities": [
         "shadowtag",
+        "shadowtag",
         "h:shadowtag"
       ],
       "baseStats": {
@@ -336,7 +338,11 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky"
+      ]
     },
     {
       "name": "Gmax",
@@ -359,5 +365,9 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

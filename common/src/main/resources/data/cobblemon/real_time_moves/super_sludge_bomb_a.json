@@ -1,0 +1,28 @@
+{
+  "name": "Super Sludge Bomb a",
+  "type": "projectile",
+  "elementalType": "Poison",
+  "priority": 2,
+  "power": 1,
+  "cooldownTicks": 0,
+  "salvoCount": 1,
+  "spreadDegrees": 2.0,
+  "speed": 0.3,
+  "hasGravity": true,
+  "gravity": 0.1,
+  "piercing": true,
+  "targetOpponent": false,
+  "minRange": 0,
+  "maxRange": 7,
+  "collisionEvents": [
+    {
+      "collisionType": "BLOCK",
+      "actions": [
+        {
+          "type": "createmove",
+          "moveId": "cobblemon:super_sludge_bomb_b"
+        }
+      ]
+    }
+  ]
+}

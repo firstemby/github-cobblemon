@@ -577,10 +577,16 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "icy"
+      ]
     }
   ],
   "features": [
     "galarian"
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

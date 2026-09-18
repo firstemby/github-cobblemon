@@ -202,5 +202,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "trumbeak",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "defeatist",
+    "defeatist",
     "h:defeatist"
   ],
   "eggGroups": [
@@ -289,5 +290,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "archen",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
+  ]
 }

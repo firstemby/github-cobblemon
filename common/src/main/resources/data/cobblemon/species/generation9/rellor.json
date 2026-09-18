@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "compoundeyes",
+    "compoundeyes",
     "h:shedskin"
   ],
   "eggGroups": [
@@ -167,5 +168,10 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "keeneye",
+    "keeneye",
     "h:sniper"
   ],
   "eggGroups": [
@@ -211,5 +212,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
   ]
 }

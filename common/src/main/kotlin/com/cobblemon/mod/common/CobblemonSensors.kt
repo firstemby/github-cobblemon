@@ -9,13 +9,13 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.*
-import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
 import com.cobblemon.mod.common.entity.sensor.BattlingPokemonSensor
 import com.cobblemon.mod.common.entity.sensor.NPCBattlingSensor
-import java.util.function.Supplier
+import com.cobblemon.mod.common.pokemon.ai.PokemonDisturbancesSensor
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.ai.sensing.SensorType
+import java.util.function.Supplier
 
 object CobblemonSensors {
     val sensors = mutableMapOf<String, SensorType<*>>()
@@ -48,9 +48,6 @@ object CobblemonSensors {
 
     @JvmField
     val NEARBY_FLOWER = register("nearby_flower", ::FlowerSensor)
-
-    @JvmField
-    val NEARBY_SWEET_BERRY_BUSH = register("nearby_sweet_berry_bush", ::SweetBerryBushSensor)
 
     @JvmField
     val POKEMON_NEARBY_WANTED_ITEM = register("pokemon_nearby_wanted_item", ::PokemonItemSensor)

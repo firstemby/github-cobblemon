@@ -279,6 +279,7 @@
       ],
       "abilities": [
         "hugepower",
+        "hugepower",
         "h:hugepower"
       ],
       "baseStats": {
@@ -314,7 +315,13 @@
         "herd": {
           "maxSize": 4
         }
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

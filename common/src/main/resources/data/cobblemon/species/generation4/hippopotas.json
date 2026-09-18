@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sandstream",
+    "sandstream",
     "h:sandforce"
   ],
   "eggGroups": [
@@ -206,5 +207,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

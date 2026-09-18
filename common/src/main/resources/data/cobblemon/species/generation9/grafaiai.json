@@ -184,5 +184,8 @@
     "tutor:xscissor"
   ],
   "preEvolution": "shroodle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

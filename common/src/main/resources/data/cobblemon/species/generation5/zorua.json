@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "illusion",
+    "illusion",
     "h:illusion"
   ],
   "eggGroups": [
@@ -333,7 +334,12 @@
           ]
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -366,5 +372,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

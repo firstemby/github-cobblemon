@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -288,5 +289,8 @@
   "lightingData": {
     "lightLevel": 6,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "shroomy"
+  ]
 }

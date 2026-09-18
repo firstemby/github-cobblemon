@@ -237,5 +237,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "blitzle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

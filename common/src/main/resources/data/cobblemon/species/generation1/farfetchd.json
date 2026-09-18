@@ -278,6 +278,7 @@
       ],
       "abilities": [
         "steadfast",
+        "steadfast",
         "h:scrappy"
       ],
       "baseStats": {
@@ -442,7 +443,14 @@
           "willDefendOwner": true,
           "willFlee": false
         }
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "twiggy",
+    "watery"
   ]
 }

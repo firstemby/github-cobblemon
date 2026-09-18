@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "comatose",
+    "comatose",
     "h:comatose"
   ],
   "eggGroups": [
@@ -193,5 +194,9 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

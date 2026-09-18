@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "effectspore",
+    "effectspore",
     "h:regenerator"
   ],
   "eggGroups": [
@@ -183,5 +184,8 @@
     "legacy:swagger"
   ],
   "preEvolution": "foongus",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "corrosion",
+    "corrosion",
     "h:oblivious"
   ],
   "eggGroups": [
@@ -241,5 +242,10 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "rocky",
+    "sandy"
   ]
 }

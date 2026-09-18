@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:moxie"
   ],
   "eggGroups": [
@@ -359,6 +360,7 @@
       ],
       "abilities": [
         "moldbreaker",
+        "moldbreaker",
         "h:moldbreaker"
       ],
       "baseStats": {
@@ -388,5 +390,8 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

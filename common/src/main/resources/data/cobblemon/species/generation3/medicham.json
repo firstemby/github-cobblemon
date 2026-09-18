@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "purepower",
+    "purepower",
     "h:telepathy"
   ],
   "eggGroups": [
@@ -260,6 +261,7 @@
       ],
       "abilities": [
         "purepower",
+        "purepower",
         "h:purepower"
       ],
       "baseStats": {
@@ -292,7 +294,10 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
   ],
   "behaviour": {
@@ -319,5 +324,8 @@
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

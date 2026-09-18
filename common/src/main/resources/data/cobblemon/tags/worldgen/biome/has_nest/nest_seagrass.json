@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:is_river",
+    "#cobblemon:is_swamp",
+    "#cobblemon:is_cold_ocean",
+    "#cobblemon:is_cold_ocean",
+    "#cobblemon:is_cold_ocean",
+    "#cobblemon:is_frozen_ocean",
+    "minecraft:ocean"
+  ]
+}

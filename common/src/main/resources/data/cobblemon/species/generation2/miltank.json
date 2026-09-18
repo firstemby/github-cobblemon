@@ -267,5 +267,8 @@
     "legacy:toxic",
     "legacy:zapcannon"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

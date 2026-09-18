@@ -180,5 +180,8 @@
     "tutor:wildcharge"
   ],
   "preEvolution": "maschiff",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

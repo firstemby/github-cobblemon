@@ -1,0 +1,10 @@
+{
+  "type": "cobblemon:expression",
+  "order": 80,
+  "expression": [
+    "t.father_light_ball = q.father.held_item.is_of('cobblemon:light_ball');",
+    "t.mother_light_ball = q.mother.held_item.is_of('cobblemon:light_ball');",
+    "t.is_pichu = q.offspring.species.name == 'Pichu';",
+    "t.is_pichu && (t.father_light_ball || t.mother_light_ball) ? q.add_moves_to_stack('volttackle') : 0;"
+  ]
+}

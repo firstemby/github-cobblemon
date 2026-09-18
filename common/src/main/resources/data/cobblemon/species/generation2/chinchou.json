@@ -237,5 +237,8 @@
   "lightingData": {
     "lightLevel": 14,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "watery"
+  ]
 }

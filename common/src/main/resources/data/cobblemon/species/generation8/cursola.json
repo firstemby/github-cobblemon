@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "weakarmor",
+    "weakarmor",
     "h:perishbody"
   ],
   "eggGroups": [
@@ -210,5 +211,10 @@
     "legacy:snore"
   ],
   "preEvolution": "corsola galarian",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ]
 }

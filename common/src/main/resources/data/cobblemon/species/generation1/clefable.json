@@ -329,5 +329,9 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "clefairy",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "shroomy"
+  ]
 }

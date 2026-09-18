@@ -646,7 +646,6 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         val headPitch = if (shouldRotateHead) headPitch else 0f
         val headYaw = if (shouldRotateHead) headYaw else 0f
 
-
         // Quirks will run if there is no primary animation running and quirks are enabled for this context.
         if (primaryAnimation == null && context.request(RenderContext.DO_QUIRKS) != false) {
             // Remove any quirk animations that don't exist in our current pose
@@ -660,7 +659,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
         if (primaryAnimation != null) {
             // The pose intensity is the complement of the primary animation's curve. This is used to blend the primary.
-            state.poseIntensity = 1 - primaryAnimation.curve((state.animationSeconds - primaryAnimation.started) / primaryAnimation.duration)
+            state.poseIntensity = 1 - primaryAnimation.curve((state.animationSeconds - primaryAnimation.started) / (primaryAnimation.duration.takeIf { it > 0 } ?: 3F))
             // If the primary animation is done after running we're going to clean things up.
             //Set headYaw and headPitch to zero if Pokemon shouldn't move head during riding
             if (!primaryAnimation.run(

@@ -182,5 +182,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:ice_stone"
     }
+  ],
+  "nestTypes": [
+    "icy",
+    "rocky"
   ]
 }

@@ -42,7 +42,7 @@ import net.minecraft.world.level.gameevent.GameEvent
 class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.BERRY, pos, state) {
     lateinit var berryIdentifier: ResourceLocation
     private val ticksPerMinute = 1200
-    var renderState: RenderState? = null
+    var renderState: BlockEntityRenderState? = null
     //The time left for the tree until its either age 3 or age 5 (check block state, if we are at age 0<x<3 unti 3 otherwise until 5)
     var growthTimer: Int = 0
         set(value) {
@@ -357,7 +357,7 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
      */
     fun processTick(world: ServerLevel, pos: BlockPos, state: BlockState): Boolean {
         if (state.getValue(BerryBlock.IS_ROOTED)) return false
-        
+
         val currentTime = world.gameTime
         val elapsed = if (lastTickTime > 0L) {
             (currentTime - lastTickTime).toInt().coerceAtLeast(1)
@@ -365,19 +365,14 @@ class BerryBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobblemon
             1 // First tick, only decrement by 1
         }
         lastTickTime = currentTime
-        
+
         // Batch decrement the timer
         if (stageTimer > 0) {
             stageTimer = (stageTimer - elapsed).coerceAtLeast(0)
         }
-        
+
         // Return whether growth is needed
         return stageTimer <= 0
-    }
-
-    //Using a similar approach to ComputerCraft, implement this client side
-    interface RenderState : AutoCloseable {
-        var needsRebuild: Boolean
     }
 
     companion object {

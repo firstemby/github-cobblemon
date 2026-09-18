@@ -28,11 +28,13 @@ import net.minecraft.tags.TagKey
 import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.BooleanOp
@@ -231,6 +233,15 @@ fun Entity.setPositionSafely(pos: Vec3): Boolean {
 fun Entity.isDusk(): Boolean {
     val time = level().dayTime % 24000
     return time in 12000..13000
+}
+
+fun PathfinderMob.getPathTypeSimplified(): PathType {
+    return when {
+        this.isInWater -> PathType.WATER
+        this.isInLava -> PathType.LAVA
+        navigation.nodeEvaluator.getPathType(this, blockPosition()) == PathType.WALKABLE -> PathType.WALKABLE
+        else -> PathType.OPEN
+    }
 }
 
 fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {

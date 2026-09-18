@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "wanderingspirit",
+    "wanderingspirit",
     "h:wanderingspirit"
   ],
   "eggGroups": [
@@ -200,5 +201,8 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

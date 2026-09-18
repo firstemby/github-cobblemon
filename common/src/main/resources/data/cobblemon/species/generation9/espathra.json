@@ -221,5 +221,9 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "flittle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "twiggy"
+  ]
 }

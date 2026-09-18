@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "megalauncher",
+    "megalauncher",
     "h:megalauncher"
   ],
   "eggGroups": [
@@ -202,5 +203,8 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

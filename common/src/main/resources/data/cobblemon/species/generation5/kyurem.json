@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:pressure"
   ],
   "eggGroups": [
@@ -198,6 +199,7 @@
         "white-fusion"
       ],
       "abilities": [
+        "turboblaze",
         "turboblaze",
         "h:turboblaze"
       ],
@@ -390,6 +392,7 @@
         "black-fusion"
       ],
       "abilities": [
+        "teravolt",
         "teravolt",
         "h:teravolt"
       ],

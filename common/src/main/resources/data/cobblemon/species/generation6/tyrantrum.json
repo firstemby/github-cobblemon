@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "strongjaw",
+    "strongjaw",
     "h:rockhead"
   ],
   "eggGroups": [
@@ -242,5 +243,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "tyrunt",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

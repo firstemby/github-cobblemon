@@ -273,5 +273,9 @@
     "legacy:snore"
   ],
   "preEvolution": "drakloak",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "sandy",
+    "watery"
+  ]
 }

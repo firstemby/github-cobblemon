@@ -478,7 +478,11 @@
           "willFlee": false
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
   ],
   "riding": {
@@ -503,5 +507,9 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

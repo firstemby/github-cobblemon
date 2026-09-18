@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:rattled"
   ],
   "eggGroups": [
@@ -145,5 +146,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

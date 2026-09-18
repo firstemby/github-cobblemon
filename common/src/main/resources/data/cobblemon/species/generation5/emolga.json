@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:motordrive"
   ],
   "eggGroups": [
@@ -186,5 +187,8 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

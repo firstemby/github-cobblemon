@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:chlorophyll"
   ],
   "eggGroups": [
@@ -243,5 +244,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

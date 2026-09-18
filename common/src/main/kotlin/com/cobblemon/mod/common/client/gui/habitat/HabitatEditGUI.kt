@@ -333,7 +333,7 @@ class HabitatEditGUI(
         validationMessageY = getFooterTop() + 6
         updateSaveButtonState()
         updateOptionWidgetInteractivity()
-        
+
         refresh()
     }
 
@@ -395,7 +395,7 @@ class HabitatEditGUI(
     )
     private fun getTriggerText() = lang("ui.edit.habitat.trigger", habitatSettingsDTO.activatedSettings?.trigger ?: "")
     private fun getReplaceSpawnsText() = lang("ui.edit.habitat.replace_spawns", habitatSettingsDTO.naturalSettings?.replaceSpawns ?: false)
-    
+
     private fun getPoolText(): net.minecraft.network.chat.Component {
         val pool = habitatSettingsDTO.pool
         if (pool == null || !pool.isReference) {

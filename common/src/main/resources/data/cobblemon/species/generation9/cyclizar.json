@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:regenerator"
   ],
   "eggGroups": [
@@ -197,5 +198,9 @@
     "tutor:uproar",
     "tutor:wildcharge"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

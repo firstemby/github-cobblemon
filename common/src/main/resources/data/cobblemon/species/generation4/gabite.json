@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:roughskin"
   ],
   "eggGroups": [
@@ -232,5 +233,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

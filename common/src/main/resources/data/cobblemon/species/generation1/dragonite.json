@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "innerfocus",
+    "innerfocus",
     "h:multiscale"
   ],
   "eggGroups": [
@@ -414,5 +415,9 @@
     "special:healbell"
   ],
   "preEvolution": "dragonair",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:sheerforce"
   ],
   "eggGroups": [
@@ -254,5 +255,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "watery"
   ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "limber",
+    "limber",
     "h:imposter"
   ],
   "eggGroups": [
@@ -141,5 +142,15 @@
     "behaviour": {
       "key": "cobblemon:land/vehicle"
     }
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "icy",
+    "rocky",
+    "sandy",
+    "shroomy",
+    "twiggy",
+    "watery"
+  ]
 }

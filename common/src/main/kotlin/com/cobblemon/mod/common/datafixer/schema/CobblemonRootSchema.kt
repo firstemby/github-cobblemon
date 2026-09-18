@@ -117,6 +117,12 @@ class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey,
                 DSL.list(References.ITEM_STACK.`in`(schema))
             )
         }
+        map.put("cobblemon:egg") {
+            DSL.optionalFields(
+                    "Items",
+                    DSL.list(References.ITEM_STACK.`in`(schema))
+            )
+        }
         this.registerSimple(map, "cobblemon:pasture")
         this.registerSimple(map, "cobblemon:fossil_analyzer")
         this.registerSimple(map, "cobblemon:restoration_tank")

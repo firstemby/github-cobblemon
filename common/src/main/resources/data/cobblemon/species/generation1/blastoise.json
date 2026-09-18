@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:raindish"
   ],
   "eggGroups": [
@@ -364,6 +365,7 @@
       ],
       "abilities": [
         "megalauncher",
+        "megalauncher",
         "h:megalauncher"
       ],
       "baseStats": {
@@ -434,7 +436,11 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "sandy",
+        "watery"
+      ]
     },
     {
       "name": "Gmax",
@@ -456,5 +462,9 @@
       "battleOnly": true,
       "dynamaxBlocked": true
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "watery"
   ]
 }

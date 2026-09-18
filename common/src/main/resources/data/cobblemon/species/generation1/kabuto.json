@@ -241,5 +241,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "watery"
   ]
 }

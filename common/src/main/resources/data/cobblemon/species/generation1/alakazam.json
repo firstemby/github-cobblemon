@@ -282,6 +282,7 @@
       ],
       "abilities": [
         "trace",
+        "trace",
         "h:trace"
       ],
       "baseStats": {
@@ -346,7 +347,12 @@
         "herd": {
           "maxSize": 5
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "rocky",
+        "shroomy"
+      ]
     }
   ],
   "riding": {
@@ -371,5 +377,10 @@
     "behaviour": {
       "key": "cobblemon:land/horse"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
+  ]
 }

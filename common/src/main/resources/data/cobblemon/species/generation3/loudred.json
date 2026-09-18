@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "soundproof",
+    "soundproof",
     "h:scrappy"
   ],
   "eggGroups": [
@@ -236,5 +237,8 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

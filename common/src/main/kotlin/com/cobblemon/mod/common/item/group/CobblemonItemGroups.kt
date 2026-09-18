@@ -458,6 +458,22 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.WATER_STONE_ORE)
         entries.accept(CobblemonItems.DEEPSLATE_WATER_STONE_ORE)
 
+        entries.accept(CobblemonItems.NEST_GRASSY)
+        entries.accept(CobblemonItems.NEST_LEAFY)
+        entries.accept(CobblemonItems.NEST_FIERY)
+        entries.accept(CobblemonItems.NEST_ICY)
+        entries.accept(CobblemonItems.NEST_ROCKY)
+        entries.accept(CobblemonItems.NEST_SANDY)
+        entries.accept(CobblemonItems.NEST_SHROOMY)
+        entries.accept(CobblemonItems.NEST_TWIGGY)
+        entries.accept(CobblemonItems.NEST_WATERY)
+        entries.accept(CobblemonItems.NEST_HAY)
+        entries.accept(CobblemonItems.NEST_KELP)
+
+        entries.accept(CobblemonItems.INCUBATOR)
+
+        entries.accept(CobblemonItems.HABITAT_BLOCK)
+
         entries.accept(CobblemonItems.DAWN_STONE_BLOCK)
         entries.accept(CobblemonItems.DUSK_STONE_BLOCK)
         entries.accept(CobblemonItems.FIRE_STONE_BLOCK)

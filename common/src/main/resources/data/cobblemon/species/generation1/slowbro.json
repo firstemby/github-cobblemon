@@ -319,6 +319,7 @@
       ],
       "abilities": [
         "shellarmor",
+        "shellarmor",
         "h:shellarmor"
       ],
       "baseStats": {
@@ -595,7 +596,13 @@
             "percentage": 5.0
           }
         ]
-      }
+      },
+      "nestTypes": [
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "sandy"
   ]
 }

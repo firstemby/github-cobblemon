@@ -1,0 +1,120 @@
+{
+  "name": "cobblemon:type_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/mystery_egg.png"
+    },
+    {
+      "aspects": [
+        "normal"
+      ],
+      "texture": "cobblemon:textures/egg/type_normal_egg.png"
+    },
+    {
+      "aspects": [
+        "bug"
+      ],
+      "texture": "cobblemon:textures/egg/type_bug_egg.png"
+    },
+    {
+      "aspects": [
+        "dark"
+      ],
+      "texture": "cobblemon:textures/egg/type_dark_egg.png"
+    },
+    {
+      "aspects": [
+        "dragon"
+      ],
+      "texture": "cobblemon:textures/egg/type_dragon_egg.png"
+    },
+    {
+      "aspects": [
+        "electric"
+      ],
+      "texture": "cobblemon:textures/egg/type_electric_egg.png"
+    },
+    {
+      "aspects": [
+        "fairy"
+      ],
+      "texture": "cobblemon:textures/egg/type_fairy_egg.png"
+    },
+    {
+      "aspects": [
+        "fighting"
+      ],
+      "texture": "cobblemon:textures/egg/type_fighting_egg.png"
+    },
+    {
+      "aspects": [
+        "fire"
+      ],
+      "texture": "cobblemon:textures/egg/type_fire_egg.png"
+    },
+    {
+      "aspects": [
+        "flying"
+      ],
+      "texture": "cobblemon:textures/egg/type_flying_egg.png"
+    },
+    {
+      "aspects": [
+        "ghost"
+      ],
+      "texture": "cobblemon:textures/egg/type_ghost_egg.png"
+    },
+    {
+      "aspects": [
+        "grass"
+      ],
+      "texture": "cobblemon:textures/egg/type_grass_egg.png"
+    },
+    {
+      "aspects": [
+        "ground"
+      ],
+      "texture": "cobblemon:textures/egg/type_ground_egg.png"
+    },
+    {
+      "aspects": [
+        "ice"
+      ],
+      "texture": "cobblemon:textures/egg/type_ice_egg.png"
+    },
+    {
+      "aspects": [
+        "metal"
+      ],
+      "texture": "cobblemon:textures/egg/type_metal_egg.png"
+    },
+    {
+      "aspects": [
+        "poison"
+      ],
+      "texture": "cobblemon:textures/egg/type_poison_egg.png"
+    },
+    {
+      "aspects": [
+        "psychic"
+      ],
+      "texture": "cobblemon:textures/egg/type_psychic_egg.png"
+    },
+    {
+      "aspects": [
+        "rock"
+      ],
+      "texture": "cobblemon:textures/egg/type_rock_egg.png"
+    },
+    {
+      "aspects": [
+        "water"
+      ],
+      "texture": "cobblemon:textures/egg/type_water_egg.png"
+    }
+  ]
+}

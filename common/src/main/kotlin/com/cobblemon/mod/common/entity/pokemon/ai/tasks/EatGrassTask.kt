@@ -34,7 +34,7 @@ class EatGrassTask(
 ) : Behavior<PokemonEntity>(
     ImmutableMap.of(
         MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-        CobblemonMemories.RECENTLY_ATE_GRASS, MemoryStatus.VALUE_ABSENT
+//        CobblemonMemories.RECENTLY_ATE_GRASS, MemoryStatus.VALUE_ABSENT
     )
 ) {
     val grassPredicate = BlockStatePredicate.forBlock(Blocks.GRASS_BLOCK)
@@ -73,7 +73,7 @@ class EatGrassTask(
                     world.destroyBlock(blockPos, false)
                 }
                 entity.ate()
-                entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
+//                entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
             } else if (world.getBlockState(blockPos.below()).`is`(Blocks.GRASS_BLOCK)) {
                 val blockPos2 = blockPos.below()
                 if (world.getBlockState(blockPos2).`is`(Blocks.GRASS_BLOCK)) {
@@ -82,7 +82,7 @@ class EatGrassTask(
                         world.setBlock(blockPos2, Blocks.DIRT.defaultBlockState(), 2)
                     }
 
-                    entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
+//                    entity.brain.setMemoryWithExpiry(CobblemonMemories.RECENTLY_ATE_GRASS, true, cooldownTicks)
                     entity.ate()
                 }
             }

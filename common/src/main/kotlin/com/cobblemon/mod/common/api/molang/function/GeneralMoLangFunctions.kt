@@ -45,7 +45,8 @@ object GeneralMoLangFunctions {
     val functions: MutableMap<String, (MoParams) -> Any> = mutableMapOf()
 
     init {
-        functions["print"] = { params ->
+        functions["cobblemon_config" to { Cobblemon.config.struct },
+        "print"] = { params ->
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)
         }

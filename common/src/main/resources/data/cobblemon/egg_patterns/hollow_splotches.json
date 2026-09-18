@@ -1,0 +1,7 @@
+{
+  "model": "cobblemon:egg",
+  "baseTexturePath": "cobblemon:base",
+  "overlayTexturePath": "cobblemon:pattern_hollow_splotches",
+  "baseInvSpritePath": "cobblemon:test_pattern_base",
+  "overlayInvSpritePath": "cobblemon:test_pattern_overlay"
+}

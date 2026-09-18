@@ -401,5 +401,8 @@
       "evolutions": [],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

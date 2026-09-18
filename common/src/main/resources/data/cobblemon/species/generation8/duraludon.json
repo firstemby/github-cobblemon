@@ -242,7 +242,10 @@
       ],
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "rocky"
+      ]
     }
   ]
 }

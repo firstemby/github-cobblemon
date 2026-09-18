@@ -273,5 +273,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "twiggy",
+    "watery"
   ]
 }

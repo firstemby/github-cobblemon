@@ -25,7 +25,7 @@ class NaturalHabitatSettingsDTO() {
         buffer.writeInt(rangeOfInfluence)
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf, ) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         this.replaceSpawns = buffer.readBoolean()
         this.rangeOfInfluence = buffer.readInt()
     }

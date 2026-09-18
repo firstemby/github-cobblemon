@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:plus"
   ],
   "eggGroups": [
@@ -274,6 +275,7 @@
       ],
       "abilities": [
         "moldbreaker",
+        "moldbreaker",
         "h:moldbreaker"
       ],
       "baseStats": {
@@ -316,11 +318,17 @@
       "lightingData": {
         "lightLevel": 13,
         "liquidGlowMode": "BOTH"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "lightingData": {
     "lightLevel": 12,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

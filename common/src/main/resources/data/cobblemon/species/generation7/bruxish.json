@@ -218,5 +218,8 @@
     "legacy:toxic",
     "legacy:uproar"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

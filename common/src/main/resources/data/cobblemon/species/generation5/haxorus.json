@@ -233,5 +233,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "fraxure",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

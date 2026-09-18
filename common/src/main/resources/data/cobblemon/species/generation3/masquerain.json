@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "intimidate",
+    "intimidate",
     "h:unnerve"
   ],
   "eggGroups": [
@@ -234,5 +235,8 @@
     "special:mudsport"
   ],
   "preEvolution": "surskit",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -250,5 +251,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "chingling",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "rocky"
+  ]
 }

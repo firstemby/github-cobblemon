@@ -222,5 +222,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "frillish",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

@@ -267,5 +267,10 @@
       ],
       "requirements": []
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
   ]
 }

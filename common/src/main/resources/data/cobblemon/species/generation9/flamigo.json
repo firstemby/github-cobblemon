@@ -185,5 +185,9 @@
     "tutor:throatchop",
     "tutor:waterpulse"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy",
+    "watery"
+  ]
 }

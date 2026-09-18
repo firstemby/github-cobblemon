@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "strongjaw",
+    "strongjaw",
     "h:sturdy"
   ],
   "eggGroups": [
@@ -232,5 +233,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky"
   ]
 }

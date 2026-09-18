@@ -452,10 +452,18 @@
       ],
       "preEvolution": "growlithe hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
   ],
   "features": [
     "hisuian"
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy"
   ]
 }

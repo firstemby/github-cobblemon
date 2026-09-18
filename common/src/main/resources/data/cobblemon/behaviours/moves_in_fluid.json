@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon.behaviour.moves_in_fluid.name",
+  "description": "cobblemon.behaviour.moves_in_fluid.desc",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "8": ["cobblemon:maintain_fluid_y"]
+      }
+    }
+  ]
+}

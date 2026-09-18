@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:shellarmor"
   ],
   "eggGroups": [
@@ -234,5 +235,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

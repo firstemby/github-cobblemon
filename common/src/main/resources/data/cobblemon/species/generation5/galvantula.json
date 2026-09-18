@@ -224,5 +224,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "joltik",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

@@ -213,5 +213,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "drilbur",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

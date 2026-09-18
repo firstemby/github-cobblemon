@@ -214,5 +214,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "yanma",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

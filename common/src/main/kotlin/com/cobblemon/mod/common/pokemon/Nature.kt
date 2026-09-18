@@ -8,7 +8,10 @@
 
 package com.cobblemon.mod.common.pokemon
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.cooking.Flavour
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.util.codec.CodecUtils
@@ -24,6 +27,15 @@ class Nature(
     val favouriteFlavour: Flavour?,
     val dislikedFlavour: Flavour?
 ) {
+    val struct = ObjectValue(this).also {
+        it.addFunction("name") { StringValue(name.toString()) }
+        it.addFunction("display_name") { StringValue(displayName) }
+        it.addFunction("increased_stat") { increasedStat?.let { StringValue(it.showdownId) } ?: DoubleValue.ZERO }
+        it.addFunction("decreased_stat") { decreasedStat?.let { StringValue(it.showdownId) } ?: DoubleValue.ZERO }
+        it.addFunction("favourite_flavour") { favouriteFlavour?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
+        it.addFunction("disliked_flavour") { dislikedFlavour?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
+    }
+
     fun modifyStat(stat: Stat, value: Int): Int {
         return when (stat) {
             increasedStat -> floor(value * 1.1)

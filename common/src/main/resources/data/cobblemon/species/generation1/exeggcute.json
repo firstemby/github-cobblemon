@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "chlorophyll",
+    "chlorophyll",
     "h:harvest"
   ],
   "eggGroups": [
@@ -301,5 +302,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

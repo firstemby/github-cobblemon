@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "hungerswitch",
+    "hungerswitch",
     "h:hungerswitch"
   ],
   "eggGroups": [
@@ -221,7 +222,11 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -255,5 +260,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

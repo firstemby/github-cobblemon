@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "wonderguard",
+    "wonderguard",
     "h:wonderguard"
   ],
   "eggGroups": [
@@ -207,5 +208,10 @@
         "percentage": 5.0
       }
     ]
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
+  ]
 }

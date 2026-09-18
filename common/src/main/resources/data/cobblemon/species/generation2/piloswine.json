@@ -263,5 +263,11 @@
       "result": "mamoswine",
       "variant": "level_up"
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "icy",
+    "sandy",
+    "shroomy"
   ]
 }

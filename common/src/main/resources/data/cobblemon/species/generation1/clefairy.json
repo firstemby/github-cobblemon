@@ -335,5 +335,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:moon_stone"
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "shroomy"
   ]
 }

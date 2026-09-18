@@ -31,7 +31,7 @@ object BedrockAnimationAdapter : JsonDeserializer<BedrockAnimation> {
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BedrockAnimation {
         if (json is JsonObject) {
             val animationLength = json["animation_length"]?.asDouble ?: -1.0
-            val shouldLoop = animationLength > 0 && json["loop"]?.asBoolean == true
+            val shouldLoop = json["loop"]?.asBoolean == true
             val boneTimelines = mutableMapOf<String, BedrockBoneTimeline>()
             val effects = mutableListOf<BedrockEffectKeyframe>()
             json["bones"]?.asJsonObject?.entrySet()?.forEach { (boneName, timeline) ->

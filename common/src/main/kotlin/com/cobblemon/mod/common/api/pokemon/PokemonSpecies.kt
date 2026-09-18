@@ -9,11 +9,15 @@
 package com.cobblemon.mod.common.api.pokemon
 
 import com.bedrockk.molang.Expression
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.abilities.AbilityTemplate
 import com.cobblemon.mod.common.api.ai.SleepDepth
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.ai.config.task.TaskConfig
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
@@ -51,11 +55,14 @@ import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItemCondition
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItemConditionAdapter
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.CobblemonPreEvolutionAdapter
 import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
 import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.getStringOrNull
 import com.google.common.collect.HashBasedTable
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -91,6 +98,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
         .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
         .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(ObjectiveConfig::class.java, ObjectiveConfigAdapter)
+        .registerTypeAdapter(SenseConfig::class.java, SenseConfigAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
             ExpressionOrEntityVariableAdapter
@@ -117,7 +126,8 @@ object PokemonSpecies : JsonDataRegistry<Species> {
         .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
         .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
         .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
-        .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
+        .registerTypeAdapter(CompoundTag::class.java, CompoundTagAdapter)
+        .registerTypeAdapter(RealTimeMove::class.java, RealTimeMoveReferenceAdapter)
         .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(Component::class.java, TextAdapter)
@@ -175,7 +185,7 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      * @return The [Species] if existing.
      */
     @JvmStatic
-    fun getByName(name: String) = this.getByIdentifier(cobblemonResource(name))
+    fun getByName(name: String) = this.getByIdentifier(name.asIdentifierDefaultingNamespace())
 
     /**
      * Finds a [Species] by its national Pokédex entry number.
@@ -194,6 +204,22 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     @JvmStatic
     fun getByIdentifier(identifier: ResourceLocation) = this.speciesByIdentifier[identifier]
+
+    /**
+     * Finds the first [Species] in an evolution line
+     *
+     * @param species The [Species] evolution line to use
+     * @return The [Species] if existing.
+     */
+    fun getFirstEvolution(species: Species): Species {
+        var returnSpecies = species
+
+        while (returnSpecies.preEvolution != null) {
+            returnSpecies = returnSpecies.preEvolution!!.species
+        }
+
+        return returnSpecies
+    }
 
     /**
      * Counts the currently loaded species.
@@ -228,6 +254,16 @@ object PokemonSpecies : JsonDataRegistry<Species> {
      */
     @JvmStatic
     fun random(): Species = this.implemented.random()
+
+    val struct = QueryStruct(hashMapOf()).apply {
+        addFunction("get_by_identifier") { params -> getByIdentifier(params.getString(0).asIdentifierDefaultingNamespace())?.struct ?: DoubleValue.ZERO }
+        addFunction("get_by_pokedex_number") { params ->
+            val namespace = params.getStringOrNull(1) ?: Cobblemon.MODID
+            getByPokedexNumber(params.getInt(0), namespace)?.struct ?: DoubleValue.ZERO
+        }
+        addFunction("get_by_name") { params -> getByName(params.getString(0))?.struct ?: DoubleValue.ZERO }
+        addFunction("count") { _ -> DoubleValue(this@PokemonSpecies.count()) }
+    }
 
     override fun reload(data: Map<ResourceLocation, Species>) {
         this.speciesByIdentifier.clear()

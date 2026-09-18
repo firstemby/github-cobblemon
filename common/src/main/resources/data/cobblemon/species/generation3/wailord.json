@@ -324,5 +324,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "wailmer",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

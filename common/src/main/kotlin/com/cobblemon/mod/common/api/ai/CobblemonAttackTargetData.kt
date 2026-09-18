@@ -42,7 +42,8 @@ class CobblemonAttackTargetData(
     /** An expression that returns false when the target is no longer worth attacking. */
     var shouldContinue: Expression = "true".asExpression(),
     var hitsUntilDisengage: Int = -1, // -1 means no limit
-    var disengageAction: (entity: Entity) -> Unit = {}
+    var disengageAction: (entity: Entity) -> Unit = {},
+    var hitsLanded : Int = 0
 ) {
     val struct = ObjectValue<CobblemonAttackTargetData>(this).also {
         it.addFunction("hits_until_disengage") { DoubleValue(hitsUntilDisengage.toDouble()) }

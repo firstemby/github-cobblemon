@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:liquidvoice"
   ],
   "eggGroups": [
@@ -228,5 +229,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "brionne",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
+  ]
 }

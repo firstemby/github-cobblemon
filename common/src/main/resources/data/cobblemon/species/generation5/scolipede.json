@@ -234,5 +234,9 @@
     "legacy:swagger"
   ],
   "preEvolution": "whirlipede",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

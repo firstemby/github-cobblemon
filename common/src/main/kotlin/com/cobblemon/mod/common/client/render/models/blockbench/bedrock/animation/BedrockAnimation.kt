@@ -11,11 +11,14 @@ package com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animati
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.snowstorm.BedrockParticleOptions
 import com.cobblemon.mod.common.client.particle.ParticleStorm
+import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.sound.instances.AlphaCrySoundInstance
@@ -34,6 +37,7 @@ import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 import java.util.*
@@ -68,12 +72,18 @@ class BedrockParticleKeyframe(
     }
 
     override fun run(entity: Entity?, state: PosableState) {
-        entity ?: return
-        val world = entity.level() as? ClientLevel ?: return
+        val world = (entity?.level() ?: Minecraft.getInstance().level) as? ClientLevel ?: return
 
-        val rootMatrix = state.locatorStates["root"]!!
-        val locatorMatrix = state.locatorStates[locator] ?: state.locatorStates["root"]!!
-        val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
+        val rootMatrix = state.locatorStates["root"]
+        val locatorMatrix = state.locatorStates[locator] ?: rootMatrix
+
+        if (locatorMatrix == null) {
+            // Cannot resolve locator or root fallback, bail the fuck out
+            Cobblemon.LOGGER.warn("BedrockParticleKeyframe: Missing locator [$locator] and fallback root")
+            return
+        }
+
+        val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix ?: locatorMatrix, locatorMatrix)
 
         if (this in state.poseParticles) {
             return
@@ -84,18 +94,38 @@ class BedrockParticleKeyframe(
         // Share the query struct from the entity so the particle can query entity properties
         particleRuntime.environment.query = state.runtime.environment.query
 
-        val storm = ParticleStorm(
-            effect = effect,
-            emitterSpaceMatrix = particleMatrix,
-            attachedMatrix = locatorMatrix,
-            world = world,
-            runtime = particleRuntime,
-            sourceVelocity = { entity.deltaMovement },
-            sourceAlive = { !entity.isRemoved && this in state.poseParticles },
-            sourceVisible = { !entity.isInvisible },
-            entity = entity,
-            onDespawn = { state.poseParticles.remove(this) }
-        )
+        val storm = if (entity != null) {
+            ParticleStorm(
+                effect = effect,
+                emitterSpaceMatrix = particleMatrix,
+                attachedMatrix = locatorMatrix,
+                world = world,
+                runtime = particleRuntime,
+                sourceVelocity = { entity.deltaMovement },
+                sourceAlive = { !entity.isRemoved && this in state.poseParticles },
+                sourceVisible = { !entity.isInvisible },
+                entity = entity,
+                onDespawn = { state.poseParticles.remove(this) }
+            )
+        } else {
+            val blockPos = (state as? EggState)?.renderingBlockPos
+            val fallbackPos = blockPos?.let { Vec3(it.x + 0.5, it.y + 0.5, it.z + 0.5) } ?: locatorMatrix.getOrigin()
+            val matrix = MatrixWrapper().apply {
+                updateFunction = { it.updatePosition(fallbackPos) }
+            }
+            ParticleStorm(
+                effect = effect,
+                emitterSpaceMatrix = matrix,
+                attachedMatrix = matrix,
+                world = world,
+                runtime = particleRuntime,
+                sourceVelocity = { Vec3.ZERO },
+                sourceAlive = { true },
+                sourceVisible = { true },
+                entity = null,
+                onDespawn = { state.poseParticles.remove(this) }
+            )
+        }
 
         state.poseParticles.add(this)
         storm.runtime.execute(this.scripts)
@@ -120,8 +150,21 @@ class BedrockSoundKeyframe(
                         entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
                     }
                 }
-            } else {
-                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
+            } else if (state is EggState) {
+                val pos = state.renderingBlockPos
+
+                if (pos != null) {
+                    Minecraft.getInstance().level?.playLocalSound(
+                        pos.x + 0.5, pos.y + 0.5, pos.z + 0.5,
+                        soundEvent,
+                        SoundSource.BLOCKS,
+                        1.0f,
+                        1.0f,
+                        false
+                    )
+                } else {
+                    Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
+                }
             }
         }
     }
@@ -194,7 +237,7 @@ data class BedrockAnimation(
         intensity: Float
     ): Boolean {
         var animationSeconds = animationSeconds
-        if (shouldLoop) {
+        if (shouldLoop && animationLength > 0) {
             animationSeconds %= animationLength.toFloat()
         } else if (animationSeconds > animationLength && animationLength > 0) {
             return false

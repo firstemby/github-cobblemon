@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:competitive"
   ],
   "eggGroups": [
@@ -274,5 +275,9 @@
     "special:sing"
   ],
   "preEvolution": "prinplup",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

@@ -430,7 +430,10 @@
       "lightingData": {
         "lightLevel": 11,
         "liquidGlowMode": "LAND"
-      }
+      },
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "riding": {
@@ -459,5 +462,9 @@
   "lightingData": {
     "lightLevel": 15,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy"
+  ]
 }

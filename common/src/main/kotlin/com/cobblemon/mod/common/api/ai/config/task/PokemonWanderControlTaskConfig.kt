@@ -43,8 +43,6 @@ class PokemonWanderControlTaskConfig : SingleTaskConfig {
                 val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
                     ?: CobblemonWanderControl()
 
-                wanderControl.reset()
-
                 wanderControl.allowLand = (entity.behaviour.moving.walk.canWalk && !entity.behaviour.moving.walk.avoidsLand) || entity.behaviour.moving.fly.canFly
                 wanderControl.allowWater = entity.behaviour.moving.swim.canSwimInWater && !entity.behaviour.moving.swim.avoidsWater
                 wanderControl.allowAir = entity.behaviour.moving.fly.canFly && !entity.behaviour.moving.walk.canWalk

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:libero"
   ],
   "eggGroups": [
@@ -218,5 +219,10 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "icy"
+  ]
 }

@@ -297,5 +297,9 @@
     "special:wish"
   ],
   "preEvolution": "chansey",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

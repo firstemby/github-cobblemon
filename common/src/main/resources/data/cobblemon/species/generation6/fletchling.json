@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "bigpecks",
+    "bigpecks",
     "h:galewings"
   ],
   "eggGroups": [
@@ -195,5 +196,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

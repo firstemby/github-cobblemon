@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swarm",
+    "swarm",
     "h:technician"
   ],
   "eggGroups": [
@@ -196,5 +197,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "kricketot",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "shroomy",
+    "watery"
+  ]
 }

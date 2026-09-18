@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:plus"
   ],
   "eggGroups": [
@@ -252,5 +253,8 @@
   "lightingData": {
     "lightLevel": 10,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

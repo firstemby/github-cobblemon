@@ -275,5 +275,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "primeape",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "twiggy"
+  ]
 }

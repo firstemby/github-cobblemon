@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:protean"
   ],
   "eggGroups": [
@@ -251,6 +252,7 @@
       ],
       "abilities": [
         "battlebond",
+        "battlebond",
         "h:battlebond"
       ],
       "eggGroups": [
@@ -276,6 +278,7 @@
         "ash"
       ],
       "abilities": [
+        "battlebond",
         "battlebond",
         "h:battlebond"
       ],
@@ -323,5 +326,8 @@
         }
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

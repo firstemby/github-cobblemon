@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "schooling",
+    "schooling",
     "h:schooling"
   ],
   "eggGroups": [
@@ -279,7 +280,13 @@
         }
       },
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "nestTypes": [
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

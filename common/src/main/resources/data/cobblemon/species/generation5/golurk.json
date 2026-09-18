@@ -343,5 +343,8 @@
     "lightLevel": 10,
     "liquidGlowMode": "BOTH"
   },
-  "standingEyeHeight": 0.98
+  "standingEyeHeight": 0.98,
+  "nestTypes": [
+    "rocky"
+  ]
 }

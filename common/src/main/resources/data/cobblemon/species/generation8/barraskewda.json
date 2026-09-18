@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:propellertail"
   ],
   "eggGroups": [
@@ -173,5 +174,8 @@
     "legacy:snore"
   ],
   "preEvolution": "arrokuda",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

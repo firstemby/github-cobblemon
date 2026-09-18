@@ -195,5 +195,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "sunkern",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

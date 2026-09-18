@@ -234,5 +234,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "icy",
+    "rocky"
+  ]
 }

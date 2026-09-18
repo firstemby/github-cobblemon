@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:raindish"
   ],
   "eggGroups": [
@@ -270,5 +271,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "sandy",
+    "watery"
   ]
 }

@@ -200,6 +200,11 @@ open class PokemonBattle(
     fun getActor(npc: NPCEntity) = actors.firstOrNull { it is NPCBattleActor && it.npc == npc }
 
     /**
+     * Gets the first battle actor who has or is the given [PokemonEntity]
+     */
+    fun getActor(pokemonEntity: PokemonEntity) = actors.firstOrNull { it.uuid == pokemonEntity.uuid ||  it.activePokemon.any { it.battlePokemon?.entity == pokemonEntity } }
+
+    /**
      * Gets a [BattleActor] and an [ActiveBattlePokemon] from a pnx key, e.g. p2a
      *
      * Returns null if either the pn or x is invalid.

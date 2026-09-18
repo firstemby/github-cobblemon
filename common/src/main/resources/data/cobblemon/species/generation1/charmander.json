@@ -20,6 +20,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:solarpower"
   ],
   "eggGroups": [
@@ -273,5 +274,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "rocky"
   ]
 }

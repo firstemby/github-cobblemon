@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "flowerveil",
+    "flowerveil",
     "h:symbiosis"
   ],
   "eggGroups": [
@@ -522,5 +523,9 @@
         }
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

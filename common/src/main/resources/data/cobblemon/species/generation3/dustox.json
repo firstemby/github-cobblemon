@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "shielddust",
+    "shielddust",
     "h:compoundeyes"
   ],
   "eggGroups": [
@@ -210,5 +211,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

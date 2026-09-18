@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:longreach"
   ],
   "eggGroups": [
@@ -313,5 +314,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

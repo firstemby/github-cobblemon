@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "synchronize",
+    "synchronize",
     "h:innerfocus"
   ],
   "eggGroups": [
@@ -278,5 +279,8 @@
   "lightingData": {
     "lightLevel": 7,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

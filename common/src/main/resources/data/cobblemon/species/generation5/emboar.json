@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:reckless"
   ],
   "eggGroups": [
@@ -256,5 +257,11 @@
   "lightingData": {
     "lightLevel": 15,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky",
+    "shroomy"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "guts",
+    "guts",
     "h:scrappy"
   ],
   "eggGroups": [
@@ -205,5 +206,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

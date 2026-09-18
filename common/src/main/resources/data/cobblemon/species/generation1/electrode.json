@@ -332,7 +332,10 @@
       ],
       "preEvolution": "voltorb hisuian",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy"
+      ]
     }
   ],
   "riding": {
@@ -357,5 +360,8 @@
     "behaviour": {
       "key": "cobblemon:land/vehicle"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

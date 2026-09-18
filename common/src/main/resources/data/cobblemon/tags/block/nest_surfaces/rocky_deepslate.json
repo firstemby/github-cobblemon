@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:deepslate",
+    {
+      "id": "#c:ores_in_ground/deepslate",
+      "required": false
+    }
+  ]
+}

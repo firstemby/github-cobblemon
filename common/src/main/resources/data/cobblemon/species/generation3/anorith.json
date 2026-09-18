@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "battlearmor",
+    "battlearmor",
     "h:swiftswim"
   ],
   "eggGroups": [
@@ -220,5 +221,8 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

@@ -468,6 +468,10 @@
       }
     }
   ],
+  "nestTypes": [
+    "shroomy",
+    "watery"
+  ],
   "features": [
     "hisuian"
   ]

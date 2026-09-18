@@ -212,5 +212,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "cottonee",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -213,5 +213,10 @@
     "legacy:snore",
     "legacy:swagger"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "sandy",
+    "watery"
+  ]
 }

@@ -11,13 +11,21 @@ package com.cobblemon.mod.common.client.render.layer
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.resources.ResourceLocation
 import java.util.function.BiFunction
 import java.util.function.Function
 import net.minecraft.Util
 import net.minecraft.client.renderer.RenderStateShard
-import net.minecraft.client.renderer.RenderStateShard.*
+import net.minecraft.client.renderer.RenderStateShard.LIGHTMAP
+import net.minecraft.client.renderer.RenderStateShard.NO_CULL
+import net.minecraft.client.renderer.RenderStateShard.NO_TRANSPARENCY
+import net.minecraft.client.renderer.RenderStateShard.OVERLAY
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_CUTOUT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.RENDERTYPE_ENTITY_TRANSLUCENT_SHADER
+import net.minecraft.client.renderer.RenderStateShard.TRANSLUCENT_TRANSPARENCY
+import net.minecraft.client.renderer.RenderStateShard.TextureStateShard
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.resources.ResourceLocation
 
 object CobblemonRenderLayers {
     val BERRY_LAYER = run {
@@ -84,6 +92,5 @@ object CobblemonRenderLayers {
             false,
             multiPhaseParameters
         )
-    };
-
+    }
 }

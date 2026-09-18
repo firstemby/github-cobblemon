@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "waterbubble",
+    "waterbubble",
     "h:waterabsorb"
   ],
   "eggGroups": [
@@ -197,5 +198,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "dewpider",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

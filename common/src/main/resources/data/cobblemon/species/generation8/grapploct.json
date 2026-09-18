@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "limber",
+    "limber",
     "h:technician"
   ],
   "eggGroups": [
@@ -174,5 +175,8 @@
     "legacy:snore"
   ],
   "preEvolution": "clobbopus",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

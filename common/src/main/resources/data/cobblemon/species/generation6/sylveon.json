@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "cutecharm",
+    "cutecharm",
     "h:pixilate"
   ],
   "eggGroups": [
@@ -256,5 +257,9 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "shroomy"
+  ]
 }

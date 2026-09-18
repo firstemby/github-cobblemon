@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "furcoat",
+    "furcoat",
     "h:furcoat"
   ],
   "eggGroups": [
@@ -451,5 +452,8 @@
       "evolutions": [],
       "battleOnly": false
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

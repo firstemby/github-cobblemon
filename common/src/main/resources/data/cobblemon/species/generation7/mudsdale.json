@@ -237,5 +237,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "mudbray",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

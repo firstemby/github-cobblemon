@@ -280,5 +280,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "drifloon",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

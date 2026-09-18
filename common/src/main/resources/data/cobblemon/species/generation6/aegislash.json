@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "stancechange",
+    "stancechange",
     "h:stancechange"
   ],
   "eggGroups": [
@@ -326,5 +327,8 @@
       "evolutions": [],
       "battleOnly": true
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

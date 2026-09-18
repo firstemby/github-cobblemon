@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "roughskin",
+    "roughskin",
     "h:speedboost"
   ],
   "eggGroups": [
@@ -295,6 +296,7 @@
       ],
       "abilities": [
         "strongjaw",
+        "strongjaw",
         "h:strongjaw"
       ],
       "baseStats": {
@@ -341,7 +343,13 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

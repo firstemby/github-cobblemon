@@ -22,7 +22,8 @@ enum class PokemonBehaviourFlag {
     LOOKING,
     EXCITED,
     FLYING,
-    PASTURE_CONFLICT;
+    PASTURE_CONFLICT,
+    DANCING;
 
     val bit: Int = ordinal + 1
 }

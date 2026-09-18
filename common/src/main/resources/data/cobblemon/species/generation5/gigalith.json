@@ -205,5 +205,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "boldore",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

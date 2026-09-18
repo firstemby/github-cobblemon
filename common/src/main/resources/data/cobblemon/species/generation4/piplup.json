@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:competitive"
   ],
   "eggGroups": [
@@ -240,5 +241,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "icy",
+    "rocky"
   ]
 }

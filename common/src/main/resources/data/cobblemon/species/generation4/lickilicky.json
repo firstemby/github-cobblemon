@@ -289,5 +289,8 @@
     "special:wish"
   ],
   "preEvolution": "lickitung",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client
 
+import RealtimeAoeEntityRenderer
+import RealtimeProjectileEntityRenderer
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
@@ -15,7 +17,9 @@ import com.cobblemon.mod.common.CobblemonClientImplementation
 import com.cobblemon.mod.common.CobblemonEntities
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMenuType
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrainState
 import com.cobblemon.mod.common.api.berry.Berries
+import com.cobblemon.mod.common.api.breeding.EggTextures
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.storage.player.client.ClientGeneralPlayerData
 import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
@@ -24,6 +28,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
 import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.client.battle.ClientBattle
+import com.cobblemon.mod.common.client.gui.BrainDebugOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
 import com.cobblemon.mod.common.client.gui.RideControlsOverlay
@@ -106,15 +111,30 @@ object CobblemonClient {
     var lastPcBoxViewed = 0
     var requests = ClientPlayerActionRequests()
     var teamData = ClientPlayerTeamData()
+    var biggerBrainDebugData: BiggerBrainState? = null
+    var debuggedEntityId : Int = -1
+
+    /*var posableModelRepositories = listOf(
+        PokemonModelRepository,
+        PokeBallModelRepository,
+        NPCModelRepository,
+        FossilModelRepository,
+        BlockEntityModelRepository,
+        GenericBedrockEntityModelRepository,
+        EggModelRepo
+    )*/
+
     val overlay: PartyOverlay by lazy { PartyOverlay() }
     val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
-    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
-    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    val pokedexUsageContext: PokedexUsageContext by lazy(::PokedexUsageContext)
+    val rideControlsOverlay: RideControlsOverlay by lazy(::RideControlsOverlay)
+    val brainDebugOverlay: BrainDebugOverlay by lazy(::BrainDebugOverlay)
 
     fun onLogin() {
         clientPlayerData = ClientGeneralPlayerData()
         requests = ClientPlayerActionRequests()
         teamData = ClientPlayerTeamData()
+        biggerBrainDebugData = null
         clientPokedexData = ClientPokedexManager(mutableMapOf())
         clientTMMoveData = ClientTMMoveManager(mutableSetOf())
         storage.onLogin()
@@ -143,6 +163,8 @@ object CobblemonClient {
 
         this.registerBlockEntityRenderers()
         registerBlockRenderTypes()
+        registerBlockColors()
+        registerColors()
         registerColors()
         registerFlywheelRenderers()
         this.registerEntityRenderers()
@@ -154,7 +176,8 @@ object CobblemonClient {
         this.registerMenuScreens()
 
         LOGGER.info("Registering custom BuiltinItemRenderers")
-        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
+        registerBuiltinItemRenderers()
+
 
         PlatformEvents.CLIENT_ITEM_TOOLTIP.subscribe { event ->
             val stack = event.stack
@@ -391,7 +414,21 @@ object CobblemonClient {
             CobblemonBlocks.X_SP_DEF,
             CobblemonBlocks.X_SPEED,
             CobblemonBlocks.TM_MACHINE,
-
+            CobblemonBlocks.X_SPEED,
+            CobblemonBlocks.INCUBATOR,
+            CobblemonBlocks.LECTERN,
+            CobblemonBlocks.NEST_FIERY,
+            CobblemonBlocks.NEST_SANDY,
+            CobblemonBlocks.NEST_TWIGGY,
+            CobblemonBlocks.NEST_ICY,
+            CobblemonBlocks.NEST_ROCKY,
+            CobblemonBlocks.NEST_HAY,
+            CobblemonBlocks.NEST_KELP,
+            CobblemonBlocks.NEST_WATERY,
+            CobblemonBlocks.NEST_SHROOMY,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY,
+            CobblemonBlocks.TM_MACHINE,
             CobblemonBlocks.GALARICA_CUFF,
             CobblemonBlocks.GALARICA_WREATH,
             CobblemonBlocks.CHIPPED_POT,
@@ -417,7 +454,22 @@ object CobblemonClient {
             CobblemonBlocks.SCOPE_LENS
         )
 
+        this.implementation.registerBlockRenderType(
+            RenderType.translucent(),
+            CobblemonBlocks.TUMBLESTONE_BLOCK
+        )
+
+
         this.createBoatModelLayers()
+    }
+
+    fun registerBlockColors() {
+        this.implementation.registerBlockColors(
+            NestLeafBlockColorProvider,
+            CobblemonBlocks.NEST_GRASSY,
+            CobblemonBlocks.NEST_LEAFY,
+            CobblemonBlocks.NEST_TWIGGY
+        )
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
@@ -429,6 +481,7 @@ object CobblemonClient {
             battleOverlay.render(context, partialDeltaTicks)
         }
         rideControlsOverlay.render(context, partialDeltaTicks)
+        brainDebugOverlay.render(context, partialDeltaTicks)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -462,6 +515,9 @@ object CobblemonClient {
             ::RestorationTankRenderer
         )
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.HABITAT_BLOCK, ::HabitatBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.NEST, ::NestBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.EGG, ::EggBlockRenderer)
+        this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.INCUBATOR, ::IncubatorRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.GILDED_CHEST, ::GildedChestBlockRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.DISPLAY_CASE, ::DisplayCaseRenderer)
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.LECTERN, ::LecternBlockEntityRenderer)
@@ -475,6 +531,10 @@ object CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.POKEMON, ::PokemonRenderer)
         LOGGER.info("Registering PokéBall renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.EMPTY_POKEBALL, ::PokeBallRenderer)
+        LOGGER.info("Registering Realtime move Projectile renderer")
+        this.implementation.registerEntityRenderer(CobblemonEntities.REALTIME_MOVE_PROJECTILE_ENTITY, ::RealtimeProjectileEntityRenderer)
+        LOGGER.info("Registering Realtime move AOE renderer")
+        this.implementation.registerEntityRenderer(CobblemonEntities.REALTIME_MOVE_PROJECTILE_AOE, ::RealtimeAoeEntityRenderer)
         LOGGER.info("Registering Boat renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.BOAT) { ctx -> CobblemonBoatRenderer(ctx, false) }
         LOGGER.info("Registering Boat with Chest renderer")
@@ -497,6 +557,10 @@ object CobblemonClient {
         implementation.registerItemColors(SinisterTeaItemColorProvider, CobblemonItems.SINISTER_TEA)
     }
 
+    private fun registerBuiltinItemRenderers() {
+        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
+    }
+
     fun reloadCodedAssets(resourceManager: ResourceManager) {
         LOGGER.info("Loading assets...")
         // Particles come first because animations need them.
@@ -510,6 +574,7 @@ object CobblemonClient {
 
         BerryModelRepository.reload(resourceManager)
         MiscModelRepository.reload(resourceManager)
+        EggTextures.reload(resourceManager)
         LOGGER.info("Loaded assets")
     }
 

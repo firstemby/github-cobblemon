@@ -160,6 +160,20 @@
       "rouseChance": 0.0042
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "!q.entity.is_in_party",
+      "objectivesByPriority": {
+        "0": [
+          {
+            "type": "cobblemon:combat_defensive",
+            "condition": "q.entity.type == 'minecraft:player'"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 6,
     "entries": [
@@ -297,6 +311,7 @@
       ],
       "abilities": [
         "noguard",
+        "noguard",
         "h:noguard"
       ],
       "baseStats": {
@@ -370,7 +385,10 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ]
 }

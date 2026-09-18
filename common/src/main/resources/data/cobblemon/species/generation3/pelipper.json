@@ -230,5 +230,8 @@
     "legacy:uproar"
   ],
   "preEvolution": "wingull",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "twiggy"
+  ]
 }

@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:runaway"
   ],
   "eggGroups": [
@@ -143,5 +144,10 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy",
+    "watery"
   ]
 }

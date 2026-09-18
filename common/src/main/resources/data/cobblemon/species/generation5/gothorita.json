@@ -240,5 +240,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

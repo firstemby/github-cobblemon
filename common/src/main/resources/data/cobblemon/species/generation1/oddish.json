@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "chlorophyll",
+    "chlorophyll",
     "h:runaway"
   ],
   "eggGroups": [
@@ -214,5 +215,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

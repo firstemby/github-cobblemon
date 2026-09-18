@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "effectspore",
+    "effectspore",
     "h:regenerator"
   ],
   "eggGroups": [
@@ -213,5 +214,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "shroomy"
   ]
 }

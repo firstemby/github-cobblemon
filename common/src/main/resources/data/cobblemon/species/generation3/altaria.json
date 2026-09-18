@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "naturalcure",
+    "naturalcure",
     "h:cloudnine"
   ],
   "eggGroups": [
@@ -321,6 +322,7 @@
       ],
       "abilities": [
         "pixilate",
+        "pixilate",
         "h:pixilate"
       ],
       "baseStats": {
@@ -362,10 +364,16 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "flyingEyeHeight": 0.87,
   "standingEyeHeight": 0.87,
-  "swimmingEyeHeight": 0.87
+  "swimmingEyeHeight": 0.87,
+  "nestTypes": [
+    "twiggy"
+  ]
 }

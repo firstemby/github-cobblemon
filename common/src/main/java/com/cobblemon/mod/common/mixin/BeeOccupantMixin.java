@@ -67,14 +67,14 @@ public abstract class BeeOccupantMixin {
                 if (state.is(BlockTags.BEEHIVES)) {
                     // position in front of the entrance, face away from the block
                     var facing = state.getValue(HorizontalDirectionalBlock.FACING);
-                    newPos = pos.relative(facing).getCenter();
+                    newPos = pos.relative(facing).getBottomCenter();
                     newYaw = facing.toYRot();
                     if (brain.checkMemory(CobblemonMemories.HIVE_LOCATION, MemoryStatus.REGISTERED)) {
                         brain.setMemory(CobblemonMemories.HIVE_LOCATION, pos); // This needs to be set in the case that the hive was picked up and moved.
                     }
                 } else {
                     // Block has likely been destroyed
-                    var center = pos.getCenter();
+                    var center = pos.getBottomCenter();
                     newPos = new Vec3(
                             center.x + level.random.nextFloat() * 0.6 - 0.3,
                             center.y + level.random.nextFloat() * 0.6 - 0.3,

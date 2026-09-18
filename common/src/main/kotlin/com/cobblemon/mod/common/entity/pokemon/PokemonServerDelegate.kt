@@ -14,6 +14,8 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LockFixation
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.entity.PokemonSideDelegate
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonEntityFunctions
@@ -29,8 +31,20 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asUUID
+import com.cobblemon.mod.common.util.getIsSubmerged
+import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.update
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
+import java.util.Optional
+import kotlin.math.ceil
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.round
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import net.minecraft.network.chat.Component
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.server.level.ServerLevel
@@ -40,6 +54,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.pathfinder.PathType
+import org.joml.Matrix3f
+import org.joml.Vector3f
 import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.math.*
@@ -246,9 +262,12 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
             entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
-        }
-        else {
+        } else {
             entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+        }
+
+        if (entity.entityData.get(PokemonEntity.BUSY) != entity.biggerBrain.fixation is LockFixation) {
+            entity.entityData.set(PokemonEntity.BUSY, entity.biggerBrain.fixation is LockFixation)
         }
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
@@ -333,6 +352,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         updateHealth(entity.pokemon)
+
+        entity.pokemon.tickRealTimeMoveCooldowns()
 
         // TODO: updateTrackedValues does the same check and set again, refactor.
         if (entity.ownerUUID != entity.pokemon.getOwnerUUID()) {

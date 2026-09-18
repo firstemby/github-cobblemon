@@ -1,0 +1,16 @@
+{
+  "name": "cobblemon.behaviour.pokemon_move_into_water.name",
+  "description": "cobblemon.behaviour.pokemon_move_into_water.desc",
+  "entityType": "cobblemon:pokemon",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "q.entity.behaviour.moving.walk.avoids_land",
+      "objectivesByPriority": {
+        "3": [
+          "cobblemon:move_into_water"
+        ]
+      }
+    }
+  ]
+}

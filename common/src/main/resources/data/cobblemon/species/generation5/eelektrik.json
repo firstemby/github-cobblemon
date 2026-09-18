@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "levitate",
+    "levitate",
     "h:levitate"
   ],
   "eggGroups": [
@@ -205,5 +206,9 @@
       "requirements": [],
       "requiredContext": "cobblemon:thunder_stone"
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "watery"
   ]
 }

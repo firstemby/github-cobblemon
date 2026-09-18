@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "innerfocus",
+    "innerfocus",
     "h:infiltrator"
   ],
   "eggGroups": [
@@ -246,5 +247,8 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:bulletproof"
   ],
   "eggGroups": [
@@ -261,5 +262,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "quilladin",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

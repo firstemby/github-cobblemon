@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "gluttony",
+    "gluttony",
     "h:torrent"
   ],
   "eggGroups": [
@@ -241,5 +242,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "watery"
+  ]
 }

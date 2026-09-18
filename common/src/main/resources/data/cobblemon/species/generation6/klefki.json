@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "prankster",
+    "prankster",
     "h:magician"
   ],
   "eggGroups": [
@@ -193,5 +194,8 @@
     "legacy:swagger",
     "legacy:toxic"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

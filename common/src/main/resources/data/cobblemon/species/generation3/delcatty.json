@@ -232,5 +232,8 @@
     "special:sweetkiss"
   ],
   "preEvolution": "skitty",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

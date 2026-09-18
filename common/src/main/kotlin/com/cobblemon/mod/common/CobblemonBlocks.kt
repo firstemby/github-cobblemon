@@ -9,10 +9,47 @@
 package com.cobblemon.mod.common
 
 import com.cobblemon.mod.common.api.apricorn.Apricorn
+import com.cobblemon.mod.common.api.nest.WildNestType
+import com.cobblemon.mod.common.api.nest.WildNestVariant
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
-import com.cobblemon.mod.common.block.*
+import com.cobblemon.mod.common.block.ApricornBlock
+import com.cobblemon.mod.common.block.ApricornSaplingBlock
+import com.cobblemon.mod.common.block.BerryBlock
+import com.cobblemon.mod.common.block.BigRootBlock
+import com.cobblemon.mod.common.block.CoinPouchBlock
+import com.cobblemon.mod.common.block.DamagedMonitorBlock
+import com.cobblemon.mod.common.block.DiscShelfBlock
+import com.cobblemon.mod.common.block.DisplayCaseBlock
+import com.cobblemon.mod.common.block.EggBlock
+import com.cobblemon.mod.common.block.EnergyRootBlock
+import com.cobblemon.mod.common.block.FossilAnalyzerBlock
+import com.cobblemon.mod.common.block.HealingMachineBlock
+import com.cobblemon.mod.common.block.HeartyGrainsBlock
+import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.block.LecternBlock
+import com.cobblemon.mod.common.block.MedicinalLeekBlock
+import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
+import com.cobblemon.mod.common.block.MonitorBlock
+import com.cobblemon.mod.common.block.NestBlock
+import com.cobblemon.mod.common.block.NutBushBlock
+import com.cobblemon.mod.common.block.PCBlock
+import com.cobblemon.mod.common.block.PastureBlock
+import com.cobblemon.mod.common.block.PlaqueBlock
+import com.cobblemon.mod.common.block.PokeSnackBlock
+import com.cobblemon.mod.common.block.RestorationTankBlock
+import com.cobblemon.mod.common.block.RevivalHerbBlock
+import com.cobblemon.mod.common.block.SaccharineLeafBlock
+import com.cobblemon.mod.common.block.SaccharineLogBlock
+import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock
+import com.cobblemon.mod.common.block.StackableItemBlock
+import com.cobblemon.mod.common.block.TumblestoneBlock
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
+import com.cobblemon.mod.common.block.TypeGemCoreBlock
+import com.cobblemon.mod.common.block.VivichokeBlock
+import com.cobblemon.mod.common.block.WallAttachedDirectionalShapeBlock
+import com.cobblemon.mod.common.block.WallAttachedStackableItemBlock
+import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
@@ -801,7 +838,16 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
 
 
     @JvmField
-    val LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava().lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }))
+    val LECTERN = create("lectern", LecternBlock(
+        BlockBehaviour.Properties
+            .of()
+            .mapColor(MapColor.WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .sound(SoundType.WOOD)
+            .strength(2.5F)
+            .ignitedByLava()
+            .lightLevel { if (it.getValue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }
+    ))
 
     @JvmField
     val DISC_SHELF = create("disc_shelf", DiscShelfBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.METAL).strength(2.5F)))
@@ -1033,6 +1079,82 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
+    val NEST_FIERY = this.create(
+        "nest_fiery",
+        WildNestBlock.create(
+            WildNestType.FIERY,
+            BlockBehaviour.Properties.of()
+                .noOcclusion()
+                .pushReaction(PushReaction.DESTROY)
+                .lightLevel { state ->
+                    val variant = (state.block as? WildNestBlock)?.variantProperty?.let { state.getValue(it) }
+                    when (variant) {
+                        WildNestVariant.FIERY_NETHERRACK -> 15
+                        WildNestVariant.FIERY_SOUL_SAND -> 10
+                        else -> 3
+                    }
+                }
+        )
+    )
+    val NEST_GRASSY = this.create(
+        "nest_grassy",
+        WildNestBlock.create(WildNestType.GRASSY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_LEAFY = this.create(
+        "nest_leafy",
+        WildNestBlock.create(WildNestType.LEAFY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_ICY = this.create(
+        "nest_icy",
+        WildNestBlock.create(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_HAY = this.create(
+        "nest_hay",
+        WildNestBlock.create(WildNestType.PLAYER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_KELP = this.create(
+        "nest_kelp",
+        WildNestBlock.create(WildNestType.KELP, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_ROCKY = this.create(
+        "nest_rocky",
+        WildNestBlock.create(WildNestType.ROCKY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_SANDY = this.create(
+        "nest_sandy",
+        WildNestBlock.create(WildNestType.SANDY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_SHROOMY = this.create(
+        "nest_shroomy",
+        WildNestBlock.create(WildNestType.SHROOMY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_TWIGGY = this.create(
+        "nest_twiggy",
+        WildNestBlock.create(WildNestType.TWIGGY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+    val NEST_WATERY = this.create(
+        "nest_watery",
+        WildNestBlock.create(WildNestType.WATERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+    )
+
+    val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
+        .ofFullCopy(Blocks.DRAGON_EGG)
+        .pushReaction(PushReaction.BLOCK)
+        .sound(SoundType.BONE_BLOCK)
+    ))
+
+    @JvmField
+    val INCUBATOR = this.create("incubator", IncubatorBlock(BlockBehaviour.Properties.of()
+        .mapColor(MapColor.COLOR_LIGHT_GRAY)
+        .sound(SoundType.METAL)
+        .strength(Blocks.COAL_BLOCK.defaultDestroyTime(), Blocks.DIAMOND_ORE.explosionResistance)
+        .noOcclusion()
+        .pushReaction(PushReaction.BLOCK)
+        .lightLevel { state ->
+            if (state.getValue(IncubatorBlock.HAS_EGG)) 5 else 0 // Emit 5 light when HAS_EGG is true
+        }
+    ))
+
     init {
         /**
          * Makes all blocks in array flammable by adding them to FireBlock's flammableRegistry.
@@ -1071,6 +1193,12 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         val block = this.create(identifier.path, BerryBlock(identifier, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).dynamicShape().sound(CobblemonSounds.BERRY_BUSH_SOUNDS).strength(0.2F)))
         this.berries[identifier] = block
         return block
+    }
+
+    private fun nestBlock(variant: NestBlock.NestVariant): NestBlock {
+        val identifier = cobblemonResource(variant.serializedName)
+        val block = NestBlock(variant, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        return this.create(identifier.path, block)
     }
 
     /**

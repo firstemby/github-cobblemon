@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:waterveil"
   ],
   "eggGroups": [
@@ -226,5 +227,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "buizel",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "watery"
+  ]
 }

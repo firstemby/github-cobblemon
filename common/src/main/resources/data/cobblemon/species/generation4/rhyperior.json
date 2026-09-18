@@ -93,7 +93,8 @@
       },
       "walk": {
         "walkSpeed": 0.2
-      }
+      },
+      "canDance": true
     },
     "resting": {
       "drowsyChance": 0.0333,
@@ -321,5 +322,10 @@
     "legacy:zapcannon"
   ],
   "preEvolution": "rhydon",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
+  ]
 }

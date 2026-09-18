@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "compoundeyes",
+    "compoundeyes",
     "h:runaway"
   ],
   "eggGroups": [
@@ -195,5 +196,10 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "shroomy"
   ]
 }

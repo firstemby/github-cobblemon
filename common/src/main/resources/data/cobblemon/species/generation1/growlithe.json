@@ -86,8 +86,47 @@
           "tier": 1
         }
       ]
+    },
+    "fireImmune": true,
+    "itemInteract": {
+      "desiredItems": [
+        {
+          "item": "minecraft:bone",
+          "pickupPriority": 1,
+          "fullnessValue": 1,
+          "onUseEffect": "q.entity.heal(1)"
+        }
+      ]
     }
   },
+  "ai": [
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "!q.entity.is_in_party",
+      "objectivesByPriority": {
+        "5": [
+          {
+            "type": "cobblemon:combat_aggressive",
+            "targetCondition": "q.entity.type == 'minecraft:skeleton'"
+          }
+        ],
+        "6": [
+          {
+            "type": "cobblemon:behaviour_friendly",
+            "description": "'Follow players holding bones'",
+            "targetCondition": "q.target.type == 'minecraft:player' && q.target.main_held_item.is_of('minecraft:bone')",
+            "maxDuration": "9999"
+          },
+          {
+            "type": "cobblemon:behaviour_friendly",
+            "description": "'Follow wolves'",
+            "targetCondition": "q.target.type == 'minecraft:wolf'",
+            "maxDuration": "200"
+          }
+        ]
+      }
+    }
+  ],
   "drops": {
     "amount": 2,
     "entries": [
@@ -395,7 +434,15 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "fiery",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy"
   ]
 }

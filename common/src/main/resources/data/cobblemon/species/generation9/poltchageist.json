@@ -18,6 +18,7 @@
   ],
   "abilities": [
     "hospitality",
+    "hospitality",
     "h:heatproof"
   ],
   "eggGroups": [
@@ -200,5 +201,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

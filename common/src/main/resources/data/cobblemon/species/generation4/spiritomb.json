@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:infiltrator"
   ],
   "eggGroups": [
@@ -220,5 +221,8 @@
   "lightingData": {
     "lightLevel": 9,
     "liquidGlowMode": "BOTH"
-  }
+  },
+  "nestTypes": [
+    "rocky"
+  ]
 }

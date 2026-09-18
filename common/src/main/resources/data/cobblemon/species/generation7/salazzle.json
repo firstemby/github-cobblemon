@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "corrosion",
+    "corrosion",
     "h:oblivious"
   ],
   "eggGroups": [
@@ -236,5 +237,10 @@
     "legacy:snore"
   ],
   "preEvolution": "salandit",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "fiery",
+    "rocky",
+    "sandy"
+  ]
 }

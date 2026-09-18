@@ -1,0 +1,35 @@
+{
+  "name": "cobblemon.brain_preset.pokemon.pokemon_breeding.name",
+  "description": "cobblemon.brain_preset.pokemon.pokemon_breeding.desc",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "0": [
+          "cobblemon:attack_target",
+          "cobblemon:path_to_nest",
+          "cobblemon:breed_at_nest",
+          "cobblemon:guard_nest",
+          "cobblemon:search_for_egg",
+          "cobblemon:retrieve_egg",
+          "cobblemon:pick_up_egg",
+          "cobblemon:place_egg_in_nest",
+          "cobblemon:attack_egg_thief",
+          "cobblemon:path_to_ideal_nest_location",
+          "cobblemon:build_nest"
+        ]
+      }
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "senses": [
+        "cobblemon:nearby_entities",
+        "cobblemon:mate_sensor",
+        "cobblemon:nest_sensor",
+        "cobblemon:egg_sensor",
+        "cobblemon:ideal_nest_location_sensor",
+        "cobblemon:pokemon_disturbance"
+      ]
+    }
+  ]
+}

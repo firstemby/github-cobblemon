@@ -308,6 +308,7 @@
       ],
       "abilities": [
         "filter",
+        "filter",
         "h:filter"
       ],
       "baseStats": {
@@ -345,7 +346,13 @@
           "willFlee": false
         },
         "fireImmune": true
-      }
+      },
+      "nestTypes": [
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

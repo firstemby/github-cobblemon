@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.pokemon.ai
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 class CombatBehaviour {
@@ -17,6 +18,7 @@ class CombatBehaviour {
     var willFlee = true
     var willDefendOwner = false
     var fightsMelee = true
+    var moves : List<RealTimeMove> = emptyList()
 
     @Transient
     val struct = ObjectValue(this).also {

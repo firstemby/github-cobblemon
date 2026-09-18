@@ -177,5 +177,8 @@
     "tutor:xscissor",
     "special:block"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

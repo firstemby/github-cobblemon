@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flashfire",
+    "flashfire",
     "h:drought"
   ],
   "eggGroups": [
@@ -287,6 +288,7 @@
       ],
       "abilities": [
         "snowcloak",
+        "snowcloak",
         "h:snowwarning"
       ],
       "drops": {
@@ -480,7 +482,17 @@
         "combat": {
           "willDefendOwner": true
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "icy",
+        "twiggy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "twiggy"
   ]
 }

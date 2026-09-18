@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overcoat",
+    "overcoat",
     "h:filter"
   ],
   "eggGroups": [
@@ -212,5 +213,8 @@
     "tutor:zenheadbutt"
   ],
   "preEvolution": "varoom",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky"
+  ]
 }

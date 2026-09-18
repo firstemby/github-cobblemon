@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "plus",
+    "plus",
     "h:lightningrod"
   ],
   "eggGroups": [
@@ -235,5 +236,8 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

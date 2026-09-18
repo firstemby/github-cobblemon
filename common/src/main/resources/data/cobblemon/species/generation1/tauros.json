@@ -450,7 +450,10 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Paldea-Blaze",
@@ -625,7 +628,11 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "fiery",
+        "grassy"
+      ]
     },
     {
       "name": "Paldea-Aqua",
@@ -816,11 +823,18 @@
         "tutor:zenheadbutt"
       ],
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "watery"
+      ]
     }
   ],
   "features": [
     "paldean",
     "bull_breed"
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

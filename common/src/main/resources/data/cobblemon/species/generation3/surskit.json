@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "swiftswim",
+    "swiftswim",
     "h:raindish"
   ],
   "eggGroups": [
@@ -219,5 +220,8 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

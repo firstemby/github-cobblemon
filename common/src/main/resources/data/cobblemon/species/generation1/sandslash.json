@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:sandrush"
   ],
   "eggGroups": [
@@ -276,6 +277,7 @@
       ],
       "abilities": [
         "snowcloak",
+        "snowcloak",
         "h:slushrush"
       ],
       "baseStats": {
@@ -488,7 +490,15 @@
             "percentage": 5.0
           }
         ]
-      }
+      },
+      "nestTypes": [
+        "icy",
+        "rocky"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

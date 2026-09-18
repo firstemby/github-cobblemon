@@ -237,5 +237,9 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

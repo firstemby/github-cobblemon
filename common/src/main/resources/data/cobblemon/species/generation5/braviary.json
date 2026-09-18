@@ -545,10 +545,16 @@
       ],
       "preEvolution": "rufflet",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "features": [
     "hisuian"
+  ],
+  "nestTypes": [
+    "twiggy"
   ]
 }

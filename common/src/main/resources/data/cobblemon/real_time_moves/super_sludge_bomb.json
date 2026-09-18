@@ -1,0 +1,43 @@
+{
+  "name": "Super Sludge Bomb",
+  "type": "projectile",
+  "elementalType": "Poison",
+  "priority": 2,
+  "power": 1,
+  "cooldownTicks": 100,
+  "salvoCount": 1,
+  "spreadDegrees": 2.0,
+  "speed": 0.3,
+  "hasGravity": false,
+  "piercing": true,
+  "minRange": 0,
+  "maxRange": 7,
+  "effect": "q.target.ignite_for_ticks(30)",
+  "tickEvents": [
+    {
+      "startTick": 5,
+      "intervalTicks": 10,
+      "maxOccurrences": 4,
+      "actions": [
+        {
+          "type": "createmove",
+          "moveId": "cobblemon:super_sludge_bomb_a",
+          "rotationDegrees": {
+            "x": -90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "type": "createmove",
+          "moveId": "cobblemon:super_sludge_bomb_a",
+          "rotationDegrees": {
+            "x": 90.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}

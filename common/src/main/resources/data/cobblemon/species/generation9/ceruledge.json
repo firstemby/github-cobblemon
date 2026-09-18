@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "flashfire",
+    "flashfire",
     "h:weakarmor"
   ],
   "eggGroups": [
@@ -207,5 +208,9 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "rocky"
+  ]
 }

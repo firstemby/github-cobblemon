@@ -12,13 +12,16 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Objective
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.Sense
 import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.activityRegistry
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -46,7 +49,14 @@ class BehaviourConfigurationContext {
     val memories = mutableSetOf<MemoryModuleType<*>>()
     val sensors = mutableSetOf<SensorType<*>>()
 
+    val objectives = mutableMapOf<Int, MutableList<Objective>>()
+    val senses = mutableSetOf<Sense>()
+
     val onAdd = mutableListOf<ExpressionLike>()
+
+    init {
+        memories.add(CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK)
+    }
 
     fun getOrCreateActivity(activity: Activity): ActivityConfigurationContext {
         return activities.firstOrNull { it.activity == activity } ?: ActivityConfigurationContext(activity).also(activities::add)
@@ -66,6 +76,22 @@ class BehaviourConfigurationContext {
 
     fun addSensors(sensors: Collection<SensorType<*>>) {
         this.sensors.addAll(sensors)
+    }
+
+    fun addSenses(vararg senses: Sense) {
+        addSenses(senses.toList())
+    }
+
+    fun addSenses(senses: Collection<Sense>) {
+        outer@for (sense in senses) {
+            for (existingSense in this.senses) {
+                if (existingSense.merge(sense)) {
+                    continue@outer
+                }
+            }
+            this.senses.add(sense)
+            this.addMemories(sense.memories)
+        }
     }
 
     fun addOnAddScript(script: ExpressionLike) {
@@ -88,8 +114,23 @@ class BehaviourConfigurationContext {
         var brain = entity.brain
         // Apply the brain config
         if (entity is MoLangScriptingEntity) {
-            brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, sensors)
+            val useBiggerBrain = objectives.isNotEmpty() || senses.isNotEmpty()
+            brain = entity.assignNewBrainWithMemoriesAndSensors(dynamic, memories, if (useBiggerBrain) emptySet() else sensors)
             onAdd.forEach { runtime.resolve(it) }
+            if (useBiggerBrain) {
+                val wereDebugging = entity.biggerBrain.debuggingPlayers ?: emptySet()
+                val biggerBrain = BiggerBrain(entity)
+                entity.biggerBrain = biggerBrain
+                addSenses(biggerBrain.senses)
+                val orderedObjectives = objectives.entries.sortedBy { it.key }.flatMap { it.value }
+                orderedObjectives.forEach(biggerBrain::registerObjective)
+                biggerBrain.senses.addAll(senses)
+                biggerBrain.debuggingPlayers.addAll(wereDebugging)
+                return
+            } else {
+                val biggerBrain = BiggerBrain(entity)
+                entity.biggerBrain = biggerBrain
+            }
         }
         activities.forEach { it.apply(entity) }
         brain.setCoreActivities(coreActivities)

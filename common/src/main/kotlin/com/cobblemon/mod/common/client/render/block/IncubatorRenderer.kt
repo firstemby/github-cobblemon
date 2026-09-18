@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.client.render.block
+
+import com.cobblemon.mod.common.CobblemonItemComponents
+import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
+import com.cobblemon.mod.common.client.render.helper.EggRenderHelper
+import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+
+class IncubatorRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<IncubatorBlockEntity> {
+
+    override fun render(
+        entity: IncubatorBlockEntity,
+        tickDelta: Float,
+        matrices: PoseStack,
+        vertexConsumers: MultiBufferSource,
+        light: Int,
+        overlay: Int
+    ) {
+        // Ensure the renderer runs only on the client
+        val isClientSide = entity.level?.isClientSide ?: false
+        if (!isClientSide) return
+
+        // Retrieve the egg data from the entity
+        val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA) ?: return
+        matrices.pushPose()
+        // Render the egg model with the dynamically determined texture
+        EggRenderHelper.renderEgg(
+            egg = egg,
+            state = entity.eggState,
+            matrices = matrices,
+            vertexConsumers = vertexConsumers,
+            light = light,
+            overlay = overlay,
+            yRot = 0f,
+            scale = 1f,
+            translation = Triple(0.5f, 0.54f, 0.5f), // Adjust translation
+            rotation = Triple(180f, 0f, 0f),           // Adjust rotation
+            tickDelta = tickDelta
+        )
+
+        matrices.popPose() // Restore the matrix stack
+    }
+}

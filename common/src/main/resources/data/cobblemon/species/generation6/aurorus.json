@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "refrigerate",
+    "refrigerate",
     "h:snowwarning"
   ],
   "eggGroups": [
@@ -217,5 +218,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "amaura",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "icy"
+  ]
 }

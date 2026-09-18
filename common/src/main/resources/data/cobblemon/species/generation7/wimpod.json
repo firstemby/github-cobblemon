@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "wimpout",
+    "wimpout",
     "h:wimpout"
   ],
   "eggGroups": [
@@ -171,5 +172,10 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy",
+    "watery"
   ]
 }

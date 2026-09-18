@@ -1,0 +1,7 @@
+{
+  "type": "cobblemon:species_feature_inheritance",
+  "order": 32,
+  "parent": "q.mother",
+  "conditionAspect": "hisuian",
+  "modifier": "hisuian=true region_bias=hisui"
+}

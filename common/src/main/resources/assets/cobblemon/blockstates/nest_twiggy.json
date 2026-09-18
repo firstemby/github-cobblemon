@@ -1,0 +1,118 @@
+﻿{
+  "variants": {
+    "variant=twiggy_default,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy"
+    },
+    "variant=twiggy_default,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy"
+    },
+    "variant=twiggy_chorus,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_chorus"
+    },
+    "variant=twiggy_chorus,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_chorus"
+    },
+    "variant=twiggy_dead_bush,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_dead_bush"
+    },
+    "variant=twiggy_dead_bush,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_dead_bush"
+    },
+    "variant=twiggy_leafy,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_leafy,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_mangrove,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_mangrove"
+    },
+    "variant=twiggy_mangrove,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_mangrove"
+    },
+    "variant=twiggy_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_oak"
+    },
+    "variant=twiggy_acacia,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_acacia"
+    },
+    "variant=twiggy_acacia,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_acacia"
+    },
+    "variant=twiggy_apricorn,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_apricorn"
+    },
+    "variant=twiggy_apricorn,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_apricorn"
+    },
+    "variant=twiggy_azalea,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_azalea"
+    },
+    "variant=twiggy_azalea,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_azalea"
+    },
+    "variant=twiggy_birch,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_birch"
+    },
+    "variant=twiggy_birch,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_birch"
+    },
+    "variant=twiggy_cherry,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_cherry"
+    },
+    "variant=twiggy_cherry,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_cherry"
+    },
+    "variant=twiggy_dark_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_dark_oak"
+    },
+    "variant=twiggy_dark_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_dark_oak"
+    },
+    "variant=twiggy_flowering_azalea,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_flowering_azalea"
+    },
+    "variant=twiggy_flowering_azalea,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_flowering_azalea"
+    },
+    "variant=twiggy_jungle,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_jungle"
+    },
+    "variant=twiggy_jungle,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_jungle"
+    },
+    "variant=twiggy_mangrove_leaves,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_mangrove_leaves"
+    },
+    "variant=twiggy_mangrove_leaves,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_mangrove_leaves"
+    },
+    "variant=twiggy_saccharine,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine"
+    },
+    "variant=twiggy_saccharine,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine"
+    },
+    "variant=twiggy_saccharine_sticky,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_sticky"
+    },
+    "variant=twiggy_saccharine_sticky,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_sticky"
+    },
+    "variant=twiggy_saccharine_drippy,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_drippy"
+    },
+    "variant=twiggy_saccharine_drippy,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_saccharine_drippy"
+    },
+    "variant=twiggy_spruce,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_spruce"
+    },
+    "variant=twiggy_spruce,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_spruce"
+    }
+  }
+}

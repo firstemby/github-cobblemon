@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "anticipation",
+    "anticipation",
     "h:overcoat"
   ],
   "eggGroups": [
@@ -290,7 +291,12 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     },
     {
       "name": "Trash",
@@ -426,7 +432,12 @@
       ],
       "preEvolution": "burmy",
       "evolutions": [],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy",
+        "sandy",
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -454,5 +465,10 @@
         }
       ]
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "sandy",
+    "twiggy"
+  ]
 }

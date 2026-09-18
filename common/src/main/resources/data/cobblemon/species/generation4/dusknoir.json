@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "pressure",
+    "pressure",
     "h:frisk"
   ],
   "eggGroups": [
@@ -302,5 +303,10 @@
     "legacy:toxic"
   ],
   "preEvolution": "dusclops",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "icy",
+    "rocky",
+    "shroomy"
+  ]
 }

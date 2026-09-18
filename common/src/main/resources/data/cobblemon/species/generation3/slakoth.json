@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "truant",
+    "truant",
     "h:truant"
   ],
   "eggGroups": [
@@ -252,5 +253,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

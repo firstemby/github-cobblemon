@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "sandveil",
+    "sandveil",
     "h:roughskin"
   ],
   "eggGroups": [
@@ -351,6 +352,7 @@
       ],
       "abilities": [
         "sandforce",
+        "sandforce",
         "h:sandforce"
       ],
       "baseStats": {
@@ -386,7 +388,15 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "rocky",
+        "sandy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "sandy"
   ]
 }

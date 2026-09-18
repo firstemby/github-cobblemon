@@ -201,5 +201,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "stufful",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

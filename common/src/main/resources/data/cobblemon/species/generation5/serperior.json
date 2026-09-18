@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:contrary"
   ],
   "eggGroups": [
@@ -240,5 +241,8 @@
     "special:holdback"
   ],
   "preEvolution": "servine",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

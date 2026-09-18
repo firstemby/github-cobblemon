@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "overgrow",
+    "overgrow",
     "h:chlorophyll"
   ],
   "eggGroups": [
@@ -283,6 +284,7 @@
       ],
       "abilities": [
         "thickfat",
+        "thickfat",
         "h:thickfat"
       ],
       "baseStats": {
@@ -341,7 +343,10 @@
       },
       "evolutions": [],
       "battleOnly": true,
-      "dynamaxBlocked": true
+      "dynamaxBlocked": true,
+      "nestTypes": [
+        "grassy"
+      ]
     },
     {
       "name": "Gmax",
@@ -366,5 +371,8 @@
     }
   ],
   "standingEyeHeight": 0.4,
-  "swimmingEyeHeight": 0.4
+  "swimmingEyeHeight": 0.4,
+  "nestTypes": [
+    "grassy"
+  ]
 }

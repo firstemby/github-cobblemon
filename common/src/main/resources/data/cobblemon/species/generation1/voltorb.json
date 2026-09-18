@@ -340,7 +340,13 @@
           "requiredContext": "cobblemon:leaf_stone"
         }
       ],
-      "battleOnly": false
+      "battleOnly": false,
+      "nestTypes": [
+        "grassy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy"
   ]
 }

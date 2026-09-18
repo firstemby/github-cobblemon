@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#cobblemon:nether/is_soul_sand",
+    "#cobblemon:nether/is_soul_fire"
+  ]
+}

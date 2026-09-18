@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:sniper"
   ],
   "eggGroups": [
@@ -182,5 +183,8 @@
         ]
       }
     }
+  ],
+  "nestTypes": [
+    "watery"
   ]
 }

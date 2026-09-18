@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "immunity",
+    "immunity",
     "h:toxicboost"
   ],
   "eggGroups": [
@@ -279,5 +280,8 @@
     "legacy:waterpulse",
     "special:refresh"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

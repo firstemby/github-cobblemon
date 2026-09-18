@@ -232,5 +232,9 @@
     "legacy:toxic"
   ],
   "preEvolution": "binacle",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "rocky",
+    "watery"
+  ]
 }

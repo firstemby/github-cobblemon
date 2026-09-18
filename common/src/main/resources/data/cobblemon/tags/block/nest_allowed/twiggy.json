@@ -1,0 +1,43 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:base_stone_nether",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:dirt",
+    "#minecraft:leaves",
+    "#minecraft:logs",
+    "#minecraft:nylium",
+    "#minecraft:sand",
+    "#minecraft:snow",
+    "#minecraft:terracotta",
+    "minecraft:calcite",
+    "minecraft:end_stone",
+    "minecraft:gravel",
+    "minecraft:mangrove_roots",
+    "minecraft:mud",
+    "minecraft:muddy_mangrove_roots",
+    "minecraft:red_sandstone",
+    "minecraft:sandstone",
+    "minecraft:suspicious_gravel",
+    {
+      "id": "#c:dirts",
+      "required": false
+    },
+    {
+      "id": "#c:end_stones",
+      "required": false
+    },
+    {
+      "id": "#c:gravels",
+      "required": false
+    },
+    {
+      "id": "#c:sands",
+      "required": false
+    },
+    {
+      "id": "#c:stones",
+      "required": false
+    }
+  ]
+}

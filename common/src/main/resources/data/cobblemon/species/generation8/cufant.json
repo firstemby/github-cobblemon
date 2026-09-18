@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "sheerforce",
+    "sheerforce",
     "h:heavymetal"
   ],
   "eggGroups": [
@@ -205,5 +206,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "rocky",
+    "sandy"
   ]
 }

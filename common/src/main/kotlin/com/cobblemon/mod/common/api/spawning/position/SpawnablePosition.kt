@@ -76,7 +76,7 @@ abstract class SpawnablePosition {
     abstract val skyLight: Int
     /** Whether or not the sky is visible at this location. */
     abstract val canSeeSky: Boolean
-    /** A list of [SpawningInfluence]s that apply due to this specific position. This generally shouldn't be consumed; use [getAllInfluences].*/
+    /** A list of [SpawningInfluence]s that apply due to this specific position.*/
     abstract val influences: MutableList<SpawningInfluence>
     /** Gets a cache of structures by block coordinates, grouped by chunk. */
     abstract fun getStructureCache(pos: BlockPos): StructureChunkCache
@@ -192,7 +192,7 @@ abstract class SpawnablePosition {
     /**
      * Gets all influences that apply to this spawnable position, including the cause, and does something with them.
      *
-     * Technically we could simple make a list of influences + cause and run that, but influences MUST be able
+     * Technically we could simply make a list of influences + cause and run that, but influences MUST be able
      * to run extremely frequently in performance-critical code, so we don't want to have to allocate a list.
      */
     fun applyInfluences(extraInfluences: List<SpawningInfluence>? = null, usage: (SpawningInfluence) -> Unit) {

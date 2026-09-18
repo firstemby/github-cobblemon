@@ -72,13 +72,22 @@
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
-      "condition": "!q.in_air",
+      "condition": "!q.in_air && !q.is_dancing",
       "animations": [
         "q.look('head')",
         "q.bedrock('rhyperior', 'ground_idle')"
       ],
       "quirks": [
         "q.bedrock_quirk('rhyperior', 'blink')"
+      ]
+    },
+    "dancing": {
+      "poseTypes": ["STAND"],
+      "isBattle": false,
+      "condition": "!q.in_air && q.is_dancing",
+      "animations": [
+        "q.bedrock('rhyperior', 'ground_idle')",
+        "q.bedrock('rhyperior', 'dance')"
       ]
     },
     "walking": {

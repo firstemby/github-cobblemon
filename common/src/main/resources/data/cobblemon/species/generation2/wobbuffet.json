@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "shadowtag",
+    "shadowtag",
     "h:telepathy"
   ],
   "eggGroups": [
@@ -107,5 +108,9 @@
     "special:tickle"
   ],
   "preEvolution": "wynaut",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

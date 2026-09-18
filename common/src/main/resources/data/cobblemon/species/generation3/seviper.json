@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "shedskin",
+    "shedskin",
     "h:infiltrator"
   ],
   "eggGroups": [
@@ -265,5 +266,8 @@
     "legacy:snore",
     "legacy:swift"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

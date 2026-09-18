@@ -1,0 +1,234 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.ai.biggerbrain.objective
+
+import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
+import com.cobblemon.mod.common.api.ai.asVariables
+import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.biggerbrain.LookingTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.idleBoredomDistraction
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
+import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.mainThreadRuntime
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.withQueryValue
+import com.mojang.datafixers.util.Either
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.PathfinderMob
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
+import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.world.entity.item.ItemEntity
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.GameRules
+import kotlin.math.ceil
+import kotlin.math.min
+
+/**
+ * Paths to whatever item entity is marked by NEAREST_VISIBLE_WANTED_ITEM
+ * Upon reaching the target attempts to place it in held item slot
+ * held item slot if possible.
+ * Requires NEARBY_SWEET_BERRY_BUSH memory
+ *
+ * @author JazzMcNade
+ * @since February 8th, 2026
+ */
+class PickupItem(
+    val ticksBetweenAttempts: Int = 60,
+    val maxDistance: Expression = "14.0".asExpression(),
+    val speedMultiplier: Expression = "0.4".asExpression(),
+    val maxReach: Expression = "1.0".asExpression(),
+) : Objective {
+    var collectItemTask: EntityFixation? = null
+    var remainingCooldownTicks = ticksBetweenAttempts
+
+    override fun getDescription(entity: LivingEntity) = "Pickup item"
+    override fun perform(
+        entity: LivingEntity,
+        brain: BiggerBrain,
+        activeObjectiveTags: MutableSet<String>
+    ): ObjectiveStatus {
+        if (entity !is PokemonEntity) {
+            return ObjectiveStatus.INVALID
+        } else if (brain.isFixation(collectItemTask)) {
+            remainingCooldownTicks = ticksBetweenAttempts
+            return ObjectiveStatus.FIXATED
+        }
+
+        val itemEntity = entity.biggerBrain.getMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM) ?: return ObjectiveStatus.INACTIVE
+
+        if (remainingCooldownTicks > 0) {
+            remainingCooldownTicks--
+            return ObjectiveStatus.ACTIVE
+        }
+
+        mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
+        val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
+
+        // See if the item can be picked up without needing to path to it
+        val success = tryPickupItem(entity, itemEntity)
+
+        if (!success) {
+            // Item is too far away, need to path to it
+            if (remainingCooldownTicks <= 0 && brain.distract(idleBoredomDistraction)) {
+                remainingCooldownTicks = ticksBetweenAttempts
+                val horizontalHitboxRadius = maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
+                val movementTracker = RegularMovementTracker.attempt(
+                    entity = entity,
+                    walkTarget = WalkTarget(
+                        itemEntity,
+                        speedMultiplier,
+                        min(ceil(horizontalHitboxRadius).toInt() - 1, 1),
+                    )
+                )
+
+                if (movementTracker != null) {
+                    val lookingTracker = LookingTracker(entity = entity, lookTarget = movementTracker.walkTarget.target)
+                    collectItemTask = brain.fixate(
+                        fixation = PickupItemFixation(
+                            objective = this,
+                            itemEntity = itemEntity,
+                            movementTracker = movementTracker,
+                            lookingTracker = lookingTracker,
+                        )
+                    )
+                }
+            }
+        } else {
+            remainingCooldownTicks = ticksBetweenAttempts
+        }
+        return ObjectiveStatus.ACTIVE
+    }
+
+    fun tryPickupItem(entity: PokemonEntity, itemEntity: ItemEntity) : Boolean {
+        val maxReach = mainThreadRuntime.resolveDouble(maxReach) + maxOf(entity.boundingBox.xsize, entity.boundingBox.zsize) / 2
+        if (itemEntity.distanceTo(entity) > maxReach || !entity.hasLineOfSight(itemEntity)) {
+            return false
+        }
+
+        entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
+        entity.take(itemEntity, 1) // This creates the effect of the item going into the entity along with the item pickup sound
+        val stack = entity.pokemon.swapHeldItem(itemEntity.item)
+        if (!stack.isEmpty && !entity.level().isClientSide) {
+            dropItem(entity, stack)
+        }
+        return true
+    }
+
+    class PickupItemFixation(
+        val objective: PickupItem,
+        val itemEntity: ItemEntity,
+        override val movementTracker: MovementTracker,
+        override val lookingTracker : LookingTracker,
+    ): EntityFixation, MovementTrackerFixation, LookingTrackerFixation {
+
+        override fun getDescription(entity: LivingEntity) = "Moving to desired item"
+        override fun canDistract(distraction: Distraction, entity: LivingEntity): Boolean {
+            return distraction.isDamage || distraction.isForce || (movementTracker.lastStatus == MovementStatus.COMPLETED && entity.brain.getMemorySafely(
+                CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).orElse(null) != null)
+        }
+
+        override fun onDistract(distraction: Distraction, entity: LivingEntity) {
+            movementTracker.stop()
+        }
+
+        override fun tick(entity: LivingEntity, brain: BiggerBrain): Boolean {
+            lookingTracker.tick()
+            movementTracker.tick()
+
+            if (movementTracker.lastStatus == MovementStatus.COMPLETED || movementTracker.lastStatus == MovementStatus.FAILED) {
+                // May have failed but let's check if we're still close enoug to grab it
+                val world = entity.level()
+
+                if (entity !is PokemonEntity) return false
+
+                if (!world.gameRules.getRule(GameRules.RULE_MOBGRIEFING).get()) {
+                    // Not allowed to alter the world
+                    return false
+                }
+                if (!itemEntity.isAlive || !entity.pokemon.canDropHeldItem) {
+                    return false
+                }
+
+                val succeeded = objective.tryPickupItem(entity, itemEntity)
+
+                if (!succeeded && movementTracker.lastStatus == MovementStatus.FAILED) {
+                    // Cannot reach, give up for a while
+                    entity.brain.setMemoryWithExpiry(CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM, true, 200)
+                    entity.brain.eraseMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
+                }
+                return false
+            }
+            return true
+        }
+
+    }
+
+
+    class Config : ObjectiveConfig {
+        val ticksBetweenAttempts: ExpressionOrEntityVariable = Either.left("60".asExpression())
+        val maxDistance: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(
+            ticksBetweenAttempts,
+            maxDistance,
+            speedMultiplier
+        ).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
+            val ticksBetweenAttempts = ticksBetweenAttempts.resolveInt(behaviourConfigurationContext.runtime)
+            return PickupItem(
+                ticksBetweenAttempts = ticksBetweenAttempts,
+                maxDistance = maxDistance.asSimplifiedExpression(entity),
+                speedMultiplier = speedMultiplier.asSimplifiedExpression(entity)
+            )
+        }
+    }
+
+    companion object {
+        fun dropItem(entity: Entity, stack: ItemStack) {
+            val itemEntity = ItemEntity(
+                entity.level(),
+                entity.x + entity.lookAngle.x,
+                entity.y + 1.0,
+                entity.z + entity.lookAngle.z,
+                stack
+            )
+            itemEntity.setPickUpDelay(40)
+            itemEntity.setThrower(entity)
+            entity.playSound(SoundEvents.FOX_SPIT, 1.0f, 1.0f) // TODO: customize this sound?
+            entity.level().addFreshEntity(itemEntity)
+        }
+    }
+
+
+
+    }

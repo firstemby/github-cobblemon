@@ -17,6 +17,7 @@
   "aspects": [],
   "abilities": [
     "suctioncups",
+    "suctioncups",
     "h:stormdrain"
   ],
   "eggGroups": [
@@ -213,5 +214,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "lileep",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

@@ -114,6 +114,7 @@ object CobblemonItemTags {
     @JvmField val ZINC_INGREDIENTS = create("zinc_ingredients")
 
     // Held Item Tags
+    @JvmField val DEFAULTING_POKE_BALLS = create("defaulting_poke_balls")
     @JvmField val CONSUMED_IN_NPC_BATTLE = create("held/consumed_in_npc_battle")
     @JvmField val CONSUMED_IN_PVP_BATTLE = create("held/consumed_in_pvp_battle")
     @JvmField val CONSUMED_IN_WILD_BATTLE = create("held/consumed_in_wild_battle")

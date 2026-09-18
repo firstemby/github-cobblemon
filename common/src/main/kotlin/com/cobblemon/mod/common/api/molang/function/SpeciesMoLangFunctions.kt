@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.molang.function
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.asArrayValue
 
@@ -33,6 +34,11 @@ object SpeciesMoLangFunctions : AbstractMoLangFunctionHolder<Species>() {
         functions["catch_rate"] = { DoubleValue(species.catchRate) }
         functions["labels"] = { species.labels.asArrayValue { StringValue(it) } }
         functions["has_label"] = { params -> DoubleValue(species.labels.contains(params.getString(0))) }
+        functions["has_feature"] = { params ->
+            val targetFeature = SpeciesFeatures.getFeature(params.getString(0))
+            val speciesFeatures = SpeciesFeatures.getFeaturesFor(species)
+            DoubleValue(targetFeature != null && targetFeature in speciesFeatures)
+        }
 
         return functions
     }

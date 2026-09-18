@@ -231,6 +231,7 @@
       ],
       "abilities": [
         "aerilate",
+        "aerilate",
         "h:aerilate"
       ],
       "baseStats": {
@@ -269,7 +270,15 @@
         "herd": {
           "maxSize": 4
         }
-      }
+      },
+      "nestTypes": [
+        "grassy",
+        "shroomy"
+      ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "shroomy"
   ]
 }

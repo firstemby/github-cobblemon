@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "static",
+    "static",
     "h:lightningrod"
   ],
   "eggGroups": [
@@ -426,5 +427,9 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
   ]
 }

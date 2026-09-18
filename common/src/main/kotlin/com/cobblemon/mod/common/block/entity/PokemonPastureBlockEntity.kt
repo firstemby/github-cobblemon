@@ -30,7 +30,7 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.server
 import com.cobblemon.mod.common.util.toVec3d
-import java.util.*
+import java.util.UUID
 import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -102,6 +102,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             blockEntity.ticksUntilCheck--
             if (blockEntity.ticksUntilCheck <= 0) {
                 blockEntity.checkPokemon()
+                //blockEntity.tryBreed()
             }
 
             // for every tethered Pokémon, tick metabolism and interaction cooldown if fullness or cooldown is above 0
@@ -111,12 +112,11 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 if (pokemon.currentFullness > 0) {
                     pokemon.tickMetabolism(1)
                 }
-                if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown(1)
-                }
+                pokemon.tickInteractionCooldown(1)
             }
             blockEntity.togglePastureOn(blockEntity.getInRangeViewerCount(world, blockEntity.blockPos) > 0)
         }
+        val DITTO_DEX_NUM = 132
     }
 
     var ticksUntilCheck = Cobblemon.config.pastureBlockUpdateTicks
@@ -125,6 +125,11 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
     var maxRoamPos: BlockPos
     var ownerId: UUID? = null
     var ownerName: String = ""
+    //Maps a male pokemon to all of the female pokemon it can breed with
+    //val breedingSets: MutableMap<Tethering, MutableSet<Tethering>> = mutableMapOf()
+    //Basically here to decide whether to calc all breeding sets when updating the block entity
+    //We add breeding sets when pokemon are tethered but we need to calc them on world load too,
+    var initializedBreedingSets = false
 
     init {
         val radius = Cobblemon.config.pastureMaxWanderDistance
@@ -194,6 +199,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                         entityId = entity.id,
                         pasturePos = blockPos
                     )
+                    //calcBreedingSets(tethering)
                     pokemon.tetheringId = tethering.tetheringId
                     tetheredPokemon.add(tethering)
                     entity.tethering = tethering
@@ -303,6 +309,188 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         setChanged()
     }
 
+    // todo the pasture block no longer tracks nests and is in control of breeding. it is all brains now
+    /*//Dear god this method needs to be cleaned up
+    fun tryBreed() {
+        val bredPokemon = mutableSetOf<Pokemon>()
+        //We should probably find a way to minimize how often this gets called
+        //Maybe cache the result and update it infrequently?
+        val nests = findUnusedNests()
+        if (nests.isNotEmpty()) {
+            breedingSets.forEach { father, mothers ->
+                if (father.getPokemon()?.breedingCooldown == 0) {
+                    mothers.forEach { mother ->
+                        if (mother.getPokemon()?.breedingCooldown == 0) {
+                            val motherPoke = mother.getPokemon()!!
+                            val fatherPoke = father.getPokemon()!!
+                            if (BreedingLogicManager.canBreed(motherPoke, fatherPoke) && nests.isNotEmpty()) {
+                                val breedResult = BreedingLogicManager.breed(motherPoke, fatherPoke)
+
+                                if (breedResult.successful) {
+                                    // add cooldown to the parents
+                                    motherPoke.breedingCooldown = 240
+
+                                    // Add heart particles <3 <3 <3
+                                    val fatherPokemon = father.getPokemon()?.entity
+                                    val motherPokemon = mother.getPokemon()?.entity
+
+                                    if (fatherPokemon != null && motherPokemon != null) {
+                                        // Spawn heart particles for father
+                                        (level as net.minecraft.server.level.ServerLevel).sendParticles(
+                                            net.minecraft.core.particles.ParticleTypes.HEART,
+                                            fatherPokemon.getRandomX(1.0), // Particle X position with slight randomness
+                                            fatherPokemon.getRandomY() + 0.5, // Slightly raised Y position
+                                            fatherPokemon.getRandomZ(1.0), // Particle Z position with slight randomness
+                                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                                            0.2 * fatherPokemon.random.nextGaussian(), // X velocity with slight variance
+                                            0.1 * fatherPokemon.random.nextGaussian(), // Y velocity with upwards variance
+                                            0.2 * fatherPokemon.random.nextGaussian(), // Z velocity with slight variance
+                                            0.02 // Particle speed
+                                        )
+
+                                        // Spawn heart particles for mother
+                                        (level as net.minecraft.server.level.ServerLevel).sendParticles(
+                                            net.minecraft.core.particles.ParticleTypes.HEART,
+                                            motherPokemon.getRandomX(1.0), // Particle X position with slight randomness
+                                            motherPokemon.getRandomY() + 0.5, // Slightly raised Y position
+                                            motherPokemon.getRandomZ(1.0), // Particle Z position with slight randomness
+                                            4 + kotlin.random.Random.nextInt(2), // Particle count
+                                            0.2 * motherPokemon.random.nextGaussian(), // X velocity with slight variance
+                                            0.1 * motherPokemon.random.nextGaussian(), // Y velocity with upwards variance
+                                            0.2 * motherPokemon.random.nextGaussian(), // Z velocity with slight variance
+                                            0.02 // Particle speed
+                                        )
+                                    }
+
+
+                                    println(breedResult.pokemon)
+                                    val nestTaken = nests.random()
+                                    val nestStal = level?.getBlockState(nestTaken)
+                                    val blockEntity = level?.getBlockEntity(nestTaken) as? NestBlockEntity
+                                    val avgEggCycle = (motherPoke.species.eggCycles + fatherPoke.species.eggCycles) / 2
+                                    if (blockEntity != null && breedResult.pokemon != null) {
+                                        val egg = Egg(
+                                            species = breedResult.pokemon!!.species.resourceIdentifier, // Species
+                                            parentOne = motherPoke, // Mother UUID
+                                            parentTwo = fatherPoke, // Father UUID
+                                            form = breedResult.pokemon.formData.name.lowercase(),
+                                            timeToHatch = 100F //breedResult.timeToHatch.toFloat() // 10 seconds hatch time
+                                        )
+
+                                        //Most params here need to be gotten from the form when implemented properly
+                                        blockEntity.setItem(egg.createEggItemStack())
+
+                                        val isClientSide = this.level?.isClientSide ?: false
+                                        if (isClientSide) {
+                                            //println("PokemonPastureBlockEntity: Running on the CLIENT side.")
+                                        } else {
+                                            //println("PokemonPastureBlockEntity: Running on the SERVER side.")
+                                        }
+
+                                        //println("Egg set in NestBlockEntity at ${nestTaken}: ${blockEntity.getEgg()!!.species}")
+
+                                        level?.getBlockState(nestTaken)?.let { level?.sendBlockUpdated(nestTaken, it, level?.getBlockState(nestTaken)!!, Block.UPDATE_CLIENTS) }
+
+                                        // remove the nest used from the nest consideration pool
+                                        nests.remove(nestTaken)
+
+                                        bredPokemon.add(fatherPoke)
+                                        bredPokemon.add(motherPoke)
+
+                                        if (Cobblemon.config.canDestinyKnotBreak) {
+                                            if (fatherPokemon?.pokemon?.heldItem?.item == CobblemonItems.DESTINY_KNOT.asItem())
+                                                fatherPokemon.pokemon.heldItemNoCopy().damageValue += 1
+
+                                            if (motherPokemon?.pokemon?.heldItem?.item == CobblemonItems.DESTINY_KNOT.asItem())
+                                                motherPokemon.pokemon.heldItemNoCopy().damageValue += 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                bredPokemon.forEach {
+                    it.breedingCooldown = 20 // todo remove this when pasture doesn't do this anymore
+                }
+            }
+        }
+
+    }
+
+    //If new mon is passed, only calc/add breeding sets with that parent
+    //Otherwise, find all combos in the block (like on world load)
+    fun calcBreedingSets(newMon: Tethering? = null) {
+        initializedBreedingSets = true
+        if (newMon != null) {
+            for (t in tetheredPokemon) {
+                addIfBreedingPair(newMon, t)
+            }
+        }
+        else {
+            tetheredPokemon.forEachIndexed { i, mon ->
+                val listLen = tetheredPokemon.size
+                if (i != listLen - 1) {
+                    tetheredPokemon.subList(i + 1, listLen).forEach {
+                        addIfBreedingPair(mon, it)
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    fun addIfBreedingPair(monOne: Tethering, monTwo: Tethering) {
+        val pokemonOne = monOne.getPokemon()
+        val pokemonTwo = monTwo.getPokemon()
+
+        if (pokemonOne == null || pokemonTwo == null) {
+            return // Skip if either Pokémon is null
+        }
+
+        // Ensure distinct Pokémon
+        if (pokemonOne.uuid == pokemonTwo.uuid) {
+            return // Skip if the Pokémon have the same UUID
+        }
+
+        // Determine mother and father based on gender or if Ditto is involved
+        val mother = if (pokemonOne.gender == Gender.FEMALE || pokemonOne.species.nationalPokedexNumber == DITTO_DEX_NUM) monOne else monTwo
+        val father = if (mother == monOne) monTwo else monOne
+
+        // Ensure they can breed
+        if (SimpleBreedingLogic.canBreed(mother.getPokemon()!!, father.getPokemon()!!)) {
+            val fatherSet: MutableSet<Tethering> = breedingSets.getOrDefault(father, mutableSetOf())
+            fatherSet.add(mother)
+            breedingSets[father] = fatherSet
+        }
+    }
+
+
+    fun findUnusedNests(): MutableSet<BlockPos> {
+        val res = mutableSetOf<BlockPos>()
+        val cube = Shapes.box(
+            (this.blockPos.x - 2).toDouble(), (this.blockPos.y - 1).toDouble(), (this.blockPos.z - 2).toDouble(),
+            (this.blockPos.x + 3).toDouble(), (this.blockPos.y + 3).toDouble(), (this.blockPos.z + 3).toDouble()
+        )
+        cube.blockPositionsAsList().forEach {
+            val state = level?.getBlockState(it)
+            if (state?.block is NestBlock) {
+                val entity = level?.getBlockEntity(it) as NestBlockEntity
+                //Cobblemon.LOGGER.warn("Nest at ${it.toString()}")
+                if (entity.getItem().item != CobblemonItems.POKEMON_EGG.asItem()) {
+                    res.add(it)
+                }
+                else
+                {
+                    //Cobblemon.LOGGER.warn("Nest with egg at ${it.toString()}")
+                }
+
+            }
+        }
+        return res
+    }*/
+
     fun onBroken() {
         if (level is ServerLevel) {
             tetheredPokemon.toList().forEach { releasePokemon(it.pokemonId) }
@@ -314,6 +502,11 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         val tethering = tetheredPokemon.find { it.pokemonId == pokemonId } ?: return
         tethering.getPokemon()?.tetheringId = null
         tetheredPokemon.remove(tethering)
+
+        // Recalculate breeding sets after removal
+        //breedingSets.clear()
+        //tetheredPokemon.forEach { calcBreedingSets(it) }
+
         setChanged()
     }
 
@@ -324,9 +517,15 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             tetheredPokemon.remove(it)
             unpastured.add(it.pokemonId)
         }
+
+        // Recalculate breeding sets after all removals
+        //breedingSets.clear()
+        //tetheredPokemon.forEach { calcBreedingSets(it) }
+
         setChanged()
         return unpastured
     }
+
 
     private fun getInRangeViewerCount(world: Level, pos: BlockPos, range: Double = 5.0): Int {
         val box = AABB(
@@ -376,6 +575,9 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
         }
         this.minRoamPos = NbtUtils.readBlockPos(nbt, DataKeys.TETHER_MIN_ROAM_POS).get()
         this.maxRoamPos = NbtUtils.readBlockPos(nbt, DataKeys.TETHER_MAX_ROAM_POS).get()
+        /*if (!initializedBreedingSets) {
+            calcBreedingSets()
+        }*/
     }
 
     override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {

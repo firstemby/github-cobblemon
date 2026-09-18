@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "compoundeyes",
+    "compoundeyes",
     "h:tintedlens"
   ],
   "eggGroups": [
@@ -276,5 +277,8 @@
     "behaviour": {
       "key": "cobblemon:air/glider"
     }
-  }
+  },
+  "nestTypes": [
+    "grassy"
+  ]
 }

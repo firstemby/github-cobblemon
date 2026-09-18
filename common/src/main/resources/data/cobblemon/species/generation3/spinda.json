@@ -231,5 +231,9 @@
     "legacy:toxic",
     "special:sing"
   ],
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "rocky"
+  ]
 }

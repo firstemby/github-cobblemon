@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "truant",
+    "truant",
     "h:truant"
   ],
   "eggGroups": [
@@ -307,5 +308,9 @@
     "legacy:waterpulse"
   ],
   "preEvolution": "vigoroth",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

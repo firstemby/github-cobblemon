@@ -1,0 +1,10 @@
+{
+  "name": "Sky Uppercut",
+  "type": "raycast",
+  "priority": 0,
+  "power": 30,
+  "cooldownTicks": 100,
+  "minRange": 0.0,
+  "maxRange": 0.5,
+  "effect": "q.target.knockback()"
+}

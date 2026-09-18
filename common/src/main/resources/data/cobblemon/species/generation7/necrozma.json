@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "prismarmor",
+    "prismarmor",
     "h:prismarmor"
   ],
   "eggGroups": [
@@ -597,6 +598,7 @@
         "ultra-fusion"
       ],
       "abilities": [
+        "neuroforce",
         "neuroforce",
         "h:neuroforce"
       ],

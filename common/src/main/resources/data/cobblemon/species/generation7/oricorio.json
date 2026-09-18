@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "dancer",
+    "dancer",
     "h:dancer"
   ],
   "eggGroups": [
@@ -204,7 +205,10 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     },
     {
       "name": "Pa'u",
@@ -250,7 +254,10 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     },
     {
       "name": "Sensu",
@@ -296,7 +303,10 @@
             }
           ]
         }
-      }
+      },
+      "nestTypes": [
+        "twiggy"
+      ]
     }
   ],
   "behaviour": {
@@ -327,5 +337,8 @@
       "willDefendOwner": true
     },
     "fireImmune": true
-  }
+  },
+  "nestTypes": [
+    "twiggy"
+  ]
 }

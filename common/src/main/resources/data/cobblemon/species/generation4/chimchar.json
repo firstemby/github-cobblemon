@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:ironfist"
   ],
   "eggGroups": [
@@ -265,5 +266,10 @@
   "lightingData": {
     "lightLevel": 11,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "rocky"
+  ]
 }

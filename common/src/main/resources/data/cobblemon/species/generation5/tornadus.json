@@ -17,6 +17,7 @@
   ],
   "abilities": [
     "prankster",
+    "prankster",
     "h:defiant"
   ],
   "eggGroups": [
@@ -176,6 +177,7 @@
         "therian-forme"
       ],
       "abilities": [
+        "regenerator",
         "regenerator",
         "h:regenerator"
       ],

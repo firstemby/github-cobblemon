@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "blaze",
+    "blaze",
     "h:flashfire"
   ],
   "eggGroups": [
@@ -301,5 +302,10 @@
         }
       ]
     }
+  ],
+  "nestTypes": [
+    "fiery",
+    "grassy",
+    "twiggy"
   ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "chlorophyll",
+    "chlorophyll",
     "h:gluttony"
   ],
   "eggGroups": [
@@ -221,5 +222,8 @@
     "special:teeterdance"
   ],
   "preEvolution": "weepinbell",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "grassy"
+  ]
 }

@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "myceliummight",
+    "myceliummight",
     "h:myceliummight"
   ],
   "eggGroups": [
@@ -184,5 +185,8 @@
     "tutor:swift"
   ],
   "preEvolution": "toedscool",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "shroomy"
+  ]
 }

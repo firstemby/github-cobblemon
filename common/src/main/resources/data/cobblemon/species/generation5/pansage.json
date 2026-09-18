@@ -15,6 +15,7 @@
   "aspects": [],
   "abilities": [
     "gluttony",
+    "gluttony",
     "h:overgrow"
   ],
   "eggGroups": [
@@ -257,5 +258,9 @@
     "combat": {
       "willDefendOwner": true
     }
-  }
+  },
+  "nestTypes": [
+    "grassy",
+    "twiggy"
+  ]
 }

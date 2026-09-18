@@ -218,5 +218,8 @@
     "legacy:toxic"
   ],
   "preEvolution": "seadra",
-  "evolutions": []
+  "evolutions": [],
+  "nestTypes": [
+    "watery"
+  ]
 }

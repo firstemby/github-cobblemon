@@ -16,6 +16,7 @@
   "aspects": [],
   "abilities": [
     "torrent",
+    "torrent",
     "h:shellarmor"
   ],
   "eggGroups": [
@@ -254,6 +255,7 @@
       ],
       "abilities": [
         "torrent",
+        "torrent",
         "h:sharpness"
       ],
       "baseStats": {
@@ -448,7 +450,15 @@
           "drowsyChance": 0.0333,
           "rouseChance": 0.0042
         }
-      }
+      },
+      "nestTypes": [
+        "rocky",
+        "watery"
+      ]
     }
+  ],
+  "nestTypes": [
+    "rocky",
+    "watery"
   ]
 }

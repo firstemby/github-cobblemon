@@ -68,6 +68,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
                 return false
             }
         }
+
         return true
     }
 
