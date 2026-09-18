@@ -37,7 +37,7 @@ interface Sense {
             cobblemonResource("ideal_nest_location_sensor") to IdealNestPlacementSense::class.java,
             cobblemonResource("pokemon_disturbance") to PokemonDisturbanceSense::class.java,
             cobblemonResource("hurt_by") to HurtBySense::class.java,
-            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java
+            cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java,
             cobblemonResource("jukebox_playing") to JukeboxSense::class.java,
             cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense::class.java,
             cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java,

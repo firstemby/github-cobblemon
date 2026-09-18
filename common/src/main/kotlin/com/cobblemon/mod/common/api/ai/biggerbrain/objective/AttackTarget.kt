@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.objective
 
 import com.bedrockk.molang.Expression
+import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asSimplifiedExpression
@@ -103,14 +104,12 @@ class AttackTarget(
         return ObjectiveStatus.ACTIVE
     }
 
-    override fun <T> onMemoryChanged(
-        entity: LivingEntity,
-        brain: BiggerBrain,
-        memory: MemoryModuleType<T>,
-        value: T?
-    ) {
-        if (memory == MemoryModuleType.ATTACK_TARGET && value == null) {
-            movementTask = null
+    override fun onRegister(entity: LivingEntity, brain: BiggerBrain) {
+        brain.subscribe(Priority.NORMAL, MemoryModuleType.ATTACK_TARGET) { value, _ ->
+            if (value == null) {
+                movementTask = null
+            }
+            true
         }
     }
 

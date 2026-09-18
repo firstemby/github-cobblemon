@@ -18,21 +18,26 @@ import com.cobblemon.mod.common.block.BerryBlock
 import com.cobblemon.mod.common.block.BigRootBlock
 import com.cobblemon.mod.common.block.CoinPouchBlock
 import com.cobblemon.mod.common.block.DamagedMonitorBlock
+import com.cobblemon.mod.common.block.DecorativeItemBlock
 import com.cobblemon.mod.common.block.DiscShelfBlock
 import com.cobblemon.mod.common.block.DisplayCaseBlock
 import com.cobblemon.mod.common.block.EggBlock
+import com.cobblemon.mod.common.block.EjectButtonBlock
 import com.cobblemon.mod.common.block.EnergyRootBlock
 import com.cobblemon.mod.common.block.FossilAnalyzerBlock
+import com.cobblemon.mod.common.block.GalaricaWreathBlock
 import com.cobblemon.mod.common.block.HealingMachineBlock
 import com.cobblemon.mod.common.block.HeartyGrainsBlock
 import com.cobblemon.mod.common.block.IncubatorBlock
 import com.cobblemon.mod.common.block.LecternBlock
+import com.cobblemon.mod.common.block.MagnetBlock
 import com.cobblemon.mod.common.block.MedicinalLeekBlock
 import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
 import com.cobblemon.mod.common.block.MonitorBlock
 import com.cobblemon.mod.common.block.NestBlock
 import com.cobblemon.mod.common.block.NutBushBlock
+import com.cobblemon.mod.common.block.OrbBlock
 import com.cobblemon.mod.common.block.PCBlock
 import com.cobblemon.mod.common.block.PastureBlock
 import com.cobblemon.mod.common.block.PlaqueBlock
@@ -667,7 +672,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val GALARICA_WREATH = create("galarica_wreath", GalaricaWreathBlock(BlockBehaviour.Properties.of().sound(SoundType.AZALEA_LEAVES).mapColor(MapColor.NONE).noOcclusion().noCollission()))
 
     @JvmField
-    val FLAME_ORB = create("flame_orb", OrbBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel{15}))
+    val FLAME_ORB = create("flame_orb",OrbBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion().lightLevel { 15 }))
     @JvmField
     val TOXIC_ORB = create("toxic_orb", OrbBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).mapColor(MapColor.NONE).noOcclusion()))
     @JvmField
