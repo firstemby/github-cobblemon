@@ -13,9 +13,45 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_the_recipe": {
+    "has_the_red_recipe": {
       "conditions": {
         "recipe": "cobblemon:gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_yellow_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:yellow_gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_green_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:green_gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_blue_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:blue_gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_pink_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:pink_gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_black_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:black_gilded_chest"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_the_white_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:white_gilded_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -23,12 +59,24 @@
   "requirements": [
     [
       "has_gold",
-      "has_the_recipe"
+      "has_the_red_recipe",
+      "has_the_yellow_recipe",
+      "has_the_green_recipe",
+      "has_the_blue_recipe",
+      "has_the_pink_recipe",
+      "has_the_black_recipe",
+      "has_the_white_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "cobblemon:gilded_chest"
+      "cobblemon:gilded_chest",
+      "cobblemon:yellow_gilded_chest",
+      "cobblemon:green_gilded_chest",
+      "cobblemon:blue_gilded_chest",
+      "cobblemon:pink_gilded_chest",
+      "cobblemon:black_gilded_chest",
+      "cobblemon:white_gilded_chest"
     ]
   }
 }

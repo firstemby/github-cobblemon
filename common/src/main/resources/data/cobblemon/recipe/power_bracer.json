@@ -1,5 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "ev_power_items",
     "pattern": [
         "MCD",
         "C C",

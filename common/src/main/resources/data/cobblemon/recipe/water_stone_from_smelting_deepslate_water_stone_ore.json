@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "water_stone",
     "ingredient": {
         "item": "cobblemon:deepslate_water_stone_ore"

@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "apricorn",
     "ingredient": {
         "item": "cobblemon:red_apricorn"

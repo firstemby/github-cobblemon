@@ -1,5 +1,6 @@
 {
     "type": "minecraft:blasting",
+    "category": "misc",
     "group": "sun_stone",
     "ingredient": {
         "item": "cobblemon:sun_stone_ore"

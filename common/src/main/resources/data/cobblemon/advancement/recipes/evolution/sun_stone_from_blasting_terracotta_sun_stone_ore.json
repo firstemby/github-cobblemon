@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/evolution",
+  "rewards": {
+    "recipes": [
+      "cobblemon:sun_stone_from_blasting_terracotta_sun_stone_ore"
+    ]
+  },
+  "criteria": {
+    "has_terracotta_sun_stone_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:terracotta_sun_stone_ore"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:sun_stone_from_blasting_terracotta_sun_stone_ore"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_terracotta_sun_stone_ore",
+      "has_the_recipe"
+    ]
+  ]
+}
