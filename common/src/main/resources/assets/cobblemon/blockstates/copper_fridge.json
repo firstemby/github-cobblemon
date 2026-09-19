@@ -1,32 +1,32 @@
 {
   "variants": {
-    "facing=east,part=bottom": {
+    "facing=east,half=lower": {
       "model": "cobblemon:block/copper_fridge_bottom",
       "y": 90
     },
-    "facing=north,part=bottom": {
+    "facing=north,half=lower": {
       "model": "cobblemon:block/copper_fridge_bottom"
     },
-    "facing=south,part=bottom": {
+    "facing=south,half=lower": {
       "model": "cobblemon:block/copper_fridge_bottom",
       "y": 180
     },
-    "facing=west,part=bottom": {
+    "facing=west,half=lower": {
       "model": "cobblemon:block/copper_fridge_bottom",
       "y": 270
     },
-    "facing=east,part=top": {
+    "facing=east,half=upper": {
       "model": "cobblemon:block/copper_fridge_top",
       "y": 90
     },
-    "facing=north,part=top": {
+    "facing=north,half=upper": {
       "model": "cobblemon:block/copper_fridge_top"
     },
-    "facing=south,part=top": {
+    "facing=south,half=upper": {
       "model": "cobblemon:block/copper_fridge_top",
       "y": 180
     },
-    "facing=west,part=top": {
+    "facing=west,half=upper": {
       "model": "cobblemon:block/copper_fridge_top",
       "y": 270
     }

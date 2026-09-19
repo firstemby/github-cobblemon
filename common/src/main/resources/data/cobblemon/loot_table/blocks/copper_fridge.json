@@ -13,7 +13,7 @@
               "condition": "minecraft:block_state_property",
               "block": "cobblemon:copper_fridge",
               "properties": {
-                "part": "bottom"
+                "half": "lower"
               }
             }
           ]

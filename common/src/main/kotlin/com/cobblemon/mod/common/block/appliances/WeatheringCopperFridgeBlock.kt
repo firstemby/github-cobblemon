@@ -13,12 +13,13 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.block.WeatheringCopper
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 
 class WeatheringCopperFridgeBlock(val weatherState: WeatheringCopper.WeatherState, properties: Properties) :
     CopperFridgeBlock(properties), WeatheringCopper {
 
     override fun randomTick(state: BlockState, level: ServerLevel?, pos: BlockPos?, random: RandomSource?) {
-        if (state.getValue(PART) == FridgeHalf.BOTTOM) {
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             this.changeOverTime(state, level, pos, random)
         }
     }
