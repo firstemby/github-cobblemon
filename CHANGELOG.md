@@ -38,6 +38,7 @@
 - Type Gem blocks now properly generate clusters off of the block.
 - Starter Screen Categories will no longer stop rendering if they are bigger than the viewport, and you are not viewing top or bottom edges 
 - Random Starter option now properly handled in height calculation, so now it won't run off into other categories or be un-accessible due to scroll limits if it causes a new row
+- Exeggcute now evolves into Alolan Exeggutor on the first Leaf Stone when in an Alolan biome, instead of requiring a second one
 
 ### Developer
 
