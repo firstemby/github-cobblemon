@@ -182,9 +182,7 @@ open class TemporaryForm (
     }
 
     fun revert(pokemon: Pokemon) {
-        if (toggleable) {
-            pokemon.form = parentForm
-        }
+        pokemon.form = parentForm
     }
 
     override fun convertToDisplay(pokemon: Pokemon): FormDisplay {

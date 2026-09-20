@@ -103,7 +103,7 @@ class FormChangeInstruction(val message: BattleMessage): ActionEffectInstruction
             val lang = when (formId) {
                 "busted", "hero", "complete" -> return@dispatchWaiting
                 "school", "wishiwashi", "meteor", "minior" -> battleLang("formechange.$formId", pokemonName)
-                speciesName -> battleLang("formechange.default.temporary.end", pokemonName)
+                speciesName -> battleLang("formechange.default.temporary.ended", pokemonName)
                 else -> battleLang("formechange.default.$typeKey", pokemonName, formId)
             }
             battle.sendSidedUpdate(

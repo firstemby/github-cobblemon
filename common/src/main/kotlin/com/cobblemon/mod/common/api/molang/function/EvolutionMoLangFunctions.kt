@@ -22,13 +22,11 @@ object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Transformation>()
         val evolution = this
         val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        functions["result"] = { evolution.result.asMoLangValue() }
         functions["is_optional"] = { DoubleValue(evolution.optional) }
-        functions["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
         functions["reevaluate"] = { DoubleValue(evolution.reevaluate) }
 
         if (evolution is Evolution) {
-            map["result"] = { evolution.result.asMoLangValue() }
+            functions["result"] = { evolution.result.asMoLangValue() }
             when (evolution.trigger) {
                 is LevelUpTrigger -> {
                     functions["is_level_up"] = { DoubleValue.ONE }

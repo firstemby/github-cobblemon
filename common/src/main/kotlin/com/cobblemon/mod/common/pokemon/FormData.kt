@@ -378,7 +378,11 @@ abstract class FormData(
      * @return The literal Showdown ID of this form only. If this is the [Species.standardForm], this will be an empty
      * string.
      */
-    fun formOnlyShowdownId(): String = if (this is TemporaryForm) this.parentForm.formOnlyShowdownId() + ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "") else ""
+    fun formOnlyShowdownId(): String = if (this is TemporaryForm) {
+        this.parentForm.formOnlyShowdownId() + ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+    } else if (this is PermanentForm && this !is StandardForm) {
+        ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+    } else ""
 
     // TODO - will including 'standard' cause breakage?
 

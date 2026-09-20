@@ -8,12 +8,12 @@
 
 package com.cobblemon.mod.common.pokemon.requirements
 
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class StatEqualRequirement : Requirement {
+class StatEqualRequirement : TransformationRequirement {
     companion object {
         const val ADAPTER_VARIANT = "stat_equal"
     }

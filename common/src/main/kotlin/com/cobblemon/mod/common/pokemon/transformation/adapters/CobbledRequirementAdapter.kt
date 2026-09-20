@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.api.pokemon.transformation.requirement.Transform
 import com.cobblemon.mod.common.pokemon.requirements.AdvancementRequirement
 import com.cobblemon.mod.common.pokemon.requirements.ChanceRequirement
 import com.cobblemon.mod.common.pokemon.requirements.OwnerHoldsItemRequirement
+import com.cobblemon.mod.common.pokemon.requirements.StatCompareRequirement
+import com.cobblemon.mod.common.pokemon.requirements.StatEqualRequirement
 import com.cobblemon.mod.common.pokemon.transformation.requirements.*
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
