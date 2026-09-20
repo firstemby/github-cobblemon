@@ -234,6 +234,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "bug",
       "secondaryType": "flying",
       "maleRatio": 0.5,

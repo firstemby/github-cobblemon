@@ -10,8 +10,8 @@ package com.cobblemon.mod.common.entity.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.entity.Despawner
-import net.minecraft.world.entity.Entity
 import com.cobblemon.mod.common.config.CobblemonConfig
+import net.minecraft.world.entity.Entity
 
 /**
  * The aging despawner applies strictly to mobs that can age. Its logic is relatively simple: the closer to

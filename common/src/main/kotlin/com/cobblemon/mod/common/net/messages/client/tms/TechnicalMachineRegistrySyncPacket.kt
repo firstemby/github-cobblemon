@@ -17,7 +17,6 @@ import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.net.messages.client.data.DataRegistrySyncPacket
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Ingredient
 
 class TechnicalMachineRegistrySyncPacket(tms: List<TechnicalMachine>) : DataRegistrySyncPacket<TechnicalMachine, TechnicalMachineRegistrySyncPacket>(tms) {

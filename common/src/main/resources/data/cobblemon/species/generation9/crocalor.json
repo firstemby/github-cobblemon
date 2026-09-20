@@ -165,9 +165,7 @@
   "evolutions": [
     {
       "id": "crocalor_skeledirge",
-      "variant": "level_up",
       "result": "skeledirge",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "torchsong"
       ],

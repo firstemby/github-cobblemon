@@ -30,13 +30,20 @@ import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.fishing.PokerodCastEvent
 import com.cobblemon.mod.common.api.events.fishing.PokerodReelEvent
-import com.cobblemon.mod.common.api.events.pokemon.*
+import com.cobblemon.mod.common.api.events.pokemon.CollectEggEvent
+import com.cobblemon.mod.common.api.events.pokemon.FossilRevivedEvent
+import com.cobblemon.mod.common.api.events.pokemon.HatchEggEvent
+import com.cobblemon.mod.common.api.events.pokemon.LevelUpEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
+import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
+import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import com.cobblemon.mod.common.api.events.storage.ReleasePokemonEvent
 import com.cobblemon.mod.common.api.stats.CobblemonStats.getStat
 import com.cobblemon.mod.common.util.getPlayer
+import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
-import java.util.*
 
 object StatHandler : EventHandler {
     override fun registerListeners() {

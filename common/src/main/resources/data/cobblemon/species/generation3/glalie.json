@@ -236,6 +236,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "ice",
       "maleRatio": 0.5,
       "height": 21,

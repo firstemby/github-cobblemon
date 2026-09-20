@@ -149,9 +149,7 @@
   "evolutions": [
     {
       "id": "grookey_thwackey",
-      "variant": "level_up",
       "result": "thwackey",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
       ],

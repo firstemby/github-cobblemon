@@ -8,10 +8,8 @@
 
 package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
-import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**

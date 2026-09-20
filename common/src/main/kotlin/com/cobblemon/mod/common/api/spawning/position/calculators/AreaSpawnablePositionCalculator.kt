@@ -10,9 +10,8 @@ package com.cobblemon.mod.common.api.spawning.position.calculators
 
 import com.cobblemon.mod.common.Cobblemon.config
 import com.cobblemon.mod.common.api.spawning.SpawningZone
-import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePosition
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
+import com.cobblemon.mod.common.api.spawning.position.AreaSpawnablePositionResolver
 import com.cobblemon.mod.common.api.spawning.spawner.Spawner
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState

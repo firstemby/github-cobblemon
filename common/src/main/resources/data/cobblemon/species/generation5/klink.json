@@ -187,9 +187,7 @@
   "evolutions": [
     {
       "id": "klink_klang",
-      "variant": "level_up",
       "result": "klang",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

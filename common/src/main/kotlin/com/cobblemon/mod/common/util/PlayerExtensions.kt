@@ -21,16 +21,22 @@ import com.cobblemon.mod.common.api.reactive.Observable.Companion.takeFirst
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawner
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.battles.TeamManager
-import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokedexItem
+import com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.trade.TradeManager
+import java.util.UUID
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -48,13 +54,8 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.HitResult
-import java.util.*
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.min
-import kotlin.math.sin
+import net.minecraft.world.phys.Vec3
 
 // Stuff like getting their party
 fun ServerPlayer.party() = Cobblemon.storage.getParty(this)
@@ -469,14 +470,17 @@ fun Player.dropFakeItem(stack: ItemStack): ItemEntity {
 }
 
 /** Retrieves the battle theme associated with this player, or the default PVP theme if null. */
-fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme ?: CobblemonSounds.PVP_BATTLE.location
+fun ServerPlayer.getBattleTheme() = Cobblemon.playerDataManager.getGenericData(this).battleTheme?.let { BuiltInRegistries.SOUND_EVENT.get(it) } ?: CobblemonSounds.PVP_BATTLE
+
+/** Checks if the player is preoccupied and cannot accept an action. */
+fun ServerPlayer.isBusy() = this.isInBattle() || this.isTrading()
 
 /** Checks if any [PokemonEntity]s belonging to a player's party has any busy locks. */
 fun Player.isPartyBusy() =
     if (this.level().isClientSide)
         CobblemonClient.storage.party.find { it?.entity?.isBusy == true } != null
     else
-        Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it?.entity?.isBusy == true } != null
+        Cobblemon.storage.getParty(this.uuid, this.registryAccess()).find { it.entity?.isBusy == true } != null
 
 fun Player.isUsingPokedex() = isUsingItem &&
     ((mainHandItem.item is PokedexItem && usedItemHand == InteractionHand.MAIN_HAND) ||

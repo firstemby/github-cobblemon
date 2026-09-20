@@ -1,0 +1,26 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["transformation"]
+    },
+    {
+      "type": "entity_particles",
+      "effect": "cobblemon:statdown_actor",
+      "delay": 0.1,
+      "locators": ["root"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.0
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["transformation"]
+    },
+    {
+      "type": "pause",
+      "pause": 2.0
+    }
+  ]
+}

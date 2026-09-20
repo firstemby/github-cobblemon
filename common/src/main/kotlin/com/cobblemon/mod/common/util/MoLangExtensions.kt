@@ -16,6 +16,7 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.ArrayStruct
 import com.bedrockk.molang.runtime.struct.ContextStruct
+import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
@@ -31,6 +32,7 @@ import com.cobblemon.mod.common.api.molang.SingleExpression
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
+import kotlin.reflect.KMutableProperty1
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
@@ -293,4 +295,78 @@ fun MoLangEnvironment.createDuplicateRuntime(): MoLangRuntime {
     val runtime = MoLangRuntime()
     runtime.environment.cloneFrom(this)
     return runtime
+}
+
+fun <T, S : QueryStruct> S.addMutableCollectionFunctions(
+    collection: MutableCollection<T>,
+    name: String,
+    plural: String = "${name}s",
+    parser: (MoValue) -> T?,
+    serializer: (T) -> MoValue
+): S {
+    functions["add_$name"] = java.util.function.Function { params ->
+        val value = parser(params.get(0))
+        if (value != null) {
+            collection.add(value)
+            DoubleValue.ONE
+        } else {
+            DoubleValue.ZERO
+        }
+    }
+    functions["remove_$name"] = java.util.function.Function { params ->
+        val value = parser(params.get(0))
+        if (value != null) {
+            collection.remove(value)
+            DoubleValue.ONE
+        } else {
+            DoubleValue.ZERO
+        }
+    }
+    functions[plural] = java.util.function.Function {
+        collection.asArrayValue(serializer)
+    }
+    return this
+}
+
+fun <T, S : QueryStruct> S.addReferentialGetterSetter(
+    getter: () -> T,
+    setter: (T) -> Unit,
+    name: String,
+    serializer: (T) -> MoValue,
+    deserializer: (MoValue) -> T?
+): S {
+    functions[name] = java.util.function.Function {
+        serializer(getter())
+    }
+    functions["set_$name"] = java.util.function.Function {
+        val value = deserializer(it.get(0))
+        if (value != null) {
+            setter(value)
+            DoubleValue.ONE
+        } else {
+            DoubleValue.ZERO
+        }
+    }
+    return this
+}
+
+fun <Owner, T> ObjectValue<Owner>.addReferentialGetterSetter(
+    property: KMutableProperty1<Owner, T>,
+    serializer: (T) -> MoValue,
+    deserializer: (MoValue) -> T?
+): ObjectValue<Owner> {
+    val name = property.name
+    functions[name] = java.util.function.Function {
+        serializer(property.get(obj))
+    }
+    functions["set_$name"] = java.util.function.Function {
+        val value = deserializer(it.get(0))
+        if (value != null) {
+            property.set(obj, value)
+            DoubleValue.ONE
+        } else {
+            DoubleValue.ZERO
+        }
+    }
+    return this
 }

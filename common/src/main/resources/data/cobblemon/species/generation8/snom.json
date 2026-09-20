@@ -127,9 +127,7 @@
   "evolutions": [
     {
       "id": "snom_frosmoth",
-      "variant": "level_up",
       "result": "frosmoth",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "icywind"
       ],

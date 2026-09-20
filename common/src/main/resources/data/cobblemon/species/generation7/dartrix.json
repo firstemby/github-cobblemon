@@ -222,9 +222,7 @@
   "evolutions": [
     {
       "id": "dartrix_decidueye",
-      "variant": "level_up",
       "result": "decidueye",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "spiritshackle"
       ],
@@ -237,9 +235,7 @@
     },
     {
       "id": "dartrix_decidueyehisui",
-      "variant": "level_up",
       "result": "decidueye hisuian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "triplearrows"
       ],
@@ -279,9 +275,7 @@
       "evolutions": [
         {
           "id": "dartrix_decidueye",
-          "variant": "level_up",
           "result": "decidueye",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "spiritshackle"
           ],
@@ -298,9 +292,7 @@
         },
         {
           "id": "dartrix_decidueyehisui",
-          "variant": "level_up",
           "result": "decidueye hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "triplearrows"
           ],

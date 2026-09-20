@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.mixin.invoker.ClientPlayNetworkHandlerInvoker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
-import net.minecraft.world.entity.Entity
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.protocol.PacketUtils
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
 abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {

@@ -135,18 +135,17 @@
   "evolutions": [
     {
       "id": "shelmet_accelgor",
-      "variant": "trade",
       "result": "accelgor",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "karrablast"
+      "trigger": {
+        "variant": "trade",
+        "requiredContext": "karrablast"
+      }
     },
     {
       "id": "shelmet_accelgor_item",
-      "variant": "item_interact",
       "result": "accelgor",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -155,7 +154,6 @@
           "contains": true
         }
       ],
-      "requiredContext": "cobblemon:link_cable",
       "drops": {
         "amount": 1,
         "entries": [
@@ -172,6 +170,10 @@
             ]
           }
         ]
+      },
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:link_cable"
       }
     }
   ],

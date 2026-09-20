@@ -10,8 +10,8 @@ package com.cobblemon.mod.common.net.messages.client.pokemon.update
 
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 
 /**
  * Packet sent to update the client's tetheringId for a Pokémon. Really only used to show in the PC appropriately.

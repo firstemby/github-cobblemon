@@ -112,9 +112,7 @@
   "evolutions": [
     {
       "id": "frigibax_arctibax",
-      "variant": "level_up",
       "result": "arctibax",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

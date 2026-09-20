@@ -113,9 +113,7 @@
   "evolutions": [
     {
       "id": "rellor_rabsca",
-      "variant": "level_up",
       "result": "rabsca",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "revivalblessing"
       ],

@@ -10,14 +10,14 @@ package com.cobblemon.mod.common.api.pokemon.status
 
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.VolatileStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.AttractStatus
+import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.BurnStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.FrozenStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.ParalysisStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.SleepStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
-import com.cobblemon.mod.common.pokemon.status.statuses.nonpersistent.AttractStatus
 import net.minecraft.resources.ResourceLocation
 
 /**

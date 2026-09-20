@@ -20,17 +20,23 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.types.ElementalTypes
-import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.ActiveBattlePokemon
+import com.cobblemon.mod.common.battles.BattleSide
+import com.cobblemon.mod.common.battles.InBattleMove
+import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.MoveTarget
+import com.cobblemon.mod.common.battles.PassActionResponse
+import com.cobblemon.mod.common.battles.ShowdownActionResponse
+import com.cobblemon.mod.common.battles.ShowdownMoveset
+import com.cobblemon.mod.common.battles.SwitchActionResponse
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.AIUtility
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.ActiveTracker
 import com.cobblemon.mod.common.battles.ai.strongBattleAI.TrackerPokemon
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.exception.IllegalActionChoiceException
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
-import kotlin.random.Random
-import kotlin.collections.associateWith
-import kotlin.collections.partition
 import kotlin.math.absoluteValue
+import kotlin.random.Random
 
 /**
  * AI that tries to choose the best move for the given situations. Based off of the Pokemon Trainer Tournament Simulator Github

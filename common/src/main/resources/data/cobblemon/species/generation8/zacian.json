@@ -190,6 +190,7 @@
   "forms": [
     {
       "name": "Crowned",
+      "variant": "temporary",
       "primaryType": "fairy",
       "secondaryType": "steel",
       "maleRatio": -1,

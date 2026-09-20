@@ -247,6 +247,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "fighting",
       "maleRatio": 0.875,

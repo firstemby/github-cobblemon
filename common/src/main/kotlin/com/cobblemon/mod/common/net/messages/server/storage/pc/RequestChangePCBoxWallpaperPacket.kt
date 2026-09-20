@@ -16,9 +16,9 @@ import com.cobblemon.mod.common.util.readSizedInt
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeSizedInt
 import com.cobblemon.mod.common.util.writeString
+import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import java.util.UUID
 
 class RequestChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: ResourceLocation, val altWallpaper: ResourceLocation?) : NetworkPacket<RequestChangePCBoxWallpaperPacket>, UnsplittablePacket {
 

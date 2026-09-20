@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.pokemon.ai.sensors
 
 import com.cobblemon.mod.common.CobblemonMemories
+import java.util.Optional
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -18,7 +19,6 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CaveVines
 import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.state.BlockState
-import java.util.*
 
 class SweetBerryBushSensor : Sensor<LivingEntity>(SCAN_INTERVAL) {
 

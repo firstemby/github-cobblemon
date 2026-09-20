@@ -164,6 +164,7 @@
   "evolutions": [],
   "forms": [
     {
+      "variant": "temporary",
       "name": "Sunshine",
       "primaryType": "grass",
       "maleRatio": 0.5,

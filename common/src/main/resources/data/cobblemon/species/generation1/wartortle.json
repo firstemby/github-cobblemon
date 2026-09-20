@@ -246,9 +246,7 @@
   "evolutions": [
     {
       "id": "wartortle_blastoise",
-      "variant": "level_up",
       "result": "blastoise",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "flashcannon"
       ],

@@ -236,9 +236,7 @@
   "evolutions": [
     {
       "id": "natu_xatu",
-      "variant": "level_up",
       "result": "xatu",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "airslash"
       ],

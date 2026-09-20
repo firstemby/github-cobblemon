@@ -214,9 +214,7 @@
   "evolutions": [
     {
       "id": "pineco_forretress",
-      "variant": "level_up",
       "result": "forretress",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "mirrorshot",
         "autotomize",

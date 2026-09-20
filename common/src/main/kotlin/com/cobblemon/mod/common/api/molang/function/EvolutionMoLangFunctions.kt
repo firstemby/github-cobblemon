@@ -11,31 +11,34 @@ package com.cobblemon.mod.common.api.molang.function
 import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
-import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
-import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
+import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
+import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
 
-object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Evolution>() {
-    override fun Evolution.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Transformation>() {
+    override fun Transformation.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val evolution = this
         val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        functions["result"] = { evolution.result.asMoLangValue() }
         functions["is_optional"] = { DoubleValue(evolution.optional) }
-        functions["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
+        functions["reevaluate"] = { DoubleValue(evolution.reevaluate) }
 
-        when (evolution) {
-            is LevelUpEvolution -> {
-                functions["is_level_up"] = { DoubleValue.ONE }
-            }
+        if (evolution is Evolution) {
+            functions["result"] = { evolution.result.asMoLangValue() }
+            when (evolution.trigger) {
+                is LevelUpTrigger -> {
+                    functions["is_level_up"] = { DoubleValue.ONE }
+                }
 
-            is TradeEvolution -> {
-                functions["is_trade"] = { DoubleValue.ONE }
-            }
+                is TradeTrigger -> {
+                    functions["is_trade"] = { DoubleValue.ONE }
+                }
 
-            is ItemInteractionEvolution -> {
-                functions["is_item"] = { DoubleValue.ONE }
+                is ItemInteractionTrigger -> {
+                    functions["is_item"] = { DoubleValue.ONE }
+                }
             }
         }
 

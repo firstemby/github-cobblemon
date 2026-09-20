@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.block.entity.CampfireBlockEntity
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipe
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
+import java.util.Optional
 import net.minecraft.recipebook.ServerPlaceRecipe
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
@@ -36,7 +37,6 @@ import net.minecraft.world.item.crafting.RecipeHolder
 import net.minecraft.world.item.crafting.RecipeManager
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
-import java.util.*
 
 class CookingPotMenu : RecipeBookMenu<CraftingInput, CookingPotRecipeBase>, ContainerListener {
     private val player: Player

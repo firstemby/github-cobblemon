@@ -218,9 +218,7 @@
   "evolutions": [
     {
       "id": "starly_staravia",
-      "variant": "level_up",
       "result": "staravia",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

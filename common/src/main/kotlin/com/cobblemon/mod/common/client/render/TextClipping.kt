@@ -8,6 +8,9 @@
 
 package com.cobblemon.mod.common.client.render
 
+import com.cobblemon.mod.common.client.render.TextClipping.doWithMaxCharacters
+
+
 /**
  * A utility class for limiting the number of characters that can be rendered by whatever draw operation
  * is about to occur.

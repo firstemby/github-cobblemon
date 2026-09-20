@@ -12,10 +12,14 @@ import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.net.serverhandling.block.TMMachineTeachMoveHandler
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readItemStack
+import com.cobblemon.mod.common.util.readString
+import com.cobblemon.mod.common.util.writeItemStack
+import com.cobblemon.mod.common.util.writeString
+import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
-import java.util.UUID
 
 /**
  * Handled by [TMMachineTeachMoveHandler].

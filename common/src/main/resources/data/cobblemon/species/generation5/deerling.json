@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "deerling_sawsbuck",
-      "variant": "level_up",
       "result": "sawsbuck",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "hornleech"
       ],
@@ -206,9 +204,7 @@
       "evolutions": [
         {
           "id": "deerling_sawsbuck",
-          "variant": "level_up",
           "result": "sawsbuck",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "hornleech"
           ],
@@ -241,9 +237,7 @@
       "evolutions": [
         {
           "id": "deerling_sawsbuck",
-          "variant": "level_up",
           "result": "sawsbuck",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "hornleech"
           ],
@@ -276,9 +270,7 @@
       "evolutions": [
         {
           "id": "deerling_sawsbuck",
-          "variant": "level_up",
           "result": "sawsbuck",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "hornleech"
           ],

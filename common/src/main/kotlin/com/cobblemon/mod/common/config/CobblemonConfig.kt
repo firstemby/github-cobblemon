@@ -21,9 +21,9 @@ import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
-import net.minecraft.resources.ResourceLocation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
+import net.minecraft.resources.ResourceLocation
 
 class CobblemonConfig {
     companion object {

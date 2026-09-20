@@ -181,9 +181,7 @@
   "evolutions": [
     {
       "id": "pichu_pikachu",
-      "variant": "level_up",
       "result": "pikachu",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -216,9 +214,7 @@
       "evolutions": [
         {
           "id": "pichu_pikachu",
-          "variant": "level_up",
           "result": "pikachu",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

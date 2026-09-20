@@ -185,9 +185,7 @@
   "evolutions": [
     {
       "id": "wattrel_kilowattrel",
-      "variant": "level_up",
       "result": "kilowattrel",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "electroball"
       ],

@@ -22,9 +22,9 @@ import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.net.messages.client.battle.BattleApplyPassResponsePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
+import java.util.UUID
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
 
 abstract class BattleActor(

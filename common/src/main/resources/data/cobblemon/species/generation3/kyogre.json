@@ -168,6 +168,7 @@
   "forms": [
     {
       "name": "Primal",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": -1,
       "height": 98,

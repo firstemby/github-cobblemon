@@ -219,9 +219,7 @@
   "evolutions": [
     {
       "id": "gabite_garchomp",
-      "variant": "level_up",
       "result": "garchomp",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "crunch"
       ],

@@ -11,8 +11,8 @@ package com.cobblemon.mod.common.api.spawning.rules.component
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.rules.selector.AllSpawnDetailSelector
 import com.cobblemon.mod.common.api.spawning.rules.selector.AllSpawnablePositionSelector
 import com.cobblemon.mod.common.api.spawning.rules.selector.SpawnDetailSelector

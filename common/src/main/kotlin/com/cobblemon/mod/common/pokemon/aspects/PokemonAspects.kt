@@ -8,18 +8,18 @@
 
 package com.cobblemon.mod.common.pokemon.aspects
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonCosmeticItems
-import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
 import com.cobblemon.mod.common.api.pokemon.aspect.SingleConditionalAspectProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Characteristic
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.getMemorySafely
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.server
 
 val SHINY_ASPECT = object : SingleConditionalAspectProvider {
@@ -39,6 +39,18 @@ val GENDER_ASPECT = object : AspectProvider {
 
     override fun provide(pokemon: Pokemon) = getAspectsForGender(pokemon.gender)
     override fun provide(properties: PokemonProperties) = properties.gender?.let { getAspectsForGender(it) } ?: emptySet()
+}
+
+/** [AspectProvider] for providing the aspects associated with a [Pokemon]'s active [FormData]. */
+val FORM_ASPECTS = object : AspectProvider {
+    override fun provide(pokemon: Pokemon): Set<String> = pokemon.form.aspects.toSet()
+
+    override fun provide(properties: PokemonProperties): Set<String> {
+        val formID = properties.form ?: return emptySet()
+        val speciesId = properties.species ?: return emptySet()
+        val form = PokemonSpecies.getByIdentifier(speciesId.asIdentifierDefaultingNamespace())?.getFormByShowdownId(formID) // TODO check by ID
+        return form?.aspects?.toSet() ?: emptySet()
+    }
 }
 
 val COSMETIC_SLOT_ASPECT = object : AspectProvider {
@@ -118,18 +130,18 @@ val CHARACTERISTIC_RAINBOW_ASPECT = object : AspectProvider {
                 -> "rainbow-green"
 
             (Stats.SPECIAL_DEFENCE to Stats.SPECIAL_ATTACK),
-            (Stats.SPECIAL_ATTACK to Stats.SPECIAL_DEFENCE) 
+            (Stats.SPECIAL_ATTACK to Stats.SPECIAL_DEFENCE)
                 -> "rainbow-cyan"
 
             (Stats.SPECIAL_ATTACK to Stats.SPECIAL_ATTACK),
             (Stats.SPECIAL_ATTACK to Stats.HP),
             (null to Stats.SPECIAL_ATTACK),
             (Stats.SPECIAL_DEFENCE to Stats.SPEED),
-            (Stats.SPEED to Stats.SPECIAL_DEFENCE) 
+            (Stats.SPEED to Stats.SPECIAL_DEFENCE)
                 -> "rainbow-blue"
 
             (Stats.SPECIAL_ATTACK to Stats.SPEED),
-            (Stats.SPEED to Stats.SPECIAL_ATTACK) 
+            (Stats.SPEED to Stats.SPECIAL_ATTACK)
                 -> "rainbow-purple"
 
             (Stats.SPEED to Stats.SPEED),
@@ -143,7 +155,7 @@ val CHARACTERISTIC_RAINBOW_ASPECT = object : AspectProvider {
             (Stats.ATTACK to Stats.SPEED),
                 -> "rainbow-pink"
 
-            (null to Stats.HP) 
+            (null to Stats.HP)
                 -> "rainbow-light-blue"
 
             else -> null

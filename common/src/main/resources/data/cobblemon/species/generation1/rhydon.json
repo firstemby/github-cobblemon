@@ -322,15 +322,18 @@
     {
       "consumeHeldItem": true,
       "id": "rhydon_rhyperior",
+      "result": "rhyperior",
       "learnableMoves": [],
       "requirements": [
         {
+          "variant": "held_item",
           "itemCondition": "cobblemon:protector",
-          "variant": "held_item"
+          "consumeHeldItem": true
         }
       ],
-      "result": "rhyperior",
-      "variant": "trade"
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

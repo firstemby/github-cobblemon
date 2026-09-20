@@ -232,21 +232,23 @@
   "evolutions": [
     {
       "id": "gligar_gliscor",
-      "variant": "level_up",
       "result": "gliscor",
-      "consumeHeldItem": true,
       "learnableMoves": [],
+      "trigger": {
+        "variant": "level_up"
+      },
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:razor_fang"
+          "itemCondition": "cobblemon:razor_fang",
+          "consumeHeldItem": false
         },
         {
           "variant": "time_range",
           "range": "night"
         }
       ],
-      "permanent": true,
+      "reevaluate": false,
       "drops": {
         "amount": 1,
         "entries": [

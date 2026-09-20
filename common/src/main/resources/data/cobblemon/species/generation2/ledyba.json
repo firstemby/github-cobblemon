@@ -207,9 +207,7 @@
   "evolutions": [
     {
       "id": "ledyba_ledian",
-      "variant": "level_up",
       "result": "ledian",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -54,9 +54,9 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleQueueRequestPacket
-import com.cobblemon.mod.common.pokemon.evolution.progress.DefeatEvolutionProgress
-import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress
-import com.cobblemon.mod.common.pokemon.requirements.DefeatRequirement
+import com.cobblemon.mod.common.pokemon.transformation.progress.DefeatTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.LastBattleCriticalHitsTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.DefeatRequirement
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.giveOrDropItemStack
@@ -97,8 +97,8 @@ open class PokemonBattle(
         this.actors.forEach { actor ->
             actor.battle = this
             actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.effectedPokemon.evolutionProxy.current().progress()
-                    .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
+                battlePokemon.effectedPokemon.requirementProgress
+                    .filterIsInstance<LastBattleCriticalHitsTransformationProgress>()
                     .forEach { it.reset() }
             }
         }
@@ -271,12 +271,13 @@ open class PokemonBattle(
                         val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
                         val pokemon = opponentPokemon.effectedPokemon
                         if (facedFainted) {
-                            pokemon.lockedEvolutions.forEach { evolution ->
-                                evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
-                                    if (defeatRequirement.target.matches(faintedPokemon.effectedPokemon)) {
-                                        val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DefeatEvolutionProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatEvolutionProgress() }
-                                        progress.updateProgress(DefeatEvolutionProgress.Progress(defeatRequirement.target, progress.currentProgress().amount + 1))
-                                    }
+                            if (pokemon.hasMatchingRequirement<DefeatRequirement>({ it.target.matches(faintedPokemon.effectedPokemon) })) {
+                                val requiredPokemonProperties = pokemon.getRelevantRequirements<DefeatRequirement> { it.target.matches(faintedPokemon.effectedPokemon) }
+                                    .map { it.target }
+                                    .distinctBy { it.asString() }
+                                for (props in requiredPokemonProperties) {
+                                    val progress = pokemon.progressFirstOrCreate({ it is DefeatTransformationProgress && it.currentProgress().target.asString().equals(props.asString(), ignoreCase = true) }, ::DefeatTransformationProgress)
+                                    progress.updateProgress(DefeatTransformationProgress.Progress(props.copy(), progress.currentProgress().amount + 1))
                                 }
                             }
                         }

@@ -43,7 +43,7 @@ class SpawnPokemonPacket(
     var speciesId: ResourceLocation,
     var gender: Gender,
     var shiny: Boolean,
-    var formName: String,
+    var formId: String,
     var aspects: Set<String>,
     var battleId: UUID?,
     var phasingTargetId: Int,
@@ -111,7 +111,7 @@ class SpawnPokemonPacket(
         buffer.writeIdentifier(this.speciesId)
         buffer.writeEnumConstant(this.gender)
         buffer.writeBoolean(this.shiny)
-        buffer.writeString(this.formName)
+        buffer.writeString(this.formId)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
         buffer.writeNullable(this.battleId) { pb, value -> pb.writeUUID(value) }
         buffer.writeInt(this.phasingTargetId)
@@ -159,7 +159,7 @@ class SpawnPokemonPacket(
             gender = this@SpawnPokemonPacket.gender
             shiny = this@SpawnPokemonPacket.shiny
             form =
-                this@SpawnPokemonPacket.formName.let { formName -> species.forms.find { it.formOnlyShowdownId() == formName } }
+                this@SpawnPokemonPacket.formId.let { formId -> species.forms.find { it.formOnlyShowdownId() == formId } }
                     ?: species.standardForm
             forcedAspects = this@SpawnPokemonPacket.aspects
             nickname = this@SpawnPokemonPacket.nickname
@@ -183,6 +183,7 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
         entity.entityData.set(PokemonEntity.IS_ALPHA, isAlpha)
+        entity.entityData.set(PokemonEntity.FORM, formId)
         entity.isSilent = silent
 
         entity.tickSpawned = this.tickSpawned

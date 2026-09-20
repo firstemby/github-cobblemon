@@ -11,9 +11,15 @@ package com.cobblemon.mod.fabric.data.generator.providers
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.TypeGemClusterBlock
+import java.util.concurrent.CompletableFuture
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider
-import net.minecraft.advancements.critereon.*
+import net.minecraft.advancements.critereon.EnchantmentPredicate
+import net.minecraft.advancements.critereon.ItemEnchantmentsPredicate
+import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.advancements.critereon.ItemSubPredicates
+import net.minecraft.advancements.critereon.MinMaxBounds
+import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.item.Item
@@ -32,7 +38,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePrope
 import net.minecraft.world.level.storage.loot.predicates.MatchTool
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
-import java.util.concurrent.CompletableFuture
 
 class TypeGemsLootTableProvider(
     dataOutput: FabricDataOutput,

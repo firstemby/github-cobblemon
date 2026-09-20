@@ -9,15 +9,15 @@
 package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.entity.OmniPathingEntity
+import java.util.Objects
+import java.util.function.Supplier
+import java.util.function.ToDoubleFunction
 import net.minecraft.core.BlockPos
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.util.GoalUtils
 import net.minecraft.world.entity.ai.util.RandomPos
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import java.util.function.Supplier
-import java.util.function.ToDoubleFunction
 
 /*
 *

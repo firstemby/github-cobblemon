@@ -13,7 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.util.asArrayValue
-import java.util.*
+import java.util.UUID
 
 object BattleMoLangFunctions : AbstractMoLangFunctionHolder<PokemonBattle>() {
     override fun PokemonBattle.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {

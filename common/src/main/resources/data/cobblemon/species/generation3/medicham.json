@@ -243,6 +243,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "fighting",
       "secondaryType": "psychic",
       "maleRatio": 0.5,

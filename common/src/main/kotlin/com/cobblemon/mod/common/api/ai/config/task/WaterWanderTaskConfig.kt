@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.datafixers.util.Either
+import kotlin.math.ceil
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
@@ -34,7 +35,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
-import kotlin.math.ceil
 
 class WaterWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "water_wanders", true).asExpressible()

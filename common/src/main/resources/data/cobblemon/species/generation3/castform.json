@@ -187,6 +187,7 @@
   "forms": [
     {
       "name": "Sunny",
+      "variant": "temporary",
       "primaryType": "fire",
       "maleRatio": 0.5,
       "height": 3,
@@ -246,6 +247,7 @@
     },
     {
       "name": "Rainy",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.5,
       "height": 3,
@@ -273,6 +275,7 @@
     },
     {
       "name": "Snowy",
+      "variant": "temporary",
       "primaryType": "ice",
       "maleRatio": 0.5,
       "height": 3,

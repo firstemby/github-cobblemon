@@ -231,6 +231,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         val trackedNickname =  mock?.nickname ?: entity.pokemon.nickname ?: Component.empty()
         val trackedAspects = mock?.aspects ?: entity.pokemon.aspects
         val trackedBall = mock?.pokeball ?: entity.pokemon.caughtBall.name.toString()
+        val trackedForm = mock?.form ?: entity.pokemon.form.formOnlyShowdownId()
         val trackedScaleModifier = mock?.scaleModifier ?: entity.pokemon.effectiveScale
 
         entity.ownerUUID = entity.pokemon.getOwnerUUID()
@@ -253,6 +254,8 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)
         entity.entityData.set(PokemonEntity.CAUGHT_BALL, trackedBall)
+        entity.entityData.set(PokemonEntity.FORM, trackedForm) // have this get form from aspects...?
+        entity.entityData.set(PokemonEntity.BUSY_LOCKED, entity.busyLocks.isNotEmpty())
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, trackedScaleModifier)
         if (entity.pokemon.rideStamina != entity.entityData.get(PokemonEntity.RIDE_STAMINA) && entity.passengers.isEmpty()) {
             entity.entityData.set(PokemonEntity.RIDE_STAMINA, entity.pokemon.rideStamina)
@@ -322,13 +325,19 @@ class PokemonServerDelegate : PokemonSideDelegate {
         }
 
         val battle = getBattle()
-        if (entity.ticksLived % 20 == 0 && battle != null) {
-            val activeBattlePokemon = battle
-                .activePokemon
-                .find { it.battlePokemon?.uuid == entity.pokemon.uuid }
+        if (entity.ticksLived % 20 == 0) {
+            if (battle != null) {
+                val activeBattlePokemon = battle
+                    .activePokemon
+                    .find { it.battlePokemon?.uuid == entity.pokemon.uuid }
 
-            if (activeBattlePokemon != null) {
-                activeBattlePokemon.position = entity.level() as ServerLevel to entity.position()
+                if (activeBattlePokemon != null) {
+                    activeBattlePokemon.position = entity.level() as ServerLevel to entity.position()
+                }
+            }
+            // reevaluate forms of wild pokemon
+            else if (entity.owner == null) {
+                entity.pokemon.formProxy.server().reevaluate()
             }
         }
 

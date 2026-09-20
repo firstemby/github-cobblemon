@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "chewtle_drednaw",
-      "variant": "level_up",
       "result": "drednaw",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "rocktomb"
       ],

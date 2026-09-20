@@ -15,9 +15,7 @@ import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.battles.model.actor.EntityBackedBattleActor
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
-import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 import com.cobblemon.mod.common.util.asArrayValue
 import net.minecraft.world.entity.LivingEntity
 

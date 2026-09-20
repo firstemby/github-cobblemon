@@ -187,12 +187,14 @@
   "evolutions": [
     {
       "id": "panpour_simipour",
-      "variant": "item_interact",
       "result": "simipour",
       "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:water_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:water_stone"
+      }
     }
   ],
   "behaviour": {

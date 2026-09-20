@@ -12,9 +12,7 @@
   "labels": [
     "gen7"
   ],
-  "aspects": [
-    "solo-form"
-  ],
+  "aspects": [],
   "abilities": [
     "schooling",
     "h:schooling"
@@ -221,6 +219,7 @@
   "forms": [
     {
       "name": "School",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.5,
       "height": 82,
@@ -232,7 +231,7 @@
         "gen7"
       ],
       "aspects": [
-        "school-form"
+        "schooling"
       ],
       "baseStats": {
         "hp": 45,
@@ -278,7 +277,19 @@
           "rouseChance": 0.0042
         }
       },
-      "evolutions": [],
+      "requirements": [
+        {
+          "variant": "level",
+          "minLevel": 20
+        },
+        {
+          "variant": "health",
+          "cutoff": 0.25
+        }
+      ],
+      "optional": true,
+      "reevaluate": true,
+      "toggleable": true,
       "battleOnly": true
     }
   ]

@@ -175,9 +175,7 @@
   "evolutions": [
     {
       "id": "nacli_naclstack",
-      "variant": "level_up",
       "result": "naclstack",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "saltcure"
       ],

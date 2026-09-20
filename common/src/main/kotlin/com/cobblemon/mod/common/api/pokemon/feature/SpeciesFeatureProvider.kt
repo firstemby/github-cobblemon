@@ -21,7 +21,7 @@ import net.minecraft.nbt.CompoundTag
  * @author Hiroku
  * @since November 29th, 2022
  */
-interface SpeciesFeatureProvider<T : SpeciesFeature> {
+interface SpeciesFeatureProvider<T : SpeciesFeature<*>> {
     /**
      * Attempts to create a species feature for the given [Pokemon]. It is appropriate to check for an existing feature
      * that is compatible with this type and transfer / retain that feature instead of constructing a new one. For example

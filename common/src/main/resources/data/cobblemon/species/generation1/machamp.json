@@ -220,6 +220,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "fighting",
       "maleRatio": 0.75,
       "height": 250,

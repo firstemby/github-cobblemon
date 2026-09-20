@@ -232,9 +232,7 @@
   "evolutions": [
     {
       "id": "solosis_duosion",
-      "variant": "level_up",
       "result": "duosion",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

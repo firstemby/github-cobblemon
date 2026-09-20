@@ -168,9 +168,7 @@
   "evolutions": [
     {
       "id": "arrokuda_barraskewda",
-      "variant": "level_up",
       "result": "barraskewda",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -229,6 +229,8 @@
     {
       "consumeHeldItem": false,
       "id": "amaura_aurorus",
+      "result": "aurorus",
+      "variant": "level_up",
       "learnableMoves": [
         "freezedry"
       ],
@@ -241,9 +243,7 @@
           "range": "night",
           "variant": "time_range"
         }
-      ],
-      "result": "aurorus",
-      "variant": "level_up"
+      ]
     }
   ]
 }

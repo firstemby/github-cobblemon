@@ -197,9 +197,7 @@
   "evolutions": [
     {
       "id": "mareanie_toxapex",
-      "variant": "level_up",
       "result": "toxapex",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "banefulbunker"
       ],

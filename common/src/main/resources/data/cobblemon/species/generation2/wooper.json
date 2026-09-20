@@ -239,9 +239,7 @@
   "evolutions": [
     {
       "id": "wooper_quagsire",
-      "variant": "level_up",
       "result": "quagsire",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -383,9 +381,7 @@
       "evolutions": [
         {
           "id": "wooper_clodsire",
-          "variant": "level_up",
           "result": "clodsire",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "amnesia"
           ],

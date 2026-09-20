@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.client.gui.toast
 
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
-import net.minecraft.client.Minecraft
 import java.util.UUID
+import net.minecraft.client.Minecraft
 
 object ToastTracker {
 

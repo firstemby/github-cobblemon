@@ -9,7 +9,13 @@
 package com.cobblemon.mod.common.client.keybind
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.client.keybind.keybinds.*
+import com.cobblemon.mod.common.client.keybind.keybinds.DebugKeybindings
+import com.cobblemon.mod.common.client.keybind.keybinds.DownShiftPartyBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.HidePartyBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.RidingFreelookBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.UpShiftPartyBinding
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import net.minecraft.client.KeyMapping
 

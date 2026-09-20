@@ -238,9 +238,7 @@
   "evolutions": [
     {
       "id": "aron_lairon",
-      "variant": "level_up",
       "result": "lairon",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

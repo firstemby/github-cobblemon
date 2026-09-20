@@ -256,9 +256,7 @@
   "evolutions": [
     {
       "id": "monferno_infernape",
-      "variant": "level_up",
       "result": "infernape",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "closecombat"
       ],

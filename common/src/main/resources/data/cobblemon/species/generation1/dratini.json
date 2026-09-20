@@ -238,9 +238,7 @@
   "evolutions": [
     {
       "id": "dratini_dragonair",
-      "variant": "level_up",
       "result": "dragonair",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

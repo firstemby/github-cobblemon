@@ -231,9 +231,7 @@
   "evolutions": [
     {
       "id": "pidgey_pidgeotto",
-      "variant": "level_up",
       "result": "pidgeotto",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -283,8 +283,8 @@
   ],
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "girafarig_farigiraf",
+      "result": "farigiraf",
       "learnableMoves": [],
       "requirements": [
         {

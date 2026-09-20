@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import kotlin.math.min
 
 class WallAttachedStackableItemBlock(settings: Properties, val type: WallStackableItemBlockType): WallAttachedDirectionalBlock(settings) {
     enum class WallStackableItemBlockType: StringRepresentable {

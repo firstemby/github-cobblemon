@@ -218,9 +218,7 @@
   "evolutions": [
     {
       "id": "chinchou_lanturn",
-      "variant": "level_up",
       "result": "lanturn",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "stockpile",
         "swallow",

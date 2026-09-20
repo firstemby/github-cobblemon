@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "zweilous_hydreigon",
-      "variant": "level_up",
       "result": "hydreigon",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

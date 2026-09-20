@@ -277,6 +277,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "fighting",
       "secondaryType": "steel",
       "maleRatio": 0.875,

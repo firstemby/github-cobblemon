@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.command
 
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.command.argument.SpeciesArgumentType
-import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.permission
 import com.mojang.brigadier.Command
@@ -41,8 +40,7 @@ object ChangeWalkSpeed {
         val walkSpeed = FloatArgumentType.getFloat(context, "walkSpeed")
 
         pkm.behaviour.moving.walk.walkSpeed = walkSpeed.toString().asExpression()
-        pkm.forms.clear()
-        pkm.forms.add(FormData().also { it.initialize(pkm)})
+        // TODO refresh form
         return Command.SINGLE_SUCCESS
     }
 }

@@ -9,9 +9,7 @@
 package com.cobblemon.mod.common.api.ai.config.task
 
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.Difficulty
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder

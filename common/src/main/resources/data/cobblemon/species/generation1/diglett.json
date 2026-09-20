@@ -224,9 +224,7 @@
   "evolutions": [
     {
       "id": "diglett_dugtrio",
-      "variant": "level_up",
       "result": "dugtrio",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "sandtomb"
       ],
@@ -386,9 +384,7 @@
       "evolutions": [
         {
           "id": "diglett_dugtrioalola",
-          "variant": "level_up",
           "result": "dugtrio alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "sandtomb"
           ],

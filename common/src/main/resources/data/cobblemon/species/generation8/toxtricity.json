@@ -331,6 +331,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "electric",
       "secondaryType": "poison",
       "maleRatio": 0.5,
@@ -353,6 +354,7 @@
     },
     {
       "name": "Low-Key-Gmax",
+      "variant": "temporary",
       "primaryType": "electric",
       "secondaryType": "poison",
       "maleRatio": 0.5,

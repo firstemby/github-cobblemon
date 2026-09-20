@@ -261,9 +261,7 @@
   "evolutions": [
     {
       "id": "meowth_persian",
-      "variant": "level_up",
       "result": "persian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "swift",
         "powergem"
@@ -456,9 +454,7 @@
       "evolutions": [
         {
           "id": "meowth_persianalola",
-          "variant": "level_up",
           "result": "persian alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "swift",
             "powergem"
@@ -714,9 +710,7 @@
       "evolutions": [
         {
           "id": "meowth_perrserker",
-          "variant": "level_up",
           "result": "perrserker",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "ironhead"
           ],
@@ -732,6 +726,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "normal",
       "maleRatio": 0.5,
       "height": 330,

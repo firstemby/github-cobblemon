@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokemon.feature
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.substitute
@@ -79,5 +80,30 @@ class ChoiceSpeciesFeatureProvider : AbstractChoiceSpeciesFeatureProvider<List<S
             aspects[choices.indexOf(it)] = (aspectFormat.substitute("choice", it))
         }
         return aspects
+    }
+
+    override fun provide(pokemon: Pokemon): Set<String> {
+        return if (isAspect) {
+            get(pokemon)?.let {
+                setOf(getAspect(it))
+            } ?: emptySet()
+        } else {
+            emptySet()
+        }
+    }
+
+    override fun get(pokemon: Pokemon) = pokemon.getFeature<StringSpeciesFeature>(keys.first())
+
+    override fun provide(properties: PokemonProperties): Set<String> {
+        return if (isAspect) {
+            val feature = properties.customProperties.filterIsInstance<StringSpeciesFeature>().find { it.name == keys.first() }
+            if (feature != null) {
+                setOf(getAspect(feature))
+            } else {
+                emptySet()
+            }
+        } else {
+            emptySet()
+        }
     }
 }

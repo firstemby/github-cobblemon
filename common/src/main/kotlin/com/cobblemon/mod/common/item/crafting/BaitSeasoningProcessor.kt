@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.item.crafting
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.api.cooking.Seasonings
-import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
 import com.cobblemon.mod.common.item.components.BaitEffectsComponent
 import net.minecraft.resources.ResourceLocation

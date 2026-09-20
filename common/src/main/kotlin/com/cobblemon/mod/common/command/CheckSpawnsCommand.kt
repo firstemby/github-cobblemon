@@ -30,12 +30,12 @@ import com.cobblemon.mod.common.util.spawner
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
-import net.minecraft.commands.CommandSourceStack
 import java.text.DecimalFormat
+import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 
 object CheckSpawnsCommand {

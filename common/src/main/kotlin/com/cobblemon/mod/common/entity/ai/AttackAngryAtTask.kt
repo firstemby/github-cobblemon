@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common.entity.ai
 
-import net.minecraft.world.Difficulty
 import com.cobblemon.mod.common.CobblemonMemories
+import net.minecraft.world.Difficulty
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder

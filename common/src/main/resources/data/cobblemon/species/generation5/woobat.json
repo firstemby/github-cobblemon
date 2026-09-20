@@ -253,9 +253,7 @@
   "evolutions": [
     {
       "id": "woobat_swoobat",
-      "variant": "level_up",
       "result": "swoobat",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

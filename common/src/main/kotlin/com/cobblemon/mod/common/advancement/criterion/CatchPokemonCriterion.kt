@@ -10,10 +10,10 @@ package com.cobblemon.mod.common.advancement.criterion
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
 import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
-import java.util.Optional
 
 /**
  * A context that is used when you require a [CountableContext] along with some type string.

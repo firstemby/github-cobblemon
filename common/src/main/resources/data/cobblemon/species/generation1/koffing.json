@@ -207,9 +207,7 @@
   "evolutions": [
     {
       "id": "koffing_weezing",
-      "variant": "level_up",
       "result": "weezing",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
       ],
@@ -222,9 +220,7 @@
     },
     {
       "id": "koffing_weezinggalar",
-      "variant": "level_up",
       "result": "weezing galarian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doublehit"
       ],
@@ -262,9 +258,7 @@
       "evolutions": [
         {
           "id": "koffing_weezing",
-          "variant": "level_up",
           "result": "weezing",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "doublehit"
           ],
@@ -281,9 +275,7 @@
         },
         {
           "id": "koffing_weezinggalar",
-          "variant": "level_up",
           "result": "weezing galarian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "doublehit"
           ],

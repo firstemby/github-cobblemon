@@ -19,7 +19,7 @@ import net.minecraft.client.gui.GuiGraphics
  * @author Hiroku
  * @since November 13th, 2023
  */
-interface SummarySpeciesFeatureRenderer<T : SynchronizedSpeciesFeature> {
+interface SummarySpeciesFeatureRenderer<T : SynchronizedSpeciesFeature<*>> {
     /** The name of the feature (so we know where to look to find it in the [Pokemon]) */
     val name: String
     /** Draws it at a particular position. */

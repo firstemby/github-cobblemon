@@ -24,11 +24,11 @@ interface SingleConditionalAspectProvider : AspectProvider {
         fun getForFeature(name: String): SingleConditionalAspectProvider {
             return object : SingleConditionalAspectProvider {
                 override val aspect: String = name
-                override fun meetsCondition(pokemon: Pokemon) = pokemon.getFeature<FlagSpeciesFeature>(name)?.enabled == true
+                override fun meetsCondition(pokemon: Pokemon) = pokemon.getFeature<FlagSpeciesFeature>(name)?.value == true
                 override fun meetsCondition(pokemonProperties: PokemonProperties) = pokemonProperties
                     .customProperties
                     .filterIsInstance<FlagSpeciesFeature>()
-                    .any { it.name == name && it.enabled }
+                    .any { it.name == name && it.value }
 
             }
         }

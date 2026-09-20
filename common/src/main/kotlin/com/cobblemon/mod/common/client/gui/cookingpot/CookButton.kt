@@ -9,8 +9,8 @@
 package com.cobblemon.mod.common.client.gui.cookingpot
 
 import com.cobblemon.mod.common.api.gui.blitk
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
+import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button

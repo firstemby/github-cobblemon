@@ -276,6 +276,7 @@
     {
       "consumeHeldItem": false,
       "id": "rhyhorn_rhydon",
+      "result": "rhydon",
       "learnableMoves": [
         "hammerarm"
       ],

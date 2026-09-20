@@ -19,6 +19,10 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream
 import io.netty.handler.codec.EncoderException
+import java.io.IOException
+import java.util.BitSet
+import java.util.EnumSet
+import java.util.UUID
 import net.minecraft.nbt.EndTag
 import net.minecraft.nbt.NbtAccounter
 import net.minecraft.nbt.NbtIo
@@ -35,8 +39,6 @@ import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.world.item.ItemStack
 import org.joml.Matrix3f
 import org.joml.Matrix4f
-import java.io.IOException
-import java.util.*
 
 fun RegistryFriendlyByteBuf.readItemStack(): ItemStack {
     return ItemStack.OPTIONAL_STREAM_CODEC.decode(this)

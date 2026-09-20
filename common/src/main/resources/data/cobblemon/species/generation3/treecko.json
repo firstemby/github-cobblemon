@@ -237,9 +237,7 @@
   "evolutions": [
     {
       "id": "treecko_grovyle",
-      "variant": "level_up",
       "result": "grovyle",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "furycutter"
       ],

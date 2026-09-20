@@ -12,11 +12,16 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.util.asExpressionLike
+import com.cobblemon.mod.common.util.giveOrDropItemStack
+import com.cobblemon.mod.common.util.readExpressionLike
+import com.cobblemon.mod.common.util.withPlayerValue
+import com.cobblemon.mod.common.util.withQueryValue
+import com.cobblemon.mod.common.util.writeExpressionLike
 import com.google.gson.annotations.SerializedName
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.FriendlyByteBuf
@@ -29,7 +34,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
 data class PokemonInteractionSet(
-    val requirements: List<Requirement> = listOf(),
+    val requirements: List<TransformationRequirement> = listOf(),
     val interactions: List<PokemonInteraction> = listOf(),
 ) {
     fun encode(buffer: FriendlyByteBuf) {
@@ -51,7 +56,7 @@ data class PokemonInteractionSet(
 }
 
 data class PokemonInteraction(
-    val requirements: List<Requirement> = listOf(),
+    val requirements: List<TransformationRequirement> = listOf(),
     val effects: List<InteractionEffect> = listOf(),
     val cooldown: ExpressionLike = "0".asExpressionLike()
 ) {

@@ -46,8 +46,7 @@ object ChangeEyeHeight {
         val height = FloatArgumentType.getFloat(context, "height")
 
         applicator.invoke(pkm, height)
-        pkm.forms.clear()
-        pkm.forms.add(FormData().also { it.initialize(pkm) })
+        // TODO refresh form
         return Command.SINGLE_SUCCESS
     }
 }

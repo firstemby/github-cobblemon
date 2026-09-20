@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.text.gray
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.util.asTranslated
-import net.minecraft.core.component.DataComponents
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack

@@ -21,34 +21,9 @@ import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.api.drop.DropEntry
-import com.cobblemon.mod.common.api.molang.function.BattleActorMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.BattleMessageMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.BattleMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.BiomeMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.BlockMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.DimensionTypeMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.DropEntryMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.EntityMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.EvolutionMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.GeneralMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.ItemStackMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.LivingEntityMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.NPCMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PCMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PartyMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PlayerMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PokedexMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PokemonEntityMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PokemonMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PokemonPropertiesMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.PokemonStoreMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.ServerMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.SpawnablePositionMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.SpeciesMoLangFunctions
-import com.cobblemon.mod.common.api.molang.function.WorldMoLangFunctions
+import com.cobblemon.mod.common.api.molang.function.*
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.storage.PokemonStore
@@ -58,8 +33,10 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.util.effectiveName
 import com.mojang.datafixers.util.Either
+import java.util.function.Function
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.RegistryAccess
@@ -84,7 +61,6 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.dimension.DimensionType
 import net.minecraft.world.phys.Vec3
-import java.util.function.Function
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API

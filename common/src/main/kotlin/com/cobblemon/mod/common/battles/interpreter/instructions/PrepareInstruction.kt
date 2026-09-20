@@ -12,22 +12,17 @@ import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addBattleMessageFunctions
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
-import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.ActionEffectInstruction
 import com.cobblemon.mod.common.battles.dispatch.GO
-import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
-import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
-import net.minecraft.resources.ResourceLocation
 
 /**
  * Format: |-prepare|ATTACKER|MOVE and |-prepare|ATTACKER|MOVE|DEFENDER
@@ -38,7 +33,7 @@ import net.minecraft.resources.ResourceLocation
  */
 class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("prepare")
 
     override fun addMolangQueries(runtime: MoLangRuntime) {
@@ -75,8 +70,7 @@ class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }

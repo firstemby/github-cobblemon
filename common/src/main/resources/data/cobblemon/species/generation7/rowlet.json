@@ -225,9 +225,7 @@
   "evolutions": [
     {
       "id": "rowlet_dartrix",
-      "variant": "level_up",
       "result": "dartrix",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -261,9 +259,7 @@
       "evolutions": [
         {
           "id": "rowlet_dartrix",
-          "variant": "level_up",
           "result": "dartrix",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

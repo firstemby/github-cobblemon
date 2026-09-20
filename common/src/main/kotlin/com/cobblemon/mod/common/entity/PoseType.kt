@@ -9,7 +9,8 @@
 package com.cobblemon.mod.common.entity
 
 import com.cobblemon.mod.common.util.cobblemonResource
-import java.util.*
+import java.util.EnumSet
+import java.util.Locale
 import net.minecraft.resources.ResourceLocation
 
 /**

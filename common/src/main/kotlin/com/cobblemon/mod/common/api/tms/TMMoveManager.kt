@@ -8,8 +8,8 @@
 
 package com.cobblemon.mod.common.api.tms
 
-import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.advancement.criterion.CountableContext
 import com.cobblemon.mod.common.advancement.criterion.LearnAllTMContext

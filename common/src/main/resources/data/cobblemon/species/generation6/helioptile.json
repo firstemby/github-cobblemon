@@ -144,12 +144,13 @@
   "evolutions": [
     {
       "id": "helioptile_heliolisk",
-      "variant": "item_interact",
       "result": "heliolisk",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:sun_stone",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:sun_stone"
+      },
       "drops": {
         "amount": 1,
         "entries": [

@@ -42,11 +42,6 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.aspect.AspectProvider
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionController
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionDisplay
-import com.cobblemon.mod.common.api.pokemon.evolution.EvolutionProxy
-import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceSource
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeature
@@ -59,6 +54,13 @@ import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
+import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
+import com.cobblemon.mod.common.api.pokemon.transformation.progress.TransformationProgress
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.riding.RidingProperties
@@ -93,18 +95,22 @@ import com.cobblemon.mod.common.pokemon.activestate.InactivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.PokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.evolution.CobblemonEvolutionProxy
-import com.cobblemon.mod.common.pokemon.evolution.controller.ClientEvolutionController
-import com.cobblemon.mod.common.pokemon.evolution.controller.ServerEvolutionController
-import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
-import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
 import com.cobblemon.mod.common.pokemon.feature.SeasonFeatureHandler
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.BattleCloneProperty
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerEvolutionController
+import com.cobblemon.mod.common.pokemon.transformation.controller.ServerFormController
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.proxies.EvolutionProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.FormProxy
+import com.cobblemon.mod.common.pokemon.transformation.proxies.TransformationProxy
+import com.cobblemon.mod.common.pokemon.transformation.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -187,38 +193,57 @@ open class Pokemon : ShowdownIdentifiable {
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             val oldValue = field
             field = value
+            // Reset form (only if invalid - when creating pokemon from properties, species is set twice and would overwrite form)
+            if (!this.isValidForm(this.form)) {
+                this.form = value.standardForm
+            }
             if (!isClient) {
                 val newFeatures = SpeciesFeatures.getFeaturesFor(species).mapNotNull { it.invoke(this) }
                 features.clear()
                 features.addAll(newFeatures)
                 if (oldValue != value) {
-                    evolutionProxy.current().clear()
+                    evolutionProxy.server().clear()
+                    formProxy.server().clear()
                 }
             }
             updateAspects()
-            updateForm()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
             onChange(SpeciesUpdatePacket({ this }, value))
         }
 
-    var form = species.standardForm
+    var form: FormData = species.standardForm
         set(value) {
-            // If nothing actually changed, avoid running heavy logic (e.g. updateMovesOnFormChange when the form hasn't really "changed")
-            if (field == value) return
+            if (value === field)
+                return
+            else if (!this.isValidForm(value))
+                throw IllegalArgumentException("Cannot set a form that doesn't belong to the species")
 
+            val old = field
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
             field = value
+
+            if (!isClient) {
+                // if old and new are not interchangeable, wipe unlocked evolutions and forms
+                if (!old.isInterchangeableWith(value)) {
+                    this.evolutionProxy.server().clear()
+                    this.formProxy.server().clear()
+                }
+                // if old is interchangeable with new, toggleable, and still valid - keep it in the controller
+                else if (old is TemporaryForm && (!old.toggleable || !old.reevaluate(this))) {
+                    this.formProxy.server().remove(old)
+                }
+            }
+
+            updateAspects()
             this.updateMovesOnFormChange(value)
-            // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
-            this.evolutionProxy.current().clear()
             checkGender()
             updateHP(quotient)
             this.attemptAbilityUpdate()
-            onChange(FormUpdatePacket({ this }, value))
+            onChange(FormUpdatePacket({ this }, value.name))
         }
 
     // Need to happen before currentHealth init due to the calc
@@ -243,6 +268,9 @@ open class Pokemon : ShowdownIdentifiable {
             field = value
             value.changeFunction = oldChangeFunction
         }
+
+    // If you access this on the client then you are a stupid
+    var requirementProgress = mutableSetOf<TransformationProgress<*>>()
 
     var characteristic: Characteristic = Characteristic.calculate(ivs, uuid)
         private set
@@ -344,6 +372,10 @@ open class Pokemon : ShowdownIdentifiable {
             field = max(min(maxHealth, value), 0)
             onChange(HealthUpdatePacket({ this }, field))
 
+            if (isClient) {
+                return
+            }
+
             // If the Pokémon is fainted, give it a timer for it to wake back up
             if (this.isFainted()) {
                 decrementFriendship(1)
@@ -352,8 +384,8 @@ open class Pokemon : ShowdownIdentifiable {
                     this.faintedTimer = it.faintedTimer
                 }
                 // These are meant to reset on faint
-                this.evolutionProxy.current().progress()
-                    .filter { it is RecoilEvolutionProgress || it is DamageTakenEvolutionProgress }
+                requirementProgress
+                    .filter { it is RecoilTransformationProgress || it is DamageTakenTransformationProgress }
                     .forEach { it.reset() }
             }
             this.healTimer = Cobblemon.config.healTimer
@@ -646,7 +678,7 @@ open class Pokemon : ShowdownIdentifiable {
             onChange(CaughtBallUpdatePacket({ this }, field))
         }
 
-    var features = mutableListOf<SpeciesFeature>()
+    var features = mutableListOf<SpeciesFeature<*>>()
 
     var cosmeticItem = ItemStack.EMPTY
         set(value) {
@@ -708,33 +740,54 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var aspects = setOf<String>()
         private set(value) {
-            if (field != value) {
-                field = value
-                if (!isClient) {
-                    updateForm()
-                }
-                onChange(AspectsUpdatePacket({ this }, value))
-            }
+            field = value
+            onChange(AspectsUpdatePacket({ this }, value))
         }
 
     /** If you're not a Cobblemon dev you should probably leave this right alone. */
     internal var isClient = false
     val storeCoordinates = SettableObservable<StoreCoordinates<*>?>(null)
 
+    val preEvolution: PreEvolution?
+        get() = form.preEvolution
+
     // We want non-optional evolutions to trigger first to avoid unnecessary packets and any cost associate with an optional one that would just be lost
-    val evolutions: Iterable<Evolution> get() = this.form.evolutions.sortedBy { evolution -> evolution.optional }
+    val evolutions: Iterable<Evolution>
+        get() = form.evolutions.sortedBy { evolution -> evolution.optional }
+
+    val changeableForms: Iterable<TemporaryForm>
+        get() = form.changeableForms.sortedBy { form -> form.toggleable }
+
+    /** [Evolution]s that have not yet fulfilled their [TransformationRequirement]s nor been unlocked by a [TransformationTrigger]. */
     val lockedEvolutions: Iterable<Evolution>
         get() = evolutions.filter { it !in evolutionProxy.current() }
 
-    val preEvolution: PreEvolution? get() = this.form.preEvolution
+    /** [TemporaryForm]s that have not yet fulfilled their [TransformationRequirement]s nor been unlocked by a [TransformationTrigger]. */
+    val lockedForms: Iterable<TemporaryForm>
+        get() = changeableForms.filter { it !in formProxy.current() }
+
+    val relevantRequirements: Iterable<TransformationRequirement>
+        get() = (lockedEvolutions + lockedForms).flatMap { it.requirements }
+
+    inline fun <reified T : TransformationRequirement> getRelevantRequirements(condition: (T) -> Boolean): List<T> {
+        return (lockedEvolutions + lockedForms).flatMap { it.requirements.filterIsInstance<T>().filter(condition) }
+    }
+
+    inline fun <reified T : TransformationRequirement> hasMatchingRequirement(condition: (T) -> Boolean = { true }): Boolean {
+        return (lockedEvolutions + lockedForms).any { it.requirements.any { it is T && condition(it) } }
+    }
 
     private val rideBoosts: MutableMap<RidingStat, Float> = mutableMapOf()
 
     /**
-     * Provides the sided [EvolutionController]s, these operations can be done safely with a simple side check.
-     * This can be done beforehand or using [EvolutionProxy.isClient].
+     * Provides the sided [TransformationController]s for managing [Evolution]s. These operations can be done safely with a simple side check.
+     * This can be done beforehand or using [TransformationProxy.isClient].
      */
-    var evolutionProxy: EvolutionProxy<EvolutionDisplay, Evolution, ClientEvolutionController.Intermediate, ServerEvolutionController.Intermediate> = CobblemonEvolutionProxy(this.self())
+    var evolutionProxy: EvolutionProxy = EvolutionProxy(this.self())
+        private set
+
+    /** Provides the sided [TransformationController]s for managing [TemporaryForm]s. */
+    var formProxy: FormProxy = FormProxy(this.self())
         private set
 
     val customProperties = mutableListOf<CustomPokemonProperty>()
@@ -746,6 +799,9 @@ open class Pokemon : ShowdownIdentifiable {
     var persistentData: CompoundTag =
         CompoundTag()
         internal set
+
+    /** Default pool of [Transformation]s that [TransformationTrigger]s query.  */
+    val transformations: Iterable<Transformation> get() = lockedEvolutions + lockedForms
 
     /**
      * The [ItemStack] this Pokémon is holding.
@@ -787,12 +843,7 @@ open class Pokemon : ShowdownIdentifiable {
      *
      * @return The literal Showdown ID of this Pokémon.
      */
-    override fun showdownId(): String {
-        if (this.form == this.species.standardForm) {
-            return this.species.showdownId()
-        }
-        return this.form.showdownId()
-    }
+    override fun showdownId(): String = this.form.showdownId()
 
     fun sendOut(level: ServerLevel, position: Vec3, illusion: IllusionEffect?, mutation: (PokemonEntity) -> Unit = {}): PokemonEntity? {
         CobblemonEvents.POKEMON_SENT_PRE.postThen(PokemonSentEvent.Pre(this, level, position)) {
@@ -1438,6 +1489,13 @@ open class Pokemon : ShowdownIdentifiable {
         return CODEC.decode(ops, data).ifSuccess { this.copyFrom(it.first) }
     }
 
+    /** Revolves the [RegistryAccess] associated with this pokemon, if one exists. */
+    val registryAccess: RegistryAccess
+        @Throws(IllegalStateException::class)
+        get() = this.getOwnerEntity()?.registryAccess()
+            ?: server()?.registryAccess()
+            ?: throw IllegalStateException("No registry access available")
+
     /**
      * Clones the provided pokemon into a completely new instance.
      *
@@ -1448,8 +1506,7 @@ open class Pokemon : ShowdownIdentifiable {
      */
     fun clone(newUUID: Boolean = true, registryAccess: RegistryAccess? = null): Pokemon {
         // NBT is faster, ops type doesn't really matter
-        var ops = (registryAccess ?: server()?.registryAccess() ?: throw IllegalStateException("No registry access for cloning available"))
-            .createSerializationContext(NbtOps.INSTANCE)
+        var ops = (registryAccess ?: this.registryAccess).createSerializationContext(NbtOps.INSTANCE)
         val encoded = CODEC.encodeStart(ops, this).orThrow
         val result = CODEC.decode(ops, encoded).orThrow.first
         result.isClient = this.isClient
@@ -1500,7 +1557,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.caughtBall = other.caughtBall
         this.faintedTimer = other.faintedTimer
         this.healTimer = other.healTimer
-        (this.evolutionProxy as? CobblemonEvolutionProxy)?.overrideController(other.evolutionProxy.current().asIntermediate().create(this))
+        this.evolutionProxy.overrideController(ServerEvolutionController(this, other.evolutionProxy.server().map(Evolution::id).toSet()))
         this.customProperties.clear()
         this.customProperties += other.customProperties
         this.nature = other.nature
@@ -1517,6 +1574,7 @@ open class Pokemon : ShowdownIdentifiable {
         this.originalTrainerType = other.originalTrainerType
         this.originalTrainer = other.originalTrainer
         this.forcedAspects = other.forcedAspects
+        this.formProxy.overrideController(ServerFormController(this, other.formProxy.server().map(TemporaryForm::id).toSet()))
         this.features = other.features
         this.cosmeticItem = other.cosmeticItem
         this.activeMark = other.activeMark
@@ -1705,14 +1763,6 @@ open class Pokemon : ShowdownIdentifiable {
         }
     }
 
-    fun updateForm() {
-        val newForm = species.getForm(aspects)
-        if (form != newForm) {
-            // Form updated!
-            form = newForm
-        }
-    }
-
     fun initialize(): Pokemon {
         // Force the setter to initialize it
         species = species
@@ -1720,6 +1770,7 @@ open class Pokemon : ShowdownIdentifiable {
         if (moveSet.getMoves().isEmpty()) {
             initializeMovesetFromDefault()
         }
+        this.requirementProgress.removeIf { !it.shouldKeep(this) }
         return this
     }
 
@@ -2117,7 +2168,7 @@ open class Pokemon : ShowdownIdentifiable {
         return result
     }
 
-    fun <T : SpeciesFeature> getFeature(name: String) = features.find { it.name == name } as? T
+    fun <T : SpeciesFeature<*>> getFeature(name: String) = features.find { it.name == name } as? T
 
     /**
      * Copies the specified properties from this Pokémon into a new [PokemonProperties] instance.
@@ -2250,7 +2301,7 @@ open class Pokemon : ShowdownIdentifiable {
     val struct = ObjectValue<Pokemon>(this)
         .addPokemonFunctions(this)
 
-    fun markFeatureDirty(feature: SpeciesFeature) {
+    fun markFeatureDirty(feature: SpeciesFeature<*>) {
         val featureProvider = SpeciesFeatures.getFeature(feature.name)
         val packet = if (feature is SynchronizedSpeciesFeature && featureProvider is SynchronizedSpeciesFeatureProvider && featureProvider.visible) {
             SpeciesFeatureUpdatePacket({ this }, species.resourceIdentifier, feature)
@@ -2271,6 +2322,29 @@ open class Pokemon : ShowdownIdentifiable {
             return true
         }
         return false
+    }
+
+    open fun <P : TransformationProgress<*>> trackProgress(progress: P): P {
+        this.requirementProgress.add(progress)
+        return progress
+    }
+
+    /**
+     * Attempts to find an [TransformationProgress] in [requirementProgress] or creates and tracks using [trackProgress].
+     *
+     * @param P The type of [TransformationProgress].
+     * @param predicate The lambda attempting to find specific progress. This needs to ensure the [TransformationProgress] is of type [P] or the cast will fail.
+     * @param progressFactory The lambda creating a new instance of type [P] if [predicate] can't find an element.
+     * @return The found match in [requirementProgress] or the created and now tracked with [trackProgress].
+     */
+    open fun <P : TransformationProgress<*>> progressFirstOrCreate(predicate: (progress: TransformationProgress<*>) -> Boolean, progressFactory: () -> P): P {
+        val existing = requirementProgress.firstOrNull(predicate)
+        if (existing == null) {
+            val created = progressFactory()
+            this.requirementProgress.add(created)
+            return created
+        }
+        return existing as P
     }
 
     /**
@@ -2294,6 +2368,16 @@ open class Pokemon : ShowdownIdentifiable {
      */
     open fun self(): Pokemon = this
 
+    /**
+     * Triggers [TemporaryForm]s and [Evolution]s if requirements are met.
+     *
+     * @param context The optional [ContextTrigger.Context] required for [ContextTrigger]s.
+     * @return The [Transformation]s of this [Pokemon] that were triggered.
+     */
+    inline fun <reified T : TransformationTrigger> triggerTransformations(context: ContextTrigger.Context? = null) =
+        transformations.filter { it.trigger is T && it.tryStart(this, context) }
+
+    private fun isValidForm(form: FormData) = this.species.allForms.any { it === form }
 
     /**
      * Function that sanitizes specific form-related moves when the form of this Pokémon changes.
@@ -2342,6 +2426,14 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
     }
+
+    /**
+     * Checks if this pokemon's entity is in the middle of performing a blocking action. While busy, it's recommended that
+     * the pokemon does NOT undertake any mutable actions.
+     *
+     * @return whether this pokemon has an entity that is busy.
+     */
+    fun isBusy() = this.entity?.isBusy == true
 
     companion object {
         /**

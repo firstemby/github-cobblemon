@@ -13,13 +13,12 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.UsersProvider
-import com.cobblemon.mod.common.api.scheduling.after
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation.NavigationContext
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
+import java.util.concurrent.CompletableFuture
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
-import java.util.concurrent.CompletableFuture
 
 class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
     val speed = 1F
@@ -56,7 +55,7 @@ class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
             }
         )
 
-        after(seconds = timeout.resolveFloat(context.runtime)) {
+        context.tracker.after(seconds = timeout.resolveFloat(context.runtime)) {
             if (!future.isDone && !timedOut) {
                 timedOut = true
                 timeoutEffect.run(context).thenApply { future.complete(Unit) }

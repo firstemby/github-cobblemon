@@ -55,9 +55,7 @@
   "evolutions": [
     {
       "id": "cosmog_cosmoem",
-      "variant": "level_up",
       "result": "cosmoem",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "cosmicpower"
       ],

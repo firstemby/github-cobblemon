@@ -143,12 +143,13 @@
   "evolutions": [
     {
       "id": "karrablast_escavalier",
-      "variant": "trade",
       "result": "escavalier",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "shelmet",
+      "trigger": {
+        "variant": "trade",
+        "requiredContext": "shelmet"
+      },
       "drops": {
         "amount": 1,
         "entries": [
@@ -163,12 +164,13 @@
     },
     {
       "id": "karrablast_escavalier_item",
-      "variant": "item_interact",
       "result": "escavalier",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [],
-      "requiredContext": "cobblemon:shell_helmet",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:shell_helmet"
+      },
       "drops": {
         "amount": 1,
         "entries": [

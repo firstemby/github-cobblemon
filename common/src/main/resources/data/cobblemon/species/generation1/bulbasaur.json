@@ -232,9 +232,7 @@
   "evolutions": [
     {
       "id": "bulbasaur_ivysaur",
-      "variant": "level_up",
       "result": "ivysaur",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

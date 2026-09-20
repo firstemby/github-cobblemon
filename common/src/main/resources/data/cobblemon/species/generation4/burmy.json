@@ -79,9 +79,7 @@
   "evolutions": [
     {
       "id": "burmy_wormadam",
-      "variant": "level_up",
       "result": "wormadam",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "quiverdance"
       ],
@@ -109,9 +107,7 @@
     },
     {
       "id": "burmy_mothim",
-      "variant": "level_up",
       "result": "mothim",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "quiverdance"
       ],
@@ -157,9 +153,7 @@
       "evolutions": [
         {
           "id": "burmy_wormadam",
-          "variant": "level_up",
           "result": "wormadam",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "quiverdance"
           ],
@@ -187,9 +181,7 @@
         },
         {
           "id": "burmy_mothim",
-          "variant": "level_up",
           "result": "mothim",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "quiverdance"
           ],
@@ -236,9 +228,7 @@
       "evolutions": [
         {
           "id": "burmy_wormadam",
-          "variant": "level_up",
           "result": "wormadam",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "quiverdance"
           ],
@@ -266,9 +256,7 @@
         },
         {
           "id": "burmy_mothim",
-          "variant": "level_up",
           "result": "mothim",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "quiverdance"
           ],

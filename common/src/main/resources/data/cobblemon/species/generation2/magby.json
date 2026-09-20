@@ -178,9 +178,7 @@
   "evolutions": [
     {
       "id": "magby_magmar",
-      "variant": "level_up",
       "result": "magmar",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -324,6 +324,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "dark",
       "secondaryType": "ghost",
       "maleRatio": 0.5,

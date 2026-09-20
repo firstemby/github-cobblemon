@@ -8,16 +8,12 @@
 
 package com.cobblemon.mod.common.api.ai.config
 
-import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.asExpression
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolveBoolean
-import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 

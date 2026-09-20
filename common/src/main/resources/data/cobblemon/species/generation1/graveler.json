@@ -249,11 +249,12 @@
   "evolutions": [
     {
       "id": "graveler_golem",
-      "variant": "trade",
       "result": "golem",
-      "consumeHeldItem": false,
       "learnableMoves": [],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ],
   "forms": [
@@ -437,11 +438,12 @@
       "evolutions": [
         {
           "id": "graveler_golemalola",
-          "variant": "trade",
           "result": "golem alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [],
-          "requirements": []
+          "requirements": [],
+          "trigger": {
+            "variant": "trade"
+          }
         }
       ],
       "battleOnly": false,

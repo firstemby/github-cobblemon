@@ -25,11 +25,8 @@ class RemoveHoldsActionEffectKeyframe : ActionEffectKeyframe {
     val holds = mutableSetOf<String>()
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
         return delayedFuture(seconds = delay).thenApply {
-            if (holds.isEmpty()) {
-                context.holds.clear()
-            } else {
-                context.holds.removeAll(holds)
-            }
+            val holdsToRemove = if (holds.isEmpty()) context.getHolds() else holds
+            holdsToRemove.forEach(context::removeHold)
         }
     }
 }

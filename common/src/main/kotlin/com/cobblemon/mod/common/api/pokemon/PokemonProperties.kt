@@ -49,6 +49,7 @@ import com.mojang.brigadier.StringReader
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import java.util.UUID
+import kotlin.jvm.optionals.getOrNull
 import kotlin.math.min
 import kotlin.random.Random
 import net.minecraft.ResourceLocationException
@@ -65,7 +66,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A grouping of typical, selectable properties for a Pokémon. This is serializable
@@ -168,8 +168,8 @@ open class PokemonProperties {
                 parseIntProperty(keyPairs, listOf("${statName}_iv"))?.coerceIn(0, IVs.MAX_VALUE)?.let { maybeIVs[stat] = it }
                 parseIntProperty(keyPairs, listOf("${statName}_ev"))?.coerceIn(0, EVs.MAX_STAT_VALUE)?.let { maybeEVs[stat] = it }
             }
-            props.ivs = maybeIVs
-            props.evs = maybeEVs
+            props.evs = maybeEVs.takeIf { it.total() > 0 }
+            props.ivs = maybeIVs.takeIf { it.total() > 0 }
 
             props.updateAspects()
             return props
@@ -519,29 +519,18 @@ open class PokemonProperties {
     }
 
     fun matches(properties: PokemonProperties): Boolean {
-        return properties.asString() == this.asString()
+        // Custom properties check could be duplicated but can't assume 3rd party hasn't done anything type specific
+        return this.commonMatches(properties) && this.customProperties.containsAll(properties.customProperties)
     }
 
+    // Undefined properties will match whatever they're compared with
     private fun commonMatches(pokemon: Pokemon): Boolean {
         level?.takeIf { it != pokemon.level }?.let { return false }
         shiny?.takeIf { it != pokemon.shiny }?.let { return false }
         gender?.takeIf { it != pokemon.gender }?.let { return false }
-        species?.run {
-            try {
-                val species = if (this == "random") {
-                    PokemonSpecies.species.random()
-                } else {
-                    PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace()) ?: return@run
-                }
-                if (pokemon.species != species) {
-                    return false
-                }
-            } catch (e: ResourceLocationException) {
-                return false
-            }
-        }
+        species?.takeIf { it.asSpecies() != pokemon.species }?.let { return false }
         nickname?.takeIf { it.string != pokemon.nickname?.string }?.let { return false }
-        form?.takeIf { !it.equals(pokemon.form.name, true) }?.let { return false }
+        form?.takeIf { !it.equals(pokemon.form.formOnlyShowdownId(), true) }?.let { return false }
         friendship?.takeIf { it != pokemon.friendship }?.let { return false }
         fullness?.takeIf { it != pokemon.currentFullness }?.let { return false }
         pokeball?.takeIf { it != pokemon.caughtBall.name.toString() }?.let { return false }
@@ -581,6 +570,36 @@ open class PokemonProperties {
             return@takeIf false
         }?.let { return false }
         scaleModifier?.takeIf { it != pokemon.scaleModifier }?.let { return false }
+        return true
+    }
+
+    // Undefined properties will match whatever they're compared with
+    private fun commonMatches(properties: PokemonProperties): Boolean {
+        level?.takeIf { it != properties.level }?.let { return false }
+        shiny?.takeIf { it != properties.shiny }?.let { return false }
+        gender?.takeIf { it != properties.gender }?.let { return false }
+        species?.takeIf { it.asSpecies() != properties.species?.asSpecies() }?.let { return false }
+        nickname?.takeIf { it.string != properties.nickname?.string }?.let { return false }
+        form?.takeIf { it != properties.form }?.let { return false }
+        friendship?.takeIf { it != properties.friendship }?.let { return false }
+        pokeball?.takeIf { it != properties.pokeball }?.let { return false }
+        nature?.takeIf { it != properties.nature }?.let { return false }
+        ability?.takeIf { it != properties.ability }?.let { return false }
+        status?.takeIf { it != properties.status }?.let { return false }
+        ivs?.forEach{ stat ->
+            if (stat.value != properties.ivs?.get(stat.key)) { return false }
+        }
+        evs?.forEach{ stat ->
+            if (stat.value != properties.evs?.get(stat.key)) { return false }
+        }
+        type?.takeIf { it != properties.type }?.let { return false }
+        teraType?.takeIf { it != properties.teraType }?.let { return false }
+        dmaxLevel?.takeIf { it != properties.dmaxLevel }?.let { return false }
+        gmaxFactor?.takeIf { it != properties.gmaxFactor }?.let { return false }
+        tradeable?.takeIf { it != properties.tradeable }?.let { return false }
+        originalTrainer?.takeIf { it != properties.originalTrainer }?.let{ return false }
+        originalTrainerType?.takeIf { it != properties.originalTrainerType }?.let{ return false }
+        moves?.takeIf { it.any { move -> properties.moves?.none { it == move } == true } }?.let { return false }
         return true
     }
 
@@ -904,4 +923,15 @@ open class PokemonProperties {
     }
 
     fun hasSpecies() = species?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) } != null
+    private fun String.asSpecies() =
+        try {
+            if (this == "random") {
+                PokemonSpecies.species.random()
+            } else {
+                PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace())
+            }
+         }
+        catch (e: ResourceLocationException) {
+            null
+        }
 }

@@ -80,9 +80,7 @@
   "evolutions": [
     {
       "id": "wurmple_silcoon",
-      "variant": "level_up",
       "result": "silcoon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "harden"
       ],
@@ -99,9 +97,7 @@
     },
     {
       "id": "wurmple_cascoon",
-      "variant": "level_up",
       "result": "cascoon",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "harden"
       ],

@@ -10,13 +10,17 @@ package com.cobblemon.mod.common.api.moves.animations
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.moves.animations.keyframes.ActionEffectKeyframe
+import com.cobblemon.mod.common.api.scheduling.Schedulable
+import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.entity.npc.NPCEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.resolveBoolean
+import java.util.concurrent.CompletableFuture
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
-import java.util.concurrent.CompletableFuture
 
 /**
  * An action effect will run and execute a series of 'keyframes', with each running once
@@ -36,7 +40,7 @@ class ActionEffectTimeline(
     }
 
     fun run(context: ActionEffectContext): CompletableFuture<Unit> {
-        return if (timeline.isEmpty() || !context.runtime.resolveBoolean(condition)) {
+        val future = if (timeline.isEmpty() || !context.runtime.resolveBoolean(condition)) {
             CompletableFuture.completedFuture(Unit)
         } else {
             val finalFuture = CompletableFuture<Unit>()
@@ -47,6 +51,10 @@ class ActionEffectTimeline(
             it.printStackTrace()
             CompletableFuture.completedFuture(Unit)
         }
+
+        context.future = future
+        future.thenRun { context.getHolds().forEach(context::removeHold) }
+        return future
     }
 
     fun chainKeyframes(context: ActionEffectContext, iterator: Iterator<ActionEffectKeyframe>, finalFuture: CompletableFuture<Unit>) {
@@ -65,15 +73,45 @@ class ActionEffectTimeline(
 
 class ActionEffectContext(
     val actionEffect: ActionEffectTimeline,
-    val holds: MutableSet<String> = mutableSetOf(),
+    private val holds: MutableSet<String> = mutableSetOf(),
     val providers: MutableList<Any> = mutableListOf(),
     val runtime: MoLangRuntime,
     var canBeInterrupted: Boolean = false,
     var interrupted: Boolean = false,
     var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf(),
-    var level: Level? = null
+    var level: Level? = null,
+    var holdRemovalCallbacks: MutableMap<String, () -> Unit> = mutableMapOf(),
+    var tracker: Schedulable = ServerTaskTracker
 ) {
+    companion object {
+        fun fromPokemonEntity(
+            actionEffect: ActionEffectTimeline,
+            pokemonEntity: PokemonEntity,
+            runtime: MoLangRuntime = MoLangRuntime().also { it.environment.query.addStandardFunctions() },
+            holds: Collection<String> = emptySet(),
+            holdRemovalCallbacks: Map<String, () -> Unit> = emptyMap()
+        ): ActionEffectContext {
+            return ActionEffectContext(
+                actionEffect = actionEffect,
+                providers = mutableListOf(UsersProvider(listOf(pokemonEntity))),
+                holdRemovalCallbacks = holdRemovalCallbacks.toMutableMap(),
+                holds = holds.toMutableSet(),
+                runtime = runtime,
+                level = pokemonEntity.level()
+            )
+        }
+    }
+
+    lateinit var future: CompletableFuture<Unit>
     inline fun <reified T> findOneProvider() = providers.filterIsInstance<T>().firstOrNull()
+
+    /** Returns a reference to the internal holds set so you can keep an eye on it. */
+    fun getHolds(): Set<String> = holds
+    fun addHold(hold: String) = holds.add(hold)
+    fun removeHold(hold: String) {
+        holds.remove(hold)
+        holdRemovalCallbacks.remove(hold)?.invoke()
+    }
 }
 
 class UsersProvider(users: List<Entity>): EntityProvider {

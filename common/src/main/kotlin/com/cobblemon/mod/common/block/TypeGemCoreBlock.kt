@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.SHOULD_GROW
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.STUNTED
+import java.util.LinkedList
+import java.util.Queue
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
@@ -25,7 +27,6 @@ import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.state.BlockState
-import java.util.*
 
 class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 

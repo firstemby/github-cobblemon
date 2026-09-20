@@ -331,6 +331,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "dragon",
       "secondaryType": "psychic",
       "maleRatio": 0,

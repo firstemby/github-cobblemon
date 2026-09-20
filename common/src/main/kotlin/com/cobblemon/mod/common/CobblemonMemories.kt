@@ -15,12 +15,12 @@ import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.ListCodec
 import com.mojang.serialization.codecs.PrimitiveCodec
+import java.util.Optional
+import java.util.UUID
 import net.minecraft.core.BlockPos
-import net.minecraft.core.GlobalPos
 import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import java.util.*
 
 object CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()

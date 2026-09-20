@@ -9,8 +9,6 @@
 package com.cobblemon.mod.common.api.scheduling
 
 import java.util.concurrent.CompletableFuture
-import com.cobblemon.mod.common.util.runOnServer
-import net.minecraft.world.TickRateManager
 import net.minecraft.world.level.Level
 
 @Deprecated("Use afterOnServer or afterOnClient; ambiguous side is not good for your health")
@@ -52,9 +50,9 @@ fun lerpOnServer(seconds: Float = 0F, action: (Float) -> Unit) = ServerTaskTrack
 fun lerpOnClient(seconds: Float = 0F, action: (Float) -> Unit) = ClientTaskTracker.lerp(seconds = seconds, action = action)
 fun taskBuilder() = ScheduledTask.Builder()
 
-fun delayedFuture(seconds: Float): CompletableFuture<Unit> {
+fun delayedFuture(seconds: Float, tracker: Schedulable = ServerTaskTracker): CompletableFuture<Unit> {
     val future = CompletableFuture<Unit>()
-    afterOnServer(seconds = seconds) {
+    tracker.after(seconds = seconds) {
         future.complete(Unit)
     }
     return future

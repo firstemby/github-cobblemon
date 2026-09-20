@@ -9,12 +9,12 @@
 package com.cobblemon.mod.neoforge
 
 import com.cobblemon.mod.common.CobblemonItems
+import java.util.List
+import java.util.function.Supplier
 import net.minecraft.client.RecipeBookCategories
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.neoforged.fml.common.asm.enumextension.EnumProxy
-import java.util.List
-import java.util.function.Supplier
 
 
 // to learn more about this, read https://docs.neoforged.net/docs/1.21.1/advanced/extensibleenums/#iextensibleenum

@@ -137,6 +137,7 @@
   "forms": [
     {
       "name": "Eternamax",
+      "variant": "temporary",
       "primaryType": "poison",
       "secondaryType": "dragon",
       "maleRatio": -1,

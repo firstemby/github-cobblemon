@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.awt.Color
 import net.minecraft.advancements.critereon.MinMaxBounds
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -30,7 +31,6 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.awt.Color
 
 /**
  * The data registry for [Berry].

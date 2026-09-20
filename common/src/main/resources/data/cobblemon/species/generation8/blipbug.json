@@ -73,9 +73,7 @@
   "evolutions": [
     {
       "id": "blipbug_dottler",
-      "variant": "level_up",
       "result": "dottler",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "reflect",
         "lightscreen",

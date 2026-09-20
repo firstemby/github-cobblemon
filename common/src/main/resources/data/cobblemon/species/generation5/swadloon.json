@@ -169,9 +169,7 @@
   "evolutions": [
     {
       "id": "swadloon_leavanny",
-      "variant": "level_up",
       "result": "leavanny",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "slash"
       ],

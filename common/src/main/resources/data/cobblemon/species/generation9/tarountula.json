@@ -174,9 +174,7 @@
   "evolutions": [
     {
       "id": "tarountula_spidops",
-      "variant": "level_up",
       "result": "spidops",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "silktrap"
       ],

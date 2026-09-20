@@ -9,7 +9,13 @@
 package com.cobblemon.mod.common.api.riding.behaviour.types.composite
 
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviours
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.SidedRidingState
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.behaviour.types.composite.strategies.CompositeRidingStrategies
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat

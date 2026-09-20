@@ -217,8 +217,8 @@
   ],
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "skiddo_gogoat",
+      "result": "gogoat",
       "learnableMoves": [
         "aerialace"
       ],

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common
 
+import java.util.Optional
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
@@ -18,7 +19,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.trading.ItemCost
 import net.minecraft.world.item.trading.MerchantOffer
-import java.util.Optional
 
 /**
  * A generator for various trade offers in the mod.

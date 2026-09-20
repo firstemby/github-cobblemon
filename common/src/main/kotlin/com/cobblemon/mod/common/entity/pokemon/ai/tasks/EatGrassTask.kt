@@ -44,7 +44,7 @@ class EatGrassTask(
         if (world.random.nextFloat() > eatingChance) {
             return false
         } else {
-            entity.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled?.takeIf { it } ?: run {
+            entity.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.value?.takeIf { it } ?: run {
                 return false
             }
             val blockPos = entity.blockPosition()

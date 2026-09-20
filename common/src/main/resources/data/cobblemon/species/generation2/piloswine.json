@@ -249,8 +249,8 @@
   "preEvolution": "swinub",
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "piloswine_mamoswine",
+      "result": "mamoswine",
       "learnableMoves": [
         "doublehit"
       ],

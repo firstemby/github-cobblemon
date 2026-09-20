@@ -162,9 +162,7 @@
   "evolutions": [
     {
       "id": "snorunt_glalie",
-      "variant": "level_up",
       "result": "glalie",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "freezedry"
       ],
@@ -177,9 +175,7 @@
     },
     {
       "id": "snorunt_froslass",
-      "variant": "item_interact",
       "result": "froslass",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "ominouswind",
         "hex"
@@ -190,7 +186,10 @@
           "target": "gender=female"
         }
       ],
-      "requiredContext": "cobblemon:dawn_stone"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:dawn_stone"
+      }
     }
   ],
   "behaviour": {

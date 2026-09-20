@@ -143,9 +143,7 @@
   "evolutions": [
     {
       "id": "goomy_sliggoo",
-      "variant": "level_up",
       "result": "sliggoo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "acidspray"
       ],
@@ -158,9 +156,7 @@
     },
     {
       "id": "goomy_sliggoohisui",
-      "variant": "level_up",
       "result": "sliggoo hisuian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shelter"
       ],
@@ -198,9 +194,7 @@
       "evolutions": [
         {
           "id": "goomy_sliggoo",
-          "variant": "level_up",
           "result": "sliggoo",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "acidspray"
           ],
@@ -217,9 +211,7 @@
         },
         {
           "id": "goomy_sliggoohisui",
-          "variant": "level_up",
           "result": "sliggoo hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "shelter"
           ],

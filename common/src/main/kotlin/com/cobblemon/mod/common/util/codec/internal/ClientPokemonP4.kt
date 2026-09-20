@@ -8,18 +8,13 @@
 
 package com.cobblemon.mod.common.util.codec.internal
 
-import com.cobblemon.mod.common.api.mark.Marks
-import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.client.settings.ServerSettings
-import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.ItemStack
-import java.util.*
+import java.util.Optional
 
 internal data class ClientPokemonP4(
     val originalTrainerFriendship: Optional<Int>

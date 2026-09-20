@@ -8,14 +8,11 @@
 
 package com.cobblemon.mod.common.client.gui
 
-import com.cobblemon.mod.common.api.gui.blitk
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.network.chat.CommonComponents
-import net.minecraft.resources.ResourceLocation
-import kotlin.math.floor
 
 open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int): AbstractWidget(x, y, width, height, CommonComponents.EMPTY) {
     val children = mutableListOf<Entry>()

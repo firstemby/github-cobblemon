@@ -16,9 +16,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.storage.PokemonStore
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.getPlayer
 import net.minecraft.server.level.ServerPlayer
-import java.util.UUID
 
 /**
  * The base of the events around the release of Pokémon from pc or party.

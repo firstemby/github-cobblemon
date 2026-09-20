@@ -12,10 +12,10 @@ import com.cobblemon.mod.common.Cobblemon
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
-import net.minecraft.ResourceLocationException
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import net.minecraft.ResourceLocationException
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 

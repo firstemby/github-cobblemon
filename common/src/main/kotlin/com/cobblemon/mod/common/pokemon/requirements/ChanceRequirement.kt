@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.pokemon.requirements
 
 import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.genericRuntime
@@ -22,7 +22,7 @@ import kotlin.random.Random
  * @author Hiroku
  * @since January 30th, 2026
  */
-class ChanceRequirement : Requirement {
+class ChanceRequirement : TransformationRequirement {
     companion object {
         const val ADAPTER_VARIANT = "chance"
     }

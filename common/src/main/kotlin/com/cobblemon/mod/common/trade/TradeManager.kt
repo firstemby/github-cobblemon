@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.trade
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
+import com.cobblemon.mod.common.api.interaction.RequestManager
 import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.api.text.aqua
@@ -20,7 +20,7 @@ import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferNotification
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
+import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
 import com.cobblemon.mod.common.util.canInteractWith
 import com.cobblemon.mod.common.util.party
 import java.util.UUID
@@ -142,12 +142,12 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             pokemon2.cacheFriendship(player2.uuid)
 
             // If pokemon2 was originally player1's, set the friendship back to what it was at point of trading
-            if ( !pokemon2.restoreFriendship(player1.uuid) ) {
+            if (!pokemon2.restoreFriendship(player1.uuid)) {
                 // Otherwise, reset the friendship
                 pokemon2.setFriendship(pokemon2.form.baseFriendship)
             }
             // If pokemon1 was originally player2's, set the friendship back to what it was at point of trading
-            if ( !pokemon1.restoreFriendship(player2.uuid) ) {
+            if (!pokemon1.restoreFriendship(player2.uuid)) {
                 // Otherwise, reset the friendship
                 pokemon1.setFriendship(pokemon1.form.baseFriendship)
             }
@@ -155,13 +155,8 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             party2.add(pokemon1)
             party1.add(pokemon2)
 
-            pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon1, pokemon2)
-            }
-
-            pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon2, pokemon1)
-            }
+            pokemon1.triggerTransformations<TradeTrigger>(TradeTrigger.Context(pokemon2))
+            pokemon2.triggerTransformations<TradeTrigger>(TradeTrigger.Context(pokemon1))
 
             activeTrade.completeTrade()
 

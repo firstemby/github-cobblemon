@@ -25,18 +25,18 @@ import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveDouble
+import java.util.SortedMap
+import java.util.TreeMap
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.multiplayer.ClientLevel
-import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import java.util.*
 
 data class BedrockAnimationGroup(
     val formatVersion: String,

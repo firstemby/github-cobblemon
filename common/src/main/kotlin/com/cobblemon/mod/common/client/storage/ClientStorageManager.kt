@@ -12,8 +12,8 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.storage.party.PartyPosition
 import com.cobblemon.mod.common.api.storage.pc.PCPosition
 import com.cobblemon.mod.common.pokemon.Pokemon
-import net.minecraft.resources.ResourceLocation
 import java.util.UUID
+import net.minecraft.resources.ResourceLocation
 
 /**
  * Manages all known Pokémon stores on the client. This holds onto the player's party and PC permanently, but can also

@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.npc.ai.SwitchToBattleTask
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
 class SwitchToNPCBattleTaskConfig : SingleTaskConfig {
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()

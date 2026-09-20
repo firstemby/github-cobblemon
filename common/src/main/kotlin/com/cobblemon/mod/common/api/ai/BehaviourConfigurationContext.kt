@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.util.activityRegistry
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace

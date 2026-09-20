@@ -269,6 +269,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "normal",
       "secondaryType": "fighting",
       "maleRatio": 0.5,

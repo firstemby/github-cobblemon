@@ -212,9 +212,7 @@
   "evolutions": [
     {
       "id": "blitzle_zebstrika",
-      "variant": "level_up",
       "result": "zebstrika",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

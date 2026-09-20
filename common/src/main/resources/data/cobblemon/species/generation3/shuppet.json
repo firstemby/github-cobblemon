@@ -202,9 +202,7 @@
   "evolutions": [
     {
       "id": "shuppet_banette",
-      "variant": "level_up",
       "result": "banette",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "knockoff"
       ],

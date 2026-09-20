@@ -225,9 +225,7 @@
   "evolutions": [
     {
       "id": "poliwag_poliwhirl",
-      "variant": "level_up",
       "result": "poliwhirl",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

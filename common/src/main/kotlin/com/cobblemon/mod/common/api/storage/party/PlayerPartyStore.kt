@@ -12,23 +12,29 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.PassiveEvolution
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
 import com.cobblemon.mod.common.api.pokemon.feature.TickingSpeciesFeature
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.PassiveTrigger
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
-import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
-import com.cobblemon.mod.common.util.*
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.network.chat.Component
-import java.util.*
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.util.DataKeys
+import com.cobblemon.mod.common.util.getPlayer
+import com.cobblemon.mod.common.util.isBusy
+import com.cobblemon.mod.common.util.isPokemonEntity
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.updateShoulderNbt
+import java.util.UUID
 import kotlin.math.ceil
 import kotlin.math.round
 import kotlin.random.Random
 import net.minecraft.core.RegistryAccess
+import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 
 /**
  * A [PartyStore] used for a single player. This uses the player's UUID as the store's UUID, and is declared as its own
@@ -143,14 +149,29 @@ open class PlayerPartyStore(
                     }
                 }
 
-                // Passive evolutions
-                pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { it.attemptEvolution(pokemon) }
-                val removeList = mutableListOf<Evolution>()
-                pokemon.evolutionProxy.server().forEach {
-                    if (!it.test(pokemon) && it is LevelUpEvolution && !it.permanent)
-                        removeList.add(it)
+                // Passive evolutions and form changes
+                pokemon.triggerTransformations<PassiveTrigger>()
+
+                // Reevaluate active form
+                val form = pokemon.form
+                if (form is TemporaryForm && !form.reevaluate(pokemon) && !player.isBusy() && pokemon.entity?.isBusy != true) {
+                    val entity = pokemon.entity
+                    if (entity == null) {
+                        form.revert(pokemon)
+                    } else {
+                        form.performRevert(
+                            pokemonEntity = entity,
+                            context =ActionEffectContext.fromPokemonEntity(
+                                actionEffect = form.revertActionEffect,
+                                pokemonEntity = entity
+                            )
+                        )
+                    }
                 }
-                removeList.forEach { pokemon.evolutionProxy.server().remove(it) }
+
+                // Reevaluate transformation requirements and remove invalid transformations from the controller
+                pokemon.formProxy.server().reevaluate()
+                pokemon.evolutionProxy.server().reevaluate()
 
                 // Metabolism for Fullness
                 if (pokemon.currentFullness > 0) {

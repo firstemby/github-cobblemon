@@ -184,9 +184,7 @@
   "evolutions": [
     {
       "id": "venipede_whirlipede",
-      "variant": "level_up",
       "result": "whirlipede",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "irondefense"
       ],

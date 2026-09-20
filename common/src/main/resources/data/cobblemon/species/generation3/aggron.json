@@ -292,6 +292,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "steel",
       "maleRatio": 0.5,
       "height": 22,

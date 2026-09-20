@@ -9,9 +9,9 @@
 package com.cobblemon.mod.common.api.spawning.multiplier
 
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
+import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 
 /**
  * A weight multiplying [SpawningInfluence] that applies only under specific conditions. The

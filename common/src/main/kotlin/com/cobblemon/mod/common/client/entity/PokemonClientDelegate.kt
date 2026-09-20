@@ -114,6 +114,10 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                 currentEntity.refreshRiding()
             } else if (data == PokemonEntity.IS_ALPHA) {
                 currentEntity.pokemon.isAlpha = currentEntity.entityData.get(PokemonEntity.IS_ALPHA)
+            } else if (data == PokemonEntity.FORM) {
+                val formId = currentEntity.entityData.get(PokemonEntity.FORM)
+                currentEntity.pokemon.form = currentEntity.pokemon.species.getFormByShowdownId(formId)
+                currentEntity.refreshRiding()
             } else if (data == PokemonEntity.ASPECTS) {
                 currentAspects = currentEntity.entityData.get(PokemonEntity.ASPECTS)
                 currentEntity.pokemon.shiny = currentAspects.contains("shiny")

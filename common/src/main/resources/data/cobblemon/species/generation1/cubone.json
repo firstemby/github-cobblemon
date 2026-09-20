@@ -209,9 +209,7 @@
   "evolutions": [
     {
       "id": "cubone_marowak",
-      "variant": "level_up",
       "result": "marowak",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -230,9 +228,7 @@
     },
     {
       "id": "cubone_marowakalola",
-      "variant": "level_up",
       "result": "marowak alolan",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowbone"
       ],
@@ -261,9 +257,7 @@
     },
     {
       "id": "cubone_nether_marowakalola",
-      "variant": "level_up",
       "result": "marowak alolan",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -303,9 +297,7 @@
       "evolutions": [
         {
           "id": "cubone_marowak",
-          "variant": "level_up",
           "result": "marowak",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -328,9 +320,7 @@
         },
         {
           "id": "cubone_marowakalola",
-          "variant": "level_up",
           "result": "marowak alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "shadowbone"
           ],
@@ -355,9 +345,7 @@
         },
         {
           "id": "cubone_nether_marowakalola",
-          "variant": "level_up",
           "result": "marowak alolan",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

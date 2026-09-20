@@ -531,4 +531,12 @@ object CobblemonClient {
             )
         }
     }
+
+    /**
+     *
+     * This is the client equivalent of [Player].
+     *
+     */
+    /** Checks if the player is preoccupied and cannot accept an action. */
+    fun isBusy() = battle != null || trade != null
 }

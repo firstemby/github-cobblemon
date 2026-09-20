@@ -118,9 +118,7 @@
   "evolutions": [
     {
       "id": "arctibax_baxcalibur",
-      "variant": "level_up",
       "result": "baxcalibur",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "glaiverush"
       ],

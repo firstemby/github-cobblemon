@@ -17,9 +17,9 @@ import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.tms.obtain.DefaultObtainMethod
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 

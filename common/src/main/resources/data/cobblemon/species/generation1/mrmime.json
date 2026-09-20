@@ -539,6 +539,7 @@
         {
           "consumeHeldItem": false,
           "id": "mrmime_mrrime",
+          "result": "mrrime",
           "learnableMoves": [],
           "requirements": [
             {

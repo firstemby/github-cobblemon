@@ -16,4 +16,4 @@ import com.cobblemon.mod.common.api.serialization.BufferSerializer
  * @author Hiroku
  * @since November 13th, 2023
  */
-interface SynchronizedSpeciesFeature : SpeciesFeature, BufferSerializer
+interface SynchronizedSpeciesFeature<T> : SpeciesFeature<T>, BufferSerializer

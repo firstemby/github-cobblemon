@@ -11,14 +11,14 @@ package com.cobblemon.mod.common.spawning
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import java.io.FileNotFoundException
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
+import kotlin.io.path.extension
 import kotlin.io.path.isRegularFile
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.io.FileNotFoundException
-import java.net.URI
-import kotlin.io.path.extension
 
 internal class SpawnValidator {
 

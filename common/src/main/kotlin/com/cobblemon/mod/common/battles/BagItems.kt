@@ -16,12 +16,12 @@ import com.cobblemon.mod.common.battles.runner.ShowdownService
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.item.battle.BagItemLike
 import com.cobblemon.mod.common.util.cobblemonResource
+import java.io.File
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.item.ItemStack
-import java.io.File
 
 /**
  * A registry for [BagItem]s that could be parsed from [ItemStack]s. This registry is used as the resource loading

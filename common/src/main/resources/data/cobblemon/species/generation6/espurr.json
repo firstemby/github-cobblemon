@@ -214,9 +214,7 @@
   "evolutions": [
     {
       "id": "espurr_meowstic",
-      "variant": "level_up",
       "result": "meowstic male",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -231,9 +229,7 @@
     },
     {
       "id": "espurr_meowsticf",
-      "variant": "level_up",
       "result": "meowstic female",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

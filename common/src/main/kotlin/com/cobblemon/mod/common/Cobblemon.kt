@@ -97,10 +97,10 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.aspects.ALPHA_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.COSMETIC_SLOT_ASPECT
+import com.cobblemon.mod.common.pokemon.aspects.FORM_ASPECTS
 import com.cobblemon.mod.common.pokemon.aspects.GENDER_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.MARK_ASPECT
 import com.cobblemon.mod.common.pokemon.aspects.SHINY_ASPECT
-import com.cobblemon.mod.common.pokemon.evolution.variants.BlockClickEvolution
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatureProvider
 import com.cobblemon.mod.common.pokemon.feature.TagSeasonResolver
@@ -115,6 +115,7 @@ import com.cobblemon.mod.common.pokemon.properties.NoAIProperty
 import com.cobblemon.mod.common.pokemon.properties.UnaspectPropertyType
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.stat.CobblemonStatProvider
+import com.cobblemon.mod.common.pokemon.transformation.triggers.BlockClickTrigger
 import com.cobblemon.mod.common.starter.CobblemonStarterHandler
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.world.feature.CobblemonPlacedFeatures
@@ -273,13 +274,8 @@ object Cobblemon {
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe { event ->
             val player = event.player
             val block = player.level().getBlockState(event.pos).block
-            player.party().forEach { pokemon ->
-                pokemon.lockedEvolutions
-                    .filterIsInstance<BlockClickEvolution>()
-                    .forEach { evolution ->
-                        evolution.attemptEvolution(pokemon, BlockClickEvolution.BlockInteractionContext(block, player.level()))
-                    }
-            }
+            val context = BlockClickTrigger.Context(block, player.level())
+            player.party().forEach { pokemon -> pokemon.triggerTransformations<BlockClickTrigger>(context) }
         }
 
         PlatformEvents.CHANGE_DIMENSION.subscribe {
@@ -323,6 +319,7 @@ object Cobblemon {
 
         SHINY_ASPECT.register()
         GENDER_ASPECT.register()
+        FORM_ASPECTS.register()
         COSMETIC_SLOT_ASPECT.register()
         CHARACTERISTIC_RAINBOW_ASPECT.register()
         ALPHA_ASPECT.register()

@@ -394,7 +394,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     private fun breakFree() {
         val pokemon = capturingPokemon ?: return
         pokemon.setPositionSafely(position())
-        
+
         pokemon.beamMode = 2
         pokemon.isInvisible = false
         pokemon.isSilent = false
@@ -419,7 +419,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
         pokemon.after(seconds = 0.1F) {
             pokemon.beamMode = 0
-            pokemon.busyLocks.remove(this)
+            pokemon.busyLocks.remove(PokemonEntity.CAPTURE)
         }
 
         after(seconds = 0.1F) {
@@ -445,7 +445,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     override fun getDimensions(pPose: Pose) = DIMENSIONS
 
     private fun attemptCatch(pokemonEntity: PokemonEntity) {
-        pokemonEntity.busyLocks.add(this)
+        pokemonEntity.busyLocks.add(PokemonEntity.CAPTURE)
         val displace = deltaMovement
         captureState = CaptureState.HIT
         val mul = if (random.nextBoolean()) 1 else -1

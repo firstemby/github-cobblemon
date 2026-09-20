@@ -348,6 +348,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.875,
       "height": 16,
@@ -438,6 +439,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.875,
       "height": 250,

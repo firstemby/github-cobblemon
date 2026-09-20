@@ -12,6 +12,8 @@ import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.data.ShowdownIdentifiable
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.categories.DamageCategories
 import com.cobblemon.mod.common.api.moves.categories.DamageCategory
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -55,7 +57,7 @@ open class MoveTemplate(
     val critRatio: Double,
     val effectChances: Array<Double>,
     val weight: Float
-) {
+) : ShowdownIdentifiable {
     val struct: MoStruct by lazy {
         QueryStruct(hashMapOf())
             .addFunction("name") { StringValue(name) }
@@ -162,6 +164,8 @@ open class MoveTemplate(
         }
         return this.elementalType
     }
+
+    override fun showdownId() = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
 
     fun getSelectionWeight(form: FormData): Float {
         return if (this in form.signatureMoves) {

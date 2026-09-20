@@ -13,7 +13,12 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
-import com.cobblemon.mod.common.util.adapters.*
+import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.ModelTextureSupplierAdapter
+import com.cobblemon.mod.common.util.adapters.SpriteTypeAdapter
+import com.cobblemon.mod.common.util.adapters.Vector3fAdapter
+import com.cobblemon.mod.common.util.adapters.Vector4fAdapter
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.resolveBoolean
@@ -21,9 +26,9 @@ import com.cobblemon.mod.common.util.toRGBA
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.platform.NativeImage
+import kotlin.math.floor
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
-import kotlin.math.floor
 import net.minecraft.resources.ResourceLocation
 import org.joml.Vector3f
 import org.joml.Vector4f

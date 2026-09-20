@@ -200,14 +200,15 @@
   "evolutions": [
     {
       "id": "crabrawler_crabominable",
-      "variant": "item_interact",
       "result": "crabominable",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "icepunch"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:ice_stone",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:ice_stone"
+      },
       "drops": {
         "amount": 1,
         "entries": [

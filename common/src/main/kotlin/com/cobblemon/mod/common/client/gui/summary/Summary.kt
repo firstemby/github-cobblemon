@@ -22,15 +22,25 @@ import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.*
 import com.cobblemon.mod.common.client.gui.summary.widgets.*
+import com.cobblemon.mod.common.client.gui.CobblemonRenderable
+import com.cobblemon.mod.common.client.gui.ExitButton
+import com.cobblemon.mod.common.client.gui.TypeIcon
+import com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.PartyWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.SummaryTab
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.info.InfoWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.stats.StatWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.EvolutionTestSelectScreen
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.transformations.FormSelectScreen
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHiddenPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -78,6 +88,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         const val PARTY = 0
         const val MOVE_SWAP = 1
         const val EVOLVE = 2
+        const val FORM = 3
 
         // Resources
         private val baseResource = cobblemonResource("textures/gui/summary/summary_base.png")
@@ -92,6 +103,8 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         private val tabIconMoves = cobblemonResource("textures/gui/summary/summary_tab_icon_moves.png")
         private val tabIconStats = cobblemonResource("textures/gui/summary/summary_tab_icon_stats.png")
         private val tabIconMarks = cobblemonResource("textures/gui/summary/summary_tab_icon_marks.png")
+        private val formButtonResource = cobblemonResource("textures/gui/summary/summary_form_test_button.png")
+        private val revertButtonResource = cobblemonResource("textures/gui/summary/summary_revert_test_button.png")
         val iconShinyResource = cobblemonResource("textures/gui/summary/icon_shiny.png")
         val iconHeldItemResource = cobblemonResource("textures/gui/summary/icon_item_held.png")
         val iconCosmeticItemResource = cobblemonResource("textures/gui/summary/icon_item_cosmetic.png")
@@ -169,16 +182,46 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
                 },
                 text = lang("ui.evolve"),
                 resource = evolveButtonResource,
-                renderRequirement = {
-                    selectedPokemon.evolutionProxy.client().isNotEmpty()
-                        && CobblemonClient.battle == null
-                        && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE
+                renderRequirement = {  selectedPokemon.evolutionProxy.client().canStart() },
+                clickRequirement = { selectedPokemon.evolutionProxy.client().canStart() }
+            )
+        )
+
+        // TODO form and revert button are temp for debugging
+
+        // Form Button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 4F,
+                buttonY = y + 30F,
+                buttonWidth = 10,
+                buttonHeight = 10,
+                clickAction = {
+                    momentarily { displaySideScreen(if (sideScreenIndex == FORM) PARTY else FORM) }
                 },
-                clickRequirement = {
-                    selectedPokemon.evolutionProxy.client().isNotEmpty()
-                        && CobblemonClient.battle == null
-                        && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE
-                }
+                resource = formButtonResource,
+                renderRequirement = { selectedPokemon.formProxy.client().canStart() },
+                clickRequirement = { selectedPokemon.formProxy.client().canStart() }
+            )
+        )
+
+        // Temporary form revert button
+        addRenderableWidget(
+            SummaryButton(
+                buttonX = x + 4F,
+                buttonY = y + 50F,
+                buttonWidth = 10,
+                buttonHeight = 10,
+                clickAction = {
+                    momentarily {
+                        Minecraft.getInstance().player?.clientSideCloseContainer()
+                        playSound(CobblemonSounds.GUI_CLICK)
+                        sendToServer(RevertFormPacket(selectedPokemon.uuid))
+                    }
+                },
+                resource = revertButtonResource,
+                renderRequirement = { selectedPokemon.formProxy.client().canRevert() && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE },
+                clickRequirement = { selectedPokemon.formProxy.client().canRevert() && selectedPokemon.heldItem.item != CobblemonItems.EVERSTONE }
             )
         )
 
@@ -334,7 +377,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         listenToMoveSet()
         displayMainScreen(mainScreenIndex)
         if (::markingsWidget.isInitialized) markingsWidget.setActivePokemon(selectedPokemon)
-        children().find { it is EvolutionSelectScreen }?.let(this::removeWidget)
+        children().find { it is EvolutionTestSelectScreen }?.let(this::removeWidget)
     }
 
     fun updatePokemonInfo() {
@@ -475,10 +518,20 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
             EVOLVE -> {
                 saveActiveMark()
                 saveMarkings()
-                sideScreen = EvolutionSelectScreen(
+                sideScreen = EvolutionTestSelectScreen(
                         x + 216,
                         y + 23,
                         pokemon = selectedPokemon
+                )
+            }
+
+            FORM -> {
+                saveActiveMark()
+                saveMarkings()
+                sideScreen = FormSelectScreen(
+                    x + 216,
+                    y + 23,
+                    pokemon = selectedPokemon
                 )
             }
         }
@@ -680,7 +733,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        if (sideScreenIndex == MOVE_SWAP || sideScreenIndex == EVOLVE || sideScreenIndex == FORM) sideScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         if (mainScreenIndex == MOVES) mainScreen.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }

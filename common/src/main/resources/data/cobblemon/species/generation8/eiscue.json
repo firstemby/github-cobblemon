@@ -194,6 +194,7 @@
   "forms": [
     {
       "name": "Noice-Face",
+      "variant": "temporary",
       "primaryType": "ice",
       "maleRatio": 0.5,
       "height": 14,

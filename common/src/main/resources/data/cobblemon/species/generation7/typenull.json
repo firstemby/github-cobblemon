@@ -135,9 +135,7 @@
   "evolutions": [
     {
       "id": "typenull_silvally",
-      "variant": "level_up",
       "result": "silvally",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "multiattack"
       ],

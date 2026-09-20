@@ -272,6 +272,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "grass",
       "secondaryType": "dragon",
       "maleRatio": 0.875,

@@ -15,8 +15,8 @@ import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.scheduling.delayedFuture
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
-import net.minecraft.core.registries.Registries
 import java.util.concurrent.CompletableFuture
+import net.minecraft.core.registries.Registries
 
 /**
  * An action effect keyframe that plays a positioned sound for all matching entities.
@@ -45,6 +45,6 @@ class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), Entit
             entity.playSound(soundEvent, 1f, 1f)
         }
 
-        return delayedFuture(seconds = delay.resolveFloat(context.runtime))
+        return delayedFuture(seconds = delay.resolveFloat(context.runtime), context.tracker)
     }
 }

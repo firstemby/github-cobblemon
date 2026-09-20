@@ -196,9 +196,7 @@
   "evolutions": [
     {
       "id": "roggenrola_boldore",
-      "variant": "level_up",
       "result": "boldore",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "powergem"
       ],

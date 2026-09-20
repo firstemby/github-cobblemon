@@ -26,11 +26,10 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect
 import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
-import com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroups
 import com.cobblemon.mod.common.api.pokemon.moves.Learnset
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
+import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.riding.RidingProperties
 import com.cobblemon.mod.common.api.storage.InvalidSpeciesException
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -42,6 +41,10 @@ import com.cobblemon.mod.common.net.IntSize
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour
 import com.cobblemon.mod.common.pokemon.lighthing.LightingData
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
+import com.cobblemon.mod.common.pokemon.transformation.form.PermanentForm
+import com.cobblemon.mod.common.pokemon.transformation.form.StandardForm
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
 import com.cobblemon.mod.common.util.*
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -50,6 +53,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
+
+// UPDATE THE SPECIES SCHEMA IF YOU MODIFY THIS! THANKS
 
 class Species : ShowdownIdentifiable {
     var name: String = "Bulbasaur"
@@ -120,13 +125,44 @@ class Species : ShowdownIdentifiable {
     var weight = 1F
         private set
 
-    var forms = mutableListOf<FormData>()
+    /**
+     * The [FormData] representation of this species.
+     *
+     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
+     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
+     */
+    val standardForm by lazy {
+        StandardForm(
+            preEvolution = this.preEvolution,
+            evolutions = this.evolutions,
+            forms = this.forms
+        ).also {
+            it.initialize(this)
+        }
+    }
+
+    /** Aggregates child forms, their nested forms, and the base standard form. This is all possible forms of the species. */
+    val allForms: Collection<FormData>
+        get() = this.standardForm.flattenForms() + this.standardForm
+
+    /** The [PermanentForm]s that belong to the [standardForm]. */
+    val permanentForms: Collection<PermanentForm> get() = this.forms.filterIsInstance<PermanentForm>()
+
+    /** The [TemporaryForm]s that belong to the [standardForm]. */
+    val temporaryForms: Collection<TemporaryForm> get() = this.forms.filterIsInstance<TemporaryForm>()
+
+    /**
+     * The child forms belonging to this species' base [standardForm].
+     *
+     * This does not include the standard form itself nor any nested forms belonging to [permanentForms] of the standard form.
+     * For an exhaustive list of all possible forms, use [allForms].
+     */
+    var forms: MutableList<FormData> = mutableListOf()
         private set
+    // TODO serialize under a different name and have 'allForms' be 'forms'
 
     var riding: RidingProperties = RidingProperties()
         private set
-
-    val standardForm by lazy { FormData(_evolutions = this.evolutions).initialize(this) }
 
     var labels = hashSetOf<String>()
         private set
@@ -176,15 +212,13 @@ class Species : ShowdownIdentifiable {
 
     fun initialize() {
         Cobblemon.statProvider.provide(this)
-        this.forms.forEach { it.initialize(this) }
-        if (this.forms.isNotEmpty() && this.forms.none { it == this.standardForm }) {
-            this.forms.add(0, this.standardForm)
-        }
         this.lightingData?.let { this.lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species
         this.preEvolution?.form
         this.evolutions.size
+        // init all forms
+        this.standardForm
         behaviour.herd.initialize()
     }
 
@@ -196,14 +230,34 @@ class Species : ShowdownIdentifiable {
                 pokemon.form.moves.evolutionMoves += evolution.learnableMoves
             }
         }
-        this.forms.forEach(FormData::resolveEvolutionMoves)
+        this.permanentForms.forEach(PermanentForm::resolveEvolutionMoves)
     }
 
     fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.resourceIdentifier}\" level=${level}").create()
 
-    fun getForm(aspects: Set<String>) = forms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
-    fun getFormByName(name: String) = forms.firstOrNull { it.name == name } ?: standardForm
-    fun getFormByShowdownId(formOnlyShowdownId: String) = forms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
+    /**
+     * Retrieves a form by its aspects.
+     *
+     * @param aspects A set of aspects that's provided by a form belonging to this species.
+     * @return The form that has a matching [FormData.aspects], or the [standardForm].
+     */
+    fun getForm(aspects: Set<String>) = allForms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
+
+    /**
+     * Retrieves a form by its name.
+     *
+     * @param name The name of a form belonging to this species.
+     * @return A form that has a matching [FormData.name], or the [standardForm].
+     */
+    fun getFormByName(name: String) = allForms.firstOrNull { it.name.lowercase() == name.lowercase() } ?: standardForm
+
+    /**
+     * Retrieves a form by its unique Showdown ID.
+     *
+     * @param formOnlyShowdownId The unique identifier (in Showdown format) of a form belonging to this species.
+     * @return The form that has a matching [FormData.formOnlyShowdownId], or the [standardForm].
+     */
+    fun getFormByShowdownId(formOnlyShowdownId: String) = allForms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: VANILLA_DEFAULT_EYE_HEIGHT
@@ -240,7 +294,6 @@ class Species : ShowdownIdentifiable {
         // Hitbox end
         this.moves.encode(buffer)
         buffer.writeCollection(this.pokedex) { pb, line -> pb.writeString(line) }
-        buffer.writeCollection(this.forms) { _, form -> form.encode(buffer) }
         buffer.writeIdentifier(this.battleTheme)
         buffer.writeCollection(this.features) { pb, feature -> pb.writeString(feature) }
         this.behaviour.encode(buffer)
@@ -277,8 +330,6 @@ class Species : ShowdownIdentifiable {
         this.moves.decode(buffer)
         this.pokedex.clear()
         this.pokedex += buffer.readList { pb -> pb.readString() }
-        this.forms.clear()
-        this.forms += buffer.readList{ FormData().apply { decode(buffer) } }.filterNotNull()
         this.battleTheme = buffer.readIdentifier()
         this.features.clear()
         this.features += buffer.readList { pb -> pb.readString() }
@@ -305,7 +356,7 @@ class Species : ShowdownIdentifiable {
     /**
      * The literal Showdown ID of this species.
      * This will be a lowercase version of the [name] with all the non-alphanumeric characters removed. For example, "Mr. Mime" becomes "mrmime".
-     * If a Species is not a part of the Cobblemon mon the [resourceIdentifier] will have the namespace appended at the start of the ID resulting in something such as 'somemodaspecies'
+     * If a Species is not a part of the Cobblemon mod, the [resourceIdentifier] will have the namespace appended at the start of the ID resulting in something such as 'somemodaspecies'
      *
      * @return The literal Showdown ID of this species.
      */
@@ -326,6 +377,19 @@ class Species : ShowdownIdentifiable {
      * @return The unformatted literal Showdown ID of this species.
      */
     private fun unformattedShowdownId(): String = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
+
+    /**
+     * The Showdown name of this species.
+     * If a species is not a part of the Cobblemon mod, the [resourceIdentifier] will have the namespace appended at
+     * the start of the name. 'Namespace:Species'.
+     *
+     * @return The Showdown name of this species.
+     */
+    fun showdownName(): String {
+        val namespace = this.resourceIdentifier.namespace
+        val name = this.name
+        return if (namespace == Cobblemon.MODID) name else "$namespace:$name"
+    }
 
     override fun toString() = this.showdownId()
 

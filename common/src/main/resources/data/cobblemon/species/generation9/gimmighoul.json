@@ -123,9 +123,7 @@
   "evolutions": [
     {
       "id": "gimmighoul_gholdengo",
-      "variant": "level_up",
       "result": "gholdengo",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -136,9 +134,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite1",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage1",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -154,9 +150,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite2",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage2",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -172,9 +166,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite3",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage3",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -190,9 +182,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite4",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage4",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -208,9 +198,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite5",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage5",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -226,9 +214,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite6",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage6",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -244,9 +230,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite7",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=stage7",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -262,9 +246,7 @@
     },
     {
       "id": "gimmighoul_gholdengonetherite8",
-      "variant": "level_up",
       "result": "gholdengo netherite_coating=full",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -362,9 +344,7 @@
       "evolutions": [
         {
           "id": "gimmighoul_gholdengo",
-          "variant": "level_up",
           "result": "gholdengo",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -375,9 +355,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite1",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage1",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -393,9 +371,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite2",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage2",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -411,9 +387,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite3",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage3",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -429,9 +403,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite4",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage4",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -447,9 +419,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite5",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage5",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -465,9 +435,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite6",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage6",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -483,9 +451,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite7",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=stage7",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -501,9 +467,7 @@
         },
         {
           "id": "gimmighoul_gholdengonetherite8",
-          "variant": "level_up",
           "result": "gholdengo netherite_coating=full",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {

@@ -11,8 +11,15 @@ package com.cobblemon.mod.common.entity.pokemon
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
-import com.cobblemon.mod.common.*
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonCosmeticItems
+import com.cobblemon.mod.common.CobblemonEntities
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.drop.DropTable
 import com.cobblemon.mod.common.api.entity.Despawner
@@ -71,12 +78,19 @@ import com.cobblemon.mod.common.battles.SuccessfulBattleStart
 import com.cobblemon.mod.common.block.entity.PokemonPastureBlockEntity
 import com.cobblemon.mod.common.client.MountedCameraTypeHandler
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
-import com.cobblemon.mod.common.entity.*
+import com.cobblemon.mod.common.entity.BehaviourEditingTracker
+import com.cobblemon.mod.common.entity.EntityCallbacks
+import com.cobblemon.mod.common.entity.MoLangScriptingEntity
+import com.cobblemon.mod.common.entity.OmniPathingEntity
+import com.cobblemon.mod.common.entity.PlatformType
+import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.PoseType.Companion.NO_GRAV_POSES
 import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity.Companion.BUSY_LOCKED
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -102,16 +116,23 @@ import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour
 import com.cobblemon.mod.common.pokemon.ai.ObtainableItem
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
-import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatureProvider
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
+import com.cobblemon.mod.common.pokemon.transformation.triggers.ItemInteractionTrigger
 import com.cobblemon.mod.common.util.*
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.google.common.collect.UnmodifiableIterator
 import com.mojang.serialization.Codec
 import com.mojang.serialization.Dynamic
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import kotlin.math.PI
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.min
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -175,12 +196,6 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
-import java.util.*
-import java.util.concurrent.CompletableFuture
-import kotlin.math.PI
-import kotlin.math.ceil
-import kotlin.math.max
-import kotlin.math.min
 
 @Suppress("unused")
 open class PokemonEntity(
@@ -211,15 +226,18 @@ open class PokemonEntity(
         @JvmStatic val FRIENDSHIP = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.INT)
         @JvmStatic val FREEZE_FRAME = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic val CAUGHT_BALL = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
-        @JvmStatic val EVOLUTION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val TRANSFORMATION_STARTED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val FORM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.STRING)
+        @JvmStatic val BUSY_LOCKED = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic var SHOWN_HELD_ITEM = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.ITEM_STACK)
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
 
-        const val BATTLE_LOCK = "battle"
-        const val EVOLUTION_LOCK = "evolving"
+        // Cobblemon busy locks
+        val SHOULDER_MOUNT_LOCK = cobblemonResource("shoulder_mount")
+        val CAPTURE = cobblemonResource("capture")
 
         const val FALL_DAMAGE_MULT_FLYINGTYPE = 0.5f
         const val FALL_DAMAGE_MULT_MOVEMENT_FLY = 0.2f
@@ -270,14 +288,27 @@ open class PokemonEntity(
     /** The player that caused this Pokémon to faint. */
     var killer: ServerPlayer? = null
 
-    val isEvolving: Boolean
-        get() = entityData.get(EVOLUTION_STARTED)
+    val isTransforming: Boolean
+        get() = entityData.get(TRANSFORMATION_STARTED)
     var evolutionEntity: GenericBedrockEntity? = null
 
     var ticksLived = 0
-    val busyLocks = mutableListOf<Any>()
+
+    /**
+     * Custom locks for marking an entity as busy. When populated, [isBusy] and [BUSY_LOCKED] will always evaluate as TRUE.
+     *
+     * NOTE: [BUSY_LOCKED] is NOT a comprehensive check of whether an entity is busy. [isBusy] evaluates Cobblemon-specific
+     * busy conditions that should ALWAYS be checked.
+     */
+    val busyLocks = mutableListOf<ResourceLocation>()
+
+    /**
+     * Whether this entity is performing a blocking action.
+     *
+     * To track an action as blocking, add it to the [busyLocks].
+     */
     val isBusy: Boolean
-        get() = busyLocks.isNotEmpty()
+        get() = entityData.get(BUSY_LOCKED) || isBattling || isTransforming
     val aspects: Set<String>
         get() = entityData.get(ASPECTS)
     var battleId: UUID?
@@ -461,7 +492,9 @@ open class PokemonEntity(
         builder.define(FRIENDSHIP, 0)
         builder.define(FREEZE_FRAME, -1F)
         builder.define(CAUGHT_BALL, "")
-        builder.define(EVOLUTION_STARTED, false)
+        builder.define(TRANSFORMATION_STARTED, false)
+        builder.define(FORM, "")
+        builder.define(BUSY_LOCKED, false)
         builder.define(SHOWN_HELD_ITEM, ItemStack.EMPTY)
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
@@ -478,33 +511,11 @@ open class PokemonEntity(
 
         // common SynchedEntityData handling
         when (data) {
-            SPECIES -> refreshDimensions()
+            SPECIES, FORM, SCALE_MODIFIER -> refreshDimensions()
             POSE_TYPE -> {
                 val value = entityData.get(data) as PoseType
                 isNoGravity = (value in NO_GRAV_POSES) && passengers.isEmpty()
             }
-
-            BATTLE_ID -> {
-                if (battleId != null) {
-                    busyLocks.remove(BATTLE_LOCK) // Remove in case it's hopped across to another battle, don't want extra battle locks
-                    busyLocks.add(BATTLE_LOCK)
-                    brain.setMemory(CobblemonMemories.POKEMON_BATTLE, battleId)
-                } else {
-                    busyLocks.remove(BATTLE_LOCK)
-                    brain.eraseMemory(CobblemonMemories.POKEMON_BATTLE)
-                }
-            }
-
-            EVOLUTION_STARTED -> {
-                if (isEvolving) {
-                    busyLocks.remove(EVOLUTION_LOCK)
-                    busyLocks.add(EVOLUTION_LOCK)
-                } else {
-                    busyLocks.remove(EVOLUTION_LOCK)
-                }
-            }
-
-            SCALE_MODIFIER -> refreshDimensions()
         }
     }
 
@@ -1482,22 +1493,16 @@ open class PokemonEntity(
         }
 
         // Evolution item logic
+        // Check evolution and form change item interaction
         if (pokemon.getOwnerPlayer() == player) {
-            val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
-            pokemon.lockedEvolutions
-                    .filterIsInstance<ItemInteractionEvolution>()
-                    .forEach { evolution ->
-                        if (evolution.attemptEvolution(pokemon, context)) {
-                            stack.consume(1, player)
-                            this.level().playSoundServer(
-                                    position = this.position(),
-                                    sound = CobblemonSounds.ITEM_USE,
-                                    volume = 1F,
-                                    pitch = 1F
-                            )
-                            return true
-                        }
-                    }
+            val context = ItemInteractionTrigger.Context(stack, player.level())
+            val transformed = pokemon.triggerTransformations<ItemInteractionTrigger>(context)
+
+            if (transformed.any()) {
+                if (!player.isCreative) stack.shrink(1)
+                this.level().playSoundServer(position = this.position(), sound = CobblemonSounds.ITEM_USE, volume = 1F, pitch = 1F)
+                return true
+            }
         }
 
         // Fallback to item-defined interaction
@@ -1617,10 +1622,9 @@ open class PokemonEntity(
             ) {
                 val dirToPlayer = player.eyePosition.subtract(position()).multiply(1.0, 0.0, 1.0).normalize()
                 deltaMovement = dirToPlayer.scale(0.8).add(0.0, 0.5, 0.0)
-                val lock = Any()
-                busyLocks.add(lock)
+                busyLocks.add(SHOULDER_MOUNT_LOCK)
                 after(seconds = 0.5F) {
-                    busyLocks.remove(lock)
+                    busyLocks.remove(SHOULDER_MOUNT_LOCK)
                     if (!isBusy && isAlive) {
                         val isLeft = player.shoulderEntityLeft.isEmpty
                         if (isLeft || player.shoulderEntityRight.isEmpty) {
@@ -1845,7 +1849,7 @@ open class PokemonEntity(
 
         val feature = pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)
         if (feature != null) {
-            feature.enabled = false
+            feature.value = false
             pokemon.markFeatureDirty(feature)
             pokemon.updateAspects()
         }
@@ -2129,7 +2133,7 @@ open class PokemonEntity(
 
     override fun shear(shearedSoundCategory: SoundSource) {
         val slowpokeTailFeature = SlowpokeTailRegrowthSpeciesFeatureProvider.getFromPokemon(pokemon)
-        if (slowpokeTailFeature != null && slowpokeTailFeature.regrowthSeconds <= 0) {
+        if (slowpokeTailFeature != null && slowpokeTailFeature.value <= 0) {
             this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F)
             slowpokeTailFeature.onShear(this)
             return
@@ -2137,7 +2141,7 @@ open class PokemonEntity(
 
         val feature = this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED) ?: return
         this.level().playSound(null, this, SoundEvents.SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F)
-        feature.enabled = true
+        feature.value = true
         this.pokemon.markFeatureDirty(feature)
         this.pokemon.updateAspects()
         val i = this.random.nextInt(3) + 1
@@ -2171,12 +2175,12 @@ open class PokemonEntity(
             return false
         }
         val slowpokeRegrowthFeature = SlowpokeTailRegrowthSpeciesFeatureProvider.getFromPokemon(pokemon)
-        return if (slowpokeRegrowthFeature != null && slowpokeRegrowthFeature.regrowthSeconds > 0) {
+        return if (slowpokeRegrowthFeature != null && slowpokeRegrowthFeature.value > 0) {
             false
         } else if (slowpokeRegrowthFeature != null) {
             true
         } else {
-            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.enabled == false
+            this.pokemon.getFeature<FlagSpeciesFeature>(DataKeys.HAS_BEEN_SHEARED)?.value == false
         }
     }
 

@@ -11,9 +11,9 @@ package com.cobblemon.mod.common.client.render.shader
 import com.cobblemon.mod.common.util.ShaderRegistryData
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import java.util.function.Consumer
 import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.server.packs.resources.ResourceProvider
-import java.util.function.Consumer
 
 object CobblemonShaders {
     val SHADERS_TO_REGISTER = mutableListOf<Pair<(ResourceProvider) -> ShaderRegistryData, Consumer<ShaderInstance>>>()

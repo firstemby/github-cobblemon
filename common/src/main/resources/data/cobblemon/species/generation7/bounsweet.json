@@ -144,9 +144,7 @@
   "evolutions": [
     {
       "id": "bounsweet_steenee",
-      "variant": "level_up",
       "result": "steenee",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "doubleslap"
       ],

@@ -13,8 +13,6 @@ import com.cobblemon.mod.common.CobblemonRecipeTypes
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe
-import net.minecraft.client.Minecraft
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec

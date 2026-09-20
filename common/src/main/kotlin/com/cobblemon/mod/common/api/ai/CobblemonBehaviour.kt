@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.ai.config.BehaviourConfig
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
-import com.cobblemon.mod.common.api.scripting.CobblemonScripts
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.resolve
 import com.cobblemon.mod.common.util.withQueryValue

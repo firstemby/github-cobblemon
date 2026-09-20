@@ -215,9 +215,7 @@
   "evolutions": [
     {
       "id": "quilava_typhlosion",
-      "variant": "level_up",
       "result": "typhlosion",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {
@@ -228,9 +226,7 @@
     },
     {
       "id": "quilava_typhlosionhisui",
-      "variant": "level_up",
       "result": "typhlosion hisuian",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "infernalparade"
       ],
@@ -269,9 +265,7 @@
       "evolutions": [
         {
           "id": "quilava_typhlosion",
-          "variant": "level_up",
           "result": "typhlosion",
-          "consumeHeldItem": false,
           "learnableMoves": [],
           "requirements": [
             {
@@ -286,9 +280,7 @@
         },
         {
           "id": "quilava_typhlosionhisui",
-          "variant": "level_up",
           "result": "typhlosion hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "infernalparade"
           ],

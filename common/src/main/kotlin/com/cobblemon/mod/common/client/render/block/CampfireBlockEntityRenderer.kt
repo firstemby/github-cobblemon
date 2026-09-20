@@ -15,6 +15,9 @@ import com.cobblemon.mod.common.item.CampfirePotItem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.ItemBlockRenderTypes
 import net.minecraft.client.renderer.MultiBufferSource
@@ -27,9 +30,6 @@ import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING
 import org.joml.Vector3f
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
 
 class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity> {
 

@@ -257,13 +257,14 @@
   "evolutions": [
     {
       "id": "haunter_gengar",
-      "variant": "trade",
       "result": "gengar",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "shadowpunch"
       ],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ]
 }

@@ -128,9 +128,7 @@
   "evolutions": [
     {
       "id": "silicobra_sandaconda",
-      "variant": "level_up",
       "result": "sandaconda",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

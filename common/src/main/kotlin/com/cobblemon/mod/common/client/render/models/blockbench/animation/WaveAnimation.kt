@@ -14,8 +14,8 @@ import com.cobblemon.mod.common.client.render.models.blockbench.addPosition
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.wavefunction.WaveFunction
-import net.minecraft.client.model.geom.ModelPart
 import kotlin.math.atan
+import net.minecraft.client.model.geom.ModelPart
 
 /**
  * An animation that interpolates some segment of limbs onto a given wave function. This wave function

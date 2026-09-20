@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
-import com.cobblemon.mod.common.util.getPlayer
 import net.minecraft.server.level.ServerPlayer
 
 /**

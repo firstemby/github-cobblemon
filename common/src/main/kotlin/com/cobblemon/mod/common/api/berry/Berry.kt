@@ -26,10 +26,10 @@ import com.cobblemon.mod.common.util.writeBox
 import com.cobblemon.mod.common.util.writeEnumConstant
 import com.cobblemon.mod.common.util.writeIdentifier
 import com.google.gson.annotations.SerializedName
-import net.minecraft.core.BlockPos
-import net.minecraft.network.RegistryFriendlyByteBuf
 import java.awt.Color
 import java.util.EnumSet
+import net.minecraft.core.BlockPos
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.LivingEntity

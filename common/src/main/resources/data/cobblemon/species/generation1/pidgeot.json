@@ -280,6 +280,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "normal",
       "secondaryType": "flying",
       "maleRatio": 0.5,

@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
@@ -28,10 +29,10 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.simplify
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import java.util.concurrent.CompletableFuture
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
-import java.util.concurrent.CompletableFuture
 
 /**
  * A data registry responsible for providing tab completion for Pokemon properties.
@@ -151,6 +152,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
         this.inject(setOf("helditem", "held_item"), setOf("cobblemon:exp_share"))
         this.inject(setOf("min_perfect_ivs"), setOf("0", "6"))
         this.inject(setOf("scale_modifier"), setOf("0.5", "2.0"))
+        this.inject(setOf("form"), PokemonSpecies.forms.map { it.formOnlyShowdownId() })
 
         Stats.PERMANENT.forEach{ stat ->
             val statName = stat.toString().lowercase()

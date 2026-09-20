@@ -178,9 +178,7 @@
   "evolutions": [
     {
       "id": "sandygast_palossand",
-      "variant": "level_up",
       "result": "palossand",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -18,7 +18,6 @@ import com.cobblemon.mod.common.util.permission
 import com.cobblemon.mod.common.util.toBlockPos
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
@@ -26,8 +25,8 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.coordinates.Vec3Argument
 import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.MobSpawnType
-import net.minecraft.world.phys.Vec3
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.Vec3
 
 object SpawnPokemon {
 

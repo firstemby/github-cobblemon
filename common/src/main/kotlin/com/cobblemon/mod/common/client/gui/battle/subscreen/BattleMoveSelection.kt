@@ -15,7 +15,10 @@ import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.gold
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.text.text
-import com.cobblemon.mod.common.battles.*
+import com.cobblemon.mod.common.battles.InBattleMove
+import com.cobblemon.mod.common.battles.MoveActionResponse
+import com.cobblemon.mod.common.battles.ShiftActionResponse
+import com.cobblemon.mod.common.battles.Targetable
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon

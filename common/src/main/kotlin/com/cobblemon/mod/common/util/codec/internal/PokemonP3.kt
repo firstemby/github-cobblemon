@@ -20,12 +20,12 @@ import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import java.util.*
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
@@ -104,13 +104,7 @@ internal data class PokemonP3(
                 Codec.FLOAT.optionalFieldOf(DataKeys.POKEMON_RIDE_STAMINA, 1F).forGetter(PokemonP3::rideStamina),
                 Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
-                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)
-            ).apply(instance) {
-              originalTrainerType,
-              originalTrainer,
-              forcedAspects,
-              features,
-              heldItemVisible,
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)).apply(instance) { originalTrainerType, originalTrainer, forcedAspects, features, heldItemVisible,
               canDropHeldItem,
               cosmeticItem,
               activeMark,
@@ -121,12 +115,7 @@ internal data class PokemonP3(
               rideStamina,
               currentFullness,
               interactionCooldown,
-              isAlpha -> PokemonP3(
-                originalTrainerType,
-                originalTrainer,
-                forcedAspects.toSet(),
-                features,
-                heldItemVisible,
+              isAlpha -> PokemonP3(originalTrainerType, originalTrainer, forcedAspects.toSet(), features, heldItemVisible,
                 canDropHeldItem,
                 cosmeticItem.orElse(ItemStack.EMPTY),
                 activeMark,

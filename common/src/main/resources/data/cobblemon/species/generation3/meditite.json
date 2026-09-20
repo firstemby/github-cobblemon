@@ -228,9 +228,7 @@
   "evolutions": [
     {
       "id": "meditite_medicham",
-      "variant": "level_up",
       "result": "medicham",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

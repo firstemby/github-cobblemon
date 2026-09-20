@@ -194,6 +194,7 @@
   "forms": [
     {
       "name": "Crowned",
+      "variant": "temporary",
       "primaryType": "fighting",
       "secondaryType": "steel",
       "maleRatio": -1,

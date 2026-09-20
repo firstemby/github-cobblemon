@@ -150,9 +150,7 @@
   "evolutions": [
     {
       "id": "sliggoo_goodra",
-      "variant": "level_up",
       "result": "goodra",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "aquatail"
       ],
@@ -321,9 +319,7 @@
       "evolutions": [
         {
           "id": "sliggoo_goodrahisui",
-          "variant": "level_up",
           "result": "goodra hisuian",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "irontail"
           ],

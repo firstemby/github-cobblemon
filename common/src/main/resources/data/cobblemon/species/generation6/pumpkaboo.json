@@ -223,11 +223,12 @@
   "evolutions": [
     {
       "id": "pumpkaboo_gourgeist",
-      "variant": "trade",
       "result": "gourgeist",
-      "consumeHeldItem": false,
       "learnableMoves": [],
-      "requirements": []
+      "requirements": [],
+      "trigger": {
+        "variant": "trade"
+      }
     }
   ],
   "forms": [
@@ -259,11 +260,12 @@
       "evolutions": [
         {
           "id": "pumpkaboo_gourgeist",
-          "variant": "trade",
           "result": "gourgeist",
-          "consumeHeldItem": false,
           "learnableMoves": [],
-          "requirements": []
+          "requirements": [],
+          "trigger": {
+            "variant": "trade"
+          }
         }
       ],
       "battleOnly": false
@@ -296,11 +298,12 @@
       "evolutions": [
         {
           "id": "pumpkaboo_gourgeist",
-          "variant": "trade",
           "result": "gourgeist",
-          "consumeHeldItem": false,
           "learnableMoves": [],
-          "requirements": []
+          "requirements": [],
+          "trigger": {
+            "variant": "trade"
+          }
         }
       ],
       "battleOnly": false
@@ -333,11 +336,12 @@
       "evolutions": [
         {
           "id": "pumpkaboo_gourgeist",
-          "variant": "trade",
           "result": "gourgeist",
-          "consumeHeldItem": false,
           "learnableMoves": [],
-          "requirements": []
+          "requirements": [],
+          "trigger": {
+            "variant": "trade"
+          }
         }
       ],
       "battleOnly": false

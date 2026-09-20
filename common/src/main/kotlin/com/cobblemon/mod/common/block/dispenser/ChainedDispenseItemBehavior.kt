@@ -8,10 +8,10 @@
 
 package com.cobblemon.mod.common.block.dispenser
 
+import java.util.concurrent.CopyOnWriteArrayList
 import net.minecraft.core.dispenser.BlockSource
 import net.minecraft.core.dispenser.DispenseItemBehavior
 import net.minecraft.world.item.ItemStack
-import java.util.concurrent.CopyOnWriteArrayList
 
 class ChainedDispenseItemBehavior(private val base: DispenseItemBehavior) : DispenseItemBehavior {
     private val extras = CopyOnWriteArrayList<DispenseItemBehavior>()

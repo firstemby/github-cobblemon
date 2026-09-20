@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture
 class AddHoldsActionEffectKeyframe : ActionEffectKeyframe {
     val holds = mutableSetOf<String>()
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
-        context.holds.addAll(holds)
+        holds.forEach(context::addHold)
         return CompletableFuture.completedFuture(Unit)
     }
 }

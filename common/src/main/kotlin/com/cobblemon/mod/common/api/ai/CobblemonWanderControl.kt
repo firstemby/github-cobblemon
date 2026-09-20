@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.getDoubleOrNull
 import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
-import net.minecraft.world.entity.PathfinderMob
 
 /**
  * Used to maintain some settings around how the entity should wander this tick. The idea is you

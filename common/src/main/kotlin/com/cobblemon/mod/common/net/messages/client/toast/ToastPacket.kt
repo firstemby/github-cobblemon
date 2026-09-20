@@ -9,12 +9,20 @@
 package com.cobblemon.mod.common.net.messages.client.toast
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.util.*
-import net.minecraft.network.RegistryFriendlyByteBuf
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.readEnumConstant
+import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readItemStack
+import com.cobblemon.mod.common.util.readText
+import com.cobblemon.mod.common.util.writeEnumConstant
+import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeItemStack
+import com.cobblemon.mod.common.util.writeText
 import java.util.UUID
-import net.minecraft.world.item.ItemStack
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 
 class ToastPacket(
     val title: Component,

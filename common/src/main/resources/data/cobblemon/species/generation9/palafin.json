@@ -203,6 +203,7 @@
   "forms": [
     {
       "name": "Hero",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.5,
       "height": 18,

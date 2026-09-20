@@ -136,9 +136,7 @@
   "evolutions": [
     {
       "id": "pawmo_pawmot",
-      "variant": "level_up",
       "result": "pawmot",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "revivalblessing"
       ],

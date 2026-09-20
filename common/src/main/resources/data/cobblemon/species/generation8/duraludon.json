@@ -211,20 +211,24 @@
   ],
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "duraludon_archaludon",
+      "result": "archaludon",
+      "consumeHeldItem": false,
       "learnableMoves": [
         "electroshot"
       ],
       "requiredContext": "cobblemon:metal_alloy",
       "requirements": [],
-      "result": "archaludon",
-      "variant": "item_interact"
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:metal_alloy"
+      }
     }
   ],
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "steel",
       "secondaryType": "dragon",
       "maleRatio": 0.5,

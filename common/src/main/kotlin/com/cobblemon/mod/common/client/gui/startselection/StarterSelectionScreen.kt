@@ -25,8 +25,6 @@ import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.VariableObjectSelectionScrollbar
 import com.cobblemon.mod.common.client.gui.startselection.widgets.CategoryList
 import com.cobblemon.mod.common.client.gui.startselection.widgets.SelectionButton
-import com.cobblemon.mod.common.client.gui.startselection.widgets.preview.StarterRoundabout
-import com.cobblemon.mod.common.client.gui.summary.Summary.Companion.PARTY
 import com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget
 import com.cobblemon.mod.common.client.keybind.keybinds.SummaryBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
@@ -36,6 +34,7 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import java.io.FileNotFoundException
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
@@ -43,7 +42,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
-import java.io.FileNotFoundException
 
 /**
  * Starterselection Screen Thingy

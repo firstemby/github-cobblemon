@@ -291,8 +291,12 @@
   "preEvolution": "teddiursa",
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "ursaring_ursaluna",
+      "result": "ursaluna",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:peat_block"
+      },
       "learnableMoves": [
         "headlongrush"
       ],
@@ -306,9 +310,7 @@
           "range": "night",
           "variant": "time_range"
         }
-      ],
-      "result": "ursaluna",
-      "variant": "item_interact"
+      ]
     }
   ]
 }

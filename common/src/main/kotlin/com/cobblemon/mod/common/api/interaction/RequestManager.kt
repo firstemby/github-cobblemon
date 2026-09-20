@@ -74,7 +74,7 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
         ?: this.getInboundRequest(receiver.uuid, requestID)
 
     /** Determines whether [player] can receive a [T]. */
-    open fun isBusy(player: ServerPlayer): Boolean = player.isInBattle() || player.isTrading() || player.party().find { it.entity?.isBusy == true } != null
+    open fun isBusy(player: ServerPlayer): Boolean = player.isBusy() || player.isPartyBusy()
 
     /** Determines if the [target] is a valid interaction request target. */
     abstract fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean

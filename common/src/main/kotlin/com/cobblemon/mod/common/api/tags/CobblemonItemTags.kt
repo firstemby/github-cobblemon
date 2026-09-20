@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.api.tags
 
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.tags.CobblemonItemTags.COOKED_MEAT
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.TagKey

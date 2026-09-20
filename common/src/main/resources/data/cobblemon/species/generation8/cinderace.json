@@ -220,6 +220,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "fire",
       "maleRatio": 0.875,
       "height": 270,

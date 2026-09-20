@@ -209,9 +209,7 @@
   "evolutions": [
     {
       "id": "pidove_tranquill",
-      "variant": "level_up",
       "result": "tranquill",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -224,16 +224,18 @@
   "evolutions": [
     {
       "id": "scyther_scizor",
-      "variant": "trade",
       "result": "scizor",
-      "consumeHeldItem": true,
+      "trigger": {
+        "variant": "trade"
+      },
       "learnableMoves": [
         "bulletpunch"
       ],
       "requirements": [
         {
           "variant": "held_item",
-          "itemCondition": "cobblemon:metal_coat"
+          "itemCondition": "cobblemon:metal_coat",
+          "consumeHeldItem": true
         }
       ],
       "drops": {
@@ -250,14 +252,15 @@
     },
     {
       "id": "scyther_kleavor",
-      "variant": "item_interact",
       "result": "kleavor",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "stoneaxe"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:black_augurite",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:black_augurite"
+      },
       "drops": {
         "amount": 1,
         "entries": [

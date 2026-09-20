@@ -10,6 +10,7 @@ package com.cobblemon.mod.common.api.toast
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
+import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_BACKGROUND_SPRITE
 import com.cobblemon.mod.common.api.toast.Toast.Companion.VANILLA_PROGRESS_COLOR
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents

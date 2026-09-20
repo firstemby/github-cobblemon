@@ -13,13 +13,13 @@ import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
-import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.data.PokemonInteractionsSyncPacket
-import com.cobblemon.mod.common.pokemon.adapters.CobblemonRequirementAdapter
-import com.cobblemon.mod.common.pokemon.evolution.adapters.LegacyItemConditionWrapperAdapter
-import com.cobblemon.mod.common.pokemon.requirements.PokemonPropertiesRequirement
+import com.cobblemon.mod.common.pokemon.transformation.adapters.CobblemonRequirementAdapter
+import com.cobblemon.mod.common.pokemon.transformation.adapters.LegacyItemConditionWrapperAdapter
+import com.cobblemon.mod.common.pokemon.transformation.requirements.PokemonPropertiesRequirement
 import com.cobblemon.mod.common.util.adapters.*
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
@@ -46,7 +46,7 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
-        .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
+        .registerTypeAdapter(TransformationRequirement::class.java, CobblemonRequirementAdapter)
         .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
         .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)

@@ -11,10 +11,10 @@ package com.cobblemon.mod.common.advancement.criterion
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import java.util.Optional
 import net.minecraft.advancements.critereon.ContextAwarePredicate
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import java.util.Optional
 
 class AspectCriterion(
     playerCtx: Optional<ContextAwarePredicate>,

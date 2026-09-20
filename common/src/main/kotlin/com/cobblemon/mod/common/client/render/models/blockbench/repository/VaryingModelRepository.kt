@@ -16,7 +16,12 @@ import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ModelVariationSet
 import com.cobblemon.mod.common.client.render.SpriteType
 import com.cobblemon.mod.common.client.render.VaryingRenderableResolver
-import com.cobblemon.mod.common.client.render.models.blockbench.*
+import com.cobblemon.mod.common.client.render.models.blockbench.JsonModelAdapter
+import com.cobblemon.mod.common.client.render.models.blockbench.LocatorAccess
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
+import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
+import com.cobblemon.mod.common.client.render.models.blockbench.PoseAdapter
+import com.cobblemon.mod.common.client.render.models.blockbench.TexturedModel
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilModel

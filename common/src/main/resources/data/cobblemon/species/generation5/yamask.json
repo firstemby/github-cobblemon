@@ -210,9 +210,7 @@
   "evolutions": [
     {
       "id": "yamask_cofagrigus",
-      "variant": "level_up",
       "result": "cofagrigus",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "scaryface",
         "shadowclaw"
@@ -344,9 +342,7 @@
       "evolutions": [
         {
           "id": "yamask_runerigus",
-          "variant": "level_up",
           "result": "runerigus",
-          "consumeHeldItem": false,
           "learnableMoves": [
             "shadowclaw"
           ],

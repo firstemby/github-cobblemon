@@ -173,9 +173,7 @@
   "evolutions": [
     {
       "id": "quaxly_quaxwell",
-      "variant": "level_up",
       "result": "quaxwell",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

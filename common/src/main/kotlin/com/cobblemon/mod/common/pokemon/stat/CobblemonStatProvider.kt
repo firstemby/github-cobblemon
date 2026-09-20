@@ -21,9 +21,9 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.adapters.CobblemonStatTypeAdapter
 import com.cobblemon.mod.common.util.readSizedInt
 import com.cobblemon.mod.common.util.writeSizedInt
-import net.minecraft.network.RegistryFriendlyByteBuf
 import kotlin.math.truncate
 import kotlin.random.Random
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
 /**

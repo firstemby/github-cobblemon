@@ -26,8 +26,8 @@ import net.minecraft.world.phys.Vec3
  * A species feature value that's just an integer. Complex stuff.
  * @author Hiroku
  */
-class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature, CustomPokemonProperty {
-    var value = 0
+class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature<Int>, CustomPokemonProperty {
+    override var value = 0
 
     constructor() : this("")
     constructor(name: String, value: Int) : this(name) {
@@ -39,7 +39,7 @@ class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature,
         return pokemonNBT
     }
 
-    override fun loadFromNBT(pokemonNBT: CompoundTag): SynchronizedSpeciesFeature {
+    override fun loadFromNBT(pokemonNBT: CompoundTag): SynchronizedSpeciesFeature<Int> {
         value = pokemonNBT.getInt(name)
         return this
     }
@@ -49,7 +49,7 @@ class IntSpeciesFeature(override var name: String) : SynchronizedSpeciesFeature,
         return pokemonJSON
     }
 
-    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
+    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature<Int> {
         value = pokemonJSON.get(name).asInt
         return this
     }

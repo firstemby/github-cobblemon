@@ -203,9 +203,7 @@
   "evolutions": [
     {
       "id": "lotad_lombre",
-      "variant": "level_up",
       "result": "lombre",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

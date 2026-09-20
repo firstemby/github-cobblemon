@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.battles
 
 import com.cobblemon.mod.common.net.IntSize
-import com.cobblemon.mod.common.util.getStringOrNull
 import com.cobblemon.mod.common.util.readSizedInt
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.writeSizedInt

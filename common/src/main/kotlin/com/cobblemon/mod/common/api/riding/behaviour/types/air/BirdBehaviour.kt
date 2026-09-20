@@ -16,15 +16,28 @@ import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.orientation.OrientationController
 import com.cobblemon.mod.common.api.riding.RidingStyle
-import com.cobblemon.mod.common.api.riding.behaviour.*
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviour
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourSettings
+import com.cobblemon.mod.common.api.riding.behaviour.RidingBehaviourState
+import com.cobblemon.mod.common.api.riding.behaviour.Side
+import com.cobblemon.mod.common.api.riding.behaviour.ridingState
 import com.cobblemon.mod.common.api.riding.posing.PoseOption
 import com.cobblemon.mod.common.api.riding.posing.PoseProvider
 import com.cobblemon.mod.common.api.riding.sound.RideSoundSettingsList
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.readNullableExpression
+import com.cobblemon.mod.common.util.readRidingStats
+import com.cobblemon.mod.common.util.resolveBoolean
+import com.cobblemon.mod.common.util.resolveDouble
+import com.cobblemon.mod.common.util.resolveFloat
+import com.cobblemon.mod.common.util.toVec3d
+import com.cobblemon.mod.common.util.writeNullableExpression
+import com.cobblemon.mod.common.util.writeRidingStats
+import kotlin.math.*
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -35,7 +48,6 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
-import kotlin.math.*
 
 class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     companion object {

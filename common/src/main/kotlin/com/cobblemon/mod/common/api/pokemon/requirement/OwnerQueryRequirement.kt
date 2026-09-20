@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokemon.requirement
 
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
@@ -23,7 +24,7 @@ import net.minecraft.world.entity.player.Player
  * @author Polymeta
  * @since May 6th, 2025
  */
-interface OwnerQueryRequirement : Requirement {
+interface OwnerQueryRequirement : TransformationRequirement {
     override fun check(pokemon: Pokemon): Boolean {
         val owner = pokemon.getOwnerEntity() ?: return false
         return when (owner) {

@@ -29,7 +29,6 @@ import com.cobblemon.mod.common.util.withQueryValue
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kotlin.random.Random
-import kotlin.ranges.random
 import net.minecraft.server.level.ServerPlayer
 
 /**

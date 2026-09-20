@@ -26,37 +26,37 @@ import com.google.gson.JsonObject
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 
-class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : SpeciesFeature, CustomPokemonProperty, TickingSpeciesFeature {
+class SlowpokeTailRegrowthSpeciesFeature(override var value: Int = 0) : SpeciesFeature<Int>, CustomPokemonProperty, TickingSpeciesFeature {
     override val name: String = NAME
 
     override fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag {
-        if (regrowthSeconds > 0) {
-            pokemonNBT.putInt(DataKeys.TAIL_REGROWTH_SECONDS, regrowthSeconds)
+        if (value > 0) {
+            pokemonNBT.putInt(DataKeys.TAIL_REGROWTH_SECONDS, value)
         }
         return pokemonNBT
     }
 
-    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
-        regrowthSeconds = pokemonNBT.getInt(DataKeys.TAIL_REGROWTH_SECONDS)
+    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature<Int> {
+        value = pokemonNBT.getInt(DataKeys.TAIL_REGROWTH_SECONDS)
         return this
     }
 
     override fun saveToJSON(pokemonJSON: JsonObject): JsonObject {
-        if (regrowthSeconds > 0) {
-            pokemonJSON.addProperty(DataKeys.TAIL_REGROWTH_SECONDS, regrowthSeconds)
+        if (value > 0) {
+            pokemonJSON.addProperty(DataKeys.TAIL_REGROWTH_SECONDS, value)
         }
         return pokemonJSON
     }
 
-    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
+    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature<Int> {
         if (pokemonJSON.has(DataKeys.TAIL_REGROWTH_SECONDS)) {
-            regrowthSeconds = pokemonJSON.get(DataKeys.TAIL_REGROWTH_SECONDS).asInt
+            value = pokemonJSON.get(DataKeys.TAIL_REGROWTH_SECONDS).asInt
         }
         return this
     }
 
     override fun asString(): String {
-        return "$name=$regrowthSeconds"
+        return "$name=$value"
     }
 
     override fun apply(pokemon: Pokemon) {
@@ -66,11 +66,11 @@ class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : Species
     }
 
     override fun matches(pokemon: Pokemon): Boolean {
-        return (pokemon.getFeature(NAME) as? SlowpokeTailRegrowthSpeciesFeature)?.regrowthSeconds == regrowthSeconds
+        return (pokemon.getFeature(NAME) as? SlowpokeTailRegrowthSpeciesFeature)?.value == value
     }
 
     fun onShear(pokemonEntity: PokemonEntity) {
-        this.regrowthSeconds = CobblemonMechanics.slowpokeTails.regrowthSeconds
+        this.value = CobblemonMechanics.slowpokeTails.regrowthSeconds
         val itemEntity = pokemonEntity.spawnAtLocation(CobblemonItems.TASTY_TAIL) ?: return
         pokemonEntity.pokemon.updateAspects()
         pokemonEntity.pokemon.markFeatureDirty(this)
@@ -82,12 +82,12 @@ class SlowpokeTailRegrowthSpeciesFeature(var regrowthSeconds: Int = 0) : Species
         pokemon: Pokemon,
         entity: PokemonEntity?
     ) {
-        if (regrowthSeconds <= 0) return
+        if (value <= 0) return
         if (CobblemonMechanics.slowpokeTails.onlyRegrowWhenSentOut && entity == null) return
         // if they're sent out and parameter entity is null, the party ticker is running this - leave it for the entity delegate ticker
         if (entity == null && pokemon.entity != null) return
 
-        regrowthSeconds--
+        value--
         pokemon.updateAspects()
         pokemon.markFeatureDirty(this)
     }
@@ -129,9 +129,9 @@ object SlowpokeTailRegrowthSpeciesFeatureProvider: SpeciesFeatureProvider<Slowpo
     override fun fromString(value: String?): SlowpokeTailRegrowthSpeciesFeature? {
         val mechanic = CobblemonMechanics.slowpokeTails
         return if (value == null) {
-            SlowpokeTailRegrowthSpeciesFeature(regrowthSeconds = mechanic.regrowthSeconds)
+            SlowpokeTailRegrowthSpeciesFeature(value = mechanic.regrowthSeconds)
         } else if (value.isInt()) {
-            SlowpokeTailRegrowthSpeciesFeature(regrowthSeconds = value.toInt())
+            SlowpokeTailRegrowthSpeciesFeature(value = value.toInt())
         } else {
             null
         }
@@ -141,13 +141,13 @@ object SlowpokeTailRegrowthSpeciesFeatureProvider: SpeciesFeatureProvider<Slowpo
 
     override fun provide(pokemon: Pokemon): Set<String> {
         val mechanic = CobblemonMechanics.slowpokeTails
-        val regrowthSeconds = pokemon.getFeature<SlowpokeTailRegrowthSpeciesFeature>(SlowpokeTailRegrowthSpeciesFeature.NAME)?.regrowthSeconds ?: return emptySet()
-        return mechanic.getAspects(regrowthSeconds)
+        val value = pokemon.getFeature<SlowpokeTailRegrowthSpeciesFeature>(SlowpokeTailRegrowthSpeciesFeature.NAME)?.value ?: return emptySet()
+        return mechanic.getAspects(value)
     }
 
     override fun provide(properties: PokemonProperties): Set<String> {
         val mechanic = CobblemonMechanics.slowpokeTails
-        val regrowthSeconds = properties.customProperties.filterIsInstance<SlowpokeTailRegrowthSpeciesFeature>().firstOrNull()?.regrowthSeconds ?: return emptySet()
-        return mechanic.getAspects(regrowthSeconds)
+        val value = properties.customProperties.filterIsInstance<SlowpokeTailRegrowthSpeciesFeature>().firstOrNull()?.value ?: return emptySet()
+        return mechanic.getAspects(value)
     }
 }

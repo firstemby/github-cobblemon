@@ -9,19 +9,19 @@
 package com.cobblemon.mod.common.client.gui.toast
 
 import com.cobblemon.mod.common.net.messages.client.toast.ToastPacket
+import java.util.UUID
+import kotlin.math.min
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.toasts.Toast
 import net.minecraft.client.gui.components.toasts.ToastComponent
-import net.minecraft.world.item.ItemStack
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.Mth
-import java.util.*
-import kotlin.math.min
-import net.minecraft.client.gui.Font
 import net.minecraft.util.FormattedCharSequence
+import net.minecraft.util.Mth
+import net.minecraft.world.item.ItemStack
 
 @Environment(EnvType.CLIENT)
 class CobblemonToast(

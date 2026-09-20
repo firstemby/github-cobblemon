@@ -9,7 +9,6 @@
 package com.cobblemon.mod.common.item.crafting.brewingstand
 
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.RecipeInput
 
 class BrewingStandInput(

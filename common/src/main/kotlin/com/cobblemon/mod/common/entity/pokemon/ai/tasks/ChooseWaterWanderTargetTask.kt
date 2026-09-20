@@ -8,13 +8,13 @@
 
 package com.cobblemon.mod.common.entity.pokemon.ai.tasks
 
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
+import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 
 object ChooseWaterWanderTargetTask {

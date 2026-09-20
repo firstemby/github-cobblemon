@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.block
 import com.cobblemon.mod.common.util.rotateShape
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import kotlin.math.min
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.util.StringRepresentable
@@ -31,7 +32,6 @@ import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import kotlin.math.min
 
 class StackableItemBlock(settings: Properties, val type: StackableItemBlockType): HorizontalDirectionalBlock(settings), SimpleWaterloggedBlock {
     enum class StackableItemBlockType: StringRepresentable {

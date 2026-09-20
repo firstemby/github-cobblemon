@@ -14,17 +14,19 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.cooking.getColourMixFromSeasonings
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
-import com.cobblemon.mod.common.item.components.PotComponent
 import com.cobblemon.mod.common.block.campfirepot.CookingPotMenu
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
 import com.cobblemon.mod.common.client.particle.ParticleStorm
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.client.sound.BlockEntitySoundTracker
 import com.cobblemon.mod.common.client.sound.instances.CancellableSoundInstance
+import com.cobblemon.mod.common.item.CampfirePotItem
+import com.cobblemon.mod.common.item.components.PotComponent
 import com.cobblemon.mod.common.item.crafting.CookingPotRecipeBase
 import com.cobblemon.mod.common.util.playSoundServer
 import com.mojang.blaze3d.vertex.PoseStack
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import java.util.Optional
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -43,7 +45,11 @@ import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.entity.player.StackedContents
-import net.minecraft.world.inventory.*
+import net.minecraft.world.inventory.AbstractContainerMenu
+import net.minecraft.world.inventory.ContainerData
+import net.minecraft.world.inventory.CraftingContainer
+import net.minecraft.world.inventory.RecipeCraftingHolder
+import net.minecraft.world.inventory.StackedContentsCompatible
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingInput
@@ -58,8 +64,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector4f
-import com.cobblemon.mod.common.item.CampfirePotItem
-import java.util.*
 
 class CampfireBlockEntity(pos: BlockPos, state: BlockState) : BaseContainerBlockEntity(
     CobblemonBlockEntities.CAMPFIRE,

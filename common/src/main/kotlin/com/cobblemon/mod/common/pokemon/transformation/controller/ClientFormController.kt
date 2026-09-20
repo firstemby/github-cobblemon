@@ -1,0 +1,45 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.pokemon.transformation.controller
+
+import com.cobblemon.mod.common.CobblemonSounds
+import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
+import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.transformation.form.FormDisplay
+import com.cobblemon.mod.common.pokemon.transformation.form.TemporaryForm
+import com.cobblemon.mod.common.util.asTranslated
+import net.minecraft.client.Minecraft
+
+/**
+ * Controller for managing changeable forms on the client.
+ * From the client's perspective, these forms are visual only and are represented by [FormDisplay]s.
+ *
+ * @author Segfault Guy
+ * @since January 19th, 2025
+ */
+class ClientFormController(
+    pokemon: Pokemon,
+    forms: Set<FormDisplay>,
+) : ClientTransformationController<FormDisplay>(pokemon, forms) {
+
+    override fun notification() {
+        Minecraft.getInstance().player?.sendSystemMessage("cobblemon.ui.forms.hint".asTranslated(this.pokemon.getDisplayName()).green())
+        Minecraft.getInstance().player?.playSound(CobblemonSounds.EVOLUTION_NOTIFICATION, 1F, 1F) // TODO replace with unique notificaiton
+    }
+
+    override fun acceptPacket(pokemon: Pokemon, transformation: FormDisplay): NetworkPacket<*> = AcceptFormPacket(pokemon, transformation)
+
+    override fun canRevert(): Boolean = pokemon.form is TemporaryForm &&
+        (pokemon.form as TemporaryForm).toggleable &&
+        !CobblemonClient.isBusy() &&
+        !pokemon.isBusy()
+}

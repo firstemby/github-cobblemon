@@ -10,13 +10,10 @@ package com.cobblemon.mod.common.client.render.item
 
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.client.pot.CookingQuality
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.item.interactive.PokerodItem
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.ChatFormatting
 import net.minecraft.client.renderer.item.ItemProperties
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player

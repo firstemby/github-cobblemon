@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.mechanics
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.cobblemon.mod.common.api.molang.ExpressionLike
-import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.readExpressionLike
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.resolveInt

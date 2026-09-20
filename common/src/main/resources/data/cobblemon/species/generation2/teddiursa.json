@@ -268,9 +268,7 @@
   "evolutions": [
     {
       "id": "teddiursa_ursaring",
-      "variant": "level_up",
       "result": "ursaring",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

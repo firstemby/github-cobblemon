@@ -31,13 +31,13 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
 import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
-import com.cobblemon.mod.common.pokemon.evolution.progress.UseMoveEvolutionProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.UseMoveTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.UseMoveRequirement
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
-import net.minecraft.world.entity.LivingEntity
 
 /**
  * Format: |move|POKEMON|MOVE|TARGET
@@ -56,7 +56,7 @@ class MoveInstruction(
     val spreadTargets = message.optionalArgument("spread")?.split(",") ?: emptyList()
 
     var future = CompletableFuture.completedFuture(Unit)
-    var holds = mutableSetOf<String>()
+    var holds = setOf<String>()
 
     lateinit var userPokemon: BattlePokemon
     var targetPokemon: BattlePokemon? = null
@@ -85,9 +85,9 @@ class MoveInstruction(
             }
 
             userPokemon.effectedPokemon.let { pokemon ->
-                if (UseMoveEvolutionProgress.supports(pokemon, move)) {
-                    val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is UseMoveEvolutionProgress && it.currentProgress().move == move }) { UseMoveEvolutionProgress() }
-                    progress.updateProgress(UseMoveEvolutionProgress.Progress(move, progress.currentProgress().amount + 1))
+                if (pokemon.hasMatchingRequirement<UseMoveRequirement>({ it.move == move })) {
+                    val progress = pokemon.progressFirstOrCreate({ it is UseMoveTransformationProgress && it.currentProgress().move == move }, ::UseMoveTransformationProgress)
+                    progress.updateProgress(UseMoveTransformationProgress.Progress(move, progress.currentProgress().amount + 1))
                 }
             }
 
@@ -177,8 +177,7 @@ class MoveInstruction(
             runtime.environment.query.addFunction("instruction_id") { StringValue(cobblemonResource("move").toString()) }
 
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch UntilDispatch { "effects" !in holds }.andThen {
                 val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
                 val targets = hurtTargets.mapNotNull { it.entity }

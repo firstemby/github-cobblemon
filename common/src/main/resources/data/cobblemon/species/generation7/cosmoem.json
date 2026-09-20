@@ -58,9 +58,7 @@
   "evolutions": [
     {
       "id": "cosmoem_solgaleo",
-      "variant": "level_up",
       "result": "solgaleo",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "sunsteelstrike"
       ],
@@ -77,9 +75,7 @@
     },
     {
       "id": "cosmoem_lunala",
-      "variant": "level_up",
       "result": "lunala",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "moongeistbeam"
       ],

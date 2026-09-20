@@ -1,0 +1,93 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.pokemon.transformation
+
+import com.cobblemon.mod.common.api.pokemon.transformation.controller.TransformationController
+import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
+import com.cobblemon.mod.common.pokemon.Pokemon
+
+/**
+ * Represents a transformation of a [Pokemon]. This is the server side counterpart of [TransformationDisplay] and serves as
+ * the driver of the transformation. These are triggered by a player-driven or world-driven event.
+ *
+ * @author Segfault Guy
+ * @since Sept 8th, 2023
+ */
+interface Transformation : TransformationLike {
+
+    /** The [TransformationTrigger] to attempt this transformation. */
+    val trigger: TransformationTrigger
+
+    /** The [TransformationRequirement]s that need to be satisfied for this transformation. */
+    val requirements: Set<TransformationRequirement>
+
+    /** If this transformation can be deferred by the user and started whenever. */
+    val optional: Boolean
+
+    /** If this transformation needs its requirements reevaluated to remain valid in a [TransformationController]. */
+    val reevaluate: Boolean
+
+    /** Checks if all [TransformationRequirement]s are met. */
+    fun checkRequirements(pokemon: Pokemon) = this.requirements.all { requirement -> requirement.check(pokemon) }
+
+    /**
+     * Tests if the given [Pokemon] passes all the conditions and is ready to transform.
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @param context The optional [ContextTrigger.Context] needed to transform.
+     * @return Whether the [Transformation] can start.
+     */
+    fun test(pokemon: Pokemon, context: ContextTrigger.Context?) = this.trigger.testTrigger(context) && this.checkRequirements(pokemon)
+
+    /**
+     * Starts this transformation if conditions are met.
+     *
+     * @param pokemon The [Pokemon] being transformed.
+     * @param context The optional [ContextTrigger.Context] needed to transform.
+     * @return Whether the [Transformation] was successful.
+     */
+    fun tryStart(pokemon: Pokemon, context: ContextTrigger.Context?): Boolean {
+        if (test(pokemon, context)) {
+            perform(pokemon)
+            return true
+        }
+        return false
+    }
+
+    /**
+     * Performs the actual transformation.
+     *
+     * @param pokemon The [Pokemon] being transformed.
+     */
+    fun perform(pokemon: Pokemon)
+
+    /** Finishes off the transformation, mainly by making any changes that the [TransformationRequirement]s demanded. */
+    fun fulfill(pokemon: Pokemon) {
+        this.requirements.forEach { it.fulfill(pokemon) }
+    }
+
+    /**
+     * Converts this transformation to its client side representation.
+     *
+     * @param pokemon The [Pokemon] being transformed.
+     * @return The [TransformationDisplay] representing this transformation on the client.
+     */
+    fun convertToDisplay(pokemon: Pokemon): TransformationDisplay
+
+    /**
+     * Validates whether a transformation still meets the [TransformationRequirement]s.
+     * If [Transformation.reevaluate] is false, this check will be bypassed.
+     *
+     * @param pokemon the [Pokemon] to test against.
+     * @return Whether this transformation is still valid and can be made for [pokemon].
+     */
+    fun reevaluate(pokemon: Pokemon) = !this.reevaluate || this.checkRequirements(pokemon)
+}

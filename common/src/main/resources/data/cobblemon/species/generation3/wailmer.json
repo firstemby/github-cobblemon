@@ -263,8 +263,8 @@
   ],
   "evolutions": [
     {
-      "consumeHeldItem": false,
       "id": "wailmer_wailord",
+      "result": "wailord",
       "learnableMoves": [],
       "requirements": [
         {

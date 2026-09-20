@@ -172,9 +172,7 @@
   "evolutions": [
     {
       "id": "gossifleur_eldegoss",
-      "variant": "level_up",
       "result": "eldegoss",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "cottonspore"
       ],

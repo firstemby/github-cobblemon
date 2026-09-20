@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.block.entity.TMMachineBlockEntity
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.playSoundServer
-import com.cobblemon.mod.common.util.toVec3d
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos

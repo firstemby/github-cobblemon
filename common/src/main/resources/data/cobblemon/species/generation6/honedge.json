@@ -198,9 +198,7 @@
   "evolutions": [
     {
       "id": "honedge_doublade",
-      "variant": "level_up",
       "result": "doublade",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

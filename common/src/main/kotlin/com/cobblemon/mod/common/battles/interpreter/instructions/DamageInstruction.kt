@@ -25,9 +25,11 @@ import com.cobblemon.mod.common.battles.dispatch.UntilDispatch
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.battle.BattleHealthChangePacket
-import com.cobblemon.mod.common.pokemon.evolution.progress.DamageTakenEvolutionProgress
-import com.cobblemon.mod.common.pokemon.evolution.progress.RecoilEvolutionProgress
 import com.cobblemon.mod.common.pokemon.status.statuses.persistent.PoisonStatus
+import com.cobblemon.mod.common.pokemon.transformation.progress.DamageTakenTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.progress.RecoilTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.DamageTakenRequirement
+import com.cobblemon.mod.common.pokemon.transformation.requirements.RecoilRequirement
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -50,7 +52,7 @@ class DamageInstruction(
 ) : ActionEffectInstruction {
     val expectedTarget = publicMessage.battlePokemon(0, actor.battle)
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
-    override var holds = mutableSetOf<String>()
+    override var holds = setOf<String>()
     override val id = cobblemonResource("damage")
 
     override fun preActionEffect(battle: PokemonBattle) {
@@ -74,18 +76,15 @@ class DamageInstruction(
 
     private fun doRecoilEvoChecks(battlePokemon: BattlePokemon) {
         battlePokemon.effectedPokemon.let { pokemon ->
-            if (RecoilEvolutionProgress.supports(pokemon)) {
-                val healthStr = privateMessage.argumentAt(1) ?: throw UnsupportedOperationException(
-                    "Cant get recoil string"
-                )
-                val newHealth =
-                    "([0-9]+).*".toRegex().find(healthStr)?.groups?.get(1)?.value?.toIntOrNull()
-                        ?: throw UnsupportedOperationException("Cant get recoil string")
+            if (pokemon.hasMatchingRequirement<RecoilRequirement>()) {
+                val healthStr = privateMessage.argumentAt(1)
+                    ?: throw UnsupportedOperationException("Cant get recoil string")
+                val newHealth = "([0-9]+).*".toRegex().find(healthStr)?.groups?.get(1)?.value?.toIntOrNull()
+                    ?: throw UnsupportedOperationException("Cant get recoil string")
                 val difference = pokemon.currentHealth - newHealth
                 if (difference > 0) {
-                    val progress = pokemon.evolutionProxy.current()
-                        .progressFirstOrCreate({ it is RecoilEvolutionProgress }) { RecoilEvolutionProgress() }
-                    progress.updateProgress(RecoilEvolutionProgress.Progress(progress.currentProgress().recoil + difference))
+                    val progress = pokemon.progressFirstOrCreate({ it is RecoilTransformationProgress }) { RecoilTransformationProgress() }
+                    progress.updateProgress(RecoilTransformationProgress.Progress(progress.currentProgress().amount + difference))
                 }
             }
         }
@@ -125,8 +124,7 @@ class DamageInstruction(
                 level = battle.players.firstOrNull()?.level()
             )
             this.future = actionEffect.run(context)
-            holds = context.holds // Reference so future things can check on this action effect's holds
-            future.thenApply { holds.clear() }
+            holds = context.getHolds() // Reference so future things can check on this action effect's holds
             return@dispatch GO
         }
     }
@@ -187,9 +185,9 @@ class DamageInstruction(
                     battlePokemon.effectedPokemon.currentHealth = remainingHealth
                     if (difference > 0) {
                         battlePokemon.effectedPokemon.let { pokemon ->
-                            if (DamageTakenEvolutionProgress.supports(pokemon)) {
-                                val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DamageTakenEvolutionProgress }) { DamageTakenEvolutionProgress() }
-                                progress.updateProgress(DamageTakenEvolutionProgress.Progress(progress.currentProgress().amount + difference))
+                            if (pokemon.hasMatchingRequirement<DamageTakenRequirement>()) {
+                                val progress = pokemon.progressFirstOrCreate({ it is DamageTakenTransformationProgress }, ::DamageTakenTransformationProgress)
+                                progress.updateProgress(DamageTakenTransformationProgress.Progress(progress.currentProgress().amount + difference))
                             }
                         }
                     }

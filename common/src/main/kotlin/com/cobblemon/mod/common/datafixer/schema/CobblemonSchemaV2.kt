@@ -8,13 +8,11 @@
 
 package com.cobblemon.mod.common.datafixer.schema
 
-import com.cobblemon.mod.common.datafixer.CobblemonTypeReferences
-import com.mojang.datafixers.DSL
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.datafixers.types.templates.TypeTemplate
+import java.util.function.Supplier
 import net.minecraft.util.datafix.DataFixers
 import net.minecraft.util.datafix.fixes.References
-import java.util.function.Supplier
 
 class CobblemonSchemaV2(versionKey: Int, parent: Schema?) : Schema(versionKey, parent) {
 

@@ -8,9 +8,13 @@
 
 package com.cobblemon.mod.common.client.tooltips
 
-import com.cobblemon.mod.common.api.text.*
-import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
+import com.cobblemon.mod.common.api.text.blue
+import com.cobblemon.mod.common.api.text.gold
+import com.cobblemon.mod.common.api.text.gray
+import com.cobblemon.mod.common.api.text.white
+import com.cobblemon.mod.common.api.text.yellow
 import com.cobblemon.mod.common.item.components.TMMoveComponent
+import com.cobblemon.mod.common.item.interactive.TechnicalMachineItem
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component

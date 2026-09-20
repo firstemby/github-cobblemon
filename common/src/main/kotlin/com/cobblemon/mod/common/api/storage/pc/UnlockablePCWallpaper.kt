@@ -12,7 +12,6 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.util.cobblemonResource
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 /**

@@ -25,29 +25,14 @@ import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getBattleTheme
 import com.cobblemon.mod.common.util.getPlayer
 import com.cobblemon.mod.common.util.party
-import java.util.UUID
+import com.cobblemon.mod.common.util.swap
 import com.cobblemon.mod.common.util.update
-import com.cobblemon.mod.common.util.*
+import java.util.UUID
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import kotlin.collections.HashMap
-import kotlin.collections.Iterable
-import kotlin.collections.MutableSet
-import kotlin.collections.all
-import kotlin.collections.filterIsInstance
-import kotlin.collections.first
-import kotlin.collections.flatMap
-import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableSetOf
-import kotlin.collections.plus
-import kotlin.collections.plusAssign
-import kotlin.collections.set
-import kotlin.collections.sortedBy
 
 object BattleBuilder {
     @JvmOverloads
@@ -108,8 +93,9 @@ object BattleBuilder {
                 errors.participantErrors[actor] += BattleStartError.alreadyInBattle(player)
             }
         }
-        player1Actor.battleTheme = player2.getBattleTheme()
-        player2Actor.battleTheme = player1.getBattleTheme()
+
+        player1Actor.battleTheme = player2.getBattleTheme().location
+        player2Actor.battleTheme = player1.getBattleTheme().location
 
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(
@@ -204,11 +190,12 @@ object BattleBuilder {
 
         val side1Actors = listOf(playerActors[0], playerActors[1])
         val side2Actors = listOf(playerActors[2], playerActors[3])
+
         val side1Theme = players[0].getBattleTheme()
         val side2Theme = players[2].getBattleTheme()
 
-        side1Actors.forEach { it.battleTheme = side2Theme }
-        side2Actors.forEach { it.battleTheme = side1Theme }
+        side1Actors.forEach { it.battleTheme = side2Theme.location }
+        side2Actors.forEach { it.battleTheme = side1Theme.location }
 
         return if (errors.isEmpty) {
             BattleRegistry.startBattle(

@@ -9,13 +9,8 @@
 package com.cobblemon.mod.common.net.messages.client.orientation
 
 import com.cobblemon.mod.common.api.net.NetworkPacket
-import com.cobblemon.mod.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket.Companion.ID
 import com.cobblemon.mod.common.util.cobblemonResource
-import com.cobblemon.mod.common.util.readMatrix3f
-import com.cobblemon.mod.common.util.writeMatrix3f
 import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.world.entity.player.Player
-import org.joml.Matrix3f
 import org.joml.Vector3f
 
 /**

@@ -198,9 +198,7 @@
   "evolutions": [
     {
       "id": "litten_torracat",
-      "variant": "level_up",
       "result": "torracat",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

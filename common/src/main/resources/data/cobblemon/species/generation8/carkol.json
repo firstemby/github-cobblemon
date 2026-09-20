@@ -189,9 +189,7 @@
   "evolutions": [
     {
       "id": "carkol_coalossal",
-      "variant": "level_up",
       "result": "coalossal",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "tarshot"
       ],

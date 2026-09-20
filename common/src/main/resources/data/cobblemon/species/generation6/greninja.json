@@ -261,6 +261,7 @@
     },
     {
       "name": "Ash",
+      "variant": "temporary",
       "primaryType": "water",
       "secondaryType": "dark",
       "maleRatio": 1,

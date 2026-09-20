@@ -119,9 +119,7 @@
   "evolutions": [
     {
       "id": "scatterbug_spewpa",
-      "variant": "level_up",
       "result": "spewpa",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "protect"
       ],

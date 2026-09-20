@@ -151,14 +151,15 @@
   "evolutions": [
     {
       "id": "charjabug_vikavolt",
-      "variant": "item_interact",
       "result": "vikavolt",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "thunderbolt"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone",
+      "trigger": {
+        "variant": "item_interact",
+        "requiredContext": "cobblemon:thunder_stone"
+      },
       "drops": {
         "amount": 1,
         "entries": [

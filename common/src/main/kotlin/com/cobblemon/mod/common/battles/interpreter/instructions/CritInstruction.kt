@@ -11,11 +11,12 @@ package com.cobblemon.mod.common.battles.interpreter.instructions
 import com.cobblemon.mod.common.api.battles.interpreter.BattleMessage
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.text.yellow
-import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
-import com.cobblemon.mod.common.util.battleLang
-import com.cobblemon.mod.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress
 import com.cobblemon.mod.common.battles.ShowdownInterpreter
 import com.cobblemon.mod.common.battles.dispatch.InstructionSet
+import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
+import com.cobblemon.mod.common.pokemon.transformation.progress.LastBattleCriticalHitsTransformationProgress
+import com.cobblemon.mod.common.pokemon.transformation.requirements.BattleCriticalHitsRequirement
+import com.cobblemon.mod.common.util.battleLang
 
 /**
  * Format: |-crit|POKEMON
@@ -24,8 +25,7 @@ import com.cobblemon.mod.common.battles.dispatch.InstructionSet
  * @author Hunter
  * @since August 18th, 2022
  */
-class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet,
-): InterpreterInstruction {
+class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val lastCauser  = instructionSet.getMostRecentCauser(comparedTo = this)
@@ -39,9 +39,9 @@ class CritInstruction(val message: BattleMessage, val instructionSet: Instructio
                 } else {
                     battle.broadcastChatMessage(battleLang("crit").yellow())
                 }
-                if (LastBattleCriticalHitsEvolutionProgress.supports(battlePokemon.effectedPokemon)) {
-                    val progress = battlePokemon.effectedPokemon.evolutionProxy.current().progressFirstOrCreate({ it is LastBattleCriticalHitsEvolutionProgress }) { LastBattleCriticalHitsEvolutionProgress() }
-                    progress.updateProgress(LastBattleCriticalHitsEvolutionProgress.Progress(progress.currentProgress().amount + 1))
+                if (battlePokemon.effectedPokemon.hasMatchingRequirement<BattleCriticalHitsRequirement>()) {
+                    val progress = battlePokemon.effectedPokemon.progressFirstOrCreate({ it is LastBattleCriticalHitsTransformationProgress }, ::LastBattleCriticalHitsTransformationProgress)
+                    progress.updateProgress(LastBattleCriticalHitsTransformationProgress.Progress(progress.currentProgress().amount + 1))
                 }
             }
             battle.minorBattleActions[pokemon.uuid] = message

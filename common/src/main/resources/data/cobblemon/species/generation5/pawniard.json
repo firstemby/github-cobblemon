@@ -191,9 +191,7 @@
   "evolutions": [
     {
       "id": "pawniard_bisharp",
-      "variant": "level_up",
       "result": "bisharp",
-      "consumeHeldItem": false,
       "learnableMoves": [],
       "requirements": [
         {

@@ -21,7 +21,12 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.AnimatedModelTextureSupplier
 import com.cobblemon.mod.common.client.render.ModelLayer
 import com.cobblemon.mod.common.client.render.ScrollingTextureSettings
-import com.cobblemon.mod.common.client.render.models.blockbench.animation.*
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PoseAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PoseTransitionAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.RotationFunctionPoseAnimation
+import com.cobblemon.mod.common.client.render.models.blockbench.animation.TranslationFunctionPoseAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation

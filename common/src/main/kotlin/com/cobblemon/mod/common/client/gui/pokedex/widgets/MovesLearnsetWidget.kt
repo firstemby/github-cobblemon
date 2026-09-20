@@ -13,7 +13,6 @@ import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
@@ -33,7 +32,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BA
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SPACING
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
-import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.MOVE_ICON_SIZE
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesAccuracyIconResource
@@ -41,8 +39,10 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWi
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesPowerIconResource
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
+import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang

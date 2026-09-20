@@ -237,9 +237,7 @@
   "evolutions": [
     {
       "id": "numel_camerupt",
-      "variant": "level_up",
       "result": "camerupt",
-      "consumeHeldItem": false,
       "learnableMoves": [
         "rockslide"
       ],

@@ -32,9 +32,9 @@ import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.TypeIcon
 import com.cobblemon.mod.common.client.gui.interact.moveselect.MoveSlotButton
 import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget
-import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
+import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.net.messages.client.ui.SetActiveTMPacket
 import com.cobblemon.mod.common.net.messages.client.ui.SetTMMachineContainerDataPacket
@@ -47,6 +47,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.toRGB
 import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.blaze3d.vertex.PoseStack
+import kotlin.math.ceil
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -63,7 +64,6 @@ import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import kotlin.math.ceil
 
 class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, title: Component) : AbstractContainerScreen<TMMachineMenu>(containerMenu, inventory, title) {
     companion object {

@@ -107,6 +107,9 @@ import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.Add
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.ClientboundSeatAssignmentPacket
 import com.cobblemon.mod.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.AddFormPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.ClearFormsPacket
+import com.cobblemon.mod.common.net.messages.client.pokemon.update.form.RemoveFormPacket
 import com.cobblemon.mod.common.net.messages.client.settings.OpenCobblemonConfigScreenPacket
 import com.cobblemon.mod.common.net.messages.client.settings.ServerSettingsPacket
 import com.cobblemon.mod.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
@@ -194,6 +197,8 @@ import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetItemHidden
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetMarkingsPacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.AcceptFormPacket
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.form.RevertFormPacket
 import com.cobblemon.mod.common.net.messages.server.riding.DismountPokemonPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
 import com.cobblemon.mod.common.net.messages.server.riding.ServerboundUpdatePassengerPositionPacket
@@ -211,9 +216,11 @@ import com.cobblemon.mod.common.net.messages.server.trade.ChangeTradeAcceptanceP
 import com.cobblemon.mod.common.net.messages.server.trade.OfferTradePacket
 import com.cobblemon.mod.common.net.messages.server.trade.PerformTradePacket
 import com.cobblemon.mod.common.net.messages.server.trade.UpdateTradeOfferPacket
+import com.cobblemon.mod.common.net.serverhandling.AcceptFormHandler
 import com.cobblemon.mod.common.net.serverhandling.ChallengeHandler
 import com.cobblemon.mod.common.net.serverhandling.ChallengeResponseHandler
 import com.cobblemon.mod.common.net.serverhandling.RequestInteractionsHandler
+import com.cobblemon.mod.common.net.serverhandling.RevertFormHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.BattleSelectActionsHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.RemoveSpectatorHandler
 import com.cobblemon.mod.common.net.serverhandling.battle.SpectateBattleHandler
@@ -506,6 +513,11 @@ object CobblemonNetwork {
         // Pokédex scanning
         list.add(PacketRegisterInfo(ServerConfirmedRegisterPacket.ID, ServerConfirmedRegisterPacket::decode, ServerConfirmedRegisterHandler))
 
+        // Form packets
+        list.add(PacketRegisterInfo(AddFormPacket.ID, AddFormPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(ClearFormsPacket.ID, ClearFormsPacket::decode, PokemonUpdatePacketHandler()))
+        list.add(PacketRegisterInfo(RemoveFormPacket.ID, RemoveFormPacket::decode, PokemonUpdatePacketHandler()))
+
         // Riding
         list.add(PacketRegisterInfo(ClientboundUpdateRidingStatePacket.ID, ClientboundUpdateRidingStatePacket::decode, ClientboundUpdateRidingStateHandler))
         list.add(PacketRegisterInfo(ClientboundUpdateDriverInputPacket.ID, ClientboundUpdateDriverInputPacket::decode, ClientboundUpdateDriverInputHandler))
@@ -620,6 +632,10 @@ object CobblemonNetwork {
 
         // NPC packets
         list.add(PacketRegisterInfo(SaveNPCPacket.ID, SaveNPCPacket::decode, SaveNPCHandler))
+
+        // Form Packets
+        list.add(PacketRegisterInfo(AcceptFormPacket.ID, AcceptFormPacket::decode, AcceptFormHandler))
+        list.add(PacketRegisterInfo(RevertFormPacket.ID, RevertFormPacket::decode, RevertFormHandler))
 
         // Riding packet(s)
         list.add(PacketRegisterInfo(ServerboundUpdateOrientationPacket.ID, ServerboundUpdateOrientationPacket::decode, ServerboundUpdateOrientationHandler))
