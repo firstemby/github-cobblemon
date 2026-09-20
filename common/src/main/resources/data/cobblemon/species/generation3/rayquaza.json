@@ -223,6 +223,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "dragon",
       "secondaryType": "flying",
       "maleRatio": -1,

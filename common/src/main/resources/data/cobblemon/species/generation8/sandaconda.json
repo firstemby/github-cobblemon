@@ -154,6 +154,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "ground",
       "maleRatio": 0.5,
       "height": 220,

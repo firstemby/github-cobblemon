@@ -319,6 +319,7 @@
   "forms": [
     {
       "name": "Mega-X",
+      "variant": "temporary",
       "primaryType": "psychic",
       "secondaryType": "fighting",
       "maleRatio": -1,
@@ -355,6 +356,7 @@
     },
     {
       "name": "Mega-Y",
+      "variant": "temporary",
       "primaryType": "psychic",
       "maleRatio": -1,
       "height": 15,

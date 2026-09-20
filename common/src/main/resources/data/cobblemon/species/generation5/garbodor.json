@@ -211,6 +211,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "poison",
       "maleRatio": 0.5,
       "height": 210,

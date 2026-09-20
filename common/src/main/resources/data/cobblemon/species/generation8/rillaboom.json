@@ -189,6 +189,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "grass",
       "maleRatio": 0.875,
       "height": 280,

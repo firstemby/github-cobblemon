@@ -304,6 +304,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "fighting",
       "secondaryType": "dark",
       "maleRatio": 0.875,
@@ -326,6 +327,7 @@
     },
     {
       "name": "Rapid-Strike-Gmax",
+      "variant": "temporary",
       "primaryType": "fighting",
       "secondaryType": "water",
       "maleRatio": 0.875,

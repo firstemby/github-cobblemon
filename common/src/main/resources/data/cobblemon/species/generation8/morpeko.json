@@ -172,6 +172,7 @@
   "forms": [
     {
       "name": "Hangry",
+      "variant": "temporary",
       "primaryType": "electric",
       "secondaryType": "dark",
       "maleRatio": 0.5,

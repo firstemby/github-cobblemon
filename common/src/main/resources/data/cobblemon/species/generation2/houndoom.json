@@ -262,6 +262,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "dark",
       "secondaryType": "fire",
       "maleRatio": 0.5,

@@ -302,6 +302,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "water",
       "secondaryType": "psychic",
       "maleRatio": 0.5,

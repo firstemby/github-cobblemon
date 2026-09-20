@@ -208,6 +208,7 @@
   "forms": [
     {
       "name": "Blade",
+      "variant": "temporary",
       "primaryType": "steel",
       "secondaryType": "ghost",
       "maleRatio": 0.5,

@@ -352,6 +352,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "electric",
       "maleRatio": 0.5,
       "height": 210,

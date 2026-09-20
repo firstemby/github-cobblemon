@@ -280,6 +280,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "ghost",
       "secondaryType": "poison",
       "maleRatio": 0.5,
@@ -340,6 +341,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "ghost",
       "secondaryType": "poison",
       "maleRatio": 0.5,

@@ -212,6 +212,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "water",
       "secondaryType": "rock",
       "maleRatio": 0.5,

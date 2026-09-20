@@ -161,6 +161,7 @@
   "forms": [
     {
       "name": "Active",
+      "variant": "temporary",
       "primaryType": "fairy",
       "maleRatio": -1,
       "height": 30,

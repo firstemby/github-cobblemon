@@ -238,6 +238,7 @@
   "forms": [
     {
       "name": "Primal",
+      "variant": "temporary",
       "primaryType": "ground",
       "secondaryType": "fire",
       "maleRatio": -1,

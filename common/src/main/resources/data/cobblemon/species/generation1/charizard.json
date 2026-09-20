@@ -51,36 +51,36 @@
   },
   "riding": {
     "behaviours": {
-          "AIR": {
+      "AIR": {
         "key": "cobblemon:air/bird",
-      "rideSounds": [
-       {
-        "muffleEnabled": true,
-        "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-          "playForNonPassengers": false,
-        "playForPassengers": true,
-      "soundLocation": "cobblemon:ride.loop.wind.stereo",
-      "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+        "rideSounds": [
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.wind.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
-        {
-      "muffleEnabled": true,
-      "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-        "playForNonPassengers": true,
-        "playForPassengers": false,
-        "soundLocation": "cobblemon:ride.loop.wind.mono",
-          "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": true,
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.wind.mono",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
-        {
-      "muffleEnabled": true,
-      "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-        "playForNonPassengers": false,
-        "playForPassengers": true,
-        "soundLocation": "cobblemon:ride.loop.leather.stereo",
-          "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+            "playForNonPassengers": false,
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.leather.stereo",
+            "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
-        {
-      "muffleEnabled": true,
-    "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
+          {
+            "muffleEnabled": true,
+            "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
             "playForNonPassengers": true,
             "playForPassengers": false,
             "soundLocation": "cobblemon:ride.loop.leather.mono",
@@ -349,6 +349,7 @@
   "forms": [
     {
       "name": "Mega-X",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "dragon",
       "maleRatio": 0.875,
@@ -470,6 +471,7 @@
     },
     {
       "name": "Mega-Y",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "flying",
       "maleRatio": 0.875,
@@ -591,6 +593,7 @@
     },
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "flying",
       "maleRatio": 0.875,

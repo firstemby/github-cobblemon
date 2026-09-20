@@ -228,6 +228,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "steel",
       "secondaryType": "dragon",
       "maleRatio": 0.5,

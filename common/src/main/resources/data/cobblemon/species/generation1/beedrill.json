@@ -239,6 +239,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "bug",
       "secondaryType": "poison",
       "maleRatio": 0.5,

@@ -192,6 +192,7 @@
   "forms": [
     {
       "name": "Busted",
+      "variant": "temporary",
       "primaryType": "ghost",
       "secondaryType": "fairy",
       "maleRatio": 0.5,

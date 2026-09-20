@@ -282,6 +282,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "normal",
       "maleRatio": 0.875,
       "height": 180,

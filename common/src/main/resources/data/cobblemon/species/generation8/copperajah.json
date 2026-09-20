@@ -211,6 +211,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "steel",
       "maleRatio": 0.5,
       "height": 230,

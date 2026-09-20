@@ -188,6 +188,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "rock",
       "secondaryType": "fairy",
       "maleRatio": -1,

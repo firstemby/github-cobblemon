@@ -212,6 +212,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "electric",
       "maleRatio": 0.5,
       "height": 18,

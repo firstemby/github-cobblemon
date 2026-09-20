@@ -192,6 +192,7 @@
   "forms": [
     {
       "name": "Gulping",
+      "variant": "temporary",
       "primaryType": "flying",
       "secondaryType": "water",
       "maleRatio": 0.5,
@@ -211,6 +212,7 @@
     },
     {
       "name": "Gorging",
+      "variant": "temporary",
       "primaryType": "flying",
       "secondaryType": "water",
       "maleRatio": 0.5,

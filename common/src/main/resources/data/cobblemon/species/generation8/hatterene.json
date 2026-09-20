@@ -171,6 +171,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "psychic",
       "secondaryType": "fairy",
       "maleRatio": 0,

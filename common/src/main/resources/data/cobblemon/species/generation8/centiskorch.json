@@ -173,6 +173,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "bug",
       "maleRatio": 0.5,

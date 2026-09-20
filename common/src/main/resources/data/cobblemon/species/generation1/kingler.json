@@ -222,6 +222,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "water",
       "maleRatio": 0.5,
       "height": 190,

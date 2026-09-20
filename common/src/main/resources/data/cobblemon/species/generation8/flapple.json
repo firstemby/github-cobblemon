@@ -156,6 +156,7 @@
   "forms": [
     {
       "name": "Gmax",
+      "variant": "temporary",
       "primaryType": "grass",
       "secondaryType": "dragon",
       "maleRatio": 0.5,

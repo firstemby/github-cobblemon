@@ -266,6 +266,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "psychic",
       "maleRatio": 0.75,
       "height": 12,

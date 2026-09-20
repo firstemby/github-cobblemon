@@ -255,6 +255,7 @@
   "forms": [
     {
       "name": "Zen",
+      "variant": "temporary",
       "primaryType": "fire",
       "secondaryType": "psychic",
       "maleRatio": 0.5,
@@ -631,6 +632,7 @@
     },
     {
       "name": "Galar-Zen",
+      "variant": "temporary",
       "primaryType": "ice",
       "secondaryType": "fire",
       "maleRatio": 0.5,

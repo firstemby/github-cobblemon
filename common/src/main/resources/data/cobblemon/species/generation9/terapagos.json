@@ -143,6 +143,7 @@
   "forms": [
     {
       "name": "Terastal",
+      "variant": "temporary",
       "primaryType": "normal",
       "maleRatio": 0.5,
       "height": 3,
@@ -210,6 +211,7 @@
     },
     {
       "name": "Stellar",
+      "variant": "temporary",
       "primaryType": "normal",
       "maleRatio": 0.5,
       "height": 17,

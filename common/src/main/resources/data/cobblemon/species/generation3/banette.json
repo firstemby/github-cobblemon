@@ -221,6 +221,7 @@
   "forms": [
     {
       "name": "Mega",
+      "variant": "temporary",
       "primaryType": "ghost",
       "maleRatio": 0.5,
       "height": 12,
