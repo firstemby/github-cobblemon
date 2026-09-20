@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
 import com.cobblemon.mod.common.api.storage.player.client.ClientTMMoveManager
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.block.entity.TintBlockEntity
+import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.client.battle.ClientBattle
 import com.cobblemon.mod.common.client.gui.PartyOverlay
 import com.cobblemon.mod.common.client.gui.PartyOverlayDataControl
@@ -239,6 +240,12 @@ object CobblemonClient {
         )
 
         this.implementation.registerBlockRenderType(
+            RenderType.translucent(),
+            CobblemonBlocks.UPGRADE,
+            CobblemonBlocks.DUBIOUS_DISC
+        )
+
+        this.implementation.registerBlockRenderType(
             RenderType.cutout(),
             CobblemonBlocks.GILDED_CHEST,
             CobblemonBlocks.FOSSIL_ANALYZER,
@@ -383,7 +390,31 @@ object CobblemonClient {
             CobblemonBlocks.X_SP_ATK,
             CobblemonBlocks.X_SP_DEF,
             CobblemonBlocks.X_SPEED,
-            CobblemonBlocks.TM_MACHINE
+            CobblemonBlocks.TM_MACHINE,
+
+            CobblemonBlocks.GALARICA_CUFF,
+            CobblemonBlocks.GALARICA_WREATH,
+            CobblemonBlocks.CHIPPED_POT,
+            CobblemonBlocks.CRACKED_POT,
+            CobblemonBlocks.UNREMARKABLE_TEACUP,
+            CobblemonBlocks.MASTERPIECE_TEACUP,
+            CobblemonBlocks.LUMINOUS_MOSS,
+            CobblemonBlocks.ICY_ROCK,
+            CobblemonBlocks.HEAT_ROCK,
+            CobblemonBlocks.SMOOTH_ROCK,
+            CobblemonBlocks.DAMP_ROCK,
+            CobblemonBlocks.DESTINY_KNOT,
+            CobblemonBlocks.METRONOME,
+            CobblemonBlocks.KINGS_ROCK,
+            CobblemonBlocks.FLAME_ORB,
+            CobblemonBlocks.LIFE_ORB,
+            CobblemonBlocks.TOXIC_ORB,
+            CobblemonBlocks.LIGHT_BALL,
+            CobblemonBlocks.SMOKE_BALL,
+            CobblemonBlocks.NEVER_MELT_ICE,
+            CobblemonBlocks.WIDE_LENS,
+            CobblemonBlocks.ZOOM_LENS,
+            CobblemonBlocks.SCOPE_LENS
         )
 
         this.createBoatModelLayers()

@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:dragon_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_dragon_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:dragon_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:dragon_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dragon_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

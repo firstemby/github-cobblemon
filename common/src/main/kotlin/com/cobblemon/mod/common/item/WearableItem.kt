@@ -13,7 +13,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.Equipable
 
-class WearableItem(val name: String): CobblemonItem(Properties()), Equipable {
+interface WearableItem: Equipable {
+    val name: String
+
     companion object {
         const val MODEL_PATH = "item/wearable"
     }

@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/evolution",
+  "rewards": {
+    "recipes": [
+      "cobblemon:fire_stone_from_smelting_nether_fire_stone_ore"
+    ]
+  },
+  "criteria": {
+    "has_netherrack_fire_stone_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:nether_fire_stone_ore"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:fire_stone_from_smelting_nether_fire_stone_ore"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_nether_fire_stone_ore",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -22,7 +22,7 @@
         ],
         "timeRange": "night",
         "isRaining": false,
-        "minLight": 1
+        "minLight": 8
       },
       "herdablePokemon": [
         {
@@ -55,7 +55,7 @@
         ],
         "timeRange": "night",
         "isRaining": false,
-        "minLight": 1
+        "minLight": 8
       },
       "herdablePokemon": [
         {

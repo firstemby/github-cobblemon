@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.29, 0],
   "rootBone": "dugtrio",
   "animations": {
+    "faint": "q.bedrock_primary('dugtrio', 'faint', q.curve('one'))",
     "cry": "q.bedrock_stateful('dugtrio', 'cry')",
     "recoil": "q.bedrock_stateful('dugtrio', 'recoil')",
     "physical": "q.bedrock_primary('dugtrio', 'physical', q.curve('symmetrical'))"

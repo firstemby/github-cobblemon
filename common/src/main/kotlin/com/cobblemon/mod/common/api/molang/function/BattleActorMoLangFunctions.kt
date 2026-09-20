@@ -17,30 +17,29 @@ import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
 
-
 object BattleActorMoLangFunctions : AbstractMoLangFunctionHolder<BattleActor>() {
     override fun BattleActor.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val actor = this
-        val map = mutableMapOf<String, (MoParams) -> Any>(
-            "is_npc" to { DoubleValue(actor.type == ActorType.NPC) },
-            "is_player" to { DoubleValue(actor.type == ActorType.PLAYER) },
-            "is_wild" to { DoubleValue(actor.type == ActorType.WILD) }
-        )
+        val functions = hashMapOf<String, (MoParams) -> Any>()
+
+        functions["is_npc"] = { DoubleValue(actor.type == ActorType.NPC) }
+        functions["is_player"] = { DoubleValue(actor.type == ActorType.PLAYER) }
+        functions["is_wild"] = { DoubleValue(actor.type == ActorType.WILD) }
 
         when (actor) {
             is NPCBattleActor -> {
-                map["npc"] = { actor.entity.struct }
+                functions["npc"] = { actor.entity.struct }
             }
 
             is PlayerBattleActor -> {
-                map["player"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+                functions["player"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             }
 
             is PokemonBattleActor -> {
-                map["pokemon"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
+                functions["pokemon"] = { actor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             }
         }
 
-        return map
+        return functions
     }
 }

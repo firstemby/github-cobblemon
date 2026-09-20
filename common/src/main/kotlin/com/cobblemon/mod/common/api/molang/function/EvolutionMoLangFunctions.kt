@@ -20,28 +20,30 @@ import com.cobblemon.mod.common.pokemon.transformation.triggers.TradeTrigger
 object EvolutionMoLangFunctions : AbstractMoLangFunctionHolder<Transformation>() {
     override fun Transformation.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val evolution = this
-        val map = hashMapOf<String, (MoParams) -> Any>()
+        val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        map["is_optional"] = { DoubleValue(evolution.optional) }
-        map["reevaluate"] = { DoubleValue(evolution.reevaluate) }
+        functions["result"] = { evolution.result.asMoLangValue() }
+        functions["is_optional"] = { DoubleValue(evolution.optional) }
+        functions["consumes_held_item"] = { DoubleValue(evolution.consumeHeldItem) }
+        functions["reevaluate"] = { DoubleValue(evolution.reevaluate) }
 
         if (evolution is Evolution) {
             map["result"] = { evolution.result.asMoLangValue() }
             when (evolution.trigger) {
                 is LevelUpTrigger -> {
-                    map["is_level_up"] = { DoubleValue.ONE }
+                    functions["is_level_up"] = { DoubleValue.ONE }
                 }
 
                 is TradeTrigger -> {
-                    map["is_trade"] = { DoubleValue.ONE }
+                    functions["is_trade"] = { DoubleValue.ONE }
                 }
 
                 is ItemInteractionTrigger -> {
-                    map["is_item"] = { DoubleValue.ONE }
+                    functions["is_item"] = { DoubleValue.ONE }
                 }
             }
         }
 
-        return map
+        return functions
     }
 }

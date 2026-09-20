@@ -1155,14 +1155,6 @@
 					"position": [0, 0.5, 0]
 				}
 			},
-			"sound_effects": {
-				"0.0417": {
-					"effect": "animation.plumage_wing_flap_1"
-				},
-				"0.5417": {
-					"effect": "animation.plumage_wing_flap_3"
-				}
-			},
 			"timeline": {
 				"0.0417": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };",
 				"0.5417": "q.has_entity ? { q.sound('animation.plumage.wing_flap.small'); };"

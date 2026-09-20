@@ -325,7 +325,12 @@
 					"name": "head",
 					"parent": "torso2",
 					"pivot": [0, 40, 3],
-					"rotation": [47.5, 0, 0],
+					"rotation": [47.5, 0, 0]
+				},
+				{
+					"name": "head_ai",
+					"parent": "head",
+					"pivot": [0, 40, 0],
 					"cubes": [
 						{"origin": [-2.5, 41, 0.99], "size": [5, 3, 1], "uv": [0, 0]},
 						{"origin": [0.5, 41, 1.98], "size": [2, 3, 2], "inflate": 0.01, "uv": [12, 0]},
@@ -334,7 +339,7 @@
 				},
 				{
 					"name": "locator_item",
-					"parent": "head",
+					"parent": "head_ai",
 					"pivot": [-0.25, 42.75, 3.5],
 					"rotation": [0, -135, 90],
 					"locators": {
@@ -343,7 +348,7 @@
 				},
 				{
 					"name": "head_wheel",
-					"parent": "head",
+					"parent": "head_ai",
 					"pivot": [0, 40.25, 2],
 					"cubes": [
 						{"origin": [-0.5, 38.75, 1.85], "size": [1, 2, 2], "inflate": -0.15, "uv": [23, 14]}
@@ -351,7 +356,7 @@
 				},
 				{
 					"name": "head2",
-					"parent": "head",
+					"parent": "head_ai",
 					"pivot": [0, 41, 2],
 					"cubes": [
 						{"origin": [-2.5, 41, -1], "size": [5, 3, 2], "uv": [24, 0]},
@@ -621,7 +626,7 @@
 					]
 				},
 				{
-					"name": "locator_seat_1",
+					"name": "seat_1_locator",
 					"parent": "torso_back",
 					"pivot": [0, 11, 14],
 					"locators": {
