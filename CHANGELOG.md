@@ -35,6 +35,7 @@
 - Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
 - Some other recipes without advancements have also been corrected
 - Corrected the TM Recipes for Charge Beam and Payday
+- Type Gem blocks now properly generate clusters off of the block.
 
 ### Developer
 
