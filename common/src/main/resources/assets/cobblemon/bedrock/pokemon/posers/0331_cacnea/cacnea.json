@@ -5,62 +5,111 @@
   "profileTranslation": [0, 0.5, 0],
   "rootBone": "cacnea",
   "animations": {
-    "cry": "q.bedrock_stateful('cacnea', 'cry')"
+    "faint": "q.bedrock_primary('cacnea', 'faint', q.curve('one'))",
+    "cry": "q.bedrock_stateful('cacnea', 'cry')",
+    "recoil": "q.bedrock_stateful('cacnea', 'recoil')",
+    "physical": "q.bedrock_primary('cacnea', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('cacnea', 'special', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_primary('cacnea', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "sleep": {
       "poseName": "sleep",
-      "poseTypes": [
-        "SLEEP"
-      ],
-      "animations": [
-        "q.bedrock('cacnea', 'sleep')"
-      ],
-      "namedAnimations": {
-        "cry": "q.bedrock_stateful('dummy', 'cry')"
-      }
+      "poseTypes": ["SLEEP"],
+      "isBattle": false,
+      "animations": ["q.bedrock('cacnea', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
+    },
+    "battle-sleep": {
+      "poseName": "sleep",
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "animations": ["q.bedrock('cacnea', 'battle_sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     },
     "standing": {
-      "poseName": "standing",
       "poseTypes": [
         "STAND",
-        "FLOAT",
         "NONE",
         "PORTRAIT",
         "PROFILE"
       ],
+      "isBattle": false,
+      "isTouchingWater": false,
       "animations": [
+        "q.look('torso', 1, 1, 20, -20, 7, -7)",
         "q.bedrock('cacnea', 'ground_idle')"
       ],
-      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('cacnea', 'blink')",
+        "q.bedrock_quirk('cacnea', 'idle_quirk_flex'), 30, 60, 1)"
+      ]
+    },
+    "walk": {
+      "poseTypes": [
+        "WALK"
+      ],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('torso', 1, 1, 20, -20, 7, -7)",
+        "q.bedrock('cacnea', 'ground_walk')"
+      ],
       "quirks": [
         "q.bedrock_quirk('cacnea', 'blink')"
       ]
     },
-    "walk": {
-      "poseName": "walk",
-      "poseTypes": [
-        "WALK",
-        "SWIM"
-      ],
+    "running": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": false,
+      "condition": "q.is_sprinting",
       "animations": [
-        "q.bedrock('cacnea', 'ground_walk')"
+        "q.bedrock('cacnea', 'ground_run')"
       ],
-      "transformTicks": 10,
       "quirks": [
         "q.bedrock_quirk('cacnea', 'blink')"
       ]
     },
     "battle_idle": {
-      "poseName": "battle_idle",
       "poseTypes": [
         "STAND",
         "FLOAT"
       ],
+      "isBattle": true,
+      "isTouchingWater": false,
       "animations": [
+        "q.look('torso', 1, 1, 20, -20, 7, -7)",
         "q.bedrock('cacnea', 'battle_idle')"
       ],
-      "transformTicks": 10,
+      "quirks": [
+        "q.bedrock_quirk('cacnea', 'blink')",
+        "q.bedrock_primary_quirk('cacnea', q.array('battle_quirk_spin_right', 'battle_quirk_spin_left'), 20, 40, 1, q.curve('symmetrical_wide'))"
+      ]
+    },
+    "swim": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "isTouchingWater": true,
+      "animations": [
+        "q.pitch_tilt('body')",
+        "q.bedrock('cacnea', 'water_swim')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('cacnea', 'blink')"
+      ]
+    },
+    "float": {
+      "poseTypes": [
+        "STAND",
+        "FLOAT"
+      ],
+      "isTouchingWater": true,
+      "animations": [
+        "q.pitch_tilt('body')",
+        "q.look('torso', 1, 1, 20, -20, 7, -7)",
+        "q.bedrock('cacnea', 'water_idle')"
+      ],
       "quirks": [
         "q.bedrock_quirk('cacnea', 'blink')"
       ]

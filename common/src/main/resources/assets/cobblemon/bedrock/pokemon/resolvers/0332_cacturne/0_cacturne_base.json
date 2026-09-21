@@ -7,13 +7,28 @@
       "poser": "cobblemon:cacturne",
       "model": "cobblemon:cacturne_male.geo",
       "texture": "cobblemon:textures/pokemon/0332_cacturne/cacturne.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0332_cacturne/cacturne_emissive.png",
+          "emissive": true,
+          "translucent": true
+        }
+      ]
     },
     {
       "aspects": [
         "shiny"
       ],
-      "texture": "cobblemon:textures/pokemon/0332_cacturne/cacturne_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0332_cacturne/cacturne_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0332_cacturne/cacturne_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
+        }
+      ]
     },
     {
       "aspects": [

@@ -70,7 +70,7 @@
     },
     "running": {
       "poseTypes": ["WALK", "SWIM"],
-      "condition": "q.has_entity ? !q.in_air q.is_sprinting : 0.0",
+      "condition": "q.has_entity ? !q.in_air && q.is_sprinting : 0.0",
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('flygon', 'ground_run')",
