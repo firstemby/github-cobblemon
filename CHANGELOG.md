@@ -118,6 +118,7 @@
 
 ### Molang & Datapacks
 - A new `negate` variant for evolution requirements has been added, which will negate (invert) the provided inner condition.
+- Added Molang functions for individual Pokedex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
 
 ### Particles
 
