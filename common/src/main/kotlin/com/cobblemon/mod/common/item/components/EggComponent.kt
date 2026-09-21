@@ -86,7 +86,7 @@ class EggComponent(
     }
 
     val isWild = parent1OwnerUUID == null && parent2OwnerUUID == null
-    fun isParent(pokemonId: UUID) = parent1OwnerUUID == pokemonId || parent2OwnerUUID == pokemonId
+    fun isParent(pokemonId: UUID) = parent1UUID == pokemonId || parent2UUID == pokemonId
 
     override fun equals(other: Any?) = other is EggComponent && this.eggId == other.eggId
     override fun hashCode() = eggId.hashCode()
