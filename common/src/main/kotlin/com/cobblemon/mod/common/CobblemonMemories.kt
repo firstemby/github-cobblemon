@@ -47,7 +47,7 @@ object CobblemonMemories {
     @JvmField
     val NEST_LOCATION = register<BlockPos>("nest_location")
     @JvmField
-    val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest")
+    val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest", BlockPos.CODEC)
     @JvmField
     val IRRITATED_AT = register<UUID>("irritated_at")
     @JvmField
