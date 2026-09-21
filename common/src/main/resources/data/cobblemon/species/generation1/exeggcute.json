@@ -226,16 +226,6 @@
   ],
   "evolutions": [
     {
-      "id": "exeggcute_exeggutor",
-      "variant": "item_interact",
-      "result": "exeggutor",
-      "consumeHeldItem": false,
-      "learnableMoves": [
-        "stomp"
-      ],
-      "requiredContext": "cobblemon:leaf_stone"
-    },
-    {
       "id": "exeggcute_exeggutoralola",
       "variant": "item_interact",
       "result": "exeggutor alolan",
@@ -248,6 +238,16 @@
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
         }
+      ],
+      "requiredContext": "cobblemon:leaf_stone"
+    },
+    {
+      "id": "exeggcute_exeggutor",
+      "variant": "item_interact",
+      "result": "exeggutor",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "stomp"
       ],
       "requiredContext": "cobblemon:leaf_stone"
     }
