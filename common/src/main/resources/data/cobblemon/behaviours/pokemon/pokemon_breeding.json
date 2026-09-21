@@ -27,8 +27,7 @@
         "cobblemon:mate_sensor",
         "cobblemon:nest_sensor",
         "cobblemon:egg_sensor",
-        "cobblemon:ideal_nest_location_sensor",
-        "cobblemon:pokemon_disturbance"
+        "cobblemon:ideal_nest_location_sensor"
       ]
     }
   ]

@@ -9,11 +9,17 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -23,7 +29,9 @@ import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrNull
 
 class IdealNestPlacementSense(
-    private var cooldownTicks: Int = 100
+    private var cooldownTicks: Int = 100,
+    private var detectionRadius: Int = 10,
+    private var minNestDistance: Int = 10
 ) : Sense {
     override var ticksUntilNextExecution: Int = 100
     override val memories = setOf(
@@ -35,6 +43,8 @@ class IdealNestPlacementSense(
     override fun merge(other: Sense): Boolean {
         if (other is IdealNestPlacementSense) {
             this.cooldownTicks = minOf(this.cooldownTicks, other.cooldownTicks)
+            this.detectionRadius = maxOf(this.detectionRadius, other.detectionRadius)
+            this.minNestDistance = maxOf(this.minNestDistance, other.minNestDistance)
             return true
         }
         return false
@@ -91,8 +101,8 @@ class IdealNestPlacementSense(
 
     private fun findValidNestPlacement(world: ServerLevel, entity: PokemonEntity, mate: PokemonEntity?, entityPos: BlockPos, sharedTypes: List<WildNestType>): BlockPos? {
         return BlockPos.betweenClosed(
-            entityPos.offset(-DETECTION_RADIUS, -5, -DETECTION_RADIUS),
-            entityPos.offset(DETECTION_RADIUS, 5, DETECTION_RADIUS)
+            entityPos.offset(-detectionRadius, -5, -detectionRadius),
+            entityPos.offset(detectionRadius, 5, detectionRadius)
         ).firstOrNull { pos ->
             val blockBelowState = world.getBlockState(pos)
             val nestPos = pos.above()
@@ -142,8 +152,8 @@ class IdealNestPlacementSense(
 
     private fun isNearExistingNest(world: ServerLevel, pos: BlockPos): Boolean {
         return BlockPos.betweenClosed(
-            pos.offset(-MIN_NEST_DISTANCE, -MIN_NEST_DISTANCE, -MIN_NEST_DISTANCE),
-            pos.offset(MIN_NEST_DISTANCE, MIN_NEST_DISTANCE, MIN_NEST_DISTANCE)
+            pos.offset(-minNestDistance, -minNestDistance, -minNestDistance),
+            pos.offset(minNestDistance, minNestDistance, minNestDistance)
         ).any { checkPos ->
             world.getBlockEntity(checkPos) is com.cobblemon.mod.common.block.entity.NestBlockEntity
         }
@@ -175,13 +185,21 @@ class IdealNestPlacementSense(
     }
 
     class Config : SenseConfig {
-        override fun create(entity: LivingEntity, behaviourConfigurationContext: com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext): Sense? {
-            return IdealNestPlacementSense()
-        }
-    }
+        var cooldownTicks: ExpressionOrEntityVariable = Either.left("100".asExpression())
+        var detectionRadius: ExpressionOrEntityVariable = Either.left("10".asExpression())
+        var minNestDistance: ExpressionOrEntityVariable = Either.left("10".asExpression())
 
-    companion object {
-        private const val DETECTION_RADIUS = 10
-        private const val MIN_NEST_DISTANCE = 10
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(cooldownTicks, detectionRadius, minNestDistance).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
+            return IdealNestPlacementSense(
+                cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
+                detectionRadius = detectionRadius.resolveInt(behaviourConfigurationContext.runtime),
+                minNestDistance = minNestDistance.resolveInt(behaviourConfigurationContext.runtime)
+            )
+        }
     }
 }

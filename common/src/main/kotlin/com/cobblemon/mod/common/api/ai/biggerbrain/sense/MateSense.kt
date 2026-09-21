@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
 import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
+import com.cobblemon.mod.common.api.ai.resolveDouble
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -24,7 +25,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.AABB
 
 class MateSense(
-    private var cooldownTicks: Int = 1200
+    private var cooldownTicks: Int = 1200,
+    private var detectionRadius: Double = 10.0
 ) : Sense {
     override var ticksUntilNextExecution: Int = 1200
     override val memories = setOf(
@@ -36,6 +38,7 @@ class MateSense(
     override fun merge(other: Sense): Boolean {
         if (other is MateSense) {
             this.cooldownTicks = minOf(this.cooldownTicks, other.cooldownTicks)
+            this.detectionRadius = maxOf(this.detectionRadius, other.detectionRadius)
             return true
         }
         return false
@@ -61,7 +64,7 @@ class MateSense(
 
         val potentialMate = world.getEntitiesOfClass(
             PokemonEntity::class.java,
-            AABB(entity.blockPosition()).inflate(DETECTION_RADIUS)
+            AABB(entity.blockPosition()).inflate(detectionRadius)
         ) { nearbyEntity ->
             nearbyEntity != entity && isValidMate(entity, nearbyEntity)
         }.firstOrNull()
@@ -94,20 +97,22 @@ class MateSense(
 
     class Config : SenseConfig {
         var cooldownTicks: ExpressionOrEntityVariable = Either.left("1200".asExpression())
+        var detectionRadius: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
 
         override fun getVariables(
             entity: LivingEntity,
             behaviourConfigurationContext: BehaviourConfigurationContext
-        ) = listOf(cooldownTicks).asVariables()
+        ) = listOf(cooldownTicks, detectionRadius).asVariables()
 
         override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
-            val cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime)
-            return MateSense(cooldownTicks = cooldownTicks)
+            return MateSense(
+                cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
+                detectionRadius = detectionRadius.resolveDouble(behaviourConfigurationContext.runtime)
+            )
         }
     }
 
     companion object {
-        private const val DETECTION_RADIUS = 10.0
         private const val MATE_SCAN_COOLDOWN = 1200L
     }
 }

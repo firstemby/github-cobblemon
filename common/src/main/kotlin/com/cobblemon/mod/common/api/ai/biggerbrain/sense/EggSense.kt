@@ -11,19 +11,27 @@ package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
-import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.api.ai.resolveDouble
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 
 class EggSense(
-    private var cooldownTicks: Int = 100
+    private var cooldownTicks: Int = 100,
+    private var scanRadius: Double = 20.0
 ) : Sense {
     override var ticksUntilNextExecution: Int = 100
     override val memories = setOf(
@@ -41,6 +49,7 @@ class EggSense(
     override fun merge(other: Sense): Boolean {
         if (other is EggSense) {
             this.cooldownTicks = minOf(this.cooldownTicks, other.cooldownTicks)
+            this.scanRadius = maxOf(this.scanRadius, other.scanRadius)
             return true
         }
         return false
@@ -56,8 +65,8 @@ class EggSense(
         val blockEntity = level.getBlockEntity(nestPos)
         if (blockEntity is NestBlockEntity) {
             val nestItem = blockEntity.getItem()
+            // Egg is in nest
             if (!nestItem.isEmpty && nestItem.item.asItem() == CobblemonItems.POKEMON_EGG.asItem()) {
-                brain.sendDebugMessage("[EggSense] Egg confirmed in nest at $nestPos.")
                 brain.setMemory(CobblemonMemories.EGG_LOCATION, nestPos)
                 brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
                 brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
@@ -65,55 +74,65 @@ class EggSense(
             }
         }
 
-        brain.sendDebugMessage("[EggSense] Egg missing from nest at $nestPos; searching.")
+        // Egg is gone from nest
         brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
         brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
 
-        val nearbyEggItems = level.getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox.inflate(20.0)) { itemEntity ->
+        // get item entities nearby that are Eggs
+        val nearbyEggItems = level.getEntitiesOfClass(ItemEntity::class.java, entity.boundingBox.inflate(scanRadius)) { itemEntity ->
             val itemStack = itemEntity.item
             if (itemStack.item.asItem() != CobblemonItems.POKEMON_EGG.asItem()) return@getEntitiesOfClass false
             val eggComponent = itemStack.get(CobblemonItemComponents.EGG_DATA) ?: return@getEntitiesOfClass false
             eggComponent.isParent(entity.pokemon.uuid)
         }
 
+        // see if we have any stored egg thieves in memory
         val existingEggThief = brain.getMemory(CobblemonMemories.EGG_THIEF) as? Player
         val lastSeenTick = brain.getMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
         val currentTick = level.gameTime
 
+        // we got a thief here!
         if (existingEggThief != null) {
-            if (isEntityTargetable(entity, existingEggThief)) {
+            // there the thief is!
+            if (isPlayerVisible(entity, existingEggThief)) {
                 brain.setMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK, currentTick)
-                brain.sendDebugMessage("[EggSense] Egg thief still in sight: ${existingEggThief.name.string}.")
                 brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
                 brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
                 return
             }
 
             val lastSeen = lastSeenTick ?: currentTick
+            // lost track of thief for too long, giving up
             if (currentTick - lastSeen > THIEF_LOST_SIGHT_TICKS) {
-                brain.sendDebugMessage("[EggSense] Lost sight of egg thief for too long; clearing.")
                 brain.eraseMemory(CobblemonMemories.EGG_THIEF)
                 brain.eraseMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
             } else {
-                brain.sendDebugMessage("[EggSense] Egg thief out of sight; holding target.")
+                // dont see the thief
                 brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
                 return
             }
         }
 
         if (nearbyEggItems.isNotEmpty()) {
-            brain.sendDebugMessage("[EggSense] Egg item found on ground near ${nearbyEggItems[0].blockPosition()}.")
-            level.players().forEach { player ->
-                player.displayClientMessage("An egg has been found on the ground!".green(), true)
-            }
+            // the egg is on the ground lets stop being angry
             if (brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)) brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
             if (brain.hasMemoryValue(MemoryModuleType.ANGRY_AT)) brain.eraseMemory(MemoryModuleType.ANGRY_AT)
 
             brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
             brain.setMemory(CobblemonMemories.EGG_LOCATION, nearbyEggItems[0].blockPosition())
             brain.eraseMemory(CobblemonMemories.EGG_THIEF)
+            return
+        }
+
+        // when looking for the egg and it is seen in the hand of a nearby player mark them as the thief
+        val heldEggThief = findVisiblePlayerHoldingEgg(entity, brain)
+        if (heldEggThief != null) {
+            brain.setMemory(CobblemonMemories.EGG_THIEF, heldEggThief)
+            brain.setMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK, currentTick)
+            brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
+            brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
         } else {
-            brain.sendDebugMessage("[EggSense] No egg or thief found; starting search timer.")
+            // start search timer with no egg or player holding the egg in sight
             brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
             brain.eraseMemory(CobblemonMemories.EGG_THIEF)
             brain.eraseMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
@@ -124,13 +143,41 @@ class EggSense(
         }
     }
 
-    private fun isEntityTargetable(entity: LivingEntity, player: Player): Boolean {
+    // todo we might want to have each mate report to the other if a thief is found
+    private fun isPlayerVisible(entity: LivingEntity, player: Player): Boolean {
         return entity.hasLineOfSight(player) && !player.isInvisible
     }
 
+    private fun findVisiblePlayerHoldingEgg(entity: PokemonEntity, brain: BiggerBrain): Player? {
+        val visible = brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES) ?: return null
+        return visible.findAll { it is Player && !it.isSpectator && !it.isCreative && isHoldingEggOf(it, entity) }
+            .filterIsInstance<Player>()
+            .firstOrNull()
+    }
+
+    // todo if we have pokemon that can steal eggs from nests we may want to make this work on PokemonEntity too not just players
+    private fun isHoldingEggOf(player: Player, entity: PokemonEntity): Boolean {
+        return listOf(InteractionHand.MAIN_HAND, InteractionHand.OFF_HAND).any { hand ->
+            val stack = player.getItemInHand(hand)
+            stack.item.asItem() == CobblemonItems.POKEMON_EGG.asItem() &&
+                stack.get(CobblemonItemComponents.EGG_DATA)?.isParent(entity.pokemon.uuid) == true
+        }
+    }
+
     class Config : SenseConfig {
-        override fun create(entity: LivingEntity, behaviourConfigurationContext: com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext): Sense? {
-            return EggSense()
+        var cooldownTicks: ExpressionOrEntityVariable = Either.left("100".asExpression())
+        var scanRadius: ExpressionOrEntityVariable = Either.left("20.0".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(cooldownTicks, scanRadius).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
+            return EggSense(
+                cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
+                scanRadius = scanRadius.resolveDouble(behaviourConfigurationContext.runtime)
+            )
         }
     }
 

@@ -9,13 +9,19 @@
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
+import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
+import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
+import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
 import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.asExpression
+import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
@@ -23,7 +29,9 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.level.block.entity.BlockEntity
 
 class NestSense(
-    private var cooldownTicks: Int = 200
+    private var cooldownTicks: Int = 200,
+    private var radiusXZ: Int = 20,
+    private var radiusY: Int = 5
 ) : Sense {
     override var ticksUntilNextExecution: Int = 200
     override val memories = setOf(
@@ -37,6 +45,8 @@ class NestSense(
     override fun merge(other: Sense): Boolean {
         if (other is NestSense) {
             this.cooldownTicks = minOf(this.cooldownTicks, other.cooldownTicks)
+            this.radiusXZ = maxOf(this.radiusXZ, other.radiusXZ)
+            this.radiusY = maxOf(this.radiusY, other.radiusY)
             return true
         }
         return false
@@ -49,26 +59,31 @@ class NestSense(
 
         val paternalNestLocation = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
 
+        // early memory check so we can end early
         if (paternalNestLocation != null) {
+            // end early if the nest itself isnt loaded in
+            if (!world.isLoaded(paternalNestLocation)) {
+                return
+            }
+            // check to make sure there is a nest still at that spot
             val blockAtLocation = world.getBlockEntity(paternalNestLocation)
-            if (blockAtLocation !is NestBlockEntity) {
-                debug(brain, "Paternal nest missing at $paternalNestLocation; clearing memories.")
+            if (blockAtLocation !is NestBlockEntity) { // nest is gone so we kill all nest and egg memories
                 brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
                 brain.eraseMemory(CobblemonMemories.EGG_IN_NEST)
                 brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
             } else if (blockAtLocation.parents.first == entity.uuid || blockAtLocation.parents.second == entity.uuid) {
-                debug(brain, "Paternal nest confirmed at $paternalNestLocation.")
+                // is the pokemon one of the parents of this nest? Yes? Sick let's remember that. We might want to check memories beforehand though so we don't need to set memories each time? idk todo look into
                 brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, paternalNestLocation)
                 brain.setMemory(CobblemonMemories.NEST_LOCATION, paternalNestLocation)
 
+                // does our nest have an egg todo we should maybe also check that not just any egg is in the nest but if it is trhe egg of the parents (check uuid of the egg components later)
                 if (blockAtLocation.getItem().isEmpty) {
                     brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
                 } else {
                     brain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
                 }
                 return
-            } else {
-                debug(brain, "Paternal nest no longer owned by this Pokémon; clearing memories.")
+            } else { // no longer parents of the nest clear
                 brain.eraseMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
                 brain.setMemory(CobblemonMemories.EGG_IN_NEST, false)
                 brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
@@ -77,39 +92,41 @@ class NestSense(
 
         val nearbyNest = findNearbyNest(entity, brain, world, entity.blockPosition())
         if (nearbyNest != null) {
-            debug(brain, "Nearby nest selected at $nearbyNest.")
             brain.setMemory(CobblemonMemories.NEST_LOCATION, nearbyNest)
         } else {
-            debug(brain, "No valid nearby nest found.")
             brain.eraseMemory(CobblemonMemories.NEST_LOCATION)
         }
     }
 
     private fun findNearbyNest(pokemonEntity: PokemonEntity, brain: BiggerBrain, world: ServerLevel, entityPos: BlockPos): BlockPos? {
         return BlockPos.betweenClosed(
-            entityPos.offset(-20, -5, -20),
-            entityPos.offset(20, 5, 20)
+            entityPos.offset(-radiusXZ, -radiusY, -radiusXZ),
+            entityPos.offset(radiusXZ, radiusY, radiusXZ)
         ).firstOrNull { pos ->
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
             if (blockEntity !is NestBlockEntity) return@firstOrNull false
 
             if (pokemonEntity.isBattling || pokemonEntity.isBattleClone() || (!pokemonEntity.pokemon.isWild() && pokemonEntity.tethering?.tetheringId == null)) return@firstOrNull false
 
+            // we might need to check if a nest nearby was forgotten about
+            if (blockEntity.parents.first == pokemonEntity.uuid || blockEntity.parents.second == pokemonEntity.uuid) {
+                brain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, pos)
+                return@firstOrNull true
+            }
+
             val nestBlockEntity = blockEntity
             val allowedTypes = allowedNestTypes(pokemonEntity, brain)
             val nestType = (nestBlockEntity.blockState.block as? WildNestBlock)?.type
-            if (nestType == null) {
-                debug(brain, "Rejecting nest at $pos: missing WildNestBlock type.")
+
+            // is the nest a valid type allowed by the mates
+            if (nestType == null || !isNestTypeAllowed(nestType, pokemonEntity, allowedTypes))
                 return@firstOrNull false
-            }
-            if (!isNestTypeAllowed(nestType, pokemonEntity, allowedTypes)) {
-                debug(brain, "Rejecting nest at $pos: type=$nestType not in $allowedTypes.")
-                return@firstOrNull false
-            }
+
+            // can the mates get to the nest?
             if (!canPathfindToTarget(pokemonEntity, nestBlockEntity.blockPos)) return@firstOrNull false
 
             val isWildNest = nestBlockEntity.ownerUUID == null
-            val isOwnedNest = nestBlockEntity.ownerUUID != null
+            val isPlayerNest = nestBlockEntity.ownerUUID != null
             val isClaimed = nestBlockEntity.nestClaimedBy.first != null || nestBlockEntity.nestClaimedBy.second != null
             val isEggless = nestBlockEntity.getItem(0).isEmpty
             val isNestWaterlogged = nestBlockEntity.blockState.getOptionalValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED).orElse(false)
@@ -121,18 +138,19 @@ class NestSense(
             val nestParentOneActive = nestBlockEntity.parents.first?.let { world.getEntity(it) }
             val nestParentTwoActive = nestBlockEntity.parents.second?.let { world.getEntity(it) }
 
+            // skip any empty wild nests that are claimed
             if (isWildNest && isEggless && ((nestParentOneActive != null || nestParentTwoActive != null) || (isClaimed && (nestClaimerOne != null && !isClaimerOne && nestClaimerTwo != null && !isClaimerTwo)))) {
-                debug(brain, "Rejecting nest at $pos: claimed or active parents present.")
                 return@firstOrNull false
             }
 
+            // is this nest water group compatible? some of our nests can only be used by water egg grouup mons if they are water logged. reverse for land nests and water egg groups
             if (!isWaterGroupCompatible(pokemonEntity, mate, isNestWaterlogged)) {
-                debug(brain, "Rejecting nest at $pos: water-group compatibility failed (waterlogged=$isNestWaterlogged).")
                 return@firstOrNull false
             }
 
+            // pastured mons to only use free player nests and wild mons to use naturally made nests
             return@firstOrNull when {
-                pokemonEntity.tethering?.tetheringId != null -> isOwnedNest && isEggless
+                pokemonEntity.tethering?.tetheringId != null -> isPlayerNest && isEggless
                 else -> isWildNest && isEggless
             }
         }
@@ -189,13 +207,22 @@ class NestSense(
         return allowedTypes.contains(nestType)
     }
 
-    private fun debug(brain: BiggerBrain, message: String) {
-        brain.sendDebugMessage("[NestSense] $message")
-    }
-
     class Config : SenseConfig {
-        override fun create(entity: LivingEntity, behaviourConfigurationContext: com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext): Sense? {
-            return NestSense()
+        var cooldownTicks: ExpressionOrEntityVariable = Either.left("200".asExpression())
+        var radiusXZ: ExpressionOrEntityVariable = Either.left("20".asExpression())
+        var radiusY: ExpressionOrEntityVariable = Either.left("5".asExpression())
+
+        override fun getVariables(
+            entity: LivingEntity,
+            behaviourConfigurationContext: BehaviourConfigurationContext
+        ) = listOf(cooldownTicks, radiusXZ, radiusY).asVariables()
+
+        override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
+            return NestSense(
+                cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
+                radiusXZ = radiusXZ.resolveInt(behaviourConfigurationContext.runtime),
+                radiusY = radiusY.resolveInt(behaviourConfigurationContext.runtime)
+            )
         }
     }
 }

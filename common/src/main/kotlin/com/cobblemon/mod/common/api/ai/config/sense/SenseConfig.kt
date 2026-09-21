@@ -22,7 +22,6 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.sense.JukeboxSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NPCBattlingSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NestSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
-import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonDisturbanceSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SaccLeafSense
@@ -53,7 +52,6 @@ interface SenseConfig {
             cobblemonResource("nest_sensor") to NestSense.Config::class.java,
             cobblemonResource("egg_sensor") to EggSense.Config::class.java,
             cobblemonResource("ideal_nest_location_sensor") to IdealNestPlacementSense.Config::class.java,
-            cobblemonResource("pokemon_disturbance") to PokemonDisturbanceSense.Config::class.java,
             cobblemonResource("pokemon_adult") to PokemonAdultSense.Config::class.java,
             cobblemonResource("nearby_sweet_berry_bush") to SweetBerryBushSense.Config::class.java,
             cobblemonResource("pokemon_nearby_wanted_item") to PokemonItemSense.Config::class.java,
