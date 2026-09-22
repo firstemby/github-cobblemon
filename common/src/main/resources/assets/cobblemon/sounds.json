@@ -2017,6 +2017,32 @@
       { "name": "cobblemon:stepsound/wood/standard/medium/stepsound_wood_standard_medium_8", "volume": 0.15 }
     ]
   },
+  "stepsound.mud.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_1", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_2", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_3", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_4", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_5", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_6", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_7", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/mud/standard/large/stepsound_mud_standard_large_8", "volume": 0.22 }
+    ]
+  },
+  "stepsound.mud.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_1", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_2", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_3", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_4", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_5", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_6", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_7", "volume": 0.14 },
+      { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_8", "volume": 0.14 }
+    ]
+  },
   "stepsound.dirt.hoof.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
