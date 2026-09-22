@@ -1,5 +1,5 @@
 {
-  "values": [
-    "#minecraft:sand"
-  ]
+    "values": [
+        { "id": "#minecraft:sand", "required": false }
+    ]
 }

@@ -1,7 +1,7 @@
 {
-  "values": [
-    "minecraft:grass_block",
-    "minecraft:podzol",
-    "minecraft:moss_block"
-  ]
+    "values": [
+        { "id": "minecraft:grass_block", "required": false },
+        { "id": "minecraft:podzol", "required": false },
+        { "id": "minecraft:moss_block", "required": false }
+    ]
 }

@@ -1,8 +1,8 @@
 {
-  "values": [
-    "minecraft:stone",
-    "minecraft:andesite",
-    "minecraft:diorite",
-    "minecraft:netherrack"
-  ]
+    "values": [
+        { "id": "minecraft:stone", "required": false },
+        { "id": "minecraft:andesite", "required": false },
+        { "id": "minecraft:diorite", "required": false },
+        { "id": "minecraft:netherrack", "required": false }
+    ]
 }

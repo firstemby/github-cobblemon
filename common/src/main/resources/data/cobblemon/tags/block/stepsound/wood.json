@@ -1,11 +1,11 @@
 {
-  "values": [
-    "#minecraft:logs",
-    "#minecraft:planks",
-    "#minecraft:wooden_doors",
-    "#minecraft:wooden_trapdoors",
-    "#minecraft:wooden_fences",
-    "#minecraft:wooden_stairs",
-    "#minecraft:wooden_slabs"
-  ]
+    "values": [
+        { "id": "#minecraft:logs", "required": false },
+        { "id": "#minecraft:planks", "required": false },
+        { "id": "#minecraft:wooden_doors", "required": false },
+        { "id": "#minecraft:wooden_trapdoors", "required": false },
+        { "id": "#minecraft:wooden_fences", "required": false },
+        { "id": "#minecraft:wooden_stairs", "required": false },
+        { "id": "#minecraft:wooden_slabs", "required": false }
+    ]
 }

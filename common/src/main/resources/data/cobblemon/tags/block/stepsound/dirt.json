@@ -1,5 +1,5 @@
 {
-  "values": [
-    "#minecraft:dirt"
-  ]
+    "values": [
+        { "id": "#minecraft:dirt", "required": false }
+    ]
 }

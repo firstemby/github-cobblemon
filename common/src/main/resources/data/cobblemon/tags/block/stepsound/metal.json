@@ -1,8 +1,8 @@
 {
-  "values": [
-    "minecraft:iron_block",
-    "minecraft:gold_block",
-    "minecraft:diamond_block",
-    "minecraft:netherite_block"
-  ]
+    "values": [
+        { "id": "minecraft:iron_block", "required": false },
+        { "id": "minecraft:gold_block", "required": false },
+        { "id": "minecraft:diamond_block", "required": false },
+        { "id": "minecraft:netherite_block", "required": false }
+    ]
 }

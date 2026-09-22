@@ -1,5 +1,5 @@
 {
-  "values": [
-    "#minecraft:snow"
-  ]
+    "values": [
+        { "id": "#minecraft:snow", "required": false }
+    ]
 }
