@@ -6,15 +6,13 @@
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
         "0": [
-          "cobblemon:attack_target",
+          "cobblemon:defend_nest",
           "cobblemon:path_to_nest",
           "cobblemon:breed_at_nest",
-          "cobblemon:guard_nest",
           "cobblemon:search_for_egg",
           "cobblemon:retrieve_egg",
           "cobblemon:pick_up_egg",
           "cobblemon:place_egg_in_nest",
-          "cobblemon:attack_egg_thief",
           "cobblemon:path_to_ideal_nest_location",
           "cobblemon:build_nest"
         ]
