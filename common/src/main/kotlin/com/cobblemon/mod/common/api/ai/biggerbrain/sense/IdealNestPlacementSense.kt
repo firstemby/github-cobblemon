@@ -36,7 +36,6 @@ class IdealNestPlacementSense(
     override var ticksUntilNextExecution: Int = 100
     override val memories = setOf(
         CobblemonMemories.IDEAL_NEST_LOCATION,
-        CobblemonMemories.READY_TO_BUILD_NEST,
         CobblemonMemories.POTENTIAL_MATE
     )
 
@@ -60,16 +59,8 @@ class IdealNestPlacementSense(
         if (mate == null || combinedTypes.isEmpty()) {
             debug(brain, "No mate or no combined nest types; clearing ideal nest memories.")
             brain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
-            brain.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
             mate?.biggerBrain?.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
-            mate?.biggerBrain?.eraseMemory(CobblemonMemories.READY_TO_BUILD_NEST)
             return
-        }
-
-        if (brain.getMemory(CobblemonMemories.READY_TO_BUILD_NEST) != true) {
-            debug(brain, "Ready to build set true for both parents.")
-            brain.setMemory(CobblemonMemories.READY_TO_BUILD_NEST, true)
-            mate.biggerBrain.setMemory(CobblemonMemories.READY_TO_BUILD_NEST, true)
         }
 
         val storedNestPos = brain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION)

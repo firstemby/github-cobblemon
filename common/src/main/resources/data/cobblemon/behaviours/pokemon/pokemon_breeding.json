@@ -7,14 +7,12 @@
       "objectivesByPriority": {
         "0": [
           "cobblemon:defend_nest",
+          "cobblemon:breed",
           "cobblemon:path_to_nest",
-          "cobblemon:breed_at_nest",
           "cobblemon:search_for_egg",
           "cobblemon:retrieve_egg",
           "cobblemon:pick_up_egg",
-          "cobblemon:place_egg_in_nest",
-          "cobblemon:path_to_ideal_nest_location",
-          "cobblemon:build_nest"
+          "cobblemon:place_egg_in_nest"
         ]
       }
     },
