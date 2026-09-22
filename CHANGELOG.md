@@ -92,6 +92,7 @@
 ### Molang & Datapacks
 - A new `negate` variant for evolution requirements has been added, which will negate (invert) the provided inner condition.
 - Added Molang functions for individual Pokédex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
+- `q.is_standing_on_blocks` now properly checks for non-full blocks like slabs, Mud or Soul Sand
 
 ### Particles
 
