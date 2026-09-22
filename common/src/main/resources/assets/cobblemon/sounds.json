@@ -2257,6 +2257,32 @@
       { "name": "step/snow4", "volume": 0.08 }
     ]
   },
+  "stepsound.leaves.universal.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_1", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_2", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_3", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_4", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_5", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_6", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_7", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/leaves/universal/large/stepsound_leaves_universal_large_8", "volume": 0.12 }
+    ]
+  },
+  "stepsound.leaves.universal.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_1", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_2", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_3", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_4", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_5", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_6", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_7", "volume": 0.06 },
+      { "name": "cobblemon:stepsound/leaves/universal/medium/stepsound_leaves_universal_medium_8", "volume": 0.06 }
+    ]
+  },
   "ride.loop.wind.mono": {
     "sounds": [
       {

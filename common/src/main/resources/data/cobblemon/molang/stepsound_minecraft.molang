@@ -13,6 +13,7 @@ loop(t.depth, {
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/metal') ? return q.sound('stepsound.metal.minecraft', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/leaves') ? return q.sound('stepsound.grass.minecraft', t.volume, t.pitch);
 });
 
 return 0;
