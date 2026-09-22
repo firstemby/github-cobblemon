@@ -16,7 +16,7 @@ plugins {
     id("java")
     id("java-library")
 
-    id("org.cadixdev.licenser")
+    id("net.neoforged.licenser")
     id("dev.architectury.loom")
     id("architectury-plugin")
     kotlin("jvm")
