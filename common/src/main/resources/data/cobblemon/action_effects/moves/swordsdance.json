@@ -10,6 +10,11 @@
       "delay": 0.1
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.swordsdance.actor');"]
+    },
+    {
       "type": "entity_particles",
       "effect": "cobblemon:swordsdance_actor",
       "locators": ["middle"]

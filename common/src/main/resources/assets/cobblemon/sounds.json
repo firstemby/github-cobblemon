@@ -1194,7 +1194,7 @@
     "sounds": [ { "name": "cobblemon:move/confusion/confusion_target", "volume": 0.8 } ]
   },
   "move.swordsdance.actor": {
-    "sounds": [ { "name": "cobblemon:move/swordsdance/swordsdance_actor", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/swordsdance/swordsdance_actor", "volume": 0.6 } ]
   },
   "move.thunderwave.actor": {
     "sounds": [ { "name": "cobblemon:move/thunderwave/thunderwave_actor", "volume": 0.8 } ]
@@ -1325,13 +1325,13 @@
     "sounds": [ { "name": "cobblemon:move/bulletpunch/bulletpunch_target", "volume": 0.8 } ]
   },
   "move.closecombat.actor_1": {
-    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_actor_1", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_actor_1", "volume": 0.6 } ]
   },
   "move.closecombat.actor_2": {
-    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_actor_2", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_actor_2", "volume": 0.4 } ]
   },
   "move.closecombat.target": {
-    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_target", "volume": 0.8 } ]
+    "sounds": [ { "name": "cobblemon:move/closecombat/closecombat_target", "volume": 1.0 } ]
   },
   "move.gust.actor": {
     "sounds": [ { "name": "cobblemon:move/gust/gust_actor", "volume": 0.8 } ]

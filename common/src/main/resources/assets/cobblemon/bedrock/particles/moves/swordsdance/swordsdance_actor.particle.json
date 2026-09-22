@@ -46,11 +46,6 @@
 					"effect": "cobblemon:swordsdance_sword3",
 					"type": "emitter_bound"
 				}
-			},
-			"event_sound": {
-				"sound_effect": {
-					"event_name": "cobblemon:move.swordsdance.actor"
-				}
 			}
 		},
 		"components": {
@@ -61,7 +56,7 @@
 				"active_time": 2.5
 			},
 			"minecraft:emitter_lifetime_events": {
-				"creation_event": ["event_sword2", "event_sword3", "event_sword4", "event_sound"]
+				"creation_event": ["event_sword2", "event_sword3", "event_sword4"]
 			},
 			"minecraft:emitter_shape_point": {},
 			"minecraft:particle_lifetime_expression": {

@@ -18,7 +18,7 @@
     },
     {
       "type": "pause",
-      "pause": 0.7
+      "pause": 0.6
     },
     {
       "type": "entity_molang",
@@ -29,7 +29,7 @@
     },
     {
       "type": "pause",
-      "pause": 0.45
+      "pause": 0.55
     },
     {
       "type": "entity_particles",
@@ -58,7 +58,7 @@
     },
     {
       "type": "pause",
-      "pause": 0.4
+      "pause": 0.3
     },
     {
       "type": "entity_molang",
@@ -67,7 +67,7 @@
     },
     {
       "type": "pause",
-      "pause": 1.2
+      "pause": 1.3
     }
   ]
 }
