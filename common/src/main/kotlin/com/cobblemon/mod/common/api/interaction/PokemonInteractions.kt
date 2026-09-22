@@ -10,7 +10,7 @@ package com.cobblemon.mod.common.api.interaction
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
-import com.cobblemon.mod.common.api.data.JsonDataRegistry
+import com.cobblemon.mod.common.api.data.ServerJsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
@@ -26,6 +26,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import net.minecraft.advancements.critereon.ItemPredicate
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
@@ -36,28 +37,31 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.material.Fluid
 
-object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
+object PokemonInteractions : ServerJsonDataRegistry<PokemonInteractionSet> {
     override val id = cobblemonResource("pokemon_interactions")
     override val type = PackType.SERVER_DATA
+    override fun setupParser(registry: HolderLookup.Provider): Gson {
+        return GsonBuilder()
+            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter(registry))
+            .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
+            .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
+            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+            .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
+            .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
+            .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
+            .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Structure::class.java).type, StructureLikeConditionAdapter)
+            .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
+            .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
+            .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
+            .setPrettyPrinting()
+            .create()
+    }
+
     override val observable = SimpleObservable<PokemonInteractions>()
     override val typeToken: TypeToken<PokemonInteractionSet> = TypeToken.get(PokemonInteractionSet::class.java)
     override val resourcePath = "pokemon_interactions"
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
-        .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
-        .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Structure::class.java).type, StructureLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
-        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-        .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
-        .setPrettyPrinting()
-        .create()
 
     val interactions = mutableListOf<PokemonInteractionSet>()
 
@@ -65,7 +69,7 @@ object PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         PokemonInteractionsSyncPacket(interactions).sendToPlayer(player)
     }
 
-    override fun reload(data: Map<ResourceLocation, PokemonInteractionSet>) {
+    override fun reload(data: Map<ResourceLocation, PokemonInteractionSet>, registry: HolderLookup.Provider) {
         interactions.clear()
         val split = data.entries
             .partition {
