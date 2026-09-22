@@ -65,6 +65,17 @@
       "quirks": [
         "q.bedrock_quirk('flapple', 'blink')"
       ]
+    },
+    "sleep": {
+      "poseTypes": [
+        "SLEEP"
+      ],
+      "animations": [
+        "q.bedrock('flapple', 'closed_test')"
+      ],
+      "quirks": [
+      ],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
     }
   }
  }

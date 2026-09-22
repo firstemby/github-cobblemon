@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:vikavolt",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:vikavolt",
+      "model": "cobblemon:vikavolt.geo",
+      "texture": "cobblemon:textures/pokemon/0738_vikavolt/vikavolt.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0738_vikavolt/vikavolt_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0738_vikavolt/vikavolt_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

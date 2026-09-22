@@ -1,0 +1,26 @@
+{
+  "portraitScale": 1.3,
+  "portraitTranslation": [-0.12, -0.16, 0],
+  "profileScale": 0.77,
+  "profileTranslation": [0.01, 0.63, 0],
+  "rootBone": "greavard",
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.look('head')", 
+        "q.bedrock('greavard', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('greavard', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
+        "q.look('head')", 
+        "q.bedrock('greavard', 'ground_idle')",
+        "q.quadruped_walk(0.66, 1.4, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('greavard', 'blink')"]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smoking",
+    "category": "food",
     "group": "roasted_leek",
     "ingredient": {
         "item": "cobblemon:medicinal_leek"

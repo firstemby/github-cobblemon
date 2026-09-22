@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "held_orbs",
+    "pattern": [
+        "ATM",
+        "TET",
+        "MTA"
+    ],
+    "key": {
+        "A": {
+            "tag": "c:gems/amethyst"
+        },
+        "T": {
+            "item": "minecraft:tinted_glass"
+        },
+        "E": {
+            "item": "minecraft:ender_pearl"
+        },
+        "M": {
+            "item": "minecraft:phantom_membrane"
+        }
+    },
+    "result": {
+        "id": "cobblemon:smoke_ball"
+    }
+}

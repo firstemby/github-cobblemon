@@ -1,8 +1,8 @@
 {
-  "portraitScale": 0.9,
-  "portraitTranslation": [-0.13,1.6,0],
+  "portraitScale": 0.86,
+  "portraitTranslation": [-0.10,1.66,0],
   "profileScale": 0.5,
-  "profileTranslation": [-0.04,1,0],
+  "profileTranslation": [0,1,0],
   "rootBone": "barbaracle",
   "animations": {
     "cry": "q.bedrock_stateful('barbaracle', 'cry')"
@@ -21,11 +21,7 @@
         "q.bedrock('barbaracle', 'ground_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('barbaracle', 'blink')",
-        "q.bedrock_quirk('barbaracle', 'blink2')",
-        "q.bedrock_quirk('barbaracle', 'blink3')",
-        "q.bedrock_quirk('barbaracle', 'blink4')",
-        "q.bedrock_quirk('barbaracle', 'blink5')"
+        "q.bedrock_quirk('barbaracle', 'blink')"
       ]
     },
     "walking": {
@@ -34,15 +30,11 @@
       ],
       "animations": [
         "q.look('head')",
-        "q.biped_walk(0.66, 0.6, 'leg_left', 'leg_right')",
+        "q.biped_walk(0.66, 0.8, 'leg_left', 'leg_right')",
         "q.bedrock('barbaracle', 'ground_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('barbaracle', 'blink')",
-        "q.bedrock_quirk('barbaracle', 'blink2')",
-        "q.bedrock_quirk('barbaracle', 'blink3')",
-        "q.bedrock_quirk('barbaracle', 'blink4')",
-        "q.bedrock_quirk('barbaracle', 'blink5')"
+        "q.bedrock_quirk('barbaracle', 'blink')"
       ]
     }
   }

@@ -1,0 +1,39 @@
+{
+  "portraitScale": 2.42,
+  "portraitTranslation": [-0.5,1.25,0],
+  "profileScale": 0.5,
+  "profileTranslation": [0,1,0],
+  "rootBone": "heliolisk",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "isBattle": false,
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('heliolisk', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('heliolisk', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK","SWIM"
+      ],
+      "animations": [
+        "q.look('head')",
+        "q.biped_walk(1, 1, 'leg_left', 'leg_right')",
+        "q.bedrock('heliolisk', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('heliolisk', 'blink')"
+      ]
+    }
+  }
+}
