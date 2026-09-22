@@ -83,6 +83,7 @@
 - Fixed Diglett line not having their faint animations
 - Fixed Kingambit moving its legs while walking
 - Various Structure fixes
+- Fixed shiny pokemon under certain circumstances forgetting taught TMs
 
 ### Developer
 - Fixed wrong order of operations in the code flow prior to the `FOSSIL_REVIVED` event causing pokemon to appear without entity link
