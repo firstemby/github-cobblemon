@@ -1968,27 +1968,27 @@
   "stepsound.snow.standard.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_1", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_2", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_3", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_4", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_5", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_6", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_7", "volume": 0.2 },
-      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_8", "volume": 0.2 }
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_1", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_2", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_3", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_4", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_5", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_6", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_7", "volume": 0.18 },
+      { "name": "cobblemon:stepsound/snow/standard/large/stepsound_snow_standard_large_8", "volume": 0.18 }
     ]
   },
   "stepsound.snow.standard.medium": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_1", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_2", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_3", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_4", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_5", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_6", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_7", "volume": 0.1 },
-      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_8", "volume": 0.1 }
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_1", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_2", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_3", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_4", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_5", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_6", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_7", "volume": 0.08 },
+      { "name": "cobblemon:stepsound/snow/standard/medium/stepsound_snow_standard_medium_8", "volume": 0.08 }
     ]
   },
   "stepsound.wood.standard.large": {
@@ -2125,27 +2125,53 @@
   "stepsound.snow.hoof.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_1", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_2", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_3", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_4", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_5", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_6", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_7", "volume": 0.25 },
-      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_8", "volume": 0.25 }
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_1", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_2", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_3", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_4", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_5", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_6", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_7", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/snow/hoof/large/stepsound_snow_hoof_large_8", "volume": 0.22 }
     ]
   },
   "stepsound.snow.hoof.medium": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_1", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_2", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_3", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_4", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_5", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_6", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_7", "volume": 0.15 },
-      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_8", "volume": 0.15 }
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_1", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_2", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_3", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_4", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_5", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_6", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_7", "volume": 0.12 },
+      { "name": "cobblemon:stepsound/snow/hoof/medium/stepsound_snow_hoof_medium_8", "volume": 0.12 }
+    ]
+  },
+  "stepsound.wood.hoof.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_1", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_2", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_3", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_4", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_5", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_6", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_7", "volume": 0.25 },
+      { "name": "cobblemon:stepsound/wood/hoof/large/stepsound_wood_hoof_large_8", "volume": 0.25 }
+    ]
+  },
+  "stepsound.wood.hoof.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_1", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_2", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_3", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_4", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_5", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_6", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_7", "volume": 0.15 },
+      { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_8", "volume": 0.15 }
     ]
   },
   "stepsound.grass.minecraft": {
