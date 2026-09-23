@@ -5,7 +5,7 @@
     {
       "type": "cobblemon:add_objectives",
       "objectivesByPriority": {
-        "0": [
+        "4": [
           "cobblemon:defend_nest",
           "cobblemon:breed",
           "cobblemon:egg_recovery"

@@ -11,9 +11,15 @@
       "behaviours": [
         "cobblemon:core",
         "cobblemon:pokemon_battles",
-        "cobblemon:pokemon_breeding",
         "cobblemon:pokemon_base_senses",
         "cobblemon:pokemon_combat"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
+      "condition": "!q.entity.is_in_party && (q.entity.is_wild || q.entity.is_pastured)",
+      "behaviours": [
+        "cobblemon:pokemon_breeding"
       ]
     },
     {
