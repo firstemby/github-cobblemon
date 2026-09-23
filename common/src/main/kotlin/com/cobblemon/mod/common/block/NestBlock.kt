@@ -145,7 +145,7 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         }
 
         // if the person interacting is not the owner of one of the parents
-        if (egg != null && (player.uuid != egg.parent1OwnerUUID || player.uuid != egg.parent2OwnerUUID) && !egg.isWild) {
+        if (egg != null && (player.uuid != egg.parent1OwnerUUID.orElse(null) || player.uuid != egg.parent2OwnerUUID.orElse(null)) && !egg.isWild) {
             return InteractionResult.FAIL
         }
 

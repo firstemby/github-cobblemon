@@ -116,7 +116,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         // if the person interacting is not the owner of one of the parents
         // TODO maybe a permission node to bypass?
-        if (egg != null && (player.uuid != egg.parent1OwnerUUID || player.uuid != egg.parent2OwnerUUID)) {
+        if (egg != null && (player.uuid != egg.parent1OwnerUUID.orElse(null) || player.uuid != egg.parent2OwnerUUID.orElse(null))) {
             return InteractionResult.FAIL
         }
 
