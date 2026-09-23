@@ -146,7 +146,6 @@ class SpawnPokemonPacket(
         buffer.writeBoolean(silent)
         buffer.writeBoolean(busy)
         buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
-        buffer.writeBoolean(busy)
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
