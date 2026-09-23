@@ -2200,6 +2200,32 @@
       { "name": "cobblemon:stepsound/wood/hoof/medium/stepsound_wood_hoof_medium_8", "volume": 0.15 }
     ]
   },
+  "stepsound.mud.hoof.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/mud/hoof/large/stepsound_mud_hoof_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.mud.hoof.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/mud/hoof/medium/stepsound_mud_hoof_medium_8", "volume": 0.1 }
+    ]
+  },
   "stepsound.grass.minecraft": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
