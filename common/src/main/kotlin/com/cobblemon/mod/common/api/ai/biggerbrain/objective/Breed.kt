@@ -100,7 +100,7 @@ class Breed(
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
         // path to the nest site with mate until close enough
-        if (entity.distanceToSqr(nestCenter) > ARRIVAL_DISTANCE_SQR || mate.distanceToSqr(nestCenter) > ARRIVAL_DISTANCE_SQR) {
+        if (entity.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE || mate.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE) {
             bringMate(mate, nestCenter, speed)
             return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
@@ -120,7 +120,7 @@ class Breed(
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
         // keep going until both mates are not too far from the nest
-        if (entity.distanceToSqr(nestCenter) > ARRIVAL_DISTANCE_SQR || mate.distanceToSqr(nestCenter) > ARRIVAL_DISTANCE_SQR) {
+        if (entity.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE || mate.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE) {
             bringMate(mate, nestCenter, speed)
             return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
@@ -182,9 +182,9 @@ class Breed(
             )
         }
         // try to keep them in one spot for a bit to give time for the magic to happen
-        fixation = brain.fixate(DurationLockFixation("Breed: laying an egg", layDurationTicks))
+        fixation = brain.fixate(DurationLockFixation("Breed: laying egg", layDurationTicks))
         if (mate.biggerBrain.distract(Distraction.FORCE)) {
-            mateFixation = mate.biggerBrain.fixate(DurationLockFixation("Breed: making egg", layDurationTicks))
+            mateFixation = mate.biggerBrain.fixate(DurationLockFixation("Breed: laying egg as the mate", layDurationTicks))
         }
         return ObjectiveStatus.FIXATED
     }
@@ -194,7 +194,7 @@ class Breed(
         if (brain.isFixation(fixation))
             return ObjectiveStatus.FIXATED
         // wait for mate to get here
-        if (entity.distanceToSqr(target) <= ARRIVAL_DISTANCE_SQR)
+        if (entity.position().distanceTo(target) <= CLOSE_ENOUGH_DISTANCE)
             return ObjectiveStatus.ACTIVE
         if (!brain.distract(comfortDistraction))
             return ObjectiveStatus.BLOCKED
@@ -213,7 +213,7 @@ class Breed(
     // have the other mates be told where to go
     private fun bringMate(mate: PokemonEntity, target: Vec3, speed: Float) {
         val mateBrain = mate.biggerBrain
-        if (mate.distanceToSqr(target) <= ARRIVAL_DISTANCE_SQR || mateBrain.isFixation(mateFixation))
+        if (mate.position().distanceTo(target) <= CLOSE_ENOUGH_DISTANCE || mateBrain.isFixation(mateFixation))
             return
         if (!mateBrain.distract(comfortDistraction))
             return
@@ -269,7 +269,7 @@ class Breed(
     }
 
     class Config : ObjectiveConfig {
-        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.6".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("2.0".asExpression())
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val layDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
 
@@ -295,7 +295,7 @@ class Breed(
     }
 
     companion object {
-        private const val ARRIVAL_DISTANCE_SQR = 2.0 // should this be bigger or maybe based on mon hitbox for the large mons? maybe
+        private const val CLOSE_ENOUGH_DISTANCE = 1.5 // should this be bigger or maybe based on mon hitbox for the large mons? maybe
         private val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
     }
 }

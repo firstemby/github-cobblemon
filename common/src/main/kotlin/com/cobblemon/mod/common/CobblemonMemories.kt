@@ -75,8 +75,6 @@ object CobblemonMemories {
     @JvmField
     val EGG_IN_NEST = register("egg_in_nest", PrimitiveCodec.BOOL)
     @JvmField
-    val READY_TO_GRAB_EGG = register("ready_to_grab_egg", PrimitiveCodec.BOOL)
-    @JvmField
     val HOLDING_EGG = register("holding_egg", PrimitiveCodec.BOOL)
     @JvmField
     val EGG_SEARCH_COUNTDOWN = register ("egg_search_countdown", PrimitiveCodec.BOOL)

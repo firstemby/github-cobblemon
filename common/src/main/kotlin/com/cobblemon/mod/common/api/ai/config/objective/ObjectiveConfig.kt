@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Dance
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.DefendOwner
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Breed
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.DefendNest
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EggRecovery
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.Defensive
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatGrass
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.EatHeldItem
@@ -35,11 +36,6 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.MoveToRestingPlace
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PickupItem
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
-import com.cobblemon.mod.common.api.ai.config.task.PathToNestTaskConfig
-import com.cobblemon.mod.common.api.ai.config.task.PickUpEggTaskConfig
-import com.cobblemon.mod.common.api.ai.config.task.PlaceEggInNestTaskConfig
-import com.cobblemon.mod.common.api.ai.config.task.RetrieveEggTaskConfig
-import com.cobblemon.mod.common.api.ai.config.task.SearchForEggTaskConfig
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.NeutralBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
@@ -69,11 +65,7 @@ interface ObjectiveConfig {
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,
             cobblemonResource("defend_nest") to DefendNest.Config::class.java,
             cobblemonResource("breed") to Breed.Config::class.java,
-            cobblemonResource("path_to_nest") to PathToNestTaskConfig::class.java,
-            cobblemonResource("search_for_egg") to SearchForEggTaskConfig::class.java,
-            cobblemonResource("retrieve_egg") to RetrieveEggTaskConfig::class.java,
-            cobblemonResource("pick_up_egg") to PickUpEggTaskConfig::class.java,
-            cobblemonResource("place_egg_in_nest") to PlaceEggInNestTaskConfig::class.java,
+            cobblemonResource("egg_recovery") to EggRecovery.Config::class.java,
             cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBush.Config::class.java,
             cobblemonResource("pickup_item") to PickupItem.Config::class.java,
             cobblemonResource("eat_held_item") to EatHeldItem.Config::class.java,
