@@ -32,6 +32,7 @@ object SpeciesMoLangFunctions : AbstractMoLangFunctionHolder<Species>() {
         functions["hitbox_height"] = { DoubleValue(species.hitbox.height) }
         functions["hitbox_fixed"] = { DoubleValue(species.hitbox.fixed) }
         functions["catch_rate"] = { DoubleValue(species.catchRate) }
+        functions["egg_cycles"] = { DoubleValue(species.eggCycles) }
         functions["labels"] = { species.labels.asArrayValue { StringValue(it) } }
         functions["has_label"] = { params -> DoubleValue(species.labels.contains(params.getString(0))) }
         functions["has_feature"] = { params ->
