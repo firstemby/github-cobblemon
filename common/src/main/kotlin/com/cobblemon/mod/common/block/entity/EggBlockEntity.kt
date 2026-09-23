@@ -12,8 +12,6 @@ import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.item.components.EggComponent
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -27,26 +25,12 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
 class EggBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.EGG, pos, state) {
     var eggComponent: EggComponent? = null
-
-    // Component data codec
-    companion object {
-        val CODEC: Codec<EggBlockEntity> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                EggComponent.CODEC.optionalFieldOf("egg", null).forGetter(EggBlockEntity::eggComponent)
-            ).apply(instance) { egg ->
-                EggBlockEntity(BlockPos(0, 0, 0), Blocks.AIR.defaultBlockState()).apply {
-                    setEgg(egg)
-                }
-            }
-        }
-    }
 
     /**
      * Sets the EggComponent and synchronizes with the client.
