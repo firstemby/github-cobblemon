@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
+import java.util.Optional
 import java.util.UUID
 import net.minecraft.core.UUIDUtil
 import net.minecraft.network.codec.ByteBufCodecs
@@ -29,10 +30,10 @@ class EggComponent(
     var identifier: ResourceLocation,
     var variant: String,
     var eggId: UUID,
-    var parent1UUID: UUID?,
-    var parent1OwnerUUID: UUID?,
-    var parent2UUID: UUID?,
-    var parent2OwnerUUID: UUID?,
+    var parent1UUID: Optional<UUID>,
+    var parent1OwnerUUID: Optional<UUID>,
+    var parent2UUID: Optional<UUID>,
+    var parent2OwnerUUID: Optional<UUID>,
     var ticksToHatch: Float // Float because some things that reduce the remaining time are fractional
 ) {
     constructor(
@@ -44,10 +45,10 @@ class EggComponent(
         identifier = "${offspring.species.resourceIdentifier}_egg".asIdentifierDefaultingNamespace(),
         variant = offspring.form.name.lowercase().replace("[^a-z0-9]".toRegex(), ""),
         eggId = offspring.uuid,
-        parent1UUID = parent1?.uuid,
-        parent1OwnerUUID = parent1?.getOwnerUUID(),
-        parent2UUID = parent2?.uuid,
-        parent2OwnerUUID = parent2?.getOwnerUUID(),
+        parent1UUID = Optional.ofNullable(parent1?.uuid),
+        parent1OwnerUUID = Optional.ofNullable(parent1?.getOwnerUUID()),
+        parent2UUID = Optional.ofNullable(parent2?.uuid),
+        parent2OwnerUUID = Optional.ofNullable(parent2?.getOwnerUUID()),
         ticksToHatch = ticksToHatch
     )
 
@@ -56,10 +57,10 @@ class EggComponent(
         it.addFunction("variant") { StringValue(variant) }
         it.addFunction("egg_id") { StringValue(eggId.toString()) }
         it.addFunction("is_wild") { DoubleValue(isWild) }
-        it.addFunction("parent_1_uuid") { parent1UUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
-        it.addFunction("parent_2_uuid") { parent2UUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
-        it.addFunction("parent_1_owner_uuid") { parent1OwnerUUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
-        it.addFunction("parent_2_owner_uuid") { parent2OwnerUUID?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_1_uuid") { parent1UUID.orElse(null)?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_2_uuid") { parent2UUID.orElse(null)?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_1_owner_uuid") { parent1OwnerUUID.orElse(null)?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
+        it.addFunction("parent_2_owner_uuid") { parent2OwnerUUID.orElse(null)?.let { StringValue(it.toString()) } ?: DoubleValue.ZERO }
         it.addFunction("ticks_to_hatch") { DoubleValue(ticksToHatch) }
         it.addFunction("set_identifier") { params -> identifier = params.getString(0).asIdentifierDefaultingNamespace() }
         it.addFunction("set_variant") { params -> variant = params.getString(0).lowercase().replace("[^a-z0-9]".toRegex(), "") }
@@ -73,10 +74,10 @@ class EggComponent(
                 ResourceLocation.CODEC.fieldOf("identifier").forGetter(EggComponent::identifier),
                 Codec.STRING.fieldOf("variant").forGetter(EggComponent::variant),
                 UUIDUtil.LENIENT_CODEC.fieldOf("eggId").forGetter(EggComponent::eggId),
-                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1UUID", null).forGetter { it?.parent1UUID },
-                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1OwnerUUID", null).forGetter { it?.parent1OwnerUUID },
-                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2UUID", null).forGetter { it?.parent2UUID },
-                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2OwnerUUID", null).forGetter { it?.parent2OwnerUUID },
+                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1UUID").forGetter { it?.parent1UUID },
+                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent1OwnerUUID").forGetter { it?.parent1OwnerUUID },
+                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2UUID").forGetter { it?.parent2UUID },
+                UUIDUtil.LENIENT_CODEC.optionalFieldOf("parent2OwnerUUID").forGetter { it?.parent2OwnerUUID },
                 Codec.FLOAT.optionalFieldOf("ticksToHatch", 0F).forGetter { it?.ticksToHatch ?: 0F }
             ).apply(instance, ::EggComponent)
         }
@@ -85,8 +86,8 @@ class EggComponent(
         val PACKET_CODEC: StreamCodec<ByteBuf, EggComponent> = ByteBufCodecs.fromCodec(CODEC)
     }
 
-    val isWild = parent1OwnerUUID == null && parent2OwnerUUID == null
-    fun isParent(pokemonId: UUID) = parent1UUID == pokemonId || parent2UUID == pokemonId
+    val isWild = parent1OwnerUUID.isEmpty && parent2OwnerUUID.isEmpty
+    fun isParent(pokemonId: UUID) = parent1UUID.orElse(null) == pokemonId || parent2UUID.orElse(null) == pokemonId
 
     override fun equals(other: Any?) = other is EggComponent && this.eggId == other.eggId
     override fun hashCode() = eggId.hashCode()
