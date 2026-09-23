@@ -24,6 +24,7 @@ import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.storage.party.PartyStore
+import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.asArrayValue
@@ -218,6 +219,11 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         functions["is_in_party"] = { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
         functions["species"] = { pokemon.species.struct }
         functions["form"] = { StringValue(pokemon.form.name) }
+        functions["is_male"] = { DoubleValue(pokemon.gender == Gender.MALE) }
+        functions["is_female"] = { DoubleValue(pokemon.gender == Gender.FEMALE) }
+        functions["is_genderless"] = { DoubleValue(pokemon.gender == Gender.GENDERLESS) }
+        functions["prevolution"] = { pokemon.species.preEvolution?.species?.struct ?: DoubleValue.ZERO }
+        functions["unevolved_species"] = { (pokemon.form.preEvolution?.getBaseEvolution()?.species ?: pokemon.species).struct }
         functions["weight"] = { DoubleValue(pokemon.species.weight.toDouble()) }
         functions["matches"] = { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
         functions["apply"] = { params ->
