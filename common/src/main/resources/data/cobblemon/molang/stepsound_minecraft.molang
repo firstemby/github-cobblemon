@@ -8,6 +8,7 @@ loop(t.depth, {
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/sand') ? return q.sound('stepsound.sand.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/snow') ? return q.sound('stepsound.snow.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/grass') ? return q.sound('stepsound.grass.minecraft', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/glass') ? return q.sound('stepsound.glass.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/dirt') ? return q.sound('stepsound.dirt.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.minecraft', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.minecraft', t.volume, t.pitch);

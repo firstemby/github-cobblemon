@@ -2043,6 +2043,32 @@
       { "name": "cobblemon:stepsound/mud/standard/medium/stepsound_mud_standard_medium_8", "volume": 0.14 }
     ]
   },
+  "stepsound.glass.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/glass/standard/large/stepsound_glass_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.glass.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_8", "volume": 0.1 }
+    ]
+  },
   "stepsound.dirt.hoof.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
@@ -2235,6 +2261,17 @@
       { "name": "step/grass4", "volume": 0.05 },
       { "name": "step/grass5", "volume": 0.05 },
       { "name": "step/grass6", "volume": 0.05 }
+    ]
+  },
+  "stepsound.glass.minecraft": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "step/stone1", "volume": 0.05 },
+      { "name": "step/stone2", "volume": 0.05 },
+      { "name": "step/stone3", "volume": 0.05 },
+      { "name": "step/stone4", "volume": 0.05 },
+      { "name": "step/stone5", "volume": 0.05 },
+      { "name": "step/stone6", "volume": 0.05 }
     ]
   },
   "stepsound.dirt.minecraft": {
