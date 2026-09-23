@@ -181,7 +181,6 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             brain.eraseMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
             brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
             brain.eraseMemory(CobblemonMemories.POTENTIAL_MATE)
-            brain.eraseMemory(CobblemonMemories.IRRITATED_AT)
             brain.sendDebugMessage("[NestBlockEntity] Wild egg hatched; clearing nest memories.")
         }
         parents = Pair(null, null)

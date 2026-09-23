@@ -161,12 +161,6 @@ object PokemonBrain {
             ImmutableList.copyOf(growingPlantTasks(pokemon)),
             ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT))
         )
-        brain.addActivityWithConditions(
-            CobblemonActivities.GUARD_NEST,
-            ImmutableList.copyOf(growingPlantTasks(pokemon)), // todo change this with guard tasks
-            ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT),
-                            Pair.of(CobblemonMemories.PATERNAL_NEST_LOCATION, MemoryStatus.VALUE_PRESENT))
-        )
 
 
         brain.setCoreActivities(setOf(Activity.CORE))
@@ -201,18 +195,6 @@ object PokemonBrain {
         CobblemonMemories.NEARBY_GROWABLE_CROPS,
         MemoryModuleType.AVOID_TARGET,
         CobblemonMemories.POKEMON_SLEEPING,
-        CobblemonMemories.POTENTIAL_MATE,
-        CobblemonMemories.MATE_SCAN_COOLDOWN,
-        CobblemonMemories.NEST_LOCATION,
-        CobblemonMemories.PATERNAL_NEST_LOCATION,
-        CobblemonMemories.IRRITATED_AT,
-        CobblemonMemories.EGG_THIEF,
-        CobblemonMemories.HOLDING_EGG,
-        CobblemonMemories.EGG_LOCATION,
-        CobblemonMemories.EGG_IN_NEST,
-        CobblemonMemories.EGG_SEARCH_COUNTDOWN,
-        CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK,
-        CobblemonMemories.IDEAL_NEST_LOCATION,
         CobblemonMemories.POKEMON_SLEEPING,
     //    CobblemonMemories.RECENTLY_ATE_GRASS,
         CobblemonMemories.HIVE_LOCATION,

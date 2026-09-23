@@ -49,8 +49,6 @@ object CobblemonMemories {
     @JvmField
     val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest", BlockPos.CODEC)
     @JvmField
-    val IRRITATED_AT = register<UUID>("irritated_at")
-    @JvmField
     val POKEMON_FLYING = register("pokemon_flying", PrimitiveCodec.BOOL)
     @JvmField
     val POKEMON_DROWSY = register("pokemon_drowsy", PrimitiveCodec.BOOL)
