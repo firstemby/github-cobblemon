@@ -49,9 +49,9 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             val egg = blockEntity.getItem(0).get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
+                if (world.isClientSide)
+                    blockEntity.eggState.tick(world.gameTime)
                 if (egg.ticksToHatch <= 0) {
-                    // todo egg is ready to hatch
-
                     blockEntity.setChanged()
                     return@BlockEntityTicker
                 }
@@ -84,6 +84,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         tag.put("EggItem", eggItem.saveOptional(registryLookup))
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        tag.putLong("HatchStartTick", eggState.hatchStartTick)
         eggState.renderingBlockPos?.let {
             tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
         }
@@ -96,6 +97,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
         eggState.isHatching = tag.getBoolean("IsHatching")
         eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
+        eggState.hatchStartTick = tag.getLong("HatchStartTick")
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
         }
@@ -156,6 +158,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             // Hatch the Pokémon if the time to hatch is 0 or below
             if (eggComponent.ticksToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation
+                eggState.hatchStartTick = world.gameTime
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
                 setChanged()
                 world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)

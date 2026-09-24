@@ -9,14 +9,12 @@
 package com.cobblemon.mod.common.client.render.helper
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonNetwork
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggModel
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.item.components.EggComponent
-import com.cobblemon.mod.common.net.messages.server.breeding.TriggerEggHatchPacket
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -67,6 +65,7 @@ object EggRenderHelper {
 
         val species = egg.identifier
         state.currentAspects = setOf(egg.variant)
+        state.updateAge(Minecraft.getInstance().level?.gameTime?.toInt() ?: 0)
         state.updatePartialTicks(tickDelta)
 
         val eggModel = VaryingModelRepository.getPoser(species, state) as? EggModel
@@ -94,28 +93,8 @@ object EggRenderHelper {
         if (poseName == "hatching" && state.primaryAnimation == null) {
             val animation = eggModel.getAnimation(state, "hatch", eggModel.runtime)
             if (animation is PrimaryAnimation) {
-                state.addPrimaryAnimation(animation)
+                state.startHatchAnimation(animation)
             }
-        }
-
-        try {
-            state.primaryAnimation?.animation?.applyEffects(
-                entity = null,
-                state = state,
-                previousSeconds = state.previousAnimationSeconds,
-                newSeconds = state.animationSeconds
-            )
-        } catch (e: Exception) {
-            Cobblemon.LOGGER.error("Failed to apply animation effects", e)
-        }
-
-        // Trigger hatch packet after animation finishes
-        if (state.isHatching && !state.hatchingTriggered && state.isHatchAnimationFinished()) {
-            state.hatchingTriggered = true
-            state.renderingBlockPos?.let {
-                CobblemonNetwork.sendToServer(TriggerEggHatchPacket(it))
-            }
-            state.resetHatchingState()
         }
 
         matrices.pushPose()

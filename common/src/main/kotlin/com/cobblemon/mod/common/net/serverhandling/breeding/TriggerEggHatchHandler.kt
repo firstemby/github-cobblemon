@@ -20,6 +20,11 @@ object TriggerEggHatchHandler : ServerNetworkPacketHandler<TriggerEggHatchPacket
         val level = player.serverLevel()
         val be = level.getBlockEntity(packet.pos)
         if (be is NestBlockEntity) {
+            if (be.ownerUUID == null) {
+                if (be.eggState.isHatching)
+                    be.hatchWildEgg(be.blockState, level, packet.pos)
+                return
+            }
             be.hatchPokemon(be.blockState, level, packet.pos, player)
         } else if (be is IncubatorBlockEntity) {
             be.hatchPokemon(be.blockState, level, packet.pos, player)

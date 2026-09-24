@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonMemories
+import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
@@ -94,6 +95,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             // Hatch the Pokémon if the time to hatch is 0 or below
             if (eggComponent.ticksToHatch <= 0F) {
                 eggState.isHatching = true // Trigger hatch animation on the renderer
+                eggState.hatchStartTick = world.gameTime
                 //playSound(CobblemonSounds.BREEDING_EGG_HATCH)
                 eggState.renderingBlockPos = this.blockPos // Pass block pos to renderer for packet
                 setChanged()
@@ -195,6 +197,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
+        tag.putLong("HatchStartTick", eggState.hatchStartTick)
         eggState.renderingBlockPos?.let {
             tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
         }
@@ -211,6 +214,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
         eggState.isHatching = tag.getBoolean("IsHatching")
         eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
+        eggState.hatchStartTick = tag.getLong("HatchStartTick")
         if (tag.contains("RenderingBlockPos")) {
             val posArray = tag.getIntArray("RenderingBlockPos")
             if (posArray.size == 3) {
@@ -512,9 +516,19 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             val egg = blockEntity.getItem().get(CobblemonItemComponents.EGG_DATA)
 
             if (egg != null) {
+                if (world.isClientSide)
+                    blockEntity.eggState.tick(world.gameTime)
                 if (egg.ticksToHatch == 0F) {
-                    if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel) {
-                        blockEntity.hatchWildEgg(state, world, pos)
+                    if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel && !blockEntity.eggState.isHatching) {
+                        blockEntity.eggState.isHatching = true
+                        blockEntity.eggState.hatchStartTick = world.gameTime
+                        blockEntity.eggState.renderingBlockPos = pos
+                        blockEntity.setChanged()
+                        world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+                        afterOnServer(seconds = 4F) { // I think 4 should be fine since the animation is around 3.5
+                            if (!blockEntity.isRemoved && blockEntity.eggState.isHatching)
+                                blockEntity.hatchWildEgg(state, world, pos)
+                        }
                         return@BlockEntityTicker
                     }
                 }
