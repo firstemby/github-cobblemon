@@ -1,0 +1,44 @@
+{
+  "timeline": [
+    {
+      "type": "add_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "animation",
+      "animation": ["gigatonhammer"],
+      "delay": 0.22
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.gigatonhammer.tinkaton');"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.73
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.gigatonhammer.actor');"]
+    },
+    {
+      "type": "pause",
+      "pause": 0.49
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.gigatonhammer.target');"]
+    },
+    {
+      "type": "remove_holds",
+      "holds": ["effects"]
+    },
+    {
+      "type": "pause",
+      "pause": 1.5
+    }
+  ]
+}

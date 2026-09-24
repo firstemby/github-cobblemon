@@ -1489,6 +1489,15 @@
   "move.playrough.target": {
     "sounds": [ { "name": "cobblemon:move/playrough/playrough_target", "volume": 1.0 } ]
   },
+  "move.gigatonhammer.tinkaton": {
+    "sounds": [ { "name": "cobblemon:move/gigatonhammer/gigatonhammer_actor_tinkaton", "volume": 1.0} ]
+  },
+  "move.gigatonhammer.actor": {
+    "sounds": [ { "name": "cobblemon:move/gigatonhammer/gigatonhammer_actor", "volume": 1.0 } ]
+  },
+  "move.gigatonhammer.target": {
+    "sounds": [ { "name": "cobblemon:move/gigatonhammer/gigatonhammer_target", "volume": 1.0 } ]
+  },
   "impact.normal": {
     "sounds": [
       { "name": "cobblemon:move/impact_generic/impact_generic_fighting_1", "volume": 0.8 },
