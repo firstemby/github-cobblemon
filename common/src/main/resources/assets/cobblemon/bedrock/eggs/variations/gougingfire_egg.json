@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:gougingfire_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/gougingfire_egg.png"
+    }
+  ]
+}

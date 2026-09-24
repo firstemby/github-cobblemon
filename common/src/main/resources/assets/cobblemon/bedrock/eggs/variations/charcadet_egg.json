@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:charcadet_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/charcadet_egg.png"
+    }
+  ]
+}

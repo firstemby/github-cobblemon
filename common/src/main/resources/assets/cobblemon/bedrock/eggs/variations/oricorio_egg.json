@@ -1,0 +1,30 @@
+{
+  "name": "cobblemon:oricorio_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/oricorio_egg.png"
+    },
+    {
+      "aspects": [
+        "pau"
+      ],
+      "texture": "cobblemon:textures/egg/oricorio_pau_egg.png"
+    },
+    {
+      "aspects": [
+        "pompom"
+      ],
+      "texture": "cobblemon:textures/egg/oricorio_pompom_egg.png"
+    },
+    {
+      "aspects": [
+        "sensu"
+      ],
+      "texture": "cobblemon:textures/egg/oricorio_sensu_egg.png"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "cobblemon:basculin_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/basculin_redstripe_egg.png"
+    },
+    {
+      "aspects": [
+        "bluestriped"
+      ],
+      "texture": "cobblemon:textures/egg/basculin_bluestripe_egg.png"
+    },
+    {
+      "aspects": [
+        "whitestriped"
+      ],
+      "texture": "cobblemon:textures/egg/basculin_whitestripe_egg.png"
+    }
+  ]
+}

@@ -10,9 +10,21 @@
     },
     {
       "aspects": [
-        "paldea"
+        "paldeacombat"
       ],
       "texture": "cobblemon:textures/egg/tauros_paldea_egg.png"
+    },
+    {
+      "aspects": [
+        "paldeablaze"
+      ],
+      "texture": "cobblemon:textures/egg/tauros_paldea_blaze_egg.png"
+    },
+    {
+      "aspects": [
+        "paldeaaqua"
+      ],
+      "texture": "cobblemon:textures/egg/tauros_paldea_aqua_egg.png"
     }
   ]
 }

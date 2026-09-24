@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:roggenrola_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/roggenrola_egg.png"
+    }
+  ]
+}

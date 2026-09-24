@@ -1,0 +1,12 @@
+{
+  "name": "cobblemon:ducklett_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/ducklett_egg.png"
+    }
+  ]
+}

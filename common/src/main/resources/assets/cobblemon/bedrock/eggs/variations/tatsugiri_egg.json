@@ -1,0 +1,24 @@
+{
+  "name": "cobblemon:tatsugiri_egg",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:egg",
+      "model": "cobblemon:egg.geo",
+      "texture": "cobblemon:textures/egg/tatsugiri_egg.png"
+    },
+    {
+      "aspects": [
+        "droopy"
+      ],
+      "texture": "cobblemon:textures/egg/tatsugiri_droopy_egg.png"
+    },
+    {
+      "aspects": [
+        "stretchy"
+      ],
+      "texture": "cobblemon:textures/egg/tatsugiri_stretchy_egg.png"
+    }
+  ]
+}
