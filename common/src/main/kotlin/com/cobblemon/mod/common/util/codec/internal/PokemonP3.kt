@@ -18,10 +18,6 @@ import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.Optional
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.resources.ResourceLocation
@@ -53,22 +49,6 @@ internal data class PokemonP3(
         other.refreshOriginalTrainer()
         other.forcedAspects = this.forcedAspects
         this.nickname.ifPresent { other.nickname = it.copy() }
-        this.features.forEach { featureNbt ->
-            val featureId = featureNbt.getString(FEATURE_ID)
-            if (featureId.isEmpty()) {
-                return@forEach
-            }
-            val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(other.species)
-            val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
-            if (
-                featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
-                !featureNbt.getList("keys", Tag.TAG_STRING.toInt()).contains(StringTag.valueOf(featureId))
-            ) {
-                return@forEach
-            }
-            other.features.removeIf { it.name == feature.name }
-            other.features.add(feature)
-        }
         this.heldItemVisible.ifPresent { other.heldItemVisible = it }
         this.canDropHeldItem.ifPresent { other.canDropHeldItem = it }
         this.cosmeticItem.let { other.cosmeticItem = it }
@@ -95,7 +75,6 @@ internal data class PokemonP3(
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(PokemonP3::originalTrainer),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).forGetter { it.forcedAspects.toMutableList() },
                 ComponentSerialization.CODEC.optionalFieldOf(DataKeys.POKEMON_NICKNAME).forGetter(PokemonP3::nickname),
-                Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_AI_DROPPABLE).forGetter(PokemonP3::canDropHeldItem),
                 ItemStack.CODEC.optionalFieldOf(DataKeys.POKEMON_COSMETIC_ITEM).forGetter { Optional.ofNullable(it.cosmeticItem.takeIf { !it.isEmpty }) },
@@ -113,7 +92,6 @@ internal data class PokemonP3(
               originalTrainer,
               forcedAspects,
               nickname,
-              features,
               heldItemVisible,
               canDropHeldItem,
               cosmeticItem,
@@ -130,7 +108,6 @@ internal data class PokemonP3(
                 originalTrainer,
                 forcedAspects.toSet(),
                 nickname,
-                features,
                 heldItemVisible,
                 canDropHeldItem,
                 cosmeticItem.orElse(ItemStack.EMPTY),
@@ -152,11 +129,6 @@ internal data class PokemonP3(
             Optional.ofNullable(pokemon.originalTrainer),
             pokemon.forcedAspects,
             Optional.ofNullable(pokemon.nickname),
-            pokemon.features.map { feature ->
-                val nbt = CompoundTag()
-                nbt.putString(FEATURE_ID, feature.name)
-                feature.saveToNBT(nbt)
-            },
             Optional.ofNullable(pokemon.heldItemVisible),
             Optional.ofNullable(pokemon.canDropHeldItem),
             pokemon.cosmeticItem,
