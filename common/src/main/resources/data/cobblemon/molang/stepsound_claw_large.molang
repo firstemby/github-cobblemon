@@ -1,0 +1,20 @@
+t.pitch = math.random(0.9, 1.05);
+t.volume = 1.0;
+t.depth = 2;
+
+t.i = 0;
+loop(t.depth, {
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/mud') ? return q.sound('stepsound.mud.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/sand') ? return q.sound('stepsound.sand.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/snow') ? return q.sound('stepsound.snow.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/grass') ? return q.sound('stepsound.grass.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/glass') ? return q.sound('stepsound.glass.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/dirt') ? return q.sound('stepsound.dirt.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/stone') ? return q.sound('stepsound.stone.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/metal') ? return q.sound('stepsound.metal.claw.large', t.volume, t.pitch);
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/leaves') ? return q.sound('stepsound.leaves.universal.large', t.volume, t.pitch);
+    t.i = t.i + 1;
+});
+
+return 0;
