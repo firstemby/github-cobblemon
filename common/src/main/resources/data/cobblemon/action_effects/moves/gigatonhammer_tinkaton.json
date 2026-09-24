@@ -7,11 +7,11 @@
     {
       "type": "animation",
       "animation": ["gigatonhammer"],
-      "delay": 0.22
+      "delay": 0.2
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == true",
       "expressions": ["q.sound('move.gigatonhammer.tinkaton');"]
     },
     {
@@ -20,7 +20,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == true",
       "expressions": ["q.sound('move.gigatonhammer.actor');"]
     },
     {
