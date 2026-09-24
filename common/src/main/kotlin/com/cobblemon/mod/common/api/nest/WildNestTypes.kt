@@ -152,21 +152,8 @@ object WildNestTypes {
     private val NEST_SURFACE_FIERY_NETHERRACK = nestSurfaceTag("fiery_netherrack")
     private val NEST_SURFACE_FIERY_SOUL_SAND = nestSurfaceTag("fiery_soul_sand")
 
-    private val NEST_SURFACE_GRASSY_ACACIA = nestSurfaceTag("grassy_acacia")
-    private val NEST_SURFACE_GRASSY_APRICORN = nestSurfaceTag("grassy_apricorn")
-    private val NEST_SURFACE_GRASSY_AZALEA = nestSurfaceTag("grassy_azalea")
-    private val NEST_SURFACE_GRASSY_BIRCH = nestSurfaceTag("grassy_birch")
-    private val NEST_SURFACE_GRASSY_CHERRY = nestSurfaceTag("grassy_cherry")
     private val NEST_SURFACE_GRASSY_CRIMSON_ROOTS = nestSurfaceTag("grassy_crimson_roots")
-    private val NEST_SURFACE_GRASSY_DARK_OAK = nestSurfaceTag("grassy_dark_oak")
-    private val NEST_SURFACE_GRASSY_DRY = nestSurfaceTag("grassy_dry")
     private val NEST_SURFACE_GRASSY_FERN = nestSurfaceTag("grassy_fern")
-    private val NEST_SURFACE_GRASSY_FLOWERING_AZALEA = nestSurfaceTag("grassy_flowering_azalea")
-    private val NEST_SURFACE_GRASSY_JUNGLE = nestSurfaceTag("grassy_jungle")
-    private val NEST_SURFACE_GRASSY_MANGROVE = nestSurfaceTag("grassy_mangrove")
-    private val NEST_SURFACE_GRASSY_OAK = nestSurfaceTag("grassy_oak")
-    private val NEST_SURFACE_GRASSY_SACCHARINE = nestSurfaceTag("grassy_saccharine")
-    private val NEST_SURFACE_GRASSY_SPRUCE = nestSurfaceTag("grassy_spruce")
     private val NEST_SURFACE_GRASSY_WARPED_ROOTS = nestSurfaceTag("grassy_warped_roots")
 
     private val NEST_SURFACE_LEAFY_ACACIA = nestSurfaceTag("leafy_acacia")
@@ -218,7 +205,6 @@ object WildNestTypes {
     private val NEST_SURFACE_TWIGGY_DARK_OAK = nestSurfaceTag("twiggy_dark_oak")
     private val NEST_SURFACE_TWIGGY_FLOWERING_AZALEA = nestSurfaceTag("twiggy_flowering_azalea")
     private val NEST_SURFACE_TWIGGY_JUNGLE = nestSurfaceTag("twiggy_jungle")
-    private val NEST_SURFACE_TWIGGY_LEAFY = nestSurfaceTag("twiggy_leafy")
     private val NEST_SURFACE_TWIGGY_MANGROVE_LEAVES = nestSurfaceTag("twiggy_mangrove_leaves")
     private val NEST_SURFACE_TWIGGY_MANGROVE = nestSurfaceTag("twiggy_mangrove")
     private val NEST_SURFACE_TWIGGY_OAK = nestSurfaceTag("twiggy_oak")
@@ -406,7 +392,6 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_TWIGGY_SPRUCE) -> WildNestVariant.TWIGGY_SPRUCE
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE) -> WildNestVariant.TWIGGY_MANGROVE
                 baseState.`is`(NEST_SURFACE_TWIGGY_CHORUS) -> WildNestVariant.TWIGGY_CHORUS
-                baseState.`is`(NEST_SURFACE_TWIGGY_LEAFY) -> WildNestVariant.TWIGGY_LEAFY
                 baseState.`is`(NEST_SURFACE_TWIGGY_DEAD_BUSH) -> WildNestVariant.TWIGGY_DEAD_BUSH
                 else -> null
             }
