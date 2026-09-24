@@ -1,0 +1,32 @@
+{
+  "species": "cobblemon:snover",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:snover",
+      "model": "cobblemon:snover_male.geo",
+      "texture": "cobblemon:textures/pokemon/0459_snover/snover.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0459_snover/snover_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0459_snover/snover_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

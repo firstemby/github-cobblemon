@@ -14,8 +14,6 @@ import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
-import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURES
-import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURE_ID
 import com.cobblemon.mod.common.util.codec.optionalFieldOfWithDefault
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
@@ -24,14 +22,17 @@ import java.util.Optional
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import java.util.*
 
 internal data class PokemonP3(
     val originalTrainerType: OriginalTrainerType,
     val originalTrainer: Optional<String>,
     val forcedAspects: Set<String>,
-    val features: List<CompoundTag>,
+    val nickname: Optional<Component>,
     val heldItemVisible: Optional<Boolean>,
     val canDropHeldItem: Optional<Boolean>,
     val cosmeticItem: ItemStack,
@@ -43,7 +44,7 @@ internal data class PokemonP3(
     val rideStamina: Float,
     val currentFullness: Int,
     val interactionCooldowns: Map<ResourceLocation, Int>,
-    val isAlpha: Boolean,
+    val isAlpha: Boolean
 ) : Partial<Pokemon> {
 
     override fun into(other: Pokemon): Pokemon {
@@ -51,6 +52,7 @@ internal data class PokemonP3(
         this.originalTrainer.ifPresent { other.originalTrainer = it }
         other.refreshOriginalTrainer()
         other.forcedAspects = this.forcedAspects
+        this.nickname.ifPresent { other.nickname = it.copy() }
         this.features.forEach { featureNbt ->
             val featureId = featureNbt.getString(FEATURE_ID)
             if (featureId.isEmpty()) {
@@ -92,6 +94,7 @@ internal data class PokemonP3(
                 OriginalTrainerType.CODEC.optionalFieldOfWithDefault(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE, OriginalTrainerType.NONE).forGetter(PokemonP3::originalTrainerType),
                 Codec.STRING.optionalFieldOf(DataKeys.POKEMON_ORIGINAL_TRAINER).forGetter(PokemonP3::originalTrainer),
                 Codec.list(Codec.STRING).optionalFieldOf(DataKeys.POKEMON_FORCED_ASPECTS, emptyList()).forGetter { it.forcedAspects.toMutableList() },
+                ComponentSerialization.CODEC.optionalFieldOf(DataKeys.POKEMON_NICKNAME).forGetter(PokemonP3::nickname),
                 Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP3::features),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_VISIBLE).forGetter(PokemonP3::heldItemVisible),
                 Codec.BOOL.optionalFieldOf(DataKeys.HELD_ITEM_AI_DROPPABLE).forGetter(PokemonP3::canDropHeldItem),
@@ -104,11 +107,12 @@ internal data class PokemonP3(
                 Codec.FLOAT.optionalFieldOf(DataKeys.POKEMON_RIDE_STAMINA, 1F).forGetter(PokemonP3::rideStamina),
                 Codec.intRange(0, 100).optionalFieldOf(DataKeys.POKEMON_FULLNESS, 0).forGetter(PokemonP3::currentFullness),
                 Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf(DataKeys.POKEMON_INTERACTION_COOLDOWN, emptyMap<ResourceLocation, Int>()).forGetter(PokemonP3::interactionCooldowns),
-                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha),
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ALPHA, false).forGetter(PokemonP3::isAlpha)
             ).apply(instance) {
               originalTrainerType,
               originalTrainer,
               forcedAspects,
+              nickname,
               features,
               heldItemVisible,
               canDropHeldItem,
@@ -125,6 +129,7 @@ internal data class PokemonP3(
                 originalTrainerType,
                 originalTrainer,
                 forcedAspects.toSet(),
+                nickname,
                 features,
                 heldItemVisible,
                 canDropHeldItem,
@@ -137,7 +142,7 @@ internal data class PokemonP3(
                 rideStamina,
                 currentFullness,
                 interactionCooldown,
-                isAlpha,
+                isAlpha
               )
             }
         }
@@ -146,6 +151,7 @@ internal data class PokemonP3(
             pokemon.originalTrainerType,
             Optional.ofNullable(pokemon.originalTrainer),
             pokemon.forcedAspects,
+            Optional.ofNullable(pokemon.nickname),
             pokemon.features.map { feature ->
                 val nbt = CompoundTag()
                 nbt.putString(FEATURE_ID, feature.name)
@@ -162,7 +168,7 @@ internal data class PokemonP3(
             pokemon.rideStamina,
             pokemon.currentFullness,
             pokemon.interactionCooldowns,
-            pokemon.isAlpha,
+            pokemon.isAlpha
         )
     }
 }

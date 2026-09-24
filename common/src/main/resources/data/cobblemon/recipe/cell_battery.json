@@ -1,6 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
-    "group": "cell_battery",
+    "category": "misc",
     "pattern": [
         " I",
         " R",

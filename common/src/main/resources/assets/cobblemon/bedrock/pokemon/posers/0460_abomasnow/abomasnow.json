@@ -1,0 +1,44 @@
+{
+  "portraitScale": 0.85,
+  "portraitTranslation": [-0.09, 1.3, 0],
+  "profileScale": 0.44,
+  "profileTranslation": [-0.05, 1.08, 0],
+  "rootBone": "abomasnow",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('torso2', 0.12, 0.1)",
+        "q.look('head', 0.28, 0.1)",
+        "q.bedrock('abomasnow', 'ground_idle')",
+        "q.bimanual_swing(0.66, 1.4, 'arm_left', 'arm_right')"
+      ],
+      "quirks": [
+       "q.bedrock_quirk('abomasnow', 'blink')"
+     ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK", 
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('torso2', 0.12, 0.1)",
+        "q.look('head', 0.28, 0.1)",
+        "q.bedrock('abomasnow', 'ground_idle')",
+        "q.biped_walk(0.66, 0.4, 'leg_left', 'leg_right')",
+        "q.bimanual_swing(0.66, 1.4, 'arm_left', 'arm_right')"
+      ],
+      "quirks": [
+       "q.bedrock_quirk('abomasnow', 'blink')"
+     ]
+    }
+  }
+}

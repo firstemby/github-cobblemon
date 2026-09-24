@@ -52,6 +52,7 @@
     "moving": {
       "swim": {
         "canSwimInWater": false,
+        "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
       }
     },
