@@ -86,6 +86,19 @@ class EggSense(
             eggComponent.isParent(entity.pokemon.uuid)
         }
 
+        if (nearbyEggItems.isNotEmpty()) {
+            // if the egg is on the ground lets stop being angry and grab it
+            if (brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET))
+                brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
+            if (brain.hasMemoryValue(MemoryModuleType.ANGRY_AT))
+                brain.eraseMemory(MemoryModuleType.ANGRY_AT)
+
+            brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
+            brain.setMemory(CobblemonMemories.EGG_LOCATION, nearbyEggItems[0].blockPosition())
+            brain.eraseMemory(CobblemonMemories.EGG_THIEF)
+            return
+        }
+
         // see if we have any stored egg thieves in memory
         val existingEggThief = brain.getMemory(CobblemonMemories.EGG_THIEF) as? Player
         val lastSeenTick = brain.getMemory(CobblemonMemories.EGG_THIEF_LAST_SEEN_TICK)
@@ -111,17 +124,6 @@ class EggSense(
                 brain.eraseMemory(CobblemonMemories.EGG_LOCATION)
                 return
             }
-        }
-
-        if (nearbyEggItems.isNotEmpty()) {
-            // the egg is on the ground lets stop being angry
-            if (brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)) brain.eraseMemory(MemoryModuleType.ATTACK_TARGET)
-            if (brain.hasMemoryValue(MemoryModuleType.ANGRY_AT)) brain.eraseMemory(MemoryModuleType.ANGRY_AT)
-
-            brain.eraseMemory(CobblemonMemories.EGG_SEARCH_COUNTDOWN)
-            brain.setMemory(CobblemonMemories.EGG_LOCATION, nearbyEggItems[0].blockPosition())
-            brain.eraseMemory(CobblemonMemories.EGG_THIEF)
-            return
         }
 
         // when looking for the egg and it is seen in the hand of a nearby player mark them as the thief
