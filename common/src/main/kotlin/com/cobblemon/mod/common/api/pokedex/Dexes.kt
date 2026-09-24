@@ -81,7 +81,7 @@ object Dexes : JsonDataRegistry<PokedexDef> {
         var preEvolution = rootForm.preEvolution
         while (preEvolution != null) {
             rootSpecies = preEvolution.species
-            rootForm = preEvolution.form
+            rootForm = preEvolution.resolveForm(rootForm.aspects.toSet())
             preEvolution = rootForm.preEvolution
         }
 
