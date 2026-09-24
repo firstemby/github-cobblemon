@@ -3,6 +3,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
+		"particle": "minecraft:block/birch_leaves",
 		"8": "minecraft:block/birch_leaves"
 	},
 	"elements": [

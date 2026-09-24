@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
+		"particle": "minecraft:block/magma",
 		"1": "cobblemon:block/nest_fiery_netherrack",
 		"3": "minecraft:block/magma"
 	},

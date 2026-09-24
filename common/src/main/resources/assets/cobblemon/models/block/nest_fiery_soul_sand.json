@@ -3,6 +3,7 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
+		"particle": "minecraft:block/soul_sand",
 		"1": "minecraft:block/soul_fire_0",
 		"2": "minecraft:block/soul_sand",
 		"5": "cobblemon:block/nest_soul_sand"

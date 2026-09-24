@@ -2,6 +2,7 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
+		"particle": "minecraft:block/end_stone",
 		"1": "minecraft:block/end_stone",
 		"3": "cobblemon:block/nest_end_stone"
 	},

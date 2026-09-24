@@ -2,6 +2,7 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
+		"particle": "minecraft:block/sand",
 		"2": "minecraft:block/sand",
 		"3": "minecraft:block/stone",
 		"4": "cobblemon:block/nest_sand"

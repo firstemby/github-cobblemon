@@ -3,6 +3,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
+		"particle": "cobblemon:block/wood/saccharine_leaves_sticky",
 		"1": "cobblemon:block/wood/saccharine_leaves_sticky"
 	},
 	"elements": [

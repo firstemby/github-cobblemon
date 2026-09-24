@@ -3,6 +3,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
+		"particle": "minecraft:block/dark_oak_leaves",
 		"12": "minecraft:block/dark_oak_leaves"
 	},
 	"elements": [
