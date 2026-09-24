@@ -2460,8 +2460,6 @@
   "cobblemon.config.ui.display_name_for_unknown_pokemon.tooltip": "Whether to display the name above a Pokémon if it has not been scanned with the Pokédex yet.",
   "cobblemon.config.ui.display_entity_labels_when_crouching_only": "Display Entity Labels When Crouching Only",
   "cobblemon.config.ui.display_entity_labels_when_crouching_only.tooltip": "Whether to display the name above a Pokémon only when crouching or at all times.",
-  "cobblemon.config.ui.shoulder_mount_armor_offset_blacklist": "Shoulder Mount Armor Offset Blacklist",
-  "cobblemon.config.ui.shoulder_mount_armor_offset_blacklist.tooltip": "Comma separated mod IDs or item IDs that skip the armor offset. Ex: \"examplemod, anothermod:large_chestplate\".",
   "cobblemon.config.ui.shiny_rate": "Shiny Rate",
   "cobblemon.config.ui.shiny_rate.tooltip": "The chance for a spawned Pokémon to be shiny. If 0 no spawned Pokémon will be shiny. Calculated as 1/x.",
   "cobblemon.config.ui.fossil_machine_alpha_chance": "Fossil Machine Alpha Chance",

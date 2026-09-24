@@ -24,7 +24,6 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import java.util.Locale
 import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.PlayerModel
@@ -269,22 +268,10 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
         private const val ARMOR_HEIGHT_OFFSET = 1F / 16F
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
-        private var cachedArmorOffsetBlacklistConfig = ""
-        private var cachedArmorOffsetBlacklist = emptySet<String>()
 
         private fun isArmorOffsetBlacklisted(itemStack: ItemStack): Boolean {
-            val configuredBlacklist = Cobblemon.config.shoulderMountArmorOffsetBlacklist
-            if (configuredBlacklist != cachedArmorOffsetBlacklistConfig) {
-                cachedArmorOffsetBlacklistConfig = configuredBlacklist
-                cachedArmorOffsetBlacklist = configuredBlacklist
-                    .split(',')
-                    .map { it.trim().lowercase(Locale.ROOT) }
-                    .filter { it.isNotEmpty() }
-                    .toSet()
-            }
-
             val itemIdentifier = BuiltInRegistries.ITEM.getKey(itemStack.item)
-            return itemIdentifier.namespace in cachedArmorOffsetBlacklist || itemIdentifier.toString() in cachedArmorOffsetBlacklist
+            return itemIdentifier in Cobblemon.config.shoulderMountArmorOffsetBlacklist
         }
 
         private fun extractUuid(shoulderNbt: CompoundTag): UUID {
