@@ -231,6 +231,7 @@
   "preEvolution": "combee",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy"
   ]
 }

@@ -219,6 +219,7 @@
   "preEvolution": "skiploom",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy"
   ]
 }

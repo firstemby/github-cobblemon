@@ -222,6 +222,7 @@
   "preEvolution": "cutiefly",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy",
     "shroomy"
   ]

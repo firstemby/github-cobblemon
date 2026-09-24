@@ -243,6 +243,7 @@
   "preEvolution": "hoothoot",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

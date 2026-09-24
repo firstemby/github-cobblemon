@@ -200,6 +200,7 @@
   "preEvolution": "taillow",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

@@ -292,6 +292,7 @@
   "preEvolution": "spinarak",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy",
     "shroomy"
   ]

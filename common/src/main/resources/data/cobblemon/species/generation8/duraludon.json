@@ -247,5 +247,8 @@
         "rocky"
       ]
     }
+  ],
+  "nestTypes": [
+    "rocky"
   ]
 }

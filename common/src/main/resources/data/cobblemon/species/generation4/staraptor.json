@@ -272,6 +272,7 @@
   "preEvolution": "staravia",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

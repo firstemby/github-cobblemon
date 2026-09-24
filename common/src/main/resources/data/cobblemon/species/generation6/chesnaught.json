@@ -264,6 +264,7 @@
   "preEvolution": "quilladin",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy",
     "twiggy"
   ]

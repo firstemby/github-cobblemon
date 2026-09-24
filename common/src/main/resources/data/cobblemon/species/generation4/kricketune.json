@@ -199,6 +199,7 @@
   "preEvolution": "kricketot",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy",
     "shroomy",
     "watery"

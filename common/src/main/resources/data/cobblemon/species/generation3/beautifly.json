@@ -207,6 +207,7 @@
     }
   },
   "nestTypes": [
+    "leafy",
     "grassy",
     "shroomy"
   ]

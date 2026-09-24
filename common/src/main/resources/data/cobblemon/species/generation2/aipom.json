@@ -290,6 +290,7 @@
     }
   ],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

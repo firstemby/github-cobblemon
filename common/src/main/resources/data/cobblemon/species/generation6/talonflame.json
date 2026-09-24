@@ -206,6 +206,7 @@
   "preEvolution": "fletchinder",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

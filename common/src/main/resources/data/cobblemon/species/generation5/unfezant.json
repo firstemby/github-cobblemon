@@ -198,6 +198,7 @@
   "evolutions": [],
   "forms": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

@@ -214,6 +214,7 @@
   "preEvolution": "ledyba",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "grassy"
   ]
 }

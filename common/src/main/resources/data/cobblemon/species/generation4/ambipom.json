@@ -262,6 +262,7 @@
   "preEvolution": "aipom",
   "evolutions": [],
   "nestTypes": [
+    "leafy",
     "twiggy"
   ]
 }

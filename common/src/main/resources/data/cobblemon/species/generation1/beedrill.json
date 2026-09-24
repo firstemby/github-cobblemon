@@ -329,6 +329,7 @@
     }
   },
   "nestTypes": [
+    "leafy",
     "grassy"
   ]
 }

@@ -390,5 +390,9 @@
         "twiggy"
       ]
     }
+  ],
+  "nestTypes": [
+    "leafy",
+    "twiggy"
   ]
 }

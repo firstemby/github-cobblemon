@@ -274,6 +274,7 @@
     }
   ],
   "nestTypes": [
+    "leafy",
     "grassy",
     "twiggy"
   ]

@@ -183,6 +183,7 @@
     }
   },
   "nestTypes": [
+    "leafy",
     "grassy"
   ]
 }
