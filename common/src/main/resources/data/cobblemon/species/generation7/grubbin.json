@@ -42,10 +42,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.45,
     "fixed": false
   },
+  "standingEyeHeight": 0.6,
   "drops": {
     "amount": 3,
     "entries": [

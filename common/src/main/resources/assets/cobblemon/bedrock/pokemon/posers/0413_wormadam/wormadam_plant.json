@@ -1,0 +1,30 @@
+{
+   "portraitScale": 2.31,
+   "portraitTranslation": [ -0.05, 0.16, 0 ],
+   "profileScale": 0.85,
+   "profileTranslation": [ 0, 0.75, 0 ],
+   "rootBone": "wormadam_plant",
+   "animations": {},
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "FLOAT", "HOVER", "PORTRAIT", "PROFILE", "NONE"],
+         "animations": [
+            "q.look('body', 1, 1, 0, 0, 45, -45)",
+            "q.bedrock('wormadam_plant', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('wormadam_plant', 'blink')"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK", "SWIM", "FLY"],
+         "animations": [
+            "q.look('body', 1, 1, 0, 0, 45, -45)",
+            "q.bedrock('wormadam_plant', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('wormadam_plant', 'blink')"
+         ]
+      }
+   }
+}

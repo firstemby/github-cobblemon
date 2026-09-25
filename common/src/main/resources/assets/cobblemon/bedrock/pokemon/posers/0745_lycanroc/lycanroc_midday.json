@@ -19,6 +19,9 @@
       "animations": [
         "q.look('head_ai', 1, 1, 25, -25, 40, -40)",
         "q.bedrock('lycanroc_midday', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('lycanroc_midday', 'blink')"
       ]
     },
     "walking": {
@@ -30,6 +33,9 @@
         "q.look('head_ai', 1, 1, 25, -25, 40, -40)",
         "q.bedrock('lycanroc_midday', 'ground_idle')",
         "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('lycanroc_midday', 'blink')"
       ]
     }
   }

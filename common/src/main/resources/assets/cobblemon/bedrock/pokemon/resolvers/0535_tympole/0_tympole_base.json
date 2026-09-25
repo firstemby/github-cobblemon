@@ -1,0 +1,26 @@
+{
+    "species": "cobblemon:tympole",
+    "order": 0,
+    "variations": [
+      {
+        "aspects": [],
+        "poser": "cobblemon:tympole",
+        "model": "cobblemon:tympole.geo",
+        "texture": "cobblemon:textures/pokemon/0535_tympole/tympole.png"
+      },
+      {
+        "aspects": ["shiny"],
+        "texture": "cobblemon:textures/pokemon/0535_tympole/tympole_shiny.png"  
+      },
+      {
+        "aspects": ["alpha_eyes"],
+        "layers": [
+          {
+            "name": "alpha_eyes",
+            "texture": "cobblemon:textures/pokemon/0535_tympole/tympole_alpha.png",
+            "emissive": true
+          }
+        ]
+      }
+    ]
+  }

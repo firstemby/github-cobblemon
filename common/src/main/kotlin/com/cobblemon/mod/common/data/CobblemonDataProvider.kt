@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.berry.Berries
 import com.cobblemon.mod.common.api.cooking.Seasonings
 import com.cobblemon.mod.common.api.data.DataProvider
 import com.cobblemon.mod.common.api.data.DataRegistry
+import com.cobblemon.mod.common.api.data.ServerJsonDataRegistry
 import com.cobblemon.mod.common.api.dialogue.Dialogues
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.fishing.PokeRods
@@ -51,12 +52,15 @@ import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.ifClient
 import com.cobblemon.mod.common.util.server
+import net.minecraft.core.HolderLookup
 import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener
+import org.jetbrains.annotations.ApiStatus
 
 object CobblemonDataProvider : DataProvider {
 
@@ -66,6 +70,10 @@ object CobblemonDataProvider : DataProvider {
     private val synchronizedPlayerIds = mutableListOf<UUID>()
 
     private val scheduledActions = mutableMapOf<UUID, MutableList<() -> Unit>>()
+
+    // client is public only so we can use it cross-module. maybe a more elegant solution exists, but this works
+    @ApiStatus.Internal
+    val clientResourceReloader: PreparableReloadListener = ClientResourceReloader()
 
     fun registerDefaults() {
         this.register(CobblemonScripts, reloadable = true)
@@ -119,9 +127,9 @@ object CobblemonDataProvider : DataProvider {
         }
 
         ifClient {
-            Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, emptyList())
+            Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), PackType.CLIENT_RESOURCES, emptyList()) { clientResourceReloader }
         }
-        Cobblemon.implementation.registerResourceReloader(cobblemonResource("data_resources"), SimpleResourceReloader(PackType.SERVER_DATA), PackType.SERVER_DATA, emptyList())
+        Cobblemon.implementation.registerResourceReloader(cobblemonResource("data_resources"), PackType.SERVER_DATA, emptyList()) { ServerResourceReloader(it) }
     }
 
     override fun <T : DataRegistry> register(registry: T, reloadable: Boolean): T {
@@ -160,12 +168,25 @@ object CobblemonDataProvider : DataProvider {
         }
     }
 
-    private class SimpleResourceReloader(private val type: PackType) : ResourceManagerReloadListener {
+    private class ClientResourceReloader : ResourceManagerReloadListener {
+        override fun onResourceManagerReload(manager: ResourceManager) {
+            registries.filter { it.type == PackType.CLIENT_RESOURCES }.forEach { it.reload(manager) }
+        }
+    }
+
+    private class ServerResourceReloader(private val registryAccess: HolderLookup.Provider) : ResourceManagerReloadListener {
         override fun onResourceManagerReload(manager: ResourceManager) {
             // Check for a server running, this is due to the create a world screen triggering datapack reloads, these are fine to happen as many times as needed as players may be in the process of adding their datapacks.
             val reloadAllowed = server()?.isReady != true
-            registries.filter { it.type == this.type && (reloadAllowed || it in reloadableRegistries) }
-                .forEach { it.reload(manager) }
+            registries
+                .filter { it.type == PackType.SERVER_DATA && (reloadAllowed || it in reloadableRegistries) }
+                .forEach {
+                    if (it is ServerJsonDataRegistry<*>) {
+                        it.reload(manager, registryAccess)
+                    } else {
+                        it.reload(manager)
+                    }
+                }
         }
     }
 }

@@ -31,8 +31,6 @@ interface EVIncreaseItem: PokemonSelectingItem {
     override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
             super.canUseOnPokemon(stack, pokemon)
 
-    val sound: SoundEvent
-
     override fun applyToPokemon(
         player: ServerPlayer,
         stack: ItemStack,
@@ -40,14 +38,12 @@ interface EVIncreaseItem: PokemonSelectingItem {
     ): InteractionResultHolder<ItemStack> {
         val evsGained = pokemon.evs.add(stat, evIncreaseAmount, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
-            pokemon.entity?.playSound(sound, 1F, 1F)
-            stack.consume(1, player)
-            if (!player.hasInfiniteMaterials()) {
-                player.giveOrDropItemStack(ItemStack(Items.GLASS_BOTTLE))
-            }
+            onSuccessfulApply(player, stack, pokemon)
             InteractionResultHolder.success(stack)
         } else {
             InteractionResultHolder.fail(stack)
         }
     }
+
+    fun onSuccessfulApply(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon)
 }

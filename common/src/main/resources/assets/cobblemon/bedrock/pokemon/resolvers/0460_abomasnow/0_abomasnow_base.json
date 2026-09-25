@@ -1,0 +1,32 @@
+{
+  "species": "cobblemon:abomasnow",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:abomasnow",
+      "model": "cobblemon:abomasnow_male.geo",
+      "texture": "cobblemon:textures/pokemon/0460_abomasnow/abomasnow.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0460_abomasnow/abomasnow_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0460_abomasnow/abomasnow_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

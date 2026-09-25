@@ -1,0 +1,42 @@
+{
+  "portraitScale": 1.32,
+  "portraitTranslation": [-0.06, 0.11, 0],
+  "profileScale": 0.73,
+  "profileTranslation": [-0.01, 0.64, 0],
+  "rootBone": "snover",
+  "animations": {},
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "FLOAT",
+        "NONE",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('torso', 0.2, 0.1)",
+        "q.look('torso2', 0.2, 0.1)",
+        "q.bedrock('snover', 'ground_idle')"
+      ],
+      "quirks": [
+       "q.bedrock_quirk('snover', 'blink')"
+     ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK", 
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('torso', 0.2, 0.1)",
+        "q.look('torso2', 0.2, 0.1)",
+        "q.bedrock('snover', 'ground_idle')",
+        "q.biped_walk(0.66, 0.4, 'foot_left', 'foot_right')"
+      ],
+      "quirks": [
+       "q.bedrock_quirk('snover', 'blink')"
+     ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "portraitScale": 0.78,
+  "portraitTranslation": [-0.28, 0.86, 0],
+  "profileScale": 0.52,
+  "profileTranslation": [0.0, 0.95, 0],
+  "rootBone": "houndstone",
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.look('head_ai')", 
+        "q.bedrock('houndstone', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('houndstone', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
+        "q.look('head_ai')", 
+        "q.bedrock('houndstone', 'ground_idle')",
+        "q.quadruped_walk(0.66, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('houndstone', 'blink')"]
+    }
+  }
+}

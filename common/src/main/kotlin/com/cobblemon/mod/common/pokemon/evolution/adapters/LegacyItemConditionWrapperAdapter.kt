@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon.evolution.adapters
 
 import com.cobblemon.mod.common.util.adapters.CodecBackedAdapter
+import com.cobblemon.mod.common.util.adapters.RegistryAccessResolver
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -19,6 +20,7 @@ import net.minecraft.advancements.critereon.ItemCustomDataPredicate
 import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.advancements.critereon.ItemSubPredicates
 import net.minecraft.advancements.critereon.NbtPredicate
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
@@ -26,13 +28,16 @@ import net.minecraft.tags.TagKey
 import java.lang.reflect.Type
 
 // This is an ugly adapter because breaking changes are scary and people would ;(
-object LegacyItemConditionWrapperAdapter : JsonDeserializer<ItemPredicate>, JsonSerializer<ItemPredicate> {
+class LegacyItemConditionWrapperAdapter(val registryAccess: HolderLookup.Provider = RegistryAccessResolver.getAccess())
+    : JsonDeserializer<ItemPredicate>, JsonSerializer<ItemPredicate> {
 
-    private const val TAG_PREFIX = "#"
-    private const val LEGACY_ITEM = "item"
-    private const val LEGACY_NBT = "nbt"
+    companion object {
+        private const val TAG_PREFIX = "#"
+        private const val LEGACY_ITEM = "item"
+        private const val LEGACY_NBT = "nbt"
+    }
 
-    private val codecAdapter = CodecBackedAdapter(ItemPredicate.CODEC)
+    private val codecAdapter = CodecBackedAdapter(ItemPredicate.CODEC, registryAccess)
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ItemPredicate {
         if (json.isJsonPrimitive) {
@@ -64,7 +69,9 @@ object LegacyItemConditionWrapperAdapter : JsonDeserializer<ItemPredicate>, Json
                 { id ->
                     if (isTag) {
                         val tag = TagKey.create(Registries.ITEM, id)
-                        builder.of(tag)
+                        registryAccess.lookup(Registries.ITEM)
+                            .map { builder.of(tag) }
+                            .orElseGet { builder }
                     } else {
                         BuiltInRegistries.ITEM.getOptional(id)
                             .map { builder.of(it) }

@@ -1,0 +1,41 @@
+{
+  "portraitScale": 1.35,
+  "portraitTranslation": [-0.54, 0.93, 0],
+  "profileScale": 0.68,
+  "profileTranslation": [-0.10, 0.70, 0],
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('neck_ai', 1, 1, 0, -15, 15, -15)",
+		"q.look('head_ai', 1, 1, 25, -45, 15, -15)",
+        "q.bedrock('seismitoad', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('seismitoad', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('neck_ai', 1, 1, 0, -15, 15, -15)",
+		"q.look('head_ai', 1, 1, 25, -45, 15, -15)",
+        "q.bedrock('seismitoad', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('seismitoad', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('seismitoad', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('seismitoad', 'blink')"
+      ]
+    }
+  }
+ }

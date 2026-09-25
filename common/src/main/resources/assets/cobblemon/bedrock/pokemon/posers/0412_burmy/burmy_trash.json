@@ -1,0 +1,30 @@
+{
+   "portraitScale": 2.31,
+   "portraitTranslation": [ -0.05, -0.05, 0 ],
+   "profileScale": 1,
+   "profileTranslation": [ 0, 0.5, 0 ],
+   "rootBone": "burmy_trash",
+   "animations": {},
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "FLOAT", "HOVER", "PORTRAIT", "PROFILE", "NONE"],
+         "animations": [
+            "q.look('body', 1, 1, 0, 0, 45, -45)",
+            "q.bedrock('burmy_trash', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('burmy_trash', 'blink')"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK", "SWIM", "FLY"],
+         "animations": [
+            "q.look('body', 1, 1, 0, 0, 45, -45)",
+            "q.bedrock('burmy_trash', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('burmy_trash', 'blink')"
+         ]
+      }
+   }
+}

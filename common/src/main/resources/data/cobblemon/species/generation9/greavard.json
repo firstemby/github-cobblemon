@@ -199,5 +199,12 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.85,
+    "height": 1,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.65
 }
