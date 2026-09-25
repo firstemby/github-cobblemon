@@ -7,6 +7,7 @@
   "maleRatio": 0.5,
   "height": 15,
   "weight": 395,
+  "silenceStepSounds": true,
   "pokedex": [
     "cobblemon.species.pidgeot.desc"
   ],
