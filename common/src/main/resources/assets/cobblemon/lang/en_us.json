@@ -2795,7 +2795,7 @@
   "cobblemon.capture.in_battle": "That %1$s is in a battle and cannot be caught by you.",
   "cobblemon.capture.busy": "The %1$s is busy!",
   "cobblemon.capture.you_in_battle": "You are in a battle.",
-  "cobblemon.capture.not_single": "You can only capture wild Pokémon in a 1v1 battle.",
+  "cobblemon.capture.not_single": "You can only capture wild Pokémon when there are not multiple present.",
   "cobblemon.capture.cannot_be_caught": "This Pokémon cannot be captured.",
   "cobblemon.you_in_battle": "You can't do that while in a battle!",
   "cobblemon.battle.turn": "It is now turn %1$s",

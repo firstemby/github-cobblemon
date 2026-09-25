@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.battles.model.ai.BattleAI
 import com.cobblemon.mod.common.battles.ActiveBattlePokemon
 import com.cobblemon.mod.common.battles.BattleSide
-import com.cobblemon.mod.common.battles.DefaultActionResponse
 import com.cobblemon.mod.common.battles.MoveActionResponse
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
@@ -36,7 +35,7 @@ class RandomBattleAI : BattleAI {
     ): ShowdownActionResponse {
         if (forceSwitch || activeBattlePokemon.isGone()) {
             val switchTo = activeBattlePokemon.actor.pokemonList.filter { it.canBeSentOut() }.randomOrNull()
-                ?: return DefaultActionResponse() //throw IllegalStateException("Need to switch but no Pokémon to switch to")
+                ?: return PassActionResponse // pass if there is a fainted slot with nothing to switch to (I think this shouldn't break anything and does work so going with this for now)
             switchTo.willBeSwitchedIn = true
             return SwitchActionResponse(switchTo.uuid)
         }
