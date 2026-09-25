@@ -31,6 +31,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
+import com.cobblemon.mod.common.util.isInBattle
 import com.cobblemon.mod.common.util.mainThreadRuntime
 import com.cobblemon.mod.common.util.resolveBoolean
 import com.cobblemon.mod.common.util.resolveFloat
@@ -43,6 +44,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
@@ -73,6 +75,10 @@ class DefendNest(
     override fun perform(entity: LivingEntity, brain: BiggerBrain, activeObjectiveTags: MutableSet<String>): ObjectiveStatus {
         if (entity !is PokemonEntity || !entity.isAlive)
             return ObjectiveStatus.INVALID
+        // if the mon is battling then don't worry about defending (this was causing crying and particle spam lol)
+        if (entity.isBattling)
+            return ObjectiveStatus.INACTIVE
+
         val nestPos = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION) ?: return stopDefending(brain) // no nest? then we stop probably
         val eggInNest = brain.getMemory(CobblemonMemories.EGG_IN_NEST) == true
         val thief = brain.getMemory(CobblemonMemories.EGG_THIEF)
@@ -152,6 +158,8 @@ class DefendNest(
         if (tracked.isRemoved || !tracked.isAlive)
             return false
         if (tracked is Player && (tracked.isCreative || tracked.isSpectator))
+            return false
+        if (tracked is ServerPlayer && tracked.isInBattle())
             return false
         if (brain.getMemory(CobblemonMemories.EGG_THIEF)?.uuid == tracked.uuid)
             return true
@@ -255,6 +263,7 @@ class DefendNest(
         // todo how should we handle creative players?
         return visible.findAll { candidate ->
             candidate is Player &&
+                !(candidate is ServerPlayer && candidate.isInBattle()) &&
                 candidate.position().distanceTo(nestCenter) <= warnRange &&
                 runtime.withQueryValue("target", candidate.asMostSpecificMoLangValue()).resolveBoolean(targetCondition)
         }.minByOrNull { it.position().distanceToSqr(nestCenter) }
