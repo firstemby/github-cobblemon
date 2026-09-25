@@ -2,10 +2,10 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "minecraft:block/sand",
-		"2": "minecraft:block/sand",
-		"3": "minecraft:block/stone",
-		"4": "cobblemon:block/nest_sand"
+		"2": "block/sand",
+		"3": "block/stone",
+		"4": "cobblemon:block/nest_sand",
+		"particle": "block/sand"
 	},
 	"elements": [
 		{
@@ -148,7 +148,6 @@
 		},
 		"gui": {
 			"rotation": [30, -135, 0],
-			"translation": [0.5, 0.5, 0],
 			"scale": [0.625, 0.625, 0.625]
 		},
 		"head": {
