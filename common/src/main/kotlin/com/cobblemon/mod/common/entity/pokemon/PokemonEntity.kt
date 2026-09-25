@@ -112,6 +112,7 @@ import com.cobblemon.mod.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatu
 import com.cobblemon.mod.common.pokemon.feature.StashHandler
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules
 import com.google.common.collect.UnmodifiableIterator
@@ -1379,7 +1380,7 @@ open class PokemonEntity(
 
     private fun updateNestDespawnImmunity() {
         val serverLevel = level() as? ServerLevel ?: return
-        val paternalNestLocation = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return
+        val paternalNestLocation = brain.getMemorySafely(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return
         val nestEntity = serverLevel.getBlockEntity(paternalNestLocation) as? NestBlockEntity ?: return
         val isParent = nestEntity.parents.first == pokemon.uuid || nestEntity.parents.second == pokemon.uuid
         if (!isParent) {
@@ -1404,7 +1405,7 @@ open class PokemonEntity(
             brain.eraseMemory(CobblemonMemories.NEST_DESPAWN_IMMUNE_UNTIL_TICK)
         }
 
-        val paternalNestLocation = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return false
+        val paternalNestLocation = brain.getMemorySafely(CobblemonMemories.PATERNAL_NEST_LOCATION).orElse(null) ?: return false
         val nestEntity = serverLevel.getBlockEntity(paternalNestLocation) as? NestBlockEntity ?: return false
         val isParent = nestEntity.parents.first == pokemon.uuid || nestEntity.parents.second == pokemon.uuid
         return isParent && !nestEntity.getItem().isEmpty

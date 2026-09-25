@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.battle.BattleChallengeNotificationPacket
 import com.cobblemon.mod.common.net.messages.server.BattleChallengePacket
 import com.cobblemon.mod.common.util.canInteractWith
+import com.cobblemon.mod.common.util.getMemorySafely
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerLevel
@@ -53,7 +54,7 @@ object ChallengeHandler : ServerNetworkPacketHandler<BattleChallengePacket> {
 
         val leadingPokemon = player.party()[packet.selectedPokemonId]?.uuid ?: return   // validate id
         // get the memories of the pokemon entity to see if they have a paternal nest
-        val paternalNestLocation = targetedEntity.brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+        val paternalNestLocation = targetedEntity.brain.getMemorySafely(CobblemonMemories.PATERNAL_NEST_LOCATION)
 
         if (targetedEntity is PokemonEntity && player.canInteractWith(targetedEntity, Cobblemon.config.battleWildMaxDistance) && targetedEntity.canBattle(player)) {
             // if targeted entity has a parental nest check for mates to enter battle with
