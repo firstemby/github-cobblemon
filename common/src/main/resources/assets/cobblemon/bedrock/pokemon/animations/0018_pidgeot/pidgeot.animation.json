@@ -3637,6 +3637,12 @@
 				"wings_open": {
 					"scale": 0
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_claw_medium');",
+				"0.5": "q.run_molang('cobblemon:stepsound_claw_medium');",
+				"1.0": "q.run_molang('cobblemon:stepsound_claw_medium');",
+				"1.5": "q.run_molang('cobblemon:stepsound_claw_medium');"
 			}
 		},
 		"animation.pidgeot.ride_ground_walk": {
