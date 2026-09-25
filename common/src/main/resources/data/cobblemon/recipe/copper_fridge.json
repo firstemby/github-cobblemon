@@ -3,16 +3,13 @@
   "category": "redstone",
   "group": "copper_fridge",
     "pattern": [
-        "CIC",
-        "PNP",
-        "CRC"
+        "CCC",
+        "CNC",
+        "IRI"
     ],
     "key": {
         "C": {
             "tag": "c:ingots/copper"
-        },
-        "P": {
-            "item": "minecraft:packed_ice"
         },
         "N": {
             "item": "cobblemon:never_melt_ice"
