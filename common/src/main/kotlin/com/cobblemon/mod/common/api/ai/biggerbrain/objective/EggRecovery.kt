@@ -52,7 +52,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 
 class EggRecovery(
-    private val speedMultiplier: Expression = "2.0".asExpression(), // another funny speed number for testing
+    private val speedMultiplier: Expression = "0.4".asExpression(),
     private val searchRadius: Int = 20,
     private val searchIntervalTicks: Int = 20
 ) : Objective {
@@ -311,7 +311,7 @@ class EggRecovery(
     }
 
     class Config : ObjectiveConfig {
-        val speedMultiplier: ExpressionOrEntityVariable = Either.left("2.0".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
         val searchRadius: ExpressionOrEntityVariable = Either.left("20".asExpression())
         val searchIntervalTicks: ExpressionOrEntityVariable = Either.left("20".asExpression())
 

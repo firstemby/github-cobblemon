@@ -49,7 +49,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
 class DefendNest(
-    speedMultiplier: Expression = "2.0".asExpression(), // silly speed for testing
+    speedMultiplier: Expression = "0.5".asExpression(),
     warnRange: Expression = "15.0".asExpression(),
     private val attackRange: Expression = "8.0".asExpression(),
     disengageRange: Expression = "20.0".asExpression(),
@@ -206,7 +206,7 @@ class DefendNest(
         fixation = brain.fixate(
             AttackFixation(
                 targetEntity = target,
-                speedMultiplier = speedMultiplier, // with our silly speed for testing
+                speedMultiplier = speedMultiplier,
                 availableMoves = getRealTimeMoves(entity), // idk how this works but looks like Jazz lets us do this now
                 distractionTypes = setOf(DistractionType.FORCE)
             )
@@ -311,7 +311,7 @@ class DefendNest(
     }
 
     class Config : ObjectiveConfig {
-        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.6".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.5".asExpression())
         val warnRange: ExpressionOrEntityVariable = Either.left("15.0".asExpression())
         val attackRange: ExpressionOrEntityVariable = Either.left("8.0".asExpression())
         val disengageRange: ExpressionOrEntityVariable = Either.left("20.0".asExpression())

@@ -51,7 +51,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.phys.Vec3
 
 class Breed(
-    private val speedMultiplier: Expression = "2.0".asExpression(), // funny fast number so we see who is breeding
+    private val speedMultiplier: Expression = "0.4".asExpression(),
     private val condition: Expression = "true".asExpression(),
     private val layDurationTicks: Int = 40
 ) : Objective {
@@ -269,7 +269,7 @@ class Breed(
     }
 
     class Config : ObjectiveConfig {
-        val speedMultiplier: ExpressionOrEntityVariable = Either.left("2.0".asExpression())
+        val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val layDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
 
