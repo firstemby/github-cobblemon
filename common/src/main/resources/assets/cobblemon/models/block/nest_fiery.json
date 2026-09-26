@@ -1,9 +1,10 @@
 {
+	"format_version": "26.3",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "minecraft:block/magma",
 		"1": "cobblemon:block/nest_fiery_netherrack",
-		"3": "minecraft:block/magma"
+		"3": "block/magma",
+		"particle": "block/magma"
 	},
 	"elements": [
 		{
@@ -77,10 +78,17 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "group",
 			"origin": [8, 8, 8],
+			"scope": 0,
 			"color": 0,
 			"children": [0, 1, 2, 3, 4]
 		}
