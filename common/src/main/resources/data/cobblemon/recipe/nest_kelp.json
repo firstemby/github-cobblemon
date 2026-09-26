@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "K K",
+        "KDK",
+        "KKK"
+    ],
+    "key": {
+        "K": {
+            "item": "minecraft:kelp"
+        },
+        "D": {
+            "item": "minecraft:dried_kelp_block"
+        }
+    },
+    "result": {
+        "id": "cobblemon:nest_kelp"
+    }
+}

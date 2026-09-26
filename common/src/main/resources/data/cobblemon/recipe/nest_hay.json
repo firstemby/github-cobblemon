@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "W W",
+        "WHW",
+        "WWW"
+    ],
+    "key": {
+        "W": {
+            "tag": "c:crops/wheat"
+        },
+        "H": {
+            "item": "minecraft:hay_block"
+        }
+    },
+    "result": {
+        "id": "cobblemon:nest_hay"
+    }
+}
