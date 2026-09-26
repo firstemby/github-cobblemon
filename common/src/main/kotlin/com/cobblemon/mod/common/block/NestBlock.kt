@@ -8,14 +8,18 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
+import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 import net.minecraft.world.InteractionHand
@@ -29,6 +33,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.LevelEvent
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.SimpleWaterloggedBlock
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -149,6 +154,15 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
             return InteractionResult.FAIL
         }
 
+        // we should probably not let eggs get taken if its parents are in a battle so it can't be cheesed.... todo (should we have it be a config?)
+        if (egg != null && egg.isWild && level is ServerLevel) {
+            val parentsBattling = listOfNotNull(entity.parents.first, entity.parents.second)
+                .any { (level.getEntity(it) as? PokemonEntity)?.isBattling == true }
+            // fail player interaction if either parent is battling
+            if (parentsBattling)
+                return InteractionResult.FAIL
+        }
+
         return entity.onUse(blockState, level, blockPos, serverPlayer, InteractionHand.MAIN_HAND, blockHitResult)
     }
 
@@ -179,6 +193,21 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
         }
 
         return super.playerWillDestroy(level, pos, state, player)
+    }
+
+    // if the nest is removed / destroyed with a wild egg inside break the egg (this is so we can prevent cheese where players could break a nest to get to the egg) todo not fully sold though so we should think of other ways to prevent da cheese
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
+        if (!state.`is`(newState.block) && !level.isClientSide) {
+            val egg = (level.getBlockEntity(pos) as? NestBlockEntity)?.getItem()?.get(CobblemonItemComponents.EGG_DATA)
+            // only break the egg if it is wild (is this going to be confusing to players? idk)
+            if (egg != null && egg.isWild) {
+                Cobblemon.eggStoreManager.remove(egg.eggId)
+                // this is the closest I can get to egg breaking particles but it bothers me it isn't using the textures on the actual egg
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(CobblemonBlocks.EGG.defaultBlockState()))
+                // todo play a egg breaking sound here STERREZO PLZZZ
+            }
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState) = NestBlockEntity(pos, state)
