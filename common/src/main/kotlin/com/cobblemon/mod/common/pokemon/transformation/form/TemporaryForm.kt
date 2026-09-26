@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.pokemon.transformation.Transformation
 import com.cobblemon.mod.common.api.pokemon.transformation.evolution.PreEvolution
 import com.cobblemon.mod.common.api.pokemon.transformation.requirement.TransformationRequirement
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.ContextTrigger
+import com.cobblemon.mod.common.api.pokemon.transformation.trigger.NoTrigger
 import com.cobblemon.mod.common.api.pokemon.transformation.trigger.TransformationTrigger
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.FormData
@@ -27,7 +28,6 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.transformation.evolution.Evolution
-import com.cobblemon.mod.common.pokemon.transformation.triggers.LevelUpTrigger
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -51,7 +51,7 @@ open class TemporaryForm (
     /** Whether this form can be freely toggled after requirements are initially met. */
     val toggleable: Boolean = false,
     /** The [TransformationTrigger] to change to this form OUTSIDE of battle. */
-    override val trigger: TransformationTrigger = LevelUpTrigger(),
+    override val trigger: TransformationTrigger = NoTrigger,
     /** The [TransformationRequirement]s that need to be satisfied for this form OUTSIDE of battle. */
     override val requirements: Set<TransformationRequirement> = mutableSetOf(),
     /** If this form can be deferred and started whenever rather than immediately on trigger. */

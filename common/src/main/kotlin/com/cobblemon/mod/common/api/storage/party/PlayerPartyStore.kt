@@ -161,7 +161,7 @@ open class PlayerPartyStore(
                     } else {
                         form.performRevert(
                             pokemonEntity = entity,
-                            context =ActionEffectContext.fromPokemonEntity(
+                            context = ActionEffectContext.fromPokemonEntity(
                                 actionEffect = form.revertActionEffect,
                                 pokemonEntity = entity
                             )
