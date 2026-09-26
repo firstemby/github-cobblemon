@@ -2554,6 +2554,32 @@
       { "name": "cobblemon:stepsound/mud/claw/medium/stepsound_mud_claw_medium_8", "volume": 0.11 }
     ]
   },
+  "stepsound.glass.claw.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_1", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_2", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_3", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_4", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_5", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_6", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_7", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/glass/claw/large/stepsound_glass_claw_large_8", "volume": 0.22 }
+    ]
+  },
+  "stepsound.glass.claw.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_1", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_2", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_3", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_4", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_5", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_6", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_7", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_8", "volume": 0.11 }
+    ]
+  },
   "stepsound.leaves.universal.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
