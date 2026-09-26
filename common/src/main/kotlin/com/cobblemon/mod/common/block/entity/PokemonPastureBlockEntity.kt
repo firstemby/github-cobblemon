@@ -203,6 +203,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                     pokemon.tetheringId = tethering.tetheringId
                     tetheredPokemon.add(tethering)
                     entity.tethering = tethering
+                    entity.remakeBrain()
                     tethering.toDTO(player)?.let { player.sendPacket(PokemonPasturedPacket(it)) }
                     setChanged()
                     CobblemonCriteria.PASTURE_USE.trigger(player, pokemon)
