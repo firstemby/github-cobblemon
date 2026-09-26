@@ -2,10 +2,10 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "minecraft:block/chorus_plant",
-		"1": "minecraft:block/chorus_flower",
+		"1": "block/chorus_flower",
 		"2": "cobblemon:block/nest_twiggy_chorus",
-		"3": "minecraft:block/chorus_plant"
+		"3": "block/chorus_plant",
+		"particle": "block/chorus_plant"
 	},
 	"elements": [
 		{
@@ -92,6 +92,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest_twiggy_chorus",

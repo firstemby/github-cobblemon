@@ -2,11 +2,11 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"particle": "cobblemon:block/nest_twiggy_cherry_sticks",
 		"1": "cobblemon:block/nest_twiggy_cherry_sticks",
 		"6": "cobblemon:block/nest_twiggy_cherry_layer",
 		"8": "cobblemon:block/nest_twiggy_cherry",
-		"9": "cobblemon:block/nest_twiggy_cherry_leaves"
+		"9": "cobblemon:block/nest_twiggy_cherry_leaves",
+		"particle": "cobblemon:block/nest_twiggy_cherry_sticks"
 	},
 	"elements": [
 		{
@@ -220,6 +220,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest_twiggy_cherry",

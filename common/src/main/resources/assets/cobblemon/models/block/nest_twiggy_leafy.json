@@ -1,3 +1,11 @@
 {
-    "parent": "cobblemon:block/nest_twiggy_oak"
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"parent": "cobblemon:block/nest_twiggy_oak",
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	}
 }

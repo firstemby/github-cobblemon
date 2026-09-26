@@ -1,7 +1,15 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "particle": "cobblemon:block/nest_player",
-        "all": "cobblemon:block/nest_player"
-    }
+	"format_version": "26.3",
+	"credit": "Made with Blockbench",
+	"parent": "block/cube_all",
+	"textures": {
+		"particle": "cobblemon:block/nest_player",
+		"all": "cobblemon:block/nest_player"
+	},
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	}
 }

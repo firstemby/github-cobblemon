@@ -2,12 +2,12 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "minecraft:block/deepslate",
-		"2": "minecraft:block/deepslate_top",
+		"1": "block/deepslate",
+		"2": "block/deepslate_top",
 		"3": "cobblemon:block/nest_sculk",
-		"4": "minecraft:block/sculk_vein",
-		"5": "minecraft:block/sculk",
-		"particle": "minecraft:block/deepslate"
+		"4": "block/sculk_vein",
+		"5": "block/sculk",
+		"particle": "block/deepslate"
 	},
 	"elements": [
 		{
@@ -191,9 +191,8 @@
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [30, -45, 0],
-			"translation": [0, 1.75, 0],
-			"scale": [0.85, 0.85, 0.85]
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
 		},
 		"head": {
 			"translation": [0, 15.25, 0],

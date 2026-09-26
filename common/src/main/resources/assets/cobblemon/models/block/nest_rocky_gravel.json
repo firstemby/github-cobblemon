@@ -2,7 +2,7 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "minecraft:block/gravel",
+		"1": "block/gravel",
 		"2": "cobblemon:block/nest_gravel",
 		"particle": "cobblemon:block/nest_rocky_gravel"
 	},
@@ -64,6 +64,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest_rocky_gravel",

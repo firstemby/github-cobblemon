@@ -2,8 +2,8 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "minecraft:block/red_sand",
-		"3": "minecraft:block/terracotta",
+		"2": "block/red_sand",
+		"3": "block/terracotta",
 		"4": "cobblemon:block/nest_redsand",
 		"particle": "cobblemon:block/nest_redsand"
 	},
@@ -148,7 +148,6 @@
 		},
 		"gui": {
 			"rotation": [30, -135, 0],
-			"translation": [0.5, 0.5, 0],
 			"scale": [0.625, 0.625, 0.625]
 		},
 		"head": {

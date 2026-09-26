@@ -2,8 +2,8 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "minecraft:block/soul_sand",
-		"3": "minecraft:block/bone_block_side",
+		"2": "block/soul_sand",
+		"3": "block/bone_block_side",
 		"4": "cobblemon:block/nest_soulsand",
 		"5": "cobblemon:block/sandy_soulsand_bone",
 		"particle": "cobblemon:block/sandy_soulsand_bone"
@@ -94,6 +94,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest",

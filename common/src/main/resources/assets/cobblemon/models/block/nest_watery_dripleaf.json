@@ -2,13 +2,13 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"3": "minecraft:block/big_dripleaf_top",
-		"4": "minecraft:block/big_dripleaf_side",
-		"5": "minecraft:block/big_dripleaf_tip",
-		"6": "minecraft:block/clay",
+		"3": "block/big_dripleaf_top",
+		"4": "block/big_dripleaf_side",
+		"5": "block/big_dripleaf_tip",
+		"6": "block/clay",
 		"8": "cobblemon:block/nest_watery_clay_shadow",
-		"9": "minecraft:block/small_dripleaf_stem_top",
-		"particle": "minecraft:block/small_dripleaf_stem_top"
+		"9": "block/small_dripleaf_stem_top",
+		"particle": "block/small_dripleaf_stem_top"
 	},
 	"elements": [
 		{
@@ -178,6 +178,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest_watery_dripleaf",

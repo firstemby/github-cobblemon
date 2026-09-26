@@ -3,12 +3,12 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"2": "minecraft:block/warped_fungus",
-		"3": "minecraft:block/warped_nylium",
+		"2": "block/warped_fungus",
+		"3": "block/warped_nylium",
 		"4": "cobblemon:block/nest_warped",
-		"5": "minecraft:block/warped_roots_pot",
+		"5": "block/warped_roots_pot",
 		"8": "cobblemon:block/shroomy_nest_warped_fungus",
-		"particle": "minecraft:block/warped_fungus"
+		"particle": "block/warped_fungus"
 	},
 	"elements": [
 		{
@@ -206,9 +206,8 @@
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [30, -45, 0],
-			"translation": [0, 1.75, 0],
-			"scale": [0.85, 0.85, 0.85]
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
 		},
 		"head": {
 			"rotation": [-180, -90, 0],

@@ -3,10 +3,10 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "minecraft:block/short_grass",
-		"3": "minecraft:block/grass_block_top",
+		"0": "block/short_grass",
+		"3": "block/grass_block_top",
 		"4": "cobblemon:block/nest_grass",
-		"particle": "minecraft:block/short_grass"
+		"particle": "block/short_grass"
 	},
 	"elements": [
 		{
@@ -162,9 +162,8 @@
 			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [30, -45, 0],
-			"translation": [0, 1.75, 0],
-			"scale": [0.85, 0.85, 0.85]
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
 		},
 		"head": {
 			"rotation": [-180, -90, 0],

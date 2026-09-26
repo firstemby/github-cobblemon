@@ -3,10 +3,10 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"1": "minecraft:block/netherrack",
+		"1": "block/netherrack",
 		"2": "cobblemon:block/nest_fiery_netherrack",
-		"4": "minecraft:block/fire_0",
-		"particle": "minecraft:block/fire_0"
+		"4": "block/fire_0",
+		"particle": "block/fire_0"
 	},
 	"elements": [
 		{
@@ -81,9 +81,9 @@
 		},
 		{
 			"name": "fire",
-			"shade": false,
 			"from": [2, 0, 3],
 			"to": [14, 10, 3],
+			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 3]},
 			"faces": {
 				"north": {"uv": [2, 0, 14, 10], "texture": "#4"},
@@ -96,9 +96,9 @@
 		},
 		{
 			"name": "fire",
-			"shade": false,
 			"from": [3, 0, 2],
 			"to": [3, 10, 14],
+			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [9, 6, 2]},
 			"faces": {
 				"north": {"uv": [2, 0, 2, 10], "texture": "#4"},
@@ -111,9 +111,9 @@
 		},
 		{
 			"name": "fire",
-			"shade": false,
 			"from": [13, 0, 2],
 			"to": [13, 10, 14],
+			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [19, 6, 2]},
 			"faces": {
 				"north": {"uv": [2, 0, 2, 10], "texture": "#4"},
@@ -126,9 +126,9 @@
 		},
 		{
 			"name": "fire",
-			"shade": false,
 			"from": [2, 0, 13],
 			"to": [14, 10, 13],
+			"shade": false,
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 13]},
 			"faces": {
 				"north": {"uv": [2, 0, 14, 10], "texture": "#4"},
@@ -140,6 +140,12 @@
 			}
 		}
 	],
+	"display": {
+		"gui": {
+			"rotation": [30, -135, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
 	"groups": [
 		{
 			"name": "nest",
