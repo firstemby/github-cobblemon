@@ -2069,6 +2069,32 @@
       { "name": "cobblemon:stepsound/glass/standard/medium/stepsound_glass_standard_medium_8", "volume": 0.1 }
     ]
   },
+  "stepsound.metal.standard.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/standard/large/stepsound_metal_standard_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.metal.standard.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/standard/medium/stepsound_metal_standard_medium_8", "volume": 0.1 }
+    ]
+  },
   "stepsound.dirt.hoof.large": {
     "subtitle": "subtitles.block.generic.footsteps",
     "sounds": [
@@ -2276,6 +2302,33 @@
       { "name": "cobblemon:stepsound/glass/hoof/medium/stepsound_glass_hoof_medium_6", "volume": 0.1 },
       { "name": "cobblemon:stepsound/glass/hoof/medium/stepsound_glass_hoof_medium_7", "volume": 0.1 },
       { "name": "cobblemon:stepsound/glass/hoof/medium/stepsound_glass_hoof_medium_8", "volume": 0.1 }
+    ]
+  },
+
+  "stepsound.metal.hoof.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_1", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_2", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_3", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_4", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_5", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_6", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_7", "volume": 0.2 },
+      { "name": "cobblemon:stepsound/metal/hoof/large/stepsound_metal_hoof_large_8", "volume": 0.2 }
+    ]
+  },
+  "stepsound.metal.hoof.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_1", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_2", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_3", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_4", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_5", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_6", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_7", "volume": 0.1 },
+      { "name": "cobblemon:stepsound/metal/hoof/medium/stepsound_metal_hoof_medium_8", "volume": 0.1 }
     ]
   },
   "stepsound.grass.minecraft": {
@@ -2578,6 +2631,33 @@
       { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_6", "volume": 0.11 },
       { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_7", "volume": 0.11 },
       { "name": "cobblemon:stepsound/glass/claw/medium/stepsound_glass_claw_medium_8", "volume": 0.11 }
+    ]
+  },
+
+  "stepsound.metal.claw.large": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_1", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_2", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_3", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_4", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_5", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_6", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_7", "volume": 0.22 },
+      { "name": "cobblemon:stepsound/metal/claw/large/stepsound_metal_claw_large_8", "volume": 0.22 }
+    ]
+  },
+  "stepsound.metal.claw.medium": {
+    "subtitle": "subtitles.block.generic.footsteps",
+    "sounds": [
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_1", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_2", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_3", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_4", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_5", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_6", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_7", "volume": 0.11 },
+      { "name": "cobblemon:stepsound/metal/claw/medium/stepsound_metal_claw_medium_8", "volume": 0.11 }
     ]
   },
   "stepsound.leaves.universal.large": {
