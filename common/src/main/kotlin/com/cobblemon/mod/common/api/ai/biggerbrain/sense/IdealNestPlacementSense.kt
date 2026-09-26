@@ -94,7 +94,7 @@ class IdealNestPlacementSense(
         return BlockPos.betweenClosed(
             entityPos.offset(-detectionRadius, -5, -detectionRadius),
             entityPos.offset(detectionRadius, 5, detectionRadius)
-        ).firstOrNull { pos ->
+        ).map { it.immutable() }.shuffled().firstOrNull { pos ->
             val blockBelowState = world.getBlockState(pos)
             val nestPos = pos.above()
             val blockAbove = world.getBlockState(nestPos).block
