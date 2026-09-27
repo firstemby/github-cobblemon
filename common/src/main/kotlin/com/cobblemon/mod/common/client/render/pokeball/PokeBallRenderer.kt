@@ -9,7 +9,7 @@
 package com.cobblemon.mod.common.client.render.pokeball
 
 import com.cobblemon.mod.common.client.entity.EmptyPokeBallClientDelegate
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PosablePokeBallModel
+import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PosablePokeBallEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
@@ -24,7 +24,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.resources.ResourceLocation
 
 class PokeBallRenderer(context: EntityRendererProvider.Context) : EntityRenderer<EmptyPokeBallEntity>(context) {
-    val model = PosablePokeBallModel()
+    val model = PosablePokeBallEntityModel()
 
     override fun getTextureLocation(pEntity: EmptyPokeBallEntity): ResourceLocation {
         return VaryingModelRepository.getTexture(pEntity.pokeBall.name, pEntity.delegate as EmptyPokeBallClientDelegate)

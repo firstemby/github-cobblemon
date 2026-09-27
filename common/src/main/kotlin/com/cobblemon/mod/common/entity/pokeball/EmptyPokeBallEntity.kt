@@ -49,7 +49,15 @@ import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokeballPacket
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asArrayValue
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isServerSide
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.sendParticlesServer
+import com.cobblemon.mod.common.util.setPositionSafely
+import com.cobblemon.mod.common.util.update
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
@@ -65,7 +73,10 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.PI
-import net.minecraft.world.entity.*
+import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile
 import net.minecraft.world.item.Item
@@ -177,6 +188,14 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     }
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
+
+    fun rootBone(): String = when(PokeBalls.isDefault(pokeBall.name)) {
+        true -> when (PokeBalls.isAncient(pokeBall.name)) {
+            true -> "ancient_poke_ball"
+            false -> "poke_ball"
+        }
+        false -> pokeBall.name.path
+    }
 
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
@@ -295,7 +314,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         delegate.tick(this)
 
         if (level().isServerSide()) {
-        
+
 
             if (this.tickCount > 600 && this.capturingPokemon == null) {
                 this.remove(RemovalReason.DISCARDED)
@@ -394,7 +413,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     private fun breakFree() {
         val pokemon = capturingPokemon ?: return
         pokemon.setPositionSafely(position())
-        
+
         pokemon.beamMode = 2
         pokemon.isInvisible = false
         pokemon.isSilent = false

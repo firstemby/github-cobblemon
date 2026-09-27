@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilMod
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.AncientPokeBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.BeastBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallModel
+import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1.*
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen2.*
@@ -87,7 +88,7 @@ object VaryingModelRepository {
         "bedrock/pokemon/posers" to PokemonPosableModel::class.java,
         "bedrock/fossils/posers" to FossilModel::class.java,
         "bedrock/block_entities/posers" to BlockEntityModel::class.java,
-        "bedrock/npcs/posers" to PosableModel::class.java,
+        "bedrock/npcs/posers" to PokeBallPosableModel::class.java,
         "bedrock/poke_balls/posers" to PosableModel::class.java,
         "bedrock/generic/posers" to PosableModel::class.java,
     )
@@ -116,6 +117,7 @@ object VaryingModelRepository {
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(PosableModel::class.java, JsonModelAdapter(::PosableModel))
             .registerTypeAdapter(PokemonPosableModel::class.java, JsonModelAdapter(::PokemonPosableModel))
+            .registerTypeAdapter(PokeBallPosableModel::class.java, JsonModelAdapter(::PokeBallPosableModel))
             .registerTypeAdapter(FossilModel::class.java, JsonModelAdapter(::FossilModel))
             .registerTypeAdapter(BlockEntityModel::class.java, JsonModelAdapter(::BlockEntityModel))
             .registerTypeAdapter(Pose::class.java, PoseAdapter { JsonModelAdapter.model!! })
@@ -155,8 +157,8 @@ object VaryingModelRepository {
         return {
             var boneName = jsonObject.getAsJsonPrimitive("rootBone")
             JsonModelAdapter.modelPart = if (boneName != null && it.children[boneName.asString] != null) it.children[boneName.asString] else it.children[fileName] ?: it.children.entries.filter { LocatorAccess.PREFIX !in it.key }.first().value
-            gson.fromJson(jsonObject, poserClass).also {
-                it.poses.forEach { (poseName, pose) -> pose.poseName = poseName }
+            gson.fromJson(jsonObject, poserClass).also { model ->
+                model.poses.forEach { (poseName, pose) -> pose.poseName = poseName }
             }
         }
     }
@@ -169,55 +171,6 @@ object VaryingModelRepository {
     }
 
     fun registerInBuiltPosers() {
-        inbuilt("azure_ball", ::PokeBallModel)
-        inbuilt("beast_ball", ::BeastBallModel)
-        inbuilt("cherish_ball", ::PokeBallModel)
-        inbuilt("citrine_ball", ::PokeBallModel)
-        inbuilt("dive_ball", ::PokeBallModel)
-        inbuilt("dream_ball", ::PokeBallModel)
-        inbuilt("dusk_ball", ::PokeBallModel)
-        inbuilt("fast_ball", ::PokeBallModel)
-        inbuilt("friend_ball", ::PokeBallModel)
-        inbuilt("great_ball", ::PokeBallModel)
-        inbuilt("heal_ball", ::PokeBallModel)
-        inbuilt("heavy_ball", ::PokeBallModel)
-        inbuilt("level_ball", ::PokeBallModel)
-        inbuilt("love_ball", ::PokeBallModel)
-        inbuilt("lure_ball", ::PokeBallModel)
-        inbuilt("luxury_ball", ::PokeBallModel)
-        inbuilt("master_ball", ::PokeBallModel)
-        inbuilt("moon_ball", ::PokeBallModel)
-        inbuilt("nest_ball", ::PokeBallModel)
-        inbuilt("net_ball", ::PokeBallModel)
-        inbuilt("park_ball", ::PokeBallModel)
-        inbuilt("poke_ball", ::PokeBallModel)
-        inbuilt("premier_ball", ::PokeBallModel)
-        inbuilt("quick_ball", ::PokeBallModel)
-        inbuilt("repeat_ball", ::PokeBallModel)
-        inbuilt("roseate_ball", ::PokeBallModel)
-        inbuilt("safari_ball", ::PokeBallModel)
-        inbuilt("slate_ball", ::PokeBallModel)
-        inbuilt("sport_ball", ::PokeBallModel)
-        inbuilt("strange_ball", ::PokeBallModel)
-        inbuilt("timer_ball", ::PokeBallModel)
-        inbuilt("ultra_ball", ::PokeBallModel)
-        inbuilt("verdant_ball", ::PokeBallModel)
-        inbuilt("ancient_poke_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_citrine_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_verdant_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_azure_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_roseate_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_slate_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_ivory_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_great_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_ultra_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_feather_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_wing_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_jet_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_heavy_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_leaden_ball", ::AncientPokeBallModel)
-        inbuilt("ancient_gigaton_ball", ::AncientPokeBallModel)
-
         inbuilt("squirtle", ::SquirtleModel)
         inbuilt("wartortle", ::WartortleModel)
         inbuilt("metapod", ::MetapodModel)

@@ -1,0 +1,33 @@
+{
+  "portraitScale": 1,
+  "portraitTranslation": [0, 0, 0],
+  "profileScale": 1,
+  "profileTranslation": [0, 0, 0],
+  "rootBone": "poke_ball",
+  "poses": {
+    "flying": {
+      "poseTypes": ["NONE"],
+      "condition": "q.capture_state() == 'NOT'",
+      "animations": ["q.bedrock('poke_ball', 'throw')"],
+      "transitions": {
+        "open": "q.bedrock_stateful('poke_ball', 'open')"
+      }
+    },
+    "open": {
+      "poseTypes": ["NONE", "PORTRAIT"],
+      "animations": ["q.bedrock('poke_ball', 'open_idle')"],
+      "transitions": {
+        "shut": "q.bedrock_stateful('poke_ball', 'shut')"
+      }
+    },
+    "shut": {
+      "poseTypes": ["NONE", "PORTRAIT"],
+      "animations": [
+        "q.bedrock('poke_ball', 'shut_idle')"
+      ],
+      "transitions": {
+        "open": "q.bedrock_stateful('poke_ball', 'open')"
+      }
+    }
+  }
+}

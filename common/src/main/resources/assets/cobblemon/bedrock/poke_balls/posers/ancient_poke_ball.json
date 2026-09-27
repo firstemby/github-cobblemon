@@ -1,0 +1,33 @@
+{
+  "portraitScale": 1,
+  "portraitTranslation": [0, 0, 0],
+  "profileScale": 1,
+  "profileTranslation": [0, 0, 0],
+  "rootBone": "ancient_ball",
+  "poses": {
+    "flying": {
+      "poseTypes": ["NONE"],
+      "condition": "q.capture_state() == 'NOT'",
+      "animations": ["q.bedrock('ancient_ball', 'throw')"],
+      "transitions": {
+        "open": "q.bedrock_stateful('ancient_ball', 'open')"
+      }
+    },
+    "open": {
+      "poseTypes": ["NONE", "PORTRAIT"],
+      "animations": ["q.bedrock('ancient_ball', 'open_idle')"],
+      "transitions": {
+        "shut": "q.bedrock_stateful('ancient_ball', 'shut')"
+      }
+    },
+    "shut": {
+      "poseTypes": ["NONE", "PORTRAIT"],
+      "animations": [
+        "q.bedrock('ancient_ball', 'shut_idle')"
+      ],
+      "transitions": {
+        "open": "q.bedrock_stateful('ancient_ball', 'open')"
+      }
+    }
+  }
+}

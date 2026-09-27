@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
 import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import net.minecraft.world.item.ItemStack
@@ -35,7 +36,7 @@ import net.minecraft.world.item.Rarity
  * @property model3d The identifier for the resource this Pokéball will use for the 3d model.
  */
 open class PokeBall(
-    val name: ResourceLocation,
+    val name: ResourceLocation = cobblemonResource("weird_ball"),
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
     val itemProperties: PokeBallProperties = PokeBallProperties(),
@@ -43,7 +44,7 @@ open class PokeBall(
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
-    val ancient: Boolean
+    val ancient: Boolean = false
 ) {
     data class PokeBallProperties(
         val fireResistant: Boolean = false,

@@ -340,15 +340,19 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         ancient: Boolean = false
     ): PokeBall {
         val identifier = cobblemonResource(name)
-        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient)
+        val pokeball = PokeBall(identifier, modifier, effects, PokeBall.PokeBallProperties(), waterDragValue, model2d, model3d, throwPower, ancient)
         this.defaults[identifier] = pokeball
         return pokeball
     }
 
-    private fun byName(name: String): PokeBall {
+    fun byName(name: String): PokeBall {
         val identifier = cobblemonResource(name)
         return this.custom[identifier] ?: this.defaults[identifier]!!
     }
+
+    fun isDefault(identifier: ResourceLocation) = this.defaults.containsKey(identifier)
+    fun isCustom(identifier: ResourceLocation) = this.custom.containsKey(identifier)
+    fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier)?.ancient ?: false
 
     /**
      * Backwards compatibility getters
