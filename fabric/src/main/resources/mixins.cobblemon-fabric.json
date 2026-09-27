@@ -17,6 +17,7 @@
     "FabricSoundEngineMixin",
     "PlayerMixin",
     "RecipeBookSettingsMixin",
-    "RecipeBookTypeMixin"
+    "RecipeBookTypeMixin",
+    "ServerEntityMixin"
   ]
 }

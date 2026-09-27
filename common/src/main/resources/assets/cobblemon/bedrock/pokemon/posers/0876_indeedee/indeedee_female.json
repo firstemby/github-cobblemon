@@ -1,0 +1,37 @@
+{
+  "portraitScale": 1.63,
+  "portraitTranslation": [-0.18, 0.92, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [0.00, 0.80, 0],
+  "rootBone": "indeedee",
+  "poses": {
+	"battle-standing": {
+     "poseTypes": ["STAND"],
+     "isBattle": true,
+     "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('indeedee_female', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('indeedee_female', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+	  "isBattle": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('indeedee_female', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('indeedee_female', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('indeedee_female', 'ground_idle')"
+      ]
+    }
+  }
+ }

@@ -449,6 +449,36 @@
     "facing=east,screen=music": {
       "model": "cobblemon:block/monitor_music",
       "y": 270
+    },
+    "facing=south,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid"
+    },
+    "facing=west,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 90
+    },
+    "facing=north,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 180
+    },
+    "facing=east,screen=porygon_grid": {
+      "model": "cobblemon:block/monitor_grid",
+      "y": 270
+    },
+    "facing=south,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching"
+    },
+    "facing=west,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 90
+    },
+    "facing=north,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 180
+    },
+    "facing=east,screen=porygon_glitching": {
+      "model": "cobblemon:block/monitor_glitching",
+      "y": 270
     }
   }
 }

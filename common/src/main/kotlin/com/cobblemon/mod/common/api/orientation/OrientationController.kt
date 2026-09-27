@@ -8,8 +8,10 @@
 
 package com.cobblemon.mod.common.api.orientation
 
+import com.cobblemon.mod.common.util.math.QuatSpring
 import com.cobblemon.mod.common.util.math.geometry.toDegrees
 import com.cobblemon.mod.common.util.math.geometry.toRadians
+import com.cobblemon.mod.common.util.math.simpleSpringDamperQuat
 import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.LivingEntity
@@ -26,12 +28,16 @@ open class OrientationController(val entity: LivingEntity) {
         val FORWARDS: Vector3f = Vector3f(0.0f, 0.0f, -1.0f)
         val UP: Vector3f = Vector3f(0.0f, 1.0f, 0.0f)
         val LEFT: Vector3f = Vector3f(-1.0f, 0.0f, 0.0f)
+        private const val TICK_DT = 1f / 20f // Minecraft server tick rate
+        private const val RENDER_SMOOTH_HALFLIFE = 0.1f // seconds to close ~half the gap
     }
 
     open var active: Boolean = false
 
     var orientation: Matrix3f? = null
         private set
+
+    private val renderSpring = QuatSpring()
 
     private var renderOrientationO: Matrix3f? = null
     private var renderOrientation: Matrix3f? = null
@@ -54,6 +60,8 @@ open class OrientationController(val entity: LivingEntity) {
         orientation = null
         renderOrientationO = null
         renderOrientation = null
+        renderSpring.quat.identity()
+        renderSpring.angVel.set(0f, 0f, 0f)
         active = false
     }
 
@@ -77,18 +85,26 @@ open class OrientationController(val entity: LivingEntity) {
         return oldQuat
     }
 
+    /** Every tick move the current render orientation towards the last known true orientation **/
     fun tick() {
         if (!active || orientation == null) return
         renderOrientationO = renderOrientation
-        val current = orientation
-        val renderMatrix = this.renderOrientation ?: current
-        val renderQuat = Quaternionf().setFromUnnormalized(renderMatrix)
-        val targetQuat  = Quaternionf().setFromUnnormalized(current)
-        val dampingFactor = 0.66f // Smooth interpolation to reduce jitter of orientations recieved from the server.
-        renderQuat.slerp(targetQuat, dampingFactor)
+        val current = orientation!!
+        val targetQuat = Quaternionf().setFromUnnormalized(current)
+
+        if (renderOrientation == null) {
+            // First tick: snap the spring to the target instead of easing in from identity
+            renderSpring.quat.set(targetQuat)
+            renderSpring.angVel.set(0f, 0f, 0f)
+        }
+
+        // Use a "quat spring" to smoothly move the render orientation towards the goal orientation.
+        // It takes into account the orientations angular velocities and should be much more resilient
+        // to sharp changes in goal orientation or late/missed packets.
+        simpleSpringDamperQuat(renderSpring, targetQuat, 0.15f, TICK_DT)
 
         val newRenderOrientation = Matrix3f()
-        renderQuat.get(newRenderOrientation)
+        renderSpring.quat.get(newRenderOrientation)
         renderOrientation = newRenderOrientation
     }
 

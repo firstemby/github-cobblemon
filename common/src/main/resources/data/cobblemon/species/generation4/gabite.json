@@ -56,8 +56,12 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "gabite alpha",
+          "tier": 1
+        },
         {
           "pokemon": "garchomp mega=false",
           "tier": 1

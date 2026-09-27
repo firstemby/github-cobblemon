@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:houndstone",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:houndstone",
+      "model": "cobblemon:houndstone.geo",
+      "texture": "cobblemon:textures/pokemon/0972_houndstone/houndstone.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0972_houndstone/houndstone_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0972_houndstone/houndstone_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

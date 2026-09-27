@@ -66,6 +66,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "surskit alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "masquerain alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -193,7 +206,18 @@
           "variant": "level",
           "minLevel": 22
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

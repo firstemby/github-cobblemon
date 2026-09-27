@@ -67,6 +67,19 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "yanma alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "yanmega alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -199,7 +212,18 @@
           "variant": "has_move",
           "move": "ancientpower"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

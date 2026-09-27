@@ -120,7 +120,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "brutebonnet",

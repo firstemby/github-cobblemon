@@ -73,7 +73,7 @@ open class PCStore(
     val unlockedWallpapers = mutableSetOf<ResourceLocation>()
     val unseenWallpapers = mutableSetOf<ResourceLocation>()
 
-    override fun iterator() = boxes.flatMap { it.toList() }.iterator()
+    override fun iterator() = boxes.asSequence().flatten().iterator()
     override fun getObservingPlayers() = observingUUIDs.mapNotNull { it.getPlayer() }
 
     val struct = asMoLangValue()
@@ -105,6 +105,7 @@ open class PCStore(
     override fun initialize() {
         boxes.forEach { it.initialize() }
         backupStore.initialize()
+        rebuildPokemonByUuid()
     }
 
     fun relocateEvictedBoxPokemon(pokemon: Pokemon) {
@@ -135,6 +136,7 @@ open class PCStore(
 
             tryRestoreBackedUpPokemon()
         }
+        rebuildPokemonByUuid()
         pcChangeObservable.emit(Unit)
     }
 
@@ -142,6 +144,7 @@ open class PCStore(
         this.lockedSize = lockNewSize
         boxes.removeAll(boxList)
         boxList.flatMap { it.asIterable() }.forEach(overflowHandler)
+        rebuildPokemonByUuid()
         pcChangeObservable.emit(Unit)
     }
 

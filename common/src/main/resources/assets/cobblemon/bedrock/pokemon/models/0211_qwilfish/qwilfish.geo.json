@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.qwilfish",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -16,12 +16,77 @@
 					"pivot": [0, 0, 0]
 				},
 				{
+					"name": "locator_root",
+					"parent": "qwilfish",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "qwilfish",
+					"pivot": [0, 13, 0],
+					"locators": {
+						"top": [0, 13, 0]
+					}
+				},
+				{
 					"name": "body",
 					"parent": "qwilfish",
 					"pivot": [0, 6, 0],
 					"cubes": [
 						{"origin": [-4.5, 1.5, -4.5], "size": [9, 9, 9], "uv": [0, 0]}
 					]
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 6, -7],
+					"locators": {
+						"target": [0, 6, -7]
+					}
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 6, 0],
+					"locators": {
+						"middle": [0, 6, 0]
+					}
+				},
+				{
+					"name": "locator_head",
+					"parent": "body",
+					"pivot": [0, 10.5, -3],
+					"locators": {
+						"head": [0, 10.5, -3],
+						"physical": [0, 10.5, -3]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "body",
+					"pivot": [0, 10.5, 0],
+					"locators": {
+						"item_hat": [0, 10.5, 0]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "body",
+					"pivot": [0, 7, -5],
+					"locators": {
+						"face": [0, 7, -5]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "body",
+					"pivot": [0, 7.5, -4.5],
+					"locators": {
+						"item_face": [0, 7.5, -4.5]
+					}
 				},
 				{
 					"name": "eye_left",
@@ -50,6 +115,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.37, 7.5, -4.52],
+					"locators": {
+						"eye2": [2.37, 7.5, -4.52]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "body",
 					"pivot": [-2.65, 7.41506, -7],
@@ -76,6 +149,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.37, 7.5, -4.52],
+					"locators": {
+						"eye1": [-2.37, 7.5, -4.52]
+					}
+				},
+				{
 					"name": "mouth",
 					"parent": "body",
 					"pivot": [0, -15.75, 1],
@@ -83,6 +164,23 @@
 						{"origin": [-1, 5.5, -5], "size": [2, 1, 2], "inflate": 0.02, "uv": [32, 30]},
 						{"origin": [-1, 4.5, -5], "size": [2, 1, 2], "uv": [33, 5]}
 					]
+				},
+				{
+					"name": "locator_special",
+					"parent": "mouth",
+					"pivot": [0, 5.5, -5],
+					"locators": {
+						"special": [0, 5.5, -5]
+					}
+				},
+				{
+					"name": "locator_mouth",
+					"parent": "mouth",
+					"pivot": [0, 5.5, -5],
+					"locators": {
+						"mouth": [0, 5.5, -5],
+						"item": [0, 5.5, -5]
+					}
 				},
 				{
 					"name": "mouth_closed",
@@ -110,6 +208,14 @@
 					]
 				},
 				{
+					"name": "locator_tail",
+					"parent": "tail2",
+					"pivot": [0, 6, 7.75],
+					"locators": {
+						"tail": [0, 6, 7.75]
+					}
+				},
+				{
 					"name": "tail3",
 					"parent": "tail2",
 					"pivot": [0, 6, 8],
@@ -118,6 +224,14 @@
 						{"origin": [-1.5, 6.25, 10], "size": [3, 1, 2], "inflate": 0.01, "uv": [32, 23]},
 						{"origin": [-1.5, 4.75, 10], "size": [3, 1, 2], "inflate": 0.01, "uv": [32, 23]}
 					]
+				},
+				{
+					"name": "locator_tail_tip",
+					"parent": "tail3",
+					"pivot": [0, 6, 14],
+					"locators": {
+						"tail_tip": [0, 6, 14]
+					}
 				},
 				{
 					"name": "spikes",
@@ -175,6 +289,17 @@
 					]
 				},
 				{
+					"name": "locator_horn_left",
+					"parent": "spike_front_left",
+					"pivot": [1.5, 2.75, -2.25],
+					"locators": {
+						"horn2": {
+							"offset": [1.5, 2.75, -2.25],
+							"rotation": [90, 0, 0]
+						}
+					}
+				},
+				{
 					"name": "spike_front_right",
 					"parent": "spikes",
 					"pivot": [-1.5, 8.25, -2.25],
@@ -183,6 +308,17 @@
 						{"origin": [-2.54036, 4.72475, -3.23542], "size": [2, 5, 2], "uv": [27, 0]},
 						{"origin": [-2.04036, 2.72475, -2.73542], "size": [1, 2, 1], "uv": [34, 26]}
 					]
+				},
+				{
+					"name": "locator_horn_right",
+					"parent": "spike_front_right",
+					"pivot": [-1.5, 2.75, -2.25],
+					"locators": {
+						"horn1": {
+							"offset": [-1.5, 2.75, -2.25],
+							"rotation": [90, 0, 0]
+						}
+					}
 				},
 				{
 					"name": "spike_bottom_front_left",

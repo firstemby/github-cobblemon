@@ -42,27 +42,28 @@ import net.minecraft.sounds.SoundEvent
 
 object ClientMoLangFunctions {
     val clientFunctions = hashMapOf<String, Function<MoParams, Any>>(
-        "sound" to java.util.function.Function { params ->
+        "sound" to Function { params ->
             if (params.get<MoValue>(0) !is StringValue) {
                 return@Function Unit
             }
             val soundEvent = SoundEvent.createVariableRangeEvent(params.getString(0).asIdentifierDefaultingNamespace())
             if (soundEvent != null) {
+                val volume = if (params.contains(1)) params.getDouble(1).toFloat() else 1F
                 val pitch = if (params.contains(2)) params.getDouble(2).toFloat() else 1F
-                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch))
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, pitch, volume))
             }
         },
-        "is_time" to java.util.function.Function { params ->
+        "is_time" to Function { params ->
             val time = (Minecraft.getInstance().level?.dayTime() ?: 0) % 24000
             val min = params.getInt(0)
             val max = params.getInt(1)
             time in min..max
         },
-        "say" to java.util.function.Function { params -> Minecraft.getInstance().player?.sendSystemMessage(params.getString(0).text()) ?: Unit },
+        "say" to Function { params -> Minecraft.getInstance().player?.sendSystemMessage(params.getString(0).text()) ?: Unit },
     )
 
     val animationFunctions = hashMapOf<String, Function<PosableModel, Function<MoParams, Any>>>(
-        "exclude_labels" to Function { model -> Function { params ->
+        "exclude_labels" to Function { _ -> Function { params ->
                 val labels = params.params.map { it.asString() }
                 ObjectValue(ExcludedLabels(labels))
             }

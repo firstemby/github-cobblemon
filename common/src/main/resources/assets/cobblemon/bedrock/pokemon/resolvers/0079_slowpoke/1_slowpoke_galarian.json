@@ -12,6 +12,19 @@
     {
       "aspects": ["shiny", "galarian"],
       "texture": "cobblemon:textures/pokemon/0079_slowpoke/slowpoke_galarian_shiny.png"
+    },
+    {
+      "aspects": [
+        "galarian",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0079_slowpoke/slowpoke_galarian_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

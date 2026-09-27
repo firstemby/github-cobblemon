@@ -25,9 +25,12 @@ import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.pokemon.*
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import com.cobblemon.mod.common.block.TumblestoneBlock
+import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import com.cobblemon.mod.common.item.TumblestoneItem
+import net.minecraft.world.item.BlockItem
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
+import com.cobblemon.mod.common.item.GemItem
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getPlayer
@@ -37,6 +40,8 @@ import java.util.*
 object AdvancementHandler : EventHandler {
     override fun registerListeners() {
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.LOWEST, ::onTumbleStonePlaced)
+        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.LOWEST, ::onTypeGemClusterPlaced)
+        PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.LOWEST, ::onTypeGemItemPlaced)
         POKEMON_CAPTURED.subscribe(Priority.LOWEST, ::onCapture)
         BATTLE_VICTORY.subscribe(Priority.LOWEST, ::onWinBattle)
         EVOLUTION_COMPLETE.subscribe(Priority.LOWEST, ::onEvolve)
@@ -60,6 +65,11 @@ object AdvancementHandler : EventHandler {
         if (event.pokemon.shiny) {
             advancementData.updateTotalShinyCaptureCount()
             CobblemonCriteria.CATCH_SHINY_POKEMON.trigger(event.player, CountableContext(advancementData.totalShinyCaptureCount))
+        }
+        if (event.pokemon.isAlpha)
+        {
+            advancementData.updateTotalAlphaCaptureCount()
+            CobblemonCriteria.CATCH_ALPHA_POKEMON.trigger(event.player, CountableContext(advancementData.totalAlphaCaptureCount))
         }
         CobblemonCriteria.COLLECT_ASPECT.trigger(event.player, advancementData.aspectsCollected)
         Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
@@ -125,6 +135,7 @@ object AdvancementHandler : EventHandler {
                         }
                         Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
                         CobblemonCriteria.DEFEAT_POKEMON.trigger(player, CountableContext(advancementData.totalBattleVictoryCount))
+                        playerData.sendToPlayer(player)
                     }
             }
         }
@@ -142,6 +153,7 @@ object AdvancementHandler : EventHandler {
                     advancementData.updateTotalPvNBattleVictoryCount()
                 Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
                 CobblemonCriteria.WIN_BATTLE.trigger(player, BattleCountableContext(event.battle, advancementData.totalBattleVictoryCount))
+                playerData.sendToPlayer(player)
             }
 
     }
@@ -188,6 +200,18 @@ object AdvancementHandler : EventHandler {
             val block = ((event.player.getItemInHand(event.hand).item as TumblestoneItem).block as TumblestoneBlock)
             CobblemonCriteria.PLANT_TUMBLESTONE.trigger(event.player, PlantTumblestoneContext(event.pos, block))
         }
+    }
+
+    fun onTypeGemClusterPlaced(event: ServerPlayerEvent.RightClickBlock) {
+        val item = event.player.getItemInHand(event.hand).item as? BlockItem ?: return
+        val block = item.block as? TypeGemClusterBlock ?: return
+        CobblemonCriteria.PLANT_TYPE_GEM.trigger(event.player, PlantTypeGemContext(event.pos, block))
+    }
+
+    fun onTypeGemItemPlaced(event: ServerPlayerEvent.RightClickBlock){
+        val item = event.player.getItemInHand(event.hand).item as? GemItem ?: return
+        val block = item.block as? TypeGemClusterBlock ?: return
+        CobblemonCriteria.PLANT_TYPE_GEM.trigger(event.player, PlantTypeGemContext(event.pos, block))
     }
 
     fun startRiding(event: RidePokemonEvent.Post) {

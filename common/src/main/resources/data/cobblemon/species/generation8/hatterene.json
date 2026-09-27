@@ -193,7 +193,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "hatterene alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

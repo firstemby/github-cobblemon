@@ -54,3 +54,59 @@ fun Quaternionf.toEulerXYZDegrees(): Vector3f {
 
     return vector
 }
+
+
+/* // is not allocation free so just inline ".get(AxisAngle4f)" like in the function below this
+fun Quaternionf.toScaledAngleAxis(angAxisScaled: Vector3f) {
+    val axisAng4 = AxisAngle4f() 
+    this.get(axisAng4)
+
+    angAxisScaled.x = axisAng4.x
+    angAxisScaled.y = axisAng4.y
+    angAxisScaled.z = axisAng4.z
+    angAxisScaled.mul(axisAng4.angle)
+} */
+
+fun Quaternionf.toScaledAngleAxis(dest: Vector3f) {
+    var x = this.x
+    var y = this.y
+    var z = this.z
+    var w = this.w
+
+    if (w > 1.0f) {
+        val invNorm = 1.0f / kotlin.math.sqrt(x * x + y * y + z * z + w * w)
+        x *= invNorm
+        y *= invNorm
+        z *= invNorm
+        w *= invNorm
+    }
+
+    val angle = 2.0f * kotlin.math.acos(w)
+    val s = kotlin.math.sqrt(1.0f - w * w)
+
+    if (s < 0.001f) {
+        dest.x = x * angle
+        dest.y = y * angle
+        dest.z = z * angle
+    } else {
+        val invS = angle / s
+        dest.x = x * invS
+        dest.y = y * invS
+        dest.z = z * invS
+    }
+}
+
+
+fun Quaternionf.setFromScaledAngleAxis(angAxisScaled: Vector3f) {
+    val len = angAxisScaled.length()
+    if (len > 1e-5f) {
+        this.rotationAxis(
+            len, 
+            angAxisScaled.x / len,
+            angAxisScaled.y / len,
+            angAxisScaled.z / len
+            )
+    } else {
+        this.identity()
+    }
+}

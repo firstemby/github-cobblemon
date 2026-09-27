@@ -66,11 +66,15 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
-          "pokemon": "golisopod",
+          "pokemon": "golisopod mega=false",
           "tier": 1
+        },
+        {
+          "pokemon": "golisopod mega",
+          "tier": 2
         }
       ]
     },

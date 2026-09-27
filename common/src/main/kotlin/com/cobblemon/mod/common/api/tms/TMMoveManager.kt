@@ -9,6 +9,13 @@
 package com.cobblemon.mod.common.api.tms
 
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.advancement.CobblemonCriteria
+import com.cobblemon.mod.common.advancement.criterion.CountableContext
+import com.cobblemon.mod.common.advancement.criterion.LearnAllTMContext
+import com.cobblemon.mod.common.advancement.criterion.LearnTMContext
+import com.cobblemon.mod.common.api.abilities.Ability
+import com.cobblemon.mod.common.api.abilities.AbilityPool
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.scheduling.ScheduledTask
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
@@ -43,6 +50,11 @@ class TMMoveManager(
     fun syncTMFromMove(moveTemplate: MoveTemplate) {
         val tmId = TechnicalMachines.moveToTM[moveTemplate]?.id ?: return
         learn(listOf(tmId))
+    }
+
+    fun syncTMLockFromMove(moveTemplate: MoveTemplate) {
+        val tmId = TechnicalMachines.moveToTM[moveTemplate]?.id ?: return
+        unlearn(listOf(tmId))
     }
 
     fun getLearnableTMsFromPokemon(pokemon: Pokemon): Collection<ResourceLocation> {
@@ -111,6 +123,22 @@ class TMMoveManager(
 
         syncClient(newLearnedTms.toSet())
         sendTMToast(newLearnedTms)
+
+        val player = uuid.getPlayer()
+        if (player != null) {
+            val playerData = Cobblemon.playerDataManager.getGenericData(player)
+            val advancementData = playerData.advancementData
+            advancementData.updateTotalTMLearnedCount(newLearnedTms.size)
+            Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
+
+            for (tmId in newLearnedTms) {
+                CobblemonCriteria.LEARN_TM.trigger(player, LearnTMContext(tmId))
+            }
+            CobblemonCriteria.LEARN_TM_COUNT.trigger(player, CountableContext(advancementData.totalTMLearnedCount))
+            if (learnedTMs.containsAll(TechnicalMachines.tmMap.keys)) {
+                CobblemonCriteria.LEARN_ALL_TM.trigger(player, LearnAllTMContext())
+            }
+        }
 
         return true
     }

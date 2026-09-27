@@ -39,7 +39,6 @@ class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : Inte
         battle.dispatchFuture {
             val (pnx, _) = message.pnxAndUuid(0) ?: return@dispatchFuture CompletableFuture.completedFuture(Unit)
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatchFuture CompletableFuture.completedFuture(Unit)
-            battle.sendUpdate(BattleFaintPacket(pnx))
             val actor = pokemon.actor
             pokemon.effectedPokemon.currentHealth = 0
             val preamble = if (actor is EntityBackedBattleActor<*>) {
@@ -50,6 +49,8 @@ class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : Inte
             val context = ShowdownInterpreter.getContextFromFaint(faintingPokemon, battle)
 
             preamble.thenAccept {
+                // Sent after the faint/recall animation so clients don't learn about the KO early
+                battle.sendUpdate(BattleFaintPacket(pnx))
                 faintingPokemon.effectedPokemon.currentHealth = 0
                 faintingPokemon.faintedAt = battle.faintCounter++
                 faintingPokemon.sendUpdate()

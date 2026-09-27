@@ -1,13 +1,13 @@
 {
-  "type": "choice",
+  "type": "weighted_choice",
   "keys": [
     "maushold_family"
   ],
-  "default": "four",
-  "choices": [
-    "three",
-    "four"
-  ],
+  "default": "random",
+  "choices": {
+    "three": 1,
+    "four": 99
+  },
   "isAspect": true,
   "aspectFormat": "maushold-family-{{choice}}"
 }

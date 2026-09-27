@@ -66,6 +66,7 @@ class GraalShowdownService : ShowdownService {
             .allowArrayAccess(true)
             .allowListAccess(true)
             .allowMapAccess(true)
+            .allowAccessAnnotatedBy(Export::class.java)
             .build()
         context = Context.newBuilder("js")
             .allowIO(true)

@@ -31,8 +31,8 @@ class NidoqueenModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, 
     override val leftArm = getPart("left_shoulder")
     override val rightArm = getPart("right_shoulder")
 
-    override var portraitScale = 1.5F
-    override var portraitTranslation = Vec3(-0.2, 0.6, 0.0)
+    override var portraitScale = 1.56F
+    override var portraitTranslation = Vec3(-0.33, 0.78, 0.0)
 
     override var profileScale = 0.8F
     override var profileTranslation = Vec3(0.0, 0.5, 0.0)

@@ -55,7 +55,7 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "7"
+      "maxSize": 7
     },
     "moving": {
       "swim": {

@@ -1,0 +1,50 @@
+{
+  "portraitScale": 2.1,
+  "portraitTranslation": [-0.58, -1.4, 0.0],
+  "profileScale": 0.85,
+  "profileTranslation": [0.0, 0.43, 0.0],
+  "rootBone": "bidoof",
+  "animations": {
+      "faint": "q.bedrock_primary('bidoof', 'faint', q.curve('one'))",
+      "cry": "q.bedrock_stateful('bidoof', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "isTouchingWater": false,
+      "animations": [
+		"q.look('head_ai')",
+        "q.bedrock('bidoof', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bidoof', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('bidoof', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('bidoof', 'blink')"]
+      },
+    "float": {
+      "poseTypes": ["FLOAT"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.bedrock('bidoof', 'water_float')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bidoof', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": false,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('bidoof', 'sleep')"]
+    }
+  }
+}

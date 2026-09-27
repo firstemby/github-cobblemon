@@ -1,56 +1,101 @@
 # Changelog
-## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
+## [1.8.2 (MONTH xth, 2026)](#1-8-2)
 
 ### Additions
-- Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
-- Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
-- Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
-- Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
-- Added missing crops to Botany Pots integration
-
-### New rideable Pokémon
+- The following items can now be placed on the ground as blocks:
+  - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
+  - Iron Ball, Metal Coat, Throat Spray, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
+- The following items can now be placed on various surfaces:
+  - Galarica Wreath, Magnet, Flame Orb, Life Orb, Toxic Orb, Light Ball, and Smoke Ball.
+- The following items can now be placed as blocks and have additional functionality:
+  - Ring Target, Metronome, and Eject Button.
+- The following items can now be worn by Players and Pokémon:
+  - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
+- Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
+  - Wearable items that can be placed down are exempt from this behaviour.
 
 ### Pokémon Added
+#### Generation 4
+- Snover
+- Abomasnow
+- Burmy
+- Wormadam
+- Mothim
+
+#### Generation 5
+- Tympole
+- Palpitoad
+- Seismitoad
+
+#### Generation 6
+- Helioptile
+- Heliolisk
+
+#### Generation 7
+- Grubbin
+- Charjabug
+- Vikavolt
+
+#### Generation 9
+- Greavard
+- Houndstone
 
 ### Model updates for the following Pokémon
+- Cacnea
+- Cacturne
+- Binacle
+- Barbaracle
+- Glimmet
+- Glimmora
+- Deerling
+- Sawsbuck (All forms)
+- Absol
 
 ### Animation updates for the following Pokémon
+- Cacnea
+- Cacturne
 
 ### Changes
-- Restructured Botany Pots integration folder structure
-- Decrease default pastured mon wander radius to 32.
-- Factor in the weight of pokemon when calculating pushing forces between hitboxes.
-- Remade the Starter Selection Screen with new assets
-- Refactored berry trees to be less impactful on TPS (more performant)
+- Updated various recipes to display in Recipe Groups within the Recipe Book
+- Updated most recipes to display more logically/consistently within the Recipe Book's categories
+- Make ride rotations less jittery in multiplayer.
+- Changes tm shelf discs to use textures instead of tinting and overlays to line up with item display
+- Blank TM can now be inserted into the Disc Shelf
 
 ### Fixes
-- Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
-- Fix occasional crash on retrieving revived fossils
-- Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
-- Fixed improper validation of Pokémon when performing a trade.
-- Fixed issue where particle like beam can disappear when you don't see the beginning of the beam or you look away
- - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
- - Fix occasional crash on retrieving revived fossils
- - Fix brushing not working on Neoforge
- - [Various Submarine Ride Fixes](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2157)
- - Fix Pastured mons despawning and running away.
- - Fix Apricorn trees crashing when other mods bonemeal it
- - [Various UFO Ride Improvements](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2156)
-- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within it's menu
-- Fixed NPCs switching pokemon very often during battles
-- Fixed Campfire pot causing crashes under certain circumstances
-- Fixed Type Gems not being consumed upon use
-- Fixed Ancient Pokeball's to their respective modifiers
+- Correctly grants "They're Minerals!" advancement when planting a type gem
+- Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
+- Some other recipes without advancements have also been corrected
+- Corrected the TM Recipes for Charge Beam and Payday
+- Type Gem blocks now properly generate clusters off of the block.
+- Starter Screen Categories will no longer stop rendering if they are bigger than the viewport, and you are not viewing top or bottom edges
+- Random Starter option now properly handled in height calculation, so now it won't run off into other categories or be un-accessible due to scroll limits if it causes a new row
+- Mochi and Feathers no longer drop glass bottles on use
+- Fixed a rare set of concurrency bugs related to reloading packs on NeoForge; fixes a ModernFix issue
+- Removed unnecessary conditions for Mimikyu's standing pose. Hopefully fixes the rare instance of it using its shoulder animations during battle in multiplayer scenarios.
+- Fixed Rockruff line not blinking
+- Fixed Flygon sometimes using its running animation instead of walking
+- Fixed Bramblin always sleeping outside of battle
+- Fixed Dragonair using its battle idle as a normal idle
+- Fixed Lycanroc's head movement
+- Added head movement to Archaludon
+- Fixed Duraludon line not having any sleep animations
+- Fixed Diglett line not having their faint animations
+- Fixed Kingambit moving its legs while walking
+- Various Structure fixes
+- Fixed shiny pokemon under certain circumstances forgetting taught TMs
 
 ### Developer
-- Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
-- Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
+- Fixed wrong order of operations in the code flow prior to the `FOSSIL_REVIVED` event causing pokemon to appear without entity link
+- Fixed TestPartySlot command not correctly comparing the provided spec with the target Pokémon
 
 ### Molang & Datapacks
-- q.item.is_enchanted()
-- q.item.has_enchantment(minecraft:sharpness, 3)
-- Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
-- Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for pokemon
+- A new `negate` variant for evolution requirements has been added, which will negate (invert) the provided inner condition.
+- Added Molang functions for individual Pokédex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
+
+### Particles
+
+#### New Move Animations
 
 ### Localization
 - Updated translations for:

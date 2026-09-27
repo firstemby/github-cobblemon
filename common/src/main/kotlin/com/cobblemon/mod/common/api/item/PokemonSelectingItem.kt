@@ -38,7 +38,7 @@ import net.minecraft.world.phys.AABB
  * @since July 29th, 2023
  */
 interface PokemonSelectingItem {
-    fun use(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack> {
+    fun use(player: ServerPlayer, stack: ItemStack, ignoreShift: Boolean = false): InteractionResultHolder<ItemStack> {
         val range = player.entityInteractionRange()
         val entity = player.level()
             .getEntities(player, AABB.ofSize(player.position(), range, range, range))
@@ -60,7 +60,7 @@ interface PokemonSelectingItem {
                 return interactWithSpecificBattle(player, stack, battlePokemon)
             }
         } ?: run {
-            if (!player.isShiftKeyDown) {
+            if (ignoreShift || !player.isShiftKeyDown) {
                 return if (entity != null) {
                     val pokemon = entity.pokemon
                     if (entity.ownerUUID == player.uuid) {

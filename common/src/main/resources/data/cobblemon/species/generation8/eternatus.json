@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 890,
   "name": "Eternatus",
   "primaryType": "poison",
@@ -46,8 +47,8 @@
   "dynamaxBlocked": true,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 6,
+    "height": 6,
     "fixed": false
   },
   "moves": [
@@ -167,6 +168,34 @@
       "lightingData": {
         "lightLevel": 15,
         "liquidGlowMode": "BOTH"
+      },
+      "behaviour": {
+        "resting": {
+          "times": [
+            "any"
+          ],
+          "drowsyChance": 0.0014,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "walk": {
+            "canWalk": false
+          },
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 4
+        }
       }
     }
   ],
@@ -193,6 +222,9 @@
       ],
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   },
   "lightingData": {

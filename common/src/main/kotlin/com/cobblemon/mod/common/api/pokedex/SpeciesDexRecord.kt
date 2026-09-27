@@ -107,14 +107,14 @@ class SpeciesDexRecord {
 
     fun addInformation(pokemon: Pokemon, knowledge: PokedexEntryProgress) {
         aspects.addAll(pokemon.aspects)
-        if (knowledge == PokedexEntryProgress.CAUGHT) {
+        if (knowledge == PokedexEntryProgress.OWNED) {
             highestLevel = maxOf(highestLevel, pokemon.level)
         }
     }
 
     fun addInformation(pokedexEntityData: PokedexEntityData, knowledge: PokedexEntryProgress) {
         aspects.addAll(pokedexEntityData.pokemon.aspects)
-        if (knowledge == PokedexEntryProgress.CAUGHT) {
+        if (knowledge == PokedexEntryProgress.OWNED) {
             highestLevel = maxOf(highestLevel, pokedexEntityData.pokemon.level)
         }
     }
@@ -153,9 +153,9 @@ class SpeciesDexRecord {
 
     fun getAspects(): Set<String> = this.aspects
     fun hasAspect(aspect: String) = aspect in aspects
-    fun getKnowledge() = formRecords.values.maxOfOrNull { it.knowledge } ?: PokedexEntryProgress.NONE
+    fun getKnowledge() = formRecords.values.maxOfOrNull { it.knowledge } ?: PokedexEntryProgress.UNREGISTERED
     fun hasAtLeast(knowledge: PokedexEntryProgress) = getKnowledge().ordinal >= knowledge.ordinal
-    fun hasSeenForm(formName: String) = formRecords.entries.any { it.key.equals(formName, ignoreCase = true) && it.value.knowledge != PokedexEntryProgress.NONE }
+    fun hasSeenForm(formName: String) = formRecords.entries.any { it.key.equals(formName, ignoreCase = true) && it.value.knowledge != PokedexEntryProgress.UNREGISTERED }
 
     fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeCollection(aspects) { _, it -> buffer.writeString(it) }

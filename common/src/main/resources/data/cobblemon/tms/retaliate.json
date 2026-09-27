@@ -10,6 +10,10 @@
     {
       "item": "cobblemon:normal_gem",
       "count": 6
+    },
+    {
+      "item": "cobblemon:pep_up_flower",
+      "count": 1
     }
   ]
 }

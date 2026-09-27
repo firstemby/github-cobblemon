@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 412,
   "name": "Burmy",
   "primaryType": "bug",
@@ -42,10 +43,10 @@
   "catchRate": 120,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.65,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.5,
+    "height": 1.5,
     "fixed": false
   },
   "drops": {
@@ -94,7 +95,18 @@
           "variant": "properties",
           "target": "gender=female"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     },
     {
       "id": "burmy_mothim",
@@ -113,7 +125,18 @@
           "variant": "properties",
           "target": "gender=male"
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "forms": [
@@ -150,7 +173,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         },
         {
           "id": "burmy_mothim",
@@ -169,7 +203,18 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         }
       ],
       "battleOnly": false
@@ -207,7 +252,18 @@
               "variant": "properties",
               "target": "gender=female"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         },
         {
           "id": "burmy_mothim",
@@ -226,7 +282,18 @@
               "variant": "properties",
               "target": "gender=male"
             }
-          ]
+          ],
+          "drops": {
+            "amount": 1,
+            "entries": [
+              {
+                "type": "evolution",
+                "item": "cobblemon:shed_shell",
+                "percentage": 100.0,
+                "requirements": []
+              }
+            ]
+          }
         }
       ],
       "battleOnly": false
@@ -248,6 +315,15 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wormadam alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

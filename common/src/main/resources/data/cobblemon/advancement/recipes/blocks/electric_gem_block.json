@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:electric_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_electric_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:electric_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:electric_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_electric_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

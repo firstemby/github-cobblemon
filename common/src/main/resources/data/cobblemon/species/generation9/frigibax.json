@@ -126,7 +126,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "frigibax",
@@ -137,8 +137,12 @@
           "tier": 2
         },
         {
-          "pokemon": "baxcalibur",
+          "pokemon": "baxcalibur mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "baxcalibur mega",
+          "tier": 4
         }
       ]
     },

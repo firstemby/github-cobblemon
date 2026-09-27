@@ -30,14 +30,6 @@
         "north": {"uv": [0, 0, 8, 14], "texture": "#texture"},
         "south": {"uv": [8, 0, 16, 14], "texture": "#texture"}
       }
-    },
-    {
-      "from": [10, 9, 15.975],
-      "to": [14, 16, 15.975],
-      "faces": {
-        "north": {"uv": [0, 0, 8, 14], "texture": "#texture"},
-        "south": {"uv": [8, 0, 16, 14], "texture": "#texture", "cullface": "south"}
-      }
     }
   ]
 }

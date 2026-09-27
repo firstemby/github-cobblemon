@@ -1,19 +1,19 @@
 {
-  "rootBone": "crobat",
   "portraitScale": 1.2,
   "portraitTranslation": [-0.1, 1.8, 0],
   "profileScale": 0.5,
   "profileTranslation": [0, 1.2, 0],
+  "rootBone": "crobat",
   "firstPersonCameraOffset": {
     "seat_1": [0, 0.45, 0]
   },
   "thirdPersonCameraOffset": {
-    "seat_1": [0, 0.45, 0],
-    "seat_1_reverse": [0, 0.45, 0]
+    "seat_1": [0, 0.35, 0],
+    "seat_1_reverse": [0, 0.35, 0]
   },
   "thirdPersonCameraOffsetNoViewBobbing": {
-    "seat_1": [0, 0.45, 0],
-    "seat_1_reverse": [0, 0.45, 0]
+    "seat_1": [0, 0.35, 0],
+    "seat_1_reverse": [0, 0.35, 0]
   },
     "animations": {
       "cry": "q.bedrock_stateful('crobat', 'cry')"
@@ -54,7 +54,11 @@
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('body', 0.5, 0.5)",
-        "q.bedrock('crobat', 'air_idle')"
+        "q.bedrock('crobat', 'air_idle')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('crobat', 'ride_air_idle')"
+        }
       ],
       "quirks": [
         "q.bedrock_quirk('crobat', 'blink')"
@@ -63,19 +67,40 @@
       },
     "fly": {
       "poseTypes": ["FLY"],
+      "condition": "!q.is_gliding",
       "isBattle": false,
       "animations": [
         "q.pitch_tilt('body', 1)",
-        "q.bedrock('crobat', 'air_fly')"
+        "q.bedrock('crobat', 'air_fly')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('crobat', 'ride_air_fly')"
+        }
       ],
       "quirks": [
         "q.bedrock_quirk('crobat', 'blink')"
       ],
       "transformTicks": 5
     },
+    "glide": {
+      "poseTypes": ["FLY"],
+      "condition": "q.is_gliding",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('crobat', 'air_glide')",
+        "q.bedrock('crobat', 'ride_dive')",
+        {
+          "condition": "q.is_ridden",
+          "animation": "q.bedrock('crobat', 'ride_air_glide')"
+        }
+      ]
+    },
       "sleep": {
         "poseTypes": ["SLEEP"],
-        "animations": ["q.bedrock('crobat', 'sleep')"]
+        "animations": ["q.bedrock('crobat', 'sleep')"],
+        "namedAnimations": {
+          "cry": "q.bedrock_stateful('dummy', 'cry')"
       }
+    }
   }
 }

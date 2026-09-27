@@ -28,9 +28,9 @@ object CobblemonFeatures : PlatformRegistry<Registry<Feature<*>>, ResourceKey<Re
     @JvmField
     val MINT_FEATURE = create("mint", MintBlockFeature())
     @JvmField
-    val BERRY_GROVE_FEATURE = CobblemonFeatures.create("berry_grove", BerryGroveFeature())
-    @JvmField
-    val TYPE_GEM_FEATURE = create("type_gem", TypeGemFeature())
+    val BERRY_GROVE_FEATURE = create("berry_grove", BerryGroveFeature())
     @JvmField
     val COBBLEMON_FEATURE = create("structure", CobblemonFeature())
+    @JvmField
+    val TYPE_GEM_FEATURE = create("type_gem", TypeGemFeature())
 }

@@ -66,7 +66,13 @@
       }
     },
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "roserade alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -146,7 +152,6 @@
     "tm:leafstorm",
     "tm:magicalleaf",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pinmissile",

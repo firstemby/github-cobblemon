@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 837,
   "name": "Rolycoly",
   "primaryType": "rock",
@@ -41,10 +42,10 @@
   "catchRate": 255,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.7,
     "fixed": false
   },
   "behaviour": {
@@ -55,19 +56,19 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "rolycoly",
+          "pokemon": "rolycoly alpha",
           "tier": 1
         },
         {
-          "pokemon": "carkol",
-          "tier": 2
+          "pokemon": "carkol alpha",
+          "tier": 1
         },
         {
-          "pokemon": "coalossal",
-          "tier": 3
+          "pokemon": "coalossal alpha",
+          "tier": 1
         }
       ]
     },

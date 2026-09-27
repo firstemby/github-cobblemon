@@ -67,83 +67,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -9.30856E-4,
-              "y": -1.8752725,
-              "z": 0.43995833
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0015544835,
-              "y": -1.86504,
-              "z": 0.47154668
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
@@ -168,6 +92,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "sneasler alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -241,7 +174,6 @@
     "tm:nastyplot",
     "tm:poisonjab",
     "tm:poisontail",
-    "tm:powershift",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
@@ -288,7 +220,6 @@
     "tutor:lashout",
     "tutor:lowkick",
     "tutor:poisonjab",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -300,7 +231,8 @@
     "tutor:swift",
     "tutor:throatchop",
     "tutor:vacuumwave",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:powershift"
   ],
   "preEvolution": "sneasel hisuian",
   "evolutions": []

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.SHOULD_GROW
@@ -33,26 +34,29 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         const val MIN_DISTANCE_BETWEEN_GEMS = 1
         const val CONTINUATION_CHANCE = 0.8f
 
+        // Upper safety check to prevent infinite loops
+        const val MAX_FORCE_GROW_ATTEMPTS = 64
+
         val BLOCK_TO_CLUSTER: Map<ResourceLocation, Block> by lazy {
             mapOf(
-                ResourceLocation.parse("cobblemon:type_gem_block_normal") to CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
-                ResourceLocation.parse("cobblemon:type_gem_block_fire") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
-                ResourceLocation.parse("cobblemon:type_gem_block_water") to CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
-                ResourceLocation.parse("cobblemon:type_gem_block_electric") to CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
-                ResourceLocation.parse("cobblemon:type_gem_block_grass") to CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
-                ResourceLocation.parse("cobblemon:type_gem_block_ice") to CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
-                ResourceLocation.parse("cobblemon:type_gem_block_fighting") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
-                ResourceLocation.parse("cobblemon:type_gem_block_poison") to CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
-                ResourceLocation.parse("cobblemon:type_gem_block_ground") to CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
-                ResourceLocation.parse("cobblemon:type_gem_block_flying") to CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
-                ResourceLocation.parse("cobblemon:type_gem_block_psychic") to CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
-                ResourceLocation.parse("cobblemon:type_gem_block_bug") to CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
-                ResourceLocation.parse("cobblemon:type_gem_block_rock") to CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
-                ResourceLocation.parse("cobblemon:type_gem_block_ghost") to CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
-                ResourceLocation.parse("cobblemon:type_gem_block_dragon") to CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
-                ResourceLocation.parse("cobblemon:type_gem_block_dark") to CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
-                ResourceLocation.parse("cobblemon:type_gem_block_steel") to CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
-                ResourceLocation.parse("cobblemon:type_gem_block_fairy") to CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY
+                ResourceLocation.parse("cobblemon:normal_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_NORMAL,
+                ResourceLocation.parse("cobblemon:fire_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIRE,
+                ResourceLocation.parse("cobblemon:water_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_WATER,
+                ResourceLocation.parse("cobblemon:electric_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ELECTRIC,
+                ResourceLocation.parse("cobblemon:grass_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GRASS,
+                ResourceLocation.parse("cobblemon:ice_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ICE,
+                ResourceLocation.parse("cobblemon:fighting_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FIGHTING,
+                ResourceLocation.parse("cobblemon:poison_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_POISON,
+                ResourceLocation.parse("cobblemon:ground_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GROUND,
+                ResourceLocation.parse("cobblemon:flying_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FLYING,
+                ResourceLocation.parse("cobblemon:psychic_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_PSYCHIC,
+                ResourceLocation.parse("cobblemon:bug_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_BUG,
+                ResourceLocation.parse("cobblemon:rock_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_ROCK,
+                ResourceLocation.parse("cobblemon:ghost_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_GHOST,
+                ResourceLocation.parse("cobblemon:dragon_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DRAGON,
+                ResourceLocation.parse("cobblemon:dark_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_DARK,
+                ResourceLocation.parse("cobblemon:steel_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_STEEL,
+                ResourceLocation.parse("cobblemon:fairy_gem_block") to CobblemonBlocks.TYPE_GEM_CLUSTER_FAIRY
             )
         }
 
@@ -112,13 +116,16 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
     fun forceGrow(level: WorldGenLevel, pos: BlockPos, random: RandomSource, percentage: Float) {
         val desiredLength = MAX_CONNECTED_GEMS * percentage
 
-        while (true) {
-            val growInfo = grow(level, pos, random, true)
-            val grown = growInfo.first
-            val clusterSize = growInfo.second
-
-            if (!grown || clusterSize >= desiredLength) break
+        repeat(MAX_FORCE_GROW_ATTEMPTS) {
+            val (grown, clusterSize) = grow(level, pos, random, true)
+            if (!grown || clusterSize >= desiredLength) return
         }
+
+        Cobblemon.LOGGER.warn(
+            "Forced type gem growth at {} stopped after {} attempts without reaching its target size; keeping the partial formation.",
+            pos,
+            MAX_FORCE_GROW_ATTEMPTS
+        )
     }
 
     private fun grow(
@@ -130,7 +137,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         val connectedGems = getConnectedGemBlocks(level, pos) // maybe we can store this and access it for better performance? check for changes in list rather than checking each time grow is called? idk
         val gemCount = connectedGems.size
         val overLimit = gemCount >= MAX_CONNECTED_GEMS
-        
+
         if (overLimit) {
             // if there is no open air pockets to grow any new clusters then exit early
             if (!hasBreathingRoom(level, connectedGems)) {
@@ -148,7 +155,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
 
         for ((gemState, gemPos) in connectedGems.shuffled(javaRandom)) {
             val registryKey = BuiltInRegistries.BLOCK.getKey(gemState.block)
-            val clusterBlock = BLOCK_TO_CLUSTER[registryKey]
+            val clusterBlock = BLOCK_TO_CLUSTER[registryKey] ?: continue // If there is no block to grow, skip the block
 
             for (dir in Direction.entries.shuffled(javaRandom)) {
                 val targetPos = gemPos.relative(dir)
@@ -158,16 +165,19 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                 if (!isPositionValidForGrowth(level, targetPos)) continue
 
                 // Place gem cluster
-                if (clusterBlock != null) {
-                    var placeState = clusterBlock.defaultBlockState()
-                        .setValue(DirectionalBlock.FACING, dir)
-                        .setValue(TypeGemClusterBlock.STAGE, 0)
-                        .setValue(SHOULD_GROW, true)
+                val placeState = clusterBlock.defaultBlockState()
+                    .setValue(DirectionalBlock.FACING, dir)
+                    .setValue(TypeGemClusterBlock.STAGE, 0)
+                    .setValue(SHOULD_GROW, true)
 
-                    level.setBlock(targetPos, placeState, UPDATE_ALL)
-                }
+                level.setBlock(targetPos, placeState, UPDATE_ALL)
 
-                if (forced && clusterBlock != null) {
+                // During world gen, the region silently discards writes into neighboring chunks that are already fully generated.
+                // Through ImposterProtoChunk with writes set to disabled. Checks if the block is still air after the write and skips if so as it can't be filled.
+                // Preventing infinite loops.
+                if (!level.getBlockState(targetPos).`is`(clusterBlock)) continue
+
+                if (forced) {
                     forceAdvanceClusterGrowth(level, targetPos, random)
                 }
 

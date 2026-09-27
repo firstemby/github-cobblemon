@@ -1,6 +1,12 @@
 {
     "processors": [
         {
+            "processor_type": "cobblemon:height_range",
+            "reference": "sea_level",
+            "min_offset": 2,
+            "max_offset": 250
+        },
+        {
             "processor_type": "minecraft:rule",
             "rules": [
                 {
@@ -138,7 +144,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/dragoncheer"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -148,7 +154,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.9
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -163,7 +169,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/dragoncheer"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -173,7 +179,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.9
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -188,7 +194,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/dragoncheer"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -198,7 +204,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.9
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -213,7 +219,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/dragoncheer"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -223,7 +229,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.9
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"

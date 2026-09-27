@@ -13,7 +13,7 @@
 			"bones": [
 				{
 					"name": "bramblin",
-					"pivot": [0, 0, 0]
+					"pivot": [0, 3, 0]
 				},
 				{
 					"name": "body",
@@ -487,6 +487,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [3, 11, -2.5],
+					"locators": {
+						"eye2": [3, 11, -2.5]
+					}
+				},
+				{
 					"name": "eye_right",
 					"parent": "eyes",
 					"pivot": [-3, 11, -2],
@@ -501,6 +509,14 @@
 					"cubes": [
 						{"origin": [-3.5, 9.5, -2.52], "size": [1, 3, 0], "uv": [54, 17], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-3, 11, -2.5],
+					"locators": {
+						"eye1": [-3, 11, -2.5]
+					}
 				}
 			]
 		}

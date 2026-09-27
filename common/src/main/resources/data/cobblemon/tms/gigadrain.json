@@ -9,14 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:grass_gem",
-      "count": 8
+      "count": 7
     },
     {
       "item": "cobblemon:big_root",
-      "count": 1
-    },
-    {
-      "item": "cobblemon:revival_herb",
       "count": 1
     }
   ]

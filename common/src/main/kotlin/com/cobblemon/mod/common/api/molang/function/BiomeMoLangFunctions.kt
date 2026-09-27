@@ -1,0 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.api.molang.function
+
+import com.bedrockk.molang.runtime.MoParams
+import net.minecraft.core.Holder
+import net.minecraft.world.level.biome.Biome
+
+object BiomeMoLangFunctions : AbstractMoLangFunctionHolder<Holder<Biome>>() {
+    override fun Holder<Biome>.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+        val biome = this
+        val functions = hashMapOf<String, (MoParams) -> Any>()
+
+        return functions
+    }
+}

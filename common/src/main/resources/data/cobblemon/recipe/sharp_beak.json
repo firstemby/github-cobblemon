@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        " B ",
+        " GB",
+        "B  "
+    ],
+    "key": {
+        "B": {
+            "tag": "c:bones"
+        },
+        "G": {
+            "item": "cobblemon:flying_gem"
+        }
+    },
+    "result": {
+        "id": "cobblemon:sharp_beak"
+    }
+}

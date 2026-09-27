@@ -24,7 +24,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0848_toxel/toxel_shiny.png",
       "layers": [
         {
@@ -38,6 +40,18 @@
             "fps": 10,
             "loop": true
           },
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0848_toxel/toxel_alpha.png",
           "emissive": true
         }
       ]

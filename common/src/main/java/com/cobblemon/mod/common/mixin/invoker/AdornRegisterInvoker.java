@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-//This is a yucky hack but better than what we were doing before
+// There appears to be a data driven way to do this now, however I am not sure how it works since there is no wiki or anything so yolo
 @Mixin(BlockVariantSets.class)
 public abstract class AdornRegisterInvoker {
     @Final

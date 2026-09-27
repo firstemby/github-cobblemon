@@ -60,6 +60,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gulpin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "swalot alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

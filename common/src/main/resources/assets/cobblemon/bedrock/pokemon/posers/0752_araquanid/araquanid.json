@@ -10,7 +10,6 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
-      "isBattle": true,
       "animations": ["q.bedrock('araquanid', 'ground_idle')"]
     },
     "walking": {

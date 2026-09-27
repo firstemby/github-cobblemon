@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "33-50",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,7 +32,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "33-50",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -64,7 +64,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "33-50",
-            "weight": 0.6,
+            "weight": 6.0,
             "condition": {
                 "canSeeSky": true,
                 "minSkyLight": 8,
@@ -90,7 +90,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "33-50",
-            "weight": 0.2,
+            "weight": 2.0,
             "weightMultipliers": [
                 {
                     "multiplier": 3.0,

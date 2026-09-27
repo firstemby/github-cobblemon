@@ -5,6 +5,8 @@
     "cobblemon:pasture",
     "cobblemon:restoration_tank",
     "cobblemon:monitor",
-    "cobblemon:fossil_analyzer"
+    "cobblemon:damaged_monitor",
+    "cobblemon:fossil_analyzer",
+    "cobblemon:tm_machine"
   ]
 }

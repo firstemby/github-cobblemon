@@ -1,0 +1,34 @@
+{
+  "species": "cobblemon:snover",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": ["female"],
+      "poser": "cobblemon:snover",
+      "model": "cobblemon:snover_female.geo",
+      "texture": "cobblemon:textures/pokemon/0459_snover/snover.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "female",
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0459_snover/snover_shiny.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "female",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0459_snover/snover_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

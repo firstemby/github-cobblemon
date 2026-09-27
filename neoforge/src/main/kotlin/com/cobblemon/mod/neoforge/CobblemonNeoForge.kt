@@ -38,6 +38,8 @@ import com.cobblemon.mod.neoforge.worldgen.CobblemonBiomeModifiers
 import com.mojang.brigadier.arguments.ArgumentType
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
 import net.minecraft.commands.synchronization.ArgumentTypeInfos
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.RegistryAccess
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -92,11 +94,16 @@ import kotlin.reflect.KClass
 
 @Mod(Cobblemon.MODID)
 class CobblemonNeoForge : CobblemonImplementation {
+    private data class QueuedReloadListener(
+        val identifier: ResourceLocation,
+        val listener: (HolderLookup.Provider) -> PreparableReloadListener,
+        val dependencies: Collection<ResourceLocation>
+    )
     override val modAPI = ModAPI.NEOFORGE
     private val hasBeenSynced = hashSetOf<UUID>()
 
     private val commandArgumentTypes = DeferredRegister.create(Registries.COMMAND_ARGUMENT_TYPE, Cobblemon.MODID)
-    private val reloadableResources = arrayListOf<PreparableReloadListener>()
+    private val reloadableResources = arrayListOf<QueuedReloadListener>()
     private val queuedWork = arrayListOf<() -> Unit>()
 
     override val networkManager = CobblemonNeoForgeNetworkManager
@@ -438,17 +445,21 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
-    override fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>) {
+    override fun registerResourceReloader(
+        identifier: ResourceLocation,
+        type: PackType,
+        dependencies: Collection<ResourceLocation>,
+        reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener
+    ) {
         if (type == PackType.SERVER_DATA) {
-            this.reloadableResources += reloader
-        }
-        else {
-            CobblemonNeoForgeClient.registerResourceReloader(reloader)
+            this.reloadableResources += QueuedReloadListener(identifier, reloaderFactory, dependencies)
         }
     }
 
     private fun onReload(e: AddReloadListenerEvent) {
-        this.reloadableResources.forEach(e::addListener)
+        this.reloadableResources.forEach { queued ->
+            e.addListener(queued.listener.invoke(e.serverResources.registryLookup))
+        }
     }
 
     override fun server(): MinecraftServer? = ServerLifecycleHooks.getCurrentServer()

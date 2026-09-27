@@ -86,6 +86,46 @@
 					]
 				},
 				{
+					"name": "locator_head",
+					"parent": "head",
+					"pivot": [0, 17.5, -0.75],
+					"locators": {
+						"head": [0, 17.5, -0.75]
+					}
+				},
+				{
+					"name": "locator_item_hat",
+					"parent": "head",
+					"pivot": [0, 17.5, 0.25],
+					"locators": {
+						"item_hat": [0, 17.5, 0.25]
+					}
+				},
+				{
+					"name": "locator_face",
+					"parent": "head",
+					"pivot": [0, 14, -6.75],
+					"locators": {
+						"face": [0, 14, -6.75]
+					}
+				},
+				{
+					"name": "locator_item_face",
+					"parent": "head",
+					"pivot": [0, 14.75, -3],
+					"locators": {
+						"item_face": [0, 14.75, -3]
+					}
+				},
+				{
+					"name": "locator_beak",
+					"parent": "head",
+					"pivot": [0, 13.5, -6.75],
+					"locators": {
+						"beak": [0, 13.5, -6.75]
+					}
+				},
+				{
 					"name": "eyebrow_left",
 					"parent": "head",
 					"pivot": [0, 15, -2.26],
@@ -149,6 +189,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "eye_left",
+					"pivot": [2, 14.25, -2.75],
+					"locators": {
+						"eye2": [2, 14.25, -2.75]
+					}
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eye_left",
 					"pivot": [1.91, 15, -1.66],
@@ -164,6 +212,14 @@
 						{"origin": [-3.01, 13.75, -2.76], "size": [2, 1, 2], "uv": [21, 10]},
 						{"origin": [-2.51, 13.75, -2.765], "size": [1, 1, 1], "uv": [6, 38]}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "eye_right",
+					"pivot": [-2, 14.25, -2.75],
+					"locators": {
+						"eye1": [-2, 14.25, -2.75]
+					}
 				},
 				{
 					"name": "eyelid_left",
@@ -188,6 +244,15 @@
 					"cubes": [
 						{"origin": [7.5, 9.25, -4], "size": [4, 0, 7], "inflate": 0.02, "uv": [29, 20]}
 					]
+				},
+				{
+					"name": "locator_wing_left",
+					"parent": "wing_left2",
+					"pivot": [11, 9.25, -3.5],
+					"rotation": [0, -90, 0],
+					"locators": {
+						"wing2": [11, 9.25, -3.5]
+					}
 				},
 				{
 					"name": "wing_left3",
@@ -275,12 +340,40 @@
 					]
 				},
 				{
+					"name": "locator_item",
+					"parent": "wing_right2",
+					"pivot": [-9.25, 9.25, -2.25],
+					"rotation": [180, 0, 0],
+					"locators": {
+						"item": [-9.25, 9.25, -2.25]
+					}
+				},
+				{
+					"name": "locator_wing_right",
+					"parent": "wing_right2",
+					"pivot": [-11, 9.25, -3.5],
+					"rotation": [0, 90, 0],
+					"locators": {
+						"wing1": [-11, 9.25, -3.5]
+					}
+				},
+				{
 					"name": "leak",
 					"parent": "wing_right2",
 					"pivot": [-10, 8.25, -3],
 					"cubes": [
 						{"origin": [-11, 7.25, -9.5], "size": [2, 2, 13], "inflate": 0.01, "uv": [0, 0]}
 					]
+				},
+				{
+					"name": "locator_leak",
+					"parent": "leak",
+					"pivot": [-10, 8.25, 11.25],
+					"locators": {
+						"leak": [-10, 8.25, 11.25],
+						"physical": [-10, 8.25, 11.25],
+						"special": [-10, 8.25, 11.25]
+					}
 				},
 				{
 					"name": "leak2",
@@ -437,6 +530,15 @@
 					]
 				},
 				{
+					"name": "locator_foot_secondary",
+					"parent": "foot_left",
+					"pivot": [1.5, 0.5, 0],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_secondary": [1.5, 0.5, 0]
+					}
+				},
+				{
 					"name": "leg_right",
 					"parent": "body",
 					"pivot": [-1.5, 4, 1],
@@ -451,6 +553,47 @@
 					"cubes": [
 						{"origin": [-3, 0, -2], "size": [3, 1, 4], "uv": [32, 32]}
 					]
+				},
+				{
+					"name": "locator_foot_primary",
+					"parent": "foot_right",
+					"pivot": [-1.5, 0.5, 0],
+					"rotation": [90, 0, 0],
+					"locators": {
+						"foot_primary": [-1.5, 0.5, 0]
+					}
+				},
+				{
+					"name": "locator_middle",
+					"parent": "body",
+					"pivot": [0, 7.5, -0.75],
+					"locators": {
+						"middle": [0, 7.5, -0.75]
+					}
+				},
+				{
+					"name": "locator_target",
+					"parent": "body",
+					"pivot": [0, 7.5, -9],
+					"locators": {
+						"target": [0, 7.5, -9]
+					}
+				},
+				{
+					"name": "locator_root",
+					"parent": "farfetchd",
+					"pivot": [0, 0, 0],
+					"locators": {
+						"root": [0, 0, 0]
+					}
+				},
+				{
+					"name": "locator_top",
+					"parent": "farfetchd",
+					"pivot": [0, 16.8, 0.25],
+					"locators": {
+						"top": [0, 16.8, 0.25]
+					}
 				}
 			]
 		}

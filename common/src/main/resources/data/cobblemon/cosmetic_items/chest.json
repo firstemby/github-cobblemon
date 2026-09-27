@@ -1,0 +1,9 @@
+{
+  "pokemon": ["dragonite"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "minecraft:chest",
+      "aspects": ["cosmetic_item-chest"]
+    }
+  ]
+}

@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:psychic_gem",
-      "count": 10
+      "count": 12
     },
     {
       "item": "minecraft:ender_pearl",
+      "count": 3
+    },
+    {
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

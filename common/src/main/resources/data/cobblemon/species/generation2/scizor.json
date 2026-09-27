@@ -66,6 +66,23 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "kleavor alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "scizor mega=false",
+          "tier": 1
+        },
+        {
+          "pokemon": "scizor mega=2",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -259,7 +276,29 @@
       "baseExperienceYield": 210,
       "dynamaxBlocked": true,
       "evolutions": [],
-      "battleOnly": true
+      "battleOnly": true,
+      "behaviour": {
+        "resting": {
+          "drowsyChance": 0.0333,
+          "rouseChance": 0.0042
+        },
+        "moving": {
+          "swim": {
+            "avoidsWater": true
+          },
+          "fly": {
+            "canFly": true
+          }
+        },
+        "combat": {
+          "willDefendSelf": true,
+          "willDefendOwner": true,
+          "willFlee": false
+        },
+        "herd": {
+          "maxSize": 6
+        }
+      }
     }
   ]
 }

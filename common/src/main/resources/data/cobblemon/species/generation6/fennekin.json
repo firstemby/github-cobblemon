@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "fennekin",
@@ -77,8 +77,12 @@
           "tier": 2
         },
         {
-          "pokemon": "delphox",
+          "pokemon": "delphox mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "delphox mega",
+          "tier": 4
         }
       ]
     },

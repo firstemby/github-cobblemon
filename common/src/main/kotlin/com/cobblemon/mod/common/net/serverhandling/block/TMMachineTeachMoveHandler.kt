@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.util.party
 import com.cobblemon.mod.common.util.pc
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.ItemStack
 
 object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMovePacket> {
@@ -30,6 +31,11 @@ object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMove
         val moveTemplate = packet.moveTemplate ?: return
         val menu = player.containerMenu as? TMMachineMenu ?: return
         val inventory = menu.inventory ?: return
+
+        // This is checked on the client, but a modified client could still try to teach an illegal move.
+        if (moveTemplate !in pokemon.form.moves.tmLearnableMoves()) {
+            return
+        }
 
         if (ItemStack.isSameItemSameComponents(packet.heldStack, menu.carried) &&
             moveTemplate == TMMoveComponent.getTMMove(packet.heldStack) &&
@@ -48,7 +54,8 @@ object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMove
             inventory.setChanged()
             menu.broadcastChanges()
 
-            menu.tmMachineEntity?.playSound(CobblemonSounds.TM_USE)
+            player.playNotifySound(CobblemonSounds.TM_USE, SoundSource.MASTER, 1.0F, 1.0F)
+            player.playNotifySound(CobblemonSounds.MOVE_LEARN, SoundSource.MASTER, 1.0F, 1.0F)
         }
     }
 }

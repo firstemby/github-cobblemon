@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "type_gem_blocks",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "cobblemon:ice_gem"
+    }
+  },
+  "result": {
+    "id": "cobblemon:ice_gem_block",
+    "count": 1
+  }
+}

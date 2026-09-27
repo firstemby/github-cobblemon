@@ -1,0 +1,9 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:fossils/mud_pit"
+        ],
+        "cobblemon_processors": "cobblemon:fossils/prehistoric_mud_pit"
+    }
+}

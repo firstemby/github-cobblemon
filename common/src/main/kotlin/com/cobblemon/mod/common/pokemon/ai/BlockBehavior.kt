@@ -15,9 +15,11 @@ class BlockBehavior {
     private val immuneToSweetBerryBushBlock = false
     private val canStandOnPowderSnow = false
     val canPathThroughSaccLeaves = false
+    val immuneToCobwebBlock = false
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("immune_to_sweet_berry_bush_block") { DoubleValue(immuneToSweetBerryBushBlock) }
+        it.addFunction("immune_to_cobweb_block") { DoubleValue(immuneToCobwebBlock) }
         it.addFunction("can_stand_on_powder_snow") { DoubleValue(canStandOnPowderSnow) }
         it.addFunction("can_path_through_sacc_leaves") { DoubleValue(canPathThroughSaccLeaves) }
     }

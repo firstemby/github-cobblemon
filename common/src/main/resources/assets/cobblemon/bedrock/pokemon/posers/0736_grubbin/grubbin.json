@@ -1,0 +1,23 @@
+{
+  "portraitScale": 2.08,
+  "portraitTranslation": [-0.12, -1.5, 0],
+  "profileScale": 0.79,
+  "profileTranslation": [0.06, 0.59, 0],
+  "rootBone": "grubbin",
+  "animations": {
+    "cry": "q.bedrock_stateful('grubbin', 'cry')",
+    "physical": "q.bedrock_primary('grubbin', 'physical', q.curve('symmetrical_wide'))"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": ["q.look('head')", "q.bedrock('grubbin', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('grubbin', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": ["q.look('head')", "q.bedrock('grubbin', 'ground_walk')"],
+      "quirks": ["q.bedrock_quirk('grubbin', 'blink')"]
+    }
+  }
+}

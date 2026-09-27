@@ -94,6 +94,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [5.5, 5.5, -14],
+					"locators": {
+						"eye2": [5.5, 5.5, -14]
+					}
+				},
+				{
 					"name": "eye_shine_left",
 					"parent": "eye_left",
 					"pivot": [5.25, 6.5, -14.03],
@@ -124,6 +132,14 @@
 					"cubes": [
 						{"origin": [-6, 4.5, -14.03], "size": [1, 2, 0], "uv": [45, 0], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-5.5, 5.5, -14],
+					"locators": {
+						"eye1": [-5.5, 5.5, -14]
+					}
 				},
 				{
 					"name": "eye_shine_right",

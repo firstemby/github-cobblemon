@@ -3,6 +3,7 @@
   "portraitTranslation": [-0.46, 0.59, 0],
   "profileScale": 0.59,
   "profileTranslation": [0.0, 0.87, 0],
+  "rootBone": "excadrill",
   "animations": {
     "cry": "q.bedrock_stateful('excadrill', 'cry')",
     "physical": "q.bedrock_primary('excadrill', 'physical', q.curve('symmetrical_wide'))",

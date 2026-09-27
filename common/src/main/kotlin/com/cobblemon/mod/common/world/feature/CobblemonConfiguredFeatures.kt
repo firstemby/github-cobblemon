@@ -43,9 +43,10 @@ object CobblemonConfiguredFeatures {
     val REVIVAL_HERBS_KEY = of("revival_herb")
     @JvmField
     val BERRY_GROVE_KEY = of("berry_groves")
+	@JvmField
+	val COBBLEMON_FEATURE = of("structure")
     @JvmField
-    val TYPE_GEM_KEY = of("type_gems")
+    val TYPE_GEM_KEY = of("type_gem")
 
     private fun of(id: String): ResourceKey<ConfiguredFeature<*, *>> = ResourceKey.create(Registries.CONFIGURED_FEATURE, cobblemonResource(id))
-
 }

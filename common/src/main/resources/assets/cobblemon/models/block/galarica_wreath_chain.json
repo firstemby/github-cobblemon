@@ -1,0 +1,43 @@
+{
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "cobblemon:block/decorative/galarica_wreath",
+		"particle": "cobblemon:block/crops/galarica_nut_bush_stage3"
+	},
+	"elements": [
+		{
+			"name": "chain",
+			"from": [8, 14, 6.5],
+			"to": [8, 16, 9.5],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [14.5, 5, 16, 6], "texture": "#0"},
+				"west": {"uv": [16, 5, 14.5, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "chain",
+			"from": [6.5, 13, 8],
+			"to": [9.5, 15, 8],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [16, 2.5, 14.5, 3.5], "texture": "#0"},
+				"south": {"uv": [14.5, 2.5, 16, 3.5], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"groups": [
+		0,
+		1,
+		{
+			"name": "chain",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": []
+		}
+	]
+}

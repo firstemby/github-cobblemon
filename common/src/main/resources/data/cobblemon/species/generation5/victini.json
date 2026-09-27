@@ -216,6 +216,9 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3
+    }
   }
 }

@@ -44,12 +44,11 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("dev-shadow")
+        entryCompression = ZipEntryCompression.STORED
         archiveBaseName.set("Cobblemon-${project.name}")
         configurations = listOf(bundle)
         mergeServiceFiles()
 
-        relocate ("com.mongodb", "com.cobblemon.mod.relocations.mongodb")
-        relocate ("org.graalvm", "com.cobblemon.mod.relocations.graalvm")
         relocate ("com.oracle", "com.cobblemon.mod.relocations.oracle")
     }
 

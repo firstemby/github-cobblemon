@@ -97,7 +97,17 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "solgaleo alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "lunala alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "depth": "comatose",

@@ -9,11 +9,11 @@
   "recipe": [
     {
       "item": "cobblemon:normal_gem",
-      "count": 9
+      "count": 5
     },
     {
       "item": "cobblemon:electric_gem",
-      "count": 1
+      "count": 3
     }
   ]
 }

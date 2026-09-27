@@ -16,8 +16,22 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0909_fuecoco/fuecoco_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0909_fuecoco/fuecoco_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

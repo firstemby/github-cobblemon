@@ -44,7 +44,7 @@
       "layers": [
         {
           "name": "partner",
-          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_cap_original.png"
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_cap_partner.png"
         }
       ]
     },
@@ -149,6 +149,19 @@
         {
           "name": "detective",
           "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_detective.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alolan",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0026_raichu/raichu_alolan_alpha.png",
+          "emissive": true
         }
       ]
     }

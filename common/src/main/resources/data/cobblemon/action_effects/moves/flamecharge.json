@@ -18,6 +18,11 @@
       "locators": ["middle"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.flamecharge.actor');"]
+    },
+    {
       "type": "pause",
       "pause": 0.1
     },
@@ -37,12 +42,17 @@
       "locators": ["target"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.flamecharge.target');"]
+    },
+    {
       "type": "remove_holds",
       "holds": ["effects"]
     },
     {
       "type": "pause",
-      "pause": 1.6
+      "pause": 0.6
     }
   ]
 }

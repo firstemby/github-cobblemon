@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/misc",
   "criteria": {
     "has_apricorn": {
       "conditions": {

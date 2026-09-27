@@ -15,7 +15,6 @@ import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.bold
-import com.cobblemon.mod.common.api.text.font
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.api.types.ElementalType
@@ -24,15 +23,22 @@ import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.MoveCategoryIcon
 import com.cobblemon.mod.common.client.gui.ScrollingWidget
 import com.cobblemon.mod.common.client.gui.TypeIcon
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI.Companion.arrowDownIcon
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI.Companion.arrowUpIcon
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI.Companion.categoryFilterIcon
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_DESCRIPTION_PADDING
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCALE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_BAR_WIDTH
+import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SPACING
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.settings.ServerSettings
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.MOVE_ICON_SIZE
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesAccuracyIconResource
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesEffectIconResource
+import com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget.Companion.movesPowerIconResource
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.pokemon.FormData
@@ -49,7 +55,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 
 class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
@@ -57,90 +62,45 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     pY,
     HALF_OVERLAY_WIDTH,
     HALF_OVERLAY_HEIGHT,
-    Component.literal("MovesLearnset")
+    lang("ui.moves")
 ) {
     companion object {
-        private const val LIST_TOP_OFFSET = -15
-        private const val LIST_HEIGHT = 54
-        private const val LIST_SLOT_HEIGHT = 10
-        private const val LIST_SIDE_PADDING = 4
-        private const val LIST_TM_ICON_RENDER_SIZE = 8
-        private const val LIST_TM_ICON_OFFSET = LIST_TM_ICON_RENDER_SIZE + 1
-        private const val LIST_TM_ICON_TEXTURE_SIZE = 16
-        private const val LIST_TYPE_ICON_SIZE = 18
-        private val LIST_BACKGROUND_COLOR = FastColor.ARGB32.color(255, 239, 253, 255)
+        private const val LIST_HEIGHT = 60
+        private const val LIST_SLOT_HEIGHT = 15
 
-        private const val DATA_TOP_OFFSET = 108
-        private const val DATA_ROW_HEIGHT = 10
-        private const val DATA_LABEL_OFFSET_X = 14
-        private const val DATA_ICON_SIZE = 10
-        private const val DATA_INFO_TOP_OFFSET = 7
+        private const val MOVE_SLOT_WIDTH = 134
 
-        private const val DESCRIPTION_TOP_OFFSET = 71
-        private const val DESCRIPTION_HEIGHT = 38
-        private const val DESCRIPTION_SCROLLBAR_WIDTH = 3
-        private const val DESCRIPTION_SCROLLBAR_OFFSET = 13
-        private const val DESCRIPTION_LEFT_OFFSET = 62
-        private const val DESCRIPTION_DIVIDER_OFFSET = 6
+        private const val DESCRIPTION_SCROLLBAR_WIDTH = 2
 
-        private val overlayResource = cobblemonResource("textures/gui/pokedex/pokedex_screen_info_overlay.png")
-        private val arrowFormLeft = cobblemonResource("textures/gui/pokedex/forms_arrow_left.png")
-        private val arrowFormRight = cobblemonResource("textures/gui/pokedex/forms_arrow_right.png")
-        private val typeBar = cobblemonResource("textures/gui/pokedex/type_bar.png")
-        private val typeBarDouble = cobblemonResource("textures/gui/pokedex/type_bar_double.png")
-        private val filterArrowLeft = cobblemonResource("textures/gui/pokedex/info_arrow_left.png")
-        private val filterArrowRight = cobblemonResource("textures/gui/pokedex/info_arrow_right.png")
-        private val sortAlphaIcon = cobblemonResource("textures/gui/pokedex/moves_sort_alpha.png")
-        private val sortTypeIcon = cobblemonResource("textures/gui/pokedex/moves_sort_type.png")
-        private val sortSourceIcon = cobblemonResource("textures/gui/pokedex/moves_sort_source.png")
-        private val sortDiscoveredIcon = cobblemonResource("textures/gui/pokedex/moves_sort_discovered.png")
-        private val moveDexTypeIcons = cobblemonResource("textures/gui/pokedex/types_small_dex.png")
-        private val tmDiscIcon = cobblemonResource("textures/item/tms/tm.png")
-        private val movesPowerIconResource = cobblemonResource("textures/gui/summary/summary_moves_icon_power.png")
-        private val movesAccuracyIconResource = cobblemonResource("textures/gui/summary/summary_moves_icon_accuracy.png")
-        private val movesCategoryIconResource = cobblemonResource("textures/gui/summary/summary_moves_icon_category.png")
+        private val typeBar = cobblemonResource("textures/gui/pokedex/type_bar_compact.png")
+        private val doubleTypeBar = cobblemonResource("textures/gui/pokedex/type_bar_compact_double.png")
 
-        // Match PokemonInfoWidget placement
-        private const val TYPE_BAR_Y = 14
-        private const val TYPE_BAR_HEIGHT = 25
-        private const val TYPE_ICON_X = 3
-        private const val TYPE_ICON_Y = 17
-        private const val FORM_LABEL_X = 85
-        private const val FORM_LABEL_Y = 14
-        private const val FORM_ARROW_LEFT_X = 56F
-        private const val FORM_ARROW_RIGHT_X = 107F
-        private const val FORM_ARROW_Y = 15F
-        private const val FORM_ARROW_WIDTH = 10
-        private const val FORM_ARROW_HEIGHT = 16
+        private val arrowFormLeft = cobblemonResource("textures/gui/pokedex/forms_arrow_left_compact.png")
+        private val arrowFormRight = cobblemonResource("textures/gui/pokedex/forms_arrow_right_compact.png")
 
-        // Adjustable filter arrow placement
-        private const val FILTER_ARROW_LEFT_X = 56F
-        private const val FILTER_ARROW_RIGHT_X = 107F
-        private const val FILTER_ARROW_Y = 28F
-        private const val FILTER_ARROW_WIDTH = 7
-        private const val FILTER_ARROW_HEIGHT = 10
-        private const val FILTER_LABEL_X = 84
-        private const val FILTER_LABEL_Y = 26
+        private val moveCategoryBar = cobblemonResource("textures/gui/pokedex/move_category_bar.png")
 
-        // Sort button placement
-        private const val SORT_BUTTON_X = 125F
-        private const val SORT_BUTTON_Y = 27.5F
-        private const val SORT_BUTTON_WIDTH = 20
-        private const val SORT_BUTTON_HEIGHT = 20
+        private val moveSlot = cobblemonResource("textures/gui/pokedex/move_slot.png")
+        private val moveSlotSelected = cobblemonResource("textures/gui/pokedex/move_slot_select.png")
+        private val tmSprite = cobblemonResource("textures/item/tms/blank_disc.png")
+        private val tmSpriteUndiscovered = cobblemonResource("textures/gui/pokedex/tm_undiscovered.png")
+        private val scrollBorderTop = cobblemonResource("textures/gui/pokedex/move_scroll_border.png")
+
+        private val moveInfoBackground = cobblemonResource("textures/gui/pokedex/info_move_background.png")
     }
 
     private val listWidget = LearnsetMovesScrollingWidget(
-        pX + LIST_SIDE_PADDING,
-        pY + LIST_TOP_OFFSET,
-        HALF_OVERLAY_WIDTH - (LIST_SIDE_PADDING * 2),
+        pX,
+        pY + 36,
+        165,
         LIST_HEIGHT
     ) { entry -> selectMove(entry) }
 
     private val descriptionWidget = MoveDescriptionWidget(
-        pX + LIST_SIDE_PADDING + DESCRIPTION_LEFT_OFFSET,
-        pY + DESCRIPTION_TOP_OFFSET,
-        HALF_OVERLAY_WIDTH - (LIST_SIDE_PADDING * 2) - 50,
-        DESCRIPTION_HEIGHT
+        pX + 66,
+        pY + 119,
+        68,
+        28
     )
 
     private var moveEntries: List<LearnsetMoveEntry> = emptyList()
@@ -154,54 +114,65 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     private var availableForms: List<PokedexForm> = emptyList()
     private var onFormChange: ((Boolean) -> Unit)? = null
     private var filterIndex = 0
-    private var sortMode = LearnsetSort.SOURCE
+    private var sortMode = LearnsetSort.LEVEL
 
     private val decimalFormat = DecimalFormat("#.##").also { it.roundingMode = RoundingMode.CEILING }
 
     private val formLeftButton: ScaledButton = ScaledButton(
-        pX + FORM_ARROW_LEFT_X,
-        pY + FORM_ARROW_Y,
-        FORM_ARROW_WIDTH,
-        FORM_ARROW_HEIGHT,
+        pX + if (secondaryType != null) 25.5F else 15.5F,
+        pY + 15F,
+        8,
+        16,
         arrowFormLeft,
         clickAction = { onFormChange?.invoke(false) }
     ).apply { addWidget(this) }
 
     private val formRightButton: ScaledButton = ScaledButton(
-        pX + FORM_ARROW_RIGHT_X,
-        pY + FORM_ARROW_Y,
-        FORM_ARROW_WIDTH,
-        FORM_ARROW_HEIGHT,
+        pX + 130.5F,
+        pY + 15F,
+        8,
+        16,
         arrowFormRight,
         clickAction = { onFormChange?.invoke(true) }
     ).apply { addWidget(this) }
 
-    private val filterLeftButton: ScaledButton = ScaledButton(
-        pX + FILTER_ARROW_LEFT_X,
-        pY + FILTER_ARROW_Y,
-        FILTER_ARROW_WIDTH,
-        FILTER_ARROW_HEIGHT,
-        filterArrowLeft,
+    private val categoryUpButton: ScaledButton = ScaledButton(
+        pX + 84F,
+        pY + 27F,
+        8,
+        6,
+        arrowUpIcon,
         clickAction = { cycleFilter(false) }
     ).apply { addWidget(this) }
 
-    private val filterRightButton: ScaledButton = ScaledButton(
-        pX + FILTER_ARROW_RIGHT_X,
-        pY + FILTER_ARROW_Y,
-        FILTER_ARROW_WIDTH,
-        FILTER_ARROW_HEIGHT,
-        filterArrowRight,
+    private val categoryDownButton: ScaledButton = ScaledButton(
+        pX + 84F,
+        pY + 32F,
+        8,
+        6,
+        arrowDownIcon,
         clickAction = { cycleFilter(true) }
     ).apply { addWidget(this) }
 
-    private val sortButton: ScaledButton = ScaledButton(
-        pX + SORT_BUTTON_X,
-        pY + SORT_BUTTON_Y,
-        SORT_BUTTON_WIDTH,
-        SORT_BUTTON_HEIGHT,
-        sortSourceIcon,
-        clickAction = { toggleSort() }
-    ).apply { addWidget(this) }
+    private val sortButtons: List<ScaledButton> = LearnsetSort.entries.mapIndexed { index, sortType ->
+        ScaledButton(
+            pX + 93F + (index * 12F),
+            pY + 26F,
+            20,
+            20,
+            cobblemonResource("textures/gui/pokedex/button_sort_move_${sortType.name.lowercase()}.png"),
+            clickAction = {
+                sortMode = sortType
+                applyFilter()
+                sortButtons.forEachIndexed { index, button ->
+                    button.isWidgetActive = sortMode == LearnsetSort.entries[index]
+                }
+            }
+        ).apply {
+            this.isWidgetActive = sortMode == sortType
+            addWidget(this)
+        }
+    }
 
     init {
         addWidget(listWidget)
@@ -234,252 +205,252 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         blitk(
             matrixStack = matrices,
-            texture = overlayResource,
+            texture = if (secondaryType != null) doubleTypeBar else typeBar,
             x = pX,
-            y = pY,
+            y = pY + 12,
             width = HALF_OVERLAY_WIDTH,
-            height = HALF_OVERLAY_HEIGHT
-        )
-
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = speciesNumber.bold(),
-            x = pX + 3,
-            y = pY + 1,
-            shadow = true
-        )
-
-        if (!speciesName.string.isBlank()) {
-            drawScaledText(
-                context = context,
-                font = CobblemonResources.DEFAULT_LARGE,
-                text = speciesName.bold(),
-                x = pX + 26,
-                y = pY + 1,
-                colour = 0x606B6E
-            )
-        }
-
-        blitk(
-            matrixStack = context.pose(),
-            texture = if (secondaryType != null) typeBarDouble else typeBar,
-            x = pX,
-            y = pY + TYPE_BAR_Y,
-            width = HALF_OVERLAY_WIDTH,
-            height = TYPE_BAR_HEIGHT
+            height = 12
         )
 
         if (primaryType != null) {
             TypeIcon(
-                x = pX + TYPE_ICON_X,
-                y = pY + TYPE_ICON_Y,
+                x = pX + 3,
+                y = pY + 13.5,
                 type = primaryType!!,
-                secondaryType = secondaryType
+                secondaryType = secondaryType,
+                secondaryOffset = 9.5F,
+                small = true
             ).render(context)
         }
 
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = formLabel.bold(),
-            x = pX + FORM_LABEL_X,
-            y = pY + FORM_LABEL_Y,
-            shadow = true,
-            centered = true
-        )
-
-        formLeftButton.render(context, mouseX, mouseY, delta)
-        formRightButton.render(context, mouseX, mouseY, delta)
-
-        drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = currentFilter().label.bold(),
-            x = pX + FILTER_LABEL_X,
-            y = pY + FILTER_LABEL_Y,
-            shadow = true,
-            centered = true
-        )
-
-        filterLeftButton.render(context, mouseX, mouseY, delta)
-        filterRightButton.render(context, mouseX, mouseY, delta)
-        sortButton.render(context, mouseX, mouseY, delta)
-
-        if (sortButton.isButtonHovered(mouseX, mouseY)) {
-            val sortKey = "ui.moves.learnset.sort.${sortMode.name.lowercase()}"
-            renderTooltip(context, lang(sortKey).bold(), mouseX, mouseY, delta, -14)
-        }
-
-        /*drawScaledText(
-            context = context,
-            font = CobblemonResources.DEFAULT_LARGE,
-            text = lang("ui.moves").bold(),
-            x = pX + 4,
-            y = pY + 11,
-            shadow = true
-        )*/
-
-        renderListBackground(context)
-        if (filteredEntries.isEmpty()) {
+        if (availableForms.size > 1) {
             drawScaledText(
                 context = context,
-                text = Component.literal("No moves available."),
-                x = pX + (HALF_OVERLAY_WIDTH / 2) - 20,
-                y = pY + LIST_TOP_OFFSET + (LIST_HEIGHT / 2) + 30,
-                shadow = false,
-                colour = 0x606B6E,
-                scale = SCALE,
+                font = CobblemonResources.DEFAULT_LARGE,
+                text = formLabel.bold(),
+                x = pX + if (secondaryType != null) 80 else 75,
+                y = pY + 15,
+                shadow = true,
                 centered = true
             )
-        } else {
-            listWidget.renderWidget(context, mouseX, mouseY, delta)
+
+            formLeftButton.render(context, mouseX, mouseY, delta)
+            formRightButton.render(context, mouseX, mouseY, delta)
         }
 
-        renderDescriptionDivider(context)
+        blitk(
+            texture = moveCategoryBar,
+            matrixStack = context.pose(),
+            x = pX,
+            y = pY + 26,
+            width = 91,
+            height = 10
+        )
+
+        blitk(
+            texture = categoryFilterIcon,
+            matrixStack = context.pose(),
+            x = (pX + 3) / SCALE,
+            y = (pY + 27.5) / SCALE,
+            width = 14,
+            height = 14,
+            scale = SCALE
+        )
+
+        drawScaledText(
+            context = context,
+            font = CobblemonResources.DEFAULT_LARGE,
+            text = (if (currentMoveCategory() == LearnsetCategory.ALL) lang("ui.pokedex.filter.all") else lang("ui.moves.${currentMoveCategory().label}")).bold(),
+            x = pX + 13,
+            y = pY + 27,
+            shadow = true
+        )
+
+        categoryUpButton.render(context, mouseX, mouseY, delta)
+        categoryDownButton.render(context, mouseX, mouseY, delta)
+
+        sortButtons.forEachIndexed { index, button ->
+            button.render(context, mouseX, mouseY, delta)
+
+            if (button.isButtonHovered(mouseX, mouseY)) {
+                renderTooltip(context, lang("ui.sort.${LearnsetSort.entries[index].name.lowercase()}").bold(), mouseX, mouseY, delta, -14)
+            }
+        }
+
+        if (filteredEntries.isNotEmpty()) listWidget.renderWidget(context, mouseX, mouseY, delta)
+
         renderDataSection(context)
 
         descriptionWidget.renderWidget(context, mouseX, mouseY, delta)
+
+        matrices.pushPose()
+        matrices.translate(0.0, 0.0, 500.0) // Translate on top of other elements
+        blitk(
+            texture = scrollBorderTop,
+            matrixStack = context.pose(),
+            x = pX,
+            y = pY + 36,
+            width = HALF_OVERLAY_WIDTH - SCROLL_BAR_WIDTH,
+            height = 3
+        )
+        matrices.popPose()
     }
 
-    private fun renderListBackground(context: GuiGraphics) {
-        val left = pX + LIST_SIDE_PADDING - 3
-        val top = pY + LIST_TOP_OFFSET + 54
-        val right = left + listWidget.width + 6
-        val bottom = top + LIST_HEIGHT
-        context.fill(left, top, right, bottom, LIST_BACKGROUND_COLOR)
-    }
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
+        if (mouseX.toInt() in pX..(pX + HALF_OVERLAY_WIDTH) && mouseY.toInt() in (pY + 36)..(pY + 96)) {
+            listWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+        }
 
-    private fun renderDescriptionDivider(context: GuiGraphics) {
-        val dividerX = pX + LIST_SIDE_PADDING + DESCRIPTION_LEFT_OFFSET + DESCRIPTION_DIVIDER_OFFSET
-        val dividerTop = pY + DESCRIPTION_TOP_OFFSET + 39
-        val dividerBottom = pY + DESCRIPTION_TOP_OFFSET + DESCRIPTION_HEIGHT + 37
-        context.fill(dividerX, dividerTop, dividerX + 1, dividerBottom, FastColor.ARGB32.color(255, 126, 231, 229))
+        if (mouseX.toInt() in (pX + 64)..(pX + 136) && mouseY.toInt() in (pY + 119)..(pY + 147)) {
+            descriptionWidget.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
+        }
+
+        return false
     }
 
     private fun renderDataSection(context: GuiGraphics) {
-        val dataTop = pY + DATA_TOP_OFFSET
-        val dataRight = pX + HALF_OVERLAY_WIDTH - 70
-        val entry = selectedEntry
-        val move = entry?.move
-        val showMoveInfo = entry?.isDiscovered == true
+        val move = selectedEntry?.move
+        val showMoveInfo = selectedEntry?.isDiscovered == true
 
         drawScaledText(
             context = context,
             font = CobblemonResources.DEFAULT_LARGE,
-            text = Component.literal("Data").bold(),
-            x = pX + 4,
-            y = dataTop - 10,
+            text = lang("ui.moves").bold(),
+            x = pX + 9,
+            y = pY + 97,
             shadow = true
         )
 
         blitk(
             matrixStack = context.pose(),
+            texture = moveInfoBackground,
+            x = pX + 3,
+            y = pY + 109,
+            width = 133,
+            height = 38
+        )
+
+        drawScaledText(
+            context = context,
+            text = (if (showMoveInfo && move != null) move.displayName else "—".text()).bold(),
+            x = pX + 5,
+            y = pY + 111,
+            scale = SCALE,
+            colour = 0x606B6E
+        )
+
+        if (showMoveInfo && move != null) {
+            drawScaledTextJustifiedRight(
+                context = context,
+                text = lang("ui.moves.pp", move.pp),
+                x = pX + 120,
+                y = pY + 111,
+                scale = SCALE,
+                colour = 0x606B6E
+            )
+
+            MoveCategoryIcon(x = pX + 124, y = pY + 109, category = move.damageCategory, opacity = alpha).render(context)
+        }
+
+        blitk(
+            matrixStack = context.pose(),
             texture = movesPowerIconResource,
-            x = (pX + 6) / SCALE,
-            y = (dataTop + 1 + DATA_INFO_TOP_OFFSET) / SCALE,
-            width = DATA_ICON_SIZE,
-            height = DATA_ICON_SIZE,
+            x = (pX + 5) / SCALE,
+            y = (pY + 120.5) / SCALE,
+            width = MOVE_ICON_SIZE,
+            height = MOVE_ICON_SIZE,
             scale = SCALE
         )
 
         blitk(
             matrixStack = context.pose(),
             texture = movesAccuracyIconResource,
-            x = (pX + 6) / SCALE,
-            y = (dataTop + 1 + DATA_ROW_HEIGHT + DATA_INFO_TOP_OFFSET) / SCALE,
-            width = DATA_ICON_SIZE,
-            height = DATA_ICON_SIZE,
+            x = (pX + 5) / SCALE,
+            y = (pY + 130.5) / SCALE,
+            width = MOVE_ICON_SIZE,
+            height = MOVE_ICON_SIZE,
             scale = SCALE
         )
 
         blitk(
             matrixStack = context.pose(),
-            texture = movesCategoryIconResource,
-            x = (pX + 6) / SCALE,
-            y = (dataTop + 1 + (DATA_ROW_HEIGHT * 2) + DATA_INFO_TOP_OFFSET) / SCALE,
-            width = DATA_ICON_SIZE,
-            height = DATA_ICON_SIZE,
+            texture = movesEffectIconResource,
+            x = (pX + 5) / SCALE,
+            y = (pY + 140.5) / SCALE,
+            width = MOVE_ICON_SIZE,
+            height = MOVE_ICON_SIZE,
             scale = SCALE
         )
 
         drawScaledText(
             context = context,
             text = lang("ui.power"),
-            x = pX + DATA_LABEL_OFFSET_X,
-            y = dataTop + 1 + DATA_INFO_TOP_OFFSET,
+            x = pX + 12,
+            y = pY + 121,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
 
         drawScaledText(
             context = context,
             text = lang("ui.accuracy"),
-            x = pX + DATA_LABEL_OFFSET_X,
-            y = dataTop + 1 + DATA_ROW_HEIGHT + DATA_INFO_TOP_OFFSET,
+            x = pX + 12,
+            y = pY + 131,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
 
         drawScaledText(
             context = context,
-            text = Component.literal("ui.category"),
-            x = pX + DATA_LABEL_OFFSET_X,
-            y = dataTop + 1 + (DATA_ROW_HEIGHT * 2) + DATA_INFO_TOP_OFFSET,
+            text = lang("ui.effect"),
+            x = pX + 12,
+            y = pY + 141,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
 
-        val powerText = if (showMoveInfo && move != null && move.power.toInt() > 0) move.power.toInt().toString() else "-"
+        val powerText = (if (showMoveInfo && move != null && move.power.toInt() > 0) move.power.toInt().toString() else "—").text()
         drawScaledTextJustifiedRight(
             context = context,
-            text = powerText.text(),
-            x = dataRight,
-            y = dataTop + 1  + DATA_INFO_TOP_OFFSET,
+            text = powerText,
+            x = pX + 60.5,
+            y = pY + 121,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
 
-        val accuracyText = if (showMoveInfo && move != null) formatAccuracy(move.accuracy) else "-"
+        val accuracyText = (if (showMoveInfo && move != null) formatPercentage(move.accuracy) else "—").text()
         drawScaledTextJustifiedRight(
             context = context,
-            text = accuracyText.text(),
-            x = dataRight,
-            y = dataTop + 1 + DATA_ROW_HEIGHT + DATA_INFO_TOP_OFFSET,
+            text = accuracyText,
+            x = pX + 60.5,
+            y = pY + 131,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
 
-        val categoryText = if (showMoveInfo && move != null) move.damageCategory.displayName else "-".text()
+        val effectText = (if (showMoveInfo && move != null) formatPercentage(move.effectChances.firstOrNull() ?: 0.0) else "—").text()
         drawScaledTextJustifiedRight(
             context = context,
-            text = categoryText as MutableComponent,
-            x = dataRight,
-            y = dataTop + 1 + (DATA_ROW_HEIGHT * 2) + DATA_INFO_TOP_OFFSET,
+            text = effectText,
+            x = pX + 60.5,
+            y = pY + 141,
             scale = SCALE,
-            shadow = true
+            colour = 0x606B6E
         )
-
-        /*if (showMoveInfo && move != null) {
-            MoveCategoryIcon(
-                x = pX + 6,
-                y = dataTop + 2 + (DATA_ROW_HEIGHT * 2) + DATA_INFO_TOP_OFFSET,
-                category = move.damageCategory
-            ).render(context)
-        }*/
     }
 
-    private fun formatAccuracy(input: Double): String {
-        if (input <= 0) return "-"
+    private fun formatPercentage(input: Double): String {
+        if (input <= 0) return "—"
         return "${decimalFormat.format(input)}%"
     }
 
     private fun applyFilter() {
-        val filtered = when (currentFilter()) {
-            LearnsetFilter.ALL -> moveEntries
-            LearnsetFilter.LEVEL_UP -> moveEntries.filter { it.source == LearnsetSource.LEVEL_UP }
-            LearnsetFilter.TM -> moveEntries.filter { it.source == LearnsetSource.TM }
-            LearnsetFilter.EGG -> moveEntries.filter { it.source == LearnsetSource.EGG }
+        val filtered = when (currentMoveCategory()) {
+            LearnsetCategory.ALL -> moveEntries
+            LearnsetCategory.LEVEL -> moveEntries.filter { it.source == LearnsetCategory.LEVEL }
+            LearnsetCategory.TM -> moveEntries.filter { it.source == LearnsetCategory.TM }
+            LearnsetCategory.EGG -> moveEntries.filter { it.source == LearnsetCategory.EGG }
         }
         val sorted = sortEntries(filtered)
         filteredEntries = sorted
@@ -492,38 +463,56 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     }
 
     private fun sortEntries(entries: List<LearnsetMoveEntry>): List<LearnsetMoveEntry> {
-        val baseEntries = if (sortMode == LearnsetSort.DISCOVERED) {
-            entries.filter { it.isDiscovered }
-        } else {
-            entries
-        }
         return when (sortMode) {
-            LearnsetSort.ALPHABETICAL -> baseEntries.sortedWith(
+            LearnsetSort.NAME -> entries.sortedWith(
                 compareBy(
+                    { !it.isDiscovered },
                     { it.move.displayName.string.lowercase() },
+                    { it.move.elementalType.displayName.string.lowercase() },
                     { it.level ?: Int.MAX_VALUE }
                 )
             )
-            LearnsetSort.TYPE -> baseEntries.sortedWith(
+            LearnsetSort.TYPE -> entries.sortedWith(
                 compareBy(
                     { it.move.elementalType.displayName.string.lowercase() },
+                    { !it.isDiscovered },
                     { it.move.displayName.string.lowercase() },
                     { it.level ?: Int.MAX_VALUE }
                 )
             )
-            LearnsetSort.SOURCE,
-            LearnsetSort.DISCOVERED -> baseEntries.sortedWith(
+            LearnsetSort.LEVEL -> entries.sortedWith(
                 compareBy(
                     { sourceOrder(it.source) },
                     { it.level ?: Int.MAX_VALUE },
+                    { !it.isDiscovered },
+                    { it.move.elementalType.displayName.string.lowercase() },
                     { it.move.displayName.string.lowercase() }
                 )
             )
+            LearnsetSort.DISCOVERED -> {
+                entries.sortedWith(
+                    compareBy(
+                        {
+                            TechnicalMachines.moveToTM[it.move]?.id == null
+                        },
+                        {
+                            val tmId = TechnicalMachines.moveToTM[it.move]?.id
+                            !(tmId != null && (
+                            ServerSettings.unlockAllMoveDexMovesByDefault
+                                || tmId in CobblemonClient.clientTMMoveData.learnedTMs
+                                || TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() == true
+                            ))
+                        },
+                        { it.move.displayName.string.lowercase() },
+                        { sourceOrder(it.source) }
+                    )
+                )
+            }
         }
     }
 
     private fun cycleFilter(next: Boolean) {
-        val total = LearnsetFilter.entries.size
+        val total = LearnsetCategory.entries.size
         filterIndex = if (next) {
             (filterIndex + 1) % total
         } else {
@@ -532,32 +521,16 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         applyFilter()
     }
 
-    private fun toggleSort() {
-        sortMode = when (sortMode) {
-            LearnsetSort.ALPHABETICAL -> LearnsetSort.TYPE
-            LearnsetSort.TYPE -> LearnsetSort.SOURCE
-            LearnsetSort.SOURCE -> LearnsetSort.DISCOVERED
-            LearnsetSort.DISCOVERED -> LearnsetSort.ALPHABETICAL
-        }
-        sortButton.resource = when (sortMode) {
-            LearnsetSort.ALPHABETICAL -> sortAlphaIcon
-            LearnsetSort.TYPE -> sortTypeIcon
-            LearnsetSort.SOURCE -> sortSourceIcon
-            LearnsetSort.DISCOVERED -> sortDiscoveredIcon
-        }
-        applyFilter()
-    }
-
-    private fun sourceOrder(source: LearnsetSource): Int {
+    private fun sourceOrder(source: LearnsetCategory): Int {
         return when (source) {
-            LearnsetSource.LEVEL_UP -> 0
-            LearnsetSource.TM -> 1
-            LearnsetSource.EGG -> 2
+            LearnsetCategory.TM -> 1
+            LearnsetCategory.EGG -> 2
+            else -> 0
         }
     }
 
-    private fun currentFilter(): LearnsetFilter {
-        return LearnsetFilter.entries[filterIndex.coerceIn(0, LearnsetFilter.entries.lastIndex)]
+    private fun currentMoveCategory(): LearnsetCategory {
+        return LearnsetCategory.entries[filterIndex.coerceIn(0, LearnsetCategory.entries.lastIndex)]
     }
 
     private fun updateFormButtons() {
@@ -566,6 +539,8 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         formRightButton.isVisible = hasForms
         formLeftButton.active = hasForms
         formRightButton.active = hasForms
+        formLeftButton.buttonX = pX + if (secondaryType != null) 25.5F else 15.5F
+        formLeftButton.x = formLeftButton.buttonX.toInt()
     }
 
     private fun updateFormLabel(species: Species, form: PokedexForm) {
@@ -576,7 +551,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
         val label = lang("ui.pokedex.info.form.${species}${formName}")
         formLabel = if (label.string.isBlank() || label.string.startsWith("cobblemon.ui.pokedex.info.form.")) {
-            Component.literal(form.displayForm)
+            lang("ui.pokedex.info.form.normal")
         } else {
             label
         }
@@ -588,10 +563,10 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         if (selectedEntry?.isDiscovered == true) {
             val description = selectedEntry!!.move.description.string
-            descriptionWidget.showPlaceholder = false
+            descriptionWidget.visible = false
             descriptionWidget.setText(listOf(description))
         } else {
-            descriptionWidget.showPlaceholder = true
+            descriptionWidget.visible = true
             descriptionWidget.setText(emptyList())
         }
     }
@@ -690,7 +665,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         fun addEntry(
             move: MoveTemplate,
-            source: LearnsetSource,
+            source: LearnsetCategory,
             level: Int? = null,
             tmLocked: Boolean = false,
             isDiscovered: Boolean = true
@@ -703,7 +678,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                     || tmId in learnedTMs
                     || TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() == true
                 )
-                val resolvedTmLocked = if (source == LearnsetSource.TM) tmLocked else false
+                val resolvedTmLocked = if (source == LearnsetCategory.TM) tmLocked else false
                 entries[key] = LearnsetMoveEntry(move, source, level, resolvedTmLocked, isDiscovered, tmId, tmUnlocked)
             }
         }
@@ -711,7 +686,7 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         form.moves.levelUpMoves.toSortedMap().forEach { (level, moves) ->
             moves.forEach { move ->
                 val discovered = isLevelUpDiscovered(level)
-                addEntry(move, LearnsetSource.LEVEL_UP, level = level, isDiscovered = discovered)
+                addEntry(move, LearnsetCategory.LEVEL, level = level, isDiscovered = discovered)
             }
         }
 
@@ -722,39 +697,33 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
                     && tmId !in learnedTMs
                     && TechnicalMachines.tmMap[tmId]?.isPassivelyObtained() != true
             }
-            addEntry(move, LearnsetSource.TM, tmLocked = tmLocked, isDiscovered = !tmLocked)
+            addEntry(move, LearnsetCategory.TM, tmLocked = tmLocked, isDiscovered = !tmLocked)
         }
 
         form.moves.eggMoves.sortedBy { it.displayName.string }.forEach { move ->
-            addEntry(move, LearnsetSource.EGG)
+            addEntry(move, LearnsetCategory.EGG)
         }
 
         return entries.values.toList()
     }
 
-    private enum class LearnsetSource(val label: String) {
-        LEVEL_UP("Lv"),
-        TM("TM"),
-        EGG("Egg")
-    }
-
-    private enum class LearnsetFilter(val label: MutableComponent) {
-        ALL(Component.literal("All")),
-        LEVEL_UP(Component.literal("Level-Up")),
-        TM(Component.literal("TM")),
-        EGG(Component.literal("Egg"))
+    private enum class LearnsetCategory(val label: String) {
+        ALL("all"),
+        LEVEL("level"),
+        TM("tm"),
+        EGG("egg")
     }
 
     private enum class LearnsetSort {
-        ALPHABETICAL,
+        LEVEL,
+        NAME,
         TYPE,
-        SOURCE,
         DISCOVERED
     }
 
     private data class LearnsetMoveEntry(
         val move: MoveTemplate,
-        val source: LearnsetSource,
+        val source: LearnsetCategory,
         val level: Int? = null,
         val tmLocked: Boolean = false,
         val isDiscovered: Boolean = true,
@@ -762,18 +731,17 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         val tmUnlocked: Boolean = false
     )
 
-    // todo fix the scrolling area height
     private class LearnsetMovesScrollingWidget(
-        val pX: Int,
-        val pY: Int,
+        listX: Int,
+        val listY: Int,
         listWidth: Int,
         listHeight: Int,
         val onSelect: (LearnsetMoveEntry?) -> Unit
     ) : ScrollingWidget<LearnsetMovesScrollingWidget.MoveEntrySlot>(
         width = listWidth,
         height = listHeight,
-        left = pX,
-        top = pY,
+        left = listX,
+        top = listY - listHeight,
         slotHeight = LIST_SLOT_HEIGHT
     ) {
         private var selectedEntry: LearnsetMoveEntry? = null
@@ -784,163 +752,141 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             scrollAmount = 0.0
         }
 
-
-
         fun setSelectedEntry(entry: LearnsetMoveEntry?) {
             selectedEntry = entry
         }
 
         override fun getScrollbarPosition(): Int {
-            return left + width - 3
+            return left + HALF_OVERLAY_WIDTH - SCROLL_BAR_WIDTH
         }
 
         override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
             val xLeft = this.scrollbarPosition
-            val xRight = xLeft + 3
-            val yStart = y + 1
+            val yMargin = 2
+            val yStart = y + yMargin
 
-            val barHeight = this.bottom - yStart
+            val barHeight = this.bottom - yMargin - yStart
 
             var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 32, barHeight - 8)
             var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
             if (yTop < yStart) yTop = yStart
 
-            context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, FastColor.ARGB32.color(255, 126, 231, 229)) // track
-            context.fill(xLeft, yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 58, 150, 182)) // bar
+            // Scroll Track
+            blitk(
+                texture = EntriesScrollingWidget.scrollbarTrack,
+                matrixStack = context.pose(),
+                x = xLeft,
+                y = yStart,
+                width = SCROLL_BAR_WIDTH,
+                height = height - (yMargin * 2)
+            )
+
+            // Scroll Slide
+            blitk(
+                texture = EntriesScrollingWidget.scrollbarSlide,
+                matrixStack = context.pose(),
+                x = xLeft,
+                y = yTop,
+                width = SCROLL_BAR_WIDTH,
+                height = yBottom
+            )
         }
 
         override fun getEntry(index: Int): MoveEntrySlot {
             return children()[index] as MoveEntrySlot
         }
 
-        inner class MoveEntrySlot(
-            val entry: LearnsetMoveEntry,
-            private val parentList: LearnsetMovesScrollingWidget
-        ) : Slot<MoveEntrySlot>() {
+        inner class MoveEntrySlot(val entry: LearnsetMoveEntry, private val parentList: LearnsetMovesScrollingWidget) : Slot<MoveEntrySlot>() {
             private var lastX = 0
             private var lastY = 0
 
-            override fun render(
-                context: GuiGraphics,
-                index: Int,
-                y: Int,
-                x: Int,
-                entryWidth: Int,
-                entryHeight: Int,
-                mouseX: Int,
-                mouseY: Int,
-                hovered: Boolean,
-                tickDelta: Float
-            ) {
+            override fun render(context: GuiGraphics, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
                 lastX = x
                 lastY = y
 
-                val isSelected = entry == parentList.selectedEntry
-                if (hovered || isSelected) {
-                    val color = if (isSelected) {
-                        FastColor.ARGB32.color(140, 58, 150, 182)
-                    } else {
-                        FastColor.ARGB32.color(90, 126, 231, 229)
-                    }
-                    context.fill(x, y, x + entryWidth - 3, y + entryHeight, color)
-                }
-
-                val leftOffset = LIST_TM_ICON_OFFSET
-                if (entry.tmId != null) {
-                    val (red, green, blue) = if (entry.tmUnlocked) {
-                        Triple(0.32F, 0.82F, 0.46F)
-                    } else {
-                        Triple(0.6F, 0.6F, 0.6F)
-                    }
-                    val iconX = x + 1
-                    val iconY = y + 1
-                    blitk(
-                        matrixStack = context.pose(),
-                        texture = tmDiscIcon,
-                        x = iconX / SCALE,
-                        y = iconY / SCALE,
-                        width = LIST_TM_ICON_TEXTURE_SIZE,
-                        height = LIST_TM_ICON_TEXTURE_SIZE,
-                        red = red,
-                        green = green,
-                        blue = blue,
-                        alpha = 1F,
-                        scale = SCALE
-                    )
-                    val hoveringIcon = mouseX in iconX..(iconX + LIST_TM_ICON_RENDER_SIZE) &&
-                        mouseY in iconY..(iconY + LIST_TM_ICON_RENDER_SIZE)
-                    if (hoveringIcon) {
-                        val tooltipKey = if (entry.tmUnlocked) {
-                            "ui.moves.learnset.tm.discovered"
-                        } else {
-                            "egg_group.undiscovered"
-                        }
-                        val tooltipText = lang(tooltipKey)
-                        val textWidth = Minecraft.getInstance().font.width(tooltipText.font(CobblemonResources.DEFAULT_LARGE))
-                        val tooltipWidth = textWidth + 6
-                        val listLeft = parentList.left + 2
-                        val listRight = parentList.left + parentList.width - 6
-                        val minCenter = listLeft + (tooltipWidth / 2)
-                        val maxCenter = listRight - (tooltipWidth / 2)
-                        val tooltipX = if (minCenter <= maxCenter) {
-                            Mth.clamp(mouseX, minCenter, maxCenter)
-                        } else {
-                            mouseX
-                        }
-                        renderTooltip(context, tooltipText, tooltipX, mouseY, tickDelta, -14)
-                    }
-                }
-
+                val barY = y + SCROLL_SLOT_SPACING
                 blitk(
                     matrixStack = context.pose(),
-                    texture = moveDexTypeIcons,
-                    x = (x + 1 + leftOffset) / SCALE,
-                    y = (y + 1) / SCALE,
-                    width = LIST_TYPE_ICON_SIZE,
-                    height = LIST_TYPE_ICON_SIZE,
-                    uOffset = LIST_TYPE_ICON_SIZE * entry.move.elementalType.textureXMultiplier.toFloat() + 0.1,
-                    textureWidth = LIST_TYPE_ICON_SIZE * 18,
-                    textureHeight = LIST_TYPE_ICON_SIZE,
-                    scale = SCALE
+                    texture = moveSlot,
+                    x = x,
+                    y = barY,
+                    width = MOVE_SLOT_WIDTH,
+                    height = 13
                 )
+
+                val isSlotSelected = entry == parentList.selectedEntry
+                val isSlotHovered = hovered && (mouseX <= x + MOVE_SLOT_WIDTH)
+                if (isSlotHovered || isSlotSelected) {
+                    blitk(
+                        matrixStack = context.pose(),
+                        texture = moveSlotSelected,
+                        x = x,
+                        y = barY,
+                        width = MOVE_SLOT_WIDTH,
+                        height = 13,
+                        textureHeight = 26,
+                        vOffset = if (isSlotHovered && !isSlotSelected) 13 else 0
+                    )
+                }
+
+                TypeIcon(
+                    x = x + 3,
+                    y = barY + 2,
+                    type = entry.move.elementalType,
+                    small = true
+                ).render(context)
 
                 val displayName = if (entry.isDiscovered) {
                     entry.move.displayName
                 } else {
-                    Component.literal("?????")
+                    lang("ui.generic.question_marks")
                 }
 
                 drawScaledText(
                     context = context,
-                    text = displayName,
-                    x = x + 12 + leftOffset,
-                    y = y + 2,
-                    scale = SCALE,
-                    shadow = false,
-                    colour = if (entry.isDiscovered) 0x606B6E else 0x8A8F91
+                    font = CobblemonResources.DEFAULT_LARGE,
+                    text = displayName.bold(),
+                    x = x + 14,
+                    y = barY + 2,
+                    shadow = true
                 )
 
-                val rightLabel = when {
-                    entry.level != null -> "Lv.${entry.level}"
-                    entry.source == LearnsetSource.TM -> entry.source.label
-                    else -> entry.source.label
-                }
-
+                val moveCategoryLabel = if (entry.level != null) lang("ui.lv.number", entry.level) else lang("ui.moves.${entry.source.label}")
                 drawScaledTextJustifiedRight(
                     context = context,
-                    text = rightLabel.text(),
-                    x = x + entryWidth - 6,
-                    y = y + 2,
-                    scale = SCALE,
-                    shadow = false,
-                    colour = if (entry.tmLocked || !entry.isDiscovered) 0x8A8F91 else 0x606B6E
+                    font = CobblemonResources.DEFAULT_LARGE,
+                    text = moveCategoryLabel.bold(),
+                    x = x + 131.5,
+                    y = barY + 2,
+                    shadow = true
                 )
 
+                if (entry.tmId != null) {
+                    val tmX = (x + 131.5 - (Minecraft.getInstance().font.width(moveCategoryLabel.bold()) + 10))
+                    val tmY = (barY + 2.5)
+
+                    blitk(
+                        matrixStack = context.pose(),
+                        texture = if (entry.tmUnlocked) tmSprite else tmSpriteUndiscovered,
+                        x = tmX / SCALE,
+                        y = tmY / SCALE,
+                        width = 16,
+                        height = 16,
+                        scale = SCALE
+                    )
+
+                    val hovering = mouseX.toFloat() in tmX..(tmX + 8) && mouseY.toFloat() in tmY..(tmY + 8)
+                    if (hovering) {
+                        val posY = maxOf(mouseY, listY + 14)
+                        val tooltipKey = if (entry.tmUnlocked) "ui.moves.learnset.tm.discovered" else "egg_group.undiscovered"
+                        renderTooltip(context, lang(tooltipKey).bold(), mouseX, posY, tickDelta, -14)
+                    }
+                }
             }
 
             override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-                val canClick = mouseX < (lastX + (parentList.width - 3))
+                val canClick = mouseX < (lastX + (HALF_OVERLAY_WIDTH - 3))
                 if (canClick) {
                     onSelect(entry)
                     Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.POKEDEX_CLICK_SHORT, 1.0F))
@@ -949,49 +895,24 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
             }
 
             override fun getNarration(): Component {
-                return if (entry.isDiscovered) entry.move.displayName else Component.literal("?????")
+                return if (entry.isDiscovered) entry.move.displayName else lang("ui.generic.question_marks")
             }
         }
     }
 
-    private class MoveDescriptionWidget(
-        val pX: Int,
-        val pY: Int,
-        width: Int,
-        height: Int
-    ) : ScrollingWidget<MoveDescriptionWidget.TextSlot>(
+    private class MoveDescriptionWidget(pX: Int, pY: Int, width: Int, height: Int) : ScrollingWidget<MoveDescriptionWidget.TextSlot>(
         left = pX,
-        top = pY,
+        top = pY - height,
         width = width,
         height = height,
-        slotHeight = LIST_SLOT_HEIGHT,
-        scrollBarWidth = DESCRIPTION_SCROLLBAR_WIDTH
+        slotHeight = 7
     ) {
-        var showPlaceholder = true
-
-        override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
-            if (showPlaceholder) {
-                /*drawScaledText(
-                    context = context,
-                    text = Component.literal("Select a move."),
-                    x = pX + (width / 2),
-                    y = pY + (height / 2) - 3,
-                    shadow = false,
-                    colour = 0x606B6E,
-                    scale = SCALE,
-                    centered = true
-                )*/
-                return
-            }
-            super.renderWidget(context, mouseX, mouseY, delta)
-        }
-
         fun setText(text: Collection<String>) {
             clearEntries()
             text.forEach { line ->
                 Minecraft.getInstance().font.splitter.splitLines(
                     Component.literal(line),
-                    ((width - DESCRIPTION_SCROLLBAR_OFFSET - (POKEMON_DESCRIPTION_PADDING * 2)) / SCALE).toInt(),
+                    ((width - DESCRIPTION_SCROLLBAR_WIDTH - 2) / SCALE).toInt(),
                     Style.EMPTY
                 ).stream()
                     .map { it.string }
@@ -1002,41 +923,47 @@ class MovesLearnsetWidget(val pX: Int, val pY: Int) : SoundlessWidget(
 
         override fun renderScrollbar(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
             val xLeft = this.scrollbarPosition
-            val xRight = xLeft + scrollBarWidth
-            val yStart = y + 1
+            val yMargin = 1
+            val yStart = y + yMargin
 
-            val barHeight = this.bottom - yStart
+            val barHeight = this.bottom - yMargin - yStart
 
             var yBottom = ((barHeight * barHeight).toFloat() / this.maxPosition.toFloat()).toInt()
             yBottom = Mth.clamp(yBottom, 16, barHeight - 6)
             var yTop = scrollAmount.toInt() * (barHeight - yBottom) / this.maxScroll + yStart
             if (yTop < yStart) yTop = yStart
 
-            context.fill(xLeft + 1, yStart, xRight - 1, this.bottom, FastColor.ARGB32.color(255, 126, 231, 229)) // track
-            context.fill(xLeft, yTop, xRight, yTop + yBottom, FastColor.ARGB32.color(255, 58, 150, 182)) // bar
+            // Scroll Track
+            blitk(
+                texture = InfoTextScrollWidget.scrollbarTrack,
+                matrixStack = context.pose(),
+                x = xLeft + 0.5,
+                y = yStart,
+                width = DESCRIPTION_SCROLLBAR_WIDTH / 2,
+                height = height - (yMargin * 2)
+            )
+
+            // Scroll Slide
+            blitk(
+                texture = InfoTextScrollWidget.scrollbarSlide,
+                matrixStack = context.pose(),
+                x = xLeft,
+                y = yTop,
+                width = DESCRIPTION_SCROLLBAR_WIDTH,
+                height = yBottom
+            )
         }
 
         override fun getScrollbarPosition(): Int {
-            return left + width - DESCRIPTION_SCROLLBAR_OFFSET
+            return left + width - DESCRIPTION_SCROLLBAR_WIDTH
         }
 
         class TextSlot(val text: String) : Slot<TextSlot>() {
-            override fun render(
-                context: GuiGraphics,
-                index: Int,
-                y: Int,
-                x: Int,
-                entryWidth: Int,
-                entryHeight: Int,
-                mouseX: Int,
-                mouseY: Int,
-                hovered: Boolean,
-                tickDelta: Float
-            ) {
+            override fun render(context: GuiGraphics, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
                 drawScaledText(
                     context = context,
                     text = text.text(),
-                    x = x + POKEMON_DESCRIPTION_PADDING,
+                    x = x,
                     y = y + 2,
                     scale = SCALE,
                     shadow = false,

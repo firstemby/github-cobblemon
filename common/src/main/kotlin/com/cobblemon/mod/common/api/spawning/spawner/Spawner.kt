@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.SpawnBucketChosenEvent
 import com.cobblemon.mod.common.api.spawning.BestSpawner
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnCause
 import com.cobblemon.mod.common.api.spawning.SpawningZoneGenerator
 import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
@@ -26,6 +25,7 @@ import com.cobblemon.mod.common.api.spawning.position.calculators.SpawnablePosit
 import com.cobblemon.mod.common.api.spawning.selection.SpawningSelector
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBoxLoaded
+import com.cobblemon.mod.common.util.removeIf
 import com.cobblemon.mod.common.util.squeezeWithinBounds
 import com.cobblemon.mod.common.util.toVec3f
 import com.cobblemon.mod.common.util.weightedSelection
@@ -52,6 +52,7 @@ import net.minecraft.world.phys.Vec3
 interface Spawner {
     val name: String
     val influences: MutableList<SpawningInfluence>
+    val buckets: Map<String, Float>
     var spawnPool: SpawnPool
     var selector: SpawningSelector<*>
     var generator: SpawningZoneGenerator
@@ -65,7 +66,7 @@ interface Spawner {
         const val ENTITY_LIMIT_CHUNK_RANGE = 3
     }
 
-    fun getMatchingSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+    fun getMatchingSpawns(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
         val spawns = mutableListOf<SpawnDetail>()
         spawns.addAll(spawnPool.retrieve(bucket, spawnablePosition).filter { it.isSatisfiedBy(spawnablePosition) })
         spawnablePosition.influences.forEach { influence ->
@@ -172,11 +173,12 @@ interface Spawner {
 
     fun copyInfluences() = influences.filter { !it.isExpired() }.toMutableList()
 
-    fun chooseBucket(cause: SpawnCause, influences: List<SpawningInfluence>): SpawnBucket {
-        val buckets = Cobblemon.bestSpawner.config.buckets
-        val bucketWeights = buckets.associateWith { it.weight }.toMutableMap()
+    fun chooseBucket(cause: SpawnCause, influences: List<SpawningInfluence>): String {
+        val bucketWeights = buckets.toMutableMap()
         influences.forEach { it.affectBucketWeights(bucketWeights) }
-        val bucket = bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.first()
+        val usedBuckets = spawnPool.buckets.intersect(bucketWeights.keys)
+        bucketWeights.removeIf { it.key !in usedBuckets }
+        val bucket = bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.keys.first()
         val event = SpawnBucketChosenEvent(
             spawner = this,
             spawnCause = cause,

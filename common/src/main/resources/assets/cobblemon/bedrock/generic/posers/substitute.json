@@ -1,10 +1,33 @@
 {
+  "portraitScale": 1.8,
+  "portraitTranslation": [-0.11, -0.36, 0],
+  "profileScale": 1.0,
+  "profileTranslation": [0.0, 0.18, 0.0],
+  "rootBone": "substitute",
+  "animations": {
+    "faint": "q.bedrock_primary('substitute', math.random(0, 1) < (1/3) ? 'destroy_flop' : (math.random(0, 1) < 0.5 ? 'destroy_fling_left' : 'destroy_fling_right'), q.curve('one'))",
+    "recoil": "q.bedrock_stateful('substitute', 'recoil')"
+  },
   "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('substitute', 'ground_idle')"
+      ]
+    },
     "standing": {
-      "poseName": "standing",
-      "transformTicks": 10,
-      "allPoseTypes": true,
-      "animations": []
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "animations": [
+        "q.bedrock('substitute', 'ground_idle')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "animations": [
+        "q.bedrock('substitute', 'ground_idle')"
+	  ]
     }
   }
 }

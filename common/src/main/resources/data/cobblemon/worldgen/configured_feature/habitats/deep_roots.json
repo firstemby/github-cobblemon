@@ -1,0 +1,16 @@
+{
+    "type": "cobblemon:structure",
+    "config": {
+        "cobblemon_structures": [
+            "cobblemon:habitats/deep_root1",
+            "cobblemon:habitats/deep_root2",
+            "cobblemon:habitats/deep_root3",
+            "cobblemon:habitats/deep_root4",
+            "cobblemon:habitats/deep_root5",
+            "cobblemon:habitats/deep_root6",
+            "cobblemon:habitats/deep_root7",
+            "cobblemon:habitats/deep_root8"
+        ],
+        "cobblemon_processors": "cobblemon:habitats/deep_roots"
+    }
+}

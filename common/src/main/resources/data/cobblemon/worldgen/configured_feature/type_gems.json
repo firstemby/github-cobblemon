@@ -2,7 +2,7 @@
   "type": "cobblemon:type_gem",
   "config": {
     "state": {
-      "Name": "cobblemon:type_gem_core"
+      "Name": "cobblemon:deepslate_crystal_core"
     }
   }
 }

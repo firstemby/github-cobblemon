@@ -65,162 +65,10 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.010869641,
-              "y": -2.0120482,
-              "z": 0.06636892
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.027785623,
-              "y": -1.9801829,
-              "z": 0.13352945
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.010869641,
-              "y": -2.0120482,
-              "z": 0.06636892
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.010869641,
-              "y": -2.0120482,
-              "z": 0.06636892
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.010869641,
-              "y": -2.0120482,
-              "z": 0.06636892
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.027785623,
-              "y": -1.9801829,
-              "z": 0.13352945
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.010869641,
-              "y": -2.0120482,
-              "z": 0.06636892
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       },
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.5625,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.010899445,
-              "y": -1.5354366,
-              "z": 1.0621194
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.5625,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.5625,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.5625,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": -0.010899445,
-              "y": -1.5354366,
-              "z": 1.0621194
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.5625,
-              "z": 1.0625
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_2"
       }
     ]
   },
@@ -231,7 +79,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ursaluna alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -316,6 +170,7 @@
     "tm:covet",
     "tm:crunch",
     "tm:curse",
+    "tm:cut",
     "tm:dig",
     "tm:doubleedge",
     "tm:drainpunch",
@@ -332,24 +187,34 @@
     "tm:gigaimpact",
     "tm:gunkshot",
     "tm:hardpress",
+    "tm:headbutt",
     "tm:heavyslam",
     "tm:helpinghand",
     "tm:highhorsepower",
+    "tm:honeclaws",
     "tm:hyperbeam",
     "tm:hypervoice",
     "tm:icepunch",
+    "tm:laserfocus",
+    "tm:lastresort",
     "tm:lowkick",
+    "tm:megakick",
+    "tm:megapunch",
     "tm:metalclaw",
     "tm:metronome",
     "tm:payback",
     "tm:playrough",
+    "tm:poweruppunch",
     "tm:protect",
     "tm:raindance",
     "tm:rest",
+    "tm:retaliate",
     "tm:roar",
+    "tm:rockclimb",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
+    "tm:rollout",
     "tm:scaryface",
     "tm:seedbomb",
     "tm:shadowclaw",
@@ -358,9 +223,11 @@
     "tm:snore",
     "tm:stompingtantrum",
     "tm:stoneedge",
+    "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
     "tm:supercellslam",
+    "tm:superpower",
     "tm:swift",
     "tm:swordsdance",
     "tm:takedown",
@@ -369,8 +236,10 @@
     "tm:thief",
     "tm:throatchop",
     "tm:thunderpunch",
+    "tm:torment",
     "tm:trailblaze",
     "tm:uproar",
+    "tm:workup",
     "tutor:aerialace",
     "tutor:babydolleyes",
     "tutor:bulkup",
@@ -389,17 +258,21 @@
     "tutor:hyperbeam",
     "tutor:hypervoice",
     "tutor:icepunch",
+    "tutor:laserfocus",
+    "tutor:lastresort",
     "tutor:lowkick",
     "tutor:playrough",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
+    "tutor:rollout",
     "tutor:seedbomb",
     "tutor:shadowclaw",
     "tutor:sleeptalk",
     "tutor:snore",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
+    "tutor:superpower",
     "tutor:swift",
     "tutor:throatchop",
     "tutor:thunderpunch",
@@ -472,7 +345,7 @@
           "willFlee": false
         },
         "herd": {
-          "maxSize": "5"
+          "maxSize": 5
         },
         "moving": {
           "swim": {

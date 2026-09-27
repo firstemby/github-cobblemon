@@ -9,11 +9,7 @@
   "recipe": [
     {
       "item": "cobblemon:poison_gem",
-      "count": 7
-    },
-    {
-      "item": "cobblemon:poison_barb",
-      "count": 2
+      "count": 6
     }
   ]
 }

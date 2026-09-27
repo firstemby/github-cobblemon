@@ -66,83 +66,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2857038,
-              "z": 0.37916514
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.2747328,
-              "z": 0.37528855
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
@@ -153,7 +77,7 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "parasect",
@@ -243,7 +167,6 @@
     "tm:leechlife",
     "tm:lightscreen",
     "tm:metalclaw",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:protect",
     "tm:psybeam",

@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "34-50",
-            "weight": 0.96,
+            "weight": 6.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -28,7 +28,8 @@
                     "#cobblemon:is_badlands",
                     "#cobblemon:is_hills",
                     "#cobblemon:is_savanna"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [

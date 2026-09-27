@@ -17,10 +17,10 @@ import com.cobblemon.mod.common.api.storage.factory.PokemonStoreFactory
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.DataKeys
 import com.google.gson.JsonObject
-import java.util.UUID
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerPlayer
+import java.util.UUID
 
 /**
  * The base class for all stores of [Pokemon]. A store specifies the kind of coordinate it needs to be given
@@ -53,7 +53,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
      * Runs initialization logic for this store, knowing that it has just been constructed in a [PokemonStoreFactory].
      *
      * The minimum of what this function should do is iterate over all the Pokémon in this store and set their store
-     * coordinates.
+     * coordinates. Built-in stores then rebuild the UUID index via [rebuildPokemonByUuid].
      *
      * If this does not get called, or it does not do its job properly, serious de-sync issues may follow.
      */
@@ -77,7 +77,6 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         remove(pokemon)
         val position = getFirstAvailablePosition() ?: return false // Couldn't fit, shrug emoji
         set(position, pokemon)
-        Cobblemon.playerDataManager.getTMData(uuid)?.syncTMsFromPokemon(pokemon)
         return true
     }
 
@@ -99,6 +98,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
 
         setAtPosition(position, pokemon)
         pokemon.storeCoordinates.set(StoreCoordinates(this, position))
+        pokemonByUuid[pokemon.uuid] = pokemon
     }
 
     /** Swaps the Pokémon at the specified positions. If one of the spaces is empty, it will simply move the not-null one to that space. */
@@ -147,10 +147,26 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         pokemon.recall()
         pokemon.storeCoordinates.set(null)
         setAtPosition(currentPosition.position, null)
+        pokemonByUuid.remove(pokemon.uuid)
         return true
     }
 
-    operator fun get(uuid: UUID) = find { it.uuid == uuid }
+    /** In-memory UUID index. Not serialized; rebuilt by [rebuildPokemonByUuid]. */
+    private val pokemonByUuid = hashMapOf<UUID, Pokemon>()
+
+    /** Gets the [Pokemon] with this UUID, or null if it is not in this store. */
+    operator fun get(uuid: UUID): Pokemon? = pokemonByUuid[uuid]
+
+    /**
+     * Rebuilds the UUID index from the store's current contents.
+     *
+     * Call after load or any structural mutation that does not go through [set] / [remove], such as
+     * filling slots directly from NBT/JSON or shrinking a PC.
+     */
+    protected fun rebuildPokemonByUuid() {
+        pokemonByUuid.clear()
+        forEach { pokemonByUuid[it.uuid] = it }
+    }
 
     open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")

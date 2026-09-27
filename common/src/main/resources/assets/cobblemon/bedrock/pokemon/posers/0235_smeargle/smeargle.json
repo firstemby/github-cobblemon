@@ -17,7 +17,7 @@
       "poseTypes": ["STAND"],
       "isBattle": true,
       "namedAnimations": {
-        "cry": "q.bedrock_primary('smeargle', 'battle_cry')"
+        "cry": "q.bedrock_primary('smeargle', 'battle_cry', q.curve('symmetrical_wide'))"
       },
       "animations": ["q.look('head')", "q.bedrock('smeargle', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('smeargle', 'blink')"]

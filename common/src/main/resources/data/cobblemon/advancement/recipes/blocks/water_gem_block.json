@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:water_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_water_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:water_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:water_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_water_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

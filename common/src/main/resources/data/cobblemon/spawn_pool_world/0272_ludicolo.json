@@ -13,13 +13,21 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "29-48",
-            "weight": 0.01,
-            "weightMultiplier": {
-                "multiplier": 1.5,
-                "condition": {
-                    "timeRange": "night"
+            "weight": 0.05,
+            "weightMultipliers": [
+                {
+                    "multiplier": 1.5,
+                    "condition": {
+                        "timeRange": "night"
+                    }
+                },
+                {
+                    "multiplier": 2.0,
+                    "condition": {
+                        "isPokeSnack": true
+                    }
                 }
-            },
+            ],
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -39,7 +47,13 @@
             "spawnablePositionType": "surface",
             "bucket": "common",
             "level": "29-48",
-            "weight": 0.03,
+            "weight": 0.05,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -51,11 +65,44 @@
         {
             "id": "ludicolo-3",
             "pokemon": "ludicolo",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "surface",
+            "bucket": "common",
+            "level": "29-48",
+            "weight": 0.05,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "neededNearbyBlocks": [
+                    "minecraft:lily_pad"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ]
+            }
+        },
+        {
+            "id": "ludicolo-4",
+            "pokemon": "ludicolo",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "29-48",
-            "weight": 0.05,
+            "weight": 0.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -74,13 +121,13 @@
             }
         },
         {
-            "id": "ludicolo-4",
+            "id": "ludicolo-5",
             "pokemon": "ludicolo",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "29-48",
-            "weight": 0.05,
+            "weight": 0.5,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

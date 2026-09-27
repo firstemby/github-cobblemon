@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/evolution",
   "rewards": {
     "recipes": [
       "cobblemon:ice_stone_from_blasting_ice_stone_ore"

@@ -9,10 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:fairy_gem",
-      "count": 7
+      "count": 5
     },
     {
-      "item": "cobblemon:sweet_heart",
+      "item": "cobblemon:normal_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:throat_spray",
       "count": 1
     }
   ]

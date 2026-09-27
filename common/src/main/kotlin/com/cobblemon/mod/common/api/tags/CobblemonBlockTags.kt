@@ -50,6 +50,7 @@ object CobblemonBlockTags {
     @JvmField val FOSSIL_MACHINE_PARTS = createTag("fossil_machine_parts")
     @JvmField val GALARICA_NUT_MAY_PLACE_ON = createTag("galarica_nut_may_place_on")
     @JvmField val GEMSTONES = createTag("gemstones")
+    @JvmField val HABITAT_MIMICS = createTag("habitat_mimics")
     @JvmField val GILDED_CHESTS = createTag("gilded_chests")
     @JvmField val GLAZED_TERRACOTTA_BLOCKS = createTag("glazed_terracotta_blocks")
     @JvmField val ICE_STONE_ORES = createTag("ice_stone_ores")

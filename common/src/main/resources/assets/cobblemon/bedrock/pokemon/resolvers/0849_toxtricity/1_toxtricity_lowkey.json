@@ -39,6 +39,18 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes", "low_key-form"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0849_toxtricity/toxtricity_lowkey_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

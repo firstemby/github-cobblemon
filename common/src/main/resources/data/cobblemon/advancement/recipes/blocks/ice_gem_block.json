@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:ice_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_ice_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:ice_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:ice_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ice_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

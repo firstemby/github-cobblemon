@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -37,7 +43,13 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -58,7 +70,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 36.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -84,7 +96,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -108,7 +126,13 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -132,7 +156,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -151,7 +181,13 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 18.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -167,7 +203,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 3.6,
+            "weight": 36.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

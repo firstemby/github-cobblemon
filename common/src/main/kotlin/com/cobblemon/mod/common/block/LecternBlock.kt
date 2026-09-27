@@ -127,7 +127,7 @@ class LecternBlock(properties: Properties): BaseEntityBlock(properties) {
                     else {
                         blockEntity.incrementViewerCount()
                         PokedexUIPacket(type = (blockEntity.getItemStack().item as PokedexItem).type, blockPos = blockPos).sendToPlayer(player as ServerPlayer)
-                        level.playSoundServer(position = blockPos.toVec3d(), sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
+                        level.playSoundServer(position = blockPos.bottomCenter, sound = CobblemonSounds.POKEDEX_OPEN, volume = 0.25F)
                     }
                 }
             }

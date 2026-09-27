@@ -8,19 +8,19 @@
 
 package com.cobblemon.mod.common.api.spawning.influence
 
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
-
 /**
  * A [SpawningInfluence] that multiplies bucket weights by the provided values
  * and then normalizes the resulting weights so that their total adds up to 100.
+ *
+ * No longer used by the mod, but kept for external suers.
  */
 class BucketMultiplyingInfluence(
     val multipliers: Map<String, Float>,
 ) : SpawningInfluence {
-    override fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {
-        val updates = mutableMapOf<SpawnBucket, Float>()
+    override fun affectBucketWeights(bucketWeights: MutableMap<String, Float>) {
+        val updates = mutableMapOf<String, Float>()
         for ((bucket, weight) in bucketWeights) {
-            val multiplier = multipliers[bucket.name]
+            val multiplier = multipliers[bucket]
             if (multiplier != null) {
                 updates[bucket] = weight * multiplier
             }

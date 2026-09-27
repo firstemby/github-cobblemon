@@ -9,14 +9,14 @@
   "recipe": [
     {
       "item": "cobblemon:ghost_gem",
-      "count": 10
+      "count": 11
     },
     {
-      "item": "minecraft:ghast_tear",
+      "item": "cobblemon:dusk_stone",
       "count": 1
     },
     {
-      "item": "cobblemon:spell_tag",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ]

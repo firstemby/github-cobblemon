@@ -13,24 +13,48 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "30-49",
-            "weight": 1.6,
+            "weight": 44.4,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
                     "#cobblemon:is_lukewarm_ocean",
                     "#cobblemon:is_warm_ocean"
                 ],
-                "minY": 48
+                "minY": 48,
+                "isPokeSnack": true
             }
         },
         {
             "id": "mantine-2",
             "pokemon": "mantine",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "30-49",
+            "weight": 44.4,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_lukewarm_ocean",
+                    "#cobblemon:is_warm_ocean"
+                ],
+                "minY": 48,
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "mantine-3",
+            "pokemon": "mantine",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "30-49",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -46,13 +70,13 @@
             }
         },
         {
-            "id": "mantine-3",
+            "id": "mantine-4",
             "pokemon": "mantine",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-49",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -75,35 +99,13 @@
             }
         },
         {
-            "id": "mantine-4",
-            "pokemon": "mantine",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "30-49",
-            "weight": 1.6,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_lukewarm_ocean",
-                    "#cobblemon:is_warm_ocean"
-                ],
-                "minY": 48
-            }
-        },
-        {
             "id": "mantine-5",
             "pokemon": "mantine",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "30-49",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -127,7 +129,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "30-49",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

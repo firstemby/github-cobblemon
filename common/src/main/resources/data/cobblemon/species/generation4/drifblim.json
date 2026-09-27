@@ -82,83 +82,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 2.9055437E-18,
-              "y": -3.171875,
-              "z": 0.53125
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -3.4257445,
-              "z": -0.061044615
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 2.9055437E-18,
-              "y": -3.171875,
-              "z": 0.53125
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -3.4257445,
-              "z": -0.061044615
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 2.9055437E-18,
-              "y": -3.171875,
-              "z": 0.53125
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -3.4257445,
-              "z": -0.061044615
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 2.9055437E-18,
-              "y": -3.171875,
-              "z": 0.53125
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
@@ -167,7 +91,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "drifblim",
@@ -276,7 +200,6 @@
     "tm:painsplit",
     "tm:payback",
     "tm:phantomforce",
-    "tm:powershift",
     "tm:protect",
     "tm:psybeam",
     "tm:psychic",
@@ -323,7 +246,6 @@
     "tutor:magiccoat",
     "tutor:ominouswind",
     "tutor:painsplit",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:recycle",
     "tutor:rest",
@@ -348,6 +270,7 @@
     "legacy:hiddenpower",
     "legacy:mudslap",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:psychup",
     "legacy:return",
     "legacy:round",

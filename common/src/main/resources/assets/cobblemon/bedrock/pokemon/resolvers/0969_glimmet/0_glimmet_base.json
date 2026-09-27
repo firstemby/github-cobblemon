@@ -7,11 +7,38 @@
       "poser": "cobblemon:glimmet",
       "model": "cobblemon:glimmet.geo",
       "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet_emissive.png",
+          "emissive": true
+        }
+      ]
     },
     {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet_shiny.png"
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet_emissive_shiny.png",
+          "emissive": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0969_glimmet/glimmet_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -7,6 +7,10 @@
     "minecraft:baked_potato",
     "minecraft:beetroot",
     "minecraft:apple",
-    "#cobblemon:apples"
+    "#cobblemon:apples",
+    { "id": "farmersdelight:onion", "required": false },
+    { "id": "farmersdelight:tomato", "required": false },
+    { "id": "#c:foods/leafy_green", "required": false },
+    { "id": "natures_spirit:olives", "required": false }
   ]
 }

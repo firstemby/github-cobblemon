@@ -24,7 +24,6 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.toRGB
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
-import net.minecraft.client.gui.components.Button.CreateNarration
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
@@ -36,6 +35,7 @@ class MoveSlotButton(
     var ppMax: Int = 0,
     var ppAsFraction: Boolean = true,
     var enabled: Boolean = true,
+    var showOverlayBar: Boolean = true,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, move?.name?.text() ?: lang("ui.moves"), onPress, CreateNarration { move?.name?.text() ?: lang("ui.moves") }), CobblemonRenderable {
 
@@ -43,6 +43,7 @@ class MoveSlotButton(
         val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
         val moveDisabledResource = cobblemonResource("textures/gui/summary/summary_move_disabled.png")
         val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
+        val moveOverlayBarResource = cobblemonResource("textures/gui/summary/summary_move_overlay_bar.png")
 
         const val WIDTH = 108
         const val HEIGHT = 22
@@ -78,32 +79,43 @@ class MoveSlotButton(
                 height = HEIGHT
             )
 
-            if (pp != -1 && ppMax != -1) {
-                var movePPText = lang("ui.moves.pp", pp).bold()
-                if (ppAsFraction) {
-                    movePPText = Component.literal("$pp/$ppMax").bold()
+            if (showOverlayBar) {
+                blitk(
+                    matrixStack = matrices,
+                    texture = moveOverlayBarResource,
+                    x = x + 60,
+                    y = y + 13,
+                    width = 47,
+                    height = 8
+                )
 
-                    if (pp <= Mth.floor(ppMax / 2F)) {
-                        movePPText = if (pp == 0) movePPText.red() else movePPText.gold()
+                if (pp != -1 && ppMax != -1) {
+                    var movePPText = lang("ui.moves.pp", pp).bold()
+                    if (ppAsFraction) {
+                        movePPText = Component.literal("$pp/$ppMax").bold()
+
+                        if (pp <= Mth.floor(ppMax / 2F)) {
+                            movePPText = if (pp == 0) movePPText.red() else movePPText.gold()
+                        }
                     }
+
+                    drawScaledText(
+                        context = context,
+                        font = CobblemonResources.DEFAULT_LARGE,
+                        text = movePPText,
+                        x = x + 93,
+                        y = y + 13,
+                        centered = true,
+                        opacity = alpha
+                    )
                 }
 
-                drawScaledText(
-                    context = context,
-                    font = CobblemonResources.DEFAULT_LARGE,
-                    text = movePPText,
-                    x = x + 93,
-                    y = y + 13,
-                    centered = true,
-                    opacity = alpha
-                )
+                // Move Category
+                MoveCategoryIcon(x = x + 66, y = y + 13.5, category = it.damageCategory, opacity = alpha).render(context)
             }
 
             // Type Icon
             TypeIcon(x = x + 2, y = y + 2, type = it.elementalType, opacity = alpha).render(context)
-
-            // Move Category
-            MoveCategoryIcon(x = x + 66, y = y + 13.5, category = it.damageCategory, opacity = alpha).render(context)
 
             // Move Name
             drawScaledText(

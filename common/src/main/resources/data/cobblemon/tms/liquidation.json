@@ -9,10 +9,10 @@
   "recipe": [
     {
       "item": "cobblemon:water_gem",
-      "count": 9
+      "count": 8
     },
     {
-      "item": "cobblemon:fighting_gem",
+      "item": "minecraft:prismarine_shard",
       "count": 1
     }
   ]

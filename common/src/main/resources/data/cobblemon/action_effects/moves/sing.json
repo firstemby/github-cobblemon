@@ -12,12 +12,14 @@
     {
       "type": "entity_particles",
       "effect": "cobblemon:sing_actorwave",
-      "locators": ["mouth", "jaw_lower", "special", "target"]
+      "locators": ["mouth", "jaw_lower", "special", "target"],
+      "targetLocators": ["target"]
     },
     {
       "type": "entity_particles",
       "effect": "cobblemon:sing_actor",
-      "locators": ["mouth", "jaw_lower", "special", "target"]
+      "locators": ["mouth", "jaw_lower", "special", "target"],
+      "targetLocators": ["target"]
     },
     {
       "type": "pause",
