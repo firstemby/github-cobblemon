@@ -13,6 +13,7 @@
   - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
 - Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
   - Wearable items that can be placed down are exempt from this behaviour.
+- Added custom footstep sounds to the following Pokémon: Arcanine, Wyrdeer, Pidgeot, Corviknight.
 
 ### Pokémon Added
 #### Generation 4
@@ -93,6 +94,7 @@
 - A new `negate` variant for evolution requirements has been added, which will negate (invert) the provided inner condition.
 - Added Molang functions for individual Pokédex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
 - `q.is_standing_on_blocks` now properly checks for non-full blocks like slabs, Mud or Soul Sand
+- Added Molang functions to play footstep sounds based on the corresponding surface. These are intended to be used by Pokémon animations.
 
 ### Particles
 
