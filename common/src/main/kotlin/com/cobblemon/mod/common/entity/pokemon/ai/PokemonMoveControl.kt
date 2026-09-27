@@ -205,7 +205,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
                 // Gather the point to be steered to
                 val nav = pokemonEntity.navigation
-                nav.pathFollowTarget?.let { rt ->
+                nav.getSteerTarget()?.position?.let { rt ->
                     wantedX = rt.x
                     wantedZ = rt.z
                     wantedY = rt.y
@@ -266,7 +266,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
                 // Gather the point to be steered to
                 val nav = pokemonEntity.navigation
-                nav.pathFollowTarget?.let { rt ->
+                nav.getSteerTarget()?.position?.let { rt ->
                     wantedX = rt.x
                     wantedZ = rt.z
                     wantedY = rt.y
