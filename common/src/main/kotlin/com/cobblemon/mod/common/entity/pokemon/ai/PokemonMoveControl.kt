@@ -42,6 +42,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
         // Max change in velocity per tick for fliers and swimmers
         const val FLY_SWIM_MAX_ACCEL = 0.015
+        // How fast a mob can turn to face where it's steering
+        const val MAX_TURN_DEGREES_PER_TICK = 20F
         // Walkers reach top speed from rest in roughly this many ticks
         const val GROUND_TICKS_TO_TOP_SPEED = 5.0
         // Fliers and swimmers stop once this close to a target they are arriving at
@@ -161,10 +163,17 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             if (!pokemonEntity.isFlying() && !pokemonEntity.isInLiquid) {
                 operation = Operation.WAIT
             }
+            val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
+            val inFluid = inWater || inLava
+            val fluidMover = pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid
+            val topSpeed = if (fluidMover) adjustedSpeed.toDouble() else groundTopSpeed(adjustedSpeed.toDouble())
+            val maxAccel = if (fluidMover) FLY_SWIM_MAX_ACCEL else topSpeed / GROUND_TICKS_TO_TOP_SPEED
+
             // Follow the path when there is one, otherwise go straight for the wanted position
-            val steerTarget = pokemonEntity.navigation.getSteerTarget()
+            val steerTarget = pokemonEntity.navigation.getSteerTarget(topSpeed, maxAccel)
             val target = steerTarget?.position ?: Vec3(wantedX, wantedY, wantedZ)
             val arrive = steerTarget?.isFinal ?: true
+            val maxSpeed = steerTarget?.maxSpeed ?: topSpeed
 
             val xDist = target.x - mob.x
             val zDist = target.z - mob.z
@@ -184,18 +193,13 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
-            if (!closeHorizontally) {
-                pokemonEntity.orientEntityToTravel()
-            }
 
-            val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
-            val inFluid = inWater || inLava
             var verticalHandled = false
             val blockPos = mob.blockPosition()
             val blockState = mob.level().getBlockState(blockPos)
             val voxelShape = blockState.getCollisionShape(mob.level(), blockPos)
 
-            if (pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid) {
+            if (fluidMover) {
                 verticalHandled = true
                 val fluidTarget = if (inFluid) target.add(0.0, FLUID_EXIT_Y_OFFSET, 0.0) else target
                 yDist = fluidTarget.y - mob.y
@@ -206,11 +210,10 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     stopInputs()
                     return
                 }
-                steerTowards(fluidTarget, adjustedSpeed.toDouble(), FLY_SWIM_MAX_ACCEL, arrive, horizontalOnly = false)
+                steerTowards(fluidTarget, maxSpeed, maxAccel, arrive, horizontalOnly = false)
             } else {
                 // TODO: sprinting should likely be dictated by an objective?
-                val topSpeed = groundTopSpeed(adjustedSpeed.toDouble())
-                steerTowards(target, topSpeed, topSpeed / GROUND_TICKS_TO_TOP_SPEED, arrive, horizontalOnly = true)
+                steerTowards(target, maxSpeed, maxAccel, arrive, horizontalOnly = true)
             }
 
             if (!verticalHandled) {
@@ -304,12 +307,27 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         val preDragVelocity = Vec3(velocity.x / drag.x, velocity.y / drag.y, velocity.z / drag.z)
 
         val mask = if (horizontalOnly) Vec3(1.0, 0.0, 1.0) else Vec3(1.0, 1.0, 1.0)
-        val desired = seekVelocity(mob.position().multiply(mask), target.multiply(mask), maxSpeed, maxAccel, arrive)
+        val desired = alignWithFacing(seekVelocity(mob.position().multiply(mask), target.multiply(mask), maxSpeed, maxAccel, arrive))
         val force = steerForce(desired, preDragVelocity.multiply(mask), maxAccel)
 
         mob.deltaMovement = preDragVelocity.add(force)
         stopInputs()
         mob.setDiscardFriction(true)
+    }
+
+    /**
+     * Turns toward the desired direction at a limited rate and only allows horizontal speed in the direction
+     * being faced, so turning around slows the mob down instead of it crab walking or moonwalking.
+     */
+    private fun alignWithFacing(desired: Vec3): Vec3 {
+        val horizontalSpeed = desired.horizontalDistance()
+        if (horizontalSpeed < LivingEntity.MIN_MOVEMENT_DISTANCE) return desired
+
+        val targetYaw = (Mth.atan2(desired.z, desired.x) * Mth.RAD_TO_DEG).toFloat() - 90F
+        mob.yRot = Mth.approachDegrees(mob.yRot, targetYaw, MAX_TURN_DEGREES_PER_TICK)
+        val alignment = Mth.cos(Mth.wrapDegrees(targetYaw - mob.yRot).toRadians()).coerceAtLeast(0F)
+        val forward = Vec3.directionFromRotation(0F, mob.yRot).scale(horizontalSpeed * alignment)
+        return Vec3(forward.x, desired.y, forward.z)
     }
 
     private fun stopInputs() {

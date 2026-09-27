@@ -1,9 +1,5 @@
 package com.cobblemon.mod.common.entity.pokemon.extensions
 
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
-import net.minecraft.util.Mth
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sqrt
 
@@ -31,13 +27,4 @@ fun arriveSpeed(distance: Double, maxSpeed: Double, maxAccel: Double): Double {
 fun steerForce(desired: Vec3, current: Vec3, maxForce: Double): Vec3 {
     val steer = desired.subtract(current)
     return if (steer.lengthSqr() > maxForce * maxForce) steer.normalize().scale(maxForce) else steer
-}
-
-/*************************************************************************************************************
-Face the direction of travel. Visual smoothing happens client side in PokemonBodyRotationControl
- *************************************************************************************************************/
-fun PokemonEntity.orientEntityToTravel() {
-    // Too slow for the direction to mean anything
-    if (deltaMovement.horizontalDistance() < LivingEntity.MIN_MOVEMENT_DISTANCE) return
-    yRot = Mth.atan2(deltaMovement.z, deltaMovement.x).toDegrees() - 90.0f
 }

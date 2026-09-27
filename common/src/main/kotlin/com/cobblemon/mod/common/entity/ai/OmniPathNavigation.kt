@@ -34,6 +34,9 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sqrt
 
 /**
  * A navigator designed to work with the [OmniPathNodeMaker], allowing a path that can cross land, water, and air
@@ -61,18 +64,21 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     var navigationContext = NavigationContext()
 
-    /** Where a steered mover should head this tick. [isFinal] means it should slow down and stop there. */
-    data class SteerTarget(val position: Vec3, val isFinal: Boolean)
+    /**
+     * Where a steered mover should head this tick. [isFinal] means it should slow down and stop there.
+     * [maxSpeed] is how fast it can go right now while still slowing in time for the corners ahead.
+     */
+    data class SteerTarget(val position: Vec3, val isFinal: Boolean, val maxSpeed: Double)
 
     companion object {
         val verticallyPreciseNodeTypes = setOf(PathType.WATER, PathType.OPEN, PathType.LAVA)
 
-        // Ticks of current velocity used to predict where the mob will be
+        // Ticks of current velocity the steer target sits ahead of the mob along the path
         const val LOOKAHEAD_TICKS = 5.0
-        // How far from the path line, relative to hitbox width, the mob can drift before being pulled back
-        const val PATH_RADIUS_PER_WIDTH = 1.0 / 3.0
-        // Nudges the seek point along the segment so the mob never seeks backwards
-        const val PATH_PUSH_FORWARD = 0.1
+        // Corners sharper than this start slowing the mob down
+        const val CORNER_FREE_ANGLE_DEGREES = 45.0
+        // Fraction of top speed kept going round a full reversal
+        const val CORNER_MIN_SPEED_FRACTION = 0.5
     }
 
     override fun createPathFinder(range: Int): PathFinder {
@@ -172,38 +178,70 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     }
 
     /**
-     * Reynolds path following, see https://www.youtube.com/watch?v=rlZYT-uvmGQ
-     * Projects a point ahead of the mob onto the segment it is on and seeks along it. The last node is
-     * sought directly so the mover can arrive on it.
+     * Pure pursuit path following. The target is a point a lookahead distance further along the path than the
+     * mob's closest point on it, so the mob eases back onto the path and rounds corners instead of zigzagging.
+     * Also scans ahead for corners and the path end to work out how fast the mob can go and still slow in time.
      */
-    fun getSteerTarget(): SteerTarget? {
+    fun getSteerTarget(maxSpeed: Double, maxAccel: Double): SteerTarget? {
         val currentPath = path?.takeUnless { it.isDone } ?: return null
         val index = currentPath.nextNodeIndex
         val lastIndex = currentPath.nodeCount - 1
-        val end = currentPath.getEntityPosAtNode(mob, index)
-        if (index == 0 || index == lastIndex) return SteerTarget(end, index == lastIndex)
+        if (index == 0) return SteerTarget(currentPath.getEntityPosAtNode(mob, 0), lastIndex == 0, maxSpeed)
 
-        val start = currentPath.getEntityPosAtNode(mob, index - 1)
-        val futurePos = mob.position().add(mob.deltaMovement.normalize().scale(lookAheadDistance()))
-        val direction = end.subtract(start).normalize()
-        val along = futurePos.subtract(start).dot(direction)
+        val lookAhead = lookAheadDistance()
+        val scanDistance = max(lookAhead, maxSpeed * maxSpeed / (2 * maxAccel))
+        var point = closestPointOnSegment(mob.position(), currentPath.getEntityPosAtNode(mob, index - 1), currentPath.getEntityPosAtNode(mob, index))
+        var distance = 0.0
+        var carrot: Vec3? = null
+        var speedLimit = maxSpeed
 
-        // Lookahead has left this segment so follow the next one
-        if (along > end.distanceTo(start)) {
-            return SteerTarget(seekPoint(end, currentPath.getEntityPosAtNode(mob, index + 1), futurePos), false)
+        for (i in index..lastIndex) {
+            val node = currentPath.getEntityPosAtNode(mob, i)
+            val segmentLength = node.distanceTo(point)
+            if (carrot == null && distance + segmentLength >= lookAhead) {
+                carrot = point.add(node.subtract(point).normalize().scale(lookAhead - distance))
+            }
+            distance += segmentLength
+            if (i == lastIndex) {
+                // Brake to a stop on the end
+                speedLimit = min(speedLimit, sqrt(2 * maxAccel * distance))
+                break
+            }
+            if (distance > scanDistance) break
+            val cornerSpeed = maxSpeed * cornerSpeedFraction(currentPath, i)
+            speedLimit = min(speedLimit, sqrt(cornerSpeed * cornerSpeed + 2 * maxAccel * distance))
+            point = node
         }
-        return SteerTarget(seekPoint(start, end, futurePos), false)
+
+        // Lookahead ran off the end so arrive on the last node
+        return if (carrot == null) {
+            SteerTarget(currentPath.getEntityPosAtNode(mob, lastIndex), true, speedLimit)
+        } else {
+            SteerTarget(carrot, false, speedLimit)
+        }
     }
 
     private fun lookAheadDistance() = mob.deltaMovement.length() * LOOKAHEAD_TICKS + mob.bbWidth / 2.0
 
-    private fun seekPoint(start: Vec3, end: Vec3, futurePos: Vec3): Vec3 {
-        val direction = end.subtract(start).normalize()
-        val along = futurePos.subtract(start).dot(direction).coerceIn(0.0, end.distanceTo(start))
-        val onPath = start.add(direction.scale(along))
-        // Close enough to the path already so keep heading where we're going
-        val seek = if (onPath.distanceTo(futurePos) < mob.bbWidth * PATH_RADIUS_PER_WIDTH) futurePos else onPath
-        return seek.add(direction.scale(PATH_PUSH_FORWARD))
+    private fun closestPointOnSegment(pos: Vec3, start: Vec3, end: Vec3): Vec3 {
+        val segment = end.subtract(start)
+        val lengthSqr = segment.lengthSqr()
+        if (lengthSqr == 0.0) return start
+        val t = (pos.subtract(start).dot(segment) / lengthSqr).coerceIn(0.0, 1.0)
+        return start.add(segment.scale(t))
+    }
+
+    /** 1 for gentle turns, falling to [CORNER_MIN_SPEED_FRACTION] for a full reversal at node [i]. */
+    private fun cornerSpeedFraction(currentPath: Path, i: Int): Double {
+        val node = currentPath.getEntityPosAtNode(mob, i)
+        val incoming = node.subtract(currentPath.getEntityPosAtNode(mob, i - 1))
+        val outgoing = currentPath.getEntityPosAtNode(mob, i + 1).subtract(node)
+        if (incoming.lengthSqr() == 0.0 || outgoing.lengthSqr() == 0.0) return 1.0
+        val cosAngle = incoming.normalize().dot(outgoing.normalize()).coerceIn(-1.0, 1.0)
+        val angle = Math.toDegrees(acos(cosAngle))
+        if (angle <= CORNER_FREE_ANGLE_DEGREES) return 1.0
+        val sharpness = (angle - CORNER_FREE_ANGLE_DEGREES) / (180.0 - CORNER_FREE_ANGLE_DEGREES)
+        return Mth.lerp(sharpness, 1.0, CORNER_MIN_SPEED_FRACTION)
     }
 
     /**
