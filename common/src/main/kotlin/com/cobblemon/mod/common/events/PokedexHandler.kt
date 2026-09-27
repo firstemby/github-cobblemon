@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -17,28 +18,29 @@ import com.cobblemon.mod.common.api.events.pokemon.PokemonGainedEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 
 object PokedexHandler : EventHandler {
-    override fun registerListeners() {
-        CobblemonEvents.POKEMON_GAINED.subscribe(Priority.NORMAL, ::onPokemonGained)
-        CobblemonEvents.POKEMON_SEEN.subscribe(Priority.NORMAL, ::onPokemonSeen)
-        CobblemonEvents.POKEMON_ASPECTS_CHANGED.subscribe(Priority.NORMAL, ::onPokemonAspectsChanged)
-        CobblemonEvents.LEVEL_UP_EVENT.subscribe(Priority.NORMAL, ::onLevelUp)
-    }
+	override fun registerListeners() {
+		CobblemonEvents.POKEMON_GAINED.subscribe(Priority.NORMAL, ::onPokemonGained)
+		CobblemonEvents.POKEMON_SEEN.subscribe(Priority.NORMAL, ::onPokemonSeen)
+		CobblemonEvents.POKEMON_ASPECTS_CHANGED.subscribe(Priority.NORMAL, ::onPokemonAspectsChanged)
+		CobblemonEvents.LEVEL_UP_EVENT.subscribe(Priority.NORMAL, ::onLevelUp)
+	}
 
-    fun onPokemonGained(event: PokemonGainedEvent) {
-        Cobblemon.playerDataManager.getPokedexData(event.playerId).catch(event.pokemon)
-    }
+	fun onPokemonGained(event: PokemonGainedEvent) {
+		Cobblemon.playerDataManager.getPokedexData(event.playerId).obtain(event.pokemon)
+		Cobblemon.playerDataManager.getTMData(event.playerId).syncTMsFromPokemon(event.pokemon)
+	}
 
-    fun onPokemonSeen(event: PokemonSeenEvent) {
-        Cobblemon.playerDataManager.getPokedexData(event.playerId).encounter(event.pokemon)
-    }
+	fun onPokemonSeen(event: PokemonSeenEvent) {
+		Cobblemon.playerDataManager.getPokedexData(event.playerId).encounter(event.pokemon)
+	}
 
-    fun onPokemonAspectsChanged(event: PokemonAspectsChangedEvent) {
-        if (event.ownerId != null) {
-            Cobblemon.playerDataManager.getPokedexData(event.ownerId).catch(event.pokemon)
-        }
-    }
+	fun onPokemonAspectsChanged(event: PokemonAspectsChangedEvent) {
+		if (event.ownerId != null) {
+			Cobblemon.playerDataManager.getPokedexData(event.ownerId).obtain(event.pokemon)
+		}
+	}
 
-    fun onLevelUp(event: LevelUpEvent) {
-        Cobblemon.playerDataManager.getPokedexData(event.pokemon.getOwnerUUID() ?: return).obtain(event.pokemon)
-    }
+	fun onLevelUp(event: LevelUpEvent) {
+		Cobblemon.playerDataManager.getPokedexData(event.pokemon.getOwnerUUID() ?: return).obtain(event.pokemon)
+	}
 }

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -9,7 +10,6 @@
 package com.cobblemon.mod.common.platform.events
 
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.packs.resources.CloseableResourceManager
 
 /**
  * Events fired during the life cycle of a [MinecraftServer].
@@ -43,10 +43,5 @@ interface ServerEvent {
 	 * Fired when the server has stopped.
 	 */
 	data class Stopped(override val server: MinecraftServer) : ServerEvent
-	
-	data class StartingDataPackReload(
-		override val server: MinecraftServer,
-		val resourceManager: CloseableResourceManager
-	) : ServerEvent
 
 }
