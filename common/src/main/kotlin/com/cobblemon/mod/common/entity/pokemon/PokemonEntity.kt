@@ -327,12 +327,11 @@ open class PokemonEntity(
     var previousRidingState: RidingBehaviourState? = null
         private set
 
-    /** Currently just used to ignore the killing of 0.003 length deltaMovement components that happens in
-     *  this.aiStep(). Its needed to settle the entities movement to zero but for slow mons like snorlax it
-     *  causes their minute forces upon movement start in PokemonMoveControl to be ignored. This saving of
-     *  movement is being done in stead of a mixin for now.
+    /** Movement at the end of the last unridden travel. Lets PokemonMoveControl restore the tiny components that
+     *  aiStep() zeroes, which would otherwise swallow the small forces slow mons like snorlax start moving with.
      * */
-    var aiMovement: Vec3 = Vec3.ZERO
+    var lastTravelMovement: Vec3? = null
+        private set
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -724,6 +723,7 @@ open class PokemonEntity(
             clearRestriction()
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
+            yRot = yBodyRot
         }
 
         jumping = false
@@ -1924,7 +1924,6 @@ open class PokemonEntity(
             //Prevent current travel logic when riding a pokemon.
             if (!this.hasRider() || this.controllingPassenger == null) {
                 super.travel(movementInput)
-                this.aiMovement = this.deltaMovement
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                     behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
@@ -1977,7 +1976,14 @@ open class PokemonEntity(
             // Prevent swimmers from sinking in battle
             this.deltaMovement = Vec3(deltaMovement.x, 0.0, deltaMovement.z)
         }
+        lastTravelMovement = if (!this.hasRider() || this.controllingPassenger == null) this.deltaMovement else null
     }
+
+    /** True when vanilla travel will apply water drag this tick. */
+    fun isWaterTravelling() = isInWater && isAffectedByFluids() && !canStandOnFluid(level().getFluidState(blockPosition()))
+
+    /** Horizontal drag vanilla applies each tick while swimming. */
+    fun getHorizontalWaterDrag() = getWaterSlowDown()
 
     private fun updateBlocksTraveled(fromBp: BlockPos) {
         // Riding or falling shouldn't count, other movement sources are fine

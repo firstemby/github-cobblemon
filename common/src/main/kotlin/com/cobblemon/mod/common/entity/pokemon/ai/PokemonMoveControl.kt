@@ -39,6 +39,22 @@ import net.minecraft.world.phys.Vec3
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
         const val VERY_CLOSE = 2.500000277905201E-3
+
+        // Max change in velocity per tick for fliers and swimmers
+        const val FLY_SWIM_MAX_ACCEL = 0.015
+        // Walkers reach top speed from rest in roughly this many ticks
+        const val GROUND_TICKS_TO_TOP_SPEED = 5.0
+        // Fliers and swimmers stop once this close to a target they are arriving at
+        const val ARRIVAL_TOLERANCE = 0.05
+        // Swimmers aim this far above their target, otherwise they get stuck on the lip when leaving water
+        const val FLUID_EXIT_Y_OFFSET = 0.05
+
+        // Vanilla values from LivingEntity.travel and aiStep
+        const val VANILLA_INPUT_SCALE = 0.98
+        const val VANILLA_GROUND_SPEED_FACTOR = 0.21600002
+        const val VANILLA_AIR_FRICTION = 0.91
+        const val VANILLA_FLYING_SPEED = 0.02
+        const val VANILLA_WATER_VERTICAL_DRAG = 0.8
     }
 
     val runtime = MoLangRuntime().also {
@@ -76,7 +92,6 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
     override fun tick() {
         mob.setDiscardFriction(false) // ignored while trying to move but if stopped or doing something else this needs reenabled
-        pokemonEntity.deltaMovement = pokemonEntity.aiMovement //TODO: this also needs moved elsewhere probably
         if (banking && operation != Operation.WAIT) {
             banking = false
         }
@@ -146,9 +161,14 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             if (!pokemonEntity.isFlying() && !pokemonEntity.isInLiquid) {
                 operation = Operation.WAIT
             }
-            var xDist = wantedX - mob.x
-            var zDist = wantedZ - mob.z
-            var yDist = wantedY - mob.y
+            // Follow the path when there is one, otherwise go straight for the wanted position
+            val steerTarget = pokemonEntity.navigation.getSteerTarget()
+            val target = steerTarget?.position ?: Vec3(wantedX, wantedY, wantedZ)
+            val arrive = steerTarget?.isFinal ?: true
+
+            val xDist = target.x - mob.x
+            val zDist = target.z - mob.z
+            var yDist = target.y - mob.y
 
             if (xDist * xDist + yDist * yDist + zDist * zDist < VERY_CLOSE) {
                 // If we're close enough, pull up stumps here.
@@ -165,14 +185,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
             if (!closeHorizontally) {
-                // NEW
-                pokemonEntity.orientEntityToTravel(1.0f)
-
-                // OLD
-//                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
-//                val currentMovingAngle = mob.yRot
-//                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
-//                mob.yRot = steppedAngle
+                pokemonEntity.orientEntityToTravel()
             }
 
             val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
@@ -184,116 +197,20 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             if (pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid) {
                 verticalHandled = true
-                mob.yya = 0F
-                mob.speed = 0F
-                // Refinement is to prevent the entity from spinning around trying to get to a super precise location.
-                val refine: (Double) -> Double = { if (abs(it) < 0.05) 0.0 else it }
+                val fluidTarget = if (inFluid) target.add(0.0, FLUID_EXIT_Y_OFFSET, 0.0) else target
+                yDist = fluidTarget.y - mob.y
 
-                val fullDistance = Vec3(
-                    xDist,
-                    refine(yDist + 0.05), // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-                    zDist
-                )
-
-
-                val speed = adjustedSpeed.toDouble()
-                //val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
-
-                yDist = fullDistance.y
-
-                val maxForce = 0.015
-
-                // Gather the point to be steered to
-                val nav = pokemonEntity.navigation
-                nav.getSteerTarget()?.position?.let { rt ->
-                    wantedX = rt.x
-                    wantedZ = rt.z
-                    wantedY = rt.y
+                if (arrive && fluidTarget.distanceTo(mob.position()) < ARRIVAL_TOLERANCE) {
+                    operation = Operation.WAIT
+                    mob.deltaMovement = Vec3.ZERO
+                    stopInputs()
+                    return
                 }
-                // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-                val steerForce = pokemonEntity.steerToTarget(Vec3(wantedX, refine(wantedY + 0.05), wantedZ), speed, maxForce)
-                mob.deltaMovement = mob.deltaMovement.add(steerForce)
-
-                mob.speed = 0f
-                mob.setZza(0f)
-                mob.setXxa(0f)
-                mob.setDiscardFriction(true)
+                steerTowards(fluidTarget, adjustedSpeed.toDouble(), FLY_SWIM_MAX_ACCEL, arrive, horizontalOnly = false)
             } else {
-                // division is to slow the speed down a bit so they don't overshoot when they get there.
-                var forwardSpeed = adjustedSpeed
-                var minForce = 0.005 // If its not at least this it breaks quite a few things. looking at you snorlax
-
-                val finalGoal: BlockPos? = pokemonEntity.navigation.path?.target
-                val distanceToFinalGoal = finalGoal?.let {
-                    pokemonEntity.position().distanceTo(it.center).toFloat()
-                } ?: 0.0f
-
                 // TODO: sprinting should likely be dictated by an objective?
-//                if (distanceToFinalGoal > 8f) { //TODO: scale this to hitbox size
-//                    pokemonEntity.isPokemonSprinting = true
-//                    forwardSpeed *= 1.4f
-//                    minForce = 0.02 //TODO: figure out what to actually do for this
-//                } else {
-//                    pokemonEntity.isPokemonSprinting = false
-//                }
-
-                // New way
-                val blockFriction = mob.level()
-                    .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
-                    .block.getFriction()
-                val frictionInfluencedSpeed = if (mob.onGround()) {
-                    forwardSpeed * (0.21600002f / (blockFriction * blockFriction * blockFriction))
-                } else {
-                    0.02f // getFlyingSpeed() default for non-player controlled. Also hopefully our checks above this caught this case
-                }
-
-
-                val baseForce = (forwardSpeed * 0.98) * frictionInfluencedSpeed
-
-                // We find where the equilibrium between vanilla friction and the input force usually is to get a topSpeed for this mon.
-                // Could be replaced in the future with direct topSpeed calculations in the pokemon species form
-                val frictionAppliedAfter = blockFriction * 0.91
-                val topSpeed = baseForce / (1 - frictionAppliedAfter)
-                val currSpeed = pokemonEntity.deltaMovement.length()
-
-                //TODO: is this needed?
-//                if (!pokemonEntity.isPokemonSprinting && currSpeed > topSpeed) { // TODO: this might mess up some stuff like tnt pushing mobs around
-//                    pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.normalize().scale(lerp(currSpeed, topSpeed, 0.1))
-//                }
-
-                // Get a force that looks natural
-                val maxForce = minForce //max(baseForce * forceDiv, minForce)
-
-                // Gather the point to be steered to
-                val nav = pokemonEntity.navigation
-                nav.getSteerTarget()?.position?.let { rt ->
-                    wantedX = rt.x
-                    wantedZ = rt.z
-                    wantedY = rt.y
-                }
-
-                val steerForce = pokemonEntity.steerToTarget(
-                    Vec3(wantedX, wantedY, wantedZ),
-                    topSpeed, // Is never reached as minecraft relies on top speed being obtained when force=friction
-                    topSpeed / 15f, //TODO: Possibly scale with hitbox size?
-                    horzOnly = true
-                )
-
-                // If this happens a lot then we have issues
-                val mdt = LivingEntity.MIN_MOVEMENT_DISTANCE
-                if ( abs(steerForce.x) < mdt || abs(steerForce.y) < mdt || abs(steerForce.z) < mdt) {
-                    //Cobblemon.LOGGER.info("INFO: Steer Force dimension smaller than minimum movement distance value") //TODO: figure this out
-                }
-
-                pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(steerForce)
-                //pokemonEntity.deltaMovement = pokemonEntity.deltaMovement.add(Vec3(0.0103766, 0.0, 0.0))
-                mob.speed = 0f
-                mob.setZza(0f)
-                mob.setXxa(0f)
-                mob.setDiscardFriction(true)
-
-                // Old way
-//                mob.speed = forwardSpeed
+                val topSpeed = groundTopSpeed(adjustedSpeed.toDouble())
+                steerTowards(target, topSpeed, topSpeed / GROUND_TICKS_TO_TOP_SPEED, arrive, horizontalOnly = true)
             }
 
             if (!verticalHandled) {
@@ -302,7 +219,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 val zComponent = Mth.cos(mob.yRot.toRadians()).toDouble()
 
                 val motion = Vec3(xComponent, 0.0, zComponent).normalize()
-                val offset = motion.scale(mob.speed.toDouble())
+                val offset = motion.scale(adjustedSpeed.toDouble())
                 val closeEnoughToJump = !mob.isFree(offset.x, 0.0, offset.z)// sqrt(xDist * xDist + zDist * zDist) - 0.5 <  entity.width / 2 + entity.movementSpeed * 4
 
                 if (tooBigToStep &&
@@ -311,11 +228,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     !blockState.`is`(BlockTags.DOORS) &&
                     !blockState.`is`(BlockTags.FENCES)
                 ) {
-//                    val wantedBlockPos = BlockPos(wantedX.toInt(), (wantedY).toInt(), wantedZ.toInt())
-//                    if (!voxelShape.isEmpty || (mob.y + pokemonEntity.behaviour.moving.stepHeight < mob.level().getBlockState(wantedBlockPos.below()).getCollisionShape(mob.level(), wantedBlockPos.below()).max(Direction.Axis.Y) + wantedBlockPos.below().y.toDouble())) {
-                        mob.jumpControl.jump()
-                        operation = Operation.JUMPING
-//                    }
+                    mob.jumpControl.jump()
+                    operation = Operation.JUMPING
                 }
             }
 
@@ -372,6 +286,63 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 }
             }
         }
+    }
+
+    /**
+     * Applies a steering force toward [target] and takes over velocity from vanilla input and friction.
+     * Vanilla water drag still applies after moving, so swimmers steer from their velocity before that drag
+     * and add back what it will take off.
+     */
+    private fun steerTowards(target: Vec3, maxSpeed: Double, maxAccel: Double, arrive: Boolean, horizontalOnly: Boolean) {
+        val velocity = restoreZeroedMovement()
+        val drag = if (pokemonEntity.isWaterTravelling()) {
+            val horizontal = pokemonEntity.getHorizontalWaterDrag().toDouble()
+            Vec3(horizontal, VANILLA_WATER_VERTICAL_DRAG, horizontal)
+        } else {
+            Vec3(1.0, 1.0, 1.0)
+        }
+        val preDragVelocity = Vec3(velocity.x / drag.x, velocity.y / drag.y, velocity.z / drag.z)
+
+        val mask = if (horizontalOnly) Vec3(1.0, 0.0, 1.0) else Vec3(1.0, 1.0, 1.0)
+        val desired = seekVelocity(mob.position().multiply(mask), target.multiply(mask), maxSpeed, maxAccel, arrive)
+        val force = steerForce(desired, preDragVelocity.multiply(mask), maxAccel)
+
+        mob.deltaMovement = preDragVelocity.add(force)
+        stopInputs()
+        mob.setDiscardFriction(true)
+    }
+
+    private fun stopInputs() {
+        mob.speed = 0F
+        mob.yya = 0F
+        mob.setZza(0F)
+        mob.setXxa(0F)
+    }
+
+    /** aiStep() zeroes velocity components under MIN_MOVEMENT_DISTANCE which swallows slow steering, so put those back. */
+    private fun restoreZeroedMovement(): Vec3 {
+        val last = pokemonEntity.lastTravelMovement ?: return mob.deltaMovement
+        val current = mob.deltaMovement
+        fun restore(now: Double, before: Double) = if (now == 0.0 && abs(before) < LivingEntity.MIN_MOVEMENT_DISTANCE) before else now
+        mob.deltaMovement = Vec3(restore(current.x, last.x), restore(current.y, last.y), restore(current.z, last.z))
+        return mob.deltaMovement
+    }
+
+    /**
+     * Speed where vanilla ground friction balances the walk input force, so steered walkers keep vanilla pace.
+     * Could be replaced in the future with direct topSpeed calculations in the pokemon species form
+     */
+    private fun groundTopSpeed(speed: Double): Double {
+        val blockFriction = mob.level()
+            .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
+            .block.getFriction().toDouble()
+        val frictionInfluencedSpeed = if (mob.onGround()) {
+            speed * (VANILLA_GROUND_SPEED_FACTOR / (blockFriction * blockFriction * blockFriction))
+        } else {
+            VANILLA_FLYING_SPEED
+        }
+        val inputForce = speed * VANILLA_INPUT_SCALE * frictionInfluencedSpeed
+        return inputForce / (1 - blockFriction * VANILLA_AIR_FRICTION)
     }
 
     /*

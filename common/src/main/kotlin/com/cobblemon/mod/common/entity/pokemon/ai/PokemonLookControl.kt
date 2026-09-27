@@ -11,29 +11,31 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.control.LookControl
-import java.util.function.Consumer
 
 /**
- * Controls head movement of pokemon
+ * Controls head movement of pokemon. The head is clamped to the body within the look itself, and whatever
+ * the head can't cover is left in [bodyTurnRequest] for [PokemonBodyRotationControl].
  */
 class PokemonLookControl(private val pokemon: PokemonEntity) : LookControl(pokemon) {
+    /** Signed degrees the look target is past the head's yaw limit this tick. */
+    var bodyTurnRequest = 0F
+        private set
+
     override fun tick() {
+        bodyTurnRequest = 0F
         if (this.resetXRotOnTick()) {
             this.mob.setXRot(0.0f)
         }
 
         if (this.lookAtCooldown > 0) {
             --this.lookAtCooldown
-            val targetYRotOpt = getYRotD()
-            if (targetYRotOpt.isPresent) {
-                val targetYRot = targetYRotOpt.get()
+            getYRotD().ifPresent { targetYRot ->
                 val attemptedRot = rotateTowards(mob.yHeadRot, targetYRot, yMaxRotSpeed)
                 val headTurnAngle = Mth.wrapDegrees(attemptedRot - mob.yBodyRot)
-                val headTurn = Mth.clamp(headTurnAngle, -this.mob.maxHeadYRot.toFloat(), this.mob.maxHeadYRot.toFloat())
-                val bodyTurn = headTurnAngle - headTurn // Whats left over for the head to turn
-
+                val maxHeadTurn = mob.maxHeadYRot.toFloat()
+                val headTurn = Mth.clamp(headTurnAngle, -maxHeadTurn, maxHeadTurn)
+                bodyTurnRequest = headTurnAngle - headTurn
                 mob.yHeadRot = mob.yBodyRot + headTurn
-
             }
             getXRotD().ifPresent { targetXRot ->
                 mob.setXRot(rotateTowards(mob.getXRot(), targetXRot, xMaxRotAngle))
@@ -41,18 +43,7 @@ class PokemonLookControl(private val pokemon: PokemonEntity) : LookControl(pokem
         } else {
             this.mob.yHeadRot = this.rotateTowards(this.mob.yHeadRot, this.mob.yBodyRot, 10.0f)
         }
-        // Get diff between head and body
 
         this.clampHeadRotationToBody()
-    }
-
-    override fun clampHeadRotationToBody() {
-        if (!this.mob.getNavigation().isDone) { //TODO: Is this needed?
-            // Stolen from Mth.rotateIfNecessary()
-            val f = Mth.degreesDifference(this.mob.yHeadRot, this.mob.yBodyRot)
-            val g = Mth.clamp(f, -this.mob.getMaxHeadYRot().toFloat(), this.mob.getMaxHeadYRot().toFloat())
-            this.mob.yHeadRot = this.mob.yBodyRot - g
-            this.mob.yBodyRot = this.mob.yBodyRot - (f - g)
-        }
     }
 }
