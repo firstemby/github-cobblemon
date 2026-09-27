@@ -63,6 +63,8 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     )
 
     var navigationContext = NavigationContext()
+    // Whether whatever started the current path wants it sprinted. Cleared on every new path and on stop
+    var sprinting = false
 
     /**
      * Where a steered mover should head this tick. [isFinal] means it should slow down and stop there.
@@ -321,6 +323,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     fun moveTo(x: Double, y: Double, z: Double, speed: Double = 1.0, navigationContext: NavigationContext) {
         this.navigationContext = navigationContext
         this.moveTo(x, y, z, speed)
+        this.sprinting = navigationContext.sprinting
     }
 
     override fun isStableDestination(pos: BlockPos): Boolean {
@@ -374,6 +377,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     }
 
     override fun moveTo(path: Path?, speed: Double): Boolean {
+        sprinting = false
         if (path != null && path.nodeCount > 0) {
             val node = path.getNode(0)!!
 //            pokemonEntity.discard()
@@ -492,6 +496,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     override fun stop() {
         super.stop()
+        sprinting = false
         this.currentNodeDistance = -1F
         this.cachedCurrentNode = null
         path = null

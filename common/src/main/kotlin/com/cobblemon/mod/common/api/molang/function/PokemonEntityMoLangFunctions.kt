@@ -52,10 +52,15 @@ object PokemonEntityMoLangFunctions : AbstractMoLangFunctionHolder<PokemonEntity
             }
         }
         map["is_sprinting"] = {
-            pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
-                val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
-                return@ifRidingAvailableSupply moValue.functions["sprinting"]?.apply(MoParams.EMPTY) as? MoValue
-                    ?: DoubleValue.ZERO
+            // Ridden pokemon sprint from the ride state, otherwise from the AI
+            if (!pokemonEntity.hasControllingPassenger()) {
+                DoubleValue(pokemonEntity.isPokemonSprinting)
+            } else {
+                pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
+                    val moValue = behaviour.asMoLangValue(settings, state, pokemonEntity)
+                    return@ifRidingAvailableSupply moValue.functions["sprinting"]?.apply(MoParams.EMPTY) as? MoValue
+                        ?: DoubleValue.ZERO
+                }
             }
         }
         map["is_drifting"] = {

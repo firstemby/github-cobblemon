@@ -112,12 +112,19 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         }
 
         val behaviour = pokemonEntity.behaviour
-        val mediumSpeed = runtime.resolveFloat(if (pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)) {
+        val flying = pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)
+        val swimming = pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)
+        // Sprinting is ground only and has to be asked for by whatever started the path
+        val sprintSpeed = behaviour.moving.walk.sprintSpeed
+            ?.takeIf { operation == Operation.MOVE_TO && !flying && !swimming && pokemonEntity.navigation.sprinting }
+        pokemonEntity.isPokemonSprinting = sprintSpeed != null
+
+        val mediumSpeed = runtime.resolveFloat(if (flying) {
             behaviour.moving.fly.flySpeedHorizontal
-        } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
+        } else if (swimming) {
             behaviour.moving.swim.swimSpeed
         } else {
-            behaviour.moving.walk.walkSpeed
+            sprintSpeed ?: behaviour.moving.walk.walkSpeed
         }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
