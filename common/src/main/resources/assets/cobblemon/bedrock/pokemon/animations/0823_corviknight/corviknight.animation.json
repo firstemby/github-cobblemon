@@ -3150,6 +3150,10 @@
 				"locator_seat_2": {
 					"rotation": [45, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.5001": "q.run_molang('cobblemon:stepsound_claw_large');",
+				"1.5001": "q.run_molang('cobblemon:stepsound_claw_large');"
 			}
 		},
 		"animation.corviknight.ground_run": {
@@ -4473,6 +4477,10 @@
 				"locator_seat_2": {
 					"rotation": [25, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.3333": "q.run_molang('cobblemon:stepsound_claw_large');",
+				"0.8333": "q.run_molang('cobblemon:stepsound_claw_large');"
 			}
 		},
 		"animation.corviknight.air_idle": {
