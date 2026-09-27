@@ -187,8 +187,8 @@ class CobblemonFabricClient: ClientModInitializer, CobblemonClientImplementation
                     camera
                 )
             }
-            SteerForceRenderer.registerTickHandler()
         }
+        SteerForceRenderer.registerTickHandler()
 
         CobblemonModelPredicateRegistry.registerPredicates()
     }

@@ -49,49 +49,6 @@ fun PokemonEntity.steerToTarget(
 
 
 /*************************************************************************************************************
-Steering Target Avoidance
-Detailed in: https://www.red3d.com/cwr/steer/gdc99/
- *************************************************************************************************************/
-fun PokemonEntity.avoidTarget(
-    targetPos: Vec3,
-    maxSpeed: Double,
-    maxForce: Double,
-    avoidanceRange: Double? = null
-): Vec3 {
-
-    // Calculate the vector from the targets current position to the
-    // pokemon position. Set its desired magnitude to max speed scaled
-    // linearly from 1.0 when right next to the target and 0.0 when on the
-    // very edge of the avoidance Range
-    var fromTargetVec = this.position().subtract(targetPos)
-
-    // Calculate distance to the target
-    val distToTarget = fromTargetVec.length()
-    if (distToTarget <  1.0E-4) {fromTargetVec = Vec3(0.0, 1.0, 0.0)} // Ensure the avoidance vector can't be ZERO
-
-    // Return no force otherwise a desired vector will be calculated that slows the velocity.
-    if (avoidanceRange != null && distToTarget >= avoidanceRange) return Vec3.ZERO
-
-    // Scale the avoidance force linearly
-    val desiredSpeed = when {
-        avoidanceRange == null -> maxSpeed // If no avoidance range then just always flee as fast as you can
-        avoidanceRange == 0.0 -> maxSpeed // Avoid weird divide by zero nonsense
-        distToTarget < avoidanceRange -> (1.0 - (distToTarget / avoidanceRange)) * maxSpeed
-        else -> 0.0
-    }
-    //TODO: determine if this should be scaled by distance. Probably not
-    val desiredVec = fromTargetVec.normalize() //.scale(desiredSpeed)
-
-    // Steer the pokemon towards the desired vector
-    var steer = desiredVec.subtract(this.deltaMovement)
-    if (steer.length() > maxForce) {
-        steer = steer.normalize().scale(maxForce)
-    }
-
-    return steer
-}
-
-/*************************************************************************************************************
 Lerp the mobs yRot to its direction of travel
  *************************************************************************************************************/
 fun PokemonEntity.orientEntityToTravel(k: Float = 1.0f) {
