@@ -26,93 +26,92 @@ import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getStringOrNull
 
 object PokedexMoLangFunctions : AbstractMoLangFunctionHolder<AbstractPokedexManager>() {
-    override fun AbstractPokedexManager.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
-        val pokedex = this
-        val map = mutableMapOf<String, (MoParams) -> Any>()
-        map["get_species_record"] = { params ->
-            val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
-            pokedex.speciesRecords[speciesId]?.struct ?: QueryStruct(hashMapOf())
-        }
+	override fun AbstractPokedexManager.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
+		val pokedex = this
+		val functions = hashMapOf<String, (MoParams) -> Any>()
 
-        map["has_seen"] = put@{ params ->
-            val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
-            val formName = params.getStringOrNull(1)
+		functions["get_species_record"] = { params ->
+			val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
+			pokedex.speciesRecords[speciesId]?.struct ?: QueryStruct(hashMapOf())
+		}
 
-            if (formName == null) {
-                return@put DoubleValue(pokedex.getHighestKnowledgeForSpecies(speciesId).ordinal >= PokedexEntryProgress.SEEN.ordinal)
-            } else {
-                return@put DoubleValue(
-                    (pokedex.getSpeciesRecord(speciesId)?.getFormRecord(formName)?.knowledge?.ordinal
-                        ?: 0) >= PokedexEntryProgress.SEEN.ordinal
-                )
-            }
-        }
+		functions["has_seen"] = hasSeen@{ params ->
+			val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
+			val formName =
+				params.getStringOrNull(1)
+					?: return@hasSeen DoubleValue(
+						pokedex.getHighestKnowledgeForSpecies(speciesId).ordinal >= PokedexEntryProgress.SEEN.ordinal,
+					)
 
-        map["has_caught"] = put@{ params ->
-            val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
-            val formName = params.getStringOrNull(1)
-            if (formName == null) {
-                return@put DoubleValue(pokedex.getHighestKnowledgeForSpecies(speciesId) == PokedexEntryProgress.OWNED)
-            } else {
-                return@put DoubleValue(
-                    pokedex.getSpeciesRecord(speciesId)
-                        ?.getFormRecord(formName)?.knowledge == PokedexEntryProgress.OWNED
-                )
-            }
-        }
-        map["caught_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) }
-        map["seen_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) }
-        map["caught_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
-        map["seen_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
+			DoubleValue(
+				(
+						pokedex
+							.getSpeciesRecord(speciesId)
+							?.getFormRecord(formName)
+							?.knowledge
+							?.ordinal
+							?: 0
+						) >= PokedexEntryProgress.SEEN.ordinal,
+			)
+		}
 
-        functions["dex_caught_count"] = { params ->
-            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
-            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtCount))
-            else DoubleValue.ZERO
-        }
-        functions["dex_seen_count"] = { params ->
-            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
-            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenCount))
-            else DoubleValue.ZERO
-        }
-        functions["dex_caught_percent"] = { params ->
-            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
-            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtPercent).toDouble())
-            else DoubleValue.ZERO
-        }
-        functions["dex_seen_percent"] = { params ->
-            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
-            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenPercent).toDouble())
-            else DoubleValue.ZERO
-        }
+		functions["has_caught"] = hasCaught@{ params ->
+			val speciesId = params.getString(0).asIdentifierDefaultingNamespace()
+			val formName =
+				params.getStringOrNull(1) ?: return@hasCaught DoubleValue(
+					pokedex.getHighestKnowledgeForSpecies(
+						speciesId,
+					) == PokedexEntryProgress.OWNED,
+				)
+			DoubleValue(
+				pokedex
+					.getSpeciesRecord(speciesId)
+					?.getFormRecord(formName)
+					?.knowledge == PokedexEntryProgress.OWNED,
+			)
+		}
+		functions["caught_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) }
+		functions["seen_count"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) }
+		functions["caught_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
+		functions["seen_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
 
-        when (pokedex) {
-            is PokedexManager -> {
-                functions["player_id"] = { StringValue(pokedex.uuid.toString()) }
-                functions["see"] = { params ->
-                    val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
-                    pokedex.encounter(pokemon)
-                    DoubleValue.ONE
-                }
-                functions["catch"] = { params ->
-                    val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
-                    pokedex.obtain(pokemon)
-                    DoubleValue.ONE
-                }
-        if (pokedex is PokedexManager) {
-            map["player_id"] = { StringValue(pokedex.uuid.toString()) }
-            map["see"] = put@{ params ->
-                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
-                pokedex.encounter(pokemon)
-                return@put DoubleValue.ONE
-            }
-            map["catch"] = put@{ params ->
-                val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
-                pokedex.obtain(pokemon)
-                return@put DoubleValue.ONE
-            }
-        }
+		functions["dex_caught_count"] = { params ->
+			val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+			if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtCount))
+			else DoubleValue.ZERO
+		}
+		functions["dex_seen_count"] = { params ->
+			val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+			if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenCount))
+			else DoubleValue.ZERO
+		}
+		functions["dex_caught_percent"] = { params ->
+			val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+			if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtPercent).toDouble())
+			else DoubleValue.ZERO
+		}
+		functions["dex_seen_percent"] = { params ->
+			val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+			if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenPercent).toDouble())
+			else DoubleValue.ZERO
+		}
 
-        return map
-    }
+		when (pokedex) {
+			is PokedexManager -> {
+				functions["player_id"] = { StringValue(pokedex.uuid.toString()) }
+				functions["see"] = { params ->
+					val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+					pokedex.encounter(pokemon)
+					DoubleValue.ONE
+				}
+				functions["catch"] = { params ->
+					val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+					pokedex.obtain(pokemon)
+					DoubleValue.ONE
+				}
+			}
+		}
+
+		return functions
+	}
 }
