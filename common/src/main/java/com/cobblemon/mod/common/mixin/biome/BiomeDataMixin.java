@@ -38,7 +38,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  *     CobblemonBiomes.createTestBiome()
  * );
  * }</pre>
- * </p>
  *
  * @author MeAlam
  * @since April 9th 2026

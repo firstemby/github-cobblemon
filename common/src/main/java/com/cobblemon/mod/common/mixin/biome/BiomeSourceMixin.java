@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
  *
  * // Existing and new biomes are merged with duplicates removed.
  * }</pre>
- * </p>
  *
  * @author MeAlam
  * @since April 9th 2026
