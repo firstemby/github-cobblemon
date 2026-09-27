@@ -1591,7 +1591,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun pokeBallItem(pokeBall: PokeBall): PokeBallItem {
         val item = create(pokeBall.name.path, PokeBallItem(pokeBall))
-        pokeBall.item = item
+        pokeBall.stack = item.defaultInstance
         pokeBalls.add(item)
         return item
     }

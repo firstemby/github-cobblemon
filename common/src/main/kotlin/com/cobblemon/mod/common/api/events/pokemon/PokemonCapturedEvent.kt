@@ -25,6 +25,7 @@ data class PokemonCapturedEvent (
         "pokemon" to pokemon.struct,
         "player" to player.asMoLangValue(),
         "poke_ball" to pokeBallEntity.struct,
-        "item" to player.level().itemRegistry.wrapAsHolder(pokeBallEntity.pokeBall.item).asMoLangValue(Registries.ITEM)
+        "item" to player.level().itemRegistry.wrapAsHolder(pokeBallEntity.pokeBall.item()).asMoLangValue(Registries.ITEM),
+        "stack" to pokeBallEntity.pokeBall.stack.asMoLangValue(player.level().registryAccess())
     )
 }

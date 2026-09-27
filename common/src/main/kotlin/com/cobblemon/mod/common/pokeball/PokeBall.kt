@@ -20,6 +20,8 @@ import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
 import net.minecraft.world.item.ItemStack
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Rarity
 
 /**
  * Base poke ball object
@@ -36,12 +38,18 @@ open class PokeBall(
     val name: ResourceLocation,
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
+    val itemProperties: PokeBallProperties = PokeBallProperties(),
     val waterDragValue: Float,
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
     val ancient: Boolean
 ) {
+    data class PokeBallProperties(
+        val fireResistant: Boolean = false,
+        val rarity: Rarity = Rarity.COMMON
+    )
+
     val struct = QueryStruct(hashMapOf())
         .addFunction("name") { StringValue(name.toString()) }
         .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
@@ -50,15 +58,26 @@ open class PokeBall(
 //        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry
-    internal lateinit var item: PokeBallItem
+    internal lateinit var stack: ItemStack
 
-    fun item(): PokeBallItem = this.item
+    fun item(): PokeBallItem = this.stack.item as PokeBallItem
 
     fun stack(count: Int = 1): ItemStack =
         ItemStack(this.item(), count)
 
+    fun itemProperties(): Item.Properties {
+        var properties = Item.Properties().rarity(this.itemProperties.rarity)
+
+        if (this.itemProperties.fireResistant) {
+            properties = properties.fireResistant()
+        }
+
+        return properties
+    }
+
     @Deprecated("This is a temporary solution for the safari ball dilemma", ReplaceWith("target.currentHealth"))
-    internal fun hpForCalculation(target: Pokemon): Int = if (this.name == PokeBalls.SAFARI_BALL.name) target.maxHealth else target.currentHealth
+    internal fun hpForCalculation(target: Pokemon): Int =
+        if (this.name == PokeBalls.SAFARI_BALL.name) target.maxHealth else target.currentHealth
 
     companion object {
 
@@ -69,5 +88,4 @@ open class PokeBall(
         ) { identifier -> "No PokeBall for ID $identifier" }
 
     }
-
 }
