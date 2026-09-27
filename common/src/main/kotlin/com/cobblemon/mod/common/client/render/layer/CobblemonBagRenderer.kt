@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package com.cobblemon.mod.common.client.render.layer
 
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides
@@ -30,6 +38,7 @@ class CobblemonBagRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, P
     ) {
         val bagItem = player.getItemBySlot(EquipmentSlot.CHEST)
         if (bagItem.item !is CobblemonBagItem) return
+        val model = CobblemonBakingOverrides.bagModels[bagItem.item]?.getModel() ?: return
 
         player.level().profiler.push("cobblemon_bag_render")
         poseStack.pushPose()
@@ -39,7 +48,6 @@ class CobblemonBagRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, P
         poseStack.rotateAround(Axis.ZP.rotationDegrees(180F), 0F, 1F, 0F)
         poseStack.translate(0.0, 1.0, 0.0)
 
-        val model = CobblemonBakingOverrides.BAG_PENNY.getModel()
         Minecraft.getInstance().itemRenderer.render(
             bagItem,
             ItemDisplayContext.FIXED,

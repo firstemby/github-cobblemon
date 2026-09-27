@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.client.render.getDepletableRedGreen
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.item.bag.CobblemonBagMenu
 import com.cobblemon.mod.common.item.bag.CobblemonBagSlot
+import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.net.messages.client.bag.UpdateBagMenuDataPacket
 import com.cobblemon.mod.common.net.messages.client.bag.UseItemOnPokemonFromBagPacket
 import com.cobblemon.mod.common.pokemon.Gender
@@ -189,7 +190,7 @@ class CobblemonBagScreen(
                     x = slotLeft, y = slotYPosition,
                     width = slotWidth, height = 26,
                     textureHeight = 52,
-                    vOffset = if (!menu.carried.isEmpty && partySlotHovered(i, mouseX, mouseY)) 26 else 0
+                    vOffset = if (!menu.carried.isEmpty && menu.carried.item is BagItem && partySlotHovered(i, mouseX, mouseY)) 26 else 0
                 )
 
                 val expForThisLevel = pokemon.experience - pokemon.experienceGroup.getExperience(pokemon.level)
@@ -380,11 +381,13 @@ class CobblemonBagScreen(
             return true
         }
         val party = CobblemonClient.storage.party
-        for (i in 0..5) {
-            if (party.get(i) != null && partySlotHovered(i, mouseX.toInt(), mouseY.toInt())) {
-                playSound(CobblemonSounds.GUI_CLICK)
-                sendToServer(UseItemOnPokemonFromBagPacket(i))
-                return true
+        if (!menu.carried.isEmpty && menu.carried.item is BagItem) {
+            for (i in 0..5) {
+                if (party.get(i) != null && partySlotHovered(i, mouseX.toInt(), mouseY.toInt())) {
+                    playSound(CobblemonSounds.GUI_CLICK)
+                    sendToServer(UseItemOnPokemonFromBagPacket(i))
+                    return true
+                }
             }
         }
         return super.mouseClicked(mouseX, mouseY, button)

@@ -9,10 +9,13 @@
 package com.cobblemon.mod.common.client
 
 import com.cobblemon.mod.common.BakingOverride
+import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.item.bag.CobblemonBagItem
 import com.cobblemon.mod.common.util.cobblemonModel
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.Item
 
 /**
  * The purpose of this class is to hold models that we want baked, but aren't associated with
@@ -104,7 +107,9 @@ object CobblemonBakingOverrides {
     )
 
     // Bag
-    val BAG_PENNY = registerOverride(
+    val bagModels = mutableMapOf<CobblemonBagItem, BakingOverride>()
+    val BAG_PENNY = registerBagOverride(
+        CobblemonItems.BAG_ITEM,
         cobblemonResource("item/bag/bag_penny"),
         cobblemonModel("bag_penny", "none")
     )
@@ -112,6 +117,12 @@ object CobblemonBakingOverrides {
     fun registerOverride(modelLocation: ResourceLocation, modelIdentifier: ModelResourceLocation): BakingOverride {
         val result = BakingOverride(modelLocation, modelIdentifier)
         models.add(result)
+        return result
+    }
+
+    fun registerBagOverride(associatedItem: CobblemonBagItem, modelLocation: ResourceLocation, modelIdentifier: ModelResourceLocation): BakingOverride {
+        val result = registerOverride(modelLocation, modelIdentifier)
+        bagModels[associatedItem] = result
         return result
     }
 }

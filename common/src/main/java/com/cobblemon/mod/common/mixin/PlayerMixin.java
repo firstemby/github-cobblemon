@@ -106,7 +106,7 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
 
     @Unique private Vec3 cobblemon$rideEyePos = Vec3.ZERO;
 
-    @Unique private final CobblemonBagContainer cobblemon$cobblemonBagContainer = new CobblemonBagContainer();
+    @Unique private CobblemonBagContainer cobblemon$cobblemonBagContainer = new CobblemonBagContainer();
 
     protected PlayerMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
@@ -377,7 +377,10 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     }
 
     @Override @NotNull
-    public CobblemonBagContainer getCobblemonBagContainer() { return cobblemon$cobblemonBagContainer; }
+    public CobblemonBagContainer cobblemon$getBagContainer() { return cobblemon$cobblemonBagContainer; }
+
+    @Override
+    public void cobblemon$setBagContainer(CobblemonBagContainer bagContainer) { cobblemon$cobblemonBagContainer = bagContainer; }
 
     @Inject(
             method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V",
@@ -395,5 +398,15 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     )
     private void cobblemon$addAdditionalSaveData(CompoundTag compound, CallbackInfo ci) {
         compound.put("CobblemonBagData", this.cobblemon$cobblemonBagContainer.createTag(this.registryAccess()));
+    }
+
+    @Inject(
+            method = "dropEquipment()V",
+            at = @At("TAIL")
+    )
+    private void cobblemon$dropCobblemonBag(CallbackInfo ci) {
+        if (level().getGameRules().getBoolean(CobblemonGameRules.BAG_DROP_ITEMS)) {
+            this.cobblemon$cobblemonBagContainer.dropAll((Player)(Object)this);
+        }
     }
 }

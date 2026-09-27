@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
 import com.cobblemon.mod.common.api.stats.CobblemonStats;
 import com.cobblemon.mod.common.duck.ServerLevelDuck;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.item.bag.BagEntity;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -141,5 +142,13 @@ public abstract class ServerPlayerMixin implements PlayerSpawnerAccessor {
                 !Cobblemon.config.getWorldSpawningBlocklist().contains(
                         ((ServerLevelDuck) this.serverLevel()).cobblemon$getLevelResourceLocation()
                 );
+    }
+
+    @Inject(
+            method = "restoreFrom",
+            at = @At("TAIL")
+    )
+    private void cobblemon$restoreCobblemonBag(ServerPlayer that, boolean keepEverything, CallbackInfo ci) {
+        ((BagEntity)(Object)this).cobblemon$setBagContainer(((BagEntity)that).cobblemon$getBagContainer());
     }
 }

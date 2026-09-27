@@ -30,7 +30,7 @@ class CobblemonBagItem: CobblemonItem(Properties().stacksTo(1)), MenuProvider, E
 
     override fun createMenu(i: Int, inventory: Inventory, player: Player): AbstractContainerMenu {
         val bagEntity = (player as? BagEntity)
-        val container = bagEntity?.getCobblemonBagContainer() ?: CobblemonBagContainer()
+        val container = bagEntity?.`cobblemon$getBagContainer`() ?: CobblemonBagContainer()
 
         return CobblemonBagMenu(i, inventory, container)
     }

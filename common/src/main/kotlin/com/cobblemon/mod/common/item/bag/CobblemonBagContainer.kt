@@ -89,4 +89,11 @@ class CobblemonBagContainer: Container {
 
         return tag
     }
+
+    fun dropAll(player: Player) {
+        items.forEach {
+            player.drop(it, true, false)
+        }
+        items.clear()
+    }
 }
