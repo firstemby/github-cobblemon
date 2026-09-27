@@ -46,6 +46,8 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.network.chat.Component
+import net.minecraft.util.Mth
 
 class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
     val speakers = dialogueDTO.speakers?.mapNotNull { (key, value) ->
@@ -113,9 +115,9 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         private const val BAR_WIDTH = 186
         private const val BAR_HEIGHT = 4
 
-        private const val OPTION_HEIGHT = 21
-        private const val OPTION_WIDTH_NARROW = 96
-        private const val OPTION_WIDTH_WIDE = 196
+        const val OPTION_HEIGHT = 21
+        const val OPTION_WIDTH_NARROW = 96
+        const val OPTION_WIDTH_WIDE = 196
 
         private const val NAME_WIDTH = 196
         private const val NAME_HEIGHT = 17
@@ -123,8 +125,14 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         private const val TEXT_INPUT_WIDTH = 196
         private const val TEXT_INPUT_HEIGHT = 21
 
-        private const val OPTION_HORIZONTAL_SPACING = 4
-        private const val OPTION_VERTICAL_SPACING = 4
+        const val OPTION_HORIZONTAL_SPACING = 4
+        const val OPTION_VERTICAL_SPACING = 4
+
+        const val SCROLL_TRACK_THICKNESS = 3
+        const val SCROLL_TRACK_PADDING = 4
+        const val SCROLL_CONTAINER_WIDTH = 10
+        const val SCROLL_INSET = 2
+        const val BUTTON_EDGE_PADDING = 2
 
         private val buttonResource = cobblemonResource("textures/gui/dialogue/dialogue_button.png")
         private val buttonFullWidthResource = cobblemonResource("textures/gui/dialogue/dialogue_button_full.png")
@@ -213,9 +221,10 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         val optionStartX = centerX - (totalWidth / 2F)
         val optionStartY = boxMaxY + 7
 
+        // Build option widget instances (x/y will be set by either layout or scroller)
         dialogueOptionWidgets = dialogueDTO.dialogueInput.options.mapIndexed { index, option ->
-            val x = optionStartX + (index * horizontalSpacing)
-            val y = optionStartY + (index * verticalSpacing)
+            val x = optionStartX + (index * horizontalSpacing).toFloat()
+            val y = optionStartY + (index * verticalSpacing).toFloat()
 
             DialogueOptionWidget(
                 dialogueScreen = this,
@@ -230,10 +239,69 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
             )
         }
 
+        if (dialogueOptionWidgets.size > 4) {
+            // Create and add a scroller containing the option widgets
+            val visibleCount = 4
+
+            if (vertical) {
+                val contentWidth = OPTION_WIDTH_WIDE
+                val scrollerWidth = contentWidth + SCROLL_CONTAINER_WIDTH + BUTTON_EDGE_PADDING * 2
+                val scrollerHeight =
+                    (OPTION_HEIGHT * visibleCount + OPTION_VERTICAL_SPACING * (visibleCount - 1)) + BUTTON_EDGE_PADDING * 2
+                // center only the content area so the buttons remain centered where expected
+                val scrollerX = (optionStartX - (contentWidth / 2F)).toInt() - BUTTON_EDGE_PADDING
+                val scrollerY = optionStartY.toInt()
+
+                val optionsScroller = com.cobblemon.mod.common.client.gui.dialogue.OptionsScrollWidget(
+                    dialogueScreen = this,
+                    x = scrollerX,
+                    y = scrollerY,
+                    width = scrollerWidth,
+                    height = scrollerHeight,
+                    entries = dialogueOptionWidgets,
+                    vertical = true,
+                    containerSize = SCROLL_CONTAINER_WIDTH
+                )
+                addRenderableWidget(optionsScroller)
+            } else {
+                val contentWidth = OPTION_WIDTH_NARROW * visibleCount + OPTION_HORIZONTAL_SPACING * (visibleCount - 1)
+                val scrollerWidth = contentWidth + BUTTON_EDGE_PADDING * 2
+                val scrollerHeight = OPTION_HEIGHT + SCROLL_CONTAINER_WIDTH + BUTTON_EDGE_PADDING * 2
+
+                val desiredScrollerX = (centerX - (scrollerWidth / 2F)).toInt()
+                val scrollerY = optionStartY.toInt() + 2
+
+                val minX = 0
+                val maxX = scaledWidth - scrollerWidth - 4
+                val scrollerX = Mth.clamp(desiredScrollerX, minX, maxX)
+
+
+                val optionsScroller = com.cobblemon.mod.common.client.gui.dialogue.OptionsScrollWidget(
+                    dialogueScreen = this,
+                    x = scrollerX,
+                    y = scrollerY,
+                    width = scrollerWidth,
+                    height = scrollerHeight,
+                    entries = dialogueOptionWidgets,
+                    vertical = false,
+                    containerSize = SCROLL_CONTAINER_WIDTH
+                )
+                addRenderableWidget(optionsScroller)
+            }
+        } else {
+            dialogueOptionWidgets.forEachIndexed { index, widget ->
+                val x = optionStartX + (index * horizontalSpacing)
+                val y = optionStartY + (index * verticalSpacing)
+
+                widget.x = x.toInt() - (if (vertical) OPTION_WIDTH_WIDE / 2 else OPTION_WIDTH_NARROW / 2)
+                widget.y = y.toInt()
+                addRenderableWidget(widget)
+            }
+        }
+
         addRenderableOnly(dialogueTimerWidget)
         addRenderableWidget(dialogueTextInputWidget)
         addRenderableWidget(dialogueBox)
-        dialogueOptionWidgets.forEach { addRenderableWidget(it) }
         addRenderableOnly(dialogueNameWidget)
         addRenderableOnly(dialoguePortraitWidget)
 
