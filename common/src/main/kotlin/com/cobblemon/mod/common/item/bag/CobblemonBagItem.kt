@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.item.bag
 
 import com.cobblemon.mod.common.item.CobblemonItem
+import com.cobblemon.mod.common.bag.BagEntity
 import net.minecraft.network.chat.Component
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder

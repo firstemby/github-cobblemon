@@ -23,7 +23,7 @@ import com.cobblemon.mod.common.api.tags.CobblemonItemTags;
 import com.cobblemon.mod.common.duck.PlayerDuck;
 import com.cobblemon.mod.common.duck.RidePassenger;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.item.bag.BagEntity;
+import com.cobblemon.mod.common.bag.BagEntity;
 import com.cobblemon.mod.common.item.bag.CobblemonBagContainer;
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData;
 import com.cobblemon.mod.common.pokedex.scanner.ScannableEntity;
