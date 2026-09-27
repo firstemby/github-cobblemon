@@ -59,8 +59,7 @@
 - Updated various recipes to display in Recipe Groups within the Recipe Book
 - Updated most recipes to display more logically/consistently within the Recipe Book's categories
 - Make ride rotations less jittery in multiplayer.
-- Swords Dance should be a lot quieter now
-- Adjusted the timing and volume of sounds for Close Combat and Aerial Ace
+- Adjusted the timing and volume of sounds for Close Combat, Swords Dance and Aerial Ace
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
@@ -83,6 +82,7 @@
 - Fixed Diglett line not having their faint animations
 - Fixed Kingambit moving its legs while walking
 - Various Structure fixes
+- Tail Whip's sound now correctly plays on the Pokémon performing the move, rather than its target
 
 ### Developer
 

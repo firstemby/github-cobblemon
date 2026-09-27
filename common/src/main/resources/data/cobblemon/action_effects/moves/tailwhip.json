@@ -15,7 +15,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == false",
+      "entityCondition": "q.entity.is_user == true",
       "expressions": ["q.sound('move.tailwhip.actor');"]
     },
     {
