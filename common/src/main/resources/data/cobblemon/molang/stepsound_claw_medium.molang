@@ -14,6 +14,13 @@ loop(t.depth, {
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/wood') ? return q.sound('stepsound.wood.claw.medium', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/metal') ? return q.sound('stepsound.metal.claw.medium', t.volume, t.pitch);
     q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/leaves') ? return q.sound('stepsound.leaves.universal.medium', t.volume, t.pitch);
+
+    q.is_standing_on_blocks(t.i, '#cobblemon:stepsound/amethyst') ?
+    {
+        q.sound('stepsound.amethyst.minecraft', t.volume, t.pitch);
+        q.sound('stepsound.stone.claw.medium', t.volume, t.pitch);
+        return 0;
+    };
     t.i = t.i + 1;
 });
 
