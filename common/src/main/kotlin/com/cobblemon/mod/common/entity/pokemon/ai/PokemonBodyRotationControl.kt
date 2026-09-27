@@ -12,7 +12,6 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.math.FloatSpring
 import com.cobblemon.mod.common.util.math.simpleSpringDamper
-import kotlin.math.sqrt
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.control.BodyRotationControl
 
@@ -28,11 +27,8 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
         const val GROUNDED_BODY_TURN_FRACTION = 0.8F
         const val FLOATING_BODY_TURN_FRACTION = 0.1F
 
-        // Turn halflife is the time taken to travel this many body widths. Slow mons turn around gently and fast
-        // ones don't crab walk
-        const val TURN_HALFLIFE_BODY_WIDTHS = 0.5F
-        const val MIN_TURN_HALFLIFE_SECONDS = 0.05F
-        const val MAX_TURN_HALFLIFE_SECONDS = 0.5F
+        // The server already limits how fast heading changes, so this only smooths the steps between ticks
+        const val BODY_TURN_HALFLIFE_SECONDS = 0.175F
         const val SECONDS_PER_TICK = 0.05F
     }
 
@@ -74,17 +70,7 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
     private fun smoothTowardsHeading() {
         val spring = bodyYawSpring ?: FloatSpring(pokemon.yRot).also { bodyYawSpring = it }
 
-        val dx = pokemon.x - pokemon.xo
-        val dz = pokemon.z - pokemon.zo
-        val speed = sqrt(dx * dx + dz * dz).toFloat()
-        val halflife = if (speed > 0F) {
-            (pokemon.bbWidth * TURN_HALFLIFE_BODY_WIDTHS / speed * SECONDS_PER_TICK)
-                .coerceIn(MIN_TURN_HALFLIFE_SECONDS, MAX_TURN_HALFLIFE_SECONDS)
-        } else {
-            MAX_TURN_HALFLIFE_SECONDS
-        }
-
-        simpleSpringDamper(spring, pokemon.yRot, halflife, SECONDS_PER_TICK, isAngle = true)
+        simpleSpringDamper(spring, pokemon.yRot, BODY_TURN_HALFLIFE_SECONDS, SECONDS_PER_TICK, isAngle = true)
         // Keep continuous with last tick so plain lerps between yBodyRotO and yBodyRot don't spin at the wrap
         pokemon.yBodyRot = pokemon.yBodyRotO + Mth.wrapDegrees(spring.value - pokemon.yBodyRotO)
     }

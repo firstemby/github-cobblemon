@@ -208,14 +208,23 @@ class FollowWalkTargetTask(
         sprinting = if (walkTarget == null || sprintDistance == null) {
             false
         } else {
-            val gap = walkTarget.target.currentPosition().distanceTo(entity.position()) - entity.bbWidth / 2.0
+            val gap = edgeGap(entity, walkTarget)
             gap > if (sprinting) sprintDistance * SPRINT_STOP_FRACTION else sprintDistance
         }
         navigation.sprinting = sprinting
     }
 
     private fun hasReached(entity: PathfinderMob, walkTarget: WalkTarget): Boolean {
+        val stopDistance = (walkTarget as? CobblemonWalkTarget)?.stopDistance
+        if (stopDistance != null) {
+            return edgeGap(entity, walkTarget) <= stopDistance
+        }
         return walkTarget.target.currentBlockPosition().distManhattan(entity.blockPosition()) <= walkTarget.closeEnoughDist
+    }
+
+    /** Straight line distance from the edge of the entity's hitbox to the walk target. */
+    private fun edgeGap(entity: PathfinderMob, walkTarget: WalkTarget): Double {
+        return walkTarget.target.currentPosition().distanceTo(entity.position()) - entity.bbWidth / 2.0
     }
 
     companion object {

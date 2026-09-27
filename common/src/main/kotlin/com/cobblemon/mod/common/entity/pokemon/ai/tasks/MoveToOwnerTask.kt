@@ -82,7 +82,8 @@ object MoveToOwnerTask {
                             speedModifier = speedMultiplier,
                             // Bigger mons stop further away so they keep the same gap from the owner as small ones
                             completionRange = maxOf(completionRange - 1, 0) + floor(horizontalHitboxRadius).toInt(),
-                            sprintDistance = sprintDistance
+                            sprintDistance = sprintDistance,
+                            stopDistance = completionRange.toFloat()
                         )
                     )
                     return@Trigger true

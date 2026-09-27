@@ -30,6 +30,7 @@ import net.minecraft.world.level.pathfinder.Path
 import net.minecraft.world.level.pathfinder.PathComputationType
 import net.minecraft.world.level.pathfinder.PathFinder
 import net.minecraft.world.level.pathfinder.PathType
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
@@ -50,6 +51,10 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     val pather = entity as OmniPathingEntity
 
     var cachedCurrentNode: Node? = null
+    // Per node steering results for the path they were worked out for, by node index
+    private var cachedSteeringPath: Path? = null
+    private val tightCorners = mutableMapOf<Int, Boolean>()
+    private val steerPositions = mutableMapOf<Int, Vec3>()
     var currentNodeDistance = 0F
 
     data class NavigationContext(
@@ -81,6 +86,10 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         const val CORNER_FREE_ANGLE_DEGREES = 45.0
         // Fraction of top speed kept going round a full reversal
         const val CORNER_MIN_SPEED_FRACTION = 0.5
+        // Fraction of top speed kept going round a corner that can't be cut
+        const val TIGHT_CORNER_SPEED_FRACTION = 0.3
+        // Largest distance from a tight corner that still counts as reaching it, so big mobs can't turn early
+        const val TIGHT_CORNER_REACH_DISTANCE = 0.5
     }
 
     override fun createPathFinder(range: Int): PathFinder {
@@ -154,8 +163,11 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 && f < this.maxDistanceToWaypoint.toDouble()
                 && e < (if (currentNode.type in verticallyPreciseNodeTypes && (mob.isUnderWater || pather.isFlying())) maxDistanceToWaypoint else 1.0).toDouble()
 
+        val reachedTightCorner = !isTightCorner(path!!, path!!.nextNodeIndex) ||
+            horizontalDistance(mob.position(), steerPosition(path!!, path!!.nextNodeIndex)) <= min(maxDistanceToWaypoint.toDouble(), TIGHT_CORNER_REACH_DISTANCE)
+
         // Corner cutting is commented out because it makes pokemon and NPCs 'cut' the corner and fall into water or lava
-        if (closeEnough || hasPassedNextNode(path!!)) {// || mob.navigation.canCutCorner(path!!.nextNode.type) && shouldTargetNextNodeInDirection(vec3d)) {
+        if ((closeEnough && reachedTightCorner) || hasPassedNextNode(path!!)) {// || mob.navigation.canCutCorner(path!!.nextNode.type) && shouldTargetNextNodeInDirection(vec3d)) {
             path!!.advance()
             if (path!!.isDone) {
                 path = null
@@ -188,17 +200,19 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         val currentPath = path?.takeUnless { it.isDone } ?: return null
         val index = currentPath.nextNodeIndex
         val lastIndex = currentPath.nodeCount - 1
-        if (index == 0) return SteerTarget(currentPath.getEntityPosAtNode(mob, 0), lastIndex == 0, maxSpeed)
+        if (lastIndex == 0) return SteerTarget(steerPosition(currentPath, 0), true, maxSpeed)
+        // A fresh path starts next to the mob, so follow its first segment rather than seeking node 0 itself
+        val segmentEnd = max(index, 1)
 
         val lookAhead = lookAheadDistance()
         val scanDistance = max(lookAhead, maxSpeed * maxSpeed / (2 * maxAccel))
-        var point = closestPointOnSegment(mob.position(), currentPath.getEntityPosAtNode(mob, index - 1), currentPath.getEntityPosAtNode(mob, index))
+        var point = closestPointOnSegment(mob.position(), steerPosition(currentPath, segmentEnd - 1), steerPosition(currentPath, segmentEnd))
         var distance = 0.0
         var carrot: Vec3? = null
         var speedLimit = maxSpeed
 
-        for (i in index..lastIndex) {
-            val node = currentPath.getEntityPosAtNode(mob, i)
+        for (i in segmentEnd..lastIndex) {
+            val node = steerPosition(currentPath, i)
             val segmentLength = node.distanceTo(point)
             if (carrot == null && distance + segmentLength >= lookAhead) {
                 carrot = point.add(node.subtract(point).normalize().scale(lookAhead - distance))
@@ -210,14 +224,19 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
                 break
             }
             if (distance > scanDistance) break
-            val cornerSpeed = maxSpeed * cornerSpeedFraction(currentPath, i)
+            val tight = isTightCorner(currentPath, i)
+            val cornerSpeed = maxSpeed * if (tight) TIGHT_CORNER_SPEED_FRACTION else cornerSpeedFraction(currentPath, i)
             speedLimit = min(speedLimit, sqrt(cornerSpeed * cornerSpeed + 2 * maxAccel * distance))
+            // Rounding this corner would leave the path, so the carrot waits on it until it's reached
+            if (tight && carrot == null) {
+                carrot = node
+            }
             point = node
         }
 
         // Lookahead ran off the end so arrive on the last node
         return if (carrot == null) {
-            SteerTarget(currentPath.getEntityPosAtNode(mob, lastIndex), true, speedLimit)
+            SteerTarget(steerPosition(currentPath, lastIndex), true, speedLimit)
         } else {
             SteerTarget(carrot, false, speedLimit)
         }
@@ -233,11 +252,71 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         return start.add(segment.scale(t))
     }
 
+    /**
+     * A walking corner where cutting the inside would cross a cell that isn't walkable, like a turn on a
+     * narrow ledge or around a hole.
+     */
+    private fun isTightCorner(currentPath: Path, i: Int): Boolean {
+        if (i <= 0 || i >= currentPath.nodeCount - 1) return false
+        refreshSteeringCache(currentPath)
+        return tightCorners.getOrPut(i) {
+            val node = currentPath.getNode(i)
+            if (node.type != PathType.WALKABLE) return@getOrPut false
+            val position = steerPosition(currentPath, i)
+            // The cell diagonally inside the turn. For a straight line this is the node's own cell
+            val insidePosition = steerPosition(currentPath, i - 1).add(steerPosition(currentPath, i + 1)).subtract(position)
+            val inside = BlockPos.containing(insidePosition.x, node.y.toDouble(), insidePosition.z)
+            val cell = BlockPos.containing(position.x, node.y.toDouble(), position.z)
+            inside != cell && WalkNodeEvaluator.getPathTypeStatic(mob, inside.mutable()) != PathType.WALKABLE
+        }
+    }
+
+    /**
+     * Where the mob's centre should be at node [i]. Big mobs are checked over a footprint of blocks and a node counts
+     * as walkable with only part of that footprint over ground, so they're centred over the walkable part instead.
+     */
+    private fun steerPosition(currentPath: Path, i: Int): Vec3 {
+        refreshSteeringCache(currentPath)
+        return steerPositions.getOrPut(i) {
+            val default = currentPath.getEntityPosAtNode(mob, i)
+            val node = currentPath.getNode(i)
+            // Same footprint as OmniPathNodeMaker.getPathTypeOfMob
+            val sizeX = (mob.boundingBox.xsize.toInt() + 1).coerceAtMost(2)
+            val sizeZ = (mob.boundingBox.zsize.toInt() + 1).coerceAtMost(2)
+            if (node.type != PathType.WALKABLE || (sizeX == 1 && sizeZ == 1)) return@getOrPut default
+
+            val walkable = mutableListOf<BlockPos>()
+            for (dx in 0 until sizeX) {
+                for (dz in 0 until sizeZ) {
+                    val pos = BlockPos(node.x + dx, node.y, node.z + dz)
+                    if (WalkNodeEvaluator.getPathTypeStatic(mob, pos.mutable()) == PathType.WALKABLE) {
+                        walkable.add(pos)
+                    }
+                }
+            }
+            if (walkable.isEmpty() || walkable.size == sizeX * sizeZ) {
+                default
+            } else {
+                Vec3(walkable.map { it.x }.average() + 0.5, default.y, walkable.map { it.z }.average() + 0.5)
+            }
+        }
+    }
+
+    private fun refreshSteeringCache(currentPath: Path) {
+        if (cachedSteeringPath !== currentPath) {
+            cachedSteeringPath = currentPath
+            tightCorners.clear()
+            steerPositions.clear()
+        }
+    }
+
+    private fun horizontalDistance(a: Vec3, b: Vec3) = sqrt((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z))
+
     /** 1 for gentle turns, falling to [CORNER_MIN_SPEED_FRACTION] for a full reversal at node [i]. */
     private fun cornerSpeedFraction(currentPath: Path, i: Int): Double {
-        val node = currentPath.getEntityPosAtNode(mob, i)
-        val incoming = node.subtract(currentPath.getEntityPosAtNode(mob, i - 1))
-        val outgoing = currentPath.getEntityPosAtNode(mob, i + 1).subtract(node)
+        val node = steerPosition(currentPath, i)
+        val incoming = node.subtract(steerPosition(currentPath, i - 1))
+        val outgoing = steerPosition(currentPath, i + 1).subtract(node)
         if (incoming.lengthSqr() == 0.0 || outgoing.lengthSqr() == 0.0) return 1.0
         val cosAngle = incoming.normalize().dot(outgoing.normalize()).coerceIn(-1.0, 1.0)
         val angle = Math.toDegrees(acos(cosAngle))
@@ -252,11 +331,19 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
      */
     private fun hasPassedNextNode(currentPath: Path): Boolean {
         val index = currentPath.nextNodeIndex
-        if (index == 0 || index >= currentPath.nodeCount - 1) return false
+        if (index >= currentPath.nodeCount - 1) return false
         if (currentPath.getNode(index).type != currentPath.getNode(index + 1).type) return false
+        if (isTightCorner(currentPath, index)) return false
 
-        val start = currentPath.getEntityPosAtNode(mob, index - 1)
-        val end = currentPath.getEntityPosAtNode(mob, index)
+        if (index == 0) {
+            // Nothing behind the first node, so it's passed once the mob is on the far side of it
+            val first = steerPosition(currentPath, 0)
+            val outgoing = steerPosition(currentPath, 1).subtract(first)
+            return mob.position().subtract(first).dot(outgoing) >= 0 && mob.position().distanceTo(first) < maxDistanceToWaypoint + lookAheadDistance()
+        }
+
+        val start = steerPosition(currentPath, index - 1)
+        val end = steerPosition(currentPath, index)
         val along = mob.position().subtract(start).dot(end.subtract(start).normalize())
         return along >= end.distanceTo(start) && mob.position().distanceTo(end) < maxDistanceToWaypoint + lookAheadDistance()
     }

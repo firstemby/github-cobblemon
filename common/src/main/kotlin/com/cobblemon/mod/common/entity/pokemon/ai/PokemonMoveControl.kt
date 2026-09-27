@@ -65,6 +65,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
     private var waterLevel : Double = 0.0
     var banking = false
+    // Where path following is steering this tick, null when not following a path
+    private var currentSteerTarget: Vec3? = null
     var bankDurationTicks = -1
     var bankForwardBlocksPerTick = 0.1F
     var bankUpwardsBlocksPerTick = 0F
@@ -94,6 +96,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
     override fun tick() {
         mob.setDiscardFriction(false) // ignored while trying to move but if stopped or doing something else this needs reenabled
+        val followedPath = currentSteerTarget != null
+        currentSteerTarget = null
         if (banking && operation != Operation.WAIT) {
             banking = false
         }
@@ -178,6 +182,15 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
             // Follow the path when there is one, otherwise go straight for the wanted position
             val steerTarget = pokemonEntity.navigation.getSteerTarget(topSpeed, maxAccel)
+            currentSteerTarget = steerTarget?.position
+            if (steerTarget == null && followedPath && fluidMover) {
+                // The path just ended or was cancelled, so glide to a stop instead of carrying on to the last waypoint.
+                // Walkers stop on friction already
+                val velocity = mob.deltaMovement
+                val brakingDistance = velocity.lengthSqr() / (2 * maxAccel)
+                val stop = mob.position().add(velocity.normalize().scale(brakingDistance))
+                setWantedPosition(stop.x, stop.y, stop.z, speedModifier)
+            }
             val target = steerTarget?.position ?: Vec3(wantedX, wantedY, wantedZ)
             val arrive = steerTarget?.isFinal ?: true
             val maxSpeed = steerTarget?.maxSpeed ?: topSpeed
@@ -314,7 +327,8 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         val preDragVelocity = Vec3(velocity.x / drag.x, velocity.y / drag.y, velocity.z / drag.z)
 
         val mask = if (horizontalOnly) Vec3(1.0, 0.0, 1.0) else Vec3(1.0, 1.0, 1.0)
-        val desired = alignWithFacing(seekVelocity(mob.position().multiply(mask), target.multiply(mask), maxSpeed, maxAccel, arrive))
+        val desired = seekVelocity(mob.position().multiply(mask), target.multiply(mask), maxSpeed, maxAccel, arrive)
+            .let { alignWithFacing(it, target.subtract(mob.position()).horizontalDistance()) }
         val force = steerForce(desired, preDragVelocity.multiply(mask), maxAccel)
 
         mob.deltaMovement = preDragVelocity.add(force)
@@ -325,15 +339,27 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     /**
      * Turns toward the desired direction at a limited rate and only allows horizontal speed in the direction
      * being faced, so turning around slows the mob down instead of it crab walking or moonwalking.
+     * Speed is also kept low enough that the turning circle can reach the target, otherwise it circles it.
      */
-    private fun alignWithFacing(desired: Vec3): Vec3 {
+    private fun alignWithFacing(desired: Vec3, distanceToTarget: Double): Vec3 {
         val horizontalSpeed = desired.horizontalDistance()
         if (horizontalSpeed < LivingEntity.MIN_MOVEMENT_DISTANCE) return desired
 
         val targetYaw = (Mth.atan2(desired.z, desired.x) * Mth.RAD_TO_DEG).toFloat() - 90F
         mob.yRot = Mth.approachDegrees(mob.yRot, targetYaw, MAX_TURN_DEGREES_PER_TICK)
-        val alignment = Mth.cos(Mth.wrapDegrees(targetYaw - mob.yRot).toRadians()).coerceAtLeast(0F)
-        val forward = Vec3.directionFromRotation(0F, mob.yRot).scale(horizontalSpeed * alignment)
+        val remainingTurn = Mth.wrapDegrees(targetYaw - mob.yRot).toRadians()
+        val alignment = Mth.cos(remainingTurn).coerceAtLeast(0F)
+
+        // Turning circle through the target has radius d / (2 sin θ), and turn rate × radius is the speed that fits it
+        val sinRemaining = abs(Mth.sin(remainingTurn))
+        val turnLimitedSpeed = if (sinRemaining > 0F) {
+            MAX_TURN_DEGREES_PER_TICK * Mth.DEG_TO_RAD * distanceToTarget / (2 * sinRemaining)
+        } else {
+            horizontalSpeed
+        }
+
+        val speed = min(horizontalSpeed * alignment, turnLimitedSpeed)
+        val forward = Vec3.directionFromRotation(0F, mob.yRot).scale(speed)
         return Vec3(forward.x, desired.y, forward.z)
     }
 
