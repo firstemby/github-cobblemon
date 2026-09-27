@@ -4,6 +4,9 @@
   "profileScale": 0.68,
   "profileTranslation": [0.00, 0.63, 0],
   "rootBone": "appletun",
+  "animations": {
+    "cry": "q.bedrock_stateful('appletun', 'cry')"
+  },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

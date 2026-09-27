@@ -14,9 +14,13 @@
       ],
       "animations": [
         "q.bedrock('dragonair', 'sleep')"
-      ]
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
     },
     "standing": {
+      "isBattle": false,
       "poseTypes": [
         "STAND",
         "NONE",
@@ -126,6 +130,7 @@
       }
     },
     "battle-standing": {
+      "isBattle": true,
       "poseTypes": [
         "STAND"
       ],

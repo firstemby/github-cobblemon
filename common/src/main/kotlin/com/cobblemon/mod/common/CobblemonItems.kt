@@ -472,9 +472,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     // Evolution items
     @JvmField val LINK_CABLE = create("link_cable", LinkCableItem())
     @JvmField val DRAGON_SCALE = noSettingsItem("dragon_scale")
-    @JvmField val METAL_COAT = noSettingsItem("metal_coat")
-    @JvmField val UPGRADE = noSettingsItem("upgrade")
-    @JvmField val DUBIOUS_DISC = noSettingsItem("dubious_disc")
+    @JvmField val METAL_COAT = itemNameBlockItem("metal_coat", CobblemonBlocks.METAL_COAT)
+    @JvmField val UPGRADE = itemNameBlockItem("upgrade", CobblemonBlocks.UPGRADE)
+    @JvmField val DUBIOUS_DISC = itemNameBlockItem("dubious_disc", CobblemonBlocks.DUBIOUS_DISC)
     @JvmField val DEEP_SEA_SCALE = noSettingsItem("deep_sea_scale")
     @JvmField val DEEP_SEA_TOOTH = noSettingsItem("deep_sea_tooth")
     @JvmField val ELECTIRIZER = noSettingsItem("electirizer")
@@ -483,7 +483,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val PROTECTOR = noSettingsItem("protector")
     @JvmField val REAPER_CLOTH = noSettingsItem("reaper_cloth")
     @JvmField val PRISM_SCALE = noSettingsItem("prism_scale")
-    @JvmField val SACHET = noSettingsItem("sachet")
+    @JvmField val SACHET = itemNameBlockItem("sachet", CobblemonBlocks.SACHET)
     @JvmField val WHIPPED_DREAM = create("whipped_dream", foodItem(8, 0.3f))
     @JvmField val STRAWBERRY_SWEET = create("strawberry_sweet", foodItem(6, 0.125f))
     @JvmField val LOVE_SWEET = create("love_sweet", foodItem(6, 0.125f))
@@ -492,22 +492,20 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val FLOWER_SWEET = create("flower_sweet", foodItem(6, 0.125f))
     @JvmField val STAR_SWEET = create("star_sweet", foodItem(6, 0.125f))
     @JvmField val RIBBON_SWEET = create("ribbon_sweet", foodItem(6, 0.125f))
-    @JvmField val CHIPPED_POT = noSettingsItem("chipped_pot")
-    @JvmField val CRACKED_POT = noSettingsItem("cracked_pot")
-    @JvmField val MASTERPIECE_TEACUP = noSettingsItem("masterpiece_teacup")
-    @JvmField val UNREMARKABLE_TEACUP = noSettingsItem("unremarkable_teacup")
+    @JvmField val CHIPPED_POT = itemNameBlockItem("chipped_pot", CobblemonBlocks.CHIPPED_POT)
+    @JvmField val CRACKED_POT = itemNameBlockItem("cracked_pot", CobblemonBlocks.CRACKED_POT)
+    @JvmField val MASTERPIECE_TEACUP = itemNameBlockItem("masterpiece_teacup", CobblemonBlocks.MASTERPIECE_TEACUP)
+    @JvmField val UNREMARKABLE_TEACUP = itemNameBlockItem("unremarkable_teacup", CobblemonBlocks.UNREMARKABLE_TEACUP)
     @JvmField val SWEET_APPLE = compostableItem("sweet_apple", foodItem(4, 0.3f), 0.65f)
     @JvmField val TART_APPLE = compostableItem("tart_apple", foodItem(4, 0.3f), 0.65f)
     @JvmField val SYRUPY_APPLE = compostableItem("syrupy_apple", foodItem(4, 0.3f), 0.65f)
-    @JvmField val GALARICA_CUFF = noSettingsItem("galarica_cuff")
-    @JvmField val GALARICA_WREATH = noSettingsItem("galarica_wreath")
+    @JvmField val GALARICA_CUFF = itemNameBlockItem("galarica_cuff", CobblemonBlocks.GALARICA_CUFF)
     @JvmField val BLACK_AUGURITE = noSettingsItem("black_augurite")
     @JvmField val PEAT_BLOCK = noSettingsItem("peat_block")
     @JvmField val RAZOR_CLAW = noSettingsItem("razor_claw")
     @JvmField val RAZOR_FANG = noSettingsItem("razor_fang")
     @JvmField val AUSPICIOUS_ARMOR = heldItem("auspicious_armor")
     @JvmField val MALICIOUS_ARMOR = heldItem("malicious_armor")
-    @JvmField val SHELL_HELMET = heldItem("shell_helmet")
     @JvmField val METAL_ALLOY = noSettingsItem("metal_alloy")
     @JvmField val SCROLL_OF_DARKNESS = noSettingsItem("scroll_of_darkness")
     @JvmField val SCROLL_OF_WATERS = noSettingsItem("scroll_of_waters")
@@ -651,17 +649,17 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val EXPERIENCE_CANDY_XL = candyItem("exp_candy_xl") { _, _ -> CandyItem.DEFAULT_XL_CANDY_YIELD }
     @JvmField
-    val CALCIUM = create("calcium", VitaminItem(Stats.SPECIAL_ATTACK))
+    val CALCIUM = create("calcium", VitaminItem(Stats.SPECIAL_ATTACK, CobblemonBlocks.CALCIUM))
     @JvmField
-    val CARBOS = create("carbos", VitaminItem(Stats.SPEED))
+    val CARBOS = create("carbos", VitaminItem(Stats.SPEED, CobblemonBlocks.CARBOS))
     @JvmField
-    val HP_UP = create("hp_up", VitaminItem(Stats.HP))
+    val HP_UP = create("hp_up", VitaminItem(Stats.HP, CobblemonBlocks.HP_UP))
     @JvmField
-    val IRON = create("iron", VitaminItem(Stats.DEFENCE))
+    val IRON = create("iron", VitaminItem(Stats.DEFENCE, CobblemonBlocks.IRON))
     @JvmField
-    val PROTEIN = create("protein", VitaminItem(Stats.ATTACK))
+    val PROTEIN = create("protein", VitaminItem(Stats.ATTACK, CobblemonBlocks.PROTEIN))
     @JvmField
-    val ZINC = create("zinc", VitaminItem(Stats.SPECIAL_DEFENCE))
+    val ZINC = create("zinc", VitaminItem(Stats.SPECIAL_DEFENCE, CobblemonBlocks.ZINC))
     @JvmField
     val HEALTH_MOCHI = create("health_mochi", MochiItem(Stats.HP))
     @JvmField
@@ -743,9 +741,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val MAX_REVIVE = create("max_revive", ReviveItem(max = true))
     @JvmField
-    val PP_UP = create("pp_up", PPUpItem(1))
+    val PP_UP = create("pp_up", PPUpItem(1, CobblemonBlocks.PP_UP))
     @JvmField
-    val PP_MAX = create("pp_max", PPUpItem(3))
+    val PP_MAX = create("pp_max", PPUpItem(3, CobblemonBlocks.PP_MAX))
 
     @JvmField
     val RED_MINT_SEEDS = mintSeed("red", MintType.RED.getCropBlock())
@@ -922,11 +920,18 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField val CHOICE_SPECS = wearableItem("choice_specs")
     @JvmField val EXP_SHARE = wearableItem("exp_share")
     @JvmField val FOCUS_BAND = wearableItem("focus_band")
-    @JvmField val KINGS_ROCK = wearableItem("kings_rock")
+    @JvmField val KINGS_ROCK = wearableBlockItem("kings_rock", CobblemonBlocks.KINGS_ROCK)
+    @JvmField val NEVER_MELT_ICE = wearableBlockItem("never_melt_ice", CobblemonBlocks.NEVER_MELT_ICE)
     @JvmField val MUSCLE_BAND = wearableItem("muscle_band")
     @JvmField val ROCKY_HELMET = wearableItem("rocky_helmet")
     @JvmField val SAFETY_GOGGLES = wearableItem("safety_goggles")
     @JvmField val WISE_GLASSES = wearableItem("wise_glasses")
+    @JvmField val SHARP_BEAK = wearableItem("sharp_beak")
+    @JvmField val COVERT_CLOAK = wearableItem("covert_cloak")
+    @JvmField val SHELL_HELMET = wearableItem("shell_helmet")
+    @JvmField val GALARICA_WREATH = wearableBlockItem("galarica_wreath", CobblemonBlocks.GALARICA_WREATH)
+    @JvmField val CLEANSE_TAG = wearableBlockItem("cleanse_tag", CobblemonBlocks.CLEANSE_TAG)
+    @JvmField val SPELL_TAG = wearableBlockItem("spell_tag", CobblemonBlocks.SPELL_TAG)
 
     // Held Items
     @JvmField
@@ -954,17 +959,13 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val CHOICE_SCARF = heldItem("choice_scarf")
     @JvmField
-    val CLEANSE_TAG = itemNameBlockItem("cleanse_tag", CobblemonBlocks.CLEANSE_TAG)
-    @JvmField
     val CLEAR_AMULET = heldItem("clear_amulet")
     @JvmField
-    val COVERT_CLOAK = heldItem("covert_cloak")
-    @JvmField
-    val DESTINY_KNOT = heldItem("destiny_knot")
+    val DESTINY_KNOT = itemNameBlockItem("destiny_knot", CobblemonBlocks.DESTINY_KNOT)
     @JvmField
     val DRAGON_FANG = heldItem("dragon_fang")
     @JvmField
-    val EJECT_BUTTON = heldItem("eject_button")
+    val EJECT_BUTTON = itemNameBlockItem("eject_button", CobblemonBlocks.EJECT_BUTTON)
     @JvmField
     val EJECT_PACK = heldItem("eject_pack")
     @JvmField
@@ -978,7 +979,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val FAIRY_FEATHER = heldItem("fairy_feather")
     @JvmField
-    val FLAME_ORB = heldItem("flame_orb")
+    val FLAME_ORB = itemNameBlockItem("flame_orb", CobblemonBlocks.FLAME_ORB)
     @JvmField
     val FLOAT_STONE = heldItem("float_stone")
     @JvmField
@@ -992,33 +993,31 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val HEAVY_DUTY_BOOTS = heldItem("heavy_duty_boots")
     @JvmField
-    val IRON_BALL = heldItem("iron_ball")
+    val IRON_BALL = itemNameBlockItem("iron_ball", CobblemonBlocks.IRON_BALL)
     @JvmField
     val LAGGING_TAIL = heldItem("lagging_tail")
     @JvmField
     val LEFTOVERS = compostableHeldItem("leftovers", null, 0.50f)
     @JvmField
-    val LIFE_ORB = heldItem("life_orb")
+    val LIFE_ORB = itemNameBlockItem("life_orb", CobblemonBlocks.LIFE_ORB)
     @JvmField
-    val LIGHT_BALL = heldItem("light_ball")
+    val LIGHT_BALL = itemNameBlockItem("light_ball", CobblemonBlocks.LIGHT_BALL)
     @JvmField
     val LIGHT_CLAY = heldItem("light_clay")
     @JvmField
-    val LOADED_DICE = heldItem("loaded_dice")
+    val LOADED_DICE = itemNameBlockItem("loaded_dice", CobblemonBlocks.LOADED_DICE)
     @JvmField
     val LUCKY_EGG = heldItem("lucky_egg")
     @JvmField
-    val LUMINOUS_MOSS = heldItem("luminous_moss")
+    val LUMINOUS_MOSS = itemNameBlockItem("luminous_moss", CobblemonBlocks.LUMINOUS_MOSS)
     @JvmField
-    val MAGNET = heldItem("magnet")
+    val MAGNET = itemNameBlockItem("magnet", CobblemonBlocks.MAGNET)
     @JvmField
-    val METRONOME = heldItem("metronome")
+    val METRONOME = itemNameBlockItem("metronome", CobblemonBlocks.METRONOME)
     @JvmField
     val MIRACLE_SEED = heldItem("miracle_seed")
     @JvmField
     val MYSTIC_WATER = heldItem("mystic_water")
-    @JvmField
-    val NEVER_MELT_ICE = heldItem("never_melt_ice")
     @JvmField
     val POISON_BARB = heldItem("poison_barb")
     @JvmField
@@ -1044,13 +1043,11 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val RED_CARD = heldItem("red_card")
     @JvmField
-    val RING_TARGET = heldItem("ring_target")
+    val RING_TARGET = itemNameBlockItem("ring_target", CobblemonBlocks.RING_TARGET)
     @JvmField
     val ROOM_SERVICE = heldItem("room_service")
     @JvmField
-    val SCOPE_LENS = heldItem("scope_lens")
-    @JvmField
-    val SHARP_BEAK = heldItem("sharp_beak")
+    val SCOPE_LENS = itemNameBlockItem("scope_lens", CobblemonBlocks.SCOPE_LENS)
     @JvmField
     val SHED_SHELL = heldItem("shed_shell")
     @JvmField
@@ -1062,9 +1059,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SOFT_SAND = heldItem("soft_sand")
     @JvmField
-    val SPELL_TAG = itemNameBlockItem("spell_tag", CobblemonBlocks.SPELL_TAG)
-    @JvmField
-    val SMOKE_BALL = heldItem("smoke_ball")
+    val SMOKE_BALL = itemNameBlockItem("smoke_ball", CobblemonBlocks.SMOKE_BALL)
     @JvmField
     val SOOTHE_BELL = heldItem("soothe_bell")
     @JvmField
@@ -1072,9 +1067,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val TERRAIN_EXTENDER = heldItem("terrain_extender")
     @JvmField
-    val THROAT_SPRAY = heldItem("throat_spray")
+    val THROAT_SPRAY = itemNameBlockItem("throat_spray", CobblemonBlocks.THROAT_SPRAY)
     @JvmField
-    val TOXIC_ORB = heldItem("toxic_orb")
+    val TOXIC_ORB = itemNameBlockItem("toxic_orb", CobblemonBlocks.TOXIC_ORB)
     @JvmField
     val TWISTED_SPOON = heldItem("twisted_spoon")
     @JvmField
@@ -1082,9 +1077,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val WEAKNESS_POLICY = itemNameBlockItem("weakness_policy", CobblemonBlocks.WEAKNESS_POLICY)
     @JvmField
-    val WIDE_LENS = heldItem("wide_lens")
+    val WIDE_LENS = itemNameBlockItem("wide_lens", CobblemonBlocks.WIDE_LENS)
     @JvmField
-    val ZOOM_LENS = heldItem("zoom_lens")
+    val ZOOM_LENS = itemNameBlockItem("zoom_lens", CobblemonBlocks.ZOOM_LENS)
     @JvmField
     val MENTAL_HERB = compostableHeldItem("mental_herb", null, 0.85F)
     @JvmField
@@ -1096,19 +1091,19 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val WHITE_HERB = compostableHeldItem("white_herb", null, 0.85F)
     @JvmField
-    val BRIGHT_POWDER = heldItem("bright_powder")
+    val BRIGHT_POWDER = itemNameBlockItem("bright_powder", CobblemonBlocks.BRIGHT_POWDER)
     @JvmField
-    val METAL_POWDER = heldItem("metal_powder")
+    val METAL_POWDER = itemNameBlockItem("metal_powder", CobblemonBlocks.METAL_POWDER)
     @JvmField
-    val QUICK_POWDER = heldItem("quick_powder")
+    val QUICK_POWDER = itemNameBlockItem("quick_powder", CobblemonBlocks.QUICK_POWDER)
     @JvmField
-    val DAMP_ROCK = heldItem("damp_rock")
+    val DAMP_ROCK = itemNameBlockItem("damp_rock", CobblemonBlocks.DAMP_ROCK)
     @JvmField
-    val HEAT_ROCK = heldItem("heat_rock")
+    val HEAT_ROCK = itemNameBlockItem("heat_rock", CobblemonBlocks.HEAT_ROCK)
     @JvmField
-    val SMOOTH_ROCK = heldItem("smooth_rock")
+    val SMOOTH_ROCK = itemNameBlockItem("smooth_rock", CobblemonBlocks.SMOOTH_ROCK)
     @JvmField
-    val ICY_ROCK = heldItem("icy_rock")
+    val ICY_ROCK = itemNameBlockItem("icy_rock", CobblemonBlocks.ICY_ROCK)
 
     // Mulch
     @JvmField
@@ -1599,7 +1594,16 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun wearableItem(name: String, heldItemRemappedName: String? = null): CobblemonItem = create(
         name,
-        WearableItem(name).also {
+        WearableHatItem(name).also {
+            wearables.add(it)
+            if (heldItemRemappedName != null) {
+                CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)
+            }
+        }
+    )
+    private fun wearableBlockItem(name: String, block: Block, heldItemRemappedName: String? = null): WearableBlockItem = create(
+        name,
+        WearableBlockItem(name, block).also {
             wearables.add(it)
             if (heldItemRemappedName != null) {
                 CobblemonHeldItemManager.registerRemap(it, heldItemRemappedName)

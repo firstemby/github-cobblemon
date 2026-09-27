@@ -1,0 +1,47 @@
+{
+   "species": "cobblemon:wormadam",
+   "order": 0,
+   "variations": [
+      {
+         "aspects": [],
+         "poser": "cobblemon:wormadam_plant",
+         "model": "cobblemon:wormadam_plant.geo",
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_plant.png",
+         "layers": []
+      },
+      {
+         "aspects": [ "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_plant_shiny.png"
+      },
+      {
+         "aspects": [ "sandy-cloak" ],
+         "poser": "cobblemon:wormadam_sandy",
+         "model": "cobblemon:wormadam_sandy.geo",
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_sandy.png"
+      },
+      {
+         "aspects": [ "sandy-cloak", "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_sandy_shiny.png"
+      },
+      {
+         "aspects": [ "trash-cloak" ],
+         "poser": "cobblemon:wormadam_trash",
+         "model": "cobblemon:wormadam_trash.geo",
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_trash.png"
+      },
+      {
+         "aspects": [ "trash-cloak", "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_trash_shiny.png"
+      },
+      {
+         "aspects": [ "alpha_eyes" ],
+         "layers": [
+            {
+               "name": "alpha_eyes",
+               "texture": "cobblemon:textures/pokemon/0413_wormadam/wormadam_alpha.png",
+               "emissive": true
+            }
+         ]
+      }
+   ]
+}

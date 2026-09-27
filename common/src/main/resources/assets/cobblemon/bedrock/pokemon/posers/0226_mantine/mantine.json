@@ -16,8 +16,7 @@
     "seat_1_reverse": [0, 0.4, 0]
   },
   "animations": {
-    "cry": "q.bedrock_stateful('mantine', 'cry')",
-    "recoil": "q.bedrock_stateful('mantine', 'recoil')"
+    "cry": "q.bedrock_stateful('mantine', 'cry')"
   },
   "poses": {
     "jump": {

@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:steel_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_steel_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:steel_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:steel_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_steel_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

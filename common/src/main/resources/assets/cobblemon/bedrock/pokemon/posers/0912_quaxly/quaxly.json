@@ -14,7 +14,6 @@
   ],
     "animations": {
     "cry": "q.bedrock_stateful('quaxly', 'cry')",
-    "recoil": "q.bedrock_stateful('quaxly', 'recoil')",
     "faint": "q.bedrock_primary('quaxly', 'faint', q.curve('one'))"
   },
   "poses": {

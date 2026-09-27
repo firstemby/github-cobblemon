@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 890,
   "name": "Eternatus",
   "primaryType": "poison",
@@ -46,8 +47,8 @@
   "dynamaxBlocked": true,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 6,
+    "height": 6,
     "fixed": false
   },
   "moves": [

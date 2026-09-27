@@ -8,9 +8,9 @@
 
 package com.cobblemon.mod.common.client.render.block
 
+import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.block.entity.DiscShelfBlockEntity
 import com.cobblemon.mod.common.CobblemonItems
-import com.cobblemon.mod.common.client.render.color.TechnicalMachineItemColorProvider
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
@@ -37,15 +37,15 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
     private val slotHeightPixels = 2
     private val textureSize = 16f
 
+    private val slotUMax = slotWidthPixels / textureSize
+    private val slotVMax = slotHeightPixels / textureSize
+
     private val leftMargin = 1f
     private val rightMargin = 1f
     private val topMargin = 1f
     private val interRowSpacing = 0f
-    private val tmOverlayDepthOffset = -0.0002f
     private val slotBrightnessMultiplier = 0.65f
 
-    private val tmBaseTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_base.png")
-    private val tmOverlayTexture = cobblemonResource("textures/block/disc_shelf/technical_machine_overlay.png")
     private val musicDiscUnknownTexture = cobblemonResource("textures/block/disc_shelf/music_disc_unknown.png")
 
     override fun render(
@@ -98,35 +98,19 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
                 poseStack.translate(posX, posY, -0.001f)
 
                 if (item.item == CobblemonItems.TECHNICAL_MACHINE) {
-                    val baseColor = TechnicalMachineItemColorProvider.getColor(item, 0)
-                    val overlayColor = TechnicalMachineItemColorProvider.getColor(item, 1)
-
+                    val elementId = item.components.get(CobblemonItemComponents.TM_MOVE)!!.move.elementalType.showdownId
+                    val texture = cobblemonResource("textures/block/disc_shelf/${elementId}_tm.png")
                     renderSlotQuad(
                             poseStack,
                             buffer,
-                            tmBaseTexture,
-                            baseColor,
+                            texture,
+                            0xFFFFFF,
                             packedLight,
                             slotWidth,
                             slotHeight,
                             tint = true,
                             useTextRenderType = true
                     )
-
-                    poseStack.pushPose()
-                    poseStack.translate(0.0, 0.0, tmOverlayDepthOffset.toDouble())
-                    renderSlotQuad(
-                            poseStack,
-                            buffer,
-                            tmOverlayTexture,
-                            overlayColor,
-                            packedLight,
-                            slotWidth,
-                            slotHeight,
-                            tint = true,
-                            useTextRenderType = true
-                    )
-                    poseStack.popPose()
                 } else {
                     val tex = getItemTexture(item)
                     renderSlotQuad(
@@ -176,13 +160,15 @@ class DiscShelfBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) :
         val g = (gBase * slotBrightnessMultiplier).coerceIn(0f, 1f)
         val b = (bBase * slotBrightnessMultiplier).coerceIn(0f, 1f)
 
-        consumer.addVertex(matrix, 0f, 0f, 0f).setColor(r, g, b, a).setUv(0f, 1f)
+        // The quad faces -Z, so a viewer looking at it sees +X on their left.
+        // U runs from slotUMax at x = 0 to 0 at x = width so the art is not mirrored.
+        consumer.addVertex(matrix, 0f, 0f, 0f).setColor(r, g, b, a).setUv(slotUMax, slotVMax)
                 .setUv1(0, 0).setUv2(light and 0xFFFF, light shr 16).setNormal(0f, 0f, -1f)
-        consumer.addVertex(matrix, 0f, height, 0f).setColor(r, g, b, a).setUv(0f, 0f)
+        consumer.addVertex(matrix, 0f, height, 0f).setColor(r, g, b, a).setUv(slotUMax, 0f)
                 .setUv1(0, 0).setUv2(light and 0xFFFF, light shr 16).setNormal(0f, 0f, -1f)
-        consumer.addVertex(matrix, width, height, 0f).setColor(r, g, b, a).setUv(1f, 0f)
+        consumer.addVertex(matrix, width, height, 0f).setColor(r, g, b, a).setUv(0f, 0f)
                 .setUv1(0, 0).setUv2(light and 0xFFFF, light shr 16).setNormal(0f, 0f, -1f)
-        consumer.addVertex(matrix, width, 0f, 0f).setColor(r, g, b, a).setUv(1f, 1f)
+        consumer.addVertex(matrix, width, 0f, 0f).setColor(r, g, b, a).setUv(0f, slotVMax)
                 .setUv1(0, 0).setUv2(light and 0xFFFF, light shr 16).setNormal(0f, 0f, -1f)
     }
 

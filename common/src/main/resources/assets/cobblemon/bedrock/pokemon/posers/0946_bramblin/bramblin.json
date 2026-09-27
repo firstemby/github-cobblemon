@@ -16,7 +16,6 @@
         "PORTRAIT",
         "PROFILE"
       ],
-      "isBattle": true,
       "animations": [
         "q.look('eyes')",
         "q.bedrock('bramblin', 'ground_idle')"
@@ -40,7 +39,10 @@
     },
       "sleeping": {
         "poseTypes": ["SLEEP"],
-        "animations": ["q.bedrock('bramblin', 'sleep_pose')"]
+        "animations": ["q.bedrock('bramblin', 'sleep_pose')"],
+        "namedAnimations": {
+          "cry": "q.bedrock_stateful('dummy', 'cry')"
+        }
     }
   }
 }

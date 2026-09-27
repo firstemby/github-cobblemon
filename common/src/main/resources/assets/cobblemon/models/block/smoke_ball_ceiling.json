@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/orb_ceiling",
+  "textures": {
+        "texture": "cobblemon:block/decorative/orb_smoke",
+        "particle": "cobblemon:item/held_items/smoke_ball"
+  }
+}

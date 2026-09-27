@@ -44,6 +44,7 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("dev-shadow")
+        entryCompression = ZipEntryCompression.STORED
         archiveBaseName.set("Cobblemon-${project.name}")
         configurations = listOf(bundle)
         mergeServiceFiles()

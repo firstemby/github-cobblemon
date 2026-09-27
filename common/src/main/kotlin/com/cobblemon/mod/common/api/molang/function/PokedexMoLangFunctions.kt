@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
 import com.cobblemon.mod.common.api.pokedex.CaughtCount
 import com.cobblemon.mod.common.api.pokedex.CaughtPercent
+import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.PokedexManager
 import com.cobblemon.mod.common.api.pokedex.SeenCount
@@ -64,6 +65,40 @@ object PokedexMoLangFunctions : AbstractMoLangFunctionHolder<AbstractPokedexMana
         map["caught_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
         map["seen_percent"] = { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
 
+        functions["dex_caught_count"] = { params ->
+            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtCount))
+            else DoubleValue.ZERO
+        }
+        functions["dex_seen_count"] = { params ->
+            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenCount))
+            else DoubleValue.ZERO
+        }
+        functions["dex_caught_percent"] = { params ->
+            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, CaughtPercent).toDouble())
+            else DoubleValue.ZERO
+        }
+        functions["dex_seen_percent"] = { params ->
+            val dexId = params.getString(0).asIdentifierDefaultingNamespace()
+            if (Dexes.dexEntryMap.containsKey(dexId)) DoubleValue(pokedex.getDexCalculatedValue(dexId, SeenPercent).toDouble())
+            else DoubleValue.ZERO
+        }
+
+        when (pokedex) {
+            is PokedexManager -> {
+                functions["player_id"] = { StringValue(pokedex.uuid.toString()) }
+                functions["see"] = { params ->
+                    val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+                    pokedex.encounter(pokemon)
+                    DoubleValue.ONE
+                }
+                functions["catch"] = { params ->
+                    val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
+                    pokedex.obtain(pokemon)
+                    DoubleValue.ONE
+                }
         if (pokedex is PokedexManager) {
             map["player_id"] = { StringValue(pokedex.uuid.toString()) }
             map["see"] = put@{ params ->

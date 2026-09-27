@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "building",
+  "group": "type_gem_blocks",
   "pattern": [
     "##",
     "##"
@@ -13,31 +14,5 @@
   "result": {
     "id": "cobblemon:grass_gem_block",
     "count": 1
-  },
-  "criteria": {
-    "has_grass_gem": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "cobblemon:grass_gem"
-            ]
-          }
-        ]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "cobblemon:grass_gem_block"
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_grass_gem",
-      "has_the_recipe"
-    ]
-  ]
+  }
 }

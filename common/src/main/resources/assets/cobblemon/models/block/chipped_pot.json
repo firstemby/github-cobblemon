@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/teapots",
+  "textures": {
+        "texture": "cobblemon:block/decorative/chipped_pot"
+  }
+}

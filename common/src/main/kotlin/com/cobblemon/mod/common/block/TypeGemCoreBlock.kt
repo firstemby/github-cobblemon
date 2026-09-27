@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlocks
 import com.cobblemon.mod.common.api.tags.CobblemonBlockTags
 import com.cobblemon.mod.common.block.TypeGemClusterBlock.Companion.SHOULD_GROW
@@ -32,6 +33,9 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         const val MAX_CONNECTED_GEMS = 7
         const val MIN_DISTANCE_BETWEEN_GEMS = 1
         const val CONTINUATION_CHANCE = 0.8f
+
+        // Upper safety check to prevent infinite loops
+        const val MAX_FORCE_GROW_ATTEMPTS = 64
 
         val BLOCK_TO_CLUSTER: Map<ResourceLocation, Block> by lazy {
             mapOf(
@@ -112,13 +116,16 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
     fun forceGrow(level: WorldGenLevel, pos: BlockPos, random: RandomSource, percentage: Float) {
         val desiredLength = MAX_CONNECTED_GEMS * percentage
 
-        while (true) {
-            val growInfo = grow(level, pos, random, true)
-            val grown = growInfo.first
-            val clusterSize = growInfo.second
-
-            if (!grown || clusterSize >= desiredLength) break
+        repeat(MAX_FORCE_GROW_ATTEMPTS) {
+            val (grown, clusterSize) = grow(level, pos, random, true)
+            if (!grown || clusterSize >= desiredLength) return
         }
+
+        Cobblemon.LOGGER.warn(
+            "Forced type gem growth at {} stopped after {} attempts without reaching its target size; keeping the partial formation.",
+            pos,
+            MAX_FORCE_GROW_ATTEMPTS
+        )
     }
 
     private fun grow(
@@ -130,7 +137,7 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         val connectedGems = getConnectedGemBlocks(level, pos) // maybe we can store this and access it for better performance? check for changes in list rather than checking each time grow is called? idk
         val gemCount = connectedGems.size
         val overLimit = gemCount >= MAX_CONNECTED_GEMS
-        
+
         if (overLimit) {
             // if there is no open air pockets to grow any new clusters then exit early
             if (!hasBreathingRoom(level, connectedGems)) {
@@ -164,6 +171,11 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
                     .setValue(SHOULD_GROW, true)
 
                 level.setBlock(targetPos, placeState, UPDATE_ALL)
+
+                // During world gen, the region silently discards writes into neighboring chunks that are already fully generated.
+                // Through ImposterProtoChunk with writes set to disabled. Checks if the block is still air after the write and skips if so as it can't be filled.
+                // Preventing infinite loops.
+                if (!level.getBlockState(targetPos).`is`(clusterBlock)) continue
 
                 if (forced) {
                     forceAdvanceClusterGrowth(level, targetPos, random)

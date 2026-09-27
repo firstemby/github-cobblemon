@@ -1,5 +1,6 @@
 {
     "type": "minecraft:blasting",
+    "category": "misc",
     "group": "shiny_stone",
     "ingredient": {
         "item": "cobblemon:shiny_stone_ore"
