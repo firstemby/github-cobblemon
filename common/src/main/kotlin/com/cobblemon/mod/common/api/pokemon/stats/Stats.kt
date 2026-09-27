@@ -20,55 +20,55 @@ import net.minecraft.resources.ResourceLocation
  */
 enum class Stats(override val identifier: ResourceLocation, override val displayName: Component, override val type: Stat.Type, override val showdownId: String) : Stat {
 
-    HP(cobblemonResource("hp"), lang("stat.hp.name"), Stat.Type.PERMANENT, "hp"),
-    ATTACK(cobblemonResource("attack"), lang("stat.attack.name"), Stat.Type.PERMANENT, "atk"),
-    DEFENCE(cobblemonResource("defence"), lang("stat.defence.name"), Stat.Type.PERMANENT, "def"),
-    SPECIAL_ATTACK(cobblemonResource("special_attack"), lang("stat.special_attack.name"), Stat.Type.PERMANENT, "spa"),
-    SPECIAL_DEFENCE(cobblemonResource("special_defence"), lang("stat.special_defence.name"), Stat.Type.PERMANENT, "spd"),
-    SPEED(cobblemonResource("speed"), lang("stat.speed.name"), Stat.Type.PERMANENT, "spe"),
-    EVASION(cobblemonResource("evasion"), lang("stat.evasion.name"), Stat.Type.BATTLE_ONLY, "evasion"),
-    ACCURACY(cobblemonResource("accuracy"), lang("stat.accuracy.name"), Stat.Type.BATTLE_ONLY, "accuracy");
+	HP(cobblemonResource("hp"), lang("stat.hp.name"), Stat.Type.PERMANENT, "hp"),
+	ATTACK(cobblemonResource("attack"), lang("stat.attack.name"), Stat.Type.PERMANENT, "atk"),
+	DEFENCE(cobblemonResource("defence"), lang("stat.defence.name"), Stat.Type.PERMANENT, "def"),
+	SPECIAL_ATTACK(cobblemonResource("special_attack"), lang("stat.special_attack.name"), Stat.Type.PERMANENT, "spa"),
+	SPECIAL_DEFENCE(cobblemonResource("special_defence"), lang("stat.special_defence.name"), Stat.Type.PERMANENT, "spd"),
+	SPEED(cobblemonResource("speed"), lang("stat.speed.name"), Stat.Type.PERMANENT, "spe"),
+	EVASION(cobblemonResource("evasion"), lang("stat.evasion.name"), Stat.Type.BATTLE_ONLY, "evasion"),
+	ACCURACY(cobblemonResource("accuracy"), lang("stat.accuracy.name"), Stat.Type.BATTLE_ONLY, "accuracy");
 
-    companion object {
+	companion object {
 
-        /**
-         * All the stats, an alternative to [values].
-         * Using [StatProvider.all] is recommended instead for maximum addon compatibility.
-         */
-        val ALL: Set<Stat> = EnumSet.allOf(Stats::class.java)
+		/**
+		 * All the stats, an alternative to [values].
+		 * Using [StatProvider.all] is recommended instead for maximum addon compatibility.
+		 */
+		val ALL: Set<Stat> = EnumSet.allOf(Stats::class.java)
 
-        /**
-         * All the stats with type of [Stat.Type.PERMANENT].
-         * Using [StatProvider.ofType] with type [Stat.Type.PERMANENT] is recommended instead for maximum addon compatibility.
-         */
-        val PERMANENT: Set<Stat> = EnumSet.of(HP, ATTACK, DEFENCE, SPECIAL_ATTACK, SPECIAL_DEFENCE, SPEED)
+		/**
+		 * All the stats with type of [Stat.Type.PERMANENT].
+		 * Using [StatProvider.ofType] with type [Stat.Type.PERMANENT] is recommended instead for maximum addon compatibility.
+		 */
+		val PERMANENT: Set<Stat> = EnumSet.of(HP, ATTACK, DEFENCE, SPECIAL_ATTACK, SPECIAL_DEFENCE, SPEED)
 
-        /**
-         * All the stats with type of [Stat.Type.BATTLE_ONLY].
-         * Using [StatProvider.ofType] with type [Stat.Type.BATTLE_ONLY] is recommended instead for maximum addon compatibility.
-         */
-        val BATTLE_ONLY: Set<Stat> = EnumSet.of(EVASION, ACCURACY)
+		/**
+		 * All the stats with type of [Stat.Type.BATTLE_ONLY].
+		 * Using [StatProvider.ofType] with type [Stat.Type.BATTLE_ONLY] is recommended instead for maximum addon compatibility.
+		 */
+		val BATTLE_ONLY: Set<Stat> = EnumSet.of(EVASION, ACCURACY)
 
-        /** Gets the [Stat] from the respective Showdown id. */
-        fun getStat(statKey: String) = when(statKey.lowercase()) {
-            "hp" -> HP
-            "atk", "attack" -> ATTACK // Hyper Cutter states the full stat name "Attack"
-            "def", "defense", "defence" -> DEFENCE // Big Pecks states the full stat name "Defense"
+		/** Gets the [Stat] from the respective Showdown id. */
+		fun getStat(statKey: String) = when(statKey.lowercase()) {
+			"hp" -> HP
+			"atk", "attack" -> ATTACK // Hyper Cutter states the full stat name "Attack"
+			"def", "defense", "defence" -> DEFENCE // Big Pecks states the full stat name "Defense"
 			"spa", "special_attack" -> SPECIAL_ATTACK
 			"spd", "special_defence", "special_defense" -> SPECIAL_DEFENCE
-            "spe", "speed" -> SPEED
-            "evasion" -> EVASION
-            else -> ACCURACY
-        }
+			"spe", "speed" -> SPEED
+			"evasion" -> EVASION
+			else -> ACCURACY
+		}
 
-        /** Gets the severity lang key from the respective boost/unboost stage. */
-        fun getSeverity(stages: Int) = when(stages) {
-            0 -> "cap.single"
-            1 -> "slight"
-            2 -> "sharp"
-            else -> "severe"
-        }
+		/** Gets the severity lang key from the respective boost/unboost stage. */
+		fun getSeverity(stages: Int) = when(stages) {
+			0 -> "cap.single"
+			1 -> "slight"
+			2 -> "sharp"
+			else -> "severe"
+		}
 
-    }
+	}
 
 }

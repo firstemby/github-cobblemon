@@ -17,33 +17,35 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.Block
 
 object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> {
-	override fun handle(packet: SetActiveTMPacket, server: MinecraftServer, player: ServerPlayer) {
-		val menu = player.containerMenu as? TMMachineMenu ?: return
-		val tmData = Cobblemon.playerDataManager.getTMData(player)
+    override fun handle(packet: SetActiveTMPacket, server: MinecraftServer, player: ServerPlayer) {
+        val menu = player.containerMenu as? TMMachineMenu ?: return
+        val tmData = Cobblemon.playerDataManager.getTMData(player)
 
-		if (packet.tm != null
-			&& !Cobblemon.config.unlockAllMoveDexMovesByDefault
-			&& !packet.tm.isPassivelyObtained()
-			&& packet.tm.id !in tmData.learnedTMs) {
-			return // Hacker smh
-		}
+        if (packet.tm != null && !Cobblemon.config.unlockAllMoveDexMovesByDefault && !packet.tm.isPassivelyObtained() && packet.tm.id !in tmData.learnedTMs) {
+            return // Hacker smh
+        }
 
-		menu.tmMachineEntity?.let { blockEntity ->
-			blockEntity.activeMove = packet.tm?.moveName?.name ?: ""
+        menu.tmMachineEntity?.let { blockEntity ->
+            blockEntity.activeMove = packet.tm?.moveName?.name ?: ""
 
-			blockEntity.burnActive = false
-			blockEntity.burnProgress = 0
+            blockEntity.burnActive = false
+            blockEntity.burnProgress = 0
 
-			blockEntity.setChanged()
-			player.level().sendBlockUpdated(blockEntity.blockPos, blockEntity.blockState, blockEntity.blockState, Block.UPDATE_CLIENTS)
+            blockEntity.setChanged()
+            player.level().sendBlockUpdated(
+                blockEntity.blockPos,
+                blockEntity.blockState,
+                blockEntity.blockState,
+                Block.UPDATE_CLIENTS
+            )
 
-			player.level().players().forEach { thePlayer -> //Update all players with matching menu/blockentity
-				val tmmMenu = thePlayer.containerMenu as? TMMachineMenu ?: return@forEach
-				if (tmmMenu.tmMachineEntity == blockEntity) {
-					tmmMenu.currentlySelectedTM = packet.tm
-					tmmMenu.broadcastChanges()
-				}
-			}
-		}
-	}
+            player.level().players().forEach { thePlayer -> //Update all players with matching menu/blockentity
+                val tmmMenu = thePlayer.containerMenu as? TMMachineMenu ?: return@forEach
+                if (tmmMenu.tmMachineEntity == blockEntity) {
+                    tmmMenu.currentlySelectedTM = packet.tm
+                    tmmMenu.broadcastChanges()
+                }
+            }
+        }
+    }
 }

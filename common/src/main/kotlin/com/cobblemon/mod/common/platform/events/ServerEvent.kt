@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -19,29 +18,29 @@ import net.minecraft.server.MinecraftServer
  */
 interface ServerEvent {
 
-	/**
-	 * The [MinecraftServer] backing the event trigger.
-	 */
-	val server: MinecraftServer
+    /**
+     * The [MinecraftServer] backing the event trigger.
+     */
+    val server: MinecraftServer
 
-	/**
-	 * Fired when the server is starting.
-	 */
-	data class Starting(override val server: MinecraftServer) : ServerEvent
+    /**
+     * Fired when the server is starting.
+     */
+    data class Starting(override val server: MinecraftServer) : ServerEvent
 
-	/**
-	 * Fired when the server has started.
-	 */
-	data class Started(override val server: MinecraftServer) : ServerEvent
+    /**
+     * Fired when the server has started.
+     */
+    data class Started(override val server: MinecraftServer) : ServerEvent
 
-	/**
-	 * Fired when the server is stopping.
-	 */
-	data class Stopping(override val server: MinecraftServer) : ServerEvent
+    /**
+     * Fired when the server is stopping.
+     */
+    data class Stopping(override val server: MinecraftServer) : ServerEvent
 
-	/**
-	 * Fired when the server has stopped.
-	 */
-	data class Stopped(override val server: MinecraftServer) : ServerEvent
+    /**
+     * Fired when the server has stopped.
+     */
+    data class Stopped(override val server: MinecraftServer) : ServerEvent
 
 }
