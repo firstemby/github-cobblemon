@@ -18,20 +18,22 @@ import java.util.*
 object BattleMoLangFunctions : AbstractMoLangFunctionHolder<PokemonBattle>() {
     override fun PokemonBattle.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
         val battle = this
-        return mutableMapOf(
-            "environment" to { battle.runtime.environment },
-            "battle_id" to { StringValue(battle.battleId.toString()) },
-            "battle_type" to { StringValue(battle.format.toString()) },
-            "is_pvn" to { DoubleValue(battle.isPvN) },
-            "is_pvp" to { DoubleValue(battle.isPvP) },
-            "is_pvw" to { DoubleValue(battle.isPvW) },
-            "stop" to { battle.stop() },
-            "actors" to { battle.actors.toList().asArrayValue { it.struct } },
-            "get_actor" to getActor@{ params ->
-                val uuid = UUID.fromString(params.getString(0))
-                val actor = battle.actors.find { it.uuid == uuid } ?: return@getActor DoubleValue.ZERO
-                actor.struct
-            }
-        )
+        val functions = hashMapOf<String, (MoParams) -> Any>()
+
+        functions["environment"] = { battle.runtime.environment }
+        functions["battle_id"] = { StringValue(battle.battleId.toString()) }
+        functions["battle_type"] = { StringValue(battle.format.toString()) }
+        functions["is_pvn"] = { DoubleValue(battle.isPvN) }
+        functions["is_pvp"] = { DoubleValue(battle.isPvP) }
+        functions["is_pvw"] = { DoubleValue(battle.isPvW) }
+        functions["stop"] = { battle.stop() }
+        functions["actors"] = { battle.actors.toList().asArrayValue { it.struct } }
+        functions["get_actor"] = getActor@{ params ->
+            val uuid = UUID.fromString(params.getString(0))
+            val actor = battle.actors.find { it.uuid == uuid } ?: return@getActor DoubleValue.ZERO
+            actor.struct
+        }
+
+        return functions
     }
 }
