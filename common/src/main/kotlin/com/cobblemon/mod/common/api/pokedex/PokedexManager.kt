@@ -25,101 +25,101 @@ import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 
 class PokedexManager(
-	override val uuid: UUID,
-	override val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord>
+    override val uuid: UUID,
+    override val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord>
 ) : AbstractPokedexManager(), InstancedPlayerData {
 
-	fun encounter(pokemon: Pokemon) {
-		val speciesId = pokemon.species.resourceIdentifier
-		val formName = pokemon.form.name
-		getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(PokedexEntityData(pokemon = pokemon, disguise = null))
-	}
+    fun encounter(pokemon: Pokemon) {
+        val speciesId = pokemon.species.resourceIdentifier
+        val formName = pokemon.form.name
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(PokedexEntityData(pokemon = pokemon, disguise = null))
+    }
 
-	fun encounter(pokedexEntityData: PokedexEntityData) {
-		val speciesId = pokedexEntityData.getApparentSpecies().resourceIdentifier
-		val formName = pokedexEntityData.getApparentForm().name
-		getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(pokedexEntityData)
-	}
+    fun encounter(pokedexEntityData: PokedexEntityData) {
+        val speciesId = pokedexEntityData.getApparentSpecies().resourceIdentifier
+        val formName = pokedexEntityData.getApparentForm().name
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(pokedexEntityData)
+    }
 
-	// Java interop isn't great lol
-	@Deprecated("Use obtain(Pokemon) instead")
-	fun catch(pokemon: Pokemon) {
-		obtain(pokemon)
-	}
+    // Java interop isn't great lol
+    @Deprecated("Use obtain(Pokemon) instead")
+    fun catch(pokemon: Pokemon) {
+        obtain(pokemon)
+    }
 
-	fun obtain(pokemon: Pokemon) {
-		val speciesId = pokemon.species.resourceIdentifier
-		val formName = pokemon.form.name
-		getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).obtained(PokedexEntityData(pokemon = pokemon, disguise = null))
-	}
+    fun obtain(pokemon: Pokemon) {
+        val speciesId = pokemon.species.resourceIdentifier
+        val formName = pokemon.form.name
+        getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).obtained(PokedexEntityData(pokemon = pokemon, disguise = null))
+    }
 
-	fun scheduleFullSyncFromStores(
-		party: Iterable<Pokemon?>,
-		pc: Iterable<Pokemon?>,
-		batchSize: Int = 50
-	) {
-		val iterator = sequence {
-			for (pokemon in party) {
-				if (pokemon != null) yield(pokemon)
-			}
-			for (pokemon in pc) {
-				if (pokemon != null) yield(pokemon)
-			}
-		}.iterator()
+    fun scheduleFullSyncFromStores(
+        party: Iterable<Pokemon?>,
+        pc: Iterable<Pokemon?>,
+        batchSize: Int = 50
+    ) {
+        val iterator = sequence {
+            for (pokemon in party) {
+                if (pokemon != null) yield(pokemon)
+            }
+            for (pokemon in pc) {
+                if (pokemon != null) yield(pokemon)
+            }
+        }.iterator()
 
-		if (!iterator.hasNext()) {
-			return
-		}
+        if (!iterator.hasNext()) {
+            return
+        }
 
-		ScheduledTask.Builder()
-			.tracker(ServerTaskTracker)
-			.interval(0F)
-			.infiniteIterations()
-			.execute { task ->
-				var processed = 0
-				while (processed < batchSize && iterator.hasNext()) {
-					val pokemon = iterator.next()
-					obtain(pokemon)
-					processed++
-				}
+        ScheduledTask.Builder()
+            .tracker(ServerTaskTracker)
+            .interval(0F)
+            .infiniteIterations()
+            .execute { task ->
+                var processed = 0
+                while (processed < batchSize && iterator.hasNext()) {
+                    val pokemon = iterator.next()
+                    obtain(pokemon)
+                    processed++
+                }
 
-				if (!iterator.hasNext()) {
-					task.expire()
-				}
-			}
-			.build()
-	}
+                if (!iterator.hasNext()) {
+                    task.expire()
+                }
+            }
+            .build()
+    }
 
-	override fun initialize() {
-		speciesRecords.entries.forEach { (key, value) -> value.initialize(this, key) }
-	}
+    override fun initialize() {
+        speciesRecords.entries.forEach { (key, value) -> value.initialize(this, key) }
+    }
 
-	override fun onSpeciesRecordUpdated(speciesDexRecord: SpeciesDexRecord) {
-		super.onSpeciesRecordUpdated(speciesDexRecord)
-		uuid.getPlayer()?.sendPacket(
-			SetClientPlayerDataPacket(
-				type = PlayerInstancedDataStoreTypes.POKEDEX,
-				playerData = ClientPokedexManager(mutableMapOf(speciesDexRecord.id to speciesDexRecord.clone())),
-				isIncremental = true
-			)
-		)
-	}
+    override fun onSpeciesRecordUpdated(speciesDexRecord: SpeciesDexRecord) {
+        super.onSpeciesRecordUpdated(speciesDexRecord)
+        uuid.getPlayer()?.sendPacket(
+            SetClientPlayerDataPacket(
+                type = PlayerInstancedDataStoreTypes.POKEDEX,
+                playerData = ClientPokedexManager(mutableMapOf(speciesDexRecord.id to speciesDexRecord.clone())),
+                isIncremental = true
+            )
+        )
+    }
 
-	companion object {
-		val CODEC = RecordCodecBuilder.create<PokedexManager> { instance ->
-			instance.group(
-				PrimitiveCodec.STRING.fieldOf("uuid").forGetter { it.uuid.toString() },
-				Codec.unboundedMap(ResourceLocation.CODEC, SpeciesDexRecord.CODEC).fieldOf("speciesRecords").forGetter { it.speciesRecords }
-			).apply(instance) { uuid, map ->
-				//Codec stuff seems to deserialize to an immutable map, so we have to convert it to mutable explicitly
-				PokedexManager(UUID.fromString(uuid), map.toMutableMap()).also { it.initialize() }
-			}
-		}
-	}
+    companion object {
+        val CODEC = RecordCodecBuilder.create<PokedexManager> { instance ->
+            instance.group(
+                PrimitiveCodec.STRING.fieldOf("uuid").forGetter { it.uuid.toString() },
+                Codec.unboundedMap(ResourceLocation.CODEC, SpeciesDexRecord.CODEC).fieldOf("speciesRecords").forGetter { it.speciesRecords }
+            ).apply(instance) { uuid, map ->
+                //Codec stuff seems to deserialize to an immutable map, so we have to convert it to mutable explicitly
+                PokedexManager(UUID.fromString(uuid), map.toMutableMap()).also { it.initialize() }
+            }
+        }
+    }
 
-	override fun toClientData(): ClientPokedexManager {
-		val copied = mutableMapOf<ResourceLocation, SpeciesDexRecord>()
-		speciesRecords.forEach { (key, value) -> copied[key] = value.clone() }
-		return ClientPokedexManager(copied)
-	}
+    override fun toClientData(): ClientPokedexManager {
+        val copied = mutableMapOf<ResourceLocation, SpeciesDexRecord>()
+        speciesRecords.forEach { (key, value) -> copied[key] = value.clone() }
+        return ClientPokedexManager(copied)
+    }
 }

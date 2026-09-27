@@ -21,7 +21,10 @@ object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> 
         val menu = player.containerMenu as? TMMachineMenu ?: return
         val tmData = Cobblemon.playerDataManager.getTMData(player)
 
-        if (packet.tm != null && !Cobblemon.config.unlockAllMoveDexMovesByDefault && !packet.tm.isPassivelyObtained() && packet.tm.id !in tmData.learnedTMs) {
+        if (packet.tm != null
+            && !Cobblemon.config.unlockAllMoveDexMovesByDefault
+            && !packet.tm.isPassivelyObtained()
+            && packet.tm.id !in tmData.learnedTMs) {
             return // Hacker smh
         }
 
@@ -32,12 +35,7 @@ object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> 
             blockEntity.burnProgress = 0
 
             blockEntity.setChanged()
-            player.level().sendBlockUpdated(
-                blockEntity.blockPos,
-                blockEntity.blockState,
-                blockEntity.blockState,
-                Block.UPDATE_CLIENTS
-            )
+            player.level().sendBlockUpdated(blockEntity.blockPos, blockEntity.blockState, blockEntity.blockState, Block.UPDATE_CLIENTS)
 
             player.level().players().forEach { thePlayer -> //Update all players with matching menu/blockentity
                 val tmmMenu = thePlayer.containerMenu as? TMMachineMenu ?: return@forEach

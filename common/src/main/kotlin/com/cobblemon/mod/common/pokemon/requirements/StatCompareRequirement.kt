@@ -14,17 +14,17 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 class StatCompareRequirement : Requirement {
-	companion object {
-		const val ADAPTER_VARIANT = "stat_compare"
-	}
+    companion object {
+        const val ADAPTER_VARIANT = "stat_compare"
+    }
 
-	val highStat = Stats.ATTACK.identifier.path
-	val lowStat = Stats.DEFENCE.identifier.path
+    val highStat = Stats.ATTACK.identifier.path
+    val lowStat = Stats.DEFENCE.identifier.path
 
-	override fun check(pokemon: Pokemon): Boolean {
-		val high = Stats.getStat(highStat)
-		val low = Stats.getStat(lowStat)
-		if (high.type != Stat.Type.PERMANENT || low.type != Stat.Type.PERMANENT) return false
-		return pokemon.getStat(high) > pokemon.getStat(low)
-	}
+    override fun check(pokemon: Pokemon): Boolean {
+        val high = Stats.getStat(highStat)
+        val low = Stats.getStat(lowStat)
+        if (high.type != Stat.Type.PERMANENT || low.type != Stat.Type.PERMANENT) return false
+        return pokemon.getStat(high) > pokemon.getStat(low)
+    }
 }

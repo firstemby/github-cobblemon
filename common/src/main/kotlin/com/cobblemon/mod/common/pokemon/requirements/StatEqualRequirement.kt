@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2023 Cobblemon Contributors
  *
@@ -15,17 +14,17 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 class StatEqualRequirement : Requirement {
-	companion object {
-		const val ADAPTER_VARIANT = "stat_equal"
-	}
+    companion object {
+        const val ADAPTER_VARIANT = "stat_equal"
+    }
 
-	val statOne = Stats.ATTACK.identifier.path
-	val statTwo = Stats.DEFENCE.identifier.path
+    val statOne = Stats.ATTACK.identifier.path
+    val statTwo = Stats.DEFENCE.identifier.path
 
-	override fun check(pokemon: Pokemon): Boolean {
-		val one = Stats.getStat(statOne)
-		val two = Stats.getStat(statTwo)
-		if (one.type != Stat.Type.PERMANENT || two.type != Stat.Type.PERMANENT) return false
-		return pokemon.getStat(one) == pokemon.getStat(two)
-	}
+    override fun check(pokemon: Pokemon): Boolean {
+        val one = Stats.getStat(statOne)
+        val two = Stats.getStat(statTwo)
+        if (one.type != Stat.Type.PERMANENT || two.type != Stat.Type.PERMANENT) return false
+        return pokemon.getStat(one) == pokemon.getStat(two)
+    }
 }
