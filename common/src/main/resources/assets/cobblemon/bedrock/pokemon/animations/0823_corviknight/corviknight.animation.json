@@ -3152,8 +3152,8 @@
 				}
 			},
 			"timeline": {
-				"0.5001": "q.run_molang('cobblemon:stepsound_claw_large');",
-				"1.5001": "q.run_molang('cobblemon:stepsound_claw_large');"
+				"0.5": "q.run_molang('cobblemon:stepsound_claw_large');",
+				"1.5": "q.run_molang('cobblemon:stepsound_claw_large');"
 			}
 		},
 		"animation.corviknight.ground_run": {
