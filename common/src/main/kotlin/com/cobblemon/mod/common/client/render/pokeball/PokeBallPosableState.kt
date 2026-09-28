@@ -12,8 +12,7 @@ import com.cobblemon.mod.common.api.reactive.Observable
 import com.cobblemon.mod.common.api.reactive.SettableObservable
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.AncientPokeBallModel
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallModel
+import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallPosableModel
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import kotlin.random.Random
 
@@ -27,14 +26,14 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
     open fun initSubscriptions() {
         stateEmitter.subscribe { state ->
 
-            val group = (this.getEntity() as EmptyPokeBallEntity).rootBone()
+            val group = (currentModel!! as PokeBallPosableModel).rootBone
 
             when (state) {
                 EmptyPokeBallEntity.CaptureState.HIT -> {
                     doLater {
                         val model = this.currentModel!!
                         after(seconds = 0.2F) {
-                            if (model is PokeBallModel && stateEmitter.get() == EmptyPokeBallEntity.CaptureState.HIT) {
+                            if (model is PokeBallPosableModel && stateEmitter.get() == EmptyPokeBallEntity.CaptureState.HIT) {
                                 doLater latest@{
                                     model.moveToPose(this, model.poses["open"]!!)
                                     after(seconds = 1.75F) {
@@ -62,7 +61,7 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
                     shakeEmitter
                         .pipe(Observable.emitWhile { stateEmitter.get() == EmptyPokeBallEntity.CaptureState.SHAKE })
                         .subscribe {
-                            val bob = "bob${Random.Default.nextInt(6) + 1}"
+                            val bob = "bob${Random.nextInt(6) + 1}"
                             doLater { setActiveAnimations(currentModel!!.bedrockStateful(group, bob)) }
                         }
                 }

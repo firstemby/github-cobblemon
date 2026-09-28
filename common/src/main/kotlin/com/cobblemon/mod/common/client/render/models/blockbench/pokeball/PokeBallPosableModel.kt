@@ -20,4 +20,6 @@ open class PokeBallPosableModel(root: Bone) : PosableModel(root), ModelFrame {
             .children.entries
             .first()
             .let { root.registerChildWithAllChildren(it.key) }
+
+    val rootBone: String = (root as ModelPart).children.entries.first().key
 }

@@ -189,14 +189,6 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     var pokeBall: PokeBall = PokeBalls.POKE_BALL
 
-    fun rootBone(): String = when(PokeBalls.isDefault(pokeBall.name)) {
-        true -> when (PokeBalls.isAncient(pokeBall.name)) {
-            true -> "ancient_poke_ball"
-            false -> "poke_ball"
-        }
-        false -> pokeBall.name.path
-    }
-
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
             if (level().isServerSide()) {

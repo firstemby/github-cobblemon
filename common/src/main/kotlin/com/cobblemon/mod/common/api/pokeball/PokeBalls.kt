@@ -350,8 +350,6 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         return this.custom[identifier] ?: this.defaults[identifier]!!
     }
 
-    fun isDefault(identifier: ResourceLocation) = this.defaults.containsKey(identifier)
-    fun isCustom(identifier: ResourceLocation) = this.custom.containsKey(identifier)
     fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier)?.ancient ?: false
 
     /**
