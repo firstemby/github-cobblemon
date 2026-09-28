@@ -2,6 +2,8 @@
     "values": [
         { "id": "minecraft:grass_block", "required": false },
         { "id": "minecraft:podzol", "required": false },
-        { "id": "minecraft:moss_block", "required": false }
+        { "id": "minecraft:moss_block", "required": false },
+        { "id": "#minecraft:grass_blocks", "required": false },
+        { "id": "#minecraft:moss_blocks", "required": false }
     ]
 }

@@ -1,5 +1,6 @@
 {
     "values": [
-        { "id": "#minecraft:crystal_sound_blocks", "required": false }
+        { "id": "#minecraft:crystal_sound_blocks", "required": false },
+        { "id": "#cobblemon:type_gem_blocks", "required": false }
     ]
 }

@@ -6,6 +6,16 @@
         { "id": "#minecraft:wooden_trapdoors", "required": false },
         { "id": "#minecraft:wooden_fences", "required": false },
         { "id": "#minecraft:wooden_stairs", "required": false },
-        { "id": "#minecraft:wooden_slabs", "required": false }
+        { "id": "#minecraft:wooden_slabs", "required": false },
+        { "id": "#c:stripped_logs", "required": false },
+        { "id": "#c:stripped_woods", "required": false },
+        { "id": "#c:fences/wooden", "required": false },
+        { "id": "#c:fence_gates/wooden", "required": false },
+        { "id": "#c:barrels/wooden", "required": false },
+        { "id": "#c:chests/wooden", "required": false },
+        { "id": "#c:natural_logs", "required": false },
+        { "id": "#c:natural_woods", "required": false },
+        { "id": "#minecraft:wall_hanging_signs", "required": false },
+        { "id": "#minecraft:beehives", "required": false }
     ]
 }

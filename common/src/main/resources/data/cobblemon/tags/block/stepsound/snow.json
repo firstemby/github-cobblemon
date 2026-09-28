@@ -1,5 +1,6 @@
 {
     "values": [
-        { "id": "#minecraft:snow", "required": false }
+        { "id": "#minecraft:snow", "required": false },
+        { "id": "#cobblemon:snow_block", "required": false }
     ]
 }
