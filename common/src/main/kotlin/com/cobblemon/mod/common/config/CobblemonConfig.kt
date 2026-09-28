@@ -354,7 +354,7 @@ class CobblemonConfig {
     var netherIncubatorHatchRate = 1.75F
 
     @CobblemonConfigField(Category.Breeding, lang = "wild_breeding_chance", side = SERVER)
-    var wildBreedingChance = 0.25
+    var wildBreedingChance = 0.05
 
     @CobblemonConfigField(Category.Breeding, lang = "pasture_breeding_chance", side = SERVER)
     var pastureBreedingChance = 1.0
@@ -363,7 +363,7 @@ class CobblemonConfig {
     var wildBreedingCooldownMultiplier = 1.0
 
     @CobblemonConfigField(Category.Breeding, lang = "pasture_breeding_cooldown_multiplier", side = SERVER)
-    var pastureBreedingCooldownMultiplier = 0.5
+    var pastureBreedingCooldownMultiplier = 0.7
 
     @CobblemonConfigField(Category.Breeding, lang = "bench_extra_inherited_moves", side = SERVER)
     var benchExtraInheritedMoves = true
