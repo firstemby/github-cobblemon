@@ -256,7 +256,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         lang(
                             "capture.attempted_capture",
                             throwerActor.getName(),
-                            pokeBall.item().description,
+                            pokeBall.item().getDescriptionId(pokeBall.stack),
                             pokemonEntity.exposedSpecies.translatedName
                         ).yellow()
                     )
