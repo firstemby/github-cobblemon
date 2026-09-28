@@ -26,7 +26,8 @@ abstract class PokeBallPosableState : PosableState(), Schedulable {
     open fun initSubscriptions() {
         stateEmitter.subscribe { state ->
 
-            val group = (currentModel!! as PokeBallPosableModel).rootBone
+            // if we fail to cast, provide default bone name.
+            val group = (currentModel as? PokeBallPosableModel)?.rootBone ?: "poke_ball"
 
             when (state) {
                 EmptyPokeBallEntity.CaptureState.HIT -> {
