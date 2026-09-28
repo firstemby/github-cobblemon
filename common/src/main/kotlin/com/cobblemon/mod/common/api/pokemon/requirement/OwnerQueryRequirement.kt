@@ -23,7 +23,7 @@ import net.minecraft.world.entity.player.Player
  * @author Polymeta
  * @since May 6th, 2025
  */
-abstract class OwnerQueryRequirement : Requirement() {
+interface OwnerQueryRequirement : Requirement {
     override fun check(pokemon: Pokemon): Boolean {
         val owner = pokemon.getOwnerEntity() ?: return false
         return when (owner) {
@@ -44,7 +44,7 @@ abstract class OwnerQueryRequirement : Requirement() {
      * @param owner The [Player] that owns this [Pokemon].
      * @return If the requirement was satisfied.
      */
-    abstract fun checkPlayer(pokemon: Pokemon, owner: Player): Boolean
+    fun checkPlayer(pokemon: Pokemon, owner: Player): Boolean
 
     /**
      * Checks if the given [Pokemon] & [NPCEntity] satisfies the requirement.
@@ -55,5 +55,5 @@ abstract class OwnerQueryRequirement : Requirement() {
      * @param owner The [NPCEntity] that owns this [Pokemon].
      * @return If the requirement was satisfied.
      */
-    abstract fun checkNPC(pokemon: Pokemon, owner: NPCEntity): Boolean
+    fun checkNPC(pokemon: Pokemon, owner: NPCEntity): Boolean
 }

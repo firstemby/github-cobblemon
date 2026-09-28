@@ -13,7 +13,7 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.pokemon.Pokemon
 
-class StatCompareRequirement : Requirement() {
+class StatCompareRequirement : Requirement {
     companion object {
         const val ADAPTER_VARIANT = "stat_compare"
     }

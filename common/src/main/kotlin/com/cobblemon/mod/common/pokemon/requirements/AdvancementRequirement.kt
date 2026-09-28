@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Player
  *
  * @author whatsy
  */
-class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement() {
+class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
 
     override fun checkPlayer(
         pokemon: Pokemon,

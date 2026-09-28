@@ -24,7 +24,7 @@ import net.minecraft.world.entity.player.Player
  * @author Polymeta
  */
 class OwnerHoldsItemRequirement(val itemCondition: ItemPredicate)
-    : OwnerQueryRequirement() {
+    : OwnerQueryRequirement {
 
     override fun checkPlayer(
         pokemon: Pokemon,

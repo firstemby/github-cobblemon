@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.pokemon.evolution.ContextEvolution
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.pokemon.Pokemon
 import net.minecraft.resources.ResourceLocation
+import java.util.WeakHashMap
 
 /**
  * Represents a universal requirement suitable for various checks on pokemon..
@@ -23,7 +24,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since March 19th, 2022
  */
-abstract class Requirement {
+fun interface Requirement {
 
     /**
      * Checks if the given [Pokemon] satisfies the requirement.
@@ -31,8 +32,13 @@ abstract class Requirement {
      * @param pokemon The [Pokemon] being queried.
      * @return If the requirement was satisfied.
      */
-    abstract fun check(pokemon: Pokemon): Boolean
+    fun check(pokemon: Pokemon): Boolean
 
-    val pokedexIcon: ResourceLocation? = null
-    val pokedexTooltip: String? = null
+    val pokedexIcon: ResourceLocation? get() = pokedexIconOverrides[this]
+    val pokedexTooltip: String? get() = pokedexTooltipOverrides[this]
+
+    companion object {
+        val pokedexIconOverrides = WeakHashMap<Requirement, ResourceLocation>()
+        val pokedexTooltipOverrides = WeakHashMap<Requirement, String>()
+    }
 }
