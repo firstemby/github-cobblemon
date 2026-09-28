@@ -391,6 +391,10 @@
 						"0.7083": [0, 0, 0]
 					}
 				}
+			},
+			"timeline": {
+				"0.0833": "q.run_molang('cobblemon:stepsound_standard_medium');",
+				"0.2917": "q.run_molang('cobblemon:stepsound_standard_medium');"
 			}
 		},
 		"animation.dewgong.water_idle": {
