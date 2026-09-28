@@ -21,23 +21,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Hides the player's right-hand item while recalling so it doesn't overlap the recall Poké Ball
- * drawn by PlayerRecallBallRenderer.
- */
 @Mixin(ItemInHandLayer.class)
 public class ItemInHandLayerMixin {
     @Inject(method = "renderArmWithItem", at = @At("HEAD"), cancellable = true)
-    private void cobblemon$hideRecallHandItem(
-        LivingEntity entity,
-        ItemStack itemStack,
-        ItemDisplayContext itemDisplayContext,
-        HumanoidArm humanoidArm,
-        PoseStack poseStack,
-        MultiBufferSource multiBufferSource,
-        int light,
-        CallbackInfo ci
-    ) {
+    private void cobblemon$hideRecallHandItem(LivingEntity entity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, CallbackInfo ci) {
         if (humanoidArm == HumanoidArm.RIGHT && RecallArmAnimationTracker.INSTANCE.isRecalling(entity.getUUID())) {
             ci.cancel();
         }

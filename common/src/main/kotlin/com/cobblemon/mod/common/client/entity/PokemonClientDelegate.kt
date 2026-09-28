@@ -321,13 +321,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         ballOffset = 0f
                         ballRotOffset = 0f
                         sendOutPosition = null
-                        // If a player is recalling, have them hold the matching Poké Ball out in their
-                        // right hand for the duration of the beam (see ourRecallArmAnimationTracker class).
-                        currentEntity.ownerUUID?.let { ownerId ->
-                            if (currentEntity.level().getPlayerByUUID(ownerId) != null) {
-                                RecallArmAnimationTracker.start(ownerId, currentEntity.exposedBall, emptySet())
-                            }
-                        }
+                        currentEntity.ownerUUID?.let { RecallArmAnimationTracker.start(it, currentEntity.exposedBall) }
                         afterOnClient(seconds = BEAM_EXTEND_TIME) {
                             activeSendoutScale = 1F
 

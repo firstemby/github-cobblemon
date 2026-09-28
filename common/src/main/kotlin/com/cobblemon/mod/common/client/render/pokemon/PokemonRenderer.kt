@@ -71,9 +71,6 @@ class PokemonRenderer(
 ) : MobRenderer<PokemonEntity, PosablePokemonEntityModel>(context, PosablePokemonEntityModel(), 0.5f) {
     companion object {
         val recallBeamColour = Vector4f(1F, 0.1F, 0.1F, 1F)
-        private const val CAPTURE_BEAM_X_OFFSET = 0.0
-        private const val CAPTURE_BEAM_Y_OFFSET = 0.2
-        private const val CAPTURE_BEAM_Z_OFFSET = 0.45
         fun ease(x: Double): Double {
             return 1 - (1 - x).pow(3)
         }
@@ -147,6 +144,8 @@ class PokemonRenderer(
         }
 
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
+
+
         if (entity.passengers.isNotEmpty()) {
             renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         } else {
@@ -319,15 +318,11 @@ class PokemonRenderer(
     fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
-
-        // If a player is recalling, start the beam from the Poké Ball held in their hand
         val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
         var beamSourcePosition = if (recallBallOrigin != null) {
             recallBallOrigin
         } else if (beamTarget is EmptyPokeBallEntity) {
-            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]
-                ?.transformPosition(Vec3(CAPTURE_BEAM_X_OFFSET, CAPTURE_BEAM_Y_OFFSET, CAPTURE_BEAM_Z_OFFSET))
-                ?: beamTarget.position()
+            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.transformPosition(Vec3(0.0, 0.2, 0.45)) ?: beamTarget.position()
         } else {
             if (beamTarget.uuid == Minecraft.getInstance().player?.uuid) {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()

@@ -99,24 +99,12 @@ public class HumanoidModelMixin {
         }
     }
 
-    // Pose the right arm forward while recalling so the held Poké Ball sits out in front.
     @Inject(method = "setupAnim*", at = @At("TAIL"))
-    public void cobblemon$poseRecallArm(
-        LivingEntity entity,
-        float limbSwing,
-        float limbSwingAmount,
-        float ageInTicks,
-        float netHeadYaw,
-        float headPitch,
-        CallbackInfo ci
-    ) {
-        if (!(entity instanceof AbstractClientPlayer player)) return;
-        // Skip while riding so we don't override the mounted-riding arm animation.
-        if (entity.getVehicle() instanceof PokemonEntity) return;
-        float raise = RecallArmAnimationTracker.INSTANCE.raiseFactor(player.getUUID());
+    public void cobblemon$poseRecallArm(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
+        if (!(entity instanceof AbstractClientPlayer) || entity.getVehicle() instanceof PokemonEntity) return;
+        float raise = RecallArmAnimationTracker.INSTANCE.raiseFactor(entity.getUUID());
         if (raise <= 0f) return;
-        float armForwardXRot = (float) (-Math.PI / 2.0);
-        this.rightArm.xRot = Mth.lerp(raise, this.rightArm.xRot, armForwardXRot);
+        this.rightArm.xRot = Mth.lerp(raise, this.rightArm.xRot, (float) (-Math.PI / 2.0));
         this.rightArm.yRot = Mth.lerp(raise, this.rightArm.yRot, 0f);
         this.rightArm.zRot = Mth.lerp(raise, this.rightArm.zRot, 0f);
     }
