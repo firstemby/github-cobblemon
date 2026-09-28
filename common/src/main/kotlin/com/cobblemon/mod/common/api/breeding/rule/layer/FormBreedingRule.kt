@@ -10,7 +10,9 @@ package com.cobblemon.mod.common.api.breeding.rule.layer
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
@@ -45,6 +47,8 @@ interface FormBreedingRule : BreedingRule {
         override fun addToStruct(struct: QueryStruct) {
             super.addToStruct(struct)
             struct.addFunction("offspring_species") { offspringSpecies.struct }
+            // everstone override for forms for fathers
+            struct.addFunction("form_parent") { if (father.heldItem().`is`(CobblemonItems.EVERSTONE) && generateSequence(father.species) { it.preEvolution?.species }.last() == generateSequence(mother.species) { it.preEvolution?.species }.last()) father.asStruct() else mother.asStruct() }
         }
     }
 

@@ -2,8 +2,8 @@
   "type": "cobblemon:expression",
   "order": 30,
   "expression": [
-    "t.father_max_friendship = q.father.friendship == q.cobblemon_config.max_friendship;",
-    "t.mother_max_friendship = q.mother.friendship == q.cobblemon_config.max_friendship;",
+    "t.father_max_friendship = q.father.friendship == q.cobblemon_config.max_pokemon_friendship;",
+    "t.mother_max_friendship = q.mother.friendship == q.cobblemon_config.max_pokemon_friendship;",
     "t.different_ots = q.mother.original_trainer != q.father.original_trainer && q.mother.original_trainer_type != 'NONE' && q.father.original_trainer_type != 'NONE';",
     "t.masuda2 = (t.different_ots == 1 || q.cobblemon_config.requires_ots_for_masuda == 0) && t.father_max_friendship && t.mother_max_friendship;",
     "t.masuda2 ? math.ceil(q.shiny_rate / 6) : q.shiny_rate;"

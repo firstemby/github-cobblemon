@@ -2,5 +2,5 @@
   "type": "cobblemon:species_feature_inheritance",
   "order": 40,
   "feature": "wooper_heart",
-  "parent": "q.mother"
+  "parent": "q.form_parent"
 }

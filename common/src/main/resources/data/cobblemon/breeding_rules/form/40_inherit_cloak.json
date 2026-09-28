@@ -2,5 +2,5 @@
   "type": "cobblemon:species_feature_inheritance",
   "order": 40,
   "feature": "bagworm_cloak",
-  "parent": "q.mother"
+  "parent": "q.form_parent"
 }

@@ -1,7 +1,7 @@
 {
   "type": "cobblemon:species_feature_inheritance",
   "order": 33,
-  "parent": "q.mother",
+  "parent": "q.form_parent",
   "conditionAspect": "paldean",
   "modifier": "paldean=true region_bias=paldean"
 }

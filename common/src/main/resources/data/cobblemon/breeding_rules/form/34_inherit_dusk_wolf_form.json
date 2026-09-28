@@ -1,0 +1,7 @@
+{
+  "type": "cobblemon:species_feature_inheritance",
+  "order": 34,
+  "parent": "q.form_parent",
+  "conditionAspect": "dusk-form",
+  "modifier": "wolf_form=dusk"
+}

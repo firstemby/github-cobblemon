@@ -15,24 +15,30 @@ import com.bedrockk.molang.runtime.value.MoValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMovesetBuilders
+import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
+import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.BenchedMove
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
+import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.IVs
+import com.cobblemon.mod.common.pokemon.Nature
 import com.cobblemon.mod.common.pokemon.Pokemon
+import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.getBooleanOrNull
 import com.cobblemon.mod.common.util.getDoubleOrNull
 import com.cobblemon.mod.common.util.getIntOrNull
 import com.cobblemon.mod.common.util.server
+import com.cobblemon.mod.common.util.resolveFromObjectOrString
 import com.cobblemon.mod.common.util.toProperties
 import net.minecraft.resources.ResourceLocation
 import kotlin.random.Random
@@ -63,6 +69,13 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         functions["behavior"] = { pokemon.form.behaviour.struct } // Inferior
         functions["pokeball"] = { StringValue(pokemon.caughtBall.toString()) }
         functions["ability"] = { StringValue(pokemon.ability.name) }
+        functions["set_ability"] = setAbility@{ params ->
+            val ability = params.get<MoValue>(0).resolveFromObjectOrString { Abilities.get(it)?.create() } ?: return@setAbility DoubleValue.ZERO
+            ability.forced = params.getBooleanOrNull(1) ?: false
+            pokemon.updateAbility(ability)
+            DoubleValue.ONE
+        }
+        functions["has_hidden_ability"] = { DoubleValue(pokemon.form.abilities.find { it.template == pokemon.ability.template }?.type == HiddenAbilityType) }
         functions["has_learned"] = hasLearned@{ params ->
             val moveName = params.getString(0)
             val move = pokemon.allAccessibleMoves.find { it.name == moveName }
@@ -174,13 +187,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
             }
             struct
         }
-        functions["ability_pool"] = {
-            val struct = QueryStruct(hashMapOf())
-            for ((index, ability) in pokemon.form.abilities.withIndex()) {
-                struct.addFunction(index.toString()) { StringValue(ability.toString()) }
-            }
-            struct
-        }
+        functions["ability_pool"] = { pokemon.form.abilities.struct }
         functions["egg_groups"] = {
             val struct = QueryStruct(hashMapOf())
             for ((index, group) in pokemon.form.eggGroups.withIndex()) {
@@ -213,7 +220,18 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         // Lol. Lmao, even.
         // TO-DO: Subscribe to [PokemonSpecies.observable].
         functions["pre_evolution"] = { pokemon.species.preEvolution ?: DoubleValue.ZERO }
-        functions["nature"] = { StringValue(pokemon.nature.toString()) }
+        functions["nature"] = { StringValue(pokemon.nature.name.toString()) }
+        functions["set_nature"] = setNature@{ params ->
+            val natureArg = params.get<MoValue>(0)
+            val nature = if (natureArg is ObjectValue<*>) natureArg.obj as? Nature else Natures.getNature(natureArg.asString().asIdentifierDefaultingNamespace())
+            if (nature != null) {
+                pokemon.nature = nature
+                return@setNature DoubleValue.ONE
+            }
+            DoubleValue.ZERO
+        }
+        functions["original_trainer"] = { pokemon.originalTrainer?.let(::StringValue) ?: DoubleValue.ZERO }
+        functions["original_trainer_type"] = { StringValue(pokemon.originalTrainerType.name) }
         functions["is_wild"] = { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
         functions["is_shiny"] = { DoubleValue(pokemon.shiny) }
         functions["is_in_party"] = { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }

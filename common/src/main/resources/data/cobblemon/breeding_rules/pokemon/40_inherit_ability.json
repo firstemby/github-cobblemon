@@ -3,7 +3,7 @@
   "order": 40,
   "expression": [
     "t.heritable_ability = q.offspring.ability_pool.inherited_ability(q.mother);",
-    "t.should_inherit = math.random(1, 10) <= 6;",
+    "t.should_inherit = math.random(0, 100) < (q.mother.has_hidden_ability ? 60 : 80);",
     "t.should_inherit && t.heritable_ability != 0 ? q.offspring.set_ability(t.heritable_ability);"
   ]
 }

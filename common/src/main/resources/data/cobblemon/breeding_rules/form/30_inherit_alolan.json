@@ -1,7 +1,7 @@
 {
   "type": "cobblemon:species_feature_inheritance",
   "order": 30,
-  "parent": "q.mother",
+  "parent": "q.form_parent",
   "conditionAspect": "alolan",
   "modifier": "alolan=true region_bias=alola"
 }
