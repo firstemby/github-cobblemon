@@ -17,7 +17,7 @@
             "weightMultiplier": {
                 "multiplier": 3.0,
                 "condition": {
-                    "minLight": 1
+                    "minLight": 8
                 }
             },
             "condition": {
@@ -50,7 +50,7 @@
                 ],
                 "timeRange": "night",
                 "isRaining": false,
-                "maxLight": 0
+                "maxLight": 7
             }
         },
         {
@@ -72,7 +72,7 @@
                 ],
                 "timeRange": "night",
                 "isRaining": false,
-                "minLight": 1
+                "minLight": 8
             }
         }
     ]

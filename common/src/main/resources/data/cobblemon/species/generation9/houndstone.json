@@ -176,5 +176,12 @@
       "willDefendOwner": true,
       "willFlee": false
     }
-  }
+  },
+  "baseScale": 1,
+  "hitbox": {
+    "width": 1.9,
+    "height": 2.2,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.65
 }

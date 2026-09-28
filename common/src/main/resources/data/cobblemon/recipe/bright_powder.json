@@ -1,6 +1,6 @@
 {
     "type": "minecraft:smelting",
-    "group": "misc",
+    "category": "misc",
     "ingredient": {
         "item": "minecraft:glow_lichen"
     },

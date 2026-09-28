@@ -1,0 +1,31 @@
+{
+  "species": "cobblemon:heliolisk",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:heliolisk",
+      "model": "cobblemon:heliolisk.geo",
+      "texture": "cobblemon:textures/pokemon/0695_heliolisk/heliolisk.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0695_heliolisk/heliolisk_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0695_heliolisk/heliolisk_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

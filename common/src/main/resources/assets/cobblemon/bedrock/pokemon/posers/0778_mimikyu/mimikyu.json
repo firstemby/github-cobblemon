@@ -12,8 +12,6 @@
   "poses": {
     "standing": {
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
-      "isBattle": false,
-      "condition": "!q.in_air",
       "animations": [
         "q.look('head')",
         "q.bedrock('mimikyu', 'ground_idle')"

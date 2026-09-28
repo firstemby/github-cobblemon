@@ -1,0 +1,36 @@
+{
+   "portraitScale": 2.18,
+   "portraitTranslation": [ -0.12, -0.21, 0 ],
+   "profileScale": 0.75,
+   "profileTranslation": [ 0, 0.59, 0 ],
+   "rootBone": "mothim",
+   "animations": {},
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "FLOAT", "HOVER", "PORTRAIT", "PROFILE", "NONE"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('mothim', 'ground_idle')",
+            "q.sine_wing_flap(0.35, 0.35, 25, 'y', 'wing_upper_left', 'wing_upper_right')",
+            "q.sine_wing_flap(0.25, 0.35, 25, 'y', 'wing_lower_left', 'wing_lower_right')",
+            "q.sine_wing_flap(0.2, 0.35, 12.5, '-x', 'wing_lower_left', 'wing_lower_right')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('mothim', 'blink')"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK", "SWIM", "FLY"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('mothim', 'ground_idle')",
+            "q.sine_wing_flap(0.35, 0.35, 25, 'y', 'wing_upper_left', 'wing_upper_right')",
+            "q.sine_wing_flap(0.25, 0.35, 25, 'y', 'wing_lower_left', 'wing_lower_right')",
+            "q.sine_wing_flap(0.2, 0.35, 12.5, '-x', 'wing_lower_left', 'wing_lower_right')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('mothim', 'blink')"
+         ]
+      }
+   }
+}

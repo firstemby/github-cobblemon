@@ -8,12 +8,10 @@
 
 package com.cobblemon.mod.common.client.gui.startselection.widgets
 
-import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
-import com.cobblemon.mod.common.client.gui.PokemonGUIAnimationStyle
 import com.cobblemon.mod.common.client.gui.VariableObjectSelectionList
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.startselection.StarterSelectionScreen
@@ -29,12 +27,11 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 
 class CategoryList(
-    private val paneWidth: Int,
-    private val paneHeight: Int,
+    paneWidth: Int,
+    paneHeight: Int,
     private val categories: List<RenderableStarterCategory>,
     val listX: Int,
     val listY: Int,
-    private val minecraft: Minecraft = Minecraft.getInstance(),
     private val starterSelectionScreen: StarterSelectionScreen
 ) : VariableObjectSelectionList(
     listX,
@@ -70,7 +67,8 @@ class CategoryList(
     }
 
     private fun createEntries() = categories.map { category ->
-        val rows = (category.pokemon.size - 1) / 3 + 1
+        val pokemonCount = category.pokemon.size - if (category.randomStarter) 0 else 1
+        val rows = pokemonCount / 3 + 1
         val height = CONTAINER_BUTTON_SIZE * rows + BUTTON_SEPERATION * (rows + 1) + HEADER_HEIGHT + 3
         Category(category, height)
     }

@@ -1,0 +1,47 @@
+{
+   "species": "cobblemon:burmy",
+   "order": 0,
+   "variations": [
+      {
+         "aspects": [],
+         "poser": "cobblemon:burmy_plant",
+         "model": "cobblemon:burmy_plant.geo",
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_plant.png",
+         "layers": []
+      },
+      {
+         "aspects": [ "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_plant_shiny.png"
+      },
+      {
+         "aspects": [ "sandy-cloak" ],
+         "poser": "cobblemon:burmy_sandy",
+         "model": "cobblemon:burmy_sandy.geo",
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_sandy.png"
+      },
+      {
+         "aspects": [ "sandy-cloak", "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_sandy_shiny.png"
+      },
+      {
+         "aspects": [ "trash-cloak" ],
+         "poser": "cobblemon:burmy_trash",
+         "model": "cobblemon:burmy_trash.geo",
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_trash.png"
+      },
+      {
+         "aspects": [ "trash-cloak", "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_trash_shiny.png"
+      },
+      {
+         "aspects": [ "alpha_eyes" ],
+         "layers": [
+            {
+               "name": "alpha_eyes",
+               "texture": "cobblemon:textures/pokemon/0412_burmy/burmy_alpha.png",
+               "emissive": true
+            }
+         ]
+      }
+   ]
+}

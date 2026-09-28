@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.35, 0],
   "rootBone": "diglett",
   "animations": {
+    "faint": "q.bedrock_primary('diglett', 'faint', q.curve('one'))",
     "cry": "q.bedrock_stateful('diglett', 'cry')",
     "recoil": "q.bedrock_stateful('diglett', 'recoil')",
     "physical": "q.bedrock_primary('diglett', 'physical', q.curve('symmetrical'))"

@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "dawn_stone",
     "ingredient": {
         "item": "cobblemon:dawn_stone_ore"

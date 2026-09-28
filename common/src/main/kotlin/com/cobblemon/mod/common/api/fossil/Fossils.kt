@@ -40,7 +40,7 @@ object Fossils: JsonDataRegistry<Fossil> {
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
         .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
         .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter())
         .create()
 
     override val typeToken: TypeToken<Fossil> = TypeToken.get(Fossil::class.java)

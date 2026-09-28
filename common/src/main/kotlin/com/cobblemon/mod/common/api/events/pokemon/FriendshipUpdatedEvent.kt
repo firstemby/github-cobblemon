@@ -21,7 +21,8 @@ import com.cobblemon.mod.common.pokemon.Pokemon
  */
 data class FriendshipUpdatedEvent(
     val pokemon: Pokemon,
-    val newFriendshipInitial: Int
+    val newFriendshipInitial: Int,
+    val earned: Boolean = false
 ) {
     var newFriendship: Int = newFriendshipInitial
         set(value) {

@@ -70,13 +70,14 @@ object CobblemonRequirementAdapter : RequirementAdapter {
         this.registerType(AdvancementRequirement.ADAPTER_VARIANT, AdvancementRequirement::class)
         this.registerType(OwnerHoldsItemRequirement.ADAPTER_VARIANT, OwnerHoldsItemRequirement::class)
         this.registerType(ChanceRequirement.ADAPTER_VARIANT, ChanceRequirement::class)
+        this.registerType(NegateRequirement.ADAPTER_VARIANT, NegateRequirement::class)
     }
 
     val gson: Gson by lazy {
         GsonBuilder()
             .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+            .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter())
             .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
             .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)

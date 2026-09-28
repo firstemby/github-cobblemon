@@ -1,0 +1,39 @@
+{
+	"textures": {
+		"0": "cobblemon:block/decorative/scope_lens",
+		"particle": "cobblemon:item/held_items/scope_lens"
+	},
+	"elements": [
+		{
+			"from": [12, 0, 7],
+			"to": [15, 2, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 0, 7]},
+			"faces": {
+				"north": {"uv": [5, 5, 8, 7], "texture": "#0"},
+				"east": {"uv": [0, 5, 5, 7], "texture": "#0"},
+				"south": {"uv": [13, 5, 16, 7], "texture": "#0"},
+				"west": {"uv": [8, 5, 13, 7], "texture": "#0"},
+				"up": {"uv": [8, 5, 5, 0], "texture": "#0"},
+				"down": {"uv": [11, 0, 8, 5], "texture": "#0", "cullface": "down"}
+			}
+		},
+		{
+			"from": [9, 0.875, 9.5],
+			"to": [12, 0.875, 11.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 0.875, 11.5]},
+			"faces": {
+				"up": {"uv": [15, 2, 12, 0], "texture": "#0"},
+				"down": {"uv": [15, 2, 12, 4], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, 1.125, 9.5],
+			"to": [12, 1.125, 11.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [12, 1.125, 11.5]},
+			"faces": {
+				"up": {"uv": [4, 2, 0, 0], "texture": "#0"},
+				"down": {"uv": [4, 2, 0, 4], "texture": "#0"}
+			}
+		}
+	]
+}

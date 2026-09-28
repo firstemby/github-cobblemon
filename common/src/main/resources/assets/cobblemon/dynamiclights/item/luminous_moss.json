@@ -2,5 +2,7 @@
   "match": {
     "items": "cobblemon:luminous_moss"
   },
-  "luminance": 12
+  "luminance": {
+    "type": "block_self"
+  }
 }

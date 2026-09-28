@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
+import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
@@ -45,8 +46,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.server.packs.resources.PreparableReloadListener
-import net.minecraft.server.packs.resources.ReloadableResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -103,6 +102,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {
+        event.registerReloadListener(CobblemonDataProvider.clientResourceReloader)
         event.registerReloadListener { synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor ->
             val atlasFutures = mutableListOf<CompletableFuture<Void>>()
             CobblemonAtlases.atlases.forEach {
@@ -232,9 +232,5 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 pokedexUsageContext.attackKeyHeld(keyAttack.isDown)
             }
         }
-    }
-
-    internal fun registerResourceReloader(reloader: PreparableReloadListener) {
-        (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)
     }
 }

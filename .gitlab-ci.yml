@@ -157,6 +157,9 @@ build:
     paths:
       - neoforge/build/libs
       - fabric/build/libs
+    exclude:
+      - neoforge/build/libs/*-dev-shadow.jar
+      - fabric/build/libs/*-dev-shadow.jar
 
 publish:
   stage: deploy

@@ -128,6 +128,7 @@ class DiscShelfBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(Cobbl
 
     fun isValidItem(stack: ItemStack): Boolean {
         return stack.item is TechnicalMachineItem
+                || stack.item == CobblemonItems.BLANK_TM
                 || stack.item == CobblemonItems.UPGRADE
                 || stack.item == CobblemonItems.DUBIOUS_DISC
                 || stack.has(DataComponents.JUKEBOX_PLAYABLE)

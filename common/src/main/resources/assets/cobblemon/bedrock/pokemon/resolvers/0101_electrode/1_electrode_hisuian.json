@@ -25,6 +25,30 @@
           "emissive": true
         }
       ]
+    },
+    {
+      "aspects": [
+        "color-lime",
+        "hisuian"
+      ],
+      "layers": [
+        {
+          "name": "lime",
+          "texture": "cobblemon:textures/pokemon/0101_electrode/electrode_watermelon_blank.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "color-green",
+        "hisuian"
+      ],
+      "layers": [
+        {
+          "name": "green",
+          "texture": "cobblemon:textures/pokemon/0101_electrode/electrode_watermelon_blank.png"
+        }
+      ]
     }
   ]
 }
