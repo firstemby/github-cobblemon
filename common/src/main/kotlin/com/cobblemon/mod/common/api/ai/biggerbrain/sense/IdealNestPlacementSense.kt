@@ -52,6 +52,8 @@ class IdealNestPlacementSense(
     override fun tick(entity: LivingEntity, brain: BiggerBrain) {
         ticksUntilNextExecution = cooldownTicks
         if (entity !is PokemonEntity) return
+        // wild mons should be the only ones able to build nests
+        if (!entity.pokemon.isWild()) return
         val world = entity.level() as? ServerLevel ?: return
 
         val mate = brain.getMemory(CobblemonMemories.POTENTIAL_MATE) as? PokemonEntity
