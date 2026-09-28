@@ -82,7 +82,14 @@ class DefendNest(
         if (entity.isBattling)
             return ObjectiveStatus.INACTIVE
 
-        val nestPos = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION) ?: return stopDefending(brain) // no nest? then we stop probably
+        val nestPos = brain.getMemory(CobblemonMemories.PATERNAL_NEST_LOCATION)
+        if (nestPos == null) {
+            // mates used to give up attacking players if the egg and nest was gone but we should have them chase them to the ends of the earth for their crimes
+            val thief = brain.getMemory(CobblemonMemories.EGG_THIEF)
+            if (thief != null && thief.isAlive && entity.hasLineOfSight(thief))
+                return attack(entity, brain, thief)
+            return stopDefending(brain)
+        }
         val eggInNest = brain.getMemory(CobblemonMemories.EGG_IN_NEST) == true
         val thief = brain.getMemory(CobblemonMemories.EGG_THIEF)
         // if we have no egg to watch over and no thief then we should not defend the nest anymore and need to switch to a different task
