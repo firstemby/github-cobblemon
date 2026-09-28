@@ -232,9 +232,9 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                     stopInputs()
                     return
                 }
-                steerTowards(fluidTarget, maxSpeed, maxAccel, arrive, horizontalOnly = false)
+                steerTowards(fluidTarget, maxSpeed, topSpeed, maxAccel, arrive, horizontalOnly = false)
             } else {
-                steerTowards(target, maxSpeed, maxAccel, arrive, horizontalOnly = true)
+                steerTowards(target, maxSpeed, topSpeed, maxAccel, arrive, horizontalOnly = true)
             }
 
             if (!verticalHandled) {
@@ -319,10 +319,18 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
      * Applies a steering force toward [target] and takes over velocity from vanilla input and friction.
      * Vanilla water drag still applies after moving, so swimmers steer from their velocity before that drag
      * and add back what it will take off.
+     *
+     * Vanilla friction and water drag are kept when the mob is going faster than steering could have made it, so
+     * knockback and pushes scrub off like normal, and for walkers in the air so falls and jumps keep vanilla drag.
      */
-    private fun steerTowards(target: Vec3, maxSpeed: Double, maxAccel: Double, arrive: Boolean, horizontalOnly: Boolean) {
+    private fun steerTowards(target: Vec3, maxSpeed: Double, topSpeed: Double, maxAccel: Double, arrive: Boolean, horizontalOnly: Boolean) {
         val velocity = restoreZeroedMovement()
-        val drag = if (pokemonEntity.isWaterTravelling()) {
+        val currentSpeed = if (horizontalOnly) velocity.horizontalDistance() else velocity.length()
+        // One tick of acceleration above top speed is still steering overshoot, anything more came from outside
+        val externallyMoved = currentSpeed > topSpeed + maxAccel
+        val airborneWalker = horizontalOnly && !mob.onGround()
+
+        val drag = if (pokemonEntity.isWaterTravelling() && !externallyMoved) {
             val horizontal = pokemonEntity.getHorizontalWaterDrag().toDouble()
             Vec3(horizontal, VANILLA_WATER_VERTICAL_DRAG, horizontal)
         } else {
@@ -337,7 +345,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
         mob.deltaMovement = preDragVelocity.add(force)
         stopInputs()
-        mob.setDiscardFriction(true)
+        mob.setDiscardFriction(!externallyMoved && !airborneWalker)
     }
 
     /**

@@ -77,10 +77,11 @@ object MoveToOwnerTask {
                         CobblemonWalkTarget(
                             target = EntityTracker(owner, false),
                             speedModifier = speedMultiplier,
-                            // Bigger mons stop further away so they keep the same gap from the owner as small ones
-                            completionRange = maxOf(completionRange - 1, 0) + floor(horizontalHitboxRadius).toInt(),
+                            // Path has to end within the stop gap or it finishes before the mon gets close enough
+                            completionRange = floor(completionRange + horizontalHitboxRadius + owner.bbWidth / 2.0).toInt(),
                             sprintDistance = sprintDistance,
-                            stopDistance = completionRange.toFloat()
+                            stopDistance = completionRange.toFloat(),
+                            sprintWithTarget = true
                         )
                     )
                     return@Trigger true

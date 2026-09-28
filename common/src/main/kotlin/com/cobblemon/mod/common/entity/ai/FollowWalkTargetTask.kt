@@ -200,7 +200,10 @@ class FollowWalkTargetTask(
         return path
     }
 
-    /** Sprints while far from the walk target, stopping a bit closer than it started so it doesn't flicker. */
+    /**
+     * Sprints while far from the walk target, stopping a bit closer than it started so it doesn't flicker.
+     * Can also sprint while the entity being followed is sprinting.
+     */
     private fun updateSprinting(entity: PathfinderMob) {
         val navigation = entity.navigation as? OmniPathNavigation ?: return
         val walkTarget = entity.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) as? CobblemonWalkTarget
@@ -209,7 +212,8 @@ class FollowWalkTargetTask(
             false
         } else {
             val gap = edgeGap(entity, walkTarget)
-            gap > if (sprinting) sprintDistance * SPRINT_STOP_FRACTION else sprintDistance
+            val targetSprinting = walkTarget.sprintWithTarget && (walkTarget.target as? EntityTracker)?.entity?.isSprinting == true
+            targetSprinting || gap > if (sprinting) sprintDistance * SPRINT_STOP_FRACTION else sprintDistance
         }
         navigation.sprinting = sprinting
     }
@@ -222,9 +226,10 @@ class FollowWalkTargetTask(
         return walkTarget.target.currentBlockPosition().distManhattan(entity.blockPosition()) <= walkTarget.closeEnoughDist
     }
 
-    /** Straight line distance from the edge of the entity's hitbox to the walk target. */
+    /** Straight line distance between hitbox edges, or to the target position when it isn't an entity. */
     private fun edgeGap(entity: PathfinderMob, walkTarget: WalkTarget): Double {
-        return walkTarget.target.currentPosition().distanceTo(entity.position()) - entity.bbWidth / 2.0
+        val targetRadius = (walkTarget.target as? EntityTracker)?.entity?.let { it.bbWidth / 2.0 } ?: 0.0
+        return walkTarget.target.currentPosition().distanceTo(entity.position()) - entity.bbWidth / 2.0 - targetRadius
     }
 
     companion object {

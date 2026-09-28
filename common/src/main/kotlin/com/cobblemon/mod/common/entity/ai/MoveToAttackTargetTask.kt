@@ -26,8 +26,8 @@ object MoveToAttackTargetTask {
     fun create(
         speedMultiplier: Expression = "0.5".asExpression(),
         closeEnoughDistance: Expression = "0".asExpression(),
-        // Blocks from the edge of the pokemon to its target before it sprints to close in
-        sprintDistance: Expression = "4.0".asExpression()
+        // Gap between the pokemon's hitbox and the target's before it sprints. At 0 it sprints until they touch
+        sprintDistance: Expression = "0.0".asExpression()
     ): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ATTACK_TARGET),
@@ -49,7 +49,8 @@ object MoveToAttackTargetTask {
                             target = EntityTracker(attackTarget, false),
                             speedModifier = speedMultiplier,
                             completionRange = closeEnoughDistance,
-                            sprintDistance = sprintDistance
+                            sprintDistance = sprintDistance,
+                            stopDistance = 0F
                         )
                     )
                     true
