@@ -60,6 +60,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         eggPlacerUUID = null
         setChanged() // Mark the block entity as changed.
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
+        level?.let { blockState.updateNeighbourShapes(it, blockPos, Block.UPDATE_ALL) }
     }
 
     /**
@@ -78,6 +79,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             eggPlacerUUID = null
             setChanged()
             world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
+            state.updateNeighbourShapes(world, pos, Block.UPDATE_ALL)
         }
     }
 
