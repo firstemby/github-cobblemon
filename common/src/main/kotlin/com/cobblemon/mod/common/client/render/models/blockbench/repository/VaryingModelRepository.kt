@@ -20,9 +20,6 @@ import com.cobblemon.mod.common.client.render.models.blockbench.*
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.blockentity.BlockEntityModel
 import com.cobblemon.mod.common.client.render.models.blockbench.fossil.FossilModel
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.AncientPokeBallModel
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.BeastBallModel
-import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokeball.PokeBallPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.gen1.*
@@ -88,8 +85,8 @@ object VaryingModelRepository {
         "bedrock/pokemon/posers" to PokemonPosableModel::class.java,
         "bedrock/fossils/posers" to FossilModel::class.java,
         "bedrock/block_entities/posers" to BlockEntityModel::class.java,
-        "bedrock/npcs/posers" to PokeBallPosableModel::class.java,
-        "bedrock/poke_balls/posers" to PosableModel::class.java,
+        "bedrock/npcs/posers" to PosableModel::class.java,
+        "bedrock/poke_balls/posers" to PokeBallPosableModel::class.java,
         "bedrock/generic/posers" to PosableModel::class.java,
     )
 
