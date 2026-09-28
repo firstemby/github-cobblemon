@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.item
 
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.item.components.PokeBallComponent
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.isServerSide
 import com.cobblemon.mod.common.util.math.geometry.toRadians
@@ -25,13 +26,13 @@ class PokeBallItem(val pokeBall: PokeBall) : CobblemonItem(pokeBall.itemProperti
     override fun use(world: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(usedHand)
         if (world.isServerSide()) {
-            throwPokeBall(world, player as ServerPlayer)
+            throwPokeBall(world, player as ServerPlayer, PokeBallComponent.getPokeBall(itemStack))
         }
         itemStack.consume(1, player)
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 
-    private fun throwPokeBall(world: Level, player: ServerPlayer) {
+    private fun throwPokeBall(world: Level, player: ServerPlayer, pokeBall: PokeBall) {
         val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player).apply {
             val overhandFactor: Float = if (player.xRot < 0) {
                 5f * cos(player.xRot.toRadians())
@@ -45,4 +46,7 @@ class PokeBallItem(val pokeBall: PokeBall) : CobblemonItem(pokeBall.itemProperti
         }
         world.addFreshEntity(pokeBallEntity)
     }
+
+    override fun getDescriptionId(itemStack: ItemStack): String =
+        PokeBallComponent.getPokeBall(itemStack).name.toLanguageKey("item")
 }

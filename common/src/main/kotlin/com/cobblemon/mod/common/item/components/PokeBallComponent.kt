@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
+import com.cobblemon.mod.common.item.PokeBallItem
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -26,14 +27,16 @@ data class PokeBallComponent(val name: ResourceLocation) {
         // Codec to serialize/deserialize PokeBall
         val CODEC: Codec<PokeBallComponent> = RecordCodecBuilder.create { instance ->
             instance.group(
-                ResourceLocation.CODEC.fieldOf("move").forGetter { it.name } // Serialize the move's name
+                ResourceLocation.CODEC.fieldOf("pokeball_type").forGetter { it.name } // Serialize the move's name
             ).apply(instance) { name -> PokeBallComponent(name) }
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, PokeBallComponent> = ByteBufCodecs.fromCodec(CODEC)
 
-        fun getPokeBall(stack: ItemStack): PokeBall? {
+        fun getPokeBall(stack: ItemStack): PokeBall {
             return stack.get(CobblemonItemComponents.POKE_BALL)?.name?.let(PokeBalls::getPokeBall)
+                ?: (stack.item as? PokeBallItem)?.pokeBall
+                ?: PokeBalls.STRANGE_BALL
         }
 
         fun setPokeBall(stack: ItemStack, ball: PokeBall): ItemStack {
