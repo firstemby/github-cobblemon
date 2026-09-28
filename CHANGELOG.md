@@ -35,12 +35,18 @@
 - Grubbin
 - Charjabug
 - Vikavolt
+- Minior
+
+#### Generation 8
+- Eternatus
 
 #### Generation 9
 - Greavard
 - Houndstone
 
 ### Model updates for the following Pokémon
+- Sudowoodo
+- Spheal
 - Cacnea
 - Cacturne
 - Binacle
@@ -50,10 +56,24 @@
 - Deerling
 - Sawsbuck (All forms)
 - Absol
+- Poliwag
+- Politoed
+- Oddish
+- Gloom
+- Vileplume
+- Bellossom
+- Shroomish
 
 ### Animation updates for the following Pokémon
+- Treecko (New Shoulder Mount!)
+- Bonsly (New Shoulder Mount!)
+- Sudowoodo
 - Cacnea
 - Cacturne
+- Oddish
+- Gloom
+- Vileplume
+- Bellossom
 
 ### Changes
 - Updated various recipes to display in Recipe Groups within the Recipe Book
@@ -82,6 +102,8 @@
 - Fixed Duraludon line not having any sleep animations
 - Fixed Diglett line not having their faint animations
 - Fixed Kingambit moving its legs while walking
+- Fixed Alolan Diglett's cry not playing
+- Fixed shiny alpha Snorlax using the non-shiny texture
 - Various Structure fixes
 - Fixed shiny pokemon under certain circumstances forgetting taught TMs
 - Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations

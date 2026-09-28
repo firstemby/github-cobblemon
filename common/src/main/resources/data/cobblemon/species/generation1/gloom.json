@@ -45,12 +45,15 @@
   "features": [
     "valencian"
   ],
-  "baseScale": 1,
+  "baseScale": 0.95,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.8,
+    "width": 0.8,
+    "height": 1,
     "fixed": false
   },
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -80,6 +83,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }

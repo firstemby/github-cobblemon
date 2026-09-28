@@ -5,12 +5,28 @@
     {
       "aspects": [],
       "poser": "cobblemon:politoed",
-      "model": "cobblemon:politoed.geo",
+      "model": "cobblemon:politoed_male.geo",
       "texture": "cobblemon:textures/pokemon/0186_politoed/politoed.png",
       "layers": []
     },
     {
       "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0186_politoed/politoed_shiny.png"
+    },
+    {
+      "aspects": [
+        "female"
+      ],
+      "poser": "cobblemon:politoed",
+      "model": "cobblemon:politoed_female.geo",
+      "texture": "cobblemon:textures/pokemon/0186_politoed/politoed.png",
+      "layers": []
+    },
+    {
+      "aspects": [
+        "female",
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0186_politoed/politoed_shiny.png"

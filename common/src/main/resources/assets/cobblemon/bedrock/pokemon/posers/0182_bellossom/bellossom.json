@@ -1,0 +1,63 @@
+{
+  "portraitScale": 1.8,
+  "portraitTranslation": [0, -0.2, 0],
+  "profileScale": 1,
+  "profileTranslation": [0, 0.21, 0],
+  "rootBone": "bellossom",
+  "animations": {
+    "cry": "q.bedrock_stateful('bellossom', 'cry')",
+    "recoil": "q.bedrock_stateful('bellossom', 'recoil')"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('bellossom', 'battle_idle')"
+      ],
+      "namedAnimations": {
+          "cry": "q.bedrock_stateful('bellossom', 'battle_cry')"
+        },
+      "quirks": [
+        "q.bedrock_quirk('bellossom', 'blink')"
+      ]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('bellossom', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bellossom', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('bellossom', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('bellossom', 'blink')"]
+      },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('bellossom', 'ground_run')"
+      ],
+      "quirks": ["q.bedrock_quirk('bellossom', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('bellossom', 'sleep')"]
+    }
+  }
+}

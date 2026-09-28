@@ -1,0 +1,68 @@
+{
+  "portraitScale": 1.69,
+  "portraitTranslation": [-0.14, -0.57, 0],
+  "profileScale": 0.83,
+  "profileTranslation": [0, 0.49, 0],
+  "rootBone": "gloom",
+  "animations": {
+    "cry": "q.bedrock_stateful('gloom', 'cry')",
+    "recoil": "q.bedrock_stateful('gloom', 'recoil')"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 6, -18, 10, -10)",
+        "q.bedrock('gloom', 'battle_idle')"
+      ],
+      "namedAnimations": {
+          "cry": "q.bedrock_stateful('gloom', 'battle_cry')"
+        },
+      "quirks": ["q.bedrock_quirk('gloom', 'blink')"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 6, -18, 10, -10)",
+        "q.bedrock('gloom', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('gloom', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
+        "q.bedrock('gloom', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('gloom', 'blink')"]
+      },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "!q.is_standing_on_blocks(1, 'minecraft:dirt', 'minecraft:grass_block', 'minecraft:mycelium', 'minecraft:coarse_dirt', 'minecraft:podzol', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:rooted_dirt')",
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('gloom', 'sleep')"]
+    },
+    "battle-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('gloom', 'sleep')"]
+    },
+    "wild_sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "q.is_standing_on_blocks(1, 'minecraft:dirt', 'minecraft:grass_block', 'minecraft:mycelium', 'minecraft:coarse_dirt', 'minecraft:podzol', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:rooted_dirt')",
+      "isBattle": false,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('gloom', 'wild_sleep')"]
+    }
+  }
+}

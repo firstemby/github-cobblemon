@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 774,
   "name": "Minior",
   "primaryType": "rock",
@@ -14,6 +15,9 @@
   ],
   "aspects": [
     "core-form"
+  ],
+  "features": [
+    "core_color"
   ],
   "abilities": [
     "shieldsdown",
@@ -43,10 +47,10 @@
   "catchRate": 255,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.75,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.8,
+    "height": 1.25,
     "fixed": false
   },
   "behaviour": {
