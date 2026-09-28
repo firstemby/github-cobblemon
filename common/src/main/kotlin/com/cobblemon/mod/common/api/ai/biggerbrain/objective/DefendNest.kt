@@ -75,6 +75,9 @@ class DefendNest(
     override fun perform(entity: LivingEntity, brain: BiggerBrain, activeObjectiveTags: MutableSet<String>): ObjectiveStatus {
         if (entity !is PokemonEntity || !entity.isAlive)
             return ObjectiveStatus.INVALID
+        // so only wild mons will guard the nest (unless we want them to later on..)
+        if (!entity.pokemon.isWild())
+            return ObjectiveStatus.INACTIVE
         // if the mon is battling then don't worry about defending (this was causing crying and particle spam lol)
         if (entity.isBattling)
             return ObjectiveStatus.INACTIVE
