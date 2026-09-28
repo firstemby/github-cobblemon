@@ -1156,7 +1156,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK)
         .lightLevel { state ->
-            if (state.getValue(IncubatorBlock.HAS_EGG)) 5 else 0 // Emit 5 light when HAS_EGG is true
+            if (state.getValue(IncubatorBlock.HAS_EGG) && !state.getValue(IncubatorBlock.READY)) 8 else 0 // emit light only when warming the egg
         }
     ))
 

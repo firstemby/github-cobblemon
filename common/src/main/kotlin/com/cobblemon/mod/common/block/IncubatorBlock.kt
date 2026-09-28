@@ -44,6 +44,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
     companion object {
         val FACING: DirectionProperty = DirectionProperty.create("facing", { dir -> dir.axis.isHorizontal })
         val HAS_EGG: BooleanProperty = BooleanProperty.create("has_egg")
+        val READY: BooleanProperty = BooleanProperty.create("ready")
         val CODEC: MapCodec<IncubatorBlock> = simpleCodec(::IncubatorBlock) as MapCodec<IncubatorBlock>
     }
 
@@ -51,6 +52,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, net.minecraft.core.Direction.NORTH)
             .setValue(HAS_EGG, false)
+            .setValue(READY, false)
         )
     }
 
@@ -84,7 +86,7 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(FACING, HAS_EGG)
+        builder.add(FACING, HAS_EGG, READY)
     }
 
     override fun newBlockEntity(pos: BlockPos, state: BlockState): IncubatorBlockEntity {

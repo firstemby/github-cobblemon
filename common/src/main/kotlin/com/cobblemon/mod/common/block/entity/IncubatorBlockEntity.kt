@@ -274,11 +274,12 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun setChanged() {
         val hasEgg = !eggItem.isEmpty
+        val ready = hasEgg && (eggItem.get(CobblemonItemComponents.EGG_DATA)?.ticksToHatch ?: 1F) <= 0F
 
         level?.let {
-            if (blockState.getValue(IncubatorBlock.HAS_EGG) != hasEgg) {
-                // Update the block state with the new `HAS_EGG` value
-                val newState = blockState.setValue(IncubatorBlock.HAS_EGG, hasEgg)
+            if (blockState.getValue(IncubatorBlock.HAS_EGG) != hasEgg || blockState.getValue(IncubatorBlock.READY) != ready) {
+                // Update the block state with the new `HAS_EGG` and `READY` values so we can swap between the different looks
+                val newState = blockState.setValue(IncubatorBlock.HAS_EGG, hasEgg).setValue(IncubatorBlock.READY, ready)
                 level?.setBlock(worldPosition, newState, 3)
             }
 
