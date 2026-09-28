@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.block
 
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonItemComponents
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.block.entity.IncubatorBlockEntity
 import com.mojang.serialization.MapCodec
 import net.minecraft.core.BlockPos
@@ -18,10 +17,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.PickaxeItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
@@ -152,15 +149,9 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
     override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player): BlockState {
         val entity = level.getBlockEntity(pos) as? IncubatorBlockEntity
-        val itemStack = player.mainHandItem
-
         entity?.let {
             if (!player.isCreative) {
                 it.dropItem(level, pos, state)
-                if (itemStack.item is PickaxeItem) {
-                    val itemEntity = ItemEntity(level, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, CobblemonItems.INCUBATOR.defaultInstance)
-                    level.addFreshEntity(itemEntity)
-                }
             }
         }
         return super.playerWillDestroy(level, pos, state, player)
