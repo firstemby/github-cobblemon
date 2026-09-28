@@ -19,11 +19,15 @@ class WalkBehaviour {
     val canWalk = true
     val avoidsLand = false
     var walkSpeed: Expression = "0.35".asExpression()
+    // Only species with a sprint speed can sprint
+    var sprintSpeed: Expression? = null
 
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("can_walk") { DoubleValue(canWalk) }
         it.addFunction("avoids_land") { DoubleValue(avoidsLand) }
         it.addFunction("walk_speed") { it.environment.createDuplicateRuntime().resolveFloat(walkSpeed) }
+        it.addFunction("can_sprint") { DoubleValue(sprintSpeed != null) }
+        it.addFunction("sprint_speed") { params -> sprintSpeed?.let { params.environment.createDuplicateRuntime().resolveFloat(it) } ?: 0F }
     }
 }

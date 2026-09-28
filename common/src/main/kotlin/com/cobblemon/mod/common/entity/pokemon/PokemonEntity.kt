@@ -77,6 +77,8 @@ import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonBodyRotationControl
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonLookControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -150,6 +152,7 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.control.BodyRotationControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
@@ -217,6 +220,7 @@ open class PokemonEntity(
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val IS_SPRINTING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -298,6 +302,9 @@ open class PokemonEntity(
     var shownItem: ItemStack
         get() = entityData.get(SHOWN_HELD_ITEM)
         set(value) = entityData.set(SHOWN_HELD_ITEM, value)
+    var isPokemonSprinting: Boolean
+        get() = entityData.get(IS_SPRINTING)
+        set(value) { entityData.set(IS_SPRINTING, value) }
 
     var lastLightningBoltUUID: UUID? = null
 
@@ -318,6 +325,13 @@ open class PokemonEntity(
         private set
 
     var previousRidingState: RidingBehaviourState? = null
+        private set
+
+    /**
+     * Movement at the end of the last unridden travel. Lets PokemonMoveControl restore the tiny components that
+     * aiStep() zeroes, which would otherwise swallow the small forces slow mons like snorlax start moving with.
+     */
+    var lastTravelMovement: Vec3? = null
         private set
 
     val runtime: MoLangRuntime by lazy {
@@ -430,6 +444,7 @@ open class PokemonEntity(
         delegate.changePokemon(pokemon)
         addPosableFunctions(struct)
         moveControl = PokemonMoveControl(this)
+        lookControl = PokemonLookControl(this)
         if (!level().isClientSide) {
             remakeBrain()
         }
@@ -467,6 +482,7 @@ open class PokemonEntity(
         builder.define(RIDE_STAMINA, 1F)
         builder.define(SCALE_MODIFIER, 1F)
         builder.define(IS_ALPHA, false)
+        builder.define(IS_SPRINTING, false)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -708,6 +724,7 @@ open class PokemonEntity(
             clearRestriction()
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
+            yRot = yBodyRot
         }
 
         jumping = false
@@ -782,6 +799,10 @@ open class PokemonEntity(
 
     fun setMoveControl(moveControl: MoveControl) {
         this.moveControl = moveControl
+    }
+
+    override fun createBodyControl(): BodyRotationControl {
+        return PokemonBodyRotationControl(this)
     }
 
     /**
@@ -1956,7 +1977,14 @@ open class PokemonEntity(
             // Prevent swimmers from sinking in battle
             this.deltaMovement = Vec3(deltaMovement.x, 0.0, deltaMovement.z)
         }
+        lastTravelMovement = if (!this.hasRider() || this.controllingPassenger == null) this.deltaMovement else null
     }
+
+    /** True when vanilla travel will apply water drag this tick. */
+    fun isWaterTravelling() = isInWater && isAffectedByFluids() && !canStandOnFluid(level().getFluidState(blockPosition()))
+
+    /** Horizontal drag vanilla applies each tick while swimming. */
+    fun getHorizontalWaterDrag() = getWaterSlowDown()
 
     private fun updateBlocksTraveled(fromBp: BlockPos) {
         // Riding or falling shouldn't count, other movement sources are fine

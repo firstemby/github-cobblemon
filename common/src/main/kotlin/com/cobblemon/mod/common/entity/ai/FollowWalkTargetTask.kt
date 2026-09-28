@@ -38,6 +38,7 @@ class FollowWalkTargetTask(
     private var path: Path? = null
     private var lookTargetPos: BlockPos? = null
     private var speed = 0f
+    private var sprinting = false
 
     override fun checkExtraStartConditions(level: ServerLevel, entity: PathfinderMob): Boolean {
         if (this.pathUpdateCountdownTicks > 0) {
@@ -87,14 +88,17 @@ class FollowWalkTargetTask(
         entity.brain.eraseMemory(MemoryModuleType.WALK_TARGET)
         entity.brain.eraseMemory(MemoryModuleType.PATH)
         this.path = null
+        this.sprinting = false
     }
 
     override fun start(arg: ServerLevel, entity: PathfinderMob, time: Long) {
         entity.brain.setMemory(MemoryModuleType.PATH, this.path)
         entity.navigation.moveTo(this.path, speed.toDouble())
+        updateSprinting(entity)
     }
 
     override fun tick(world: ServerLevel, entity: PathfinderMob, l: Long) {
+        updateSprinting(entity)
         val path = entity.navigation.path
         val brain = entity.brain
         if (this.path !== path) {
@@ -196,11 +200,37 @@ class FollowWalkTargetTask(
         return path
     }
 
+    /** Sprints while far from the walk target, stopping a bit closer than it started so it doesn't flicker. */
+    private fun updateSprinting(entity: PathfinderMob) {
+        val navigation = entity.navigation as? OmniPathNavigation ?: return
+        val walkTarget = entity.brain.getMemory(MemoryModuleType.WALK_TARGET).orElse(null) as? CobblemonWalkTarget
+        val sprintDistance = walkTarget?.sprintDistance
+        sprinting = if (walkTarget == null || sprintDistance == null) {
+            false
+        } else {
+            val gap = edgeGap(entity, walkTarget)
+            gap > if (sprinting) sprintDistance * SPRINT_STOP_FRACTION else sprintDistance
+        }
+        navigation.sprinting = sprinting
+    }
+
     private fun hasReached(entity: PathfinderMob, walkTarget: WalkTarget): Boolean {
+        val stopDistance = (walkTarget as? CobblemonWalkTarget)?.stopDistance
+        if (stopDistance != null) {
+            return edgeGap(entity, walkTarget) <= stopDistance
+        }
         return walkTarget.target.currentBlockPosition().distManhattan(entity.blockPosition()) <= walkTarget.closeEnoughDist
     }
 
+    /** Straight line distance from the edge of the entity's hitbox to the walk target. */
+    private fun edgeGap(entity: PathfinderMob, walkTarget: WalkTarget): Double {
+        return walkTarget.target.currentPosition().distanceTo(entity.position()) - entity.bbWidth / 2.0
+    }
+
     companion object {
+        // Once sprinting, keep going until this fraction of the sprint distance
+        const val SPRINT_STOP_FRACTION = 0.5F
+
         private fun isTargetSpectator(target: WalkTarget): Boolean {
             val lookTarget = target.target
             return if (lookTarget is EntityTracker) {
