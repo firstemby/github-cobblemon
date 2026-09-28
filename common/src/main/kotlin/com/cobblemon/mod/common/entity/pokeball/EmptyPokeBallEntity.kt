@@ -198,7 +198,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 discard()
                 val player = this.owner as? ServerPlayer
                 if (player?.isCreative == false) {
-                    spawnAtLocation(defaultItem)
+                    spawnAtLocation(pokeBall.stack())
                 }
             }
         } else {
@@ -294,7 +294,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         val owner = owner
         discard()
         val player = owner?.takeIf { it is ServerPlayer } as? ServerPlayer
-        if (player?.isCreative != true) spawnAtLocation(defaultItem)
+        if (player?.isCreative != true) spawnAtLocation(pokeBall.stack())
         return
     }
 
