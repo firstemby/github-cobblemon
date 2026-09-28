@@ -136,7 +136,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         .addFunction("thrower") { owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO }
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        pokeBall = PokeBalls.POKE_BALL
+        pokeBall = PokeBalls.STRANGE_BALL
         super.defineSynchedData(builder)
         builder.define(CAPTURE_STATE, CaptureState.NOT.ordinal.toByte())
         builder.define(ASPECTS, emptySet())
@@ -187,7 +187,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         this.pokeBall = pokeBall
     }
 
-    var pokeBall: PokeBall = PokeBalls.POKE_BALL
+    var pokeBall: PokeBall = PokeBalls.STRANGE_BALL
 
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
@@ -356,7 +356,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 // Do a capture
                 val pokemon = capturingPokemon ?: return
                 val player = this.owner as? ServerPlayer ?: return
-                val captureTime = if (pokeBall.ancient == true) 1.8F else 1F
+                val captureTime = if (pokeBall.ancient) 1.8F else 1F
                 after(seconds = captureTime) {
                     // Dupes occurred by double-adding Pokémon, this hopefully prevents it triple-condom style
                     // wtf did I just read above me
@@ -390,7 +390,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         }
         // Emits a shake by changing the value to the opposite of what it currently is. Sends an update to the client basically.
         // We could replace this with a packet, but it feels awfully excessive when we already have 5 bajillion packets.
-        if (this.pokeBall.ancient) {
+        if (pokeBall.ancient) {
             when (captureResult.numberOfShakes) {
                 1 -> ancientBallShake(setOf("q.bedrock_stateful('ancient_poke_ball', 'weirdhop')"))
                 2 -> ancientBallShake(setOf("q.bedrock_stateful('ancient_poke_ball', 'bighop')"))
@@ -435,8 +435,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
         after(seconds = 0.1F) {
             captureFuture.complete(false)
-            val ballType =
-                this.pokeBall.name.path.lowercase().replace("_", "")
+            val ballType = pokeBall.name.path.lowercase().replace("_", "")
             val mode = "casual"
             val sendflash =
                 BedrockParticleOptionsRepository.getEffect(cobblemonResource("${ballType}/${mode}/sendflash"))
@@ -453,7 +452,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     override fun getDefaultItem(): Item = pokeBall.item()
 
-    override fun getDimensions(pPose: Pose) = DIMENSIONS
+    override fun getDimensions(pPose: Pose): EntityDimensions = DIMENSIONS
 
     private fun attemptCatch(pokemonEntity: PokemonEntity) {
         pokemonEntity.busyLocks.add(this)
