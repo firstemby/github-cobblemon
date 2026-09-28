@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "trainer_bags",
+  "category": "equipment",
+  "pattern": [
+    "HSH",
+    "LEL",
+    "HHH"
+  ],
+  "key": {
+    "H": {
+      "tag": "c:leathers"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "L": {
+      "item": "minecraft:lead"
+    },
+    "S": {
+      "tag": "c:strings"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "cobblemon:trainer_pack"
+  }
+}

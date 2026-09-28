@@ -108,18 +108,18 @@ object CobblemonBakingOverrides {
 
     // Bag
     val bagModels = mutableMapOf<CobblemonBagItem, BakingOverride>()
-    val BAG_PACK = registerBagOverride(
-        CobblemonItems.PACK_ITEM,
+    val TRAINER_PACK = registerBagOverride(
+        CobblemonItems.TRAINER_PACK,
         cobblemonResource("item/bag/trainer_pack"),
         cobblemonModel("trainer_pack", "none")
     )
-    val BAG_BAG = registerBagOverride(
-        CobblemonItems.BAG_ITEM,
+    val TRAINER_BAG = registerBagOverride(
+        CobblemonItems.TRAINER_BAG,
         cobblemonResource("item/bag/trainer_bag"),
         cobblemonModel("trainer_bag", "none")
     )
     /*val BAG_PENNY = registerBagOverride(
-        CobblemonItems.PACK_ITEM,
+        CobblemonItems.TRAINER_PACK,
         cobblemonResource("item/bag/bag_penny"),
         cobblemonModel("bag_penny", "penny")
     )*/

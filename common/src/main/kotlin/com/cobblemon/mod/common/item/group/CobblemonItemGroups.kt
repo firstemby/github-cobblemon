@@ -852,6 +852,8 @@ object CobblemonItemGroups {
         CobblemonItems.pokeBalls.forEach(entries::accept)
         CobblemonItems.pokeRods.forEach(entries::accept)
         CobblemonItems.pokedexes.forEach(entries::accept)
+        entries.accept(CobblemonItems.TRAINER_PACK)
+        entries.accept(CobblemonItems.TRAINER_BAG)
     }
 
     private fun blocksInjections(injector: Injector) {

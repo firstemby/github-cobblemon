@@ -1561,9 +1561,9 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     //Bags
     @JvmField
-    val BAG_ITEM = this.create("bag", CobblemonBagItem())
+    val TRAINER_BAG = this.create("trainer_bag", CobblemonBagItem())
     @JvmField
-    val PACK_ITEM = this.create("pack", CobblemonBagItem())
+    val TRAINER_PACK = this.create("trainer_pack", CobblemonBagItem())
 
     private fun blockItem(name: String, block: Block, rarity: Rarity = Rarity.COMMON): BlockItem = this.create(name, BlockItem(block, Item.Properties().rarity(rarity)))
 
