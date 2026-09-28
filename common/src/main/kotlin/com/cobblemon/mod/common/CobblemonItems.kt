@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.block.MintBlock
 import com.cobblemon.mod.common.block.MintBlock.MintType
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotColor
 import com.cobblemon.mod.common.client.pokedex.PokedexType
+import com.cobblemon.mod.common.client.pokeradar.PokeRadarType
 import com.cobblemon.mod.common.entity.boat.CobblemonBoatType
 import com.cobblemon.mod.common.item.*
 import com.cobblemon.mod.common.item.armor.CobblemonArmorTrims
@@ -188,6 +189,22 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val POKEDEX_BLACK = pokedexItem(PokedexType.BLACK)
     @JvmField
     val POKEDEX_WHITE = pokedexItem(PokedexType.WHITE)
+    
+    val pokeradars = mutableListOf<PokeRadarItem>()
+    @JvmField
+    val POKERADAR_RED = pokeradarItem(PokeRadarType.RED)
+    @JvmField
+    val POKERADAR_YELLOW = pokeradarItem(PokeRadarType.YELLOW)
+    @JvmField
+    val POKERADAR_GREEN = pokeradarItem(PokeRadarType.GREEN)
+    @JvmField
+    val POKERADAR_BLUE = pokeradarItem(PokeRadarType.BLUE)
+    @JvmField
+    val POKERADAR_PINK = pokeradarItem(PokeRadarType.PINK)
+    @JvmField
+    val POKERADAR_BLACK = pokeradarItem(PokeRadarType.BLACK)
+    @JvmField
+    val POKERADAR_WHITE = pokeradarItem(PokeRadarType.WHITE)
 
     val campfire_pots = mutableListOf<CampfirePotItem>()
     @JvmField
@@ -1589,6 +1606,12 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     private fun pokedexItem(type: PokedexType): PokedexItem {
         val item = create("pokedex_${type.name.lowercase()}", PokedexItem(type))
         pokedexes.add(item)
+        return item
+    }
+
+    private fun pokeradarItem(type: PokeRadarType): PokeRadarItem {
+        val item = create("poke_radar_${type.name.lowercase()}", PokeRadarItem(type))
+        pokeradars.add(item)
         return item
     }
 
