@@ -262,9 +262,9 @@ data class BedrockAnimation(
     fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
         val effectCondition: (effectKeyframe: BedrockEffectKeyframe) -> Boolean =
             if (previousSeconds > newSeconds) {
-                { it.seconds >= previousSeconds || it.seconds <= newSeconds }
+                { it.seconds >= previousSeconds || it.seconds < newSeconds }
             } else {
-                { it.seconds in previousSeconds..newSeconds }
+                { it.seconds >= previousSeconds && it.seconds < newSeconds }
             }
 
         effects.filter(effectCondition).forEach { it.run(entity, state) }

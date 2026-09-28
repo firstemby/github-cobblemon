@@ -84,6 +84,7 @@
 - Fixed Kingambit moving its legs while walking
 - Various Structure fixes
 - Fixed shiny pokemon under certain circumstances forgetting taught TMs
+- Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
 
 ### Developer
 - Fixed wrong order of operations in the code flow prior to the `FOSSIL_REVIVED` event causing pokemon to appear without entity link
