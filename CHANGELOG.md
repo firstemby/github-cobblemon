@@ -84,6 +84,8 @@
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
+- Shoulder mounted Pokémon now follow player body animations, improving their positioning with custom player animations and default actions.
+- Shoulder mounted Pokémon now sit slightly higher with chest armor equipped for better alignment, with a configurable blacklist.
 - Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
 - Some other recipes without advancements have also been corrected
 - Corrected the TM Recipes for Charge Beam and Payday
