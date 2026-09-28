@@ -79,6 +79,7 @@ import com.cobblemon.mod.common.pokedex.scanner.PokedexUsageContext
 import com.cobblemon.mod.common.util.isLookingAt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.color.block.BlockColor
+import net.minecraft.client.color.item.ItemColor
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.MenuScreens
 import net.minecraft.client.gui.screens.Screen
@@ -94,6 +95,7 @@ import net.minecraft.client.resources.PlayerSkin
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.GrassColor
 import net.minecraft.world.phys.AABB
 
 object CobblemonClient {
@@ -555,6 +557,7 @@ object CobblemonClient {
         implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
         implementation.registerItemColors(PonigiriItemColorProvider, CobblemonItems.PONIGIRI)
         implementation.registerItemColors(SinisterTeaItemColorProvider, CobblemonItems.SINISTER_TEA)
+        implementation.registerItemColors({ _, _ -> GrassColor.get(0.5, 1.0) }, CobblemonItems.NEST_GRASSY, CobblemonItems.NEST_LEAFY)
     }
 
     private fun registerBuiltinItemRenderers() {
