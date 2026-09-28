@@ -31,7 +31,8 @@ import kotlin.jvm.optionals.getOrNull
 class IdealNestPlacementSense(
     private var cooldownTicks: Int = 100,
     private var detectionRadius: Int = 10,
-    private var minNestDistance: Int = 10
+    private var minNestDistance: Int = 10,
+    private var playerClearance: Int = 24
 ) : Sense {
     override var ticksUntilNextExecution: Int = 100
     override val memories = setOf(
@@ -44,6 +45,7 @@ class IdealNestPlacementSense(
             this.cooldownTicks = minOf(this.cooldownTicks, other.cooldownTicks)
             this.detectionRadius = maxOf(this.detectionRadius, other.detectionRadius)
             this.minNestDistance = maxOf(this.minNestDistance, other.minNestDistance)
+            this.playerClearance = maxOf(this.playerClearance, other.playerClearance)
             return true
         }
         return false
@@ -112,6 +114,8 @@ class IdealNestPlacementSense(
             }
 
             if (isNearExistingNest(world, nestPos)) return@firstOrNull false
+            // wild mons kept making nests near players so we should make sure there are no players nearby lol
+            if (world.getNearestPlayer(nestPos.x + 0.5, nestPos.y.toDouble(), nestPos.z + 0.5, playerClearance.toDouble(), true) != null) return@firstOrNull false
             if (!canPathfindToTarget(entity, nestPos)) return@firstOrNull false
 
             return@firstOrNull true
@@ -133,6 +137,8 @@ class IdealNestPlacementSense(
         }
 
         if (isNearExistingNest(world, pos)) return false
+        // not a valid spot if it is near a player
+        if (world.getNearestPlayer(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5, playerClearance.toDouble(), true) != null) return false
         if (!canPathfindToTarget(entity, pos)) return false
 
         return true
@@ -181,17 +187,19 @@ class IdealNestPlacementSense(
         var cooldownTicks: ExpressionOrEntityVariable = Either.left("100".asExpression())
         var detectionRadius: ExpressionOrEntityVariable = Either.left("10".asExpression())
         var minNestDistance: ExpressionOrEntityVariable = Either.left("10".asExpression())
+        var playerClearance: ExpressionOrEntityVariable = Either.left("24".asExpression())
 
         override fun getVariables(
             entity: LivingEntity,
             behaviourConfigurationContext: BehaviourConfigurationContext
-        ) = listOf(cooldownTicks, detectionRadius, minNestDistance).asVariables()
+        ) = listOf(cooldownTicks, detectionRadius, minNestDistance, playerClearance).asVariables()
 
         override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Sense {
             return IdealNestPlacementSense(
                 cooldownTicks = cooldownTicks.resolveInt(behaviourConfigurationContext.runtime),
                 detectionRadius = detectionRadius.resolveInt(behaviourConfigurationContext.runtime),
-                minNestDistance = minNestDistance.resolveInt(behaviourConfigurationContext.runtime)
+                minNestDistance = minNestDistance.resolveInt(behaviourConfigurationContext.runtime),
+                playerClearance = playerClearance.resolveInt(behaviourConfigurationContext.runtime)
             )
         }
     }
