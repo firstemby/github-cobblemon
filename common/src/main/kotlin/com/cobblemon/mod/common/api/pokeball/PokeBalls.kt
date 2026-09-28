@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokeball
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
@@ -332,7 +333,9 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     }
 
     override fun reload(data: Map<ResourceLocation, PokeBall>) {
+        data.entries.forEach { it.value.name = it.key }
         this.custom.clear()
+
         data.forEach { (location, ball) ->
             if (defaults.containsKey(location)) {
                 ball.stack = defaults[location]!!.stack
@@ -342,6 +345,8 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
 
             this.custom[location] = ball
         }
+
+        Cobblemon.LOGGER.info("Loaded ${data.size} custom poke balls.")
     }
 
     override fun sync(player: ServerPlayer) {
@@ -367,10 +372,11 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         model2d: ResourceLocation = cobblemonResource(name),
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
-        ancient: Boolean = false
+        ancient: Boolean = false,
+        color: String = "#ff1111"
     ): PokeBall {
         val identifier = cobblemonResource(name)
-        val pokeball = PokeBall(identifier, modifier, effects, PokeBall.PokeBallProperties(), waterDragValue, model2d, model3d, throwPower, ancient)
+        val pokeball = PokeBall(identifier, modifier, effects, PokeBall.PokeBallProperties(), waterDragValue, model2d, model3d, throwPower, ancient, color)
         this.defaults[identifier] = pokeball
         return pokeball
     }
@@ -380,7 +386,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         return this.custom[identifier] ?: this.defaults[identifier]!!
     }
 
-    fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier)?.ancient ?: false
+    fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier).ancient
 
     /**
      * Backwards compatibility getters

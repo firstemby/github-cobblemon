@@ -16,7 +16,9 @@ import com.cobblemon.mod.common.client.render.pokeball.PokeBallPosableState
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity.CaptureState
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity.CaptureState.NOT
+import com.cobblemon.mod.common.util.toRGBA
 import net.minecraft.network.syncher.EntityDataAccessor
+import org.joml.Vector4f
 
 class EmptyPokeBallClientDelegate : PokeBallPosableState(), EntitySideDelegate<EmptyPokeBallEntity> {
     override val stateEmitter: SettableObservable<CaptureState> = SettableObservable(NOT)
@@ -51,5 +53,9 @@ class EmptyPokeBallClientDelegate : PokeBallPosableState(), EntitySideDelegate<E
             EmptyPokeBallEntity.SHAKE -> shakeEmitter.emit(Unit)
             EmptyPokeBallEntity.ASPECTS -> currentAspects = currentEntity.aspects
         }
+    }
+
+    fun getBeamColor(): Vector4f {
+        return Integer.decode(currentEntity.pokeBall.color).toRGBA()
     }
 }

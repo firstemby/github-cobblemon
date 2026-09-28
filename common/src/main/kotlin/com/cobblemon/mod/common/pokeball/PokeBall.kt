@@ -19,9 +19,9 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.CodecUtils
 import com.mojang.serialization.Codec
-import net.minecraft.world.item.ItemStack
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
 
 /**
@@ -35,9 +35,11 @@ import net.minecraft.world.item.Rarity
  * @property model2d The identifier for the resource this Pokéball will use for the 2d model.
  * @property model3d The identifier for the resource this Pokéball will use for the 3d model.
  * @property ancient Marks this Pokéball as ancient, which makes it play different animations on catch hops
+ * @property color Defines the beam color of pokeball
  */
 class PokeBall(
-    val name: ResourceLocation = cobblemonResource("strange_ball"),
+    @Transient // Assigns in PokeBalls.reload
+    var name: ResourceLocation = cobblemonResource("strange_ball"),
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
     val itemProperties: PokeBallProperties = PokeBallProperties(),
@@ -45,12 +47,15 @@ class PokeBall(
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
-    val ancient: Boolean = false
+    val ancient: Boolean = false,
+    val color: String
 ) {
-    data class PokeBallProperties(
-        val fireResistant: Boolean = false,
-        val rarity: Rarity = Rarity.COMMON
-    )
+    init {
+        // color needs to be a hex string
+        if (!"""#[a-zA-Z0-9]{6}""".toRegex().matches(color)) {
+            throw RuntimeException("")
+        }
+    }
 
     @Transient
     val struct = QueryStruct(hashMapOf())
@@ -84,7 +89,6 @@ class PokeBall(
         if (this.name == PokeBalls.SAFARI_BALL.name) target.maxHealth else target.currentHealth
 
     companion object {
-
         @JvmStatic
         val BY_IDENTIFIER_CODEC: Codec<PokeBall> = CodecUtils.createByIdentifierCodec(
             PokeBalls::getPokeBall,
@@ -92,4 +96,9 @@ class PokeBall(
         ) { identifier -> "No PokeBall for ID $identifier" }
 
     }
+
+    data class PokeBallProperties(
+        val fireResistant: Boolean = false,
+        val rarity: Rarity = Rarity.COMMON
+    )
 }
