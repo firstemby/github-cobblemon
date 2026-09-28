@@ -518,7 +518,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             if (egg != null) {
                 if (world.isClientSide)
                     blockEntity.eggState.tick(world.gameTime)
-                if (egg.ticksToHatch == 0F) {
+                if (egg.ticksToHatch <= 0F) {
                     if (egg.isWild && blockEntity.ownerUUID == null && world is ServerLevel && !blockEntity.eggState.isHatching) {
                         blockEntity.eggState.isHatching = true
                         blockEntity.eggState.hatchStartTick = world.gameTime
