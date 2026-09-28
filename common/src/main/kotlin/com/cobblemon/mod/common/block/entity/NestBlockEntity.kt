@@ -47,6 +47,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null // player UUID that placed this nest
+    // we should track if a player put the egg in the nest
+    var eggPlacerUUID: UUID? = null
     val eggState = EggState()
     var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null)
 
@@ -55,6 +57,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
      */
     fun setItem(itemStack: ItemStack) {
         this.eggItem = itemStack
+        eggPlacerUUID = null
         setChanged() // Mark the block entity as changed.
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
     }
@@ -72,6 +75,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItem.copy())
             world.addFreshEntity(itemEntity)
             eggItem = ItemStack.EMPTY
+            eggPlacerUUID = null
             setChanged()
             world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
@@ -119,6 +123,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             } else {
                 setItem(heldItem.copy())
             }
+            eggPlacerUUID = player.uuid
             eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
@@ -195,6 +200,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             tag.put("EggItem", eggItem.saveOptional(registryLookup))
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
+        eggPlacerUUID?.let { tag.putUUID("EggPlacerUUID", it) }
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
         tag.putLong("HatchStartTick", eggState.hatchStartTick)
@@ -210,6 +216,9 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
+        }
+        if (tag.contains("EggPlacerUUID")) {
+            eggPlacerUUID = tag.getUUID("EggPlacerUUID")
         }
 
         eggState.isHatching = tag.getBoolean("IsHatching")
@@ -468,6 +477,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     override fun setItem(slot: Int, stack: ItemStack) {
         if (slot == 0) {
             eggItem = stack
+            eggPlacerUUID = null
             setChanged()
         }
     }
@@ -504,6 +514,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
 
     override fun clearContent() {
         eggItem = ItemStack.EMPTY
+        eggPlacerUUID = null
     }
 
     companion object {

@@ -198,13 +198,17 @@ open class NestBlock(val variant: NestVariant, properties: Properties) : BaseEnt
     // if the nest is removed / destroyed with a wild egg inside break the egg (this is so we can prevent cheese where players could break a nest to get to the egg) todo not fully sold though so we should think of other ways to prevent da cheese
     override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
         if (!state.`is`(newState.block) && !level.isClientSide) {
-            val egg = (level.getBlockEntity(pos) as? NestBlockEntity)?.getItem()?.get(CobblemonItemComponents.EGG_DATA)
-            // only break the egg if it is wild (is this going to be confusing to players? idk)
-            if (egg != null && egg.isWild) {
+            val nest = level.getBlockEntity(pos) as? NestBlockEntity
+            val egg = nest?.getItem()?.get(CobblemonItemComponents.EGG_DATA)
+            // only break the egg if it is wild and not placed by a player (is this going to be confusing to players? idk)
+            if (egg != null && egg.isWild && nest?.eggPlacerUUID == null) {
                 Cobblemon.eggStoreManager.remove(egg.eggId)
                 // this is the closest I can get to egg breaking particles but it bothers me it isn't using the textures on the actual egg
                 level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(CobblemonBlocks.EGG.defaultBlockState()))
                 // todo play a egg breaking sound here STERREZO PLZZZ
+            } else if (egg != null) {
+                // drop egg if not 
+                nest.dropItem(level, pos, state)
             }
         }
         super.onRemove(state, level, pos, newState, movedByPiston)
