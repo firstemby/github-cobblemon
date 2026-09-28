@@ -174,6 +174,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
             // Otherwise, drop the egg
             dropItem(world, pos, state)
+            eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -186,6 +187,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
                 setItem(0, heldItem.copy())
             }
             eggPlacerUUID = player.uuid
+            eggState.resetHatchingState()
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -210,6 +212,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         Cobblemon.eggStoreManager.hatch(egg.eggId) { offspring ->
             // Clear the egg item and synchronize
             setItem(0, ItemStack.EMPTY)
+            eggState.resetHatchingState()
             setChanged()
             world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
 
