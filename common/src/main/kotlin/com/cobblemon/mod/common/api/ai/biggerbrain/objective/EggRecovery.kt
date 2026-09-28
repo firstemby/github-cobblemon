@@ -64,6 +64,9 @@ class EggRecovery(
     override fun perform(entity: LivingEntity, brain: BiggerBrain, activeObjectiveTags: MutableSet<String>): ObjectiveStatus {
         if (entity !is PokemonEntity || !entity.isAlive)
             return ObjectiveStatus.INVALID
+        // so only wild mons recover their eggs
+        if (!entity.pokemon.isWild())
+            return ObjectiveStatus.INACTIVE
 
         val world = entity.level() as? ServerLevel ?: return ObjectiveStatus.INVALID
         // get the nest in memory if it exists and check to see if it has an egg
