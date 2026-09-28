@@ -26,13 +26,16 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
     var speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
     var teleportDistance: ExpressionOrEntityVariable = Either.left("24.0".asExpression())
     var maxDistance: ExpressionOrEntityVariable = Either.left("14.0".asExpression())
+    // Blocks from the edge of the pokemon to the owner before it sprints to catch up
+    var sprintDistance: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
 
     override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         completionRange,
         speedMultiplier,
         teleportDistance,
-        maxDistance
+        maxDistance,
+        sprintDistance
     ).asVariables()
 
     override fun createTask(
@@ -49,7 +52,8 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
                 completionRange = completionRange.asExpression(),
                 speedMultiplier = speedMultiplier.asExpression(),
                 teleportDistance = teleportDistance.asExpression(),
-                maxDistance = maxDistance.asExpression()
+                maxDistance = maxDistance.asExpression(),
+                sprintDistance = sprintDistance.asExpression()
             ),
             PokemonEntity::class.java
         )

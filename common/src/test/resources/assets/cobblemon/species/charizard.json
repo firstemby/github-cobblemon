@@ -18,5 +18,12 @@
     "width": 0.7,
     "height": 2,
     "fixed": false
+  },
+  "behaviour": {
+    "moving": {
+      "walk": {
+        "sprintSpeed": 0.443
+      }
+    }
   }
 }

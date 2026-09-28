@@ -60,7 +60,8 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.25
+        "walkSpeed": 0.25,
+        "sprintSpeed": 0.316
       },
       "swim": {
         "avoidsWater": true

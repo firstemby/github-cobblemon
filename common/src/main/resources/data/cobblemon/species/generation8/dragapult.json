@@ -141,6 +141,9 @@
       "swim": {
         "canBreatheUnderwater": true,
         "swimSpeed": 0.3
+      },
+      "walk": {
+        "sprintSpeed": 0.443
       }
     },
     "resting": {

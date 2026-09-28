@@ -60,7 +60,8 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.16
+        "walkSpeed": 0.16,
+        "sprintSpeed": 0.2
       },
       "fly": {
         "canFly": true

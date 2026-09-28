@@ -16,16 +16,18 @@ import com.cobblemon.mod.common.util.resolveFloat
 import com.cobblemon.mod.common.util.resolveInt
 import com.cobblemon.mod.common.util.withQueryValue
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.behavior.EntityTracker
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.WalkTarget
 
 object MoveToAttackTargetTask {
     fun create(
         speedMultiplier: Expression = "0.5".asExpression(),
-        closeEnoughDistance: Expression = "0".asExpression()
+        closeEnoughDistance: Expression = "0".asExpression(),
+        // Blocks from the edge of the pokemon to its target before it sprints to close in
+        sprintDistance: Expression = "4.0".asExpression()
     ): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.present(MemoryModuleType.ATTACK_TARGET),
@@ -35,12 +37,21 @@ object MoveToAttackTargetTask {
                 mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
                 val speedMultiplier = mainThreadRuntime.resolveFloat(speedMultiplier)
                 val closeEnoughDistance = mainThreadRuntime.resolveInt(closeEnoughDistance)
+                val sprintDistance = mainThreadRuntime.resolveFloat(sprintDistance)
 
                 val attackTarget = it.get(attackTarget)
                 val position = attackTarget.position()
                 val walkTarget = it.tryGet(walkTarget).orElse(null)
                 if (walkTarget == null || walkTarget.target.currentPosition().distanceToSqr(position) > closeEnoughDistance) {
-                    entity.brain.setMemory(MemoryModuleType.WALK_TARGET, WalkTarget(attackTarget, speedMultiplier, closeEnoughDistance))
+                    entity.brain.setMemory(
+                        MemoryModuleType.WALK_TARGET,
+                        CobblemonWalkTarget(
+                            target = EntityTracker(attackTarget, false),
+                            speedModifier = speedMultiplier,
+                            completionRange = closeEnoughDistance,
+                            sprintDistance = sprintDistance
+                        )
+                    )
                     true
                 } else {
                     false

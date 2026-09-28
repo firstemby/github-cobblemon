@@ -32,16 +32,13 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
 
 object MoveToOwnerTask {
-    // Blocks from the edge of the pokemon to the owner before it sprints to catch up, unless configured
-    private const val DEFAULT_SPRINT_DISTANCE = 10F
-
     fun create(
         condition: Expression,
         completionRange: Expression,
         maxDistance: Expression,
         teleportDistance: Expression,
         speedMultiplier: Expression,
-        sprintDistance: Expression? = null
+        sprintDistance: Expression
     ): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
             it.registered(MemoryModuleType.WALK_TARGET)
@@ -72,7 +69,7 @@ object MoveToOwnerTask {
                     }
                     return@Trigger true
                 } else if (distanceToOwner > maxDistance && it.tryGet(walkTarget).isEmpty && !entity.brain.hasMemoryValue(CobblemonMemories.PATH_COOLDOWN)) {
-                    val sprintDistance = sprintDistance?.let { mainThreadRuntime.resolveFloat(it) } ?: DEFAULT_SPRINT_DISTANCE
+                    val sprintDistance = mainThreadRuntime.resolveFloat(sprintDistance)
                     entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 60L)
                     entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, EntityTracker(owner, true))
                     entity.brain.setMemory(

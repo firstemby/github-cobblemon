@@ -269,7 +269,8 @@
         },
         "moving": {
           "walk": {
-            "avoidsLand": true
+            "avoidsLand": true,
+            "sprintSpeed": 0.443
           },
           "swim": {
             "canSwimInWater": false,
