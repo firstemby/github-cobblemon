@@ -7,6 +7,7 @@
   "maleRatio": 0.875,
   "height": 20,
   "weight": 1000,
+  "silenceStepSounds": true,
   "pokedex": [
     "cobblemon.species.venusaur.desc"
   ],
