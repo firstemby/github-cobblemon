@@ -19,7 +19,9 @@ import net.minecraft.world.entity.LivingEntity
  * @since August 9th, 2022
  */
 class GuaranteedModifier : CatchRateModifier {
-
+    companion object {
+        const val VARIANT = "guaranteed"
+    }
     override fun isGuaranteed() = true
     override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = 255F
     override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
