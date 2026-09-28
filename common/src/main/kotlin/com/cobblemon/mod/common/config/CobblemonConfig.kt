@@ -353,6 +353,18 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "nether_incubator_hatch_rate", side = SERVER)
     var netherIncubatorHatchRate = 1.75F
 
+    @CobblemonConfigField(Category.Breeding, lang = "wild_breeding_chance", side = SERVER)
+    var wildBreedingChance = 0.25
+
+    @CobblemonConfigField(Category.Breeding, lang = "pasture_breeding_chance", side = SERVER)
+    var pastureBreedingChance = 1.0
+
+    @CobblemonConfigField(Category.Breeding, lang = "wild_breeding_cooldown_multiplier", side = SERVER)
+    var wildBreedingCooldownMultiplier = 1.0
+
+    @CobblemonConfigField(Category.Breeding, lang = "pasture_breeding_cooldown_multiplier", side = SERVER)
+    var pastureBreedingCooldownMultiplier = 0.5
+
     @CobblemonConfigField(Category.Breeding, lang = "bench_extra_inherited_moves", side = SERVER)
     var benchExtraInheritedMoves = true
 
@@ -510,6 +522,10 @@ class CobblemonConfig {
         it.addFunction("incubator_hatch_rate") { DoubleValue(incubatorHatchRate) }
         it.addFunction("nether_nest_hatch_rate") { DoubleValue(netherNestHatchRate) }
         it.addFunction("nether_incubator_hatch_rate") { DoubleValue(netherIncubatorHatchRate) }
+        it.addFunction("wild_breeding_chance") { DoubleValue(wildBreedingChance) }
+        it.addFunction("pasture_breeding_chance") { DoubleValue(pastureBreedingChance) }
+        it.addFunction("wild_breeding_cooldown_multiplier") { DoubleValue(wildBreedingCooldownMultiplier) }
+        it.addFunction("pasture_breeding_cooldown_multiplier") { DoubleValue(pastureBreedingCooldownMultiplier) }
         it.addFunction("bench_extra_inherited_moves") { DoubleValue(benchExtraInheritedMoves) }
         it.addFunction("default_egg_texture_style") { StringValue(defaultEggTextureStyle.name.lowercase()) }
         it.addFunction("summary_pokemon_follow_cursor") { DoubleValue(summaryPokemonFollowCursor) }

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain.sense
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.BehaviourConfigurationContext
 import com.cobblemon.mod.common.api.ai.ExpressionOrEntityVariable
@@ -61,6 +62,13 @@ class MateSense(
         if (entity.pokemon.breedingCooldown != 0) return
 
         val world = entity.level() as? ServerLevel ?: return
+
+        // it has been an issue that wild mons breed so much and pasture mons not enough so we should have a config for tweaking rates of both
+        val chance = if (entity.pokemon.isWild()) Cobblemon.config.wildBreedingChance else Cobblemon.config.pastureBreedingChance
+        if (entity.random.nextDouble() >= chance) {
+            brain.setMemory(CobblemonMemories.MATE_SCAN_COOLDOWN, true, MATE_SCAN_COOLDOWN)
+            return
+        }
 
         val potentialMate = world.getEntitiesOfClass(
             PokemonEntity::class.java,

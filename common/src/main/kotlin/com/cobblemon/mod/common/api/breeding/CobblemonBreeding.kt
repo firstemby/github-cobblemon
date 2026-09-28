@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.breeding
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRule
 import com.cobblemon.mod.common.api.breeding.rule.BreedingRules
 import com.cobblemon.mod.common.api.breeding.rule.layer.EggBreedingRule
@@ -144,8 +145,10 @@ object CobblemonBreeding {
         val intercept = minTime - slope * minEggCycle
 
         val cooldown = slope * eggCycle + intercept
+        // lets make it so we can configure how often wild mons breed in the wild vs pastured ones. Berber said it would feel way nicer
+        val multiplier = if (pokemon.isWild()) Cobblemon.config.wildBreedingCooldownMultiplier else Cobblemon.config.pastureBreedingCooldownMultiplier
 
-        return (cooldown * 1200).toInt() // convert to ticks
+        return (cooldown * 1200 * multiplier).toInt() // convert to ticks
     }
 
     fun checkCompatibility(mother: Pokemon, father: Pokemon): Boolean {
