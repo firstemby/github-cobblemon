@@ -6,19 +6,19 @@
       "aspects": [],
       "poser": "cobblemon:egg",
       "model": "cobblemon:egg.geo",
-      "texture": "cobblemon:textures/egg/basculin_redstripe_egg.png"
+      "texture": "cobblemon:textures/egg/basculin_egg.png"
     },
     {
       "aspects": [
         "bluestriped"
       ],
-      "texture": "cobblemon:textures/egg/basculin_bluestripe_egg.png"
+      "texture": "cobblemon:textures/egg/basculin_bluestriped_egg.png"
     },
     {
       "aspects": [
         "whitestriped"
       ],
-      "texture": "cobblemon:textures/egg/basculin_whitestripe_egg.png"
+      "texture": "cobblemon:textures/egg/basculin_whitestriped_egg.png"
     }
   ]
 }

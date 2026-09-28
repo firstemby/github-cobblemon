@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cobblemon:item/egg/tauros_paldea_egg"
+        "layer0": "cobblemon:item/egg/koffing_galarbias_egg"
     }
 }
