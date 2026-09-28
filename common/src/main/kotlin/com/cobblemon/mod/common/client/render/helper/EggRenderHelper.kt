@@ -85,7 +85,7 @@ object EggRenderHelper {
             egg.ticksToHatch > 2400 -> "stage1" // 8 minutes left
             egg.ticksToHatch > 1200 -> "stage2"  // 2 minutes left
             egg.ticksToHatch > 20 -> "stage3"    // 1 minute left
-            (egg.ticksToHatch == 0F && state.isHatching) -> "hatching" // currently trying to hatch....
+            (egg.ticksToHatch <= 0F && state.isHatching) -> "hatching" // currently trying to hatch....
             else -> "stage4"                // Ready to hatch!
         }
         state.setPose(poseName)
