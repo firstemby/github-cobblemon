@@ -11,10 +11,12 @@ package com.cobblemon.mod.common.item.group
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.block.TypeGemClusterBlock
 import com.cobblemon.mod.common.item.AprijuiceItem
+import com.cobblemon.mod.common.item.components.PokeBallComponent
 import com.cobblemon.mod.common.item.components.RideBoostsComponent
 import com.cobblemon.mod.common.item.components.TMMoveComponent
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -943,6 +945,11 @@ object CobblemonItemGroups {
 
     private fun utilityItemEntries(displayContext: ItemDisplayParameters, entries: Output) {
         CobblemonItems.pokeBalls.forEach(entries::accept)
+
+        PokeBalls.custom
+            .filter { (_, value) -> CobblemonItems.pokeBalls.none { it.pokeBall.name == value.name } }
+            .forEach { entries.accept(PokeBallComponent.createStack(it.value)) }
+
         CobblemonItems.pokeRods.forEach(entries::accept)
         CobblemonItems.pokedexes.forEach(entries::accept)
     }

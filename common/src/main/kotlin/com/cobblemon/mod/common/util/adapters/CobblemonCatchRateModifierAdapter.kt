@@ -30,7 +30,7 @@ import net.minecraft.resources.ResourceLocation
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-object CatchRateModifierAdapter : CatchRateModifierAdapter {
+object CobblemonCatchRateModifierAdapter : CatchRateModifierAdapter {
     private const val VARIANT = "variant"
 
     private val types = HashBiMap.create<String, KClass<out CatchRateModifier>>()
@@ -45,7 +45,7 @@ object CatchRateModifierAdapter : CatchRateModifierAdapter {
 
     val gson: Gson by lazy {
         GsonBuilder()
-            .registerTypeAdapter(CatchRateModifier::class.java, CatchRateModifierAdapter)
+            .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
             .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
             .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
@@ -91,14 +91,14 @@ object CatchRateModifierAdapter : CatchRateModifierAdapter {
     private fun getVariant(modifier: CatchRateModifier): String {
         val variant =
             this.types.inverse()[modifier::class]
-                ?: throw IllegalArgumentException("Cannot resolve evolution requirement for type ${modifier::class.qualifiedName}")
+                ?: throw IllegalArgumentException("Cannot resolve pokeball catchrate modifier for type ${modifier::class.qualifiedName}")
 
         return variant
     }
 
     private fun getModifierType(variant: String): KClass<out CatchRateModifier> {
         val requirementType =
-            this.types[variant] ?: throw IllegalArgumentException("Cannot resolve evolution requirement type for variant $variant")
+            this.types[variant] ?: throw IllegalArgumentException("Cannot resolve pokeball catchrate modifier type for variant $variant")
 
         return requirementType
     }

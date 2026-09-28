@@ -21,14 +21,22 @@ import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.item.components.PokeBallComponent
 import com.cobblemon.mod.common.pokeball.PokeBall
+import com.cobblemon.mod.common.util.adapters.CobblemonCaptureEffectAdapter
+import com.cobblemon.mod.common.util.adapters.CobblemonCatchRateModifierAdapter
+import com.cobblemon.mod.common.util.adapters.FloatNumberRangeAdapter
+import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import net.minecraft.advancements.critereon.MinMaxBounds
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
+import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
 import kotlin.math.roundToInt
 
 /**
@@ -43,6 +51,12 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
 
     // ToDo once datapack pokeball is implemented add required adapters here
     override val gson: Gson = GsonBuilder()
+        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
+        .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
+        .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
+        .registerTypeAdapter(CaptureEffect::class.java, CobblemonCaptureEffectAdapter)
+        .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .create()
@@ -50,8 +64,8 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     override val resourcePath = "pokeballs"
 
     private val defaults = hashMapOf<ResourceLocation, PokeBall>()
-    // ToDo datapack pokeball type here instead
-    private val custom = hashMapOf<ResourceLocation, PokeBall>()
+
+    val custom = hashMapOf<ResourceLocation, PokeBall>()
 
     @JvmStatic
     @get:JvmName("getPokeBall")
@@ -245,6 +259,10 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     @get:JvmName("getAncientOriginBall")
     val ANCIENT_ORIGIN_BALL
         get() = this.byName("ancient_origin_ball")
+    @JvmStatic
+    @get:JvmName("getStrangeBall")
+    val STRANGE_BALL
+        get() = this.byName("strange_ball")
 
     init {
         createDefault("poke_ball")
@@ -257,7 +275,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("ultra_ball", MultiplierModifier(2F))
         createDefault("master_ball", GuaranteedModifier())
         createDefault("safari_ball", CatchRateModifiers.SAFARI)
-        createDefault("fast_ball", BaseStatModifier(Stats.SPEED, { it >= 100 }, 4F))
+        createDefault("fast_ball", BaseStatModifier(Stats.SPEED, 100, BaseStatModifier.Comparator.GTE, 4F))
         createDefault("level_ball", CatchRateModifiers.LEVEL)
         createDefault("lure_ball", CatchRateModifiers.LURE)
         createDefault("heavy_ball", CatchRateModifiers.WEIGHT_BASED)
@@ -295,6 +313,9 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("ancient_wing_ball", MultiplierModifier(1.5F), throwPower = 2.5f, ancient = true)
         createDefault("ancient_jet_ball", MultiplierModifier(2F), throwPower = 2.5f, ancient = true)
         createDefault("ancient_origin_ball", GuaranteedModifier(), ancient = true)
+        // for customs
+        createDefault("strange_ball")
+
         // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->
             if (!event.earned) {
@@ -312,7 +333,15 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
 
     override fun reload(data: Map<ResourceLocation, PokeBall>) {
         this.custom.clear()
-        // ToDo once datapack pokeball is implemented load them here, we will want datapacks to be able to override our default pokeballs too, however they will never be able to disable them
+        data.forEach { (location, ball) ->
+            if (defaults.containsKey(location)) {
+                ball.stack = defaults[location]!!.stack
+            } else {
+                ball.stack = PokeBallComponent.createStack(ball)
+            }
+
+            this.custom[location] = ball
+        }
     }
 
     override fun sync(player: ServerPlayer) {
@@ -321,10 +350,11 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
 
     /**
      * Gets a Pokeball from registry name.
-     * @return the pokeball object if found otherwise null.
+     * @return the pokeball object if found otherwise strange ball.
      */
     @JvmStatic
-    fun getPokeBall(name : ResourceLocation): PokeBall? = this.custom[name] ?: this.defaults[name]
+    fun getPokeBall(name : ResourceLocation): PokeBall =
+        this.custom[name] ?: this.defaults[name] ?: STRANGE_BALL
 
     @JvmStatic
     fun all() = this.defaults.filterKeys { !this.custom.containsKey(it) }.values + this.custom.values

@@ -34,9 +34,10 @@ import net.minecraft.world.item.Rarity
  * @property waterDragValue The value of the water drag modifier when the entity travels, default is 0.8.
  * @property model2d The identifier for the resource this Pokéball will use for the 2d model.
  * @property model3d The identifier for the resource this Pokéball will use for the 3d model.
+ * @property ancient Marks this Pokéball as ancient, which makes it play different animations on catch hops
  */
-open class PokeBall(
-    val name: ResourceLocation = cobblemonResource("weird_ball"),
+class PokeBall(
+    val name: ResourceLocation = cobblemonResource("strange_ball"),
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
     val effects: List<CaptureEffect> = listOf(),
     val itemProperties: PokeBallProperties = PokeBallProperties(),
@@ -51,6 +52,7 @@ open class PokeBall(
         val rarity: Rarity = Rarity.COMMON
     )
 
+    @Transient
     val struct = QueryStruct(hashMapOf())
         .addFunction("name") { StringValue(name.toString()) }
         .addFunction("water_drag_value") { DoubleValue(waterDragValue) }
@@ -59,6 +61,7 @@ open class PokeBall(
 //        .addFunction("item") {  } // requires a registry which is hard
 
     // This gets attached during item registry
+    @Transient
     internal lateinit var stack: ItemStack
 
     fun item(): PokeBallItem = this.stack.item as PokeBallItem
