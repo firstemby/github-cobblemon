@@ -78,6 +78,8 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null
+    // person who placed the egg into the incubator as a way for us to have more security (best I can think of for now...)
+    var eggPlacerUUID: UUID? = null
 
     override fun saveAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(tag, registryLookup)
@@ -89,6 +91,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             tag.putIntArray("RenderingBlockPos", listOf(it.x, it.y, it.z))
         }
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
+        eggPlacerUUID?.let { tag.putUUID("EggPlacerUUID", it) }
     }
 
     override fun loadAdditional(tag: CompoundTag, registryLookup: HolderLookup.Provider) {
@@ -100,6 +103,9 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
         eggState.hatchStartTick = tag.getLong("HatchStartTick")
         if (tag.contains("OwnerUUID")) {
             ownerUUID = tag.getUUID("OwnerUUID")
+        }
+        if (tag.contains("EggPlacerUUID")) {
+            eggPlacerUUID = tag.getUUID("EggPlacerUUID")
         }
         if (tag.contains("RenderingBlockPos")) {
             val posArray = tag.getIntArray("RenderingBlockPos")
@@ -138,6 +144,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             val itemEntity = ItemEntity(world, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, eggItem.copy())
             world.addFreshEntity(itemEntity)
             eggItem = ItemStack.EMPTY
+            eggPlacerUUID = null
             setChanged()
             world.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS)
         }
@@ -178,6 +185,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
             } else {
                 setItem(0, heldItem.copy())
             }
+            eggPlacerUUID = player.uuid
             world.playSound(null, pos, SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f)
             return InteractionResult.SUCCESS
         }
@@ -259,6 +267,7 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
     override fun setItem(slot: Int, stack: ItemStack) {
         if (slot == 0) {
             eggItem = stack
+            eggPlacerUUID = null
             setChanged()
         }
     }
@@ -293,5 +302,6 @@ class IncubatorBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun clearContent() {
         eggItem = ItemStack.EMPTY
+        eggPlacerUUID = null
     }
 }

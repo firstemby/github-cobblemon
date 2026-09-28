@@ -109,14 +109,10 @@ class IncubatorBlock(settings: Properties) : BaseEntityBlock(settings) {
 
         val egg = entity.getItem(0).get(CobblemonItemComponents.EGG_DATA)
 
-        // if the player interacting with the nest is not the owner of the nest we do not want them taking the egg or hatching
-        if (egg != null && entity.ownerUUID != player.uuid && entity.ownerUUID != null){
-            return InteractionResult.FAIL
-        }
-
-        // if the person interacting is not the owner of one of the parents
-        // TODO maybe a permission node to bypass?
-        if (egg != null && (player.uuid != egg.parent1OwnerUUID.orElse(null) || player.uuid != egg.parent2OwnerUUID.orElse(null))) {
+        // if the player interacting with the incubator is not the owner of the egg or the placer of the egg we do not want them taking the egg or hatching it for themselves
+        val ownerOfEgg = entity.eggPlacerUUID ?: entity.ownerUUID
+        val ownsParent = egg != null && (egg.parent1OwnerUUID.orElse(null) == player.uuid || egg.parent2OwnerUUID.orElse(null) == player.uuid)
+        if (egg != null && ownerOfEgg != null && ownerOfEgg != player.uuid && !ownsParent) {
             return InteractionResult.FAIL
         }
 
