@@ -99,8 +99,8 @@ class Breed(
 
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
-        // path to the nest site with mate until close enough
-        if (entity.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE || mate.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE) {
+        // path to the nest site with mate until close enough (big bois had issues so we are also going to try to make it easier for them)
+        if (entity.position().distanceTo(nestCenter) > closeEnough(entity) || mate.position().distanceTo(nestCenter) > closeEnough(mate)) {
             bringMate(mate, nestCenter, speed)
             return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
@@ -120,7 +120,7 @@ class Breed(
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
         // keep going until both mates are not too far from the nest
-        if (entity.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE || mate.position().distanceTo(nestCenter) > CLOSE_ENOUGH_DISTANCE) {
+        if (entity.position().distanceTo(nestCenter) > closeEnough(entity) || mate.position().distanceTo(nestCenter) > closeEnough(mate)) {
             bringMate(mate, nestCenter, speed)
             return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
@@ -194,11 +194,11 @@ class Breed(
         if (brain.isFixation(fixation))
             return ObjectiveStatus.FIXATED
         // wait for mate to get here
-        if (entity.position().distanceTo(target) <= CLOSE_ENOUGH_DISTANCE)
+        if (entity.position().distanceTo(target) <= closeEnough(entity))
             return ObjectiveStatus.ACTIVE
         if (!brain.distract(comfortDistraction))
             return ObjectiveStatus.BLOCKED
-        val tracker = RegularMovementTracker.attempt(entity, WalkTarget(target, speed, 1)) ?: return ObjectiveStatus.ACTIVE
+        val tracker = RegularMovementTracker.attempt(entity, WalkTarget(target, speed, closeEnough(entity).toInt())) ?: return ObjectiveStatus.ACTIVE
         fixation = brain.fixate(
             LookAndMoveFixation(
                 distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
@@ -213,11 +213,11 @@ class Breed(
     // have the other mates be told where to go
     private fun bringMate(mate: PokemonEntity, target: Vec3, speed: Float) {
         val mateBrain = mate.biggerBrain
-        if (mate.position().distanceTo(target) <= CLOSE_ENOUGH_DISTANCE || mateBrain.isFixation(mateFixation))
+        if (mate.position().distanceTo(target) <= closeEnough(mate) || mateBrain.isFixation(mateFixation))
             return
         if (!mateBrain.distract(comfortDistraction))
             return
-        val tracker = RegularMovementTracker.attempt(mate, WalkTarget(target, speed, 1)) ?: return
+        val tracker = RegularMovementTracker.attempt(mate, WalkTarget(target, speed, closeEnough(mate).toInt())) ?: return
         mateFixation = mateBrain.fixate(
             LookAndMoveFixation(
                 distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
@@ -294,8 +294,11 @@ class Breed(
         }
     }
 
+    // lets help those with more cushion for the pushing reach those nests to breed
+    private fun closeEnough(entity: PokemonEntity) = CLOSE_ENOUGH_DISTANCE + entity.bbWidth / 2
+
     companion object {
-        private const val CLOSE_ENOUGH_DISTANCE = 1.5 // should this be bigger or maybe based on mon hitbox for the large mons? maybe
+        private const val CLOSE_ENOUGH_DISTANCE = 1.5 // we will have this be our baseline and then scale based on hitbox (like above) for the bigger mons
         private val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
     }
 }
