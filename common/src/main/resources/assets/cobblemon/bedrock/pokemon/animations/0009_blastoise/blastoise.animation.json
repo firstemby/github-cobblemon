@@ -456,6 +456,12 @@
 				"cannon_left": {
 					"position": [0, 0, 3]
 				}
+			},
+			"timeline": {
+				"0.25": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.25": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"2.25": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"3.25": "q.run_molang('cobblemon:stepsound_standard_large');"
 			}
 		},
 		"animation.blastoise.ground_run": {

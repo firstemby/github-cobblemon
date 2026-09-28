@@ -6,6 +6,7 @@
   "maleRatio": 0.875,
   "height": 16,
   "weight": 855,
+  "silenceStepSounds": true,
   "pokedex": [
     "cobblemon.species.blastoise.desc"
   ],
