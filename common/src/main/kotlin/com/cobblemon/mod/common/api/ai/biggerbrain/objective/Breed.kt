@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangV
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
+import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.block.WildNestBlock
 import com.cobblemon.mod.common.block.entity.NestBlockEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -53,7 +54,8 @@ import net.minecraft.world.phys.Vec3
 class Breed(
     private val speedMultiplier: Expression = "0.4".asExpression(),
     private val condition: Expression = "true".asExpression(),
-    private val layDurationTicks: Int = 40
+    private val layDurationTicks: Int = 40,
+    private val meetDurationTicks: Int = 100
 ) : Objective {
     private var fixation: EntityFixation? = null
     private var mateFixation: EntityFixation? = null
@@ -76,9 +78,12 @@ class Breed(
         // is breeding disabled from any preset conditions
         if (!mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveBoolean(condition))
             return ObjectiveStatus.INACTIVE
-        // try to get one parent to lead the other one and have the other one not do this stuff
-        if (entity.uuid > mate.uuid)
-            return ObjectiveStatus.INACTIVE
+        // mates need to meet together briefly for a bit (kind of like vanilla mobs)
+        if (!brain.hasMemoryValue(CobblemonMemories.MATES_MET) || !mate.biggerBrain.hasMemoryValue(CobblemonMemories.MATES_MET))
+            return meetMate(entity, brain, mate)
+        // mother (or ditto) goes to lay the egg and the other mate tries to follow along the best they can
+        if (EggGroup.DITTO !in entity.pokemon.form.eggGroups && (EggGroup.DITTO in mate.pokemon.form.eggGroups || CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) != entity.pokemon))
+            return followMate(entity, brain, mate)
 
         val nestPos = brain.getMemory(CobblemonMemories.NEST_LOCATION)
         if (nestPos != null)
@@ -99,10 +104,9 @@ class Breed(
 
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
-        // path to the nest site with mate until close enough (big bois had issues so we are also going to try to make it easier for them)
-        if (entity.position().distanceTo(nestCenter) > closeEnough(entity) || mate.position().distanceTo(nestCenter) > closeEnough(mate)) {
-            bringMate(mate, nestCenter, speed)
-            return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
+        // path to the nest site until close enough (big bois had issues so we are also going to try to make it easier for them)
+        if (entity.position().distanceTo(nestCenter) > closeEnough(entity)) {
+            return walkTo(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
         return layEgg(entity, brain, mate, world, nest, nestPos)
     }
@@ -112,17 +116,16 @@ class Breed(
         // probably should stop trying to build nest if there is an attack target
         if (brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET))
             return ObjectiveStatus.INACTIVE
-        // find out what kinds of nests this couple can make togethr
-        val types = WildNestTypes.combinedTypes(entity, mate)
+        // find out what kinds of nests the mother makes
+        val types = WildNestTypes.typesFor((CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) ?: entity.pokemon).species)
         if (types.isEmpty())
             return ObjectiveStatus.INACTIVE
 
         val nestCenter = Vec3.atCenterOf(nestPos)
         val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
-        // keep going until both mates are not too far from the nest
-        if (entity.position().distanceTo(nestCenter) > closeEnough(entity) || mate.position().distanceTo(nestCenter) > closeEnough(mate)) {
-            bringMate(mate, nestCenter, speed)
-            return walkToNest(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
+        // keep going until the mother is not too far from the nest
+        if (entity.position().distanceTo(nestCenter) > closeEnough(entity)) {
+            return walkTo(entity, brain, nestCenter, speed, "in Breed fixation: going to nest")
         }
 
         // get our nest they are about to build and place it
@@ -167,6 +170,7 @@ class Breed(
             parent.biggerBrain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, nestPos)
             parent.biggerBrain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
             parent.biggerBrain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
+            parent.biggerBrain.eraseMemory(CobblemonMemories.MATES_MET)
 
             // todo do we want to use our own particles? look at this later
             world.sendParticles(
@@ -189,11 +193,32 @@ class Breed(
         return ObjectiveStatus.FIXATED
     }
 
-    // path to the nest location
-    private fun walkToNest(entity: PokemonEntity, brain: BiggerBrain, target: Vec3, speed: Float, description: String): ObjectiveStatus {
+    // walk over to the mate and stay put for a lil bit
+    private fun meetMate(entity: PokemonEntity, brain: BiggerBrain, mate: PokemonEntity): ObjectiveStatus {
+        // stay active while the other mate shows up
+        if (brain.hasMemoryValue(CobblemonMemories.MATES_MET))
+            return ObjectiveStatus.ACTIVE
+        val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
+        if (entity.distanceTo(mate) > closeEnough(entity) + mate.bbWidth / 2)
+            return walkTo(entity, brain, mate.position(), speed, "in Breed fixation: going to mate")
+        if (!brain.distract(comfortDistraction))
+            return ObjectiveStatus.BLOCKED
+        brain.setMemory(CobblemonMemories.MATES_MET, true, MATES_MET_TICKS)
+        fixation = brain.fixate(DurationLockFixation("Breed: staying with mate", meetDurationTicks))
+        return ObjectiveStatus.FIXATED
+    }
+
+    // other mate doess their best to follow along
+    private fun followMate(entity: PokemonEntity, brain: BiggerBrain, mate: PokemonEntity): ObjectiveStatus {
+        val nestPos = mate.biggerBrain.getMemory(CobblemonMemories.NEST_LOCATION) ?: mate.biggerBrain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION) ?: return ObjectiveStatus.INACTIVE
+        val speed = mainThreadRuntime.withQueryValue("entity", entity.asMostSpecificMoLangValue()).resolveFloat(speedMultiplier)
+        return walkTo(entity, brain, Vec3.atCenterOf(nestPos), speed, "in Breed fixation: following mate to nest")
+    }
+
+    // path to target location if able to
+    private fun walkTo(entity: PokemonEntity, brain: BiggerBrain, target: Vec3, speed: Float, description: String): ObjectiveStatus {
         if (brain.isFixation(fixation))
             return ObjectiveStatus.FIXATED
-        // wait for mate to get here
         if (entity.position().distanceTo(target) <= closeEnough(entity))
             return ObjectiveStatus.ACTIVE
         if (!brain.distract(comfortDistraction))
@@ -210,31 +235,14 @@ class Breed(
         return ObjectiveStatus.FIXATED
     }
 
-    // have the other mates be told where to go
-    private fun bringMate(mate: PokemonEntity, target: Vec3, speed: Float) {
-        val mateBrain = mate.biggerBrain
-        if (mate.position().distanceTo(target) <= closeEnough(mate) || mateBrain.isFixation(mateFixation))
-            return
-        if (!mateBrain.distract(comfortDistraction))
-            return
-        val tracker = RegularMovementTracker.attempt(mate, WalkTarget(target, speed, closeEnough(mate).toInt())) ?: return
-        mateFixation = mateBrain.fixate(
-            LookAndMoveFixation(
-                distractionTypes = setOf(DistractionType.DAMAGE, DistractionType.FORCE),
-                description = "Breed: folow mate",
-                lookingTracker = LookingTracker.fromNavigationPathOrWalkTarget(mate, tracker.walkTarget),
-                movementTracker = tracker
-            )
-        )
-    }
-
     // checks for what nests are valid for the mates
     private fun canUseNest(entity: PokemonEntity, mate: PokemonEntity, world: ServerLevel, nest: NestBlockEntity): Boolean {
         val nestType = (nest.blockState.block as? WildNestBlock)?.type ?: return false
         if (!isNestTypeAllowed(nestType, entity, mate))
             return false
+        // the main restricter is if a nest is waterlogged so make sure we can check for that
         val waterlogged = nest.blockState.getOptionalValue(BlockStateProperties.WATERLOGGED).orElse(false)
-        if (!isWaterGroupCompatible(entity, mate, waterlogged))
+        if (waterlogged && "watery" !in (CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) ?: entity.pokemon).species.nestTypes)
             return false
 
         // check if the nest is claimed by other pokemon that exist and maybe on their way to it (CRAB NOTE: This helps prevent swarms of mons going to the same nest which looked weird)
@@ -248,7 +256,7 @@ class Breed(
 
     // make sure the nest type works for the mates and that wild use wild nests and owned pokemon use player placed nests
     private fun isNestTypeAllowed(nestType: WildNestType, entity: PokemonEntity, mate: PokemonEntity): Boolean {
-        val allowed = WildNestTypes.combinedTypes(entity, mate).toMutableSet()
+        val allowed = WildNestTypes.typesFor((CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) ?: entity.pokemon).species).toMutableSet()
         if (!entity.pokemon.isWild() && !mate.pokemon.isWild()) {
             allowed.add(WildNestType.PLAYER)
             allowed.add(WildNestType.KELP)
@@ -258,25 +266,14 @@ class Breed(
         return nestType in allowed
     }
 
-    // waterlogged nests only allow parents that both have a water egg group and land nests dont work for mates that only have water egg groups
-    private fun isWaterGroupCompatible(entity: PokemonEntity, mate: PokemonEntity, nestWaterlogged: Boolean): Boolean {
-        val mate1Groups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val mate2Groups = mate.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val mate1HasWaterGroup = mate1Groups.any { it in WATER_EGG_GROUPS || it == "ditto" }
-        val mate2HasWaterGroup = mate2Groups.any { it in WATER_EGG_GROUPS || it == "ditto" }
-        val mate1OnlyWaterGroup = mate1Groups.all { it in WATER_EGG_GROUPS }
-        val mate2OnlyWaterGroup = mate2Groups.all { it in WATER_EGG_GROUPS }
-
-        return if (nestWaterlogged) mate1HasWaterGroup && mate2HasWaterGroup else !(mate1OnlyWaterGroup || mate2OnlyWaterGroup)
-    }
-
     class Config : ObjectiveConfig {
         val speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val layDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
+        val meetDurationTicks: ExpressionOrEntityVariable = Either.left("100".asExpression())
 
         override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
-            return listOf(speedMultiplier, condition, layDurationTicks).asVariables()
+            return listOf(speedMultiplier, condition, layDurationTicks, meetDurationTicks).asVariables()
         }
 
         override fun create(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): Objective {
@@ -286,21 +283,24 @@ class Breed(
                 CobblemonMemories.PATERNAL_NEST_LOCATION,
                 CobblemonMemories.IDEAL_NEST_LOCATION,
                 CobblemonMemories.EGG_IN_NEST,
+                CobblemonMemories.MATES_MET,
                 MemoryModuleType.ATTACK_TARGET
             )
             return Breed(
                 speedMultiplier = speedMultiplier.asSimplifiedExpression(entity),
                 condition = condition.asSimplifiedExpression(entity),
-                layDurationTicks = layDurationTicks.resolveVariableInt(behaviourConfigurationContext.runtime)
+                layDurationTicks = layDurationTicks.resolveVariableInt(behaviourConfigurationContext.runtime),
+                meetDurationTicks = meetDurationTicks.resolveVariableInt(behaviourConfigurationContext.runtime)
             )
         }
     }
+
 
     // lets help those with more cushion for the pushing reach those nests to breed
     private fun closeEnough(entity: PokemonEntity) = CLOSE_ENOUGH_DISTANCE + entity.bbWidth / 2
 
     companion object {
+        private const val MATES_MET_TICKS = 2400L
         private const val CLOSE_ENOUGH_DISTANCE = 1.5 // we will have this be our baseline and then scale based on hitbox (like above) for the bigger mons
-        private val WATER_EGG_GROUPS = setOf("water_1", "water_2", "water_3")
     }
 }

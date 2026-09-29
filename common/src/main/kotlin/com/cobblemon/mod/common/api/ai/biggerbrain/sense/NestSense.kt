@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
 import com.cobblemon.mod.common.api.ai.resolveInt
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
 import com.cobblemon.mod.common.block.WildNestBlock
@@ -143,8 +144,8 @@ class NestSense(
                 return@firstOrNull false
             }
 
-            // is this nest water group compatible? some of our nests can only be used by water egg grouup mons if they are water logged. reverse for land nests and water egg groups
-            if (!isWaterGroupCompatible(pokemonEntity, mate, isNestWaterlogged)) {
+            // we switched to only if the nest is waterlogged now rather than our old egg group check
+            if (isNestWaterlogged && WildNestType.WATERY !in allowedTypes) {
                 return@firstOrNull false
             }
 
@@ -160,36 +161,9 @@ class NestSense(
         val path = entity.navigation.createPath(targetPos, 0)
         return path != null && path.distToTarget < 1.75f
     }
-
-    private fun isWaterGroupCompatible(
-        entity: PokemonEntity,
-        mate: PokemonEntity?,
-        isNestWaterlogged: Boolean
-    ): Boolean {
-        val waterEggGroups = setOf("water_1", "water_2", "water_3")
-        val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val entityHasWater = entityEggGroups.any { it in waterEggGroups || it == "ditto" }
-        val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
-
-        val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
-        val mateHasWater = mateEggGroups.any { it in waterEggGroups || it == "ditto" }
-        val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
-
-        return if (isNestWaterlogged) {
-            entityHasWater && mateHasWater
-        } else {
-            !(entityOnlyWater || mateOnlyWater)
-        }
-    }
-
     private fun allowedNestTypes(entity: PokemonEntity, brain: BiggerBrain): Set<WildNestType> {
         val mate = brain.getMemory(CobblemonMemories.POTENTIAL_MATE) as? PokemonEntity
-        val types = if (mate != null) {
-            WildNestTypes.combinedTypes(entity, mate)
-        } else {
-            WildNestTypes.typesFor(entity.pokemon.species)
-        }
-        val mutable = types.toMutableSet()
+        val mutable = WildNestTypes.typesFor((mate?.let { CobblemonBreeding.getMother(entity.pokemon, it.pokemon, isSimulated = true) } ?: entity.pokemon).species).toMutableSet()
         if (!entity.pokemon.isWild() && mate != null && !mate.pokemon.isWild()) {
             mutable.add(WildNestType.PLAYER)
             mutable.add(WildNestType.KELP)

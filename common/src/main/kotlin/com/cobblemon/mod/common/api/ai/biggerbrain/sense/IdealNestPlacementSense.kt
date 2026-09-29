@@ -15,8 +15,10 @@ import com.cobblemon.mod.common.api.ai.asVariables
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.ai.config.sense.SenseConfig
+import com.cobblemon.mod.common.api.breeding.CobblemonBreeding
 import com.cobblemon.mod.common.api.nest.WildNestType
 import com.cobblemon.mod.common.api.nest.WildNestTypes
+import com.cobblemon.mod.common.api.pokemon.egg.EggGroup
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.asExpression
 import com.mojang.datafixers.util.Either
@@ -59,9 +61,11 @@ class IdealNestPlacementSense(
         val world = entity.level() as? ServerLevel ?: return
 
         val mate = brain.getMemory(CobblemonMemories.POTENTIAL_MATE) as? PokemonEntity
-        val combinedTypes = mate?.let { WildNestTypes.combinedTypes(entity, it) } ?: emptyList()
-        if (mate == null || combinedTypes.isEmpty()) {
-            debug(brain, "No mate or no combined nest types; clearing ideal nest memories.")
+        // we are changing things a bit and making it so only the one laying the egg (mother or ditto) needs to plan where the nest goes
+        if (mate != null && EggGroup.DITTO !in entity.pokemon.form.eggGroups && (EggGroup.DITTO in mate.pokemon.form.eggGroups || CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) != entity.pokemon)) return
+        val nestTypes = if (mate != null) WildNestTypes.typesFor((CobblemonBreeding.getMother(entity.pokemon, mate.pokemon, isSimulated = true) ?: entity.pokemon).species) else emptyList()
+        if (mate == null || nestTypes.isEmpty()) {
+            debug(brain, "No mate or no nest types; clearing ideal nest memories.")
             brain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
             mate?.biggerBrain?.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
             return
@@ -69,7 +73,7 @@ class IdealNestPlacementSense(
 
         val storedNestPos = brain.getMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
         if (storedNestPos != null) {
-            if (isValidNestPlacement(world, entity, mate, storedNestPos, combinedTypes)) {
+            if (isValidNestPlacement(world, entity, mate, storedNestPos, nestTypes)) {
                 debug(brain, "Stored ideal nest still valid at $storedNestPos.")
                 mate.biggerBrain.setMemory(CobblemonMemories.IDEAL_NEST_LOCATION, storedNestPos)
                 return
@@ -81,7 +85,7 @@ class IdealNestPlacementSense(
         }
 
         val entityPos = entity.blockPosition()
-        val validNestPosition = findValidNestPlacement(world, entity, mate, entityPos, combinedTypes)
+        val validNestPosition = findValidNestPlacement(world, entity, mate, entityPos, nestTypes)
 
         if (validNestPosition != null) {
             debug(brain, "Found ideal nest position at $validNestPosition.")
@@ -105,7 +109,7 @@ class IdealNestPlacementSense(
             val blockAbove2 = world.getBlockState(nestPos.above()).block
             val placement = WildNestTypes.resolvePlacement(sharedTypes, blockBelowState, world.getFluidState(nestPos)) ?: return@firstOrNull false
 
-            if (!isWaterGroupCompatible(entity, mate, placement.waterlogged)) return@firstOrNull false
+            if (placement.waterlogged && WildNestType.WATERY !in sharedTypes) return@firstOrNull false
 
             if (placement.waterlogged) {
                 if (!(blockAbove == Blocks.WATER && blockAbove2 == Blocks.WATER)) return@firstOrNull false
@@ -128,7 +132,7 @@ class IdealNestPlacementSense(
         val blockAbove2 = world.getBlockState(pos.above(2)).block
         val placement = WildNestTypes.resolvePlacement(sharedTypes, blockBelowState, world.getFluidState(pos)) ?: return false
 
-        if (!isWaterGroupCompatible(entity, mate, placement.waterlogged)) return false
+        if (placement.waterlogged && WildNestType.WATERY !in sharedTypes) return false
 
         if (placement.waterlogged) {
             if (!(blockAbove == Blocks.WATER && blockAbove2 == Blocks.WATER)) return false
@@ -155,27 +159,6 @@ class IdealNestPlacementSense(
             pos.offset(minNestDistance, minNestDistance, minNestDistance)
         ).any { checkPos ->
             world.getBlockEntity(checkPos) is com.cobblemon.mod.common.block.entity.NestBlockEntity
-        }
-    }
-
-    private fun isWaterGroupCompatible(
-        entity: PokemonEntity,
-        mate: PokemonEntity?,
-        isNestWaterlogged: Boolean
-    ): Boolean {
-        val waterEggGroups = setOf("water_1", "water_2", "water_3")
-        val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val entityHasWater = entityEggGroups.any { it in waterEggGroups || it == "ditto" }
-        val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
-
-        val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
-        val mateHasWater = mateEggGroups.any { it in waterEggGroups || it == "ditto" }
-        val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
-
-        return if (isNestWaterlogged) {
-            entityHasWater && mateHasWater
-        } else {
-            !(entityOnlyWater || mateOnlyWater)
         }
     }
 

@@ -45,6 +45,8 @@ object CobblemonMemories {
     @JvmField
     val MATE_SCAN_COOLDOWN = register("mate_scan_cooldown", PrimitiveCodec.BOOL)
     @JvmField
+    val MATES_MET = register("mates_met", PrimitiveCodec.BOOL)
+    @JvmField
     val NEST_LOCATION = register<BlockPos>("nest_location")
     @JvmField
     val PATERNAL_NEST_LOCATION = register<BlockPos>("paternal_nest", BlockPos.CODEC)
