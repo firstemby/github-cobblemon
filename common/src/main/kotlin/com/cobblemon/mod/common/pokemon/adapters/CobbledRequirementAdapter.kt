@@ -36,6 +36,8 @@ import kotlin.reflect.KClass
 object CobblemonRequirementAdapter : RequirementAdapter {
 
     private const val VARIANT = "variant"
+    private const val POKEDEX_ICON = "pokedexIcon"
+    private const val POKEDEX_TOOLTIP = "pokedexTooltip"
 
     private val types = HashBiMap.create<String, KClass<out Requirement>>()
 
@@ -90,15 +92,26 @@ object CobblemonRequirementAdapter : RequirementAdapter {
     }
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Requirement {
-        val variant = json.asJsonObject.get(VARIANT).asString.lowercase()
+        val obj = json.asJsonObject
+        val variant = obj.get(VARIANT).asString.lowercase()
         val type = getRequirementType(variant)
-        return context.deserialize(json, type.java)
+        val requirement = context.deserialize<Requirement>(json, type.java)
+
+        obj.get(POKEDEX_ICON)?.takeIf { !it.isJsonNull }
+            ?.let { context.deserialize<ResourceLocation>(it, ResourceLocation::class.java) }
+            ?.let { Requirement.pokedexIconOverrides[requirement] = it }
+        obj.get(POKEDEX_TOOLTIP)?.takeIf { !it.isJsonNull }?.asString
+            ?.let { Requirement.pokedexTooltipOverrides[requirement] = it }
+
+        return requirement
     }
 
     override fun serialize(requirement: Requirement, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val json = context.serialize(requirement, requirement::class.java).asJsonObject
         val variant = getVariant(requirement)
         json.addProperty(VARIANT, variant)
+        Requirement.pokedexIconOverrides[requirement]?.let { json.add(POKEDEX_ICON, context.serialize(it, ResourceLocation::class.java)) }
+        Requirement.pokedexTooltipOverrides[requirement]?.let { json.addProperty(POKEDEX_TOOLTIP, it) }
         return json
     }
 

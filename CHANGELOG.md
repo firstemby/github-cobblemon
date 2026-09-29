@@ -2,6 +2,9 @@
 ## [1.8.2 (MONTH xth, 2026)](#1-8-2)
 
 ### Additions
+- The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
+
+### New rideable Pokémon
 - The following items can now be placed on the ground as blocks:
   - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
   - Iron Ball, Metal Coat, Throat Spray, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
@@ -111,6 +114,14 @@
 - Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
 
 ### Developer
+- Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
+  ```json
+  {
+    "variant": "attack_defence_ratio",
+    "pokedexIcon": "minecraft:diamond_sword",
+    "pokedexTooltip": "cobblemon.ui.pokedex.requirement.attack_defence_ratio.tooltip"
+  }
+  ```
 - Fixed wrong order of operations in the code flow prior to the `FOSSIL_REVIVED` event causing pokemon to appear without entity link
 - Fixed TestPartySlot command not correctly comparing the provided spec with the target Pokémon
 
