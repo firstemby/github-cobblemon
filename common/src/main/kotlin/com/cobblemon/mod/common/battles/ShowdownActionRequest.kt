@@ -26,7 +26,9 @@ class ShowdownActionRequest(
     var active: MutableList<ShowdownMoveset>? = null,
     var forceSwitch: List<Boolean> = emptyList(),
     var noCancel: Boolean = false,
-    var side: ShowdownSide? = null
+    var side: ShowdownSide? = null,
+    var teamPreview: Boolean = false,
+    var rqid: Int = 0
 ) {
     fun <T, E : Targetable> iterate(activePokemon: List<E>, iterator: (E, ShowdownMoveset?, forceSwitch: Boolean) -> T): List<T> {
         val size = max(active?.size ?: 0, forceSwitch.size)
@@ -365,19 +367,24 @@ class ShowdownMoveset {
     }.toList() else listOf() // keep this immutable
 
     /** Map each [InBattleMove] to their respective [InBattleGimmickMove] variant. */
-    fun setGimmickMapping() = (canZMove ?: maxMoves)?.let { gimmickMoves ->
-        moves.forEachIndexed { index, move -> move.gimmickMove = gimmickMoves[index] }
+    fun setGimmickMapping() {
+        val gimmickMoves = canZMove ?: maxMoves
+        moves.forEachIndexed { index, move -> move.gimmickMove = gimmickMoves?.get(index) }
     }
 
     /** Sanitize Moveset by disabling gimmick. */
     fun blockGimmick(gimmick: Gimmick) {
         when (gimmick) {
             Gimmick.MEGA_EVOLUTION -> this.canMegaEvo = false
-            Gimmick.DYNAMAX -> this.canDynamax = false
+            Gimmick.DYNAMAX -> {
+                if (canDynamax) maxMoves = null
+                canDynamax = false
+            }
             Gimmick.ULTRA_BURST -> this.canUltraBurst = false
             Gimmick.Z_POWER -> this.canZMove = null
             else -> this.canTerastallize = null
         }
+        setGimmickMapping()
     }
 }
 class ShowdownSide {

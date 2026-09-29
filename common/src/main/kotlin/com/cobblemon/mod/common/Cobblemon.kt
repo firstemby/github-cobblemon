@@ -8,6 +8,11 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.api.cinematic.registry.SceneBuiltinSources
+import com.cobblemon.mod.common.net.serverhandling.editor.EditorPreviewSessionRegistry
+import com.cobblemon.mod.common.api.cinematic.runtime.CinematicManager
+import com.cobblemon.mod.common.api.molangui.MolangUiService
+
 import com.cobblemon.mod.common.CobblemonBuildDetails.smallCommitHash
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.SeasonResolver
@@ -76,6 +81,8 @@ import com.cobblemon.mod.common.battles.BattleSide
 import com.cobblemon.mod.common.battles.ShowdownThread
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
+import com.cobblemon.mod.common.battles.stadium.StadiumSpectating
 import com.cobblemon.mod.common.block.dispenser.DispenserBehaviorRegistry
 import com.cobblemon.mod.common.client.CobblemonPack
 import com.cobblemon.mod.common.command.argument.*
@@ -259,6 +266,9 @@ object Cobblemon {
             playerDataManager.onPlayerDisconnect(it.player)
             RequestManager.onLogoff(it.player)
             serverPlayerStructs.remove(it.player.uuid)
+            MolangUiService.closeAllForPlayer(it.player.uuid)
+            CinematicManager.onPlayerDisconnect(it.player.uuid)
+            EditorPreviewSessionRegistry.onPlayerDisconnect(it.player.uuid)
         }
         PlatformEvents.PLAYER_DEATH.subscribe {
             PCLinkManager.removeLink(it.player.uuid)
@@ -300,6 +310,7 @@ object Cobblemon {
 
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
     }
+
 
     fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
         ServerSettingsPacket(
@@ -352,6 +363,8 @@ object Cobblemon {
         CustomPokemonProperty.register(FreezeFrameProperty)
         CustomPokemonProperty.register(NoAIProperty)
         CustomPokemonProperty.register(HeldItemVisibleProperty)
+
+        SceneBuiltinSources.register()
 
         CobblemonEvents.POKEMON_PROPERTY_INITIALISED.emit(Unit)
 
@@ -449,7 +462,14 @@ object Cobblemon {
             )
         }
 
+        PlatformEvents.SERVER_STOPPING.subscribe {
+            StadiumSpectating.clear()
+            // Release temporary actor AI/gravity settings before the final world save.
+            CinematicManager.clear()
+        }
         PlatformEvents.SERVER_STOPPED.subscribe {
+            StadiumBattleRegistry.clearDynamic()
+            MolangUiService.closeAll()
             storage.unregisterAll(it.server.registryAccess())
             playerDataManager.saveAllStores()
             playerDataManager.saveExecutor.shutdown()

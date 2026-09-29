@@ -10,6 +10,9 @@ package com.cobblemon.mod.common.net.serverhandling.battle
 
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.battles.BattleRegistry
+import com.cobblemon.mod.common.battles.stadium.StadiumSpectating
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+import com.cobblemon.mod.common.net.messages.client.battle.BattleEndPacket
 import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
@@ -20,7 +23,7 @@ object RemoveSpectatorHandler : ServerNetworkPacketHandler<RemoveSpectatorPacket
         server: MinecraftServer,
         player: ServerPlayer
     ) {
-        BattleRegistry.getBattle(packet.battleId)?.spectators?.remove(player.uuid)
+        if (StadiumSpectating.leaveBattle(player, packet.battleId)) return
+        if (BattleRegistry.getBattle(packet.battleId)?.spectators?.remove(player.uuid) == true) player.sendPacket(BattleEndPacket())
     }
-
 }

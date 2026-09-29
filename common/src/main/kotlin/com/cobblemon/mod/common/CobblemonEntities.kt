@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.entity.boat.CobblemonBoatEntity
 import com.cobblemon.mod.common.entity.boat.CobblemonChestBoatEntity
 import com.cobblemon.mod.common.entity.fishing.PokeRodFishingBobberEntity
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
+import com.cobblemon.mod.common.entity.stadium.StadiumCameraDroneEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -80,6 +81,12 @@ object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey
 
     @JvmField
     val GENERIC_BEDROCK_ENTITY_KEY = cobblemonResource("generic_bedrock")
+    @JvmField
+    val STADIUM_CAMERA_DRONE: EntityType<StadiumCameraDroneEntity> = this.create(
+        "stadium_camera_drone",
+        EntityType.Builder.of(::StadiumCameraDroneEntity, MobCategory.MISC)
+            .build(cobblemonResource("stadium_camera_drone").toString())
+    )
     @JvmField
     val GENERIC_BEDROCK_ENTITY: EntityType<GenericBedrockEntity> = this.create(
         GENERIC_BEDROCK_ENTITY_KEY.path,

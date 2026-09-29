@@ -31,6 +31,7 @@ repositories {
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.neoforged.net/releases")
     maven(url = "https://maven.gegy.dev")
+    mavenCentral()
     mavenLocal()
 }
 
@@ -38,6 +39,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     modImplementation(libs.fabric.loader)
     modApi(libs.molang)
+
 
     // Integrations
     compileOnlyApi(libs.jei.api)
@@ -61,14 +63,19 @@ dependencies {
 
     // Unit Testing
     testImplementation(libs.bundles.unitTesting)
+    testImplementation(libs.graal.sdk)
+    testRuntimeOnly(libs.bundles.graal)
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    // Static GL mocks must not load a graphics driver on headless CI.
+    systemProperty("org.lwjgl.opengl.explicitInit", "true")
     testLogging {
         setEvents(listOf("failed"))
         setExceptionFormat("full")
     }
+    System.getProperty("camera.benchmark")?.let { systemProperty("camera.benchmark", it) }
 }
 
 // Git info lives in its own output dir (not processResources) so a new commit only rewrites this one file.

@@ -11,6 +11,8 @@ package com.cobblemon.mod.common.battles.runner
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.battles.runner.graal.GraalShowdownService
 import com.cobblemon.mod.common.battles.runner.socket.SocketShowdownService
+import com.cobblemon.mod.common.battles.ShowdownInterpreter
+import com.cobblemon.mod.common.battles.stadium.StadiumShowdownProtocol
 import com.google.gson.JsonArray
 import java.util.UUID
 
@@ -27,7 +29,12 @@ interface ShowdownService {
     fun openConnection()
     fun closeConnection()
     fun startBattle(battle: PokemonBattle, messages: Array<String>)
+    fun getStadiumCapabilities(): StadiumShowdownProtocol.Capabilities
+    fun validateStadiumBattle(request: String): StadiumShowdownProtocol.Result
+    fun startStadiumBattle(battle: PokemonBattle, request: String): StadiumShowdownProtocol.Result
     fun endBattle(battle: PokemonBattle)
+    fun sendStadiumChoice(battleId: UUID, request: String): StadiumShowdownProtocol.Result
+    fun resolveStadiumTimeout(battleId: UUID, request: String): StadiumShowdownProtocol.Result
     fun send(battleId: UUID, messages: Array<String>)
     fun getRegistryData(type: String): JsonArray
     fun sendRegistryData(data: Map<String, String>, type: String)
@@ -37,6 +44,7 @@ interface ShowdownService {
     fun indicateSpeciesInitialized() {}
 
     companion object {
+        val stadiumOutput = StadiumOutputGate { id, message -> ShowdownInterpreter.interpretMessage(id, message) }
         val service: ShowdownService by lazy { GraalShowdownService() }
     }
 }

@@ -32,6 +32,8 @@ lambDynamicLights = "4.1.6+1.21.1"
 debugutils-fabric = "1.21.1-1.0.9-fabric"
 mod-menu = "11.0.3"
 c2me-fabric = "0.3.0+alpha.0.320+1.21.1"
+sodium-fabric = "mc1.21.1-0.6.13-fabric"
+iris-fabric = "1.8.8+1.21.1-fabric"
 
 # NeoForge
 neoforge = "21.1.182"
@@ -85,6 +87,8 @@ jei-fabric = { group = "mezz.jei", name = "jei-1.21.1-fabric", version.ref = "je
 fabric-debugutils = { group = "maven.modrinth", name = "debugutils", version.ref = "debugutils-fabric"}
 mod-menu = { group = "com.terraformersmc", name = "modmenu", version.ref = "mod-menu" }
 c2me-fabric = { group = "maven.modrinth", name = "c2me-fabric", version.ref = "c2me-fabric" }
+sodium-fabric = { group = "maven.modrinth", name = "sodium", version.ref = "sodium-fabric" }
+iris-fabric = { group = "maven.modrinth", name = "iris", version.ref = "iris-fabric" }
 
 # NeoForge
 neoforge-api = { group = "net.neoforged", name = "neoforge", version.ref = "neoforge" }
@@ -108,8 +112,9 @@ classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref 
 kotlin = [ "kotlin-stdlib", "kotlin-reflect" ]
 fabric = [ "fabric-kotlin", "fabric-permissions" ]
 common-integrations-compileOnly = [ "adorn-fabric", "jei-api" ]
-fabric-integrations-implementation = [ "mod-menu" ]
-fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric" ]
+fabric-integrations-compileOnly = [ "iris-fabric" ]
+fabric-integrations-implementation = [ "mod-menu", "sodium-fabric"]
+fabric-integrations-runtimeOnly = [ "jei-fabric", "c2me-fabric", "iris-fabric" ]
 neoforge-integrations-runtimeOnly = [ "jei-neoforge", "c2me-neoforge" ]
 mongo = [ "mongo-driver-core", "mongo-driver-sync" ]
 unitTesting = [ "junit-fabric", "junit-params", "mockito-core", "mock-kotlin", "classgraph" ]

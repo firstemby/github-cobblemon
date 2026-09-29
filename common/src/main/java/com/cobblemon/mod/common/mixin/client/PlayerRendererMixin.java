@@ -8,11 +8,14 @@
 
 package com.cobblemon.mod.common.mixin.client;
 
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.client.render.ClientPlayerIcon;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,9 +34,32 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractC
         super(context, model, shadowRadius);
     }
 
+    @WrapOperation(
+            method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/CameraType;isFirstPerson()Z"
+            )
+    )
+    private boolean cobblemon$allowBodyRenderInCinematic(CameraType instance, Operation<Boolean> original) {
+        if (ClientCameraController.shouldUseCinematicCamera() && ClientCameraController.shouldRenderPlayerBody()) {
+            return false;
+        }
+        return original.call(instance);
+    }
+
     @Inject(method = "render", at = @At(value = "TAIL"))
     public void renderPlayer(AbstractClientPlayer player, float f, float g, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
         ClientPlayerIcon.Companion.onRenderPlayer(player);
+    }
+
+    @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$hideCinematicPlayer(AbstractClientPlayer player, float yaw, float partialTick, PoseStack poseStack, MultiBufferSource buffers, int light, CallbackInfo ci) {
+        if (player != Minecraft.getInstance().player) return;
+        if (ClientCameraController.shouldUseCinematicCamera() && !ClientCameraController.shouldRenderPlayerBody()) {
+            ci.cancel();
+            return;
+        }
     }
 
     @WrapOperation(method = "getRenderOffset(Lnet/minecraft/client/player/AbstractClientPlayer;F)Lnet/minecraft/world/phys/Vec3;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isCrouching()Z"))

@@ -1,0 +1,12 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "overlay",
+  "parameters": {
+    "player_name": { "type": "string" },
+    "opponent_name": { "type": "string" },
+    "player_party_count": { "type": "number" },
+    "opponent_party_count": { "type": "number" }
+  },
+  "actions": {}
+}

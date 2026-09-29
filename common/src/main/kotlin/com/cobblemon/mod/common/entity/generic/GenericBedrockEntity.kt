@@ -36,8 +36,12 @@ import net.minecraft.server.level.ServerEntity
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.level.Level
+import net.minecraft.world.entity.EntityType
 
-class GenericBedrockEntity(world: Level) : Entity(CobblemonEntities.GENERIC_BEDROCK_ENTITY, world), PosableEntity, Schedulable {
+open class GenericBedrockEntity @JvmOverloads constructor(
+    world: Level,
+    type: EntityType<out GenericBedrockEntity> = CobblemonEntities.GENERIC_BEDROCK_ENTITY
+) : Entity(type, world), PosableEntity, Schedulable {
     companion object {
         val CATEGORY = SynchedEntityData.defineId(GenericBedrockEntity::class.java, IdentifierDataSerializer)
         val ASPECTS = SynchedEntityData.defineId(GenericBedrockEntity::class.java, StringSetDataSerializer)

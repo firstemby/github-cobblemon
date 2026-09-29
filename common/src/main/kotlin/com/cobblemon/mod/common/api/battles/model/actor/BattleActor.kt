@@ -24,8 +24,9 @@ import com.cobblemon.mod.common.net.messages.client.battle.BattleMakeChoicePacke
 import com.cobblemon.mod.common.net.messages.client.battle.BattleMessagePacket
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.phys.Vec3
+import java.util.UUID
 
 abstract class BattleActor(
     val uuid: UUID,
@@ -52,6 +53,8 @@ abstract class BattleActor(
     var itemsUsed = mutableListOf<BagItem>()
     /** For when battles start, it's the number of Pokémon that are still in the process of being sent out (animation wise) */
     var stillSendingOutCount = 0
+    /** Positions follow active slot order: slot a is index 0. */
+    var stadiumSendOutPositions: List<Vec3>? = null
 
     abstract val type: ActorType
 
@@ -71,21 +74,31 @@ abstract class BattleActor(
     open fun isForPlayer(serverPlayerEntity: ServerPlayer) = serverPlayerEntity.uuid in getPlayerUUIDs()
     open fun isForPokemon(pokemonEntity: PokemonEntity) = activePokemon.any { it.battlePokemon?.effectedPokemon?.entity == pokemonEntity }
 
-  fun turn() {
-        val request = request ?: return
-        responses.clear()
-        if (activePokemon.any { it.isAlive() }) {
-            mustChoose = true
-            sendUpdate(BattleMakeChoicePacket())
-        }
-
-
-        val requestActive = request.active
-        if (requestActive == null || requestActive.isEmpty() || request.wait) {
-            this.request = null
+    /** Prepare every actor before notifying any AI, since synchronous choices can dispatch immediately. */
+    fun prepareTurn() {
+        mustChoose = false
+        val req = request ?: run {
+            responses.clear()
             expectingPassActions.clear()
             return
         }
+        responses.clear()
+        if (activePokemon.any { it.isAlive() }) {
+            mustChoose = true
+        }
+        val requestActive = req.active
+        if (req.wait || (requestActive.isNullOrEmpty() && req.forceSwitch.none { it })) {
+            this.request = null
+            expectingPassActions.clear()
+            mustChoose = false
+        } else if (req.forceSwitch.any { it }) {
+            mustChoose = true
+        }
+    }
+
+    /** Call only after every actor has been prepared for this turn. */
+    fun fireChoiceRequest() {
+        if (mustChoose) sendUpdate(BattleMakeChoicePacket())
     }
 
     fun postUpdate() {

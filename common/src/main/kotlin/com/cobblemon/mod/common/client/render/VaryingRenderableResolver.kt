@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.util.toRGBA
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import com.mojang.blaze3d.platform.NativeImage
+import com.mojang.blaze3d.vertex.VertexConsumer
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import kotlin.math.floor
@@ -132,8 +133,12 @@ class VaryingRenderableResolver(
     }
 
     fun getTexture(state: PosableState): ResourceLocation {
+        return getTextureSupplier(state)(state)
+    }
+
+    fun getTextureSupplier(state: PosableState): ModelTextureSupplier {
         repository.posers[getResolvedPoser(state)] ?: throw IllegalStateException("No poser for $name")
-        return getResolvedTexture(state)
+        return getVariationValue(state) { texture } ?: throw IllegalStateException("No texture for $name")
     }
 
     fun getLayers(state: PosableState): Iterable<ModelLayer> {
@@ -189,6 +194,8 @@ class ModelAssetVariation(
  */
 fun interface ModelTextureSupplier {
     operator fun invoke(state: PosableState): ResourceLocation
+
+    fun vertexConsumer(state: PosableState, vertices: VertexConsumer): VertexConsumer = vertices
 }
 
 class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {

@@ -13,14 +13,13 @@ import com.cobblemon.mod.common.client.render.models.blockbench.generic.PosableG
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.entity.EntityRenderer
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
 
-class GenericBedrockRenderer(context: EntityRendererProvider.Context) : EntityRenderer<GenericBedrockEntity>(context) {
+open class GenericBedrockRenderer(context: EntityRendererProvider.Context) : EntityRenderer<GenericBedrockEntity>(context) {
     val model = PosableGenericEntityModel()
     override fun getTextureLocation(entity: GenericBedrockEntity) = VaryingModelRepository.getTexture(entity.category, (entity.delegate as GenericBedrockClientDelegate))
     override fun render(entity: GenericBedrockEntity, yaw: Float, partialTicks: Float, poseStack: PoseStack, buffer: MultiBufferSource, packedLight: Int) {
@@ -35,12 +34,11 @@ class GenericBedrockRenderer(context: EntityRendererProvider.Context) : EntityRe
         model.context = this.model.context
         this.model.setupEntityTypeContext(entity)
         poseStack.pushPose()
-        poseStack.scale(1.0F, -1.0F, 1.0F)
-        poseStack.scale(entity.scale, entity.scale, entity.scale)
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw))
-        val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(getTextureLocation(entity)))
-
+        applyTransform(entity, yaw, partialTicks, poseStack)
         state.updatePartialTicks(partialTicks)
+        val texture = VaryingModelRepository.getTextureSupplier(entity.category, state)
+        val vertices = buffer.getBuffer(RenderType.entityCutout(texture(state)))
+        val vertexConsumer = texture.vertexConsumer(state, vertices)
         model.setLayerContext(buffer, state, VaryingModelRepository.getLayers(entity.category, state))
         this.model.setupAnim(entity, 0f, 0f, entity.tickCount + partialTicks, 0F, 0F)
         this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
@@ -53,5 +51,9 @@ class GenericBedrockRenderer(context: EntityRendererProvider.Context) : EntityRe
 
         poseStack.popPose()
         super.render(entity, yaw, partialTicks, poseStack, buffer, packedLight)
+    }
+
+    protected open fun applyTransform(entity: GenericBedrockEntity, yaw: Float, partialTicks: Float, poseStack: PoseStack) {
+        BedrockEntityTransform.apply(poseStack, yaw, entity.scale)
     }
 }

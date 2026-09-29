@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.OrientationControllable;
+import com.cobblemon.mod.common.client.camera.ClientCameraController;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemInHandRendererMixin {
     @Inject(method = "renderArmWithItem", at = @At(value = "HEAD"), cancellable = true)
     private void cobblemon$renderArmWithItem(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci) {
+        if (ClientCameraController.shouldUseCinematicCamera()) {
+            ci.cancel();
+            return;
+        }
+
         if (abstractClientPlayer.isUsingItem() && abstractClientPlayer.getUseItem().getItem() instanceof PokedexItem) {
             ci.cancel();
         }

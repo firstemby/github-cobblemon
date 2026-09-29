@@ -71,6 +71,8 @@ object CobblemonPermissions {
 
     @JvmStatic
     val STOP_BATTLE = this.create("${COMMAND_PREFIX}stopbattle", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
+    @JvmStatic
+    val STADIUM_BATTLE = this.create("${COMMAND_PREFIX}stadiumbattle", PermissionLevel.CHEAT_COMMANDS_AND_COMMAND_BLOCKS)
 
 
     @JvmStatic

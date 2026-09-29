@@ -244,11 +244,13 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
 
-        if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
-            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
-        }
-        else {
-            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+        // Manually driven poses own their movement flag as well as their animation.
+        if (entity.enablePoseTypeRecalculation) {
+            if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
+                entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
+            } else {
+                entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+            }
         }
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)

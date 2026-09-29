@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.MoveCameraTimelines
 import com.cobblemon.mod.common.api.moves.animations.ActionEffectTimeline
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
 import com.cobblemon.mod.common.api.moves.animations.TargetsProvider
@@ -179,6 +180,19 @@ class MoveInstruction(
             this.future = actionEffect.run(context)
             holds = context.holds // Reference so future things can check on this action effect's holds
             future.thenApply { holds.clear() }
+
+            val moveId = move.name.asIdentifierDefaultingNamespace()
+            val cameraTimeline = MoveCameraTimelines.getCameraTimeline(moveId)
+            if (cameraTimeline != null) {
+                val cameraContext = ActionEffectContext(
+                    actionEffect = cameraTimeline,
+                    runtime = runtime,
+                    providers = providers,
+                    level = battle.players.firstOrNull()?.level()
+                )
+                cameraTimeline.run(cameraContext)
+            }
+
             return@dispatch UntilDispatch { "effects" !in holds }.andThen {
                 val userPokemonId = userPokemon.entity?.uuid ?: return@andThen
                 val targets = hurtTargets.mapNotNull { it.entity }

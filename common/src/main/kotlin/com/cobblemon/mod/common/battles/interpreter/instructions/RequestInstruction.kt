@@ -27,13 +27,12 @@ class RequestInstruction(val battleActor: BattleActor, val message: BattleMessag
     override fun invoke(battle: PokemonBattle) {
         battle.log("Request Instruction")
 
-        if (message.rawMessage.contains("teamPreview")) // TODO probably change when we're allowing team preview
-            return
-
         // Parse Json message and update state info for actor
         val request = BattleRegistry.gson.fromJson(message.rawMessage.split("|request|")[1], ShowdownActionRequest::class.java)
         request.sanitize(battle, battleActor)
         battle.dispatchGo {
+            battle.stadiumSession?.request(battleActor, request)
+            if (request.teamPreview || battle.ended) return@dispatchGo
             // This request won't be acted on until the start of next turn or post-`update` if there's a force switch
             battleActor.sendUpdate(BattleQueueRequestPacket(request))
             battleActor.request = request

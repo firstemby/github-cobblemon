@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.battle
 
+import org.lwjgl.glfw.GLFW
+
 import com.cobblemon.mod.common.battles.PassActionResponse
 import com.cobblemon.mod.common.battles.ShowdownActionResponse
 import com.cobblemon.mod.common.client.CobblemonClient
@@ -22,6 +24,8 @@ import com.cobblemon.mod.common.client.gui.battle.subscreen.ForfeitConfirmationS
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleMessagePane
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
+import com.cobblemon.mod.common.client.keybind.keybinds.StadiumSpectateBinding
+import com.cobblemon.mod.common.client.net.stadium.StadiumSpectateStateHandler
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
 import com.cobblemon.mod.common.util.battleLang
@@ -188,12 +192,20 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (StadiumSpectateStateHandler.watching && StadiumSpectateBinding.matchesMouse(button)) {
+            StadiumSpectateStateHandler.toggle()
+            return true
+        }
         if (button == PartySendBinding.boundKey().value && CobblemonClient.battleOverlay.opacity == BattleOverlay.MAX_OPACITY && PartySendBinding.canAction()) {
             return minimizeBattle()
         }
 
         val battle = CobblemonClient.battle
         if (battle?.spectating == true && specBackButton.isHovered(mouseX, mouseY)) {
+            if (StadiumSpectateStateHandler.watching) {
+                StadiumSpectateStateHandler.toggle()
+                return true
+            }
             RemoveSpectatorPacket(battle.battleId).sendToServer()
             CobblemonClient.endBattle()
         }
@@ -205,5 +217,13 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         battle.minimised = !battle.minimised
         PartySendBinding.actioned()
         return true
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (StadiumSpectateStateHandler.watching && (keyCode == GLFW.GLFW_KEY_ESCAPE || StadiumSpectateBinding.matches(keyCode, scanCode))) {
+            StadiumSpectateStateHandler.toggle()
+            return true
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers)
     }
 }

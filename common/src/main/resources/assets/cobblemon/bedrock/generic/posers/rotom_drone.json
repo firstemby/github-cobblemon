@@ -1,0 +1,17 @@
+{
+  "rootBone": "rotom_drone",
+  "poses": {
+    "flying": {
+      "poseName": "flying",
+      "transformTicks": 0,
+      "poseTypes": ["NONE"],
+      "animations": [],
+      "transformedParts": [
+        { "part": "rotom_drone2", "isVisible": "0" },
+        { "part": "mouth_closed", "isVisible": "0" },
+        { "part": "mouth_open", "isVisible": "0" },
+        { "part": "mouth_sad", "isVisible": "0" }
+      ]
+    }
+  }
+}

@@ -29,6 +29,9 @@ import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.moves.animations.MoveCameraTimelines
+import com.cobblemon.mod.common.api.molangui.MolangUiContractRegistry
+import com.cobblemon.mod.common.api.molangui.MolangUiService
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.NPCPresets
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -46,6 +49,8 @@ import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.SpawnDetailPresets
 import com.cobblemon.mod.common.api.tms.TechnicalMachines
 import com.cobblemon.mod.common.battles.BagItems
+import com.cobblemon.mod.common.api.cinematic.registry.SceneRegistry
+import com.cobblemon.mod.common.battles.stadium.StadiumBattleRegistry
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.pokemon.SpeciesAdditions
 import com.cobblemon.mod.common.pokemon.properties.PropertiesCompletionProvider
@@ -77,10 +82,18 @@ object CobblemonDataProvider : DataProvider {
 
     fun registerDefaults() {
         this.register(CobblemonScripts, reloadable = true)
+        this.register(MolangUiContractRegistry, reloadable = true)
+        MolangUiContractRegistry.observable.subscribe {
+            server()?.execute {
+                MolangUiService.closeAll()
+                server()?.playerList?.players?.forEach(MolangUiService::requestCompatibility)
+            }
+        }
         this.register(SpeciesFeatures, reloadable = false)
         this.register(GlobalSpeciesFeatures, reloadable = false)
         this.register(SpeciesFeatureAssignments, reloadable = false)
         this.register(ActionEffects, reloadable = true)
+        this.register(MoveCameraTimelines, reloadable = true)
         this.register(Moves, reloadable = false)
         this.register(CobblemonMovesetBuilders, reloadable = false)
         this.register(Abilities, reloadable = false)
@@ -121,10 +134,13 @@ object CobblemonDataProvider : DataProvider {
         this.register(CobblemonRideSettings, reloadable = true)
         this.register(TechnicalMachines, reloadable = false)
         SpawnBait.Effects.setupEffects()
+        this.register(StadiumBattleRegistry, reloadable = true)
 
         PlatformEvents.SERVER_PLAYER_LOGOUT.subscribe {
             synchronizedPlayerIds.remove(it.player.uuid)
         }
+
+        this.register(SceneRegistry, reloadable = true)
 
         ifClient {
             Cobblemon.implementation.registerResourceReloader(cobblemonResource("client_resources"), PackType.CLIENT_RESOURCES, emptyList()) { clientResourceReloader }

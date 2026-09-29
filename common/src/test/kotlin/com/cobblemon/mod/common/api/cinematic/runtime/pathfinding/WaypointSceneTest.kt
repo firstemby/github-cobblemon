@@ -1,0 +1,55 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+
+package com.cobblemon.mod.common.api.cinematic.runtime.pathfinding
+
+import com.google.gson.JsonParser
+import net.minecraft.network.chat.Component
+import com.cobblemon.mod.common.api.cinematic.model.ActorDeclaration
+import com.cobblemon.mod.common.api.cinematic.model.ActorDirection
+import com.cobblemon.mod.common.api.cinematic.model.ActorKind
+import com.cobblemon.mod.common.api.cinematic.model.Beat
+import com.cobblemon.mod.common.api.cinematic.model.Scene
+import com.cobblemon.mod.common.api.cinematic.model.tracks.ActorTrack
+import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.KeyframeMovement
+import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.LookAtTrack
+import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.PoseLockTrack
+import com.cobblemon.mod.common.api.cinematic.model.tracks.builtin.WaypointPathfinding
+import com.cobblemon.mod.common.api.cinematic.registry.SceneBuiltinSources
+import com.cobblemon.mod.common.api.cinematic.registry.SceneSourceRegistry
+import com.cobblemon.mod.common.entity.PoseType
+import net.minecraft.world.phys.Vec3
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
+
+class WaypointSceneTest {
+    private val path = WaypointPathfinding(listOf(Vec3.ZERO, Vec3(3.0, 0.0, 0.0)))
+    private fun scene(vararg tracks: ActorTrack) = Scene("test", startBeatId = "main",
+        actors = mapOf("hero" to ActorDeclaration("hero", ActorKind.SynthesizedPokemon)),
+        beats = mapOf("main" to Beat("main", duration = 30f,
+            actorDirections = mapOf("hero" to ActorDirection(tracks = tracks.toList())))))
+
+    @Test fun `pathfinding permits a separate look at track`() {
+        assertTrue(scene(path, LookAtTrack(Vec3.ZERO)).validate().isEmpty())
+    }
+
+    @Test fun `rejects competing pathfinding and movement tracks`() {
+        assertTrue(scene(path, path).validate().any { it.message == Component.translatable("cobblemon.cinematic_editor.validation.movement_conflict") })
+        assertTrue(scene(path, KeyframeMovement(listOf(KeyframeMovement.Kf(0f, Vec3.ZERO))))
+            .validate().any { it.message == Component.translatable("cobblemon.cinematic_editor.validation.movement_conflict") })
+        assertTrue(scene(path, PoseLockTrack(PoseType.WALK)).validate().any { it.message == Component.translatable("cobblemon.cinematic_editor.validation.movement_conflict") })
+    }
+
+    @Test fun `registry can deserialize waypoint track`() {
+        SceneBuiltinSources.register()
+        val parsed = SceneSourceRegistry.deserializeActorTrack("pathfinding", JsonParser.parseString("""{"controlPoints":[{"x":0,"y":0,"z":0},{"x":3,"y":0,"z":0}]}""").asJsonObject)
+        assertInstanceOf(WaypointPathfinding::class.java, parsed)
+    }
+
+}

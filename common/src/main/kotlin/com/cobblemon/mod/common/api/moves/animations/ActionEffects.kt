@@ -57,6 +57,7 @@ object ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
         ActionEffectKeyframe.register<RunActionEffectKeyframe>("run_action_effect")
         ActionEffectKeyframe.register<EntityParticlesActionEffectKeyframe>("entity_particles")
         ActionEffectKeyframe.register<EntitySoundActionEffectKeyframe>("entity_sound")
+        ActionEffectKeyframe.register<CameraFocusActionEffectKeyframe>("camera_focus")
     }
 
     override val gson = GsonBuilder()

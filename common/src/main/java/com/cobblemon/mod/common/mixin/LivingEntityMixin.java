@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.mixin;
 
+import com.cobblemon.mod.common.api.cinematic.runtime.CinematicManager;
+import net.minecraft.world.damagesource.DamageSource;
 import com.cobblemon.mod.common.CobblemonNetwork;
 import com.cobblemon.mod.common.OrientationControllable;
 import com.cobblemon.mod.common.api.orientation.OrientationController;
@@ -129,6 +131,16 @@ public abstract class LivingEntityMixin extends Entity implements OrientationCon
         } else {
             this.absMoveTo(x, y, z);
             this.absRotateTo(yaw, pitch);
+        }
+    }
+
+    @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
+    private void cobblemon$cancelDamageDuringCinematicTakeover(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        final LivingEntity self = (LivingEntity) (Object) this;
+        if (self instanceof ServerPlayer serverPlayer) {
+            if (CinematicManager.INSTANCE.isPlayerUnderImmuneTakeover(serverPlayer.getUUID())) {
+                cir.setReturnValue(false);
+            }
         }
     }
 

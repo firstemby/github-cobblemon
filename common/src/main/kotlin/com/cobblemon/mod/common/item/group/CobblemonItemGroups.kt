@@ -314,6 +314,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.PC)
         entries.accept(CobblemonItems.HEALING_MACHINE)
         entries.accept(CobblemonItems.PASTURE)
+        entries.accept(CobblemonItems.STADIUM_BLOCK)
         entries.accept(CobblemonItems.TM_MACHINE)
         entries.accept(CobblemonItems.DISC_SHELF)
 

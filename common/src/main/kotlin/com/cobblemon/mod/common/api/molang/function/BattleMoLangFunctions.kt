@@ -13,7 +13,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.util.asArrayValue
-import java.util.*
+import java.util.UUID
 
 object BattleMoLangFunctions : AbstractMoLangFunctionHolder<PokemonBattle>() {
     override fun PokemonBattle.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
@@ -34,6 +34,10 @@ object BattleMoLangFunctions : AbstractMoLangFunctionHolder<PokemonBattle>() {
             actor.struct
         }
 
+        functions["is_in_move_selection"] = { DoubleValue(battle.actors.any { it.mustChoose && it.request != null }) }
+        functions["battle_turn"] = { DoubleValue(battle.turn.toDouble()) }
+        functions["battle_started"] = { DoubleValue(battle.started) }
+        functions["battle_ended"] = { DoubleValue(battle.ended) }
         return functions
     }
 }
