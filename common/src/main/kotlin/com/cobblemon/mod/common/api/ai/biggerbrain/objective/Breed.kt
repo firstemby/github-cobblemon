@@ -152,10 +152,12 @@ class Breed(
             return ObjectiveStatus.BLOCKED
         val egg = CobblemonBreeding.createEgg(entity.pokemon, mate.pokemon) ?: return ObjectiveStatus.INACTIVE
         nest.setItem(egg)
+        // if a mate (other than the egg layer) cannot get to a nest then it should be a deadbeat lol
+        val mateCanReach = mate.position().distanceTo(Vec3.atCenterOf(nestPos)) <= closeEnough(mate) || mate.navigation.createPath(nestPos, 0)?.let { it.distToTarget < 1.75f } == true
 
         // wild nests are probably the only ones where we need to record the parents onto the nest
         if (nest.ownerUUID == null) {
-            nest.parents = Pair(entity.uuid, mate.uuid)
+            nest.parents = Pair(entity.uuid, if (mateCanReach) mate.uuid else null)
             nest.nestClaimedBy = Pair(entity.uuid, mate.uuid)
         }
 
@@ -167,8 +169,10 @@ class Breed(
                 }
 
             parent.pokemon.breedingCooldown = CobblemonBreeding.resetBreedingCooldown(parent.pokemon)
-            parent.biggerBrain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, nestPos)
-            parent.biggerBrain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+            if (parent == entity || mateCanReach) {
+                parent.biggerBrain.setMemory(CobblemonMemories.PATERNAL_NEST_LOCATION, nestPos)
+                parent.biggerBrain.setMemory(CobblemonMemories.EGG_IN_NEST, true)
+            }
             parent.biggerBrain.eraseMemory(CobblemonMemories.IDEAL_NEST_LOCATION)
             parent.biggerBrain.eraseMemory(CobblemonMemories.MATES_MET)
 
