@@ -2,7 +2,7 @@
   "type": "cobblemon:expression",
   "order": 21,
   "expression": [
-    "q.offspring.pokeball.name == 'cobblemon:master_ball' || q.offspring.pokeball.name == 'cobblemon:cherish_ball' ? {",
+    "q.offspring.pokeball.name == 'cobblemon:master_ball' || q.offspring.pokeball.name == 'cobblemon:cherish_ball' || q.offspring.pokeball.name == 'cobblemon:ancient_origin_ball' ? {",
     "  q.offspring.set_pokeball('cobblemon:poke_ball');",
     "};"
   ]
