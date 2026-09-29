@@ -91,10 +91,9 @@
     "1:lick",
     "1:scratch",
     "1:detect",
-    "1:feint",
-    "1:substitute",
     "4:bind",
     "7:shadowsneak",
+    "10:feint",
     "13:furyswipes",
     "16:feintattack",
     "18:psybeam",
@@ -103,6 +102,7 @@
     "30:camouflage",
     "33:shadowclaw",
     "38:screech",
+    "42:substitute",
     "46:suckerpunch",
     "50:synchronoise",
     "egg:camouflage",
@@ -110,8 +110,6 @@
     "egg:dizzypunch",
     "egg:fakeout",
     "egg:recover",
-    "egg:conversion",
-    "egg:conversion2",
     "egg:foulplay",
     "egg:magiccoat",
     "egg:nastyplot",
@@ -263,7 +261,9 @@
     "legacy:toxic",
     "legacy:gigaimpact",
     "legacy:headbutt",
-    "legacy:powerwhip"
+    "legacy:powerwhip",
+    "legacy:conversion",
+    "legacy:conversion2"
   ],
   "evolutions": []
 }
