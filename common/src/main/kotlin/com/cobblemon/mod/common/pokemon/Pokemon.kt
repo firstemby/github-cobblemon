@@ -246,7 +246,14 @@ open class Pokemon : ShowdownIdentifiable {
                 field = value
                 val alphaMark = Marks.getByIdentifier(cobblemonResource("mark_alpha"))!!
 
-                if (value) { activeMark = alphaMark }
+                if (value) {
+                    activeMark = alphaMark
+                    // alphas get a number of perfect ivs based on config
+                    if (!isClient) {
+                        val perfect = Stats.PERMANENT.count { ivs[it] == IVs.MAX_VALUE }
+                        Stats.PERMANENT.filter { ivs[it] != IVs.MAX_VALUE }.shuffled().take((Cobblemon.config.alphaMinPerfectIVs - perfect).coerceAtLeast(0)).forEach { setIV(it, IVs.MAX_VALUE) }
+                    }
+                }
                 else { scaleModifier = 1F }
 
                 exchangeMark(alphaMark, value)

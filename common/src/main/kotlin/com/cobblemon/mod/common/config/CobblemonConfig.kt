@@ -235,6 +235,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_shiny_chance", SERVER)
     var honeySlatherShinyChance = 4000
 
+    @CobblemonConfigField(Category.Pokemon, lang = "alpha_min_perfect_ivs", SERVER)
+    var alphaMinPerfectIVs = 3
+
     @CobblemonConfigField(Category.Pokemon, lang = "shiny_notice_particles_distance", CLIENT)
     var shinyNoticeParticlesDistance = 24F
 
