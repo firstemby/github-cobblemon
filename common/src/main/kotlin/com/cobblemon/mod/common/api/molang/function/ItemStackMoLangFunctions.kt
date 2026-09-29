@@ -32,6 +32,19 @@ object ItemStackMoLangFunctions : AbstractMoLangFunctionHolder<Pair<ItemStack, R
         functions["count"] = { DoubleValue(stack.count.toDouble()) }
         functions["damage_value"] = { DoubleValue(stack.damageValue) }
         functions["max_damage"] = { DoubleValue(stack.maxDamage) }
+        functions["damage"] = damage@{ params ->
+            val amount = params.getIntOrNull(0) ?: 1
+            if (!stack.isDamageableItem) {
+                return@damage DoubleValue.ONE
+            }
+            stack.damageValue += amount
+            if (stack.damageValue >= stack.maxDamage) {
+                stack.shrink(1)
+                DoubleValue.ZERO
+            } else {
+                DoubleValue.ONE
+            }
+        }
         functions["is_empty"] = { DoubleValue(stack.isEmpty) }
         functions["shrink"] = { params -> stack.shrink(params.getInt(0)) }
         functions["grow"] = { params -> stack.grow(params.getInt(0)) }

@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.BenchedMove
 import com.cobblemon.mod.common.api.moves.Moves
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.experience.SidemodExperienceSource
 import com.cobblemon.mod.common.api.pokemon.moves.LearnsetQuery
 import com.cobblemon.mod.common.api.pokemon.Natures
@@ -50,6 +51,8 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
 
         functions["id"] = { StringValue(pokemon.uuid.toString()) }
         functions["nickname"] = { StringValue(pokemon.nickname.toString()) }
+        functions["primary_type"] = { StringValue(pokemon.form.primaryType.showdownId) }
+        functions["secondary_type"] = { pokemon.form.secondaryType?.let { StringValue(it.showdownId) } ?: DoubleValue.ZERO }
         functions["level"] = { DoubleValue(pokemon.level.toDouble()) }
         functions["max_hp"] = { DoubleValue(pokemon.maxHealth.toDouble()) }
         functions["current_hp"] = { DoubleValue(pokemon.currentHealth.toDouble()) }
@@ -67,7 +70,12 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         }
         functions["behaviour"] = { pokemon.form.behaviour.struct }
         functions["behavior"] = { pokemon.form.behaviour.struct } // Inferior
-        functions["pokeball"] = { StringValue(pokemon.caughtBall.toString()) }
+        functions["pokeball"] = { pokemon.caughtBall.struct }
+        functions["set_pokeball"] = setPokeball@{ params ->
+            val ball = params.get<MoValue>(0).resolveFromObjectOrString { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace()) } ?: return@setPokeball DoubleValue.ZERO
+            pokemon.caughtBall = ball
+            DoubleValue.ONE
+        }
         functions["ability"] = { StringValue(pokemon.ability.name) }
         functions["set_ability"] = setAbility@{ params ->
             val ability = params.get<MoValue>(0).resolveFromObjectOrString { Abilities.get(it)?.create() } ?: return@setAbility DoubleValue.ZERO
