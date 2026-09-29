@@ -175,6 +175,7 @@ object DataKeys {
     // Features
     const val HAS_BEEN_SHEARED = "sheared"
     const val CAN_BE_COLORED = "color"
+    const val CAN_SHOW_RAINBOW_SPIN = "rainbow_spin"
     const val TAIL_REGROWTH_SECONDS = "TailRegrowthSeconds"
 
     // Variants

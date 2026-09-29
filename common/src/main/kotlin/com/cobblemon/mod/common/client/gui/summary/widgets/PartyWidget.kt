@@ -96,6 +96,9 @@ class PartyWidget(
             ).also { widget ->
                 this.addWidget(widget)
                 partySlots.add(widget)
+                if (summary.selectedPokemon.uuid == pokemon?.uuid) {
+                    summary.setPreviewPokemon(pokemon, widget.state)
+                }
             }
         }
     }
@@ -165,6 +168,7 @@ class PartyWidget(
                         index = -1,
                         isClientPartyMember = isParty
                     )
+                    summary.setPreviewPokemon(sourcePokemon, draggedSlot!!.state)
                     playSound(CobblemonSounds.PC_GRAB)
                 }
             }

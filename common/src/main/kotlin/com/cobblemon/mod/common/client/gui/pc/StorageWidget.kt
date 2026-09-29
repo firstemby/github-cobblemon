@@ -79,6 +79,7 @@ class StorageWidget(
     var screenLoaded = false
     var selectedPosition: StorePosition? = null
     var grabbedSlot: GrabbedStorageSlot? = null
+    internal var hoveredSlot: StorageSlot? = null
 
     var box = 0
         set(value) {
@@ -303,15 +304,14 @@ class StorageWidget(
             height = SCREEN_HEIGHT
         )
 
+        var inParty = false
+
         if (screenLoaded) {
             this.boxSlots.forEach { slot ->
                 slot.render(context, mouseX, mouseY, delta)
-                val pokemon = slot.getPokemon()
-                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
-                    && pokemon != null && pokemon != pcGui.previewPokemon
-                ) {
-                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: false)
-                    pcGui.isPreviewInParty = false
+                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)) {
+                    hoveredSlot = slot
+                    inParty = false
                 }
             }
         } else {
@@ -322,14 +322,32 @@ class StorageWidget(
         if (pcGui.configuration.showParty) {
             this.partySlots.forEach { slot ->
                 slot.render(context, mouseX, mouseY, delta)
-                val pokemon = slot.getPokemon()
-                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)
-                    && pokemon != null && pokemon != pcGui.previewPokemon
-                ) {
-                    pcGui.setPreviewPokemon(pokemon, pcGui.isPreviewInParty ?: true)
-                    pcGui.isPreviewInParty = true
-                } // TODO: Hovering from party to party or pc not saving marks
+                if (grabbedSlot == null && slot.isHovered(mouseX, mouseY)) {
+                    hoveredSlot = slot
+                    inParty = true
+                }
             }
+        }
+
+        // TODO: Hovering from party to party or pc not saving marks
+        // Handle PCGUI preview here since since PC<->Party movement handling
+        // causes some race conditions between rendering and storage management
+        if (hoveredSlot != null) {
+            val slot = hoveredSlot!!
+            if (slot.getPokemon() != null) {
+                if (slot.getPokemon() != pcGui.previewPokemon) {
+                    pcGui.setPreviewPokemon(
+                        slot.getPokemon(),
+                        pcGui.isPreviewInParty ?: inParty,
+                        slot.state
+                    )
+                    pcGui.isPreviewInParty = inParty
+                }
+            } else {
+                if (pcGui.previewPokemon != null) pcGui.setPreviewPokemon(null)
+            }
+        } else if (grabbedSlot == null) {
+            if (pcGui.previewPokemon != null) pcGui.setPreviewPokemon(null)
         }
 
         pastureWidget?.render(context, mouseX, mouseY, delta)
@@ -376,7 +394,10 @@ class StorageWidget(
 
         // Clicking on itself, so unselect position
         if (this.selectedPosition != null && this.selectedPosition == clickedPosition) {
-            if (grabbedSlot != null) playSound(CobblemonSounds.PC_DROP)
+            if (grabbedSlot != null) {
+                playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
+            }
             resetSelected()
             return
         }
@@ -401,6 +422,7 @@ class StorageWidget(
                     if (clickedPosition is PCPosition) {
                         val firstEmptySpace = party.slots.indexOfFirst { it == null }
                         if (firstEmptySpace != -1) {
+                            this.partySlots[firstEmptySpace].state.syncAnimationTiming(button.state)
                             val packet = MovePCPokemonToPartyPacket(clickedPokemon.uuid, clickedPosition, PartyPosition(firstEmptySpace))
                             packet.sendToServer()
                             playSound(CobblemonSounds.PC_DROP)
@@ -412,6 +434,7 @@ class StorageWidget(
                         }
                         val firstEmptySpace = pc.boxes[box].indexOfFirst { it == null }
                         if (firstEmptySpace != -1) {
+                            this.boxSlots[firstEmptySpace].state.syncAnimationTiming(button.state)
                             val packet = MovePartyPokemonToPCPacket(clickedPokemon.uuid, clickedPosition, PCPosition(box, firstEmptySpace))
                             packet.sendToServer()
                             playSound(CobblemonSounds.PC_DROP)
@@ -421,13 +444,16 @@ class StorageWidget(
                 }
 
                 this.selectedPosition = clickedPosition
-                this.pcGui.setPreviewPokemon(clickedPokemon, pcGui.isPreviewInParty ?: false)
                 grabbedSlot = GrabbedStorageSlot(
                     x = button.x,
                     y = button.y,
                     parent = this,
                     pokemon = clickedPokemon
-                )
+                ).also {
+                    it.state.syncAnimationTiming(button.state)
+                    this.pcGui.setPreviewPokemon(clickedPokemon, pcGui.isPreviewInParty ?: false, it.state)
+                }
+                hoveredSlot = null
                 playSound(CobblemonSounds.PC_GRAB)
 
             }
@@ -445,6 +471,7 @@ class StorageWidget(
                     ?: MovePCPokemonPacket(selectedPokemon.uuid, selectedPosition as PCPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Box to Party
@@ -453,6 +480,7 @@ class StorageWidget(
                     ?: MovePCPokemonToPartyPacket(selectedPokemon.uuid, this.selectedPosition as PCPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Party to Box
@@ -464,6 +492,7 @@ class StorageWidget(
                     ?: MovePartyPokemonToPCPacket(selectedPokemon.uuid, this.selectedPosition as PartyPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
             // Party to Party
@@ -472,6 +501,7 @@ class StorageWidget(
                     ?: MovePartyPokemonPacket(selectedPokemon.uuid, selectedPosition as PartyPosition, clickedPosition)
                 packet.sendToServer()
                 playSound(CobblemonSounds.PC_DROP)
+                button.state.syncAnimationTiming(grabbedSlot!!.state)
                 resetSelected()
             }
         }
@@ -480,6 +510,7 @@ class StorageWidget(
     fun resetSelected() {
         selectedPosition = null
         grabbedSlot = null
+        hoveredSlot = null
         pcGui.setPreviewPokemon(null)
     }
 }

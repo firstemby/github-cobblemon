@@ -13,6 +13,71 @@
   - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
 - Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
   - Wearable items that can be placed down are exempt from this behaviour.
+- Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
+- Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
+- Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
+- Added a new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
+- Added missing crops to Botany Pots integration
+- Added a way to obtain Porygon by inserting the Upgrade or Dubious Disc into a data monitor
+- Added a new `cobblemon:structure`, which is a feature without any restrictions allowing the Builders to place certain structures in much more specific manner.
+- Added Configs for Infinite Use TMs and Unlocking all TMs
+- Added Type Gem blocks
+- Added Type Gem Clusters
+- Added TMs
+- Added TM Machine
+- Added Deepslate Core Block
+- Added /givetm Command
+- Added advancement triggers for learning TMs: `cobblemon:has_learn_specific_tm` (per-TM), `cobblemon:has_learn_all_tm` (all TMs learned), and `cobblemon:tms_learned` (count-based), backed by a new `totalTMLearnedCount` on player advancement data.
+- Added `cobblemon:catch_alpha_pokemon` advancement trigger and `totalAlphaCaptureCount` tracking for capturing Alpha Pokémon.
+- Added Move Dex to Pokédex
+- Added the Habitat Block, a spawner block for servers and adventure maps that controls spawning in an area.
+- Added Disk Rack for storing disks and being an audio sequencer for Noteblocks
+- Added intrinsic scaling to all mons (+-5%). Some rendering cases, such as shoulder mounting, revert to 1.0 scaling to preserve animation accuracy.
+- Added scaling to "baby" Pokémon (smaller (-20%) at level 1 → normally sized at level 10)
+- Added conditional seats for riding. Seats can be gated by molang such as "is_alpha".
+- Added Alpha Pokémon
+    - Added alpha scaling (alphas are larger than their normal counterparts)
+    - Alphas will always lead herds and will spawn in herds
+    - Alphas spawn with two random TM moves from their learnset
+    - Alpha Pokémon will always defend themselves from players that attack them
+    - Added alpha level matching and stat boost (based on level)
+    - Added pitch-down and reverb to alpha cries
+    - Added alpha Pokémon bait effect
+    - Added alpha eye rendering including eye overlay, bloom, eye trail, and particles.
+- Added cobweb block slowness immunity for spider Pokémon
+- Added 49 new habitat structures. 34 as typical Minecraft structures and 15 as structures that get placed as biome features to allow for more natural placement in generation. Structures placed as biome features will not be able to be located with the `/locate structure` command.
+- Vanilla village house template pools have been adjusted to account for the new abandoned village structure habitat. Weights have changed within the JSON file for every piece to ensure too many habitats don't generate in a single village.
+- Added 10 new ruin structures.
+- rooted_arch_ruins & crumbling_arch_ruins have been transferred over to biome features, allowing for better placement in generation.
+- All ruin structures that did not generate with a gimmighoul/gilded chest before will now generate with one.
+- All ruin structures gilded chest loot tables have been updated to include a guaranteed TM not learned naturally by any Pokémon through their level-up moveset. Each ruin gets its own specific TM, so you can now go hunting ruins to complete your move dex!
+- All fossil structures have been transferred over to biome features, allowing for better placement in generation.
+- The prehistoric_underwater_fissure & prehistoric_submerged_impact fossil structures now use the biome tag `#cobblemon:is_temperate_ocean`.
+- A new Biome tag called `#cobblemon:is_stony_beach` has been added.
+- Gimmighoul towers now generate at ground level rather than sinking one block into the ground.
+- 1 New shipwreck cove structure called the "magma_shipwreck_cove" has been added.
+- Shipwreck coves now generate slightly more frequently.
+- Added equipment loot tables for shipwreck cove enemies.
+- Maps from abandoned fishing boats leading to shipwreck coves now will skip explored chunks, allowing the player to find more shipwreck coves easier.
+- The lush shipwreck cove's phantom mob spawner has been replaced with breezes.
+- The lush shipwreck cove structure itself has been slightly cleaned up to be less noisy with the blocks it is built out of.
+- All shipwreck coves' spawners have been adjusted to give compatible mobs enchanted iron or diamond armour and weapons while in its ominous state. The armour given to the mobs will also use the automaton trim. We upped the difficulty because it was too easy now that your Pokémon can fight for you.
+- One TM of the elemental hyper beams has been added as guaranteed loot to the main treasure chest in every shipwreck cove. (Magma cove gets blast burn, lush cove gets frenzy plant, and submerged cove gets hydro cannon)
+- Added 7 new advancements
+- Pressing the inventory key now closes the Pokémon interact wheel GUI
+- Pokémon cries now play when clicking Pokémon in the summary screen.
+- Pressing the Summary key while either the starter selection or summary screen are open now closes those screens
+- Ice type Pokémon are now immune to Packed Snow
+- Added `jeb_` parity for Wooloo line (just nickname to `jeb_`!)
+
+### New rideable Pokémon
+- Drampa
+- Archeops
+- Skarmory
+- Crobat
+- Goodra
+- Hisuian Goodra
+- Milotic
 
 ### Pokémon Added
 #### Generation 4
