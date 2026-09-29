@@ -119,6 +119,9 @@
     "egg:pursuit",
     "egg:secretpower",
     "egg:whirlwind",
+    "egg:gust",
+    "egg:signalbeam",
+    "egg:silverwind",
     "tm:aerialace",
     "tm:aircutter",
     "tm:airslash",
@@ -133,7 +136,6 @@
     "tm:facade",
     "tm:flash",
     "tm:gigadrain",
-    "tm:gust",
     "tm:headbutt",
     "tm:leechlife",
     "tm:lunge",
@@ -167,6 +169,7 @@
     "tm:thief",
     "tm:uproar",
     "tm:uturn",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:ancientpower",
@@ -198,7 +201,9 @@
     "legacy:round",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:agility",
+    "legacy:dualwingbeat"
   ],
   "evolutions": [
     {

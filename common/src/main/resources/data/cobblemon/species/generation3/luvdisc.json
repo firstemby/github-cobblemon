@@ -99,6 +99,7 @@
     "1:luckychant",
     "1:captivate",
     "1:heartstamp",
+    "1:tearfullook",
     "4:watergun",
     "7:agility",
     "13:wish",
@@ -114,10 +115,8 @@
     "46:hydropump",
     "49:safeguard",
     "egg:aquajet",
-    "egg:aquaring",
     "egg:captivate",
     "egg:entrainment",
-    "egg:healpulse",
     "egg:mudsport",
     "egg:splash",
     "egg:supersonic",
@@ -151,7 +150,6 @@
     "tm:substitute",
     "tm:surf",
     "tm:takedown",
-    "tm:tearfullook",
     "tm:terablast",
     "tm:waterfall",
     "tm:waterpulse",
@@ -182,7 +180,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:swift",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:healpulse"
   ],
   "evolutions": []
 }

@@ -144,6 +144,7 @@
     "egg:firespin",
     "egg:flareblitz",
     "egg:yawn",
+    "egg:snatch",
     "tm:acrobatics",
     "tm:bodyslam",
     "tm:bulldoze",
@@ -175,7 +176,6 @@
     "tm:rest",
     "tm:retaliate",
     "tm:roar",
-    "tm:rocksmash",
     "tm:sleeptalk",
     "tm:snarl",
     "tm:snatch",
@@ -203,7 +203,6 @@
     "tutor:irontail",
     "tutor:mudslap",
     "tutor:rest",
-    "tutor:rocksmash",
     "tutor:sleeptalk",
     "tutor:snarl",
     "tutor:snatch",
@@ -221,7 +220,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:earthpower",
+    "legacy:rocksmash"
   ],
   "evolutions": [
     {

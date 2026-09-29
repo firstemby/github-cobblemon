@@ -101,6 +101,7 @@
   "moves": [
     "1:watergun",
     "1:psywave",
+    "1:synchronoise",
     "4:astonish",
     "9:confusion",
     "12:bite",
@@ -177,6 +178,7 @@
     "tm:waterpulse",
     "tm:whirlpool",
     "tm:wonderroom",
+    "tm:poisonfang",
     "tutor:afteryou",
     "tutor:allyswitch",
     "tutor:aquatail",
@@ -216,7 +218,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:scaleshot"
   ],
   "evolutions": []
 }

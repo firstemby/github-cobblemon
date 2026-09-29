@@ -202,6 +202,7 @@
     "tm:waterpulse",
     "tm:wildcharge",
     "tm:workup",
+    "tm:mimic",
     "tutor:bulkup",
     "tutor:bulldoze",
     "tutor:covet",
@@ -257,7 +258,8 @@
     "legacy:seismictoss",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:swift"
   ],
   "evolutions": [
     {

@@ -99,6 +99,7 @@
   "moves": [
     "1:astonish",
     "1:fairywind",
+    "1:rockthrow",
     "5:babydolleyes",
     "8:metalclaw",
     "11:covet",
@@ -116,6 +117,7 @@
     "egg:feint",
     "egg:icehammer",
     "egg:quash",
+    "egg:rockthrow",
     "tm:babydolleyes",
     "tm:brickbreak",
     "tm:brutalswing",
@@ -155,6 +157,8 @@
     "tm:terablast",
     "tm:thief",
     "tm:thunderwave",
+    "tm:fakeout",
+    "tm:poweruppunch",
     "tutor:babydolleyes",
     "tutor:covet",
     "tutor:endeavor",
@@ -171,7 +175,11 @@
     "tutor:sleeptalk",
     "tutor:stealthrock",
     "tutor:steelbeam",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:bulkup",
+    "legacy:bulldoze",
+    "legacy:falseswipe",
+    "legacy:screech"
   ],
   "preEvolution": "tinkatink",
   "evolutions": [

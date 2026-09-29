@@ -179,7 +179,6 @@
     "45:hydropump",
     "48:waterspout",
     "egg:aquaring",
-    "egg:clearsmog",
     "egg:curse",
     "egg:defensecurl",
     "egg:doubleedge",
@@ -234,6 +233,7 @@
     "tm:weatherball",
     "tm:whirlpool",
     "tm:zenheadbutt",
+    "tm:fissure",
     "tutor:bounce",
     "tutor:bulldoze",
     "tutor:dive",
@@ -259,7 +259,8 @@
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:clearsmog"
   ],
   "evolutions": [
     {

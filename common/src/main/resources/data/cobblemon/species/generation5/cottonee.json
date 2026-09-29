@@ -147,11 +147,10 @@
     "egg:switcheroo",
     "egg:tickle",
     "egg:worryseed",
+    "egg:naturepower",
     "tm:beatup",
     "tm:charm",
-    "tm:covet",
     "tm:dazzlinggleam",
-    "tm:defog",
     "tm:dreameater",
     "tm:encore",
     "tm:endeavor",
@@ -179,9 +178,7 @@
     "tm:taunt",
     "tm:terablast",
     "tm:worryseed",
-    "tutor:covet",
     "tutor:dazzlinggleam",
-    "tutor:defog",
     "tutor:endeavor",
     "tutor:energyball",
     "tutor:gigadrain",
@@ -204,7 +201,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:tailwind",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:covet",
+    "legacy:defog"
   ],
   "evolutions": [
     {

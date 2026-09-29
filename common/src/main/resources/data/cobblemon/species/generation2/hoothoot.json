@@ -128,7 +128,6 @@
     "39:dreameater",
     "egg:featherdance",
     "egg:feintattack",
-    "egg:meanlook",
     "egg:mirrormove",
     "egg:nightshade",
     "egg:supersonic",
@@ -191,6 +190,7 @@
     "tm:uproar",
     "tm:workup",
     "tm:zenheadbutt",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:calmmind",
@@ -233,7 +233,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:meanlook"
   ],
   "evolutions": [
     {

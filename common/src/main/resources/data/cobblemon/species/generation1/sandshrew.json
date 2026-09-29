@@ -132,6 +132,7 @@
     "egg:mudslap",
     "egg:nightslash",
     "egg:rototiller",
+    "egg:rockclimb",
     "tm:aerialace",
     "tm:agility",
     "tm:amnesia",
@@ -139,7 +140,6 @@
     "tm:brickbreak",
     "tm:bulldoze",
     "tm:covet",
-    "tm:crushclaw",
     "tm:curse",
     "tm:cut",
     "tm:dig",
@@ -196,6 +196,7 @@
     "tm:throatchop",
     "tm:workup",
     "tm:xscissor",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:bulldoze",
     "tutor:covet",
@@ -248,7 +249,8 @@
     "legacy:snore",
     "legacy:submission",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:crushclaw"
   ],
   "evolutions": [
     {
@@ -354,7 +356,6 @@
         "tm:icebeam",
         "tm:icepunch",
         "tm:icespinner",
-        "tm:iciclecrash",
         "tm:iciclespear",
         "tm:icywind",
         "tm:irondefense",
@@ -388,6 +389,7 @@
         "tm:tripleaxel",
         "tm:workup",
         "tm:xscissor",
+        "tm:nightslash",
         "tutor:aerialace",
         "tutor:aquatail",
         "tutor:bulldoze",
@@ -432,7 +434,8 @@
         "legacy:snore",
         "legacy:sunnyday",
         "legacy:swagger",
-        "legacy:toxic"
+        "legacy:toxic",
+        "legacy:iciclecrash"
       ],
       "evolutions": [
         {

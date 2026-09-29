@@ -117,6 +117,7 @@
     "1:mefirst",
     "1:naturalgift",
     "1:feint",
+    "1:flamewheel",
     "15:flail",
     "22:acrobatics",
     "29:agility",
@@ -130,6 +131,8 @@
     "egg:mefirst",
     "egg:naturalgift",
     "egg:quickguard",
+    "egg:flamewheel",
+    "egg:snatch",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -172,6 +175,8 @@
     "tm:uturn",
     "tm:willowisp",
     "tm:workup",
+    "tm:razorwind",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:defog",
@@ -194,7 +199,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:vacuumwave",
+    "legacy:wingattack"
   ],
   "preEvolution": "fletchling",
   "evolutions": [

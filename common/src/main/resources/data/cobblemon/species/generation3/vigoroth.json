@@ -203,6 +203,7 @@
     "tm:workup",
     "tm:xscissor",
     "tm:zenheadbutt",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:afteryou",
     "tutor:bulkup",
@@ -261,7 +262,8 @@
     "legacy:seismictoss",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:waterpulse"
+    "legacy:waterpulse",
+    "legacy:swift"
   ],
   "preEvolution": "slakoth",
   "evolutions": [

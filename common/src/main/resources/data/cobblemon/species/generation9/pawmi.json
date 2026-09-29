@@ -105,6 +105,8 @@
     "tm:thunderwave",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
+    "tm:fakeout",
     "tutor:chargebeam",
     "tutor:electroweb",
     "tutor:helpinghand",

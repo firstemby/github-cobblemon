@@ -175,6 +175,8 @@
     "tm:uproar",
     "tm:uturn",
     "tm:wildcharge",
+    "tm:headbutt",
+    "tm:skullbash",
     "tutor:aerialace",
     "tutor:aquatail",
     "tutor:dracometeor",
@@ -195,7 +197,8 @@
     "tutor:thunderbolt",
     "tutor:thunderfang",
     "tutor:uproar",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "legacy:flamecharge"
   ],
   "evolutions": []
 }

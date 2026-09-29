@@ -98,10 +98,8 @@
   "moves": [
     "1:constrict",
     "1:withdraw",
-    "1:bite",
     "1:rollout",
     "1:spikecannon",
-    "1:tickle",
     "1:bind",
     "1:crunch",
     "1:sandattack",
@@ -220,7 +218,6 @@
     "legacy:seismictoss",
     "legacy:skullbash",
     "legacy:snore",
-    "legacy:spikecannon",
     "legacy:submission",
     "legacy:swagger",
     "legacy:takedown",

@@ -118,9 +118,10 @@
     "44:earthquake",
     "48:fissure",
     "egg:metalsound",
-    "egg:skullbash",
     "egg:slash",
     "egg:submission",
+    "egg:leer",
+    "egg:rockclimb",
     "tm:aerialace",
     "tm:brickbreak",
     "tm:bulldoze",
@@ -163,6 +164,8 @@
     "tm:takedown",
     "tm:terablast",
     "tm:xscissor",
+    "tm:fissure",
+    "tm:skullbash",
     "tutor:aerialace",
     "tutor:bulldoze",
     "tutor:drillrun",
@@ -192,7 +195,8 @@
     "legacy:sludgebomb",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:agility"
   ],
   "evolutions": [
     {

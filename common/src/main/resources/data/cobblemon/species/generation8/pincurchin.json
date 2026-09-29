@@ -139,6 +139,9 @@
     "tm:venomdrench",
     "tm:venoshock",
     "tm:wildcharge",
+    "tm:discharge",
+    "tm:round",
+    "tm:snore",
     "tutor:chargebeam",
     "tutor:electroweb",
     "tutor:gigaimpact",
@@ -155,9 +158,8 @@
     "tutor:throatchop",
     "tutor:thunderbolt",
     "tutor:wildcharge",
-    "legacy:attract",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:snore",
+    "legacy:attract"
   ],
   "evolutions": []
 }

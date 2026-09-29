@@ -229,6 +229,7 @@
     "tutor:thunderpunch",
     "tutor:worryseed",
     "tutor:zenheadbutt",
+    "tutor:focuspunch",
     "legacy:attract",
     "legacy:captivate",
     "legacy:confide",
@@ -243,6 +244,8 @@
     "legacy:seismictoss",
     "legacy:snore",
     "legacy:vacuumwave",
+    "legacy:coaching",
+    "legacy:grassyglide",
     "special:refresh"
   ],
   "preEvolution": "shroomish",

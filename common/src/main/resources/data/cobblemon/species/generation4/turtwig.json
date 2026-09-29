@@ -123,6 +123,7 @@
     "egg:tickle",
     "egg:wideguard",
     "egg:worryseed",
+    "egg:leafage",
     "tm:amnesia",
     "tm:bodyslam",
     "tm:bulldoze",
@@ -144,7 +145,6 @@
     "tm:headbutt",
     "tm:heavyslam",
     "tm:ironhead",
-    "tm:irontail",
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",
@@ -157,7 +157,6 @@
     "tm:roar",
     "tm:rockclimb",
     "tm:rocksmash",
-    "tm:safeguard",
     "tm:sandtomb",
     "tm:seedbomb",
     "tm:sleeptalk",
@@ -183,7 +182,6 @@
     "tutor:grasspledge",
     "tutor:grassyglide",
     "tutor:ironhead",
-    "tutor:irontail",
     "tutor:magicalleaf",
     "tutor:mudslap",
     "tutor:rest",
@@ -207,7 +205,11 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:irontail",
+    "legacy:leafblade",
+    "legacy:safeguard",
+    "legacy:skittersmack"
   ],
   "evolutions": [
     {

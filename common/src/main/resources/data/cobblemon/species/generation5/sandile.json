@@ -121,10 +121,10 @@
     "egg:aquatail",
     "egg:counter",
     "egg:doubleedge",
-    "egg:meanlook",
     "egg:mefirst",
     "egg:pursuit",
     "egg:spite",
+    "egg:rockclimb",
     "tm:aquatail",
     "tm:assurance",
     "tm:beatup",
@@ -219,7 +219,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:aerialace",
+    "legacy:dragonclaw",
+    "legacy:meanlook"
   ],
   "evolutions": [
     {

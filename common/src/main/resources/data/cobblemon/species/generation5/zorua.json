@@ -82,7 +82,6 @@
     "44:nastyplot",
     "48:foulplay",
     "egg:captivate",
-    "egg:copycat",
     "egg:counter",
     "egg:detect",
     "egg:extrasensory",
@@ -90,13 +89,13 @@
     "egg:memento",
     "egg:punishment",
     "egg:suckerpunch",
+    "egg:snatch",
     "tm:agility",
     "tm:assurance",
     "tm:bounce",
     "tm:burningjealousy",
     "tm:calmmind",
     "tm:confuseray",
-    "tm:covet",
     "tm:cut",
     "tm:darkpulse",
     "tm:dig",
@@ -151,7 +150,6 @@
     "tutor:bounce",
     "tutor:burningjealousy",
     "tutor:calmmind",
-    "tutor:covet",
     "tutor:darkpulse",
     "tutor:foulplay",
     "tutor:helpinghand",
@@ -183,7 +181,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:copycat",
+    "legacy:covet"
   ],
   "evolutions": [
     {
@@ -314,7 +314,8 @@
         "tutor:snarl",
         "tutor:spite",
         "tutor:swift",
-        "tutor:trick"
+        "tutor:trick",
+        "legacy:aerialace"
       ],
       "evolutions": [
         {

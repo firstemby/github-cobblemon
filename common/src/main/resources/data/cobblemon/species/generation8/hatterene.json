@@ -136,6 +136,8 @@
     "tm:trick",
     "tm:trickroom",
     "tm:wonderroom",
+    "tm:round",
+    "tm:snore",
     "tutor:afteryou",
     "tutor:calmmind",
     "tutor:darkpulse",
@@ -162,9 +164,8 @@
     "tutor:swift",
     "tutor:trick",
     "tutor:wonderroom",
-    "legacy:attract",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:snore",
+    "legacy:attract"
   ],
   "preEvolution": "hattrem",
   "evolutions": [],

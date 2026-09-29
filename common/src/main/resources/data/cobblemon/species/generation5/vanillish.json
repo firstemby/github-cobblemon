@@ -129,7 +129,6 @@
     "egg:magnetrise",
     "egg:mirrorshot",
     "egg:naturalgift",
-    "egg:powdersnow",
     "tm:allyswitch",
     "tm:auroraveil",
     "tm:avalanche",
@@ -159,7 +158,7 @@
     "tm:taunt",
     "tm:terablast",
     "tm:uproar",
-    "tm:waterpulse",
+    "tm:sheercold",
     "tutor:allyswitch",
     "tutor:flashcannon",
     "tutor:hypervoice",
@@ -172,7 +171,6 @@
     "tutor:signalbeam",
     "tutor:sleeptalk",
     "tutor:uproar",
-    "tutor:waterpulse",
     "legacy:attract",
     "legacy:confide",
     "legacy:doubleteam",
@@ -183,7 +181,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:powdersnow",
+    "legacy:waterpulse"
   ],
   "preEvolution": "vanillite",
   "evolutions": [

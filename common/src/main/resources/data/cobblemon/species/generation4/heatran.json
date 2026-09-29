@@ -51,6 +51,7 @@
   "moves": [
     "1:leer",
     "1:firespin",
+    "1:heatcrash",
     "6:metalclaw",
     "12:ancientpower",
     "18:firefang",
@@ -86,7 +87,6 @@
     "tm:flashcannon",
     "tm:gigaimpact",
     "tm:hardpress",
-    "tm:headbutt",
     "tm:heatcrash",
     "tm:heatwave",
     "tm:heavyslam",
@@ -128,6 +128,7 @@
     "tm:terablast",
     "tm:torment",
     "tm:willowisp",
+    "tm:firstimpression",
     "tutor:ancientpower",
     "tutor:bulldoze",
     "tutor:burningjealousy",
@@ -169,6 +170,7 @@
     "legacy:swagger",
     "legacy:toxic",
     "legacy:uproar",
+    "legacy:headbutt",
     "special:eruption"
   ],
   "evolutions": [],

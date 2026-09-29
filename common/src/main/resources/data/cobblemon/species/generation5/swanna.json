@@ -203,7 +203,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:dualwingbeat",
+    "legacy:tripleaxel"
   ],
   "preEvolution": "ducklett",
   "evolutions": []

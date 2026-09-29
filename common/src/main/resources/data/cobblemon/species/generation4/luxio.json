@@ -133,6 +133,7 @@
     "egg:quickattack",
     "egg:shockwave",
     "egg:takedown",
+    "egg:signalbeam",
     "tm:babydolleyes",
     "tm:charge",
     "tm:chargebeam",
@@ -154,7 +155,6 @@
     "tm:icefang",
     "tm:irontail",
     "tm:lightscreen",
-    "tm:magnetrise",
     "tm:playrough",
     "tm:protect",
     "tm:psychicfangs",
@@ -182,6 +182,8 @@
     "tm:trailblaze",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
+    "tm:nightslash",
     "tutor:babydolleyes",
     "tutor:chargebeam",
     "tutor:electroweb",
@@ -190,7 +192,6 @@
     "tutor:helpinghand",
     "tutor:icefang",
     "tutor:irontail",
-    "tutor:magnetrise",
     "tutor:playrough",
     "tutor:rest",
     "tutor:risingvoltage",
@@ -214,7 +215,8 @@
     "legacy:round",
     "legacy:secretpower",
     "legacy:snore",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:magnetrise"
   ],
   "preEvolution": "shinx",
   "evolutions": [

@@ -90,6 +90,8 @@
     "egg:fakeout",
     "egg:feintattack",
     "egg:quickguard",
+    "egg:dynamicpunch",
+    "egg:poweruppunch",
     "tm:acidspray",
     "tm:amnesia",
     "tm:assurance",
@@ -144,7 +146,6 @@
     "tm:roar",
     "tm:rockclimb",
     "tm:rockslide",
-    "tm:rocksmash",
     "tm:rocktomb",
     "tm:scaryface",
     "tm:sleeptalk",
@@ -170,6 +171,7 @@
     "tm:uproar",
     "tm:workup",
     "tm:zenheadbutt",
+    "tm:fakeout",
     "tutor:bulkup",
     "tutor:coaching",
     "tutor:darkpulse",
@@ -191,7 +193,6 @@
     "tutor:poisonjab",
     "tutor:rest",
     "tutor:rockslide",
-    "tutor:rocksmash",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:snarl",
@@ -212,7 +213,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:spite",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:partingshot",
+    "legacy:rocksmash"
   ],
   "evolutions": [
     {

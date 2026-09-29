@@ -73,6 +73,7 @@
     "1:tackle",
     "1:harden",
     "1:poisonsting",
+    "1:silverwind",
     "12:absorb",
     "15:stunspore",
     "17:morningsun",
@@ -126,6 +127,7 @@
     "tm:twister",
     "tm:uturn",
     "tm:venoshock",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:bugbite",
@@ -163,7 +165,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:swift",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:leechlife"
   ],
   "preEvolution": "silcoon",
   "evolutions": [],

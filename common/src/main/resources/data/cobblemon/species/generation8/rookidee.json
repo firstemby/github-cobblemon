@@ -131,6 +131,8 @@
     "egg:skyattack",
     "egg:spite",
     "egg:tailwind",
+    "egg:gust",
+    "egg:wingattack",
     "tm:aerialace",
     "tm:agility",
     "tm:aircutter",
@@ -169,6 +171,7 @@
     "tm:thief",
     "tm:uturn",
     "tm:workup",
+    "tm:razorwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:defog",
@@ -184,7 +187,9 @@
     "tutor:tailwind",
     "legacy:attract",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:featherdance",
+    "legacy:slash"
   ],
   "evolutions": [
     {

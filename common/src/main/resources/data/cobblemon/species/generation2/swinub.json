@@ -128,7 +128,6 @@
     "tm:amnesia",
     "tm:ancientpower",
     "tm:avalanche",
-    "tm:babydolleyes",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:bulldoze",
@@ -174,8 +173,8 @@
     "tm:takedown",
     "tm:terablast",
     "tm:trailblaze",
+    "tm:fissure",
     "tutor:ancientpower",
-    "tutor:babydolleyes",
     "tutor:bulldoze",
     "tutor:earthpower",
     "tutor:endeavor",
@@ -209,7 +208,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:babydolleyes"
   ],
   "evolutions": [
     {

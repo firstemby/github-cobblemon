@@ -113,6 +113,8 @@
     "1:bugbite",
     "1:stickyweb",
     "1:absorb",
+    "1:leechlife",
+    "1:signalbeam",
     "12:stringshot",
     "16:thunderwave",
     "20:electroball",
@@ -124,7 +126,6 @@
     "50:gastroacid",
     "56:bugbuzz",
     "egg:camouflage",
-    "egg:disable",
     "egg:doubleteam",
     "egg:feintattack",
     "egg:infestation",
@@ -132,6 +133,7 @@
     "egg:poisonsting",
     "egg:pursuit",
     "egg:strugglebug",
+    "egg:rockclimb",
     "tm:agility",
     "tm:bounce",
     "tm:bugbite",
@@ -185,6 +187,8 @@
     "tm:voltswitch",
     "tm:wildcharge",
     "tm:xscissor",
+    "tm:discharge",
+    "tm:rockclimb",
     "tutor:bounce",
     "tutor:bugbite",
     "tutor:chargebeam",
@@ -221,7 +225,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:disable"
   ],
   "preEvolution": "joltik",
   "evolutions": []

@@ -132,6 +132,7 @@
     "egg:metalclaw",
     "egg:thrash",
     "egg:twister",
+    "egg:rockclimb",
     "tm:bodyslam",
     "tm:bulldoze",
     "tm:cut",
@@ -151,7 +152,6 @@
     "tm:firefang",
     "tm:flamethrower",
     "tm:furycutter",
-    "tm:headbutt",
     "tm:helpinghand",
     "tm:honeclaws",
     "tm:incinerate",
@@ -224,7 +224,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:headbutt"
   ],
   "evolutions": [
     {

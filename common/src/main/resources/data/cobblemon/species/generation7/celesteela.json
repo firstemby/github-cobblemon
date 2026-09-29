@@ -60,6 +60,7 @@
   "moves": [
     "1:absorb",
     "1:tackle",
+    "1:airslash",
     "5:harden",
     "10:wideguard",
     "15:megadrain",
@@ -122,6 +123,7 @@
     "tm:superpower",
     "tm:terablast",
     "tm:zenheadbutt",
+    "tm:skullbash",
     "tutor:block",
     "tutor:bulldoze",
     "tutor:energyball",

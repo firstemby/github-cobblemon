@@ -119,7 +119,6 @@
     "egg:playrough",
     "egg:retaliate",
     "tm:bodyslam",
-    "tm:charm",
     "tm:crunch",
     "tm:darkpulse",
     "tm:dig",
@@ -155,6 +154,7 @@
     "tm:thief",
     "tm:thunderfang",
     "tm:trailblaze",
+    "tm:rocksmash",
     "tutor:darkpulse",
     "tutor:endeavor",
     "tutor:firefang",
@@ -165,7 +165,14 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:snarl",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "tutor:rocksmash",
+    "legacy:bounce",
+    "legacy:charm",
+    "legacy:focusenergy",
+    "legacy:knockoff",
+    "legacy:lunge",
+    "legacy:seedbomb"
   ],
   "evolutions": [
     {

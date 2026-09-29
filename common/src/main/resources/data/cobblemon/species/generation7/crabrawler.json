@@ -109,6 +109,8 @@
     "egg:slam",
     "egg:superpower",
     "egg:wideguard",
+    "egg:harden",
+    "egg:machpunch",
     "tm:amnesia",
     "tm:bodyslam",
     "tm:brickbreak",
@@ -128,7 +130,6 @@
     "tm:fling",
     "tm:focusblast",
     "tm:focuspunch",
-    "tm:frostbreath",
     "tm:gunkshot",
     "tm:helpinghand",
     "tm:icepunch",
@@ -160,6 +161,7 @@
     "tm:upperhand",
     "tm:workup",
     "tm:zenheadbutt",
+    "tm:cometpunch",
     "tutor:bulkup",
     "tutor:bulldoze",
     "tutor:coaching",
@@ -195,7 +197,11 @@
     "legacy:snore",
     "legacy:stoneedge",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:firstimpression",
+    "legacy:frostbreath",
+    "legacy:taunt",
+    "legacy:torment"
   ],
   "evolutions": [
     {

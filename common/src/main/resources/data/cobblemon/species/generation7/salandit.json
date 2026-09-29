@@ -120,11 +120,11 @@
     "egg:flameburst",
     "egg:mudslap",
     "egg:sandattack",
+    "egg:snatch",
     "tm:acidspray",
     "tm:agility",
     "tm:beatup",
     "tm:burningjealousy",
-    "tm:covet",
     "tm:dragonclaw",
     "tm:dragonpulse",
     "tm:endeavor",
@@ -176,8 +176,9 @@
     "tm:venomdrench",
     "tm:venoshock",
     "tm:willowisp",
+    "tm:fakeout",
+    "tm:poisonfang",
     "tutor:burningjealousy",
-    "tutor:covet",
     "tutor:dragonpulse",
     "tutor:endeavor",
     "tutor:firefang",
@@ -207,7 +208,8 @@
     "legacy:return",
     "legacy:round",
     "legacy:snore",
-    "legacy:swagger"
+    "legacy:swagger",
+    "legacy:covet"
   ],
   "evolutions": [
     {

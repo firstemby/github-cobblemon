@@ -148,9 +148,9 @@
     "egg:confuseray",
     "egg:flail",
     "egg:psybeam",
-    "egg:splash",
     "egg:sweetkiss",
     "egg:tickle",
+    "egg:signalbeam",
     "tm:acrobatics",
     "tm:agility",
     "tm:alluringvoice",
@@ -229,7 +229,11 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:dualwingbeat",
+    "legacy:roost",
+    "legacy:scaleshot",
+    "legacy:splash"
   ],
   "evolutions": [
     {

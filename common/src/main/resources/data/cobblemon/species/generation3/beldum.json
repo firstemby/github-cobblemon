@@ -124,6 +124,8 @@
     "tutor:ironhead",
     "tutor:steelbeam",
     "tutor:zenheadbutt",
+    "legacy:agility",
+    "legacy:facade",
     "special:holdback"
   ],
   "evolutions": [

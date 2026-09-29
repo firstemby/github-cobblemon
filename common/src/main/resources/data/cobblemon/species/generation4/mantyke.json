@@ -126,6 +126,7 @@
     "egg:tailwind",
     "egg:twister",
     "egg:watersport",
+    "egg:signalbeam",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -194,7 +195,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:roost"
   ],
   "evolutions": [
     {

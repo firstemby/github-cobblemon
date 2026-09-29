@@ -73,6 +73,7 @@
     "1:tackle",
     "1:harden",
     "1:poisonsting",
+    "1:silverwind",
     "12:confusion",
     "15:poisonpowder",
     "17:moonlight",
@@ -128,6 +129,7 @@
     "tm:uturn",
     "tm:venomdrench",
     "tm:venoshock",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:bugbite",
@@ -166,7 +168,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:swift"
+    "legacy:swift",
+    "legacy:leechlife"
   ],
   "preEvolution": "cascoon",
   "evolutions": [],

@@ -120,6 +120,7 @@
     "egg:feint",
     "egg:icehammer",
     "egg:quash",
+    "egg:rockthrow",
     "tm:babydolleyes",
     "tm:brutalswing",
     "tm:covet",
@@ -158,6 +159,8 @@
     "tm:terablast",
     "tm:thief",
     "tm:thunderwave",
+    "tm:fakeout",
+    "tm:poweruppunch",
     "tutor:babydolleyes",
     "tutor:covet",
     "tutor:endeavor",
@@ -174,7 +177,11 @@
     "tutor:sleeptalk",
     "tutor:stealthrock",
     "tutor:steelbeam",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:brickbreak",
+    "legacy:bulldoze",
+    "legacy:falseswipe",
+    "legacy:screech"
   ],
   "evolutions": [
     {

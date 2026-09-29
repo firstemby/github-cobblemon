@@ -236,7 +236,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:mysticalfire"
   ],
   "evolutions": [
     {

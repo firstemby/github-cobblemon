@@ -143,7 +143,6 @@
     "egg:waterpulse",
     "tm:agility",
     "tm:aquatail",
-    "tm:bind",
     "tm:blizzard",
     "tm:bodyslam",
     "tm:breakingswipe",
@@ -162,7 +161,6 @@
     "tm:gigaimpact",
     "tm:hail",
     "tm:haze",
-    "tm:headbutt",
     "tm:helpinghand",
     "tm:hydropump",
     "tm:hyperbeam",
@@ -194,7 +192,6 @@
     "tm:waterpulse",
     "tm:weatherball",
     "tutor:aquatail",
-    "tutor:bind",
     "tutor:dracometeor",
     "tutor:dragonpulse",
     "tutor:flamethrower",
@@ -239,7 +236,9 @@
     "legacy:toxic",
     "legacy:watergun",
     "legacy:whirlpool",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:bind",
+    "legacy:headbutt"
   ],
   "preEvolution": "dratini",
   "evolutions": [

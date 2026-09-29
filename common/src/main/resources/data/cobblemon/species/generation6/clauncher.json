@@ -118,7 +118,6 @@
     "tm:hydropump",
     "tm:icebeam",
     "tm:icywind",
-    "tm:irontail",
     "tm:liquidation",
     "tm:muddywater",
     "tm:mudshot",
@@ -153,7 +152,6 @@
     "tutor:helpinghand",
     "tutor:icebeam",
     "tutor:icywind",
-    "tutor:irontail",
     "tutor:liquidation",
     "tutor:mudslap",
     "tutor:rest",
@@ -173,7 +171,8 @@
     "legacy:sludgebomb",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:irontail"
   ],
   "evolutions": [
     {

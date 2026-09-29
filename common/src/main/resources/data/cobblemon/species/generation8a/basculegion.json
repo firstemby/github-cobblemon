@@ -114,7 +114,6 @@
     "egg:endeavor",
     "egg:lastrespects",
     "tm:agility",
-    "tm:aquatail",
     "tm:blizzard",
     "tm:chillingwater",
     "tm:confuseray",
@@ -160,7 +159,6 @@
     "tm:waterpulse",
     "tm:whirlpool",
     "tm:zenheadbutt",
-    "tutor:aquatail",
     "tutor:endeavor",
     "tutor:flipturn",
     "tutor:gigaimpact",
@@ -180,7 +178,10 @@
     "tutor:swift",
     "tutor:uproar",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:aquatail",
+    "legacy:calmmind",
+    "legacy:psychic"
   ],
   "preEvolution": "basculin fish_stripes=white",
   "evolutions": [],

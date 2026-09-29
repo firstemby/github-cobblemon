@@ -205,6 +205,8 @@
     "tm:torment",
     "tm:triattack",
     "tm:voltswitch",
+    "tm:discharge",
+    "tm:magnetbomb",
     "tutor:allyswitch",
     "tutor:ancientpower",
     "tutor:block",
@@ -256,7 +258,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:futuresight"
   ],
   "preEvolution": "nosepass",
   "evolutions": []

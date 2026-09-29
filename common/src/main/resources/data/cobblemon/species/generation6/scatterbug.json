@@ -107,14 +107,17 @@
     "15:bugbite",
     "egg:poisonpowder",
     "egg:ragepowder",
-    "egg:stunspore",
     "tm:bugbite",
     "tm:pounce",
     "tm:stringshot",
     "tm:strugglebug",
     "tm:terablast",
     "tutor:bugbite",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:endure",
+    "legacy:facade",
+    "legacy:protect",
+    "legacy:skittersmack"
   ],
   "evolutions": [
     {

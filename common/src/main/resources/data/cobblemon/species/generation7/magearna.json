@@ -59,6 +59,8 @@
     "1:heartswap",
     "1:trumpcard",
     "1:gyroball",
+    "1:disarmingvoice",
+    "1:metalsound",
     "6:defensecurl",
     "12:rollout",
     "18:irondefense",
@@ -154,6 +156,9 @@
     "tm:trickroom",
     "tm:voltswitch",
     "tm:zenheadbutt",
+    "tm:magnetbomb",
+    "tm:petaldance",
+    "tm:skullbash",
     "tutor:afteryou",
     "tutor:calmmind",
     "tutor:chargebeam",
@@ -197,7 +202,10 @@
     "legacy:return",
     "legacy:round",
     "legacy:snore",
-    "legacy:swagger"
+    "legacy:swagger",
+    "legacy:powergem",
+    "legacy:solarblade",
+    "legacy:vacuumwave"
   ],
   "evolutions": [],
   "forms": [

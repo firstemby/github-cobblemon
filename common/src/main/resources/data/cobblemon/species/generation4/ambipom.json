@@ -110,12 +110,12 @@
     "egg:covet",
     "egg:doubleslap",
     "egg:fakeout",
-    "egg:furyswipes",
     "egg:irontail",
     "egg:pursuit",
     "egg:quickguard",
     "egg:slam",
     "egg:switcheroo",
+    "egg:revenge",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -199,6 +199,8 @@
     "tm:uturn",
     "tm:waterpulse",
     "tm:workup",
+    "tm:doublehit",
+    "tm:fakeout",
     "tutor:aerialace",
     "tutor:bounce",
     "tutor:covet",
@@ -257,7 +259,9 @@
     "legacy:swagger",
     "legacy:toxic",
     "legacy:uproar",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:encore",
+    "legacy:faketears"
   ],
   "preEvolution": "aipom",
   "evolutions": []

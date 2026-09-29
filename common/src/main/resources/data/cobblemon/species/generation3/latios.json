@@ -159,6 +159,8 @@
     "1:psychoshift",
     "1:dragondance",
     "1:storedpower",
+    "1:safeguard",
+    "1:telekinesis",
     "5:helpinghand",
     "10:recover",
     "15:confusion",
@@ -173,6 +175,7 @@
     "60:psychic",
     "65:powersplit",
     "70:memento",
+    "egg:wish",
     "tm:aerialace",
     "tm:agility",
     "tm:aircutter",
@@ -261,6 +264,9 @@
     "tm:weatherball",
     "tm:wonderroom",
     "tm:zenheadbutt",
+    "tm:healblock",
+    "tm:razorwind",
+    "tm:workup",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:allyswitch",
@@ -319,7 +325,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:whirlpool"
+    "legacy:whirlpool",
+    "legacy:psybeam"
   ],
   "evolutions": [],
   "forms": [

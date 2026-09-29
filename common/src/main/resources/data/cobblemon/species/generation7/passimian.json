@@ -86,7 +86,6 @@
     "tm:assurance",
     "tm:batonpass",
     "tm:beatup",
-    "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:brutalswing",
@@ -151,7 +150,8 @@
     "tm:uturn",
     "tm:vacuumwave",
     "tm:workup",
-    "tutor:block",
+    "tm:round",
+    "tm:snore",
     "tutor:bulkup",
     "tutor:bulldoze",
     "tutor:coaching",
@@ -180,6 +180,7 @@
     "tutor:superpower",
     "tutor:uproar",
     "tutor:vacuumwave",
+    "tutor:snore",
     "legacy:aerialace",
     "legacy:attract",
     "legacy:confide",
@@ -188,10 +189,9 @@
     "legacy:frustration",
     "legacy:hiddenpower",
     "legacy:return",
-    "legacy:round",
-    "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:block"
   ],
   "evolutions": [],
   "behaviour": {

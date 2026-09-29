@@ -137,6 +137,7 @@
     "egg:switcheroo",
     "egg:toxicspikes",
     "egg:watersport",
+    "egg:bubblebeam",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:blizzard",
@@ -165,7 +166,6 @@
     "tm:rest",
     "tm:retaliate",
     "tm:rockslide",
-    "tm:rocksmash",
     "tm:rocktomb",
     "tm:roleplay",
     "tm:round",
@@ -189,6 +189,7 @@
     "tm:waterpledge",
     "tm:waterpulse",
     "tm:workup",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:bounce",
     "tutor:dive",
@@ -200,7 +201,6 @@
     "tutor:mudslap",
     "tutor:rest",
     "tutor:rockslide",
-    "tutor:rocksmash",
     "tutor:roleplay",
     "tutor:sleeptalk",
     "tutor:snatch",
@@ -218,7 +218,8 @@
     "legacy:snore",
     "legacy:spite",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:rocksmash"
   ],
   "evolutions": [
     {

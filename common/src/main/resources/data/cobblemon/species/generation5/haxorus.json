@@ -99,6 +99,8 @@
     "1:dragonrage",
     "1:falseswipe",
     "1:bite",
+    "1:dualchop",
+    "1:laserfocus",
     "9:assurance",
     "12:taunt",
     "15:slash",
@@ -117,7 +119,6 @@
     "egg:counter",
     "egg:endeavor",
     "egg:firstimpression",
-    "egg:harden",
     "egg:irontail",
     "egg:nightslash",
     "egg:razorwind",
@@ -190,6 +191,9 @@
     "tm:terablast",
     "tm:trailblaze",
     "tm:xscissor",
+    "tm:firstimpression",
+    "tm:nightslash",
+    "tm:razorwind",
     "tutor:aerialace",
     "tutor:aquatail",
     "tutor:bulldoze",
@@ -230,7 +234,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:harden"
   ],
   "preEvolution": "fraxure",
   "evolutions": []

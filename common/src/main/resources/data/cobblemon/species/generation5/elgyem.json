@@ -108,7 +108,6 @@
   "moves": [
     "1:confusion",
     "1:growl",
-    "1:healblock",
     "1:miracleeye",
     "6:imprison",
     "12:teleport",
@@ -126,7 +125,6 @@
     "egg:destinybond",
     "egg:disable",
     "egg:psychup",
-    "egg:simplebeam",
     "egg:synchronoise",
     "tm:afteryou",
     "tm:agility",
@@ -186,6 +184,7 @@
     "tm:uproar",
     "tm:wonderroom",
     "tm:zenheadbutt",
+    "tm:healblock",
     "tutor:afteryou",
     "tutor:allyswitch",
     "tutor:calmmind",
@@ -224,7 +223,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:simplebeam"
   ],
   "evolutions": [
     {

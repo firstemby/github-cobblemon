@@ -206,7 +206,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:dualwingbeat"
   ],
   "evolutions": [
     {

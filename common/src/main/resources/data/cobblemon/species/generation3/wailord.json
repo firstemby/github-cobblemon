@@ -218,6 +218,7 @@
     "1:astonish",
     "1:soak",
     "1:nobleroar",
+    "1:rollout",
     "15:mist",
     "18:waterpulse",
     "21:heavyslam",
@@ -231,7 +232,6 @@
     "49:hydropump",
     "54:waterspout",
     "egg:aquaring",
-    "egg:clearsmog",
     "egg:curse",
     "egg:defensecurl",
     "egg:doubleedge",
@@ -291,6 +291,7 @@
     "tm:weatherball",
     "tm:whirlpool",
     "tm:zenheadbutt",
+    "tm:fissure",
     "tutor:block",
     "tutor:bounce",
     "tutor:bulldoze",
@@ -321,7 +322,8 @@
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:clearsmog"
   ],
   "preEvolution": "wailmer",
   "evolutions": []

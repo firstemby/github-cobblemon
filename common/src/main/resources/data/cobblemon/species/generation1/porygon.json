@@ -158,6 +158,11 @@
     "tm:trickroom",
     "tm:wonderroom",
     "tm:zenheadbutt",
+    "tm:discharge",
+    "tm:headbutt",
+    "tm:healblock",
+    "tm:magnetbomb",
+    "tm:skullbash",
     "tutor:allyswitch",
     "tutor:chargebeam",
     "tutor:electroweb",
@@ -192,7 +197,6 @@
     "legacy:defensecurl",
     "legacy:doubleteam",
     "legacy:frustration",
-    "legacy:headbutt",
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:naturalgift",
@@ -205,11 +209,15 @@
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
-    "legacy:skullbash",
     "legacy:snore",
     "legacy:swagger",
     "legacy:teleport",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:confuseray",
+    "legacy:flashcannon",
+    "legacy:metalsound",
+    "legacy:selfdestruct",
+    "legacy:voltswitch"
   ],
   "evolutions": [
     {

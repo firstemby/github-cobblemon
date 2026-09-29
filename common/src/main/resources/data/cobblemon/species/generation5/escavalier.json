@@ -68,7 +68,6 @@
     "1:quickguard",
     "1:twineedle",
     "1:furyattack",
-    "1:slash",
     "1:doubleedge",
     "1:fellstinger",
     "1:endure",
@@ -90,7 +89,6 @@
     "egg:bugbite",
     "egg:counter",
     "egg:feintattack",
-    "egg:hornattack",
     "egg:knockoff",
     "egg:nightslash",
     "egg:pursuit",
@@ -143,6 +141,7 @@
     "tm:taunt",
     "tm:terablast",
     "tm:xscissor",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:bugbite",
     "tutor:drillrun",
@@ -174,7 +173,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:hornattack"
   ],
   "preEvolution": "karrablast",
   "evolutions": [],

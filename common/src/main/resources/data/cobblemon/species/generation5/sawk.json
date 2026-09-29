@@ -81,6 +81,9 @@
     "45:endure",
     "50:reversal",
     "55:closecombat",
+    "egg:detect",
+    "egg:dynamicpunch",
+    "egg:machpunch",
     "tm:block",
     "tm:brickbreak",
     "tm:bulkup",
@@ -133,6 +136,7 @@
     "tm:thunderpunch",
     "tm:workup",
     "tm:zenheadbutt",
+    "tm:cometpunch",
     "tutor:block",
     "tutor:bulkup",
     "tutor:bulldoze",
@@ -168,7 +172,13 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:blazekick",
+    "legacy:bodyslam",
+    "legacy:drainpunch",
+    "legacy:ironhead",
+    "legacy:outrage",
+    "legacy:swordsdance"
   ],
   "evolutions": [],
   "behaviour": {

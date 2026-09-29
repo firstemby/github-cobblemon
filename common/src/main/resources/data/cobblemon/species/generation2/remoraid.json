@@ -168,7 +168,6 @@
     "40:soak",
     "44:hyperbeam",
     "egg:acidspray",
-    "egg:entrainment",
     "egg:flail",
     "egg:haze",
     "egg:octazooka",
@@ -257,7 +256,8 @@
     "legacy:round",
     "legacy:secretpower",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:entrainment"
   ],
   "evolutions": [
     {

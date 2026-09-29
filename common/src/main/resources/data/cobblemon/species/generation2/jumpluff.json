@@ -120,7 +120,6 @@
     "49:bounce",
     "55:memento",
     "egg:aromatherapy",
-    "egg:confusion",
     "egg:cottonguard",
     "egg:encore",
     "egg:grassyterrain",
@@ -182,7 +181,6 @@
     "tutor:dazzlinggleam",
     "tutor:endeavor",
     "tutor:energyball",
-    "tutor:falseswipe",
     "tutor:gigadrain",
     "tutor:gigaimpact",
     "tutor:helpinghand",
@@ -214,6 +212,7 @@
     "legacy:swagger",
     "legacy:sweetscent",
     "legacy:toxic",
+    "legacy:confusion",
     "special:falseswipe"
   ],
   "preEvolution": "skiploom",

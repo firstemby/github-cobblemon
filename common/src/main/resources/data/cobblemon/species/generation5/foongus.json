@@ -175,6 +175,10 @@
     "tm:toxic",
     "tm:venoshock",
     "tm:worryseed",
+    "tm:firstimpression",
+    "tm:healblock",
+    "tm:mimic",
+    "tm:skullbash",
     "tutor:afteryou",
     "tutor:energyball",
     "tutor:foulplay",
@@ -197,7 +201,10 @@
     "legacy:round",
     "legacy:secretpower",
     "legacy:snore",
-    "legacy:swagger"
+    "legacy:swagger",
+    "legacy:dazzlinggleam",
+    "legacy:mudshot",
+    "legacy:toxicspikes"
   ],
   "evolutions": [
     {

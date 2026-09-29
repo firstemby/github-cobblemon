@@ -117,7 +117,6 @@
     "egg:bubblebeam",
     "egg:clamp",
     "egg:lifedew",
-    "egg:rapidspin",
     "egg:twineedle",
     "egg:waterpulse",
     "tm:avalanche",
@@ -191,6 +190,7 @@
     "legacy:swagger",
     "legacy:teleport",
     "legacy:toxic",
+    "legacy:rapidspin",
     "special:refresh"
   ],
   "evolutions": [

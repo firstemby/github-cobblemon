@@ -119,7 +119,8 @@
     "egg:sandtomb",
     "egg:swift",
     "egg:toxicspikes",
-    "tm:autotomize",
+    "egg:autotomize",
+    "egg:revenge",
     "tm:bodyslam",
     "tm:bugbite",
     "tm:bugbuzz",
@@ -165,7 +166,6 @@
     "tm:spikes",
     "tm:stealthrock",
     "tm:strength",
-    "tm:stringshot",
     "tm:strugglebug",
     "tm:substitute",
     "tm:sunnyday",
@@ -191,7 +191,6 @@
     "tutor:sleeptalk",
     "tutor:spikes",
     "tutor:stealthrock",
-    "tutor:stringshot",
     "tutor:swift",
     "legacy:attract",
     "legacy:captivate",
@@ -209,6 +208,7 @@
     "legacy:swagger",
     "legacy:sweetscent",
     "legacy:toxic",
+    "legacy:stringshot",
     "special:refresh"
   ],
   "evolutions": [

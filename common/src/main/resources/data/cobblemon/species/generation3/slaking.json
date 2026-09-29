@@ -123,6 +123,12 @@
     "1:swagger",
     "1:furyswipes",
     "1:slash",
+    "1:endure",
+    "1:focusenergy",
+    "1:focuspunch",
+    "1:playrough",
+    "1:reversal",
+    "1:uproar",
     "17:amnesia",
     "23:covet",
     "27:throatchop",
@@ -242,6 +248,7 @@
     "tm:workup",
     "tm:xscissor",
     "tm:zenheadbutt",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:afteryou",
     "tutor:block",
@@ -304,7 +311,8 @@
     "legacy:secretpower",
     "legacy:seismictoss",
     "legacy:toxic",
-    "legacy:waterpulse"
+    "legacy:waterpulse",
+    "legacy:swift"
   ],
   "preEvolution": "vigoroth",
   "evolutions": []

@@ -131,7 +131,6 @@
     "egg:suckerpunch",
     "tm:acrobatics",
     "tm:agility",
-    "tm:allyswitch",
     "tm:assurance",
     "tm:batonpass",
     "tm:beatup",
@@ -181,7 +180,7 @@
     "tm:thunderwave",
     "tm:uturn",
     "tm:willowisp",
-    "tutor:allyswitch",
+    "tm:doublehit",
     "tutor:dive",
     "tutor:dracometeor",
     "tutor:dragonpulse",
@@ -198,7 +197,8 @@
     "legacy:attract",
     "legacy:round",
     "legacy:scald",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:allyswitch"
   ],
   "preEvolution": "dreepy",
   "evolutions": [

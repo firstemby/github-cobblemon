@@ -126,6 +126,7 @@
     "tm:bounce",
     "tutor:bounce",
     "legacy:hydropump",
+    "legacy:facade",
     "special:celebrate",
     "special:happyhour"
   ],

@@ -98,7 +98,8 @@
     "tutor:electroweb",
     "tutor:irondefense",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:facade"
   ],
   "preEvolution": "weedle",
   "evolutions": [

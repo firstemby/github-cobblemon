@@ -117,6 +117,7 @@
     "egg:hammerarm",
     "egg:takedown",
     "egg:yawn",
+    "egg:snatch",
     "tm:brickbreak",
     "tm:dig",
     "tm:encore",

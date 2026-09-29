@@ -130,7 +130,6 @@
     "egg:block",
     "egg:counter",
     "egg:disable",
-    "egg:dynamicpunch",
     "egg:fellstinger",
     "egg:grasswhistle",
     "egg:powertrip",
@@ -138,6 +137,7 @@
     "egg:smellingsalts",
     "egg:switcheroo",
     "egg:teeterdance",
+    "egg:poweruppunch",
     "tm:block",
     "tm:bodyslam",
     "tm:brickbreak",
@@ -269,7 +269,9 @@
     "legacy:seismictoss",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:assurance",
+    "legacy:dynamicpunch"
   ],
   "preEvolution": "cacnea",
   "evolutions": []

@@ -195,6 +195,7 @@
     "egg:fissure",
     "egg:thrash",
     "egg:yawn",
+    "egg:lick",
     "tm:aquatail",
     "tm:avalanche",
     "tm:bodypress",
@@ -229,6 +230,8 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:zenheadbutt",
+    "tm:fissure",
+    "tm:irontail",
     "tutor:aquatail",
     "tutor:bulldoze",
     "tutor:dive",
@@ -242,7 +245,11 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:waterpulse",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "tutor:irontail",
+    "legacy:muddywater",
+    "legacy:mudshot",
+    "legacy:whirlpool"
   ],
   "evolutions": []
 }

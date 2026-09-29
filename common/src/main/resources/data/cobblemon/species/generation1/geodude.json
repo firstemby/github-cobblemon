@@ -139,6 +139,8 @@
     "egg:hammerarm",
     "egg:megapunch",
     "egg:wideguard",
+    "egg:harden",
+    "egg:rockclimb",
     "tm:ancientpower",
     "tm:block",
     "tm:bodyslam",
@@ -159,7 +161,6 @@
     "tm:fling",
     "tm:focuspunch",
     "tm:gyroball",
-    "tm:harden",
     "tm:headbutt",
     "tm:highhorsepower",
     "tm:incinerate",
@@ -238,7 +239,9 @@
     "legacy:snore",
     "legacy:submission",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:scorchingsands",
+    "legacy:swift"
   ],
   "evolutions": [
     {
@@ -325,6 +328,7 @@
         "egg:screech",
         "egg:wideguard",
         "egg:zapcannon",
+        "egg:rockclimb",
         "tm:block",
         "tm:bodyslam",
         "tm:brickbreak",
@@ -383,6 +387,7 @@
         "tm:thunderwave",
         "tm:voltswitch",
         "tm:wildcharge",
+        "tm:discharge",
         "tutor:block",
         "tutor:bulldoze",
         "tutor:chargebeam",
@@ -420,7 +425,10 @@
         "legacy:snore",
         "legacy:swagger",
         "legacy:thundershock",
-        "legacy:toxic"
+        "legacy:toxic",
+        "legacy:metronome",
+        "legacy:scorchingsands",
+        "legacy:swift"
       ],
       "evolutions": [
         {

@@ -122,7 +122,7 @@
     "egg:mudslap",
     "egg:odorsleuth",
     "egg:slash",
-    "egg:switcheroo",
+    "egg:tailwhip",
     "tm:agility",
     "tm:aquatail",
     "tm:batonpass",
@@ -178,7 +178,6 @@
     "tm:surf",
     "tm:swift",
     "tm:tailslap",
-    "tm:tailwhip",
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
@@ -187,6 +186,8 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
+    "tm:doublehit",
+    "tm:razorwind",
     "tutor:aquatail",
     "tutor:bulkup",
     "tutor:dive",
@@ -223,7 +224,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:switcheroo"
   ],
   "preEvolution": "buizel",
   "evolutions": []

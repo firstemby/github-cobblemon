@@ -118,6 +118,11 @@
     "egg:slam",
     "egg:sleeppowder",
     "egg:stunspore",
+    "egg:acidspray",
+    "egg:gigadrain",
+    "egg:magicalleaf",
+    "egg:synthesis",
+    "egg:worryseed",
     "tm:acidspray",
     "tm:bind",
     "tm:bugbite",
@@ -187,7 +192,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:leechlife"
   ],
   "evolutions": []
 }

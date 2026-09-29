@@ -142,6 +142,8 @@
     "egg:spite",
     "egg:suckerpunch",
     "egg:wonderroom",
+    "egg:grudge",
+    "egg:ominouswind",
     "tm:allyswitch",
     "tm:burningjealousy",
     "tm:calmmind",
@@ -164,7 +166,6 @@
     "tm:futuresight",
     "tm:gigaimpact",
     "tm:grassknot",
-    "tm:grudge",
     "tm:headbutt",
     "tm:healbell",
     "tm:helpinghand",
@@ -272,7 +273,8 @@
     "legacy:swagger",
     "legacy:toxic",
     "legacy:uproar",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:skittersmack"
   ],
   "evolutions": [
     {

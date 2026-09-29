@@ -158,6 +158,7 @@
     "tm:torment",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
     "tutor:chargebeam",
     "tutor:electroweb",
     "tutor:foulplay",
@@ -310,6 +311,7 @@
         "tm:voltswitch",
         "tm:wildcharge",
         "tm:worryseed",
+        "tm:discharge",
         "tutor:chargebeam",
         "tutor:electroweb",
         "tutor:energyball",
@@ -325,7 +327,8 @@
         "tutor:swift",
         "tutor:thunderbolt",
         "tutor:wildcharge",
-        "tutor:worryseed"
+        "tutor:worryseed",
+        "legacy:magicalleaf"
       ],
       "evolutions": [
         {

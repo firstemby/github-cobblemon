@@ -120,7 +120,6 @@
     "tm:bounce",
     "tm:brutalswing",
     "tm:charm",
-    "tm:covet",
     "tm:drainingkiss",
     "tm:encore",
     "tm:endure",
@@ -147,8 +146,8 @@
     "tm:terablast",
     "tm:waterfall",
     "tm:workup",
+    "tm:sing",
     "tutor:bounce",
-    "tutor:covet",
     "tutor:helpinghand",
     "tutor:hypervoice",
     "tutor:icebeam",
@@ -180,7 +179,8 @@
     "legacy:toxic",
     "legacy:uproar",
     "legacy:waterpulse",
-    "legacy:whirlpool"
+    "legacy:whirlpool",
+    "legacy:covet"
   ],
   "evolutions": [
     {

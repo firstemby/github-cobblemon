@@ -243,7 +243,8 @@
     "legacy:softboiled",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:calmmind"
   ],
   "evolutions": [
     {

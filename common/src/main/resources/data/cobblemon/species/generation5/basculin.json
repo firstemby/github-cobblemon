@@ -120,8 +120,8 @@
     "56:headsmash",
     "egg:bubblebeam",
     "egg:endeavor",
-    "egg:headsmash",
     "egg:rage",
+    "egg:revenge",
     "tm:agility",
     "tm:aquatail",
     "tm:assurance",
@@ -299,7 +299,6 @@
         "egg:endeavor",
         "egg:lastrespects",
         "tm:agility",
-        "tm:aquatail",
         "tm:blizzard",
         "tm:chillingwater",
         "tm:crunch",
@@ -334,7 +333,6 @@
         "tm:waterpulse",
         "tm:whirlpool",
         "tm:zenheadbutt",
-        "tutor:aquatail",
         "tutor:endeavor",
         "tutor:flipturn",
         "tutor:icebeam",
@@ -347,7 +345,8 @@
         "tutor:swift",
         "tutor:uproar",
         "tutor:waterpulse",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "legacy:aquatail"
       ],
       "evolutions": [
         {

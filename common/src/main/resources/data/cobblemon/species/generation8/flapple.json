@@ -128,6 +128,8 @@
     "tm:trailblaze",
     "tm:twister",
     "tm:uturn",
+    "tm:round",
+    "tm:snore",
     "tutor:aerialace",
     "tutor:dragonpulse",
     "tutor:dualwingbeat",
@@ -147,9 +149,10 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:twister",
-    "legacy:attract",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:dracometeor",
+    "tutor:grassyglide",
+    "tutor:snore",
+    "legacy:attract"
   ],
   "preEvolution": "applin",
   "evolutions": [],

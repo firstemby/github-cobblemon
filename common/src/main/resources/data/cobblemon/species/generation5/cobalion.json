@@ -112,7 +112,6 @@
     "tm:reversal",
     "tm:roar",
     "tm:rockpolish",
-    "tm:rocksmash",
     "tm:safeguard",
     "tm:sandstorm",
     "tm:scaryface",
@@ -137,6 +136,8 @@
     "tm:workup",
     "tm:xscissor",
     "tm:zenheadbutt",
+    "tm:headbutt",
+    "tm:skullbash",
     "tutor:aerialace",
     "tutor:block",
     "tutor:bounce",
@@ -154,7 +155,6 @@
     "tutor:megahorn",
     "tutor:poisonjab",
     "tutor:rest",
-    "tutor:rocksmash",
     "tutor:sleeptalk",
     "tutor:stealthrock",
     "tutor:steelbeam",
@@ -173,7 +173,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:rocksmash"
   ],
   "evolutions": [],
   "behaviour": {

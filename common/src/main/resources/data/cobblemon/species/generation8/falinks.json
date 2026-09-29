@@ -161,6 +161,13 @@
     "tm:upperhand",
     "tm:uproar",
     "tm:zenheadbutt",
+    "tm:cometpunch",
+    "tm:doublehit",
+    "tm:firstimpression",
+    "tm:round",
+    "tm:seedbomb",
+    "tm:skullbash",
+    "tm:snore",
     "tutor:bulkup",
     "tutor:coaching",
     "tutor:endeavor",
@@ -183,8 +190,10 @@
     "tutor:throatchop",
     "tutor:uproar",
     "tutor:zenheadbutt",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:seedbomb",
+    "tutor:snore",
+    "legacy:fakeout",
+    "legacy:lowsweep"
   ],
   "evolutions": []
 }

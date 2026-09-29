@@ -102,6 +102,7 @@
     "1:bubble",
     "1:helpinghand",
     "1:wrap",
+    "1:signalbeam",
     "12:psybeam",
     "16:aurorabeam",
     "20:bubblebeam",
@@ -112,7 +113,6 @@
     "48:soak",
     "54:hyperbeam",
     "egg:acidspray",
-    "egg:entrainment",
     "egg:flail",
     "egg:haze",
     "egg:octazooka",
@@ -218,7 +218,8 @@
     "legacy:secretpower",
     "legacy:seismictoss",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:entrainment"
   ],
   "preEvolution": "remoraid",
   "evolutions": []

@@ -107,6 +107,7 @@
     "tm:sunnyday",
     "tm:takedown",
     "tm:terablast",
+    "tm:doublehit",
     "tutor:bugbite",
     "tutor:dragonpulse",
     "tutor:energyball",
@@ -120,6 +121,8 @@
     "tutor:seedbomb",
     "tutor:sleeptalk",
     "tutor:suckerpunch",
+    "tutor:dracometeor",
+    "tutor:grassyglide",
     "legacy:attract"
   ],
   "preEvolution": "applin",

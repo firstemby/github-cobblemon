@@ -122,7 +122,6 @@
     "egg:autotomize",
     "egg:curse",
     "egg:gravity",
-    "egg:lockon",
     "egg:magnitude",
     "egg:takedown",
     "egg:wideguard",
@@ -202,7 +201,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:lockon"
   ],
   "preEvolution": "boldore",
   "evolutions": []

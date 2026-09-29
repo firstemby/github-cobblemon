@@ -150,10 +150,10 @@
     "tm:terablast",
     "tm:thief",
     "tm:throatchop",
-    "tm:thunderwave",
     "tm:torment",
     "tm:trailblaze",
     "tm:trick",
+    "tm:fakeout",
     "tutor:burningjealousy",
     "tutor:darkpulse",
     "tutor:dazzlinggleam",
@@ -172,7 +172,8 @@
     "legacy:attract",
     "legacy:round",
     "legacy:snore",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:thunderwave"
   ],
   "preEvolution": "impidimp",
   "evolutions": [

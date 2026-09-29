@@ -155,6 +155,8 @@
     "tm:terablast",
     "tm:triattack",
     "tm:wonderroom",
+    "tm:round",
+    "tm:snore",
     "tutor:babydolleyes",
     "tutor:calmmind",
     "tutor:dazzlinggleam",
@@ -176,8 +178,7 @@
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:wonderroom",
-    "legacy:round",
-    "legacy:snore",
+    "tutor:snore",
     "special:celebrate"
   ],
   "preEvolution": "milcery",

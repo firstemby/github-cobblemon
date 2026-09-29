@@ -121,7 +121,6 @@
     "egg:knockoff",
     "egg:nightslash",
     "egg:slash",
-    "egg:tickle",
     "tm:agility",
     "tm:allyswitch",
     "tm:amnesia",
@@ -175,6 +174,7 @@
     "tm:waterpulse",
     "tm:whirlpool",
     "tm:xscissor",
+    "tm:nightslash",
     "tutor:allyswitch",
     "tutor:ancientpower",
     "tutor:dive",
@@ -215,7 +215,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:takedown",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:tickle"
   ],
   "preEvolution": "krabby",
   "evolutions": [],

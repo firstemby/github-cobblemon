@@ -123,6 +123,7 @@
     "tm:takedown",
     "tm:terablast",
     "tm:uproar",
+    "tm:doublehit",
     "tutor:bugbite",
     "tutor:dragonpulse",
     "tutor:earthpower",
@@ -139,6 +140,8 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:uproar",
+    "tutor:dracometeor",
+    "tutor:grassyglide",
     "legacy:attract"
   ],
   "preEvolution": "dipplin",

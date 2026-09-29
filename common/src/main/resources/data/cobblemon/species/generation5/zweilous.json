@@ -85,7 +85,6 @@
     "egg:belch",
     "egg:doublehit",
     "egg:headsmash",
-    "tm:aquatail",
     "tm:assurance",
     "tm:beatup",
     "tm:bodyslam",
@@ -131,10 +130,9 @@
     "tm:thief",
     "tm:thunderfang",
     "tm:thunderwave",
-    "tm:torment",
     "tm:workup",
     "tm:zenheadbutt",
-    "tutor:aquatail",
+    "tm:doublehit",
     "tutor:darkpulse",
     "tutor:dracometeor",
     "tutor:dragonpulse",
@@ -167,7 +165,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:aquatail",
+    "legacy:torment"
   ],
   "preEvolution": "deino",
   "evolutions": [

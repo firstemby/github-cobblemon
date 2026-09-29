@@ -119,6 +119,8 @@
     "tm:trickroom",
     "tm:willowisp",
     "tm:wonderroom",
+    "tm:round",
+    "tm:snore",
     "tutor:allyswitch",
     "tutor:calmmind",
     "tutor:darkpulse",
@@ -138,8 +140,7 @@
     "tutor:suckerpunch",
     "tutor:trick",
     "tutor:wonderroom",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:snore"
   ],
   "preEvolution": "sinistea tea_authenticity=phony",
   "evolutions": [],

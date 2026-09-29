@@ -257,6 +257,7 @@
     "legacy:submission",
     "legacy:swagger",
     "legacy:toxic",
+    "legacy:triattack",
     "special:mudsport"
   ],
   "evolutions": [

@@ -93,7 +93,8 @@
     ]
   },
   "moves": [
-    "1:hiddenpower"
+    "1:hiddenpower",
+    "tm:hiddenpower"
   ],
   "evolutions": [],
   "forms": [

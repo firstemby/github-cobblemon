@@ -137,6 +137,7 @@
     "tm:sunnyday",
     "tm:terablast",
     "tm:trick",
+    "tm:ominouswind",
     "tutor:afteryou",
     "tutor:ancientpower",
     "tutor:block",
@@ -164,6 +165,7 @@
     "tutor:stealthrock",
     "tutor:stoneedge",
     "tutor:trick",
+    "tutor:ominouswind",
     "legacy:attract",
     "legacy:confide",
     "legacy:doubleteam",
@@ -173,7 +175,10 @@
     "legacy:round",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:darkpulse",
+    "legacy:nastyplot",
+    "legacy:powergem"
   ],
   "evolutions": [
     {

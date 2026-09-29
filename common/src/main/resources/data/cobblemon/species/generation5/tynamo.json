@@ -119,14 +119,16 @@
     "tm:charge",
     "tm:chargebeam",
     "tm:knockoff",
-    "tm:magnetrise",
     "tm:risingvoltage",
     "tm:terablast",
     "tm:thunderwave",
     "tutor:chargebeam",
     "tutor:knockoff",
-    "tutor:magnetrise",
-    "tutor:risingvoltage"
+    "tutor:risingvoltage",
+    "legacy:facade",
+    "legacy:gigadrain",
+    "legacy:magnetrise",
+    "legacy:protect"
   ],
   "evolutions": [
     {

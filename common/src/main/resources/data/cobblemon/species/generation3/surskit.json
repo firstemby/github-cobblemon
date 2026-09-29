@@ -117,6 +117,7 @@
     "egg:mudshot",
     "egg:powersplit",
     "egg:psybeam",
+    "egg:signalbeam",
     "tm:acrobatics",
     "tm:agility",
     "tm:batonpass",

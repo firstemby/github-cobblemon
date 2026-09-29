@@ -114,7 +114,6 @@
     "egg:headbutt",
     "egg:rockpolish",
     "egg:rollout",
-    "egg:slam",
     "tm:afteryou",
     "tm:block",
     "tm:bodyslam",
@@ -165,6 +164,7 @@
     "tm:terablast",
     "tm:thief",
     "tm:trailblaze",
+    "tm:mimic",
     "tutor:afteryou",
     "tutor:block",
     "tutor:bulldoze",
@@ -198,7 +198,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:slam"
   ],
   "evolutions": [
     {

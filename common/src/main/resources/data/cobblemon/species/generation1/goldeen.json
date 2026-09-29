@@ -143,12 +143,11 @@
     "50:horndrill",
     "egg:acupressure",
     "egg:aquatail",
-    "egg:furyattack",
     "egg:haze",
     "egg:mudslap",
     "egg:mudsport",
     "egg:psybeam",
-    "egg:skullbash",
+    "egg:signalbeam",
     "tm:agility",
     "tm:aquatail",
     "tm:blizzard",
@@ -189,6 +188,7 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
+    "tm:skullbash",
     "tutor:aquatail",
     "tutor:bounce",
     "tutor:dive",
@@ -230,7 +230,8 @@
     "legacy:swagger",
     "legacy:takedown",
     "legacy:toxic",
-    "legacy:watergun"
+    "legacy:watergun",
+    "legacy:furyattack"
   ],
   "evolutions": [
     {

@@ -110,7 +110,6 @@
     "egg:forcepalm",
     "egg:rollout",
     "egg:stomp",
-    "egg:wideguard",
     "tm:aerialace",
     "tm:babydolleyes",
     "tm:bind",
@@ -183,7 +182,8 @@
     "legacy:round",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:wideguard"
   ],
   "evolutions": [
     {

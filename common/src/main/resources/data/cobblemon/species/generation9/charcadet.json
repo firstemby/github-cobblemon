@@ -124,6 +124,7 @@
     "egg:destinybond",
     "egg:disable",
     "egg:spite",
+    "egg:smokescreen",
     "tm:confuseray",
     "tm:endure",
     "tm:facade",
@@ -146,12 +147,14 @@
     "tm:takedown",
     "tm:terablast",
     "tm:willowisp",
+    "tm:ominouswind",
     "tutor:flamethrower",
     "tutor:heatwave",
     "tutor:helpinghand",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:spite",
+    "tutor:ominouswind",
     "special:celebrate"
   ],
   "evolutions": [

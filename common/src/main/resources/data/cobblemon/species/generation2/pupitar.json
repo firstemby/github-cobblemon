@@ -160,7 +160,6 @@
     "tm:rest",
     "tm:retaliate",
     "tm:rockblast",
-    "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
@@ -181,7 +180,6 @@
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
-    "tm:torment",
     "tutor:aerialace",
     "tutor:ancientpower",
     "tutor:bulldoze",
@@ -224,7 +222,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:rockpolish",
+    "legacy:torment"
   ],
   "preEvolution": "larvitar",
   "evolutions": [

@@ -124,9 +124,10 @@
     "egg:dragontail",
     "egg:haze",
     "egg:twister",
+    "egg:bubblebeam",
+    "egg:venomdrench",
     "tm:acidspray",
     "tm:aquatail",
-    "tm:bounce",
     "tm:chillingwater",
     "tm:dive",
     "tm:doubleteam",
@@ -175,7 +176,6 @@
     "tm:waterpulse",
     "tm:whirlpool",
     "tutor:aquatail",
-    "tutor:bounce",
     "tutor:dive",
     "tutor:dragonpulse",
     "tutor:flipturn",
@@ -205,7 +205,9 @@
     "legacy:scald",
     "legacy:secretpower",
     "legacy:snore",
-    "legacy:swagger"
+    "legacy:swagger",
+    "legacy:bounce",
+    "legacy:poisonjab"
   ],
   "evolutions": [
     {

@@ -165,6 +165,12 @@
     "tm:uturn",
     "tm:venoshock",
     "tm:xscissor",
+    "tm:firstimpression",
+    "tm:healblock",
+    "tm:mimic",
+    "tm:poisonfang",
+    "tm:razorwind",
+    "tm:triattack",
     "tutor:endeavor",
     "tutor:foulplay",
     "tutor:gigaimpact",
@@ -181,7 +187,11 @@
     "tutor:sludgebomb",
     "tutor:superfang",
     "tutor:throatchop",
-    "tutor:xscissor"
+    "tutor:xscissor",
+    "legacy:lightscreen",
+    "legacy:reflect",
+    "legacy:seedbomb",
+    "legacy:toxicspikes"
   ],
   "preEvolution": "shroodle",
   "evolutions": []

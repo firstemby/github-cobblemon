@@ -167,6 +167,9 @@
     "tm:upperhand",
     "tm:uturn",
     "tm:waterpulse",
+    "tm:mimic",
+    "tm:rocksmash",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:bulkup",
@@ -183,7 +186,13 @@
     "tutor:sleeptalk",
     "tutor:tailwind",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "tutor:rocksmash",
+    "legacy:brickbreak",
+    "legacy:brutalswing",
+    "legacy:knockoff",
+    "legacy:tripleaxel",
+    "legacy:waterfall"
   ],
   "evolutions": []
 }

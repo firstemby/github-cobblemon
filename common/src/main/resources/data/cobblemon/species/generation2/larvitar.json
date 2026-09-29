@@ -176,7 +176,6 @@
     "tm:rest",
     "tm:retaliate",
     "tm:rockblast",
-    "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
@@ -197,7 +196,6 @@
     "tm:takedown",
     "tm:taunt",
     "tm:terablast",
-    "tm:torment",
     "tutor:ancientpower",
     "tutor:bulldoze",
     "tutor:darkpulse",
@@ -237,7 +235,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:rockpolish",
+    "legacy:torment"
   ],
   "evolutions": [
     {

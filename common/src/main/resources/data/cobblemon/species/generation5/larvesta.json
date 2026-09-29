@@ -104,7 +104,6 @@
   "moves": [
     "1:ember",
     "1:stringshot",
-    "1:absorb",
     "6:flamecharge",
     "12:strugglebug",
     "18:flamewheel",
@@ -141,7 +140,6 @@
     "tm:leechlife",
     "tm:lightscreen",
     "tm:lunge",
-    "tm:magnetrise",
     "tm:overheat",
     "tm:pounce",
     "tm:protect",
@@ -170,7 +168,6 @@
     "tutor:gigadrain",
     "tutor:heatwave",
     "tutor:leechlife",
-    "tutor:magnetrise",
     "tutor:psychic",
     "tutor:rest",
     "tutor:signalbeam",
@@ -189,7 +186,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:magnetrise"
   ],
   "evolutions": [
     {

@@ -145,6 +145,7 @@
     "tm:terrainpulse",
     "tm:trickroom",
     "tm:wonderroom",
+    "tm:magnetbomb",
     "tutor:afteryou",
     "tutor:allyswitch",
     "tutor:ancientpower",
@@ -184,7 +185,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:selfdestruct"
   ],
   "evolutions": [],
   "behaviour": {

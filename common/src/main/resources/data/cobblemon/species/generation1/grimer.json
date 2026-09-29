@@ -119,13 +119,14 @@
     "egg:acidspray",
     "egg:curse",
     "egg:haze",
-    "egg:lick",
     "egg:meanlook",
     "egg:shadowpunch",
     "egg:shadowsneak",
     "egg:spitup",
     "egg:stockpile",
     "egg:swallow",
+    "egg:poweruppunch",
+    "egg:smog",
     "tm:acidspray",
     "tm:assurance",
     "tm:bodyslam",
@@ -185,6 +186,7 @@
     "tm:toxic",
     "tm:venoshock",
     "tm:zenheadbutt",
+    "tm:shadowpunch",
     "tutor:drainpunch",
     "tutor:firepunch",
     "tutor:flamethrower",
@@ -222,7 +224,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:lick",
+    "legacy:skittersmack"
   ],
   "evolutions": [
     {
@@ -293,6 +297,7 @@
         "egg:spitup",
         "egg:stockpile",
         "egg:swallow",
+        "egg:poweruppunch",
         "tm:acidspray",
         "tm:assurance",
         "tm:bodyslam",
@@ -363,6 +368,7 @@
         "tm:toxic",
         "tm:venoshock",
         "tm:zenheadbutt",
+        "tm:poisonfang",
         "tutor:darkpulse",
         "tutor:drainpunch",
         "tutor:firepunch",
@@ -402,7 +408,8 @@
         "legacy:return",
         "legacy:round",
         "legacy:snore",
-        "legacy:swagger"
+        "legacy:swagger",
+        "legacy:skittersmack"
       ],
       "evolutions": [
         {

@@ -142,7 +142,6 @@
     "tm:bulldoze",
     "tm:charm",
     "tm:chillingwater",
-    "tm:covet",
     "tm:crunch",
     "tm:cut",
     "tm:dig",
@@ -193,9 +192,10 @@
     "tm:trailblaze",
     "tm:waterpulse",
     "tm:xscissor",
+    "tm:nightslash",
+    "tm:sheercold",
     "tutor:aerialace",
     "tutor:bulldoze",
-    "tutor:covet",
     "tutor:endeavor",
     "tutor:focuspunch",
     "tutor:icebeam",
@@ -225,7 +225,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:covet"
   ],
   "evolutions": [
     {

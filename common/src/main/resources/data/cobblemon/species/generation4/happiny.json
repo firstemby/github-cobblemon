@@ -103,7 +103,6 @@
     "16:covet",
     "20:charm",
     "egg:aromatherapy",
-    "egg:counter",
     "egg:gravity",
     "egg:healbell",
     "egg:mudbomb",
@@ -187,7 +186,9 @@
     "legacy:swagger",
     "legacy:toxic",
     "legacy:uproar",
-    "legacy:waterpulse"
+    "legacy:waterpulse",
+    "legacy:calmmind",
+    "legacy:counter"
   ],
   "evolutions": [
     {
