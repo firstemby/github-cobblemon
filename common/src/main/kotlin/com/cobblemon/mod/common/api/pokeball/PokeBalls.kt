@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.FloatNumberRangeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -291,7 +292,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("lure_ball", CatchRateModifiers.LURE)
         createDefault("heavy_ball", CatchRateModifiers.WEIGHT_BASED)
         createDefault("love_ball", CatchRateModifiers.LOVE)
-        createDefault("friend_ball", effects = listOf(CaptureEffects.friendshipSetter(150)))
+        createDefault("friend_ball", effects = listOf("q.pokemon.set_friendship(150.0)".asExpressionLike()))
         createDefault("moon_ball", CatchRateModifiers.MOON_PHASES)
         createDefault("sport_ball", MultiplierModifier(1.5F))
         createDefault("net_ball", CatchRateModifiers.typeBoosting(3F, ElementalTypes.BUG, ElementalTypes.WATER))
@@ -299,10 +300,10 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("nest_ball", CatchRateModifiers.NEST)
         createDefault("repeat_ball", CatchRateModifiers.REPEAT)
         createDefault("timer_ball", CatchRateModifiers.turnBased { turn -> (1F + turn * (1229F / 4096F)).coerceAtMost(4F) })
-        createDefault("luxury_ball", effects = listOf(FriendshipEarningBoostEffect(2F)))
+        createDefault("luxury_ball", /*effects = listOf(FriendshipEarningBoostEffect(2F))*/)
         createDefault("premier_ball")
         createDefault("dusk_ball", CatchRateModifiers.LIGHT_LEVEL)
-        createDefault("heal_ball", effects = listOf(CaptureEffects.FULL_RESTORE))
+        createDefault("heal_ball", effects = listOf("q.pokemon.heal()".asExpressionLike()))
         createDefault("quick_ball", CatchRateModifiers.turnBased { turn -> if (turn == 1) 5F else 1F })
         createDefault("cherish_ball")
         createDefault("park_ball", CatchRateModifiers.PARK)
@@ -377,7 +378,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     private fun createDefault(
         name: String,
         modifier: CatchRateModifier = MultiplierModifier(1F) { _, _ -> true },
-        effects: List<CaptureEffect> = emptyList(),
+        effects: List<ExpressionLike> = emptyList(),
         waterDragValue: Float = 0.8F,
         model2d: ResourceLocation = cobblemonResource(name),
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),

@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.pokeball
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
@@ -18,11 +19,15 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asStruct
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureContext
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.MoLangModifier
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.scheduling.Schedulable
@@ -58,6 +63,7 @@ import com.cobblemon.mod.common.util.playSoundServer
 import com.cobblemon.mod.common.util.sendParticlesServer
 import com.cobblemon.mod.common.util.setPositionSafely
 import com.cobblemon.mod.common.util.update
+import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
@@ -108,7 +114,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         const val SECONDS_BETWEEN_SHAKES = 1.25F
         const val SECONDS_BEFORE_SHAKE = 1F
 
-        val DIMENSIONS = EntityDimensions.fixed(0.4F, 0.4F)
+        val DIMENSIONS: EntityDimensions = EntityDimensions.fixed(0.4F, 0.4F)
+
+        val runtime = MoLangRuntime().setup()
     }
 
     val dataTrackerEmitter = SimpleObservable<EntityDataAccessor<*>>()
@@ -356,6 +364,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 // Do a capture
                 val pokemon = capturingPokemon ?: return
                 val player = this.owner as? ServerPlayer ?: return
+
                 val captureTime = if (pokeBall.ancient) 1.8F else 1F
                 after(seconds = captureTime) {
                     // Dupes occurred by double-adding Pokémon, this hopefully prevents it triple-condom style
@@ -365,8 +374,13 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         discard()
                         captureFuture.complete(true)
                         val party = player.party()
+
+                        val effectsRuntime = runtime
+                            .withQueryValue("pokeball", struct)
+                            .withQueryValue("pokemon", pokemon.asMoLangValue())
+
                         pokemon.pokemon.caughtBall = pokeBall
-                        pokeBall.effects.forEach { effect -> effect.apply(player, pokemon.pokemon) }
+                        pokeBall.effects.forEach { effect -> effect.resolve(effectsRuntime) }
                         party.add(pokemon.pokemon)
                         val leashHolder = pokemon.leashHolder
 

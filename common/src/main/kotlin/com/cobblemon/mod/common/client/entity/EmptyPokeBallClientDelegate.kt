@@ -56,6 +56,6 @@ class EmptyPokeBallClientDelegate : PokeBallPosableState(), EntitySideDelegate<E
     }
 
     fun getBeamColor(): Vector4f {
-        return Integer.decode(currentEntity.pokeBall.color).toRGBA()
+        return Integer.decode(currentEntity.pokeBall.beamColor).toRGBA()
     }
 }

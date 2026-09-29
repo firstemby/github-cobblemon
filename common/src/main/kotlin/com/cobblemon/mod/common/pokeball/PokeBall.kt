@@ -8,11 +8,8 @@
 
 package com.cobblemon.mod.common.pokeball
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.StringValue
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokeBallFunctions
-import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
@@ -38,24 +35,24 @@ import net.minecraft.world.item.Rarity
  * @property model2d The identifier for the resource this Pokéball will use for the 2d model.
  * @property model3d The identifier for the resource this Pokéball will use for the 3d model.
  * @property ancient Marks this Pokéball as ancient, which makes it play different animations on catch hops
- * @property color Defines the beam color of pokeball
+ * @property beamColor Defines the beam color of pokeball
  */
 class PokeBall(
     @Transient // Assigns in PokeBalls.reload
     var name: ResourceLocation = cobblemonResource("strange_ball"),
     val catchRateModifier: CatchRateModifier = CatchRateModifier.DUMMY,
-    val effects: List<CaptureEffect> = listOf(),
+    val effects: List<ExpressionLike> = listOf(),
     val itemProperties: PokeBallProperties = PokeBallProperties(),
     val waterDragValue: Float,
     val model2d: ResourceLocation,
     val model3d: ResourceLocation,
     val throwPower: Float,
     val ancient: Boolean = false,
-    val color: String
+    val beamColor: String
 ) {
     init {
         // color needs to be a hex string
-        if (!"""#[a-zA-Z0-9]{6}""".toRegex().matches(color)) {
+        if (!"""#[a-zA-Z0-9]{6}""".toRegex().matches(beamColor)) {
             throw RuntimeException("")
         }
     }
