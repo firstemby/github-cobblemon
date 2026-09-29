@@ -165,11 +165,11 @@ class IdealNestPlacementSense(
     ): Boolean {
         val waterEggGroups = setOf("water_1", "water_2", "water_3")
         val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val entityHasWater = entityEggGroups.any { it in waterEggGroups }
+        val entityHasWater = entityEggGroups.any { it in waterEggGroups || it == "ditto" }
         val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
 
         val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
-        val mateHasWater = mateEggGroups.any { it in waterEggGroups }
+        val mateHasWater = mateEggGroups.any { it in waterEggGroups || it == "ditto" }
         val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
 
         return if (isNestWaterlogged) {

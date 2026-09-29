@@ -168,11 +168,11 @@ class NestSense(
     ): Boolean {
         val waterEggGroups = setOf("water_1", "water_2", "water_3")
         val entityEggGroups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val entityHasWater = entityEggGroups.any { it in waterEggGroups }
+        val entityHasWater = entityEggGroups.any { it in waterEggGroups || it == "ditto" }
         val entityOnlyWater = entityEggGroups.all { it in waterEggGroups }
 
         val mateEggGroups = mate?.pokemon?.species?.eggGroups?.map { it.name.lowercase() } ?: emptyList()
-        val mateHasWater = mateEggGroups.any { it in waterEggGroups }
+        val mateHasWater = mateEggGroups.any { it in waterEggGroups || it == "ditto" }
         val mateOnlyWater = mateEggGroups.isNotEmpty() && mateEggGroups.all { it in waterEggGroups }
 
         return if (isNestWaterlogged) {
@@ -192,6 +192,7 @@ class NestSense(
         val mutable = types.toMutableSet()
         if (!entity.pokemon.isWild() && mate != null && !mate.pokemon.isWild()) {
             mutable.add(WildNestType.PLAYER)
+            mutable.add(WildNestType.KELP)
         }
         return mutable
     }
@@ -201,8 +202,8 @@ class NestSense(
         entity: PokemonEntity,
         allowedTypes: Set<WildNestType>
     ): Boolean {
-        if (nestType == WildNestType.PLAYER) {
-            return !entity.pokemon.isWild() && allowedTypes.contains(WildNestType.PLAYER)
+        if (nestType == WildNestType.PLAYER || nestType == WildNestType.KELP) {
+            return !entity.pokemon.isWild() && allowedTypes.contains(nestType)
         }
         return allowedTypes.contains(nestType)
     }

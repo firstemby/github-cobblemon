@@ -249,10 +249,12 @@ class Breed(
     // make sure the nest type works for the mates and that wild use wild nests and owned pokemon use player placed nests
     private fun isNestTypeAllowed(nestType: WildNestType, entity: PokemonEntity, mate: PokemonEntity): Boolean {
         val allowed = WildNestTypes.combinedTypes(entity, mate).toMutableSet()
-        if (!entity.pokemon.isWild() && !mate.pokemon.isWild())
+        if (!entity.pokemon.isWild() && !mate.pokemon.isWild()) {
             allowed.add(WildNestType.PLAYER)
-        if (nestType == WildNestType.PLAYER)
-            return !entity.pokemon.isWild() && WildNestType.PLAYER in allowed
+            allowed.add(WildNestType.KELP)
+        }
+        if (nestType == WildNestType.PLAYER || nestType == WildNestType.KELP)
+            return !entity.pokemon.isWild() && nestType in allowed
         return nestType in allowed
     }
 
@@ -260,8 +262,8 @@ class Breed(
     private fun isWaterGroupCompatible(entity: PokemonEntity, mate: PokemonEntity, nestWaterlogged: Boolean): Boolean {
         val mate1Groups = entity.pokemon.species.eggGroups.map { it.name.lowercase() }
         val mate2Groups = mate.pokemon.species.eggGroups.map { it.name.lowercase() }
-        val mate1HasWaterGroup = mate1Groups.any { it in WATER_EGG_GROUPS }
-        val mate2HasWaterGroup = mate2Groups.any { it in WATER_EGG_GROUPS }
+        val mate1HasWaterGroup = mate1Groups.any { it in WATER_EGG_GROUPS || it == "ditto" }
+        val mate2HasWaterGroup = mate2Groups.any { it in WATER_EGG_GROUPS || it == "ditto" }
         val mate1OnlyWaterGroup = mate1Groups.all { it in WATER_EGG_GROUPS }
         val mate2OnlyWaterGroup = mate2Groups.all { it in WATER_EGG_GROUPS }
 
