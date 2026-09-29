@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "minecraft:clay"
+    "#minecraft:dirt",
+    "minecraft:clay",
+    "minecraft:mud",
+    "minecraft:muddy_mangrove_roots"
   ]
 }

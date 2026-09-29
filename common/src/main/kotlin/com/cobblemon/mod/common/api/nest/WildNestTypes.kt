@@ -406,7 +406,7 @@ object WildNestTypes {
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_FIRE) -> WildNestVariant.WATERY_DEAD_CORAL_FIRE
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_HORN) -> WildNestVariant.WATERY_DEAD_CORAL_HORN
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_DEAD_CORAL_TUBE) -> WildNestVariant.WATERY_DEAD_CORAL_TUBE
-                submerged && baseState.`is`(NEST_SURFACE_WATERY_MANGROVE) -> WildNestVariant.WATERY_MANGROVE
+                baseState.`is`(NEST_SURFACE_WATERY_MANGROVE) -> WildNestVariant.WATERY_MANGROVE
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_DEEPSLATE) -> WildNestVariant.WATERY_DEEPSLATE
                 submerged && baseState.`is`(NEST_SURFACE_WATERY_STONE) -> WildNestVariant.WATERY_STONE
                 baseState.`is`(NEST_SURFACE_WATERY_DRIPLEAF) -> WildNestVariant.WATERY_DRIPLEAF
