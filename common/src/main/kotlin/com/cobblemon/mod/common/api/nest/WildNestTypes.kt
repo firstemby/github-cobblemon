@@ -45,7 +45,9 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     FIERY_SOUL_SAND("fiery_soul_sand"),
     GRASSY_DEFAULT("grassy_default"),
     GRASSY_CRIMSON_ROOTS("grassy_crimson_roots"),
-    //GRASSY_DRY("grassy_dry"),
+    GRASSY_DRY_RED_SAND("grassy_dry_red_sand"),
+    GRASSY_DRY_SAND("grassy_dry_sand"),
+    GRASSY_DRY_TERRACOTTA("grassy_dry_terracotta"),
     GRASSY_FERN("grassy_fern"),
     GRASSY_WARPED_ROOTS("grassy_warped_roots"),
 
@@ -59,10 +61,14 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     LEAFY_FLOWERING_AZALEA("leafy_flowering_azalea"),
     LEAFY_JUNGLE("leafy_jungle"),
     LEAFY_MANGROVE("leafy_mangrove"),
+    LEAFY_ORANGE_POPLAR("leafy_orange_poplar"),
+    LEAFY_PALE_OAK("leafy_pale_oak"),
+    LEAFY_RED_POPLAR("leafy_red_poplar"),
     LEAFY_SACCHARINE("leafy_saccharine"),
     LEAFY_SACCHARINE_STICKY("leafy_saccharine_sticky"),
     LEAFY_SACCHARINE_DRIPPY("leafy_saccharine_drippy"),
     LEAFY_SPRUCE("leafy_spruce"),
+    LEAFY_YELLOW_POPLAR("leafy_yellow_poplar"),
 
     ICY_DEFAULT("icy_default"),
     ICY_ICE("icy_ice"),
@@ -75,6 +81,7 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     ROCKY_BASALT("rocky_basalt"),
     ROCKY_BLACKSTONE("rocky_blackstone"),
     ROCKY_CALCITE("rocky_calcite"),
+    ROCKY_CINNABAR("rocky_cinnabar"),
     ROCKY_DEEPSLATE("rocky_deepslate"),
     ROCKY_DIORITE("rocky_diorite"),
     ROCKY_DRIPSTONE("rocky_dripstone"),
@@ -85,6 +92,7 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     ROCKY_SANDSTONE("rocky_sandstone"),
     ROCKY_SCULK("rocky_sculk"),
     ROCKY_SNOWY("rocky_snowy"),
+    ROCKY_SULFUR("rocky_sulfur"),
     ROCKY_TERRACOTTA("rocky_terracotta"),
     ROCKY_TUFF("rocky_tuff"),
 
@@ -109,13 +117,16 @@ enum class WildNestVariant(private val id: String) : StringRepresentable {
     TWIGGY_DEAD_BUSH("twiggy_dead_bush"),
     TWIGGY_FLOWERING_AZALEA("twiggy_flowering_azalea"),
     TWIGGY_JUNGLE("twiggy_jungle"),
-    TWIGGY_LEAFY("twiggy_leafy"),
     TWIGGY_MANGROVE_LEAVES("twiggy_mangrove_leaves"),
     TWIGGY_MANGROVE("twiggy_mangrove"),
+    TWIGGY_ORANGE_POPLAR("twiggy_orange_poplar"),
+    TWIGGY_PALE_OAK("twiggy_pale_oak"),
+    TWIGGY_RED_POPLAR("twiggy_red_poplar"),
     TWIGGY_SACCHARINE("twiggy_saccharine"),
     TWIGGY_SACCHARINE_STICKY("twiggy_saccharine_sticky"),
     TWIGGY_SACCHARINE_DRIPPY("twiggy_saccharine_drippy"),
     TWIGGY_SPRUCE("twiggy_spruce"),
+    TWIGGY_YELLOW_POPLAR("twiggy_yellow_poplar"),
 
     WATERY_DEFAULT("watery_default"),
     WATERY_STONE("watery_stone"),
@@ -153,6 +164,9 @@ object WildNestTypes {
     private val NEST_SURFACE_FIERY_SOUL_SAND = nestSurfaceTag("fiery_soul_sand")
 
     private val NEST_SURFACE_GRASSY_CRIMSON_ROOTS = nestSurfaceTag("grassy_crimson_roots")
+    private val NEST_SURFACE_GRASSY_DRY_RED_SAND = nestSurfaceTag("grassy_dry_red_sand")
+    private val NEST_SURFACE_GRASSY_DRY_SAND = nestSurfaceTag("grassy_dry_sand")
+    private val NEST_SURFACE_GRASSY_DRY_TERRACOTTA = nestSurfaceTag("grassy_dry_terracotta")
     private val NEST_SURFACE_GRASSY_FERN = nestSurfaceTag("grassy_fern")
     private val NEST_SURFACE_GRASSY_WARPED_ROOTS = nestSurfaceTag("grassy_warped_roots")
 
@@ -165,8 +179,12 @@ object WildNestTypes {
     private val NEST_SURFACE_LEAFY_FLOWERING_AZALEA = nestSurfaceTag("leafy_flowering_azalea")
     private val NEST_SURFACE_LEAFY_JUNGLE = nestSurfaceTag("leafy_jungle")
     private val NEST_SURFACE_LEAFY_MANGROVE = nestSurfaceTag("leafy_mangrove")
+    private val NEST_SURFACE_LEAFY_ORANGE_POPLAR = nestSurfaceTag("leafy_orange_poplar")
+    private val NEST_SURFACE_LEAFY_PALE_OAK = nestSurfaceTag("leafy_pale_oak")
+    private val NEST_SURFACE_LEAFY_RED_POPLAR = nestSurfaceTag("leafy_red_poplar")
     private val NEST_SURFACE_LEAFY_SACCHARINE = nestSurfaceTag("leafy_saccharine")
     private val NEST_SURFACE_LEAFY_SPRUCE = nestSurfaceTag("leafy_spruce")
+    private val NEST_SURFACE_LEAFY_YELLOW_POPLAR = nestSurfaceTag("leafy_yellow_poplar")
 
     private val NEST_SURFACE_ICY_ICE = nestSurfaceTag("icy_ice")
 
@@ -175,6 +193,7 @@ object WildNestTypes {
     private val NEST_SURFACE_ROCKY_BASALT = nestSurfaceTag("rocky_basalt")
     private val NEST_SURFACE_ROCKY_BLACKSTONE = nestSurfaceTag("rocky_blackstone")
     private val NEST_SURFACE_ROCKY_CALCITE = nestSurfaceTag("rocky_calcite")
+    private val NEST_SURFACE_ROCKY_CINNABAR = nestSurfaceTag("rocky_cinnabar")
     private val NEST_SURFACE_ROCKY_DEEPSLATE = nestSurfaceTag("rocky_deepslate")
     private val NEST_SURFACE_ROCKY_DIORITE = nestSurfaceTag("rocky_diorite")
     private val NEST_SURFACE_ROCKY_DRIPSTONE = nestSurfaceTag("rocky_dripstone")
@@ -185,6 +204,7 @@ object WildNestTypes {
     private val NEST_SURFACE_ROCKY_SANDSTONE = nestSurfaceTag("rocky_sandstone")
     private val NEST_SURFACE_ROCKY_SCULK = nestSurfaceTag("rocky_sculk")
     private val NEST_SURFACE_ROCKY_SNOWY = nestSurfaceTag("rocky_snowy")
+    private val NEST_SURFACE_ROCKY_SULFUR = nestSurfaceTag("rocky_sulfur")
     private val NEST_SURFACE_ROCKY_TERRACOTTA = nestSurfaceTag("rocky_terracotta")
     private val NEST_SURFACE_ROCKY_TUFF = nestSurfaceTag("rocky_tuff")
 
@@ -208,8 +228,12 @@ object WildNestTypes {
     private val NEST_SURFACE_TWIGGY_MANGROVE_LEAVES = nestSurfaceTag("twiggy_mangrove_leaves")
     private val NEST_SURFACE_TWIGGY_MANGROVE = nestSurfaceTag("twiggy_mangrove")
     private val NEST_SURFACE_TWIGGY_OAK = nestSurfaceTag("twiggy_oak")
+    private val NEST_SURFACE_TWIGGY_ORANGE_POPLAR = nestSurfaceTag("twiggy_orange_poplar")
+    private val NEST_SURFACE_TWIGGY_PALE_OAK = nestSurfaceTag("twiggy_pale_oak")
+    private val NEST_SURFACE_TWIGGY_RED_POPLAR = nestSurfaceTag("twiggy_red_poplar")
     private val NEST_SURFACE_TWIGGY_SACCHARINE = nestSurfaceTag("twiggy_saccharine")
     private val NEST_SURFACE_TWIGGY_SPRUCE = nestSurfaceTag("twiggy_spruce")
+    private val NEST_SURFACE_TWIGGY_YELLOW_POPLAR = nestSurfaceTag("twiggy_yellow_poplar")
 
     private val NEST_SURFACE_WATERY_DRIPLEAF = nestSurfaceTag("watery_dripleaf")
     private val NEST_SURFACE_WATERY_STONE = nestSurfaceTag("watery_stone")
@@ -313,7 +337,9 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_GRASSY_CRIMSON_ROOTS) -> WildNestVariant.GRASSY_CRIMSON_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_WARPED_ROOTS) -> WildNestVariant.GRASSY_WARPED_ROOTS
                 baseState.`is`(NEST_SURFACE_GRASSY_FERN) -> WildNestVariant.GRASSY_FERN
-                //baseState.`is`(NEST_SURFACE_GRASSY_DRY) -> WildNestVariant.GRASSY_DRY
+                baseState.`is`(NEST_SURFACE_GRASSY_DRY_RED_SAND) -> WildNestVariant.GRASSY_DRY_RED_SAND
+                baseState.`is`(NEST_SURFACE_GRASSY_DRY_SAND) -> WildNestVariant.GRASSY_DRY_SAND
+                baseState.`is`(NEST_SURFACE_GRASSY_DRY_TERRACOTTA) -> WildNestVariant.GRASSY_DRY_TERRACOTTA
                 else -> null
             }
             WildNestType.LEAFY -> when {
@@ -326,6 +352,9 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_LEAFY_FLOWERING_AZALEA) -> WildNestVariant.LEAFY_FLOWERING_AZALEA
                 baseState.`is`(NEST_SURFACE_LEAFY_JUNGLE) -> WildNestVariant.LEAFY_JUNGLE
                 baseState.`is`(NEST_SURFACE_LEAFY_MANGROVE) -> WildNestVariant.LEAFY_MANGROVE
+                baseState.`is`(NEST_SURFACE_LEAFY_ORANGE_POPLAR) -> WildNestVariant.LEAFY_ORANGE_POPLAR
+                baseState.`is`(NEST_SURFACE_LEAFY_PALE_OAK) -> WildNestVariant.LEAFY_PALE_OAK
+                baseState.`is`(NEST_SURFACE_LEAFY_RED_POPLAR) -> WildNestVariant.LEAFY_RED_POPLAR
                 baseState.`is`(NEST_SURFACE_LEAFY_SACCHARINE) -> saccharineVariantForHoneyLevel(
                     baseState,
                     WildNestVariant.LEAFY_SACCHARINE,
@@ -333,6 +362,7 @@ object WildNestTypes {
                     WildNestVariant.LEAFY_SACCHARINE_DRIPPY
                 )
                 baseState.`is`(NEST_SURFACE_LEAFY_SPRUCE) -> WildNestVariant.LEAFY_SPRUCE
+                baseState.`is`(NEST_SURFACE_LEAFY_YELLOW_POPLAR) -> WildNestVariant.LEAFY_YELLOW_POPLAR
                 else -> null
             }
             WildNestType.ICY -> when {
@@ -347,6 +377,7 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_ROCKY_BASALT) -> WildNestVariant.ROCKY_BASALT
                 baseState.`is`(NEST_SURFACE_ROCKY_BLACKSTONE) -> WildNestVariant.ROCKY_BLACKSTONE
                 baseState.`is`(NEST_SURFACE_ROCKY_CALCITE) -> WildNestVariant.ROCKY_CALCITE
+                baseState.`is`(NEST_SURFACE_ROCKY_CINNABAR) -> WildNestVariant.ROCKY_CINNABAR
                 baseState.`is`(NEST_SURFACE_ROCKY_DEEPSLATE) -> WildNestVariant.ROCKY_DEEPSLATE
                 baseState.`is`(NEST_SURFACE_ROCKY_DIORITE) -> WildNestVariant.ROCKY_DIORITE
                 baseState.`is`(NEST_SURFACE_ROCKY_DRIPSTONE) -> WildNestVariant.ROCKY_DRIPSTONE
@@ -357,6 +388,7 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_ROCKY_SANDSTONE) -> WildNestVariant.ROCKY_SANDSTONE
                 baseState.`is`(NEST_SURFACE_ROCKY_SCULK) -> WildNestVariant.ROCKY_SCULK
                 baseState.`is`(NEST_SURFACE_ROCKY_SNOWY) -> WildNestVariant.ROCKY_SNOWY
+                baseState.`is`(NEST_SURFACE_ROCKY_SULFUR) -> WildNestVariant.ROCKY_SULFUR
                 baseState.`is`(NEST_SURFACE_ROCKY_TERRACOTTA) -> WildNestVariant.ROCKY_TERRACOTTA
                 baseState.`is`(NEST_SURFACE_ROCKY_TUFF) -> WildNestVariant.ROCKY_TUFF
                 else -> null
@@ -383,6 +415,9 @@ object WildNestTypes {
                 baseState.`is`(NEST_SURFACE_TWIGGY_JUNGLE) -> WildNestVariant.TWIGGY_JUNGLE
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE_LEAVES) -> WildNestVariant.TWIGGY_MANGROVE_LEAVES
                 baseState.`is`(NEST_SURFACE_TWIGGY_OAK) -> WildNestVariant.TWIGGY_OAK
+                baseState.`is`(NEST_SURFACE_TWIGGY_ORANGE_POPLAR) -> WildNestVariant.TWIGGY_ORANGE_POPLAR
+                baseState.`is`(NEST_SURFACE_TWIGGY_PALE_OAK) -> WildNestVariant.TWIGGY_PALE_OAK
+                baseState.`is`(NEST_SURFACE_TWIGGY_RED_POPLAR) -> WildNestVariant.TWIGGY_RED_POPLAR
                 baseState.`is`(NEST_SURFACE_TWIGGY_SACCHARINE) -> saccharineVariantForHoneyLevel(
                     baseState,
                     WildNestVariant.TWIGGY_SACCHARINE,
@@ -390,6 +425,7 @@ object WildNestTypes {
                     WildNestVariant.TWIGGY_SACCHARINE_DRIPPY
                 )
                 baseState.`is`(NEST_SURFACE_TWIGGY_SPRUCE) -> WildNestVariant.TWIGGY_SPRUCE
+                baseState.`is`(NEST_SURFACE_TWIGGY_YELLOW_POPLAR) -> WildNestVariant.TWIGGY_YELLOW_POPLAR
                 baseState.`is`(NEST_SURFACE_TWIGGY_MANGROVE) -> WildNestVariant.TWIGGY_MANGROVE
                 baseState.`is`(NEST_SURFACE_TWIGGY_CHORUS) -> WildNestVariant.TWIGGY_CHORUS
                 baseState.`is`(NEST_SURFACE_TWIGGY_DEAD_BUSH) -> WildNestVariant.TWIGGY_DEAD_BUSH

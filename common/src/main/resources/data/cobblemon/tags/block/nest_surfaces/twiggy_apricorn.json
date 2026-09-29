@@ -2,6 +2,6 @@
   "replace": false,
   "values": [
     "cobblemon:apricorn_leaves",
-    "cobblemon:apricorn_log"
+    "#cobblemon:apricorn_logs"
   ]
 }

@@ -107,6 +107,18 @@
     },
     "variant=rocky_tuff,waterlogged=true": {
       "model": "cobblemon:block/nest_rocky_tuff"
+    },
+    "variant=rocky_cinnabar,waterlogged=false": {
+      "model": "cobblemon:block/nest_rocky_cinnabar"
+    },
+    "variant=rocky_cinnabar,waterlogged=true": {
+      "model": "cobblemon:block/nest_rocky_cinnabar"
+    },
+    "variant=rocky_sulfur,waterlogged=false": {
+      "model": "cobblemon:block/nest_rocky_sulfur"
+    },
+    "variant=rocky_sulfur,waterlogged=true": {
+      "model": "cobblemon:block/nest_rocky_sulfur"
     }
   }
 }

@@ -18,12 +18,6 @@
     "variant=twiggy_dead_bush,waterlogged=true": {
       "model": "cobblemon:block/nest_twiggy_dead_bush"
     },
-    "variant=twiggy_leafy,waterlogged=false": {
-      "model": "cobblemon:block/nest_twiggy_oak"
-    },
-    "variant=twiggy_leafy,waterlogged=true": {
-      "model": "cobblemon:block/nest_twiggy_oak"
-    },
     "variant=twiggy_mangrove,waterlogged=false": {
       "model": "cobblemon:block/nest_twiggy_mangrove"
     },
@@ -113,6 +107,30 @@
     },
     "variant=twiggy_spruce,waterlogged=true": {
       "model": "cobblemon:block/nest_twiggy_spruce"
+    },
+    "variant=twiggy_orange_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_orange_poplar"
+    },
+    "variant=twiggy_orange_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_orange_poplar"
+    },
+    "variant=twiggy_pale_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_pale_oak"
+    },
+    "variant=twiggy_pale_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_pale_oak"
+    },
+    "variant=twiggy_red_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_red_poplar"
+    },
+    "variant=twiggy_red_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_red_poplar"
+    },
+    "variant=twiggy_yellow_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_twiggy_yellow_poplar"
+    },
+    "variant=twiggy_yellow_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_twiggy_yellow_poplar"
     }
   }
 }

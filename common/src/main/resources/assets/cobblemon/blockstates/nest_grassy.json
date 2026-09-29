@@ -107,6 +107,24 @@
     },
     "variant=grassy_leaves,waterlogged=true": {
       "model": "cobblemon:block/nest_grassy_oak"
+    },
+    "variant=grassy_dry_red_sand,waterlogged=false": {
+      "model": "cobblemon:block/nest_grassy_dry_red_sand"
+    },
+    "variant=grassy_dry_red_sand,waterlogged=true": {
+      "model": "cobblemon:block/nest_grassy_dry_red_sand"
+    },
+    "variant=grassy_dry_sand,waterlogged=false": {
+      "model": "cobblemon:block/nest_grassy_dry_sand"
+    },
+    "variant=grassy_dry_sand,waterlogged=true": {
+      "model": "cobblemon:block/nest_grassy_dry_sand"
+    },
+    "variant=grassy_dry_terracotta,waterlogged=false": {
+      "model": "cobblemon:block/nest_grassy_dry_terracotta"
+    },
+    "variant=grassy_dry_terracotta,waterlogged=true": {
+      "model": "cobblemon:block/nest_grassy_dry_terracotta"
     }
   }
 }

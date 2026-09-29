@@ -2,6 +2,6 @@
   "replace": false,
   "values": [
     "minecraft:cherry_leaves",
-    "minecraft:cherry_log"
+    "#minecraft:cherry_logs"
   ]
 }

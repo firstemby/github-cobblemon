@@ -13,10 +13,10 @@
       "model": "cobblemon:block/nest_watery_dripleaf"
     },
     "variant=watery_firefly_bush,waterlogged=false": {
-      "model": "cobblemon:block/nest_watery"
+      "model": "cobblemon:block/nest_watery_firefly_bush"
     },
     "variant=watery_firefly_bush,waterlogged=true": {
-      "model": "cobblemon:block/nest_watery"
+      "model": "cobblemon:block/nest_watery_firefly_bush"
     },
     "variant=watery_seagrass_dirt,waterlogged=false": {
       "model": "cobblemon:block/nest_watery_seagrass_dirt"

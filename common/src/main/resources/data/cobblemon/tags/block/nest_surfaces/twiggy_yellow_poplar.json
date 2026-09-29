@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:yellow_poplar_leaves",
+      "required": false
+    },
+    {
+      "id": "#minecraft:poplar_logs",
+      "required": false
+    }
+  ]
+}

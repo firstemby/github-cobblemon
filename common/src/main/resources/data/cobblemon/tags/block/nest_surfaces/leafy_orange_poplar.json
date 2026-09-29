@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:orange_poplar_leaves",
+      "required": false
+    }
+  ]
+}

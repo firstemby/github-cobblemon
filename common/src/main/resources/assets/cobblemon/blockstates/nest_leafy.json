@@ -83,6 +83,30 @@
     },
     "variant=leafy_saccharine_drippy,waterlogged=true": {
       "model": "cobblemon:block/nest_leafy_saccharine_drippy"
+    },
+    "variant=leafy_orange_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_leafy_orange_poplar"
+    },
+    "variant=leafy_orange_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_leafy_orange_poplar"
+    },
+    "variant=leafy_pale_oak,waterlogged=false": {
+      "model": "cobblemon:block/nest_leafy_pale_oak"
+    },
+    "variant=leafy_pale_oak,waterlogged=true": {
+      "model": "cobblemon:block/nest_leafy_pale_oak"
+    },
+    "variant=leafy_red_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_leafy_red_poplar"
+    },
+    "variant=leafy_red_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_leafy_red_poplar"
+    },
+    "variant=leafy_yellow_poplar,waterlogged=false": {
+      "model": "cobblemon:block/nest_leafy_yellow_poplar"
+    },
+    "variant=leafy_yellow_poplar,waterlogged=true": {
+      "model": "cobblemon:block/nest_leafy_yellow_poplar"
     }
   }
 }

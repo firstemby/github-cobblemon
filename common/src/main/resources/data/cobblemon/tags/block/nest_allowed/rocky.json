@@ -11,14 +11,23 @@
     "minecraft:blackstone",
     "minecraft:budding_amethyst",
     "minecraft:calcite",
+    {
+      "id": "minecraft:cinnabar",
+      "required": false
+    },
     "minecraft:dripstone_block",
     "minecraft:end_stone",
+    "minecraft:gilded_blackstone",
     "minecraft:gravel",
     "minecraft:red_sandstone",
     "minecraft:sandstone",
     "minecraft:sculk",
     "minecraft:sculk_catalyst",
     "minecraft:smooth_basalt",
+    {
+      "id": "minecraft:sulfur",
+      "required": false
+    },
     "minecraft:suspicious_gravel",
     {
       "id": "#c:end_stones",
@@ -29,19 +38,19 @@
       "required": false
     },
     {
-      "id": "#c:sands",
-      "required": false
-    },
-    {
-      "id": "#c:stones",
-      "required": false
-    },
-    {
       "id": "#c:ores_in_ground/deepslate",
       "required": false
     },
     {
       "id": "#c:ores_in_ground/stone",
+      "required": false
+    },
+    {
+      "id": "#c:sands",
+      "required": false
+    },
+    {
+      "id": "#c:stones",
       "required": false
     }
   ]

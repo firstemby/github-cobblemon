@@ -2,6 +2,6 @@
   "replace": false,
   "values": [
     "minecraft:acacia_leaves",
-    "minecraft:acacia_log"
+    "#minecraft:acacia_logs"
   ]
 }
