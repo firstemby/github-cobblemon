@@ -1,9 +1,15 @@
 # Changelog
 ## [1.x.x (MONTH Xth, 2026)](#1-x-x)
 
+### Changes
+- Pokémon learnsets have been updated to include the additional contexts up to Champions, and existing learnsets have been tweaked to apply past-gen level-up moves more generously for TM unlocks.
+
 ### Fixes
 - Fixed Ampharos' eyes not emitting particles
 - Fixed Alolan Raticate's cry not playing
+- Fixed Spinda's level up learnset from BDSP data mixups
+- Removed Freeze-Dry from Darmanitan-Zen
+
 ### TEST
 ### Pokémon Added
 #### Generation 4
