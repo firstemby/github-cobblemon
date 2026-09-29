@@ -1089,6 +1089,7 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         WildNestBlock.create(
             WildNestType.FIERY,
             BlockBehaviour.Properties.of()
+                .strength(2.0F)
                 .noOcclusion()
                 .pushReaction(PushReaction.DESTROY)
                 .lightLevel { state ->
@@ -1103,47 +1104,48 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     )
     val NEST_GRASSY = this.create(
         "nest_grassy",
-        WildNestBlock.create(WildNestType.GRASSY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.GRASSY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_LEAFY = this.create(
         "nest_leafy",
-        WildNestBlock.create(WildNestType.LEAFY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.LEAFY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_ICY = this.create(
         "nest_icy",
-        WildNestBlock.create(WildNestType.ICY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.ICY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_HAY = this.create(
         "nest_hay",
-        WildNestBlock.create(WildNestType.PLAYER, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.PLAYER, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_KELP = this.create(
         "nest_kelp",
-        WildNestBlock.create(WildNestType.KELP, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.KELP, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_ROCKY = this.create(
         "nest_rocky",
-        WildNestBlock.create(WildNestType.ROCKY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.ROCKY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_SANDY = this.create(
         "nest_sandy",
-        WildNestBlock.create(WildNestType.SANDY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.SANDY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_SHROOMY = this.create(
         "nest_shroomy",
-        WildNestBlock.create(WildNestType.SHROOMY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.SHROOMY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_TWIGGY = this.create(
         "nest_twiggy",
-        WildNestBlock.create(WildNestType.TWIGGY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.TWIGGY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
     val NEST_WATERY = this.create(
         "nest_watery",
-        WildNestBlock.create(WildNestType.WATERY, BlockBehaviour.Properties.of().noOcclusion().pushReaction(PushReaction.DESTROY))
+        WildNestBlock.create(WildNestType.WATERY, BlockBehaviour.Properties.of().strength(2.0F).noOcclusion().pushReaction(PushReaction.DESTROY))
     )
 
     val EGG = this.create("egg", EggBlock(BlockBehaviour.Properties
         .ofFullCopy(Blocks.DRAGON_EGG)
+        .strength(0.5F, Blocks.DRAGON_EGG.explosionResistance)
         .pushReaction(PushReaction.BLOCK)
         .sound(SoundType.BONE_BLOCK)
     ))
