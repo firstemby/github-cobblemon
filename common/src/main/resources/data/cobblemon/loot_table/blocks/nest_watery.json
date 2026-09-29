@@ -7,7 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:nest_watery"
+          "name": "cobblemon:nest_watery",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "cobblemon:nest_watery",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

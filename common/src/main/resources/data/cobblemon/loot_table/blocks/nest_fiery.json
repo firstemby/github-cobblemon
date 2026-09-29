@@ -7,7 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:nest_fiery"
+          "name": "cobblemon:nest_fiery",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "cobblemon:nest_fiery",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

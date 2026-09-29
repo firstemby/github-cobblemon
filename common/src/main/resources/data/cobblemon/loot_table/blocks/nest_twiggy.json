@@ -7,7 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:nest_twiggy"
+          "name": "cobblemon:nest_twiggy",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "cobblemon:nest_twiggy",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

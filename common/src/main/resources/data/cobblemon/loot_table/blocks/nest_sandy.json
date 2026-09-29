@@ -7,7 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:nest_sandy"
+          "name": "cobblemon:nest_sandy",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "cobblemon:nest_sandy",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

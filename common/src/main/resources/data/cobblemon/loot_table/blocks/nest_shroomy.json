@@ -7,7 +7,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cobblemon:nest_shroomy"
+          "name": "cobblemon:nest_shroomy",
+          "functions": [
+            {
+              "function": "minecraft:copy_state",
+              "block": "cobblemon:nest_shroomy",
+              "properties": [
+                "variant"
+              ]
+            }
+          ]
         }
       ],
       "conditions": [
