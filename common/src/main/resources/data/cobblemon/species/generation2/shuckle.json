@@ -216,7 +216,6 @@
   "evolutions": [],
   "nestTypes": [
     "grassy",
-    "sandy",
-    "watery"
+    "sandy"
   ]
 }
