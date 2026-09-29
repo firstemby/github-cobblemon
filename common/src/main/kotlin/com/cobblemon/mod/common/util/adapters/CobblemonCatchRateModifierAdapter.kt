@@ -8,12 +8,14 @@
 
 package com.cobblemon.mod.common.util.adapters
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.BaseStatModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.CatchRateModifierAdapter
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.GuaranteedModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.LabelModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.MoLangModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.PropertyBasedModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.SimpleModifier
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -41,14 +43,16 @@ object CobblemonCatchRateModifierAdapter : CatchRateModifierAdapter {
         this.registerType(GuaranteedModifier.VARIANT, GuaranteedModifier::class)
         this.registerType(PropertyBasedModifier.VARIANT, PropertyBasedModifier::class)
         this.registerType(LabelModifier.VARIANT, LabelModifier::class)
+        this.registerType(MoLangModifier.VARIANT, MoLangModifier::class)
     }
 
     val gson: Gson by lazy {
         GsonBuilder()
-            .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
-            .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
             .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+            .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+            .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
             .setPrettyPrinting()
             .create()
     }
@@ -86,7 +90,8 @@ object CobblemonCatchRateModifierAdapter : CatchRateModifierAdapter {
         buffer.writeString(gson.toJson(modifier, CatchRateModifier::class.java))
     }
 
-    fun decode(buffer: FriendlyByteBuf): CatchRateModifier = gson.fromJson(buffer.readString(), CatchRateModifier::class.java)
+    fun decode(buffer: FriendlyByteBuf): CatchRateModifier =
+        gson.fromJson(buffer.readString(), CatchRateModifier::class.java)
 
     private fun getVariant(modifier: CatchRateModifier): String {
         val variant =
@@ -98,7 +103,8 @@ object CobblemonCatchRateModifierAdapter : CatchRateModifierAdapter {
 
     private fun getModifierType(variant: String): KClass<out CatchRateModifier> {
         val requirementType =
-            this.types[variant] ?: throw IllegalArgumentException("Cannot resolve pokeball catchrate modifier type for variant $variant")
+            this.types[variant]
+                ?: throw IllegalArgumentException("Cannot resolve pokeball catchrate modifier type for variant $variant")
 
         return requirementType
     }

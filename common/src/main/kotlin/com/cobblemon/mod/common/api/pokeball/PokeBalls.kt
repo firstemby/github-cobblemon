@@ -8,15 +8,21 @@
 
 package com.cobblemon.mod.common.api.pokeball
 
+import com.bedrockk.molang.Expression
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.Priority
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.events.CobblemonEvents
+import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokeball.catching.CaptureEffect
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
 import com.cobblemon.mod.common.api.pokeball.catching.effects.CaptureEffects
 import com.cobblemon.mod.common.api.pokeball.catching.effects.FriendshipEarningBoostEffect
-import com.cobblemon.mod.common.api.pokeball.catching.modifiers.*
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.BaseStatModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.CatchRateModifiers
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.DynamicMultiplierModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.GuaranteedModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.MultiplierModifier
 import com.cobblemon.mod.common.api.pokemon.labels.CobblemonPokemonLabels
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
@@ -26,6 +32,8 @@ import com.cobblemon.mod.common.item.components.PokeBallComponent
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.util.adapters.CobblemonCaptureEffectAdapter
 import com.cobblemon.mod.common.util.adapters.CobblemonCatchRateModifierAdapter
+import com.cobblemon.mod.common.util.adapters.ExpressionAdapter
+import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.FloatNumberRangeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
@@ -53,6 +61,8 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     // ToDo once datapack pokeball is implemented add required adapters here
     override val gson: Gson = GsonBuilder()
         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
         .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
         .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
         .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
@@ -387,196 +397,4 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
     }
 
     fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier).ancient
-
-    /**
-     * Backwards compatibility getters
-     */
-    @JvmName("getPOKE_BALL")
-    @Deprecated("Use PokeBalls.getPokeBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getPOKE_BALL() = POKE_BALL
-
-    @JvmName("getSLATE_BALL")
-    @Deprecated("Use PokeBalls.getSlateBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getSLATE_BALL() = SLATE_BALL
-
-    @JvmName("getAZURE_BALL")
-    @Deprecated("Use PokeBalls.getAzureBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getAZURE_BALL() = AZURE_BALL
-
-    @JvmName("getVERDANT_BALL")
-    @Deprecated("Use PokeBalls.getVerdantBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getVERDANT_BALL() = VERDANT_BALL
-
-    @JvmName("getROSEATE_BALL")
-    @Deprecated("Use PokeBalls.getRoseateBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getROSEATE_BALL() = ROSEATE_BALL
-
-    @JvmName("getCITRINE_BALL")
-    @Deprecated("Use PokeBalls.getCitrineBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getCITRINE_BALL() = CITRINE_BALL
-
-    @JvmName("getGREAT_BALL")
-    @Deprecated("Use PokeBalls.getGreatBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getGREAT_BALL() = GREAT_BALL
-
-    @JvmName("getULTRA_BALL")
-    @Deprecated("Use PokeBalls.getUltraBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getULTRA_BALL() = ULTRA_BALL
-
-    @JvmName("getMASTER_BALL")
-    @Deprecated("Use PokeBalls.getMasterBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getMASTER_BALL() = MASTER_BALL
-
-    @JvmName("getSAFARI_BALL")
-    @Deprecated("Use PokeBalls.getSafariBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getSAFARI_BALL() = SAFARI_BALL
-
-    @JvmName("getFAST_BALL")
-    @Deprecated("Use PokeBalls.getFastBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getFAST_BALL() = FAST_BALL
-
-    @JvmName("getLEVEL_BALL")
-    @Deprecated("Use PokeBalls.getLevelBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getLEVEL_BALL() = LEVEL_BALL
-
-    @JvmName("getLURE_BALL")
-    @Deprecated("Use PokeBalls.getLureBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getLURE_BALL() = LURE_BALL
-
-    @JvmName("getHEAVY_BALL")
-    @Deprecated("Use PokeBalls.getHeavyBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getHEAVY_BALL() = HEAVY_BALL
-
-    @JvmName("getLOVE_BALL")
-    @Deprecated("Use PokeBalls.getLoveBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getLOVE_BALL() = LOVE_BALL
-
-    @JvmName("getFRIEND_BALL")
-    @Deprecated("Use PokeBalls.getFriendBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getFRIEND_BALL() = FRIEND_BALL
-
-    @JvmName("getMOON_BALL")
-    @Deprecated("Use PokeBalls.getMoonBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getMOON_BALL() = MOON_BALL
-
-    @JvmName("getSPORT_BALL")
-    @Deprecated("Use PokeBalls.getSportBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getSPORT_BALL() = SPORT_BALL
-
-    @JvmName("getNET_BALL")
-    @Deprecated("Use PokeBalls.getNetBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getNET_BALL() = NET_BALL
-
-    @JvmName("getNEST_BALL")
-    @Deprecated("Use PokeBalls.getNestBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getNEST_BALL() = NEST_BALL
-
-    @JvmName("getREPEAT_BALL")
-    @Deprecated("Use PokeBalls.getRepeatBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getREPEAT_BALL() = REPEAT_BALL
-
-    @JvmName("getTIMER_BALL")
-    @Deprecated("Use PokeBalls.getTimerBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getTIMER_BALL() = TIMER_BALL
-
-    @JvmName("getLUXURY_BALL")
-    @Deprecated("Use PokeBalls.getLuxuryBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getLUXURY_BALL() = LUXURY_BALL
-
-    @JvmName("getPREMIER_BALL")
-    @Deprecated("Use PokeBalls.getPremierBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getPREMIER_BALL() = PREMIER_BALL
-
-    @JvmName("getDUSK_BALL")
-    @Deprecated("Use PokeBalls.getDuskBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getDUSK_BALL() = DUSK_BALL
-
-    @JvmName("getHEAL_BALL")
-    @Deprecated("Use PokeBalls.getHealBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getHEAL_BALL() = HEAL_BALL
-
-    @JvmName("getQUICK_BALL")
-    @Deprecated("Use PokeBalls.getQuickBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getQUICK_BALL() = QUICK_BALL
-
-    @JvmName("getCHERISH_BALL")
-    @Deprecated("Use PokeBalls.getCherishBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getCHERISH_BALL() = CHERISH_BALL
-
-    @JvmName("getPARK_BALL")
-    @Deprecated("Use PokeBalls.getParkBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getPARK_BALL() = PARK_BALL
-
-    @JvmName("getDREAM_BALL")
-    @Deprecated("Use PokeBalls.getDreamBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getDREAM_BALL() = DREAM_BALL
-
-    @JvmName("getBEAST_BALL")
-    @Deprecated("Use PokeBalls.getBeastBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getBEAST_BALL() = BEAST_BALL
-
-    @JvmName("getANCIENT_POKE_BALL")
-    @Deprecated("Use PokeBalls.getAncientPokeBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_POKE_BALL() = ANCIENT_POKE_BALL
-
-    @JvmName("getANCIENT_CITRINE_BALL")
-    @Deprecated("Use PokeBalls.getAncientCitrineBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_CITRINE_BALL() = ANCIENT_CITRINE_BALL
-
-    @JvmName("getANCIENT_VERDANT_BALL")
-    @Deprecated("Use PokeBalls.getAncientVerdantBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_VERDANT_BALL() = ANCIENT_VERDANT_BALL
-
-    @JvmName("getANCIENT_AZURE_BALL")
-    @Deprecated("Use PokeBalls.getAncientAzureBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_AZURE_BALL() = ANCIENT_AZURE_BALL
-
-    @JvmName("getANCIENT_ROSEATE_BALL")
-    @Deprecated("Use PokeBalls.getAncientRoseateBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_ROSEATE_BALL() = ANCIENT_ROSEATE_BALL
-
-    @JvmName("getANCIENT_SLATE_BALL")
-    @Deprecated("Use PokeBalls.getAncientSlateBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_SLATE_BALL() = ANCIENT_SLATE_BALL
-
-    @JvmName("getANCIENT_IVORY_BALL")
-    @Deprecated("Use PokeBalls.getAncientIvoryBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_IVORY_BALL() = ANCIENT_IVORY_BALL
-
-    @JvmName("getANCIENT_GREAT_BALL")
-    @Deprecated("Use PokeBalls.getAncientGreatBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_GREAT_BALL() = ANCIENT_GREAT_BALL
-
-    @JvmName("getANCIENT_ULTRA_BALL")
-    @Deprecated("Use PokeBalls.getAncientUltraBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_ULTRA_BALL() = ANCIENT_ULTRA_BALL
-
-    @JvmName("getANCIENT_HEAVY_BALL")
-    @Deprecated("Use PokeBalls.getAncientHeavyBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_HEAVY_BALL() = ANCIENT_HEAVY_BALL
-
-    @JvmName("getANCIENT_LEADEN_BALL")
-    @Deprecated("Use PokeBalls.getAncientLeadenBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_LEADEN_BALL() = ANCIENT_LEADEN_BALL
-
-    @JvmName("getANCIENT_GIGATON_BALL")
-    @Deprecated("Use PokeBalls.getAncientGigatonBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_GIGATON_BALL() = ANCIENT_GIGATON_BALL
-
-    @JvmName("getANCIENT_FEATHER_BALL")
-    @Deprecated("Use PokeBalls.getAncientFeatherBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_FEATHER_BALL() = ANCIENT_FEATHER_BALL
-
-    @JvmName("getANCIENT_WING_BALL")
-    @Deprecated("Use PokeBalls.getAncientWingBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_WING_BALL() = ANCIENT_WING_BALL
-
-    @JvmName("getANCIENT_JET_BALL")
-    @Deprecated("Use PokeBalls.getAncientJetBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_JET_BALL() = ANCIENT_JET_BALL
-
-    @JvmName("getANCIENT_ORIGIN_BALL")
-    @Deprecated("Use PokeBalls.getAncientOriginBall(), provided for backwards compatibility until Cobblemon 1.8.")
-    fun getANCIENT_ORIGIN_BALL() = ANCIENT_ORIGIN_BALL
-
 }
