@@ -46,50 +46,9 @@
   "baseFriendship": 50,
   "baseScale": 0.7,
   "hitbox": {
-    "width": 1.2,
     "height": 2,
-    "fixed": false
-  },
-  "behaviour": {
-    "moving": {
-      "fly": {
-        "canFly": true
-      },
-      "swim": {
-        "swimSpeed": "0.2",
-        "avoidsWater": true
-      }
-    },
-    "walk": {
-      "walkSpeed": 0.23
-    },
-    "herd": {
-      "maxSize": "7",
-      "toleratedLeaders": [
-        {
-          "pokemon": "archeops",
-          "tier": 1
-        }
-      ]
-    },
-    "combat": {
-      "willDefendSelf": true,
-      "willDefendOwner": true,
-      "willFlee": false
-    },
-    "resting": {
-      "drowsyChance": 0.0333,
-      "rouseChance": 0.0042
-    }
-  },
-  "drops": {
-    "amount": 3,
-    "entries": [
-      {
-        "item": "minecraft:feather",
-        "quantityRange": "0-3"
-      }
-    ]
+    "fixed": false,
+    "width": 1.2
   },
   "riding": {
     "behaviours": {
@@ -99,42 +58,42 @@
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-            "playForPassengers": true,
             "playForNonPassengers": false,
+            "playForPassengers": true,
             "soundLocation": "cobblemon:ride.loop.wind.stereo",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-            "playForPassengers": false,
             "playForNonPassengers": true,
+            "playForPassengers": false,
             "soundLocation": "cobblemon:ride.loop.wind.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-            "playForPassengers": true,
             "playForNonPassengers": false,
-            "soundLocation": "cobblemon:ride.loop.leather.stereo",
+            "playForPassengers": true,
+            "soundLocation": "cobblemon:ride.loop.plumage.stereo",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           },
           {
             "muffleEnabled": true,
             "pitchExpr": "math.max(1.0 ,0.2 + math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2))",
-            "playForPassengers": false,
             "playForNonPassengers": true,
-            "soundLocation": "cobblemon:ride.loop.leather.mono",
+            "playForPassengers": false,
+            "soundLocation": "cobblemon:ride.loop.plumage.mono",
             "volumeExpr": "math.pow(math.min(q.ride_velocity() / 1.5, 1.0),2)"
           }
         ],
         "stats": {
-          "ACCELERATION": "45-75",
+          "ACCELERATION": "55-75",
           "JUMP": "30-65",
-          "SKILL": "55-85",
-          "SPEED": "45-70",
-          "STAMINA": "0-10"
+          "SKILL": "60-85",
+          "SPEED": "10-20",
+          "STAMINA": "0-5"
         }
       },
       "LAND": {
@@ -142,19 +101,57 @@
         "rideSounds": [],
         "stats": {
           "ACCELERATION": "55-65",
-          "JUMP": "15-25",
+          "JUMP": "25-35",
           "SKILL": "10-25",
-          "SPEED": "25-45",
-          "STAMINA": "20-45"
+          "SPEED": "25-40",
+          "STAMINA": "20-40"
         }
       }
     },
     "seats": [
       {
         "locator": "seat_1"
+      }
+    ]
+  },
+  "behaviour": {
+    "combat": {
+      "willDefendOwner": true,
+      "willDefendSelf": true,
+      "willFlee": false
+    },
+    "herd": {
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "archeops",
+          "tier": 1
+        }
+      ]
+    },
+    "moving": {
+      "fly": {
+        "canFly": true
       },
+      "swim": {
+        "avoidsWater": true,
+        "swimSpeed": "0.2"
+      }
+    },
+    "resting": {
+      "drowsyChance": 0.0333,
+      "rouseChance": 0.0042
+    },
+    "walk": {
+      "walkSpeed": 0.23
+    }
+  },
+  "drops": {
+    "amount": 3,
+    "entries": [
       {
-        "locator": "seat_2"
+        "item": "minecraft:feather",
+        "quantityRange": "0-3"
       }
     ]
   },

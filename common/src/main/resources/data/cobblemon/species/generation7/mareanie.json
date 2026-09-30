@@ -69,6 +69,19 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "mareanie",
+          "tier": 1
+        },
+        {
+          "pokemon": "toxapex",
+          "tier": 2
+        }
+      ]
     }
   },
   "drops": {

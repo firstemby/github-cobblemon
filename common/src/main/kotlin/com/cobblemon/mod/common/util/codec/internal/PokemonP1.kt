@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.abilities.Ability
 import com.cobblemon.mod.common.api.moves.BenchedMoves
 import com.cobblemon.mod.common.api.moves.MoveSet
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.pokemon.EVs
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
@@ -21,20 +22,22 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.codec.CodecUtils
+import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURES
+import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1.Companion.FEATURE_ID
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import java.util.Optional
 import java.util.UUID
 import net.minecraft.core.UUIDUtil
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.ComponentSerialization
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 
 internal class PokemonP1(
     val uuid: UUID,
     val species: Species,
     val form: FormData,
-    val nickname: Optional<Component>,
+    val features: List<CompoundTag>,
     val level: Int,
     val experience: Int,
     val friendship: Int,
@@ -55,7 +58,22 @@ internal class PokemonP1(
         other.ability = this.ability
         other.species = this.species
         other.form = this.form
-        this.nickname.ifPresent { other.nickname = it.copy() }
+        this.features.forEach { featureNbt ->
+            val featureId = featureNbt.getString(FEATURE_ID)
+            if (featureId.isEmpty()) {
+                return@forEach
+            }
+            val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(other.species)
+            val feature = speciesFeatureProviders.firstNotNullOfOrNull { provider -> provider(featureNbt) } ?: return@forEach
+            if (
+                featureNbt.contains("keys", Tag.TAG_STRING.toInt()) &&
+                !featureNbt.getList("keys", Tag.TAG_STRING.toInt()).contains(StringTag.valueOf(featureId))
+            ) {
+                return@forEach
+            }
+            other.features.removeIf { it.name == feature.name }
+            other.features.add(feature)
+        }
         other.level = this.level
         other.experience = this.experience
         other.setFriendship(this.friendship)
@@ -91,7 +109,7 @@ internal class PokemonP1(
                 UUIDUtil.LENIENT_CODEC.fieldOf(DataKeys.POKEMON_UUID).forGetter(PokemonP1::uuid),
                 Species.BY_IDENTIFIER_CODEC.fieldOf(DataKeys.POKEMON_SPECIES_IDENTIFIER).forGetter(PokemonP1::species),
                 Codec.STRING.fieldOf(DataKeys.POKEMON_FORM_ID).forGetter { pokemon -> pokemon.form.formOnlyShowdownId() },
-                ComponentSerialization.CODEC.optionalFieldOf(DataKeys.POKEMON_NICKNAME).forGetter(PokemonP1::nickname),
+                Codec.list(CompoundTag.CODEC).optionalFieldOf(FEATURES, emptyList()).forGetter(PokemonP1::features),
                 CodecUtils.dynamicIntRange(1) { Cobblemon.config.maxPokemonLevel }.fieldOf(DataKeys.POKEMON_LEVEL).forGetter(PokemonP1::level),
                 Codec.intRange(0, Int.MAX_VALUE).fieldOf(DataKeys.POKEMON_EXPERIENCE).forGetter(PokemonP1::experience),
                 CodecUtils.dynamicIntRange(0) { Cobblemon.config.maxPokemonFriendship }.fieldOf(DataKeys.POKEMON_FRIENDSHIP).forGetter(PokemonP1::friendship),
@@ -104,9 +122,9 @@ internal class PokemonP1(
                 Codec.FLOAT.fieldOf(DataKeys.POKEMON_SCALE_MODIFIER).forGetter(PokemonP1::scaleModifier),
                 Codec.BOOL.fieldOf(DataKeys.POKEMON_SHINY).forGetter(PokemonP1::shiny),
                 Ability.CODEC.fieldOf(DataKeys.POKEMON_ABILITY).forGetter(PokemonP1::ability)
-            ).apply(instance) { uuid, species, formId, nickname, level, experience, friendship, currentHealth, gender, ivs, evs, moveSet, benchedMoves, scaleModifier, shiny, ability ->
+            ).apply(instance) { uuid, species, formId, features, level, experience, friendship, currentHealth, gender, ivs, evs, moveSet, benchedMoves, scaleModifier, shiny, ability ->
                 val form = species.forms.firstOrNull { it.formOnlyShowdownId() == formId } ?: species.standardForm
-                PokemonP1(uuid, species, form, nickname, level, experience, friendship, currentHealth, gender, ivs, evs, moveSet, benchedMoves, scaleModifier, shiny, ability)
+                PokemonP1(uuid, species, form, features, level, experience, friendship, currentHealth, gender, ivs, evs, moveSet, benchedMoves, scaleModifier, shiny, ability)
             }
         }
 
@@ -114,7 +132,11 @@ internal class PokemonP1(
             pokemon.uuid,
             pokemon.species,
             pokemon.form,
-            Optional.ofNullable(pokemon.nickname),
+            pokemon.features.map { feature ->
+                val nbt = CompoundTag()
+                nbt.putString(FEATURE_ID, feature.name)
+                feature.saveToNBT(nbt)
+            },
             pokemon.level,
             pokemon.experience,
             pokemon.friendship,

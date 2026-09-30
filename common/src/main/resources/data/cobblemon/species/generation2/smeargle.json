@@ -66,6 +66,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "smeargle alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "moves": [

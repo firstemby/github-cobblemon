@@ -144,7 +144,6 @@
     "tm:magiccoat",
     "tm:meteorbeam",
     "tm:mistyterrain",
-    "tm:naturalgift",
     "tm:ominouswind",
     "tm:outrage",
     "tm:overheat",
@@ -453,7 +452,6 @@
         "tm:magiccoat",
         "tm:meteorbeam",
         "tm:mistyterrain",
-        "tm:naturalgift",
         "tm:ominouswind",
         "tm:outrage",
         "tm:overheat",
@@ -798,7 +796,6 @@
         "tm:magiccoat",
         "tm:meteorbeam",
         "tm:mistyterrain",
-        "tm:naturalgift",
         "tm:ominouswind",
         "tm:outrage",
         "tm:overheat",
@@ -1103,6 +1100,9 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3
     }
   }
 }

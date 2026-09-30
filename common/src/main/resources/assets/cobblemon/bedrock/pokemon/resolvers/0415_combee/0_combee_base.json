@@ -16,6 +16,25 @@
       "texture": "cobblemon:textures/pokemon/0415_combee/combee_shiny.png"
     },
     {
+      "aspects": ["female"],
+      "model": "cobblemon:combee_female.geo"
+    },
+    {
+      "aspects": ["shiny", "female"],
+      "model": "cobblemon:combee_female.geo",
+      "texture": "cobblemon:textures/pokemon/0415_combee/combee_shiny.png"
+    },
+    {
+      "aspects": ["has_nectar"],
+      "layers": [
+        {
+          "name": "nectar",
+          "texture": "cobblemon:textures/pokemon/0415_combee/combee_pollinated.png",
+          "emissive": false
+        }
+      ]
+    },
+    {
       "aspects": [
         "alpha_eyes"
       ],

@@ -45,12 +45,15 @@
   "features": [
     "valencian"
   ],
-  "baseScale": 1,
+  "baseScale": 0.95,
   "hitbox": {
-    "width": 0.6,
-    "height": 0.8,
+    "width": 0.8,
+    "height": 1,
     "fixed": false
   },
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -63,9 +66,26 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gloom alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vileplume alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "bellossom alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -138,7 +158,6 @@
     "tm:infestation",
     "tm:leafstorm",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pollenpuff",

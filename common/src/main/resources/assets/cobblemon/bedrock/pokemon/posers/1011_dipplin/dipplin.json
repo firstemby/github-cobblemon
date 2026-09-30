@@ -4,6 +4,9 @@
   "profileScale": 0.88,
   "profileTranslation": [0.00, 0.39, 0],
   "rootBone": "dipplin",
+  "animations": {
+    "cry": "q.bedrock_stateful('dipplin', 'cry')"
+  },
   "poses": {
 	"battle-standing": {
      "poseTypes": ["STAND"],

@@ -269,7 +269,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("dive_ball", CatchRateModifiers.SUBMERGED_IN_WATER, waterDragValue = 0.99F)
         createDefault("nest_ball", CatchRateModifiers.NEST)
         createDefault("repeat_ball", CatchRateModifiers.REPEAT)
-        createDefault("timer_ball", CatchRateModifiers.turnBased { turn -> (1F * turn * (1229F / 4096F)).coerceAtMost(4F) })
+        createDefault("timer_ball", CatchRateModifiers.turnBased { turn -> (1F + turn * (1229F / 4096F)).coerceAtMost(4F) })
         createDefault("luxury_ball", effects = listOf(FriendshipEarningBoostEffect(2F)))
         createDefault("premier_ball")
         createDefault("dusk_ball", CatchRateModifiers.LIGHT_LEVEL)
@@ -278,7 +278,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("cherish_ball")
         createDefault("park_ball", CatchRateModifiers.PARK)
         createDefault("dream_ball", CatchRateModifiers.statusBoosting(4F, Statuses.SLEEP))
-        createDefault("beast_ball", LabelModifier(5F, true, CobblemonPokemonLabels.ULTRA_BEAST)/*, LabelModifier(0.1F, false, CobblemonPokemonLabels.ULTRA_BEAST))*/)
+        createDefault("beast_ball", DynamicMultiplierModifier({ _, pokemon -> if (pokemon.hasLabels(CobblemonPokemonLabels.ULTRA_BEAST)) 5F else 0.1F }) { _, _ -> true })
         createDefault("ancient_poke_ball", ancient = true)
         createDefault("ancient_citrine_ball", ancient = true)
         createDefault("ancient_verdant_ball", ancient = true)
@@ -297,13 +297,15 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         createDefault("ancient_origin_ball", GuaranteedModifier(), ancient = true)
         // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
         CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->
-            var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
-            if (increment <= 0) //these affects are only meant to affect positive gains
+            if (!event.earned) {
                 return@subscribe
-            if (increment <= 1F) {
-                event.pokemon.caughtBall.effects.filterIsInstance<FriendshipEarningBoostEffect>()
-                    .forEach { increment *= it.multiplier }
             }
+            var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
+            if (increment <= 0) {
+                return@subscribe
+            }
+            event.pokemon.caughtBall.effects.filterIsInstance<FriendshipEarningBoostEffect>()
+                .forEach { increment *= it.multiplier }
             event.newFriendship = event.pokemon.friendship + increment.roundToInt()
         }
     }
@@ -338,7 +340,6 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         ancient: Boolean = false
     ): PokeBall {
         val identifier = cobblemonResource(name)
-        //val finalModifiers = if (appendUltraBeastPenalty) modifiers + listOf(LabelModifier(0.1F, true, CobblemonPokemonLabels.ULTRA_BEAST)) else modifiers
         val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient)
         this.defaults[identifier] = pokeball
         return pokeball

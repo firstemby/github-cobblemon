@@ -62,7 +62,7 @@
 				"body": {
 					"rotation": [0, -7.5, 0]
 				},
-				"Eyebrow": {
+				"eyebrows": {
 					"rotation": [0, 0, 0]
 				}
 			}
@@ -240,7 +240,7 @@
 						"1.5": [0, 0, 0]
 					}
 				},
-				"Eyebrow": {
+				"eyebrows": {
 					"position": {
 						"0.0": [0, 0, 0],
 						"0.25": {
@@ -282,31 +282,31 @@
 				"skirt_back": {
 					"rotation": ["0-math.cos(q.anim_time*90*2-30)*5", 0, 0]
 				},
-				"eyelid_left": {
+				"eyelid_annoyed_right": {
 					"position": [0, 0, -0.1]
 				},
-				"eyelid_right": {
-					"position": [0, 0, -0.1]
-				},
-				"Eyebrow": {
+				"eyebrows": {
 					"position": [0, "0+math.sin(q.anim_time*90*2-30)*0.05", 0]
 				},
 				"hair": {
 					"rotation": ["12.5+math.cos(q.anim_time*90*2-30)*3", 0, 0]
+				},
+				"eyelid_annoyed_left": {
+					"position": [0, 0, -0.1]
 				}
 			}
 		},
 		"animation.shroomish.blink": {
 			"animation_length": 0.1667,
 			"bones": {
-				"eyelid_left": {
+				"eyelid_annoyed_right": {
 					"position": {
 						"0.0": [0, 0, -0.1],
 						"0.125": [0, 0, -0.1],
 						"0.1667": [0, 0, 0]
 					}
 				},
-				"eyelid_right": {
+				"eyelid_annoyed_left": {
 					"position": {
 						"0.0": [0, 0, -0.1],
 						"0.125": [0, 0, -0.1],
@@ -591,7 +591,7 @@
 						"2.5833": [1, 1, 1]
 					}
 				},
-				"Eyebrow": {
+				"eyebrows": {
 					"rotation": [0, 0, 0],
 					"position": {
 						"0.0": [0, 0, 0],
@@ -603,17 +603,7 @@
 						"2.25": [0, 0, 0]
 					}
 				},
-				"eyelid_left": {
-					"position": {
-						"0.0": [0, 0, 0],
-						"0.0833": [0, 0, -0.1],
-						"1.875": [0, 0, -0.1],
-						"1.9167": [0, 0, 0],
-						"2.1667": [0, 0, 0],
-						"2.2083": [0, 0, -0.1]
-					}
-				},
-				"eyelid_right": {
+				"eyelid_annoyed_right": {
 					"position": {
 						"0.0": [0, 0, 0],
 						"0.0833": [0, 0, -0.1],
@@ -635,6 +625,16 @@
 						"0.0": [0, 0, 0],
 						"0.25": [0, 0, 0],
 						"0.2917": [0, 0, -0.1]
+					}
+				},
+				"eyelid_annoyed_left": {
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.0833": [0, 0, -0.1],
+						"1.875": [0, 0, -0.1],
+						"1.9167": [0, 0, 0],
+						"2.1667": [0, 0, 0],
+						"2.2083": [0, 0, -0.1]
 					}
 				}
 			}

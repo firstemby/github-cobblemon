@@ -33,6 +33,16 @@
       ],
       "transformTicks": 10
     },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "condition": "!q.in_air",
+      "animations": [
+        "q.look('head')",
+        "q.bedrock('gogoat', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('gogoat', 'blink')"]
+    },
     "in-air": {
       "poseTypes": ["STAND", "WALK"],
       "isBattle": false,

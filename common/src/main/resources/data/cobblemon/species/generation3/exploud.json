@@ -219,7 +219,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "exploud alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

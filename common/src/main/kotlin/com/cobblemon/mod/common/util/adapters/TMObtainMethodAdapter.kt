@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.util.adapters
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.tms.ObtainMethod
 import com.cobblemon.mod.common.tms.obtain.DefaultObtainMethod
+import com.cobblemon.mod.common.tms.obtain.ImpossibleObtainMethod
 import com.cobblemon.mod.common.tms.obtain.PlayerHasAdvancementObtainMethod
 import com.cobblemon.mod.common.tms.obtain.PlayerYObtainMethod
 import com.cobblemon.mod.common.tms.obtain.UnlockableObtainMethod
@@ -29,6 +30,7 @@ object TMObtainMethodAdapter : JsonSerializer<ObtainMethod>, JsonDeserializer<Ob
 
     init {
         this.register(UnlockableObtainMethod::class, UnlockableObtainMethod.ID)
+        this.register(ImpossibleObtainMethod::class, ImpossibleObtainMethod.ID)
         this.register(PlayerHasAdvancementObtainMethod::class, PlayerHasAdvancementObtainMethod.ID)
         this.register(DefaultObtainMethod::class, DefaultObtainMethod.ID)
         this.register(PlayerYObtainMethod::class, PlayerYObtainMethod.ID)

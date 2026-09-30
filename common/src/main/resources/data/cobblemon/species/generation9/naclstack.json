@@ -70,7 +70,20 @@
     "combat": {
       "willDefendOwner": true
     },
-    "fireImmune": true
+    "fireImmune": true,
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "naclstack alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "garganacl alpha",
+          "tier": 1
+        }
+      ]
+    }
   },
   "drops": {
     "amount": 3,

@@ -1,0 +1,87 @@
+{
+  "portraitScale": 1.89,
+  "portraitTranslation": [0.01, 1.31, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [0, 0.8, 0],
+  "rootBone": "sudowoodo",
+  "animations": {
+    "cry": "q.bedrock_stateful('sudowoodo', 'cry')",
+    "recoil": "q.bedrock_stateful('sudowoodo', 'recoil')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "condition": "q.has_entity ? !q.in_air : 1.0",
+      "isBattle": false,
+      "animations": [
+        "q.look('torso', 0.75, 1, 5, -5, 12.5, -12.5)",
+        "q.look('torso2', 0.75, 1, 10, 0, 0, 0)",
+        "q.look('head_ai', 1, 1, 7.5, -5, 10, -10)",
+        "q.bedrock('sudowoodo', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sudowoodo', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('torso', 0.5, 1, 2.5, -5, 2.5, -2.5)",
+        "q.look('torso2', 0.5, 1, 15, 5, 0, 0)",
+        "q.look('head_ai', 1, 1, 10, -10, 10, -10)",
+        "q.bedrock('sudowoodo', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sudowoodo', 'blink')",
+        "q.bedrock_quirk('sudowoodo', 'battle_quirk')"
+      ]
+    },
+    "walk": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('torso', 0.75, 1, 5, -5, 12.5, -12.5)",
+        "q.look('torso2', 0.75, 1, 10, 0, 0, 0)",
+        "q.look('head_ai', 1, 1, 7.5, -5, 10, -10)",
+        "q.bedrock('sudowoodo', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sudowoodo', 'blink')"
+      ]
+    },
+    "run": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('torso', 0.75, 1, 5, -5, 12.5, -12.5)",
+        "q.look('torso2', 0.75, 1, 10, 0, 0, 0)",
+        "q.look('head_ai', 1, 1, 7.5, -5, 10, -10)",
+        "q.bedrock('sudowoodo', 'ground_run')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('sudowoodo', 'blink')"
+      ]
+    },
+    "battle-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('sudowoodo', 'battle_sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": false,
+      "animations": [
+        "q.bedrock('sudowoodo', 'sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    }
+  }
+}

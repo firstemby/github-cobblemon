@@ -71,8 +71,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "squirtle alpha",
+          "tier": 1
+        },
         {
           "pokemon": "wartortle",
           "tier": 1

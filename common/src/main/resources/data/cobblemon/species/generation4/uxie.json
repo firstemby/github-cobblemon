@@ -112,10 +112,8 @@
     "tm:metronome",
     "tm:mudslap",
     "tm:nastyplot",
-    "tm:naturalgift",
     "tm:painsplit",
     "tm:playrough",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psybeam",
@@ -180,7 +178,6 @@
     "tutor:mudslap",
     "tutor:painsplit",
     "tutor:playrough",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:psychocut",
     "tutor:recycle",
@@ -205,6 +202,7 @@
     "legacy:doubleteam",
     "legacy:frustration",
     "legacy:hiddenpower",
+    "legacy:powershift",
     "legacy:return",
     "legacy:secretpower",
     "legacy:swagger",
@@ -213,7 +211,7 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 3,
       "toleratedLeaders": [
         {
           "pokemon": "uxie",

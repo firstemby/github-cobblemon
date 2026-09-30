@@ -1,5 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "unremarkable_teacup",
     "pattern": [
         "C C",
         "QCQ"

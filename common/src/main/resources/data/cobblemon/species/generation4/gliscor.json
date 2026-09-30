@@ -145,7 +145,6 @@
     "tm:pinmissile",
     "tm:poisonjab",
     "tm:poisontail",
-    "tm:powershift",
     "tm:powerwhip",
     "tm:protect",
     "tm:psychicfangs",
@@ -207,7 +206,6 @@
     "tutor:knockoff",
     "tutor:mudslap",
     "tutor:poisonjab",
-    "tutor:powershift",
     "tutor:rest",
     "tutor:rockslide",
     "tutor:rocksmash",
@@ -238,6 +236,7 @@
     "legacy:hiddenpower",
     "legacy:mimic",
     "legacy:naturalgift",
+    "legacy:powershift",
     "legacy:return",
     "legacy:rockclimb",
     "legacy:round",
@@ -267,6 +266,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gliscor alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

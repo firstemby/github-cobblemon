@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-29",
-            "weight": 2.25,
+            "weight": 22.5,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -23,7 +23,8 @@
                     "aether:skyroot_grove",
                     "aether:skyroot_meadow",
                     "#cobblemon:is_snowy_forest"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -37,13 +38,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-29",
-            "weight": 0.45,
+            "weight": 4.5,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -56,7 +58,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "rare",
             "level": "20-29",
-            "weight": 0.45,
+            "weight": 4.5,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -65,7 +67,8 @@
                 ],
                 "structures": [
                     "#minecraft:village"
-                ]
+                ],
+                "isPokeSnack": true
             }
         },
         {
@@ -78,12 +81,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-29",
-            "weight": 0.19,
+            "weight": 1.8,
             "condition": {
                 "canSeeSky": false,
                 "biomes": [
                     "#cobblemon:is_overworld"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

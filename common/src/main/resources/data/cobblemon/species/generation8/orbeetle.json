@@ -206,6 +206,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "orbeetle alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

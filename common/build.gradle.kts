@@ -1,9 +1,8 @@
 
 import utilities.isSnapshot
 import utilities.version
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import utilities.gitBranch
+import utilities.gitCommit
 
 /*
  *
@@ -72,6 +71,14 @@ tasks.withType<Test> {
     }
 }
 
+// Git info lives in its own output dir (not processResources) so a new commit only rewrites this one file.
+val writeGitInfo by tasks.registering(WriteProperties::class) {
+    destinationFile = layout.buildDirectory.file("generated/gitInfo/cobblemon-git.properties")
+    property("commit", gitCommit())
+    property("branch", gitBranch())
+}
+sourceSets.main { output.dir(mapOf("builtBy" to writeGitInfo), layout.buildDirectory.dir("generated/gitInfo")) }
+
 tasks.processResources {
     exclude("data/**/README.md")
 }
@@ -98,11 +105,13 @@ sourceSets {
                 property("modid", "cobblemon")
                 property("version", project.version())
                 property("isSnapshot", if(rootProject.isSnapshot()) "true" else "false")
-                property("gitCommit", versioning.info.commit)
-                property("branch", versioning.info.branch)
                 System.getProperty("buildNumber")?.let { property("buildNumber", it) }
-                property("timestamp", OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss")) + " UTC")
             }
         }
     }
+}
+
+// The platform jars are built from :common:jar, so the remapped common jars are only needed by `publish`
+tasks.assemble {
+    setDependsOn(dependsOn.filterNot { (it as? TaskProvider<*>)?.name in setOf("remapJar", "remapSourcesJar") })
 }

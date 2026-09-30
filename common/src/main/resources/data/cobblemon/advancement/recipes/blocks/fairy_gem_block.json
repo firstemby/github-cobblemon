@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/blocks",
+  "rewards": {
+    "recipes": [
+      "cobblemon:fairy_gem_block"
+    ]
+  },
+  "criteria": {
+    "has_fairy_gem": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:fairy_gem"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:fairy_gem_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_fairy_gem",
+      "has_the_recipe"
+    ]
+  ]
+}

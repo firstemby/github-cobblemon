@@ -82,7 +82,7 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "8",
+      "maxSize": 8,
       "toleratedLeaders": [
         {
           "pokemon": "mamoswine",

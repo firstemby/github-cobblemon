@@ -1,0 +1,34 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "rewards": {
+    "recipes": [
+      "cobblemon:pep_up_flower_to_white_dye"
+    ]
+  },
+  "criteria": {
+    "has_flower": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:pep_up_flower"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "cobblemon:pep_up_flower_to_white_dye"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flower",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -91,6 +91,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "enable_spawning", SERVER)
     var enableSpawning = true
 
+    @CobblemonConfigField(Category.Spawning, lang = "world_spawning_blocklist", SERVER)
+    var worldSpawningBlocklist = mutableSetOf<ResourceLocation>()
+
     @CobblemonConfigField(Category.Spawning, lang = "minimum_distance_between_entities", SERVER)
     var minimumDistanceBetweenEntities = 8.0
 
@@ -212,6 +215,9 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Pokemon, lang = "display_entity_labels_when_crouching_only", CLIENT)
     var displayEntityLabelsWhenCrouchingOnly = false
+
+    @CobblemonConfigField(Category.Pokemon, lang = "shoulder_mount_armor_offset_blacklist", CLIENT)
+    var shoulderMountArmorOffsetBlacklist = mutableSetOf<ResourceLocation>()
 
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate", SERVER)
     var shinyRate = 8192F

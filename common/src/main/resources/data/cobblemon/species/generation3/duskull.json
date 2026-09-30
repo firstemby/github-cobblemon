@@ -69,7 +69,21 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2"
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "duskull alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dusclops alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dusknoir alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

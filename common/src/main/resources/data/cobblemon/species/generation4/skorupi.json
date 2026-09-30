@@ -58,8 +58,12 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "skorupi alpha",
+          "tier": 1
+        },
         {
           "pokemon": "drapion",
           "tier": 1

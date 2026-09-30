@@ -19,20 +19,31 @@ import net.minecraft.world.level.block.Block
 object SetActiveTMPacketHandler : ServerNetworkPacketHandler<SetActiveTMPacket> {
     override fun handle(packet: SetActiveTMPacket, server: MinecraftServer, player: ServerPlayer) {
         val menu = player.containerMenu as? TMMachineMenu ?: return
-        val inventory = menu.inventory ?: return
         val tmData = Cobblemon.playerDataManager.getTMData(player)
 
-        if (packet.tm != null && (!packet.tm.isPassivelyObtained() && packet.tm.id !in tmData.learnedTMs)) {
+        if (packet.tm != null
+            && !Cobblemon.config.unlockAllMoveDexMovesByDefault
+            && !packet.tm.isPassivelyObtained()
+            && packet.tm.id !in tmData.learnedTMs) {
             return // Hacker smh
         }
 
         menu.tmMachineEntity?.let { blockEntity ->
             blockEntity.activeMove = packet.tm?.moveName?.name ?: ""
+
+            blockEntity.burnActive = false
+            blockEntity.burnProgress = 0
+
             blockEntity.setChanged()
             player.level().sendBlockUpdated(blockEntity.blockPos, blockEntity.blockState, blockEntity.blockState, Block.UPDATE_CLIENTS)
-        }
 
-        inventory.setChanged()
-        menu.broadcastChanges()
+            player.level().players().forEach { thePlayer -> //Update all players with matching menu/blockentity
+                val tmmMenu = thePlayer.containerMenu as? TMMachineMenu ?: return@forEach
+                if (tmmMenu.tmMachineEntity == blockEntity) {
+                    tmmMenu.currentlySelectedTM = packet.tm
+                    tmmMenu.broadcastChanges()
+                }
+            }
+        }
     }
 }

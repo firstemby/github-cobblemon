@@ -27,6 +27,18 @@
           "texture": "cobblemon:textures/pokemon/0486_regigigas/regigigas_emissive.png"
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0486_regigigas/regigigas_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

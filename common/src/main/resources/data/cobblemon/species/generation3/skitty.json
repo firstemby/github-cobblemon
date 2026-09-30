@@ -74,6 +74,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "skitty alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "delcatty",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {
@@ -121,7 +134,6 @@
     "tm:blizzard",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:cosmicpower",

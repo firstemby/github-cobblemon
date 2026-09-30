@@ -14,7 +14,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
-            "weight": 9.5,
+            "weight": 57.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -26,7 +26,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_floral"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -45,7 +46,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
-            "weight": 1.9,
+            "weight": 19.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -58,7 +59,8 @@
                 "biomes": [
                     "#cobblemon:is_forest",
                     "#cobblemon:is_tropical_island"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -75,11 +77,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
-            "weight": 9.5,
+            "weight": 57.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "structures": [
@@ -98,7 +101,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
-            "weight": 5.7,
+            "weight": 57.0,
             "weightMultiplier": {
                 "multiplier": 0.25,
                 "condition": {
@@ -110,7 +113,8 @@
                 "maxSkyLight": 15,
                 "biomes": [
                     "#cobblemon:is_hills"
-                ]
+                ],
+                "isPokeSnack": true
             },
             "anticondition": {
                 "biomes": [
@@ -130,13 +134,14 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "3-28",
-            "weight": 5.7,
+            "weight": 57.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
                     "#aether:is_aether"
-                ]
+                ],
+                "isPokeSnack": true
             }
         }
     ]

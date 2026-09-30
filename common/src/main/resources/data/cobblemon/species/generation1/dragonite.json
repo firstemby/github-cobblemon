@@ -181,6 +181,15 @@
       "times": [
         "any"
       ]
+    },
+    "herd": {
+      "maxSize": 9,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dragonite alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

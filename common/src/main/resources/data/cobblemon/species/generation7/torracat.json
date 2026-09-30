@@ -70,7 +70,17 @@
       "avoidedByPhantom": true
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "torracat alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "incineroar alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

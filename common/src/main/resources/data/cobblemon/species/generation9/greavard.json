@@ -167,8 +167,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
+        {
+          "pokemon": "greavard alpha",
+          "tier": 1
+        },
         {
           "pokemon": "houndstone",
           "tier": 1
@@ -195,5 +199,12 @@
   "lightingData": {
     "lightLevel": 8,
     "liquidGlowMode": "LAND"
-  }
+  },
+  "baseScale": 1,
+  "hitbox": {
+    "width": 0.85,
+    "height": 1,
+    "fixed": false
+  },
+  "standingEyeHeight": 0.65
 }

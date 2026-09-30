@@ -67,11 +67,11 @@ class AlphaLevelMatchingSensor : Sensor<PokemonEntity>(20) {
             val strongestPartyLevel = player.party().maxOfOrNull { it.level } ?: return null
             val minEvolutionLevel = minimumEvolutionLevel(pokemon)
             return when {
-                strongestPartyLevel < 20 -> strongestPartyLevel + 5
-                strongestPartyLevel in 31..40 -> strongestPartyLevel + 10
-                strongestPartyLevel in 51..65 -> strongestPartyLevel + 15
-                strongestPartyLevel >= 66 -> strongestPartyLevel + 20
-                else -> strongestPartyLevel
+                strongestPartyLevel < 21 -> strongestPartyLevel + 4
+                strongestPartyLevel in 21..30 -> strongestPartyLevel + 8
+                strongestPartyLevel in 31..45 -> strongestPartyLevel + 12
+                strongestPartyLevel in 46..65 -> strongestPartyLevel + 16
+                else -> strongestPartyLevel + 20
             }.coerceAtMost(100).coerceAtLeast(minEvolutionLevel)
         }
 

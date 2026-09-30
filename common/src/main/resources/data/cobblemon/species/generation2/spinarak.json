@@ -222,8 +222,12 @@
         "canSleep": true,
         "light": "0-4"
       },
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "spinarak alpha",
+          "tier": 1
+        },
         {
           "pokemon": "ariados",
           "tier": 1

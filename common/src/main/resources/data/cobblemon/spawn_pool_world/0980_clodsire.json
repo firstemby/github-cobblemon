@@ -13,7 +13,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 3.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -32,7 +38,13 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 3.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -50,7 +62,13 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "20-43",
-            "weight": 1.6,
+            "weight": 8.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -68,7 +86,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "20-43",
-            "weight": 1.6,
+            "weight": 8.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -87,7 +111,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -102,7 +126,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "20-43",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": true,
                 "biomes": [
@@ -120,7 +144,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {
@@ -146,7 +170,13 @@
             "spawnablePositionType": "submerged",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 3.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -166,7 +196,13 @@
             "spawnablePositionType": "submerged",
             "bucket": "uncommon",
             "level": "20-43",
-            "weight": 1.6,
+            "weight": 8.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -183,7 +219,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 10.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -200,7 +236,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "uncommon",
             "level": "20-43",
-            "weight": 1.6,
+            "weight": 16.0,
             "condition": {
                 "canSeeSky": false,
                 "minSkyLight": 8,
@@ -220,7 +256,7 @@
             "spawnablePositionType": "fishing",
             "bucket": "common",
             "level": "20-43",
-            "weight": 1.0,
+            "weight": 10.0,
             "weightMultiplier": {
                 "multiplier": 0.6,
                 "condition": {

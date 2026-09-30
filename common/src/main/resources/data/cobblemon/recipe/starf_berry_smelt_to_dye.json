@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "berry_dyes",
     "ingredient": {
         "item": "cobblemon:starf_berry"

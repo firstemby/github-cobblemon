@@ -67,7 +67,7 @@
       }
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "roselia",
@@ -149,7 +149,6 @@
     "tm:leafstorm",
     "tm:magicalleaf",
     "tm:mudslap",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pinmissile",

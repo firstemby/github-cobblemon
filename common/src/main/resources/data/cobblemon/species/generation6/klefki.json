@@ -73,6 +73,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "klefki alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

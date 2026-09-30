@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "thunder_stone",
     "ingredient": {
         "item": "cobblemon:deepslate_thunder_stone_ore"

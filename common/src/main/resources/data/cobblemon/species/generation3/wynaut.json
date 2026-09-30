@@ -94,11 +94,15 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "wobbuffet",
+          "pokemon": "wynaut",
           "tier": 1
+        },
+        {
+          "pokemon": "wobbuffet",
+          "tier": 2
         }
       ]
     },

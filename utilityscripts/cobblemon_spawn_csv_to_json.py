@@ -110,6 +110,7 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
     habitats_df = download_excel_data(habitats_sheet_url, {'Habitat': str, 'Pokémon': str, 'Entry': str})#, 'No.': int})
     herds_df = download_excel_data(herds_sheet_url, {'Herd ID': str, 'Herd Pokémon': str})
     herd_pokemon_df = download_excel_data(herd_pokemon_sheet_url, {'Entry ID': str, 'No.': str})
+    herds_df['Sees Sky'] = herds_df['Sees Sky'].apply(lambda x: str(x).lower())
 
     # Verify all biome tags are valid
     invalid_biome_tags = [] # verify_biome_tags() I don't know that this provides much value except to restrict the machines the script can run on
@@ -214,7 +215,7 @@ def process_herds(herds_df, herd_pokemon_df):
     # At the top level the columns are:
     # File, Herd ID, Herd Pokémon, Max Size, Lv. Min, Lv. Max, Bucket, Weight, Biomes, Excluded Biomes, Time, Weather, Multipliers, Context, Presets, Conditions, Anticonditions, Sky Light Min, Sky Light Max, Sees Sky, Min Dist, Enabled
     # This is fairly similar to the regular spawn data for the most part. First let's create the details ignoring the contents of Herd Pokémon.
-    herds_df = herds_df[herds_df['Enabled'] != False]
+    herds_df = herds_df[herds_df['Enabled'] != 'FALSE']
     herd_groups = herds_df.groupby('File')
 
     herd_pokemon = herd_pokemon_df.set_index('Entry ID')
@@ -261,8 +262,8 @@ def process_herds(herds_df, herd_pokemon_df):
                 "weight": row['Weight']
             }
 
-            if pd.notna(row['Min Dist']):
-                spawn_data["minDistanceBetweenSpawns"] = int(row['Min Dist'])
+            #if pd.notna(row['Min Dist']):
+            #    spawn_data["minDistanceBetweenSpawns"] = int(row['Min Dist'])
 
             if len(presets) == 0:
                 del spawn_data['presets']
@@ -299,7 +300,7 @@ def process_herds(herds_df, herd_pokemon_df):
                     "levelRange": f"{herd_pokemon_row['Lv. Min']}-{herd_pokemon_row['Lv. Max']}",
                     "levelRangeOffset": offset,
                     "maxTimes": max_times,
-                    "isLeader": herd_pokemon_row['Leader'] == 'yes',
+                    "isLeader": herd_pokemon_row['Leader'] != 'no',
                     "isFollower": herd_pokemon_row['Leader'] != 'only'
                 }
 
@@ -480,7 +481,7 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             # check if the dropcondition is in the preset_list, if not, then add it to the unknown_conditions list
                             for preset in presets:
                                 if preset not in preset_list:
-                                    print_warning(f"Unknown preset: {preset}")
+                                    print_warning(f"Unknown preset: {preset} used by {current_id}")
                                 # if the current entry's preset matches with the condition, then add the drops to the json_data
                                 # check if the presets field is in the spawn_data
                                 if "presets" in spawn_data and preset in spawn_data['presets']:
@@ -490,7 +491,7 @@ def transform_pokemon_to_json(pokemon_rows, invalid_biome_tags, drops_df):
                             for biome in biomes:
                                 biome = biome.lower()
                                 if biome not in biome_dictionary:
-                                    print_warning(f"Unknown biome: {biome}")
+                                    print_warning(f"Unknown biome: {biome} used by {current_id}")
                                 # Apply the biome mapping to the condition
                                 if biome in biome_dictionary:
                                     biome = biome_dictionary[biome]
@@ -606,16 +607,16 @@ def handle_common_conditions(column_name, current_id, invalid_biome_tags, row, s
         if parsed_biomes:
             condition['biomes'] = parsed_biomes
 
-    # check if Time column is day, night, dawn, dusk, or any
+    # check if Time column is day, night, dawn, dusk, etc.
+    valid_times = ['day', 'night', 'dawn', 'dusk', 'noon', 'morning', 'afternoon', 'evening', 'midnight', 'predawn', 'twilight']
     if pd.notna(row['Time']):
-        if row['Time'].lower() == 'day':
+        if row['Time'].lower() in valid_times:
             condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'night':
-            condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'dawn':
-            condition['timeRange'] = row['Time'].lower()
-        elif row['Time'].lower() == 'dusk':
-            condition['timeRange'] = row['Time'].lower()
+        elif row['Time'].lower() == 'any':
+            pass
+        else:
+            print(f"Unrecognized time value: {row['Time'].lower()}")
+
 
     # check if Weather column is clear or rain or any
     if pd.notna(row['Weather']):
@@ -623,6 +624,8 @@ def handle_common_conditions(column_name, current_id, invalid_biome_tags, row, s
             condition['isRaining'] = False
         elif row['Weather'].lower() == 'rain':
             condition['isRaining'] = True
+        elif row['Weather'].lower() == 'storm':
+            condition['isThundering'] = True
 
     return condition
 
@@ -732,6 +735,8 @@ def parse_biomes(biomes_str, invalid_biome_tags):
     biomes = []
     for biome in biomes_str.split(','):
         biome = biome.lower().strip()
+        if biome == '':
+            continue
 
         # Verify that the biome is not in the invalid_biome_tags list
         if invalid_biome_tags and biome_dictionary[biome] in invalid_biome_tags:

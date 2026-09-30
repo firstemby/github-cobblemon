@@ -1,0 +1,38 @@
+{
+  "species": "cobblemon:charjabug",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:charjabug",
+      "model": "cobblemon:charjabug.geo",
+      "texture": "cobblemon:textures/pokemon/0737_charjabug/charjabug.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "emissive": true,
+          "texture": "cobblemon:textures/pokemon/0737_charjabug/charjabug_emissive.png",
+          "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0737_charjabug/charjabug_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0737_charjabug/charjabug_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

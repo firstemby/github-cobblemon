@@ -153,6 +153,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "dipplin alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "hydrapple alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

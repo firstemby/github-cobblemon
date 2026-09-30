@@ -66,7 +66,7 @@
       }
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "froakie",
@@ -77,12 +77,20 @@
           "tier": 2
         },
         {
+          "pokemon": "greninja mega=false",
+          "tier": 3
+        },
+        {
           "pokemon": "greninja ash=false",
           "tier": 3
         },
         {
           "pokemon": "greninja ash",
           "tier": 4
+        },
+        {
+          "pokemon": "greninja mega",
+          "tier": 5
         }
       ]
     },

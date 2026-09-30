@@ -57,15 +57,19 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
-          "pokemon": "eelektross",
+          "pokemon": "eelektross mega=false",
           "tier": 1
         },
         {
-          "pokemon": "manaphy",
+          "pokemon": "eelektross mega",
           "tier": 2
+        },
+        {
+          "pokemon": "manaphy",
+          "tier": 3
         }
       ]
     },

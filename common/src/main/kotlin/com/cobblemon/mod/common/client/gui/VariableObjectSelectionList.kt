@@ -71,7 +71,7 @@ open class VariableObjectSelectionList(x: Int, y: Int, width: Int, height: Int):
         var stackHeight = -scrollAmount.toInt()
         guiGraphics.enableScissor(x, y, x + width, y + height)
         children.forEachIndexed { index, entry ->
-            if (stackHeight in 1..<height || stackHeight + entry.height in 1..<height) {
+            if (stackHeight < height && stackHeight + entry.height > 0) {
                 entry.render(guiGraphics, index, x, y + stackHeight, mouseX, mouseY, partialTick)
             }
             stackHeight += entry.height

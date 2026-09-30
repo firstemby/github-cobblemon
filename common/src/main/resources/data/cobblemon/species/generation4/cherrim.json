@@ -44,7 +44,7 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "width": 1,
     "height": 1,
@@ -111,7 +111,6 @@
     "tm:hyperbeam",
     "tm:laserfocus",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:playrough",
@@ -261,7 +260,13 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "cherrim alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "willSleepOnBed": true,

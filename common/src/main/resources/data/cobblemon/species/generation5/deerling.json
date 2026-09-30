@@ -48,10 +48,10 @@
   "features": [
     "season"
   ],
-  "baseScale": 0.8,
+  "baseScale": 0.85,
   "hitbox": {
     "width": 0.6,
-    "height": 1.1,
+    "height": 1.25,
     "fixed": false
   },
   "drops": {
@@ -117,7 +117,6 @@
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:playrough",
     "tm:protect",
@@ -296,7 +295,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "9",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "deerling",

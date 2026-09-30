@@ -75,7 +75,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "serperior alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -137,7 +143,6 @@
     "tm:brutalswing",
     "tm:bulletseed",
     "tm:calmmind",
-    "tm:captivate",
     "tm:cut",
     "tm:defog",
     "tm:doubleedge",
@@ -163,7 +168,6 @@
     "tm:leafstorm",
     "tm:lightscreen",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:outrage",
     "tm:petalblizzard",

@@ -216,8 +216,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "3",
+      "maxSize": 3,
       "toleratedLeaders": [
+        {
+          "pokemon": "magmar alpha",
+          "tier": 1
+        },
         {
           "pokemon": "magmortar",
           "tier": 1

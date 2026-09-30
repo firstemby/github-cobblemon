@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.layer
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
@@ -23,7 +24,6 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.PlayerModel
@@ -33,14 +33,18 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.ItemStack
 
-class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
+class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) :
+    RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
@@ -68,19 +72,62 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         // It's unclear why Minecraft's providing a partial ticks based on 60FPS regardless of the real FPS.
         // Whatever - the delta manager works correctly.
         val realPartialTicks = Minecraft.getInstance().timer.realtimeDeltaTicks
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, true)
-        this.render(matrixStack, buffer, packedLight, livingEntity, limbSwing, limbSwingAmount, realPartialTicks, ageInTicks, netHeadYaw, headPitch, false)
+        this.render(
+            matrixStack,
+            buffer,
+            packedLight,
+            livingEntity,
+            limbSwing,
+            limbSwingAmount,
+            realPartialTicks,
+            ageInTicks,
+            netHeadYaw,
+            headPitch,
+            true
+        )
+        this.render(
+            matrixStack,
+            buffer,
+            packedLight,
+            livingEntity,
+            limbSwing,
+            limbSwingAmount,
+            realPartialTicks,
+            ageInTicks,
+            netHeadYaw,
+            headPitch,
+            false
+        )
     }
 
-    fun configureState(state: FloatingState, model: PosableModel, leftShoulder: Boolean, shoulderData: ShoulderData): FloatingState {
+    fun configureState(
+        state: FloatingState,
+        model: PosableModel,
+        leftShoulder: Boolean,
+        shoulderData: ShoulderData
+    ): FloatingState {
         state.currentModel = model
         state.setPoseToFirstSuitable(if (leftShoulder) PoseType.SHOULDER_LEFT else PoseType.SHOULDER_RIGHT)
 
-        state.runtime.environment.query.addFunction("is_holding_item") { return@addFunction DoubleValue(shoulderData.shownItem.let {
-            !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
-        }) }
-        state.runtime.environment.query.addFunction("is_wearing_hat") { return@addFunction DoubleValue(shoulderData.shownItem.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
-        state.runtime.environment.query.addFunction("is_wearing_face") { return@addFunction DoubleValue(shoulderData.shownItem.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
+        state.runtime.environment.query.addFunction("is_holding_item") {
+            return@addFunction DoubleValue(shoulderData.shownItem.let {
+                !it.isEmpty && !it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) && !it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
+            })
+        }
+        state.runtime.environment.query.addFunction("is_wearing_hat") {
+            return@addFunction DoubleValue(
+                shoulderData.shownItem.`is`(
+                    CobblemonItemTags.WEARABLE_HAT_ITEMS
+                )
+            )
+        }
+        state.runtime.environment.query.addFunction("is_wearing_face") {
+            return@addFunction DoubleValue(
+                shoulderData.shownItem.`is`(
+                    CobblemonItemTags.WEARABLE_FACE_ITEMS
+                )
+            )
+        }
 
         return state
     }
@@ -100,12 +147,12 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
     ) {
         val compoundTag = if (pLeftShoulder) livingEntity.shoulderEntityLeft else livingEntity.shoulderEntityRight
         if (compoundTag.isPokemonEntity()) {
-            livingEntity.level().profiler.push("shoulder_render_".plus(if(pLeftShoulder) "left" else "right"))
+            livingEntity.level().profiler.push("shoulder_render_".plus(if (pLeftShoulder) "left" else "right"))
             val cache = playerCache.getOrPut(livingEntity.uuid) { ShoulderCache() }
             val shoulderData = shoulderDataFrom(compoundTag)
             if (pLeftShoulder) cache.lastKnownLeft = shoulderData else cache.lastKnownRight = shoulderData
 
-            if (shoulderData == null){
+            if (shoulderData == null) {
                 // Nothing to do
                 return
             }
@@ -121,27 +168,27 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             val width = shoulderData.form.hitbox.width
             val heightOffset = -1.5 * scale
             val widthOffset = width / 2 - 0.7
-            // If they're sneaking, the pokemon needs to rotate a little bit and push forward
-            // Shoulders move a bit when sneaking which is why the translation is necessary.
-            // Shoulder exact rotation according to testing (miasmus) is 0.4 radians, the -0.15 is eyeballed though.
-            if (livingEntity.isCrouching) {
-                matrixStack.mulPose(Axis.XP.rotation(0.4F))
-                matrixStack.translate(0F, 0F, -0.15F)
+            val chestItem = livingEntity.getItemBySlot(EquipmentSlot.CHEST)
+            val armorHeightOffset = if (chestItem.item is ArmorItem && !isArmorOffsetBlacklisted(chestItem)) {
+                ARMOR_HEIGHT_OFFSET
+            } else {
+                0F
             }
+            parentModel.body.translateAndRotate(matrixStack)
             matrixStack.translate(
                 if (pLeftShoulder) -widthOffset else widthOffset,
-                (if (livingEntity.isCrouching) heightOffset + 0.2 else heightOffset),
+                heightOffset - armorHeightOffset,
                 0.0
             )
 
             matrixStack.scale(scale, scale, scale)
             matrixStack.translate(0f, 1.5f, 0f)
 
-            state = if (pLeftShoulder && shoulderData != lastRenderedLeft) {
+            state = if (pLeftShoulder && !shoulderData.matches(lastRenderedLeft)) {
                 leftState = configureState(state, model, true, shoulderData)
                 lastRenderedLeft = shoulderData
                 leftState
-            } else if (!pLeftShoulder && shoulderData != lastRenderedRight) {
+            } else if (!pLeftShoulder && !shoulderData.matches(lastRenderedRight)) {
                 rightState = configureState(state, model, false, shoulderData)
                 lastRenderedRight = shoulderData
                 rightState
@@ -151,7 +198,14 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             state.updatePartialTicks(partialTicks)
             context.put(RenderContext.POSABLE_STATE, state)
             state.currentModel = model
-            val vertexConsumer = buffer.getBuffer(RenderType.entityCutout(VaryingModelRepository.getTexture(shoulderData.species.resourceIdentifier, state)))
+            val vertexConsumer = buffer.getBuffer(
+                RenderType.entityCutout(
+                    VaryingModelRepository.getTexture(
+                        shoulderData.species.resourceIdentifier,
+                        state
+                    )
+                )
+            )
             val i = LivingEntityRenderer.getOverlayCoords(livingEntity, 0.0f)
 
             model.applyAnimations(
@@ -164,7 +218,11 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
                 ageInTicks = livingEntity.tickCount.toFloat()
             )
             model.render(context, matrixStack, vertexConsumer, packedLight, i, -0x1)
-            model.withLayerContext(buffer, state, VaryingModelRepository.getLayers(shoulderData.species.resourceIdentifier, state)) {
+            model.withLayerContext(
+                buffer,
+                state,
+                VaryingModelRepository.getLayers(shoulderData.species.resourceIdentifier, state)
+            ) {
                 model.render(context, matrixStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -0x1)
             }
 
@@ -179,8 +237,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             model.setDefault()
             matrixStack.popPose()
             livingEntity.level().profiler.pop()
-        }
-        else {
+        } else {
             val entry = playerCache.getOrPut(livingEntity.uuid) { ShoulderCache() }
             if (pLeftShoulder) entry.lastKnownLeft = null else entry.lastKnownRight = null
         }
@@ -191,18 +248,31 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         var lastKnownRight: ShoulderData? = null
     )
 
-    data class ShoulderData(
+    class ShoulderData(
         val uuid: UUID,
         val species: Species,
         val form: FormData,
         val aspects: Set<String>,
         val scaleModifier: Float,
-        val shownItem: ItemStack
-    )
+        val shownItem: ItemStack,
+    ) {
+        fun matches(other: ShoulderData?): Boolean = other != null
+                && uuid == other.uuid
+                && species == other.species
+                && form == other.form
+                && aspects == other.aspects
+                && shownItem.item == other.shownItem.item
+    }
 
     companion object {
 
+        private const val ARMOR_HEIGHT_OFFSET = 1F / 16F
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
+
+        private fun isArmorOffsetBlacklisted(itemStack: ItemStack): Boolean {
+            val itemIdentifier = BuiltInRegistries.ITEM.getKey(itemStack.item)
+            return itemIdentifier in Cobblemon.config.shoulderMountArmorOffsetBlacklist
+        }
 
         private fun extractUuid(shoulderNbt: CompoundTag): UUID {
             if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {

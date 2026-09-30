@@ -63,7 +63,7 @@
       }
     },
     "herd": {
-      "maxSize": "7",
+      "maxSize": 7,
       "toleratedLeaders": [
         {
           "pokemon": "houndoom mega=false",
@@ -295,7 +295,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "8",
+          "maxSize": 8,
           "toleratedLeaders": [
             {
               "pokemon": "houndoom mega",

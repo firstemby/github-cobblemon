@@ -112,11 +112,27 @@
 					]
 				},
 				{
+					"name": "eyelid_hurt_left",
+					"parent": "eyes",
+					"pivot": [2.9, 9.75, -6.15],
+					"cubes": [
+						{"origin": [2.9, 8.75, -7.65], "size": [0, 2, 3], "inflate": 0.03, "uv": [0, 41]}
+					]
+				},
+				{
 					"name": "eyelid_right",
 					"parent": "eyes",
 					"pivot": [-2.9, 9.75, -6.15],
 					"cubes": [
 						{"origin": [-2.9, 8.75, -7.65], "size": [0, 2, 3], "inflate": 0.03, "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "eyelid_hurt_right",
+					"parent": "eyes",
+					"pivot": [-2.9, 9.75, -6.15],
+					"cubes": [
+						{"origin": [-2.9, 8.75, -7.65], "size": [0, 2, 3], "inflate": 0.03, "uv": [0, 44]}
 					]
 				},
 				{

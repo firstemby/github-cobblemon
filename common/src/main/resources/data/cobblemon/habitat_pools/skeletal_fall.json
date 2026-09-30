@@ -36,7 +36,7 @@
       "weight": 6.0,
       "levelRange": "16-41",
       "modifiers": "galarian",
-      "phases": "1, 3-8"
+      "phases": "1, 3-6"
     },
     {
       "species": "Houndour",
@@ -94,7 +94,7 @@
       "weight": 3.0,
       "levelRange": "8-33",
       "modifiers": "hisuian",
-      "phases": "1-4, 6-8"
+      "phases": "1-4, 6"
     },
     {
       "species": "Zoroark",
@@ -112,39 +112,7 @@
       "weight": 2.0,
       "levelRange": "30-51",
       "modifiers": "hisuian",
-      "phases": "1-4, 6-8"
-    },
-    {
-      "species": "Vullaby",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "12-37",
-      "phases": "6"
-    },
-    {
-      "species": "Vullaby",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "12-37",
-      "phases": "1-5, 7-8"
-    },
-    {
-      "species": "Mandibuzz",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "weight": 4.0,
-      "levelRange": "54-59",
-      "phases": "6"
-    },
-    {
-      "species": "Mandibuzz",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 4.0,
-      "levelRange": "54-59",
-      "phases": "1-5, 7-8"
+      "phases": "1-4, 6"
     },
     {
       "species": "Cursola",
@@ -160,7 +128,7 @@
       "spawnablePositionType": "grounded",
       "weight": 4.0,
       "levelRange": "38-51",
-      "phases": "1, 3-8"
+      "phases": "1, 3-6"
     },
     {
       "species": "Orthworm",
@@ -168,7 +136,7 @@
       "spawnablePositionType": "grounded",
       "weight": 10.0,
       "levelRange": "23-48",
-      "phases": "7"
+      "phases": "6"
     },
     {
       "species": "Orthworm",
@@ -176,39 +144,7 @@
       "spawnablePositionType": "grounded",
       "weight": 10.0,
       "levelRange": "23-48",
-      "phases": "1-6, 8"
-    },
-    {
-      "species": "Greavard",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "4-29",
-      "phases": "8"
-    },
-    {
-      "species": "Greavard",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 6.0,
-      "levelRange": "4-29",
-      "phases": "1-7"
-    },
-    {
-      "species": "Houndstone",
-      "bucket": "common",
-      "spawnablePositionType": "grounded",
-      "weight": 4.0,
-      "levelRange": "30-49",
-      "phases": "8"
-    },
-    {
-      "species": "Houndstone",
-      "bucket": "uncommon",
-      "spawnablePositionType": "grounded",
-      "weight": 4.0,
-      "levelRange": "30-49",
-      "phases": "1-7"
+      "phases": "1-5"
     }
   ]
 }

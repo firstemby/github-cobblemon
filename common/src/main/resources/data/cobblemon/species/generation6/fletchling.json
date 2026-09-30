@@ -62,7 +62,7 @@
       }
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
         {
           "pokemon": "fletchling",
@@ -71,10 +71,6 @@
         {
           "pokemon": "fletchinder",
           "tier": 2
-        },
-        {
-          "pokemon": "talonflame",
-          "tier": 3
         }
       ]
     },
@@ -139,7 +135,6 @@
     "tm:fly",
     "tm:heatwave",
     "tm:hurricane",
-    "tm:naturalgift",
     "tm:overheat",
     "tm:protect",
     "tm:raindance",

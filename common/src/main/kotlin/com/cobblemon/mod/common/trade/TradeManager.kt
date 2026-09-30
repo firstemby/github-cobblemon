@@ -115,8 +115,26 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         }
 
         CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
-            party1.remove(pokemon1)
-            party2.remove(pokemon2)
+            val party1 = player1.party
+            val party2 = player2.party
+
+            val player1Removed = party1.remove(pokemon1)
+            val player2Removed = party2.remove(pokemon2)
+
+            if (!player1Removed || !player2Removed) {
+                if (!player1Removed) {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${pokemon1.species.resourceIdentifier} from ${player1.name.string}(${player1.uuid}). Aborting trade with ${player2.name.string}(${player2.uuid}), potential exploit abused.")
+                }
+
+                if (!player2Removed) {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${pokemon2.species.resourceIdentifier} from ${player2.name.string}(${player2.uuid}). Aborting trade with ${player1.name.string}(${player1.uuid}), potential exploit abused.")
+                }
+
+                // Revert any changes if one of the removals failed
+                if (player1Removed) party1.add(pokemon1)
+                if (player2Removed) party2.add(pokemon2)
+                return@postThen
+            }
 
             // If player1 is the OT, keep track of the friendship
             pokemon1.cacheFriendship(player1.uuid)

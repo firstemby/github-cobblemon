@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/orb_wall",
+  "textures": {
+        "texture": "cobblemon:block/decorative/orb_life",
+        "particle": "cobblemon:item/held_items/life_orb"
+  }
+}
