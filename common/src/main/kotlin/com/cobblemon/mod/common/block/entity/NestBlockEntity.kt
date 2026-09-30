@@ -51,6 +51,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     var eggPlacerUUID: UUID? = null
     val eggState = EggState()
     var nestClaimedBy: Pair<UUID?, UUID?> = Pair(null, null)
+    // last time the wild nest had an egg in it (we want to break it after 1 minecraft day)
+    var lastUsedTick = -1L
 
     /**
      * Sets the ItemStack and synchronizes it.
@@ -58,6 +60,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     fun setItem(itemStack: ItemStack) {
         this.eggItem = itemStack
         eggPlacerUUID = null
+        lastUsedTick = level?.gameTime ?: -1L
         setChanged() // Mark the block entity as changed.
         level?.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS) // Notify the client.
         level?.let { blockState.updateNeighbourShapes(it, blockPos, Block.UPDATE_ALL) }
@@ -203,6 +206,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
         eggPlacerUUID?.let { tag.putUUID("EggPlacerUUID", it) }
+        tag.putLong("LastUsedTick", lastUsedTick)
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
         tag.putLong("HatchStartTick", eggState.hatchStartTick)
@@ -223,6 +227,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
             eggPlacerUUID = tag.getUUID("EggPlacerUUID")
         }
 
+        if (tag.contains("LastUsedTick"))
+            lastUsedTick = tag.getLong("LastUsedTick")
         eggState.isHatching = tag.getBoolean("IsHatching")
         eggState.hatchingTriggered = tag.getBoolean("HatchingTriggered")
         eggState.hatchStartTick = tag.getLong("HatchStartTick")
@@ -480,6 +486,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (slot == 0) {
             eggItem = stack
             eggPlacerUUID = null
+            lastUsedTick = level?.gameTime ?: -1L
             setChanged()
         }
     }
@@ -520,6 +527,7 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
     }
 
     companion object {
+        private const val NEST_DECAY_TICKS = 24000L // we want to default to one minecraft day for now
         private const val RANDOM_SPAWN_CHANCE = 10000 // 1 in 100 chance per random tick // todo remove this
         private const val SPAWN_RADIUS = 5.0 // Radius around the nest to spawn Pokémon
         private const val EGG_THEFT_SIGHT_RANGE_SQR = 20.0 * 20.0
@@ -563,6 +571,14 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
                     val test = 1
                 }
             } else {
+                // start timer when placed or egg is gone
+                if (blockEntity.lastUsedTick < 0)
+                    blockEntity.lastUsedTick = world.gameTime
+                // break wild nests (not placed by the player) after one minecraft day
+                if (blockEntity.ownerUUID == null && world is ServerLevel && world.gameTime - blockEntity.lastUsedTick >= NEST_DECAY_TICKS) {
+                    world.destroyBlock(pos, false)
+                    return@BlockEntityTicker
+                }
                 // Attempt to spawn a random egg in the nest with a small chance
                 if (world.random.nextInt(RANDOM_SPAWN_CHANCE) == 0 && false) { // TODO remove the false part and remove this entirely later too
 
