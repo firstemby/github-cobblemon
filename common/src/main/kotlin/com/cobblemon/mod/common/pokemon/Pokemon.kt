@@ -647,7 +647,9 @@ open class Pokemon : ShowdownIdentifiable {
             return try {
                 field
             } catch (_: Exception) {
-                PokeBalls.STRANGE_BALL //
+                // account for possibility of ball removal (datapack disable/removal)
+                CaughtBallUpdatePacket({ this }, PokeBalls.STRANGE_BALL)
+                PokeBalls.STRANGE_BALL
             }
         }
         set(value) {

@@ -59,11 +59,13 @@ public abstract class ItemRendererMixin {
         cancellable = true
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        boolean shouldBe2d = renderMode == ItemDisplayContext.GUI
+        boolean shouldBe2d =
+                renderMode == ItemDisplayContext.GUI
                 || renderMode == ItemDisplayContext.FIXED
                 || stack.getItem() == CobblemonItems.TECHNICAL_MACHINE;
 
-        boolean shouldBe3d = renderMode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+        boolean shouldBe3d =
+                renderMode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
                 || renderMode == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
                 || renderMode == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
                 || renderMode == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
