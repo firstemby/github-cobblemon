@@ -44,7 +44,7 @@ import net.minecraft.world.phys.BlockHitResult
 
 class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonBlockEntities.NEST, pos, state), WorldlyContainer {
     var renderState: BlockEntityRenderState? = null
-    var parents: Pair<UUID?, UUID?> = Pair(null, null) // todo make sure this is synced
+    var parents: Pair<UUID?, UUID?> = Pair(null, null)
     private var eggItem: ItemStack = ItemStack.EMPTY
     var ownerUUID: UUID? = null // player UUID that placed this nest
     // we should track if a player put the egg in the nest
@@ -206,6 +206,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         //}
         ownerUUID?.let { tag.putUUID("OwnerUUID", it) }
         eggPlacerUUID?.let { tag.putUUID("EggPlacerUUID", it) }
+        parents.first?.let { tag.putUUID("Parent1UUID", it) }
+        parents.second?.let { tag.putUUID("Parent2UUID", it) }
         tag.putLong("LastUsedTick", lastUsedTick)
         tag.putBoolean("IsHatching", eggState.isHatching)
         tag.putBoolean("HatchingTriggered", eggState.hatchingTriggered)
@@ -226,6 +228,8 @@ class NestBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(CobblemonB
         if (tag.contains("EggPlacerUUID")) {
             eggPlacerUUID = tag.getUUID("EggPlacerUUID")
         }
+        // load one or both parents if they are saved on the nest
+        parents = Pair(if (tag.contains("Parent1UUID")) tag.getUUID("Parent1UUID") else null, if (tag.contains("Parent2UUID")) tag.getUUID("Parent2UUID") else null)
 
         if (tag.contains("LastUsedTick"))
             lastUsedTick = tag.getLong("LastUsedTick")
