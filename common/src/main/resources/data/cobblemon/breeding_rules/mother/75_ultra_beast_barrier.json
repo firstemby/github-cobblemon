@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:banned_egg_groups_barrier",
+  "order": 75,
+  "bannedEggGroups": [],
+  "bannedLabels": ["ultra_beast"],
+  "allowSameLine": "q.cobblemon_config.can_breed_ultra_beasts == 1",
+  "allowDitto": "q.cobblemon_config.can_breed_ultra_beasts == 1"
+}

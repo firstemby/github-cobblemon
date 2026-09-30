@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:banned_egg_groups_barrier",
+  "order": 77,
+  "bannedEggGroups": [],
+  "bannedLabels": ["restricted"],
+  "allowSameLine": "q.cobblemon_config.can_breed_restricted == 0",
+  "allowDitto": "q.cobblemon_config.can_breed_restricted == 0"
+}

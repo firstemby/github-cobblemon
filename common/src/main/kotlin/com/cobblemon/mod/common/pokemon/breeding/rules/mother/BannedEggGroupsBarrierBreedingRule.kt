@@ -25,14 +25,18 @@ class BannedEggGroupsBarrierBreedingRule : MotherBreedingRule {
     override val order = 0
     val condition: ExpressionLike = "true".asExpressionLike()
     val bannedEggGroups = mutableSetOf(EggGroup.UNDISCOVERED)
+    val bannedLabels = mutableSetOf<String>()
+    val allowSameLine: ExpressionLike = "false".asExpressionLike()
+    val allowDitto: ExpressionLike = "false".asExpressionLike()
 
     override fun getMother(input: MotherBreedingRule.Input, mother: Pokemon?): Pokemon? {
         if (!input.runtime.resolveBoolean(condition)) {
             return mother
         }
 
-        return if (bannedEggGroups.any { it in input.parent1.form.eggGroups || it in input.parent2.form.eggGroups }) {
-            null
+        return if (bannedEggGroups.any { it in input.parent1.form.eggGroups || it in input.parent2.form.eggGroups } || bannedLabels.any { it in input.parent1.species.labels || it in input.parent2.species.labels }) {
+            // I think this is the best place to do this, it looks ugly but best I got for now.... We need a way so that we can have the config allow for same species that share certain egg groups (usually restricted) to breed
+            if ((input.runtime.resolveBoolean(allowDitto) && (EggGroup.DITTO in input.parent1.form.eggGroups || EggGroup.DITTO in input.parent2.form.eggGroups)) || (input.runtime.resolveBoolean(allowSameLine) && generateSequence(input.parent1.species) { it.preEvolution?.species }.last() == generateSequence(input.parent2.species) { it.preEvolution?.species }.last())) mother else null
         } else {
             mother
         }

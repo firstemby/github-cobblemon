@@ -341,6 +341,24 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Breeding, lang = "can_breed_ditto", side = SERVER)
     var canBreedDitto = true
 
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_babies", side = SERVER)
+    var canBreedBabies = false
+
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_legendaries", side = SERVER)
+    var canBreedLegendaries = true
+
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_mythicals", side = SERVER)
+    var canBreedMythicals = true
+
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_ultra_beasts", side = SERVER)
+    var canBreedUltraBeasts = true
+
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_paradox", side = SERVER)
+    var canBreedParadox = true
+
+    @CobblemonConfigField(Category.Breeding, lang = "can_breed_restricted", side = SERVER)
+    var canBreedRestricted = true
+
     @CobblemonConfigField(Category.Breeding, lang = "egg_cycle_to_minute", side = SERVER)
     var minutesPerEggCycle = 2.0
 
@@ -520,6 +538,12 @@ class CobblemonConfig {
         it.addFunction("can_breed_genderless") { DoubleValue(canBreedGenderless) }
         it.addFunction("can_breed_undiscovered") { DoubleValue(canBreedUndiscovered) }
         it.addFunction("can_breed_ditto") { DoubleValue(canBreedDitto) }
+        it.addFunction("can_breed_babies") { DoubleValue(canBreedBabies) }
+        it.addFunction("can_breed_legendaries") { DoubleValue(canBreedLegendaries) }
+        it.addFunction("can_breed_mythicals") { DoubleValue(canBreedMythicals) }
+        it.addFunction("can_breed_ultra_beasts") { DoubleValue(canBreedUltraBeasts) }
+        it.addFunction("can_breed_paradox") { DoubleValue(canBreedParadox) }
+        it.addFunction("can_breed_restricted") { DoubleValue(canBreedRestricted) }
         it.addFunction("minutes_per_egg_cycle") { DoubleValue(minutesPerEggCycle) }
         it.addFunction("nest_hatch_rate") { DoubleValue(nestHatchRate) }
         it.addFunction("incubator_hatch_rate") { DoubleValue(incubatorHatchRate) }

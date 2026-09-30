@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:banned_egg_groups_barrier",
+  "order": 76,
+  "bannedEggGroups": [],
+  "bannedLabels": ["paradox"],
+  "allowSameLine": "q.cobblemon_config.can_breed_paradox == 1",
+  "allowDitto": "q.cobblemon_config.can_breed_paradox == 1"
+}

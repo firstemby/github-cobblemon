@@ -1,0 +1,8 @@
+{
+  "type": "cobblemon:banned_egg_groups_barrier",
+  "order": 73,
+  "bannedEggGroups": [],
+  "bannedLabels": ["legendary"],
+  "allowSameLine": "q.cobblemon_config.can_breed_legendaries == 1",
+  "allowDitto": "q.cobblemon_config.can_breed_legendaries == 1"
+}
