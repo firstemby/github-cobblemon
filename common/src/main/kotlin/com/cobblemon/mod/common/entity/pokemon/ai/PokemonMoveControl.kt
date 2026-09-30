@@ -58,6 +58,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         const val VANILLA_AIR_FRICTION = 0.91
         const val VANILLA_FLYING_SPEED = 0.02
         const val VANILLA_WATER_VERTICAL_DRAG = 0.8
+        const val TICKS_PER_SECOND = 20.0
     }
 
     val runtime = MoLangRuntime().also {
@@ -129,12 +130,16 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         } else if (swimming) {
             behaviour.moving.swim.swimSpeed
         } else {
-            sprintSpeed ?: behaviour.moving.walk.walkSpeed
+            behaviour.moving.walk.walkSpeed
         }) * 2.5F
 
         val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
         // Mult the baseSpeed by the square root of the effectivescale to prevent foot slide (alpha/baby scaling)
         val adjustedSpeed = baseSpeed * mediumSpeed * sqrt(pokemonEntity.pokemon.effectiveScale)
+        // Sprint speed is an exact top speed in blocks per second, so it skips attributes, task speed and friction
+        val sprintTopSpeed = sprintSpeed?.let {
+            runtime.resolveFloat(it).toDouble() / TICKS_PER_SECOND * sqrt(pokemonEntity.pokemon.effectiveScale.toDouble())
+        }
 
         if (banking) {
             pokemonEntity.yRot += bankRightDegreesPerTick
@@ -179,7 +184,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
             val inFluid = inWater || inLava
             val fluidMover = pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid
-            val topSpeed = if (fluidMover) adjustedSpeed.toDouble() else groundTopSpeed(adjustedSpeed.toDouble())
+            val topSpeed = if (fluidMover) adjustedSpeed.toDouble() else sprintTopSpeed ?: groundTopSpeed(adjustedSpeed.toDouble())
             val maxAccel = if (fluidMover) FLY_SWIM_MAX_ACCEL else topSpeed / GROUND_TICKS_TO_TOP_SPEED
 
             // Follow the path when there is one, otherwise go straight for the wanted position

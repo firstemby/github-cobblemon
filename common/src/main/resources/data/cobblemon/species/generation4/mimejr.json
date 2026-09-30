@@ -311,7 +311,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "sprintSpeed": 0.443
+        "sprintSpeed": 5.6
       }
     }
   }

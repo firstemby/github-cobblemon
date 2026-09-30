@@ -137,7 +137,7 @@
       },
       "walk": {
         "walkSpeed": 0.24,
-        "sprintSpeed": 0.304
+        "sprintSpeed": 5.6
       }
     },
     "resting": {

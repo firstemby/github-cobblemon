@@ -57,7 +57,7 @@
     "moving": {
       "walk": {
         "walkSpeed": 0.15,
-        "sprintSpeed": 0.19
+        "sprintSpeed": 5.6
       },
       "swim": {
         "avoidsWater": true
@@ -477,7 +477,7 @@
             "avoidsWater": true
           },
           "walk": {
-            "sprintSpeed": 0.443
+            "sprintSpeed": 5.6
           }
         },
         "entityInteract": {

@@ -19,7 +19,7 @@ class WalkBehaviour {
     val canWalk = true
     val avoidsLand = false
     var walkSpeed: Expression = "0.35".asExpression()
-    // Only species with a sprint speed can sprint
+    // Top speed in blocks per second while sprinting, player sprint is about 5.6. Only species with one can sprint
     var sprintSpeed: Expression? = null
 
     @Transient

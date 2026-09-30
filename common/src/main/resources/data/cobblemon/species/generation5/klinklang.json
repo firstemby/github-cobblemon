@@ -109,7 +109,7 @@
       },
       "walk": {
         "canWalk": false,
-        "sprintSpeed": 0.443
+        "sprintSpeed": 5.6
       }
     },
     "resting": {
