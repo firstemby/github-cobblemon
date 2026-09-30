@@ -11,11 +11,14 @@ package com.cobblemon.mod.common.client.keybind.keybinds
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.keybind.CobblemonKeyBinding
+import com.cobblemon.mod.common.client.gui.debug.speed.SpeedTuner
+import com.cobblemon.mod.common.client.gui.debug.speed.SpeedTunerScreen
 import com.cobblemon.mod.common.client.keybind.KeybindCategories
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
+import com.cobblemon.mod.common.net.messages.server.debug.RequestOpenSpeedTunerPacket
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -30,6 +33,7 @@ object DebugKeybindings {
         TranslateDownKeybinding(),
         PrintModelSettingsKeybinding(),
         ToggleRidingStatsDebugGUIKeybinding(),
+        ToggleSpeedTunerKeybinding(),
     )
 
     class ScaleUpKeybinding: CobblemonKeyBinding(
@@ -160,6 +164,22 @@ object DebugKeybindings {
             val vehicle = Minecraft.getInstance().player?.vehicle ?: return
             if (vehicle is PokemonEntity) {
                 RequestOpenRidingStatsDebugGUIPacket().sendToServer()
+            }
+        }
+    }
+
+    class ToggleSpeedTunerKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.togglespeedtuner",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_APOSTROPHE,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            // A running session just needs its panel back, otherwise the server checks permission and sends speeds
+            if (SpeedTuner.active) {
+                Minecraft.getInstance().setScreen(SpeedTunerScreen())
+            } else {
+                RequestOpenSpeedTunerPacket().sendToServer()
             }
         }
     }

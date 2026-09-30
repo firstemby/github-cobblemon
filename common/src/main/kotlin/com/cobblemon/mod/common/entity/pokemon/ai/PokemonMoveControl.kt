@@ -59,6 +59,13 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         const val VANILLA_FLYING_SPEED = 0.02
         const val VANILLA_WATER_VERTICAL_DRAG = 0.8
         const val TICKS_PER_SECOND = 20.0
+
+        /** Speed where vanilla ground friction on a block with [blockFriction] balances a walk input of [speed]. */
+        fun vanillaGroundTopSpeed(speed: Double, blockFriction: Double): Double {
+            val frictionInfluencedSpeed = speed * (VANILLA_GROUND_SPEED_FACTOR / (blockFriction * blockFriction * blockFriction))
+            val inputForce = speed * VANILLA_INPUT_SCALE * frictionInfluencedSpeed
+            return inputForce / (1 - blockFriction * VANILLA_AIR_FRICTION)
+        }
     }
 
     val runtime = MoLangRuntime().also {
@@ -404,12 +411,10 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         val blockFriction = mob.level()
             .getBlockState(mob.getBlockPosBelowThatAffectsMyMovement())
             .block.getFriction().toDouble()
-        val frictionInfluencedSpeed = if (mob.onGround()) {
-            speed * (VANILLA_GROUND_SPEED_FACTOR / (blockFriction * blockFriction * blockFriction))
-        } else {
-            VANILLA_FLYING_SPEED
+        if (mob.onGround()) {
+            return vanillaGroundTopSpeed(speed, blockFriction)
         }
-        val inputForce = speed * VANILLA_INPUT_SCALE * frictionInfluencedSpeed
+        val inputForce = speed * VANILLA_INPUT_SCALE * VANILLA_FLYING_SPEED
         return inputForce / (1 - blockFriction * VANILLA_AIR_FRICTION)
     }
 
