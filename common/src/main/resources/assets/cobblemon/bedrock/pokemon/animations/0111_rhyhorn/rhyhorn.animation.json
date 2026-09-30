@@ -1071,6 +1071,16 @@
 				"head": {
 					"rotation": ["-0.8*math.cos(q.anim_time*90*8-120)", 0, "3*math.sin(q.anim_time*90*4+70)"]
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"0.5": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.5": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"2.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"2.5": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"3.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"3.5": "q.run_molang('cobblemon:stepsound_standard_large');"
 			}
 		},
 		"animation.rhyhorn.ride_ground_walk": {
@@ -1917,6 +1927,16 @@
 					],
 					"position": [0, "0.4+0.6*math.cos(q.anim_time*90*8-120)", 0]
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"0.375": "q.run_molang('cobblemon:stepsound_standard_medium');",
+				"0.5": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"0.875": "q.run_molang('cobblemon:stepsound_standard_medium');",
+				"1.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.375": "q.run_molang('cobblemon:stepsound_standard_medium');",
+				"1.5": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.875": "q.run_molang('cobblemon:stepsound_standard_medium');"
 			}
 		},
 		"animation.rhyhorn.ride_ground_run": {

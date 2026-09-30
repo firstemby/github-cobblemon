@@ -7,6 +7,7 @@
   "maleRatio": 0.5,
   "height": 10,
   "weight": 1150,
+  "silenceStepSounds": true,
   "pokedex": [
     "cobblemon.species.rhyhorn.desc"
   ],
