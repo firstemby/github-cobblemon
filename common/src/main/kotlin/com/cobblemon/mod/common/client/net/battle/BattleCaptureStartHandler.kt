@@ -20,7 +20,7 @@ object BattleCaptureStartHandler : ClientNetworkPacketHandler<BattleCaptureStart
         val battle = CobblemonClient.battle ?: return
         val targetPokemon = battle.getPokemonFromPNX(packet.targetPNX)
         val tile = targetPokemon.second
-        val pokeBall = PokeBalls.getPokeBall(packet.pokeBallType) ?: PokeBalls.POKE_BALL
+        val pokeBall = PokeBalls.getPokeBall(packet.pokeBallType)
         tile.ballCapturing = ClientBallDisplay(pokeBall, packet.aspects).also { it.start() }
     }
 }

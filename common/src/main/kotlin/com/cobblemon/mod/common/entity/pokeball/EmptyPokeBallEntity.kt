@@ -177,7 +177,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         addPosableFunctions(struct)
     }
 
-    constructor(world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
+    constructor(world: Level) : this(pokeBall = PokeBalls.STRANGE_BALL, world = world)
     constructor(
         pokeBall: PokeBall,
         world: Level,

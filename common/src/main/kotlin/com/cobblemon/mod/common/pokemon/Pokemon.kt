@@ -642,7 +642,14 @@ open class Pokemon : ShowdownIdentifiable {
         scaleModifier = 1F + (roundedPercent / 100F)
     }
 
-    var caughtBall: PokeBall = PokeBalls.POKE_BALL
+    var caughtBall: PokeBall = PokeBalls.STRANGE_BALL
+        get() {
+            return try {
+                field
+            } catch (_: Exception) {
+                PokeBalls.STRANGE_BALL //
+            }
+        }
         set(value) {
             field = value
             onChange(CaughtBallUpdatePacket({ this }, field))

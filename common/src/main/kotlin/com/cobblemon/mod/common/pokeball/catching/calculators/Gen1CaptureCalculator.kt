@@ -46,7 +46,7 @@ object Gen1CaptureCalculator : CaptureCalculator {
         }
         // This value can be reused when calculating the shakes in case of breakout.
         val nBound = when (pokeBall) {
-            PokeBalls.POKE_BALL -> 255
+            PokeBalls.POKE_BALL, PokeBalls.STRANGE_BALL -> 255
             PokeBalls.GREAT_BALL -> 200
             else -> 150
         }

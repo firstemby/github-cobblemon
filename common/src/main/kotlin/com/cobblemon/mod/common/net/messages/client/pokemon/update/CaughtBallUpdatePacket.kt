@@ -30,7 +30,7 @@ class CaughtBallUpdatePacket(pokemon: () -> Pokemon?, value: PokeBall): SingleUp
         val ID = cobblemonResource("caught_ball_update")
         fun decode(buffer: RegistryFriendlyByteBuf): CaughtBallUpdatePacket {
             val pokemon = decodePokemon(buffer)
-            val pokeBall = PokeBalls.getPokeBall(buffer.readIdentifier()) ?: PokeBalls.POKE_BALL
+            val pokeBall = PokeBalls.getPokeBall(buffer.readIdentifier())
             return CaughtBallUpdatePacket(pokemon, pokeBall)
         }
     }
