@@ -83,6 +83,7 @@
 		},
 		"animation.parasect.ground_walk": {
 			"loop": true,
+			"animation_length": 1,
 			"bones": {
 				"body": {
 					"rotation": [0, 0, 0],
@@ -134,6 +135,12 @@
 				"locator_seat_1": {
 					"rotation": [7.5, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_minecraft');",
+				"0.25": "q.run_molang('cobblemon:stepsound_minecraft');",
+				"0.5": "q.run_molang('cobblemon:stepsound_minecraft');",
+				"0.75": "q.run_molang('cobblemon:stepsound_minecraft');"
 			}
 		},
 		"animation.parasect.ground_run": {
@@ -258,6 +265,10 @@
 					"rotation": ["5+Math.cos((query.anim_time) * 90 * 16 - 90) * 2", 0, 0],
 					"position": [0, "0+Math.cos((query.anim_time) * 90 * 32) * -0.2", -0.25]
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_minecraft');",
+				"0.125": "q.run_molang('cobblemon:stepsound_minecraft');"
 			}
 		},
 		"animation.parasect.ride_ground_run": {
