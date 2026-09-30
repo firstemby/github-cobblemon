@@ -44,6 +44,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
+import com.cobblemon.mod.common.util.toRGBA
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
@@ -65,6 +66,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.*
+import java.lang.Integer
 import kotlin.math.*
 
 class PokemonRenderer(
@@ -323,7 +325,7 @@ class PokemonRenderer(
 
         val beamColorVec4f = when(beamTarget) {
             is EmptyPokeBallEntity -> (beamTarget.delegate as EmptyPokeBallClientDelegate).getBeamColor()
-            else -> recallBeamColour
+            else -> Integer.decode(entity.pokemon.caughtBall.beamColor).toRGBA()
         }
 
         val beamSourcePosition = when {
