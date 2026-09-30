@@ -84,6 +84,7 @@
 - Make ride rotations less jittery in multiplayer.
 - Changes tm shelf discs to use textures instead of tinting and overlays to line up with item display
 - Blank TM can now be inserted into the Disc Shelf
+- Recall animation now renders ball in hand with the player arm raised.
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
@@ -112,6 +113,7 @@
 - Various Structure fixes
 - Fixed shiny pokemon under certain circumstances forgetting taught TMs
 - Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
+- Fixed ball capture beam origin coming from behind the ball.
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:

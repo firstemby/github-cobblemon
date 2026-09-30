@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PosableP
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.MiscModelRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.client.render.player.RecallArmAnimationTracker
 import com.cobblemon.mod.common.client.render.pokeball.PokeBallPosableState
 import com.cobblemon.mod.common.client.render.renderBeaconBeam
 import com.cobblemon.mod.common.client.settings.ServerSettings
@@ -60,6 +61,7 @@ import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.*
 import kotlin.math.*
@@ -316,8 +318,11 @@ class PokemonRenderer(
     fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
-        var beamSourcePosition = if (beamTarget is EmptyPokeBallEntity) {
-            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.getOrigin() ?: beamTarget.position()
+        val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
+        var beamSourcePosition = if (recallBallOrigin != null) {
+            recallBallOrigin
+        } else if (beamTarget is EmptyPokeBallEntity) {
+            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.transformPosition(Vec3(0.0, 0.2, 0.45)) ?: beamTarget.position()
         } else {
             if (beamTarget.uuid == Minecraft.getInstance().player?.uuid) {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
