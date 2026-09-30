@@ -4,5 +4,6 @@
   "bannedEggGroups": [],
   "bannedLabels": ["legendary"],
   "allowSameLine": "q.cobblemon_config.can_breed_legendaries == 1",
-  "allowDitto": "q.cobblemon_config.can_breed_legendaries == 1"
+  "allowDitto": "q.cobblemon_config.can_breed_legendaries == 1",
+  "allowPair": "q.cobblemon_config.can_breed_legendaries == 1 && ((q.parent_1.species.name == 'Latias' && q.parent_2.species.name == 'Latios') || (q.parent_1.species.name == 'Latios' && q.parent_2.species.name == 'Latias'))"
 }

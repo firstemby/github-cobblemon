@@ -2,8 +2,8 @@
   "type": "cobblemon:expression",
   "order": 20,
   "expression": [
-    "t.nido_male = q.pokemon_species.get_by_identifier('cobblemon:nidoranmale');",
-    "t.nido_female = q.pokemon_species.get_by_identifier('cobblemon:nidoranfemale');",
+    "t.nido_male = q.pokemon_species.get_by_identifier('cobblemon:nidoranm');",
+    "t.nido_female = q.pokemon_species.get_by_identifier('cobblemon:nidoranf');",
     "(q.mother.unevolved_species.name == 'Nidoran-F' || q.mother.unevolved_species.name == 'Nidoran-M') ? q.random(t.nido_male, t.nido_female) : q.offspring_species;"
   ]
 }

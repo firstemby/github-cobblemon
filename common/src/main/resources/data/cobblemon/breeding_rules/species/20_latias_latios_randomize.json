@@ -1,0 +1,9 @@
+{
+  "type": "cobblemon:expression",
+  "order": 20,
+  "expression": [
+    "t.latias = q.pokemon_species.get_by_identifier('cobblemon:latias');",
+    "t.latios = q.pokemon_species.get_by_identifier('cobblemon:latios');",
+    "(q.mother.species.name == 'Latias' || q.mother.species.name == 'Latios') ? q.random(t.latias, t.latios) : q.offspring_species;"
+  ]
+}

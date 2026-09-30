@@ -1,6 +1,7 @@
 {
   "type": "cobblemon:banned_egg_groups_barrier",
   "order": 70,
+  "condition": "!(q.parent_1.species.has_label('baby') || q.parent_1.species.has_label('legendary') || q.parent_1.species.has_label('mythical') || q.parent_1.species.has_label('ultra_beast') || q.parent_1.species.has_label('paradox') || q.parent_1.species.has_label('restricted') || q.parent_2.species.has_label('baby') || q.parent_2.species.has_label('legendary') || q.parent_2.species.has_label('mythical') || q.parent_2.species.has_label('ultra_beast') || q.parent_2.species.has_label('paradox') || q.parent_2.species.has_label('restricted'))",
   "bannedEggGroups": [
     "UNDISCOVERED"
   ],

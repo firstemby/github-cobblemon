@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.molang.MoLangLoadedFilesCache
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.npc.partyproviders.SimplePartyProvider
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker
 import com.cobblemon.mod.common.api.scheduling.ServerTaskTracker
 import com.cobblemon.mod.common.api.scripting.CobblemonScripts
@@ -46,6 +47,7 @@ object GeneralMoLangFunctions {
 
     init {
         functions["cobblemon_config"] = { Cobblemon.config.struct }
+        functions["pokemon_species"] = { PokemonSpecies.struct }
         functions["print"] = { params ->
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)
