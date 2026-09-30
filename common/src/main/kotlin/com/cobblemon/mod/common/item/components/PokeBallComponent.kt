@@ -33,22 +33,26 @@ data class PokeBallComponent(val name: ResourceLocation) {
 
         val PACKET_CODEC: StreamCodec<ByteBuf, PokeBallComponent> = ByteBufCodecs.fromCodec(CODEC)
 
+        @JvmStatic
         fun getPokeBall(stack: ItemStack): PokeBall {
             return stack.get(CobblemonItemComponents.POKE_BALL)?.name?.let(PokeBalls::getPokeBall)
                 ?: (stack.item as? PokeBallItem)?.pokeBall
                 ?: PokeBalls.STRANGE_BALL
         }
 
+        @JvmStatic
         fun setPokeBall(stack: ItemStack, ball: PokeBall): ItemStack {
             stack.set(CobblemonItemComponents.POKE_BALL, PokeBallComponent(ball.name))
             return stack
         }
 
+        @JvmStatic
         fun removePokeBall(stack: ItemStack): ItemStack {
             stack.remove(CobblemonItemComponents.POKE_BALL)
             return stack
         }
 
+        @JvmStatic
         fun createStack(ball: PokeBall?): ItemStack {
             var result = PokeBalls.STRANGE_BALL
             if (ball == null) {

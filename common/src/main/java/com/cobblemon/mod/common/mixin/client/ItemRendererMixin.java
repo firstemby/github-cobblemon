@@ -15,7 +15,9 @@ import com.cobblemon.mod.common.ModAPI;
 import com.cobblemon.mod.common.item.PokeBallItem;
 import com.cobblemon.mod.common.item.PokedexItem;
 import com.cobblemon.mod.common.item.WearableItem;
+import com.cobblemon.mod.common.item.components.PokeBallComponent;
 import com.cobblemon.mod.common.item.components.TMMoveComponent;
+import com.cobblemon.mod.common.pokeball.PokeBall;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemModelShaper;
@@ -57,11 +59,25 @@ public abstract class ItemRendererMixin {
         cancellable = true
     )
     private void cobblemon$overrideItemModel(ItemStack stack, ItemDisplayContext renderMode, boolean leftHanded, PoseStack matrices, MultiBufferSource multiBufferSource, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        boolean shouldBe2d = renderMode == ItemDisplayContext.GUI || renderMode == ItemDisplayContext.FIXED || stack.getItem() == CobblemonItems.TECHNICAL_MACHINE;
+        boolean shouldBe2d = renderMode == ItemDisplayContext.GUI
+                || renderMode == ItemDisplayContext.FIXED
+                || stack.getItem() == CobblemonItems.TECHNICAL_MACHINE;
+
+        boolean shouldBe3d = renderMode == ItemDisplayContext.FIRST_PERSON_LEFT_HAND
+                || renderMode == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND
+                || renderMode == ItemDisplayContext.THIRD_PERSON_LEFT_HAND
+                || renderMode == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND
+                || renderMode == ItemDisplayContext.GROUND
+                || renderMode == ItemDisplayContext.HEAD;
+
         ResourceLocation resourceLocation = null;
+        if (stack.getItem() instanceof PokeBallItem) {
+            if (shouldBe2d) resourceLocation = PokeBallComponent.getPokeBall(stack).getModel2d();
+            if (shouldBe3d) resourceLocation = PokeBallComponent.getPokeBall(stack).getModel3d();
+        }
+
         if (shouldBe2d) {
-            if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel2d();
-            else if (stack.getItem() instanceof PokedexItem pokedexItem) resourceLocation = pokedexItem.getType().getItemSpritePath();
+            if (stack.getItem() instanceof PokedexItem pokedexItem) resourceLocation = pokedexItem.getType().getItemSpritePath();
             else if (stack.getItem() == CobblemonItems.TECHNICAL_MACHINE) {
                 TMMoveComponent component = stack.get(CobblemonItemComponents.TM_MOVE);
                 if (component != null) {
@@ -83,16 +99,21 @@ public abstract class ItemRendererMixin {
     @Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
     private void cobblemon$getItemModel(ItemStack stack, Level world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         ResourceLocation resourceLocation = null;
-        if (stack.getItem() instanceof PokeBallItem pokeBallItem) resourceLocation = pokeBallItem.getPokeBall().getModel3d();
-        else if (stack.getItem() instanceof PokedexItem pokedexItem) {
-            boolean isScanModel = entity instanceof Player && entity.getUseItem() == stack && entity.isUsingItem();
-            boolean canOpenScreen = entity != null && ((entity.getOffhandItem() == stack && !(entity.getMainHandItem().getItem() instanceof PokedexItem)) || entity.getMainHandItem() == stack);
-            resourceLocation = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
+        switch (stack.getItem()) {
+            case PokeBallItem ignored -> resourceLocation = PokeBallComponent.getPokeBall(stack).getModel3d();
+            case PokedexItem pokedexItem -> {
+                boolean isScanModel = entity instanceof Player && entity.getUseItem() == stack && entity.isUsingItem();
+                boolean canOpenScreen = entity != null && ((entity.getOffhandItem() == stack && !(entity.getMainHandItem().getItem() instanceof PokedexItem)) || entity.getMainHandItem() == stack);
+                resourceLocation = pokedexItem.getType().getItemModelPath(isScanModel ? "scanning" : (canOpenScreen ? null : "off"));
+            }
+            case WearableItem wearableItem -> resourceLocation = wearableItem.getModel3d();
+            default -> {
+            }
         }
-        else if (stack.getItem() instanceof WearableItem wearableItem) resourceLocation = wearableItem.getModel3d();
 
         if (resourceLocation != null) {
-            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, MODEL_PATH));
+            String modelPath = (stack.getItem() instanceof PokeBallItem && stack.has(CobblemonItemComponents.POKE_BALL)) ? "inventory" : MODEL_PATH;
+            BakedModel model = this.itemModelShaper.getModelManager().getModel(new ModelResourceLocation(resourceLocation, modelPath));
             ClientLevel clientWorld = world instanceof ClientLevel ? (ClientLevel) world : null;
             BakedModel overriddenModel = model.getOverrides().resolve(model, stack, clientWorld, entity, seed);
             cir.setReturnValue(overriddenModel == null ? this.itemModelShaper.getModelManager().getMissingModel() : overriddenModel);
