@@ -25,7 +25,9 @@ import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.item.PokeBallItem
+import com.cobblemon.mod.common.item.components.PokeBallComponent
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
+import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ShoulderedState
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
@@ -138,7 +140,7 @@ interface Evolution : EvolutionLike {
         val shedPokemon = pokemon.clone(registryAccess = owner.registryAccess())
         shedPokemon.removeHeldItem()
         innerShedder.apply(shedPokemon)
-        shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
+        shedPokemon.caughtBall = pokeballStack?.let { PokeBallComponent.getPokeBall(it) } ?: CobblemonItems.STRANGE_BALL.pokeBall
         pokemon.storeCoordinates.get()?.store?.add(shedPokemon)
         CobblemonCriteria.EVOLVE_POKEMON.trigger(owner, EvolvePokemonContext(pokemon.preEvolution!!.species.resourceIdentifier, shedPokemon.species.resourceIdentifier, playerDataManager.getGenericData(owner).advancementData.totalEvolvedCount))
         // Consume one of the balls (if the player isn't creative)
