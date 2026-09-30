@@ -329,6 +329,12 @@
 				"locator_seat_1": {
 					"rotation": [-15, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"2.0": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"3.0": "q.run_molang('cobblemon:stepsound_standard_large');"
 			}
 		},
 		"animation.rhydon.ride_ground_walk": {
@@ -807,6 +813,12 @@
 				"locator_seat_1": {
 					"rotation": [-15, 0, 0]
 				}
+			},
+			"timeline": {
+				"0.3333": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"0.8333": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.3333": "q.run_molang('cobblemon:stepsound_standard_large');",
+				"1.8333": "q.run_molang('cobblemon:stepsound_standard_large');"
 			}
 		},
 		"animation.rhydon.ride_ground_run": {
