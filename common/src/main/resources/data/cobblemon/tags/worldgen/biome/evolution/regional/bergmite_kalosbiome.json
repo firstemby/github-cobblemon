@@ -3,7 +3,13 @@
   "values": [
     "minecraft:deep_frozen_ocean",
     "minecraft:frozen_ocean",
-    "wythers:deep_icy_ocean",
-    "wythers:icy_ocean"
+    {
+      "id": "wythers:deep_icy_ocean",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_ocean",
+      "required": false
+    }
   ]
 }

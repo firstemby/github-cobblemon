@@ -1,25 +1,76 @@
 {
   "replace": false,
   "values": [
-    "#c:is_beach",
-    "#c:is_stony_shores",
-    "#clifftree:is_cliff",
+    {
+      "id": "#c:is_beach",
+      "required": false
+    },
+    {
+      "id": "#c:is_stony_shores",
+      "required": false
+    },
+    {
+      "id": "#clifftree:is_cliff",
+      "required": false
+    },
     "#minecraft:is_beach",
     "minecraft:snowy_beach",
     "minecraft:stony_shore",
-    "terralith:basalt_cliffs",
-    "terralith:granite_cliffs",
-    "terralith:white_cliffs",
-    "wythers:calcite_coast",
-    "wythers:coastal_mangroves",
-    "wythers:cold_island",
-    "wythers:cold_stony_shore",
-    "wythers:deepslate_shore",
-    "wythers:frigid_island",
-    "wythers:frozen_island",
-    "wythers:gravelly_beach",
-    "wythers:icy_shore",
-    "wythers:mediterranean_island",
-    "wythers:temperate_island"
+    {
+      "id": "terralith:basalt_cliffs",
+      "required": false
+    },
+    {
+      "id": "terralith:granite_cliffs",
+      "required": false
+    },
+    {
+      "id": "terralith:white_cliffs",
+      "required": false
+    },
+    {
+      "id": "wythers:calcite_coast",
+      "required": false
+    },
+    {
+      "id": "wythers:coastal_mangroves",
+      "required": false
+    },
+    {
+      "id": "wythers:cold_island",
+      "required": false
+    },
+    {
+      "id": "wythers:cold_stony_shore",
+      "required": false
+    },
+    {
+      "id": "wythers:deepslate_shore",
+      "required": false
+    },
+    {
+      "id": "wythers:frigid_island",
+      "required": false
+    },
+    {
+      "id": "wythers:frozen_island",
+      "required": false
+    },
+    {
+      "id": "wythers:gravelly_beach",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_shore",
+      "required": false
+    },
+    {
+      "id": "wythers:mediterranean_island",
+      "required": false
+    },
+    {
+      "id": "wythers:temperate_island",
+      "required": false
+    }
   ]
 }

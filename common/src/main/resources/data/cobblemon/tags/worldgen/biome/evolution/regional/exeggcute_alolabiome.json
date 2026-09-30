@@ -2,11 +2,29 @@
   "replace": false,
   "values": [
     "#minecraft:is_beach",
-    "biomesoplenty:dune_beach",
-    "biomesoplenty:tropics",
-    "wythers:guelta",
-    "wythers:sand_dunes",
-    "wythers:tropical_beach",
-    "wythers:tropical_volcano"
+    {
+      "id": "biomesoplenty:dune_beach",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:tropics",
+      "required": false
+    },
+    {
+      "id": "wythers:guelta",
+      "required": false
+    },
+    {
+      "id": "wythers:sand_dunes",
+      "required": false
+    },
+    {
+      "id": "wythers:tropical_beach",
+      "required": false
+    },
+    {
+      "id": "wythers:tropical_volcano",
+      "required": false
+    }
   ]
 }

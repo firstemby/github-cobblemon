@@ -1,27 +1,87 @@
 {
   "replace": false,
   "values": [
-    "#c:is_hill",
-    "#c:is_icy",
-    "#c:is_mountain/slope",
-    "#c:is_snowy",
-    "#c:is_windswept",
-    "#c:snowy",
+    {
+      "id": "#c:is_hill",
+      "required": false
+    },
+    {
+      "id": "#c:is_icy",
+      "required": false
+    },
+    {
+      "id": "#c:is_mountain/slope",
+      "required": false
+    },
+    {
+      "id": "#c:is_snowy",
+      "required": false
+    },
+    {
+      "id": "#c:is_windswept",
+      "required": false
+    },
+    {
+      "id": "#c:snowy",
+      "required": false
+    },
     "#minecraft:is_hill",
-    "biomesoplenty:auroral_garden",
-    "biomesoplenty:highland",
-    "biomesoplenty:jade_cliffs",
-    "biomesoplenty:muskeg",
-    "biomesoplenty:snowy_coniferous_forest",
-    "biomesoplenty:snowy_fir_clearing",
-    "biomesoplenty:snowy_maple_woods",
-    "clifftree:bog",
-    "clifftree:frozen_caves",
-    "clifftree:glacier_cliff",
-    "clifftree:glacier_valley",
-    "clifftree:snowy_diorite_shore",
-    "clifftree:snowy_old_growth_taiga",
-    "clifftree:tundra",
+    {
+      "id": "biomesoplenty:auroral_garden",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:highland",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:jade_cliffs",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:muskeg",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:snowy_coniferous_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:snowy_fir_clearing",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:snowy_maple_woods",
+      "required": false
+    },
+    {
+      "id": "clifftree:bog",
+      "required": false
+    },
+    {
+      "id": "clifftree:frozen_caves",
+      "required": false
+    },
+    {
+      "id": "clifftree:glacier_cliff",
+      "required": false
+    },
+    {
+      "id": "clifftree:glacier_valley",
+      "required": false
+    },
+    {
+      "id": "clifftree:snowy_diorite_shore",
+      "required": false
+    },
+    {
+      "id": "clifftree:snowy_old_growth_taiga",
+      "required": false
+    },
+    {
+      "id": "clifftree:tundra",
+      "required": false
+    },
     "minecraft:deep_frozen_ocean",
     "minecraft:frozen_ocean",
     "minecraft:frozen_peaks",
@@ -33,58 +93,217 @@
     "minecraft:snowy_plains",
     "minecraft:snowy_slopes",
     "minecraft:snowy_taiga",
-    "terralith:alpine_grove",
-    "terralith:alpine_highlands",
-    "terralith:arid_highlands",
-    "terralith:cave/frostfire_caves",
-    "terralith:cold_shrubland",
-    "terralith:emerald_peaks",
-    "terralith:frozen_cliffs",
-    "terralith:glacial_chasm",
-    "terralith:highlands",
-    "terralith:ice_marsh",
-    "terralith:lush_valley",
-    "terralith:moonlight_valley",
-    "terralith:savanna_slopes",
-    "terralith:scarlet_mountains",
-    "terralith:siberian_grove",
-    "terralith:skylands_winter",
-    "terralith:snowy_badlands",
-    "terralith:snowy_cherry_grove",
-    "terralith:snowy_maple_forest",
-    "terralith:snowy_shield",
-    "terralith:wintry_forest",
-    "terralith:wintry_lowlands",
-    "terralith:yosemite_lowlands",
-    "wythers:autumnal_crags",
-    "wythers:ayers_rock",
-    "wythers:bamboo_jungle_highlands",
-    "wythers:cold_island",
-    "wythers:crimson_tundra",
-    "wythers:deep_icy_ocean",
-    "wythers:deep_snowy_taiga",
-    "wythers:eucalyptus_deanei_forest",
-    "wythers:forested_highlands",
-    "wythers:frozen_island",
-    "wythers:glacial_cliffs",
-    "wythers:highland_tropical_rainforest",
-    "wythers:highlands",
-    "wythers:huangshan_highlands",
-    "wythers:ice_cap",
-    "wythers:icy_crags",
-    "wythers:icy_ocean",
-    "wythers:jade_highlands",
-    "wythers:old_growth_taiga_crags",
-    "wythers:snowy_bog",
-    "wythers:snowy_canyon",
-    "wythers:snowy_fen",
-    "wythers:snowy_peaks",
-    "wythers:snowy_thermal_taiga",
-    "wythers:snowy_tundra",
-    "wythers:taiga_crags",
-    "wythers:temperate_rainforest_crags",
-    "wythers:thermal_taiga_crags",
-    "wythers:windswept_jungle",
-    "wythers:wistman_woods"
+    {
+      "id": "terralith:alpine_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:alpine_highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:arid_highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:cave/frostfire_caves",
+      "required": false
+    },
+    {
+      "id": "terralith:cold_shrubland",
+      "required": false
+    },
+    {
+      "id": "terralith:emerald_peaks",
+      "required": false
+    },
+    {
+      "id": "terralith:frozen_cliffs",
+      "required": false
+    },
+    {
+      "id": "terralith:glacial_chasm",
+      "required": false
+    },
+    {
+      "id": "terralith:highlands",
+      "required": false
+    },
+    {
+      "id": "terralith:ice_marsh",
+      "required": false
+    },
+    {
+      "id": "terralith:lush_valley",
+      "required": false
+    },
+    {
+      "id": "terralith:moonlight_valley",
+      "required": false
+    },
+    {
+      "id": "terralith:savanna_slopes",
+      "required": false
+    },
+    {
+      "id": "terralith:scarlet_mountains",
+      "required": false
+    },
+    {
+      "id": "terralith:siberian_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:skylands_winter",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_badlands",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_cherry_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_maple_forest",
+      "required": false
+    },
+    {
+      "id": "terralith:snowy_shield",
+      "required": false
+    },
+    {
+      "id": "terralith:wintry_forest",
+      "required": false
+    },
+    {
+      "id": "terralith:wintry_lowlands",
+      "required": false
+    },
+    {
+      "id": "terralith:yosemite_lowlands",
+      "required": false
+    },
+    {
+      "id": "wythers:autumnal_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:ayers_rock",
+      "required": false
+    },
+    {
+      "id": "wythers:bamboo_jungle_highlands",
+      "required": false
+    },
+    {
+      "id": "wythers:cold_island",
+      "required": false
+    },
+    {
+      "id": "wythers:crimson_tundra",
+      "required": false
+    },
+    {
+      "id": "wythers:deep_icy_ocean",
+      "required": false
+    },
+    {
+      "id": "wythers:deep_snowy_taiga",
+      "required": false
+    },
+    {
+      "id": "wythers:eucalyptus_deanei_forest",
+      "required": false
+    },
+    {
+      "id": "wythers:forested_highlands",
+      "required": false
+    },
+    {
+      "id": "wythers:frozen_island",
+      "required": false
+    },
+    {
+      "id": "wythers:glacial_cliffs",
+      "required": false
+    },
+    {
+      "id": "wythers:highland_tropical_rainforest",
+      "required": false
+    },
+    {
+      "id": "wythers:highlands",
+      "required": false
+    },
+    {
+      "id": "wythers:huangshan_highlands",
+      "required": false
+    },
+    {
+      "id": "wythers:ice_cap",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:icy_ocean",
+      "required": false
+    },
+    {
+      "id": "wythers:jade_highlands",
+      "required": false
+    },
+    {
+      "id": "wythers:old_growth_taiga_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_bog",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_canyon",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_fen",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_peaks",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_thermal_taiga",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_tundra",
+      "required": false
+    },
+    {
+      "id": "wythers:taiga_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:temperate_rainforest_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:thermal_taiga_crags",
+      "required": false
+    },
+    {
+      "id": "wythers:windswept_jungle",
+      "required": false
+    },
+    {
+      "id": "wythers:wistman_woods",
+      "required": false
+    }
   ]
 }

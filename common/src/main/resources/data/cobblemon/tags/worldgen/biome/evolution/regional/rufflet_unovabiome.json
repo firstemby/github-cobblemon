@@ -1,56 +1,197 @@
 {
   "replace": false,
   "values": [
-    "#c:is_flower_forest",
-    "#c:is_forest",
-    "#c:is_plains",
-    "#c:tree/deciduous",
+    {
+      "id": "#c:is_flower_forest",
+      "required": false
+    },
+    {
+      "id": "#c:is_forest",
+      "required": false
+    },
+    {
+      "id": "#c:is_plains",
+      "required": false
+    },
+    {
+      "id": "#c:tree/deciduous",
+      "required": false
+    },
     "#minecraft:is_forest",
-    "biomesoplenty:clover_patch",
-    "biomesoplenty:field",
-    "biomesoplenty:fir_clearing",
-    "biomesoplenty:grassland",
-    "biomesoplenty:lavender_field",
-    "biomesoplenty:lavender_forest",
-    "biomesoplenty:maple_woods",
-    "biomesoplenty:marsh",
-    "biomesoplenty:mystic_grove",
-    "biomesoplenty:old_growth_woodland",
-    "biomesoplenty:ominous_woods",
-    "biomesoplenty:orchard",
-    "biomesoplenty:origin_valley",
-    "biomesoplenty:pasture",
-    "biomesoplenty:prairie",
-    "biomesoplenty:seasonal_forest",
-    "biomesoplenty:seasonal_orchard",
-    "biomesoplenty:woodland",
-    "blooming_biosphere:autumnal_forest",
-    "blooming_biosphere:chaparral",
-    "blooming_biosphere:oak_woodland",
-    "clifftree:sparse_forest",
+    {
+      "id": "biomesoplenty:clover_patch",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:field",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:fir_clearing",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:grassland",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:lavender_field",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:lavender_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:maple_woods",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:marsh",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:mystic_grove",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:old_growth_woodland",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:ominous_woods",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:orchard",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:origin_valley",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:pasture",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:prairie",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:seasonal_forest",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:seasonal_orchard",
+      "required": false
+    },
+    {
+      "id": "biomesoplenty:woodland",
+      "required": false
+    },
+    {
+      "id": "blooming_biosphere:autumnal_forest",
+      "required": false
+    },
+    {
+      "id": "blooming_biosphere:chaparral",
+      "required": false
+    },
+    {
+      "id": "blooming_biosphere:oak_woodland",
+      "required": false
+    },
+    {
+      "id": "clifftree:sparse_forest",
+      "required": false
+    },
     "minecraft:cherry_grove",
     "minecraft:plains",
     "minecraft:sunflower_plains",
-    "terralith:alpha_islands",
-    "terralith:brushland",
-    "terralith:lavender_forest",
-    "terralith:mirage_isles",
-    "terralith:sakura_grove",
-    "terralith:shrubland",
-    "terralith:steppe",
-    "terralith:valley_clearing",
-    "wythers:berry_bog",
-    "wythers:birch_taiga",
-    "wythers:boreal_forest_red",
-    "wythers:boreal_forest_yellow",
-    "wythers:cool_forest_edge",
-    "wythers:dry_tropical_forest",
-    "wythers:dry_tropical_grassland",
-    "wythers:forest_edge",
-    "wythers:spring_flower_fields",
-    "wythers:subtropical_forest_edge",
-    "wythers:tangled_forest",
-    "wythers:tropical_forest",
-    "wythers:tropical_grassland"
+    {
+      "id": "terralith:alpha_islands",
+      "required": false
+    },
+    {
+      "id": "terralith:brushland",
+      "required": false
+    },
+    {
+      "id": "terralith:lavender_forest",
+      "required": false
+    },
+    {
+      "id": "terralith:mirage_isles",
+      "required": false
+    },
+    {
+      "id": "terralith:sakura_grove",
+      "required": false
+    },
+    {
+      "id": "terralith:shrubland",
+      "required": false
+    },
+    {
+      "id": "terralith:steppe",
+      "required": false
+    },
+    {
+      "id": "terralith:valley_clearing",
+      "required": false
+    },
+    {
+      "id": "wythers:berry_bog",
+      "required": false
+    },
+    {
+      "id": "wythers:birch_taiga",
+      "required": false
+    },
+    {
+      "id": "wythers:boreal_forest_red",
+      "required": false
+    },
+    {
+      "id": "wythers:boreal_forest_yellow",
+      "required": false
+    },
+    {
+      "id": "wythers:cool_forest_edge",
+      "required": false
+    },
+    {
+      "id": "wythers:dry_tropical_forest",
+      "required": false
+    },
+    {
+      "id": "wythers:dry_tropical_grassland",
+      "required": false
+    },
+    {
+      "id": "wythers:forest_edge",
+      "required": false
+    },
+    {
+      "id": "wythers:spring_flower_fields",
+      "required": false
+    },
+    {
+      "id": "wythers:subtropical_forest_edge",
+      "required": false
+    },
+    {
+      "id": "wythers:tangled_forest",
+      "required": false
+    },
+    {
+      "id": "wythers:tropical_forest",
+      "required": false
+    },
+    {
+      "id": "wythers:tropical_grassland",
+      "required": false
+    }
   ]
 }
