@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.egg.EggState
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.cobblemon.mod.common.item.components.EggComponent
+import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -63,7 +64,7 @@ object EggRenderHelper {
 //        val form = if (egg.form.lowercase() == "normal") "" else "_${egg.form.lowercase()}"
 //        val texture = cobblemonResource("textures/egg/${egg.species.path}${form}_egg.png")
 
-        val species = egg.identifier
+        var species = egg.identifier
         state.currentAspects = setOf(egg.variant)
         state.updateAge(Minecraft.getInstance().level?.gameTime?.toInt() ?: 0)
         state.updatePartialTicks(tickDelta)
@@ -71,7 +72,9 @@ object EggRenderHelper {
         val eggModel = VaryingModelRepository.getPoser(species, state) as? EggModel
             ?: run {
                 Cobblemon.LOGGER.warn("Could not find egg model for $species and variant ${egg.variant}")
-                return
+                // fallback egg should be our mystery egg instead of it being invis
+                species = cobblemonResource("mystery_egg")
+                VaryingModelRepository.getPoser(species, state) as? EggModel ?: return
             }
 
         eggModel.context = context
