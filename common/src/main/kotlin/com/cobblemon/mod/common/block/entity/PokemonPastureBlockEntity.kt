@@ -11,8 +11,10 @@ package com.cobblemon.mod.common.block.entity
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.advancement.CobblemonCriteria
+import com.cobblemon.mod.common.api.moves.BenchedMove
 import com.cobblemon.mod.common.api.pasture.PastureLinkManager
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
 import com.cobblemon.mod.common.api.text.italicise
@@ -36,6 +38,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Vec3i
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
@@ -103,6 +106,30 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
             if (blockEntity.ticksUntilCheck <= 0) {
                 blockEntity.checkPokemon()
                 //blockEntity.tryBreed()
+
+                // MIRROR HERB TIME BABY
+                // gather pastured mons (going to make it a random chance so it is somewhat random and slower so it isn't so bad for perf)
+                val pastured = if (world.random.nextInt((1200 / Cobblemon.config.pastureBlockUpdateTicks).coerceAtLeast(1)) == 0) blockEntity.tetheredPokemon.mapNotNull { it.getPokemon() } else emptyList()
+
+                // for all the pasture mons that have mirror herb we want to check all the active moves of the others to see if any are egg moves of the checked mon
+                for (pokemon in pastured.filter { it.heldItemNoCopy().`is`(CobblemonItems.MIRROR_HERB) }) {
+                    // gather the current mons moves they know
+                    val knownMoves = pokemon.allAccessibleMoves + pokemon.moveSet.map { it.template }
+                    // filter all the egg moves from the other mons active movesets
+                    val eggMovesToLearn = pastured.filter { it != pokemon }.flatMap { other -> other.moveSet.map { it.template } }.distinct()
+                        .filter { it in pokemon.form.moves.eggMoves && it !in knownMoves }
+
+                    if (eggMovesToLearn.isEmpty())
+                        continue
+
+                    // add any new egg moves
+                    eggMovesToLearn.forEach { pokemon.benchedMoves.add(BenchedMove(it, 0)) }
+                    // same sparkles as bone meal so players can tell something happened
+                    val entity = pokemon.entity ?: continue
+
+                    // vera said she wants bonemeal particles for now
+                    (world as? ServerLevel)?.sendParticles(ParticleTypes.HAPPY_VILLAGER, entity.x, entity.y + entity.bbHeight / 2, entity.z, 15, entity.bbWidth / 2.0, entity.bbHeight / 2.0, entity.bbWidth / 2.0, 0.0)
+                }
             }
 
             // for every tethered Pokémon, tick metabolism and interaction cooldown if fullness or cooldown is above 0
