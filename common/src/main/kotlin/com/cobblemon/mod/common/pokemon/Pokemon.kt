@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.pokemon
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMovesetBuilders
 import com.cobblemon.mod.common.CobblemonItemComponents
 import com.cobblemon.mod.common.CobblemonItems.POKEMON_EGG
@@ -142,6 +143,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import net.minecraft.core.BlockPos
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -1716,6 +1718,29 @@ open class Pokemon : ShowdownIdentifiable {
 
     val relearnableMoves: Iterable<MoveTemplate>
         get() = allAccessibleMoves.filter { accessibleMove -> moveSet.none { it.template == accessibleMove } }
+
+    // if holding a mirror herb look for egg moves to learn from a sent list of other mons (so far we will do this with party mons and pasture mons)
+    fun learnEggMovesAttempt(tutors: () -> List<Pokemon>, randomChance: Int) {
+        // CRAB NOTE: I am doing random chance because I am worried about performance a bit but also it being random might have the side effect of it feeling more organic than if it was instant
+        if (!heldItem.`is`(CobblemonItems.MIRROR_HERB) || Random.nextInt(randomChance.coerceAtLeast(1)) != 0)
+            return
+
+        // gather the current mons moves the other mons know
+        val knownMoves = allAccessibleMoves + moveSet.map { it.template }
+
+        // filter all the egg moves from the active movesets of the mons
+        val eggMovesToLearn = tutors().filter { it != this }.flatMap { other -> other.moveSet.map { it.template } }.distinct()
+            .filter { it in form.moves.eggMoves && it !in knownMoves }
+
+        if (eggMovesToLearn.isEmpty())
+            return
+
+        // put any new egg moves into empty move slots first and bench the rest of them
+        eggMovesToLearn.forEach { if (!moveSet.add(it.create())) benchedMoves.add(BenchedMove(it, 0)) }
+
+        // vera said she wants bonemeal particles for now
+        (entity?.level() as? ServerLevel)?.sendParticles(ParticleTypes.HAPPY_VILLAGER, entity!!.x, entity!!.y + entity!!.bbHeight / 2, entity!!.z, 15, entity!!.bbWidth / 2.0, entity!!.bbHeight / 2.0, entity!!.bbWidth / 2.0, 0.0)
+    }
 
     fun updateAspects() {
         /*

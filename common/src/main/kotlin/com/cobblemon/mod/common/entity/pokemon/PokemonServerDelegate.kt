@@ -12,6 +12,7 @@ import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.OrientationControllable
@@ -326,6 +327,10 @@ class PokemonServerDelegate : PokemonSideDelegate {
         if (tethering != null && entity.pokemon.tetheringId != tethering.tetheringId) {
             return entity.discard()
         }
+
+        // sent out party mons with a mirror herb learn egg moves from any other party or pasture mons nearby
+        if (entity.ownerUUID != null && tethering == null && entity.pokemon.heldItem.`is`(CobblemonItems.MIRROR_HERB))
+            entity.pokemon.learnEggMovesAttempt({ entity.level().getEntitiesOfClass(PokemonEntity::class.java, entity.boundingBox.inflate(8.0)) { it != entity && it.ownerUUID != null }.map { it.pokemon } }, 100)
 
 //        if (!entity.behaviour.moving.walk.canWalk && entity.behaviour.moving.fly.canFly && !entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
 //            entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)
