@@ -1740,6 +1740,7 @@ open class Pokemon : ShowdownIdentifiable {
 
         // vera said she wants bonemeal particles for now
         (entity?.level() as? ServerLevel)?.sendParticles(ParticleTypes.HAPPY_VILLAGER, entity!!.x, entity!!.y + entity!!.bbHeight / 2, entity!!.z, 15, entity!!.bbWidth / 2.0, entity!!.bbHeight / 2.0, entity!!.bbWidth / 2.0, 0.0)
+        entity?.cry()
     }
 
     fun updateAspects() {
