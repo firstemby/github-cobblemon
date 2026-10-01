@@ -16,7 +16,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == true",
       "expressions": ["q.sound('move.playrough.actor_1');"]
     },
     {
@@ -25,7 +25,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == false",
       "expressions": ["q.sound('move.playrough.actor_2');"]
     },
     {
@@ -49,7 +49,7 @@
     },
     {
       "type": "entity_molang",
-      "entityCondition": "q.entity.is_user == true && q.missed(q.entity.uuid) == false",
+      "entityCondition": "q.entity.is_user == true",
       "expressions": ["q.sound('move.playrough.actor_3');"]
     },
     {

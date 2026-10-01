@@ -7,7 +7,7 @@
     {
       "type": "animation",
       "animation": ["gigatonhammer"],
-      "delay": 0.2
+      "delay": 0.3
     },
     {
       "type": "entity_molang",
