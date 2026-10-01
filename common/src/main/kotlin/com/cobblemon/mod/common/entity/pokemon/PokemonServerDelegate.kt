@@ -330,7 +330,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
 
         // sent out party mons with a mirror herb learn egg moves from any other party or pasture mons nearby
         if (entity.ownerUUID != null && tethering == null && entity.pokemon.heldItem.`is`(CobblemonItems.MIRROR_HERB))
-            entity.pokemon.learnEggMovesAttempt({ entity.level().getEntitiesOfClass(PokemonEntity::class.java, entity.boundingBox.inflate(8.0)) { it != entity && it.ownerUUID != null }.map { it.pokemon } }, 100)
+            entity.pokemon.learnEggMovesAttempt({ entity.level().getEntitiesOfClass(PokemonEntity::class.java, entity.boundingBox.inflate(8.0)) { it != entity && it.ownerUUID != null && (Cobblemon.config.mirrorHerbLearnFromOtherTrainers || it.ownerUUID == entity.ownerUUID) }.map { it.pokemon } }, 100)
 
 //        if (!entity.behaviour.moving.walk.canWalk && entity.behaviour.moving.fly.canFly && !entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
 //            entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, true)

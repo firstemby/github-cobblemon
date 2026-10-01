@@ -113,7 +113,7 @@ class PokemonPastureBlockEntity(pos: BlockPos, state: BlockState) :
                 val pasturedMirrorHerbists = pastured.filter { it.heldItem.`is`(CobblemonItems.MIRROR_HERB) }
 
                 // for all the mirror herb holders lets do the egg move slot check but on a much slower rate than we do with the party
-                pasturedMirrorHerbists.forEach { it.learnEggMovesAttempt({ pastured }, (1200 / Cobblemon.config.pastureBlockUpdateTicks).coerceAtLeast(1)) }
+                pasturedMirrorHerbists.forEach { holder -> holder.learnEggMovesAttempt({ pastured.filter { Cobblemon.config.mirrorHerbLearnFromOtherTrainers || it.getOwnerUUID() == holder.getOwnerUUID() } }, (1200 / Cobblemon.config.pastureBlockUpdateTicks).coerceAtLeast(1)) }
             }
 
             // for every tethered Pokémon, tick metabolism and interaction cooldown if fullness or cooldown is above 0
