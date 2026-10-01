@@ -1,6 +1,7 @@
 {
   "type": "cobblemon:banned_egg_groups_barrier",
   "order": 73,
+  "condition": "!((q.parent_1.species.name == 'Ditto' && (q.parent_2.species.name == 'Manaphy' || q.parent_2.species.name == 'Phione')) || (q.parent_2.species.name == 'Ditto' && (q.parent_1.species.name == 'Manaphy' || q.parent_1.species.name == 'Phione')))",
   "bannedEggGroups": [],
   "bannedLabels": ["legendary", "mythical"],
   "allowSameLine": "q.cobblemon_config.can_breed_legendaries == 1",
