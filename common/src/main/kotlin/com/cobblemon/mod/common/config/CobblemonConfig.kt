@@ -441,6 +441,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Spawning, lang = "data_monitor_shiny_rate", SERVER)
     var monitorShinyRate = 200
 
+    @CobblemonConfigField(Category.Pokemon, lang = "scarekrow_radius", SERVER)
+    var scarekrowRadius = 16
+
     @Transient
     val struct = ObjectValue(this).also {
         it.addFunction("last_saved_version") { StringValue(lastSavedVersion) }

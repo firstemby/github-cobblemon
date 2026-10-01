@@ -71,6 +71,22 @@
       "senses": [
         "cobblemon:pokemon_nearby_wanted_item"
       ]
+    },
+    {
+      "type": "cobblemon:add_senses",
+      "condition": "!q.entity.is_in_party && !q.entity.is_alpha",
+      "senses": [
+        "cobblemon:scarekrow_sense"
+      ]
+    },
+    {
+      "type": "cobblemon:add_objectives",
+      "condition": "!q.entity.is_in_party && !q.entity.is_alpha",
+      "objectivesByPriority": {
+        "0": [
+          "cobblemon:avoid_scarekrow"
+        ]
+      }
     }
   ]
 }

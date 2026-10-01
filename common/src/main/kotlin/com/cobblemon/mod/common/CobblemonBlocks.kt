@@ -47,6 +47,7 @@ import com.cobblemon.mod.common.block.RevivalHerbBlock
 import com.cobblemon.mod.common.block.SaccharineLeafBlock
 import com.cobblemon.mod.common.block.SaccharineLogBlock
 import com.cobblemon.mod.common.block.SaccharineLogSlatheredBlock
+import com.cobblemon.mod.common.block.ScarekrowBlock
 import com.cobblemon.mod.common.block.StackableItemBlock
 import com.cobblemon.mod.common.block.TumblestoneBlock
 import com.cobblemon.mod.common.block.TypeGemClusterBlock
@@ -1158,6 +1159,15 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
         .lightLevel { state ->
             if (state.getValue(IncubatorBlock.HAS_EGG) && !state.getValue(IncubatorBlock.READY)) 8 else 0 // emit light only when warming the egg
         }
+    ))
+
+    @JvmField
+    val SCAREKROW = this.create("scarekrow", ScarekrowBlock(
+        BlockBehaviour.Properties.of()
+            .pushReaction(PushReaction.DESTROY)
+            .sound(SoundType.GRASS)
+            .strength(0.1f)
+            .noOcclusion()
     ))
 
     init {

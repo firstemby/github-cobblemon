@@ -39,6 +39,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WanderAround
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.JumpOutOfWater
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.NeutralBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.AvoidScarekrow
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.SkittishBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.TerritorialBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkTowardsParent
@@ -82,7 +83,7 @@ interface ObjectiveConfig {
             cobblemonResource("combat_neutral") to NeutralBehaviour.Config::class.java,
             cobblemonResource("combat_skittish") to SkittishBehaviour.Config::class.java,
             cobblemonResource("behaviour_friendly") to FriendlyBehaviour.Config::class.java,
-
+            cobblemonResource("avoid_scarekrow") to AvoidScarekrow.Config::class.java,
 
             )
     }

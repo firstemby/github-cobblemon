@@ -43,7 +43,7 @@ interface Sense {
             cobblemonResource("flower_sense") to FlowerSense.Config::class.java,
             cobblemonResource("beehive_sense") to BeeHiveSense.Config::class.java,
             cobblemonResource("sacc_leaf_sense") to SaccLeafSense.Config::class.java,
-
+            cobblemonResource("scarekrow_sense") to ScarekrowSense.Config::class.java
             )
     }
 

@@ -364,7 +364,7 @@ object CobblemonItemGroups {
         entries.accept(CobblemonItems.SACCHARINE_HANGING_SIGN)
         entries.accept(CobblemonItems.SACCHARINE_LEAVES)
         //entries.accept(CobblemonItems.SACCHARINE_SAPLING)
-
+        entries.accept(CobblemonItems.SCAREKROW)
         entries.accept(CobblemonItems.HEARTY_GRAIN_BALE)
 
         entries.accept(CobblemonItems.TATAMI_BLOCK)

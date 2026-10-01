@@ -79,6 +79,7 @@ object CobblemonBlockTags {
     @JvmField val SEES_SKY = createTag("sees_sky")
     @JvmField val SHINY_STONE_ORES = createTag("shiny_stone_ores")
     @JvmField val SIGNS = createTag("signs")
+    @JvmField val SCAREKROWS = createTag("scarekrows")
     @JvmField val SKY_TUMBLESTONE_BRICKS = createTag("sky_tumblestone_bricks")
     @JvmField val SKY_TUMBLESTONES = createTag("sky_tumblestones")
     @JvmField val SMALL_FLOWERS = createTag("small_flowers")

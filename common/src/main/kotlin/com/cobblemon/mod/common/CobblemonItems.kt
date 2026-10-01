@@ -206,6 +206,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val CAMPFIRE_POT_WHITE = campfirePotItem(CobblemonBlocks.WHITE_CAMPFIRE_POT, CampfirePotColor.WHITE)
 
     @JvmField
+    val SCAREKROW = blockItem("scarekrow", CobblemonBlocks.SCAREKROW)
+    @JvmField
     val HEARTY_GRAINS = compostableItem("hearty_grains", ItemNameBlockItem(CobblemonBlocks.HEARTY_GRAINS, Properties().rarity(Rarity.COMMON)))
     @JvmField
     val HEARTY_GRAIN_BALE = compostableBlockItem("hearty_grain_bale", CobblemonBlocks.HEARTY_GRAIN_BALE, 0.85f)

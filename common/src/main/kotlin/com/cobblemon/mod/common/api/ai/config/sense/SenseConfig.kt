@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.sense.NearbyEntitiesSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonAdultSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.PokemonItemSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SaccLeafSense
+import com.cobblemon.mod.common.api.ai.biggerbrain.sense.ScarekrowSense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.Sense
 import com.cobblemon.mod.common.api.ai.biggerbrain.sense.SweetBerryBushSense
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -58,6 +59,7 @@ interface SenseConfig {
             cobblemonResource("flower_sense") to FlowerSense.Config::class.java,
             cobblemonResource("beehive_sense") to BeeHiveSense.Config::class.java,
             cobblemonResource("sacc_leaf_sense") to SaccLeafSense.Config::class.java,
+            cobblemonResource("scarekrow_sense") to ScarekrowSense.Config::class.java,
             )
     }
 
