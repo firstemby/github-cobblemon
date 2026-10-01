@@ -61,6 +61,7 @@
 - Absol
 - Poliwag
 - Politoed
+- Ekans
 - Oddish
 - Gloom
 - Vileplume
@@ -73,6 +74,8 @@
 - Sudowoodo
 - Cacnea
 - Cacturne
+- Ekans
+- Arbok
 - Oddish
 - Gloom
 - Vileplume
@@ -85,6 +88,7 @@
 - Changes tm shelf discs to use textures instead of tinting and overlays to line up with item display
 - Blank TM can now be inserted into the Disc Shelf
 - Recall animation now renders ball in hand with the player arm raised.
+- Made regional and Vivillon split-evo locations now mutually exclusive
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem

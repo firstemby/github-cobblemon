@@ -1,0 +1,64 @@
+{
+  "portraitScale": 1.7,
+  "portraitTranslation": [-0.45, -0.13, 0],
+  "profileScale": 0.7,
+  "profileTranslation": [0, 0.66, 0],
+  "rootBone": "ekans",
+  "animations": {
+    "recoil": "q.bedrock_stateful('ekans', 'recoil')",
+    "cry": "q.bedrock_stateful('ekans', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "PORTRAIT", "PROFILE", "FLOAT", "NONE"],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('ekans', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('ekans', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('ekans', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('ekans', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('ekans', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('ekans', 'blink')"
+      ]
+    },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('ekans', 'ground_run')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('ekans', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"},
+      "animations": [
+        "q.bedrock('ekans', 'sleep')"
+      ]
+    }
+  }
+}

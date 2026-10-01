@@ -233,6 +233,22 @@
       "learnableMoves": [
         "stomp"
       ],
+      "requirements": [
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_beach"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_tropical_island"
+          }
+        }
+      ],
       "requiredContext": "cobblemon:leaf_stone"
     },
     {
@@ -296,6 +312,22 @@
           "consumeHeldItem": false,
           "learnableMoves": [
             "dragonhammer"
+          ],
+          "requirements": [
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_jungle"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_savanna"
+              }
+            }
           ],
           "requiredContext": "cobblemon:leaf_stone"
         }

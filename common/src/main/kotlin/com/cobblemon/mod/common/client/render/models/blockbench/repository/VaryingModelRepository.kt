@@ -233,7 +233,6 @@ object VaryingModelRepository {
         inbuilt("primeape", ::PrimeapeModel)
         inbuilt("voltorb", ::VoltorbModel)
         inbuilt("electrode", ::ElectrodeModel)
-        inbuilt("ekans", ::EkansModel)
         inbuilt("machop", ::MachopModel)
         inbuilt("machoke", ::MachokeModel)
         inbuilt("machamp", ::MachampModel)
