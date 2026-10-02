@@ -56,7 +56,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingController
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.sound.RideSoundManager
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
+import com.cobblemon.mod.common.api.riding.util.DynamicAnimationData
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -317,7 +317,7 @@ open class PokemonEntity(
 
     var enablePoseTypeRecalculation = true
 
-    val ridingAnimationData: RidingAnimationData = RidingAnimationData(this)
+    val ridingAnimationData: DynamicAnimationData = DynamicAnimationData(this)
     var rideSoundManager: RideSoundManager = RideSoundManager(this)
 
     private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, Double>>()
@@ -669,11 +669,13 @@ open class PokemonEntity(
         isPokemonFlying = flyDist - flyDistO > 0.005F
         isPokemonWalking = walkDist - walkDistO > 0.005F
 
-        if (passengers.isNotEmpty() && level().isClientSide) {
-            rideSoundManager.tick()
+        if (level().isClientSide) {
             ridingAnimationData.update()
-        } else if (!passengers.isNotEmpty() && level().isClientSide) {
-            rideSoundManager.stop()
+            if (passengers.isNotEmpty()) {
+                rideSoundManager.tick()
+            } else {
+                rideSoundManager.stop()
+            }
         }
 
         flyDistO = flyDist

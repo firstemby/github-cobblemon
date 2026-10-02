@@ -19,7 +19,7 @@ import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
-import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
+import com.cobblemon.mod.common.api.riding.util.DynamicAnimationData
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.client.ClientMoLangFunctions.setupClient
 import com.cobblemon.mod.common.client.particle.BedrockParticleOptionsRepository
@@ -141,7 +141,7 @@ abstract class PosableState : Schedulable {
      */
     val renderMarkers = mutableSetOf<String>()
 
-    /** The MoLang functions that expose current [RidingAnimationData] data.
+    /** The MoLang functions that expose current [DynamicAnimationData] data.
      *  They are all divided by a reference value and coerece into a float range useful in animation
      */
     val ridingFunctions = QueryStruct(hashMapOf())

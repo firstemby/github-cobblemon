@@ -18,49 +18,48 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.sign
 import kotlin.math.sin
 
 /**
- * Class to handle the updating and containment of ride data used in animation.
+ * Class to handle the updating and holding of motion data used in animation. Motion values accumulate for every
+ * pokemon on the client, some only while ridden.
  *
  * @author Jackowes
  * @since April 7th, 2025
  */
 
 
-class RidingAnimationData(val ride: PokemonEntity)
+class DynamicAnimationData(val ride: PokemonEntity)
 {
+    companion object {
+        // Blend time for motion values, they catch up within 1.5x this. Longer is smoother but lags more
+        const val MOTION_BLEND_SECONDS = 0.5F
+        // Rider input comes straight from key presses so it catches up quicker
+        const val INPUT_BLEND_SECONDS = 0.3F
+    }
+
     var prevOrientation: Matrix3f = Matrix3f()
     var prevRot: Vec3 = Vec3.ZERO
-    var velocitySpring: Vec3Spring = Vec3Spring()
-    var rotSpring: Vec3Spring = Vec3Spring()
-    var rotDeltaSpring: Vec3Spring = Vec3Spring()
-    var localVelocitySpring: Vec3Spring = Vec3Spring()
-    var driverInputSpring: Vec3Spring = Vec3Spring()
-    var diveSpring: Vec3Spring = Vec3Spring()
+    var velocitySpring = Vec3Ease(MOTION_BLEND_SECONDS)
+    var rotSpring = Vec3Ease(MOTION_BLEND_SECONDS, isAngle = true)
+    var rotDeltaSpring = Vec3Ease(MOTION_BLEND_SECONDS)
+    var localVelocitySpring = Vec3Ease(MOTION_BLEND_SECONDS)
+    var driverInputSpring = Vec3Ease(INPUT_BLEND_SECONDS)
+    var diveSpring = Vec3Ease(MOTION_BLEND_SECONDS)
+    private var initialized = false
+    private var dismounted = false
 
+    /** Called on dismount. Motion keeps easing on its own, only the ride orientation needs to start fresh. */
     fun clear() {
         prevOrientation = Matrix3f()
-        prevRot = Vec3.ZERO
-        velocitySpring = Vec3Spring()
-        rotSpring = Vec3Spring()
-        rotDeltaSpring = Vec3Spring()
-        localVelocitySpring = Vec3Spring()
-        driverInputSpring = Vec3Spring()
-        diveSpring = Vec3Spring()
+        dismounted = true
     }
 
     fun update() {
         val activeRide = ride.hasControllingPassenger()
 
-        if (!activeRide) return
-
         var currRot = Vec3.ZERO
         var angDelta = Vec3.ZERO
-
-        val stiffness = 90.0
-        val damping = 18.0
 
         // Update velocity first
         val currentVelocity = Vec3(
@@ -69,7 +68,7 @@ class RidingAnimationData(val ride: PokemonEntity)
             ride.z - ride.zOld
         )
 
-        val r = ride.ifRidingAvailableSupply(false) { behaviour, settings, state ->
+        val r = activeRide && ride.ifRidingAvailableSupply(false) { behaviour, settings, state ->
             behaviour.shouldRoll(settings, state, ride);
         }
         if( r ) {
@@ -118,15 +117,28 @@ class RidingAnimationData(val ride: PokemonEntity)
             val localVelocityF = Matrix3f(orientation).transpose().transform(velocityWorldF)
             val localVelocity = Vec3(localVelocityF.x.toDouble(), localVelocityF.y.toDouble(), localVelocityF.z.toDouble())
 
-            localVelocitySpring.update(localVelocity, stiffness, damping)
+            localVelocitySpring.update(localVelocity)
 
             // Update previous values
             prevOrientation.set(currOrientation)
         } else {
-            val currPitch = ride.xRot
+            // Pitch only means something while ridden
+            val currPitch = if (activeRide) ride.xRot else 0.0f
             val currYaw = ride.yRot
             val currRoll = 0.0f
             currRot = Vec3(currPitch.toDouble(), currYaw.toDouble(), currRoll.toDouble())
+
+            // Start from where the pokemon already is instead of turning in from zero
+            if (!initialized) {
+                prevRot = currRot
+                rotSpring.snap(currRot)
+                initialized = true
+            }
+            // measure turning from here rather than as one big turn
+            if (dismounted) {
+                prevRot = currRot
+                dismounted = false
+            }
 
             //Scale rotation delta by 20 to represent degree per second instead of tick
             angDelta = Vec3(
@@ -147,7 +159,7 @@ class RidingAnimationData(val ride: PokemonEntity)
             val localVelocityF = Matrix3f(orientationNonRollable).transpose().transform(velocityWorldF)
             val localVelocity = Vec3(localVelocityF.x.toDouble(), localVelocityF.y.toDouble(), localVelocityF.z.toDouble())
 
-            localVelocitySpring.update(localVelocity, stiffness, damping)
+            localVelocitySpring.update(localVelocity)
         }
 
         /******************************************************
@@ -159,14 +171,14 @@ class RidingAnimationData(val ride: PokemonEntity)
             driver != null && driver.isShiftKeyDown -> -1.0
             else -> 0.0
         }
-        val input = if(driver != null) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
-        driverInputSpring.update(input, stiffness * 2, damping)
-        rotDeltaSpring.update(angDelta, stiffness, damping)
-        velocitySpring.update(currentVelocity, stiffness, damping)
-        rotSpring.update(currRot, stiffness, damping)
+        val input = if(driver != null && activeRide) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
+        driverInputSpring.update(input)
+        rotDeltaSpring.update(angDelta)
+        velocitySpring.update(currentVelocity)
+        rotSpring.update(currRot)
 
         val diving = abs(max(sin(currRot.x.toRadians()),0f))
-        diveSpring.update(Vec3(0.0,diving.toDouble(),0.0), stiffness, damping)
+        diveSpring.update(Vec3(0.0,diving.toDouble(),0.0))
         prevRot = currRot
     }
 }
