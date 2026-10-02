@@ -45,6 +45,7 @@ import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
+import com.cobblemon.mod.common.client.render.layer.PlayerRecallBallRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
@@ -436,8 +437,10 @@ object CobblemonClient {
         var renderer: LivingEntityRenderer<Player, PlayerModel<Player>>? =
             skinMap?.get(PlayerSkin.Model.WIDE) as LivingEntityRenderer<Player, PlayerModel<Player>>
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
+        renderer?.addLayer(PlayerRecallBallRenderer(renderer))
         renderer = skinMap[PlayerSkin.Model.SLIM] as LivingEntityRenderer<Player, PlayerModel<Player>>?
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
+        renderer?.addLayer(PlayerRecallBallRenderer(renderer))
     }
 
     private fun registerMenuScreens() {

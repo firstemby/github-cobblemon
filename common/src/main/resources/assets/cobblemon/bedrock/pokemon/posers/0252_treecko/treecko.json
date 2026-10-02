@@ -1,43 +1,125 @@
 {
-  "portraitScale": 1.95,
-  "portraitTranslation": [-0.08, 0.23, 0],
+  "portraitScale": 1.6,
+  "portraitTranslation": [-0.17, 0.3, 0],
   "profileScale": 0.72,
   "profileTranslation": [0, 0.68, 0],
   "rootBone": "treecko",
   "animations": {
-    "cry": "q.bedrock_stateful('treecko', 'cry')"
+    "faint": "q.bedrock_primary('treecko', 'faint', q.curve('one'))",
+    "cry": "q.bedrock_stateful('treecko', 'cry')",
+    "recoil": "q.bedrock_stateful('treecko', 'recoil')",
+    "physical": "q.bedrock_primary('treecko', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('treecko', 'special', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_primary('treecko', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "standing": {
-      "poseName": "standing",
-      "poseTypes": [
-        "STAND",
-        "FLOAT",
-        "PORTRAIT",
-        "PROFILE",
-        "SLEEP"
-      ],
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "condition": "q.has_entity ? !q.in_air : 1.0",
+      "isBattle": false,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('treecko', 'ground_idle')"
+        "q.look('head_ai', 1, 1, 30, -30, 35, -35)",
+        "q.bedrock('treecko', 'ground_idle')",
+        "q.bedrock('treecko', 'head_scale')"
       ],
+      "quirks": [
+        "q.bedrock_quirk('treecko', 'blink')",
+        "q.bedrock_quirk('treecko', 'quirk_ground_idle', 20, 60, 1)"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 30, -30, 35, -35)",
+        "q.bedrock('treecko', 'battle_idle')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_primary('treecko', 'battle_cry', q.curve('symmetrical_wide'))"
+      },
       "quirks": [
         "q.bedrock_quirk('treecko', 'blink')"
       ]
     },
     "walk": {
-      "poseName": "walk",
-      "poseTypes": [
-        "WALK",
-        "SWIM"
-      ],
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
       "animations": [
-        "q.look('head')",
-        "q.bedrock('treecko', 'ground_idle')",
-        "q.biped_walk(0.6, 0.9, 'leg_left', 'leg_right')"
+        "q.look('head_ai', 1, 1, 40, -20, 27.5, -27.5)",
+        "q.bedrock('treecko', 'ground_walk')",
+        "q.bedrock('treecko', 'head_scale')"
       ],
       "quirks": [
         "q.bedrock_quirk('treecko', 'blink')"
+      ]
+    },
+    "run": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai', 1, 1, 30, -30, 35, -35)",
+        "q.bedrock('treecko', 'ground_run')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('treecko', 'blink')"
+      ]
+    },
+    "battle-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "animations": [
+        "q.bedrock('treecko', 'battle_sleep')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": false,
+      "animations": [
+        "q.bedrock('treecko', 'sleep')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+    "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": [
+        "q.look('head_ai', 1, 1, 30, -30, 35, -35)",
+        "q.bedrock('treecko', 'shoulder_left')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('treecko', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [2.25, 10.75, 6]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": [
+        "q.look('head_ai', 1, 1, 30, -30, 35, -35)",
+        "q.bedrock('treecko', 'shoulder_right')",
+        "q.bedrock('treecko', 'head_scale')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('treecko', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-2.25, 10.75, 6]
+        }
       ]
     }
   }

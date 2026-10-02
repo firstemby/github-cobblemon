@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.render.layer
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
@@ -23,7 +24,6 @@ import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.DataKeys
 import com.cobblemon.mod.common.util.isPokemonEntity
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import java.util.UUID
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.PlayerModel
@@ -33,11 +33,14 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer
 import net.minecraft.client.renderer.entity.RenderLayerParent
 import net.minecraft.client.renderer.entity.layers.RenderLayer
 import net.minecraft.client.renderer.texture.OverlayTexture
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.ItemStack
 
 class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) :
@@ -165,16 +168,16 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
             val width = shoulderData.form.hitbox.width
             val heightOffset = -1.5 * scale
             val widthOffset = width / 2 - 0.7
-            // If they're sneaking, the pokemon needs to rotate a little bit and push forward
-            // Shoulders move a bit when sneaking which is why the translation is necessary.
-            // Shoulder exact rotation according to testing (miasmus) is 0.4 radians, the -0.15 is eyeballed though.
-            if (livingEntity.isCrouching) {
-                matrixStack.mulPose(Axis.XP.rotation(0.4F))
-                matrixStack.translate(0F, 0F, -0.15F)
+            val chestItem = livingEntity.getItemBySlot(EquipmentSlot.CHEST)
+            val armorHeightOffset = if (chestItem.item is ArmorItem && !isArmorOffsetBlacklisted(chestItem)) {
+                ARMOR_HEIGHT_OFFSET
+            } else {
+                0F
             }
+            parentModel.body.translateAndRotate(matrixStack)
             matrixStack.translate(
                 if (pLeftShoulder) -widthOffset else widthOffset,
-                (if (livingEntity.isCrouching) heightOffset + 0.2 else heightOffset),
+                heightOffset - armorHeightOffset,
                 0.0
             )
 
@@ -263,7 +266,13 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
 
     companion object {
 
+        private const val ARMOR_HEIGHT_OFFSET = 1F / 16F
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
+
+        private fun isArmorOffsetBlacklisted(itemStack: ItemStack): Boolean {
+            val itemIdentifier = BuiltInRegistries.ITEM.getKey(itemStack.item)
+            return itemIdentifier in Cobblemon.config.shoulderMountArmorOffsetBlacklist
+        }
 
         private fun extractUuid(shoulderNbt: CompoundTag): UUID {
             if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {

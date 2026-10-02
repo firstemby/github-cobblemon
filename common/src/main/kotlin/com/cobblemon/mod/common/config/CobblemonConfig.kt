@@ -216,6 +216,9 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokemon, lang = "display_entity_labels_when_crouching_only", CLIENT)
     var displayEntityLabelsWhenCrouchingOnly = false
 
+    @CobblemonConfigField(Category.Pokemon, lang = "shoulder_mount_armor_offset_blacklist", CLIENT)
+    var shoulderMountArmorOffsetBlacklist = mutableSetOf<ResourceLocation>()
+
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate", SERVER)
     var shinyRate = 8192F
 

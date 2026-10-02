@@ -46,6 +46,7 @@
   "standingEyeHeight": 0.8,
   "swimmingEyeHeight": 0.8,
   "flyingEyeHeight": 0.8,
+  "shoulderMountable": true,
   "baseScale": 0.6,
   "hitbox": {
     "width": 0.72,
@@ -82,6 +83,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.16
+      },
       "swim": {
         "avoidsWater": true
       }

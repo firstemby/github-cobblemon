@@ -10,6 +10,9 @@ package com.cobblemon.mod.common.api.pokedex
 
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.pokedex.def.PokedexDef
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
+import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.PokedexDexSyncPacket
 import com.cobblemon.mod.common.util.adapters.CodecBackedAdapter
@@ -40,6 +43,17 @@ object Dexes : JsonDataRegistry<PokedexDef> {
     //Maps a dex id to its PokedexDef
     val dexEntryMap = linkedMapOf<ResourceLocation, PokedexDef>()
 
+    val equivalentForms = mapOf(
+        "galar" to listOf("region-bias-galar", "bias-galar", "galar-bias", "galarian", "galar"),
+        "alola" to listOf("region-bias-alola", "bias-alola", "alola-bias", "alolan", "alola"),
+        "hisui" to listOf("region-bias-hisui", "bias-hisui", "hisui-bias", "hisuian", "hisui"),
+        "paldea" to listOf("region-bias-paldea", "bias-paldea", "paldea-bias", "paldean", "paldea"),
+    )
+
+    val equivalentFormsLookup = equivalentForms.flatMap { (key, values) ->
+        values.map { it to key }
+    }.toMap()
+
     override fun reload(data: Map<ResourceLocation, PokedexDef>) {
         dexEntryMap.clear()
         data.entries.sortedBy { it.value.sortOrder }.forEach { (id, def) -> dexEntryMap[id] = def }
@@ -48,5 +62,42 @@ object Dexes : JsonDataRegistry<PokedexDef> {
 
     override fun sync(player: ServerPlayer) {
         PokedexDexSyncPacket(dexEntryMap.values).sendToPlayer(player)
+    }
+
+    fun findDexEntryBySpeciesId(regionId: ResourceLocation, speciesId: ResourceLocation): PokedexEntry? {
+        return dexEntryMap[regionId]?.getEntries()?.firstOrNull { it -> it.speciesId == speciesId }
+    }
+
+    fun findDexEntryBySpeciesId(speciesId: ResourceLocation): PokedexEntry? {
+        return findDexEntryBySpeciesId(cobblemonResource("national"), speciesId)
+    }
+
+    fun findRootDexEntryBySpeciesId(speciesId: ResourceLocation, formName: String): Pair<PokedexEntry, PokedexForm> {
+        var rootSpecies = PokemonSpecies.getByIdentifier(speciesId)!!
+        val initialFormEquivalents = getFormEquivalents(formName)
+        var rootForm = rootSpecies.forms.firstOrNull { initialFormEquivalents.contains(it.name.lowercase()) }
+            ?: rootSpecies.standardForm
+
+        var preEvolution = rootForm.preEvolution
+        while (preEvolution != null) {
+            rootSpecies = preEvolution.species
+            rootForm = preEvolution.resolveForm(rootForm.aspects.toSet())
+            preEvolution = rootForm.preEvolution
+        }
+
+        val entry = findDexEntryBySpeciesId(rootSpecies.resourceIdentifier)
+            ?: throw RuntimeException("Root dex entry not found")
+
+        val formEquivalents = getFormEquivalents(rootForm.name)
+        val form =
+            entry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
+            entry.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
+
+        return entry to form
+    }
+
+    fun getFormEquivalents(formName: String): List<String> {
+        val key = equivalentFormsLookup[formName.lowercase()]
+        return equivalentForms[key] ?: listOf(formName.lowercase())
     }
 }
