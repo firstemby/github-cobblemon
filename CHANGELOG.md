@@ -88,6 +88,8 @@
 - Blank TM can now be inserted into the Disc Shelf
 - Recall animation now renders ball in hand with the player arm raised.
 - Made regional and Vivillon split-evo locations now mutually exclusive
+- Item evolutions now unlock **all** unlocked evolutions whose requirements are met instead of stopping after the first.
+- Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem

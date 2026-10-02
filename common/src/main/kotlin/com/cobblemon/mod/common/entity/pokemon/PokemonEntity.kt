@@ -1483,19 +1483,31 @@ open class PokemonEntity(
 
         // Evolution item logic
         if (pokemon.getOwnerPlayer() == player) {
+            fun evolutionUnlocked(): Boolean {
+                stack.consume(1, player)
+                this.level().playSoundServer(
+                    position = this.position(),
+                    sound = CobblemonSounds.ITEM_USE,
+                    volume = 1F,
+                    pitch = 1F
+                )
+                return true
+            }
             val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
-            pokemon.lockedEvolutions
-                    .filterIsInstance<ItemInteractionEvolution>()
-                    .forEach { evolution ->
-                        if (evolution.attemptEvolution(pokemon, context)) {
-                            stack.consume(1, player)
-                            this.level().playSoundServer(
-                                    position = this.position(),
-                                    sound = CobblemonSounds.ITEM_USE,
-                                    volume = 1F,
-                                    pitch = 1F
-                            )
-                            return true
+            val lockedItemEvolutions = pokemon.lockedEvolutions.filterIsInstance<ItemInteractionEvolution>()
+            // forced evolutions > check those first and do ONLY one if there's multiple
+            lockedItemEvolutions.filter { !it.optional }.forEach {
+                if (it.attemptEvolution(pokemon, context)) {
+                   return evolutionUnlocked()
+                }
+            }
+            // optional evolutions > unlock all with single item use
+            lockedItemEvolutions.filter { it.optional }
+                    // we unlock all evolutions that depend on this single item
+                    .map { evolution -> return@map evolution.attemptEvolution(pokemon, context) }
+                    .let {
+                        if (it.contains(true)) { // if any of the evolutions were unlocked, we take the item
+                            return evolutionUnlocked()
                         }
                     }
         }
