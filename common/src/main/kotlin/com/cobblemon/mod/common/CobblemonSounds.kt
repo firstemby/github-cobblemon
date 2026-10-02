@@ -657,5 +657,65 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         SoundEvents.WOOL_FALL
     )
 
+    @JvmField
+    val ITEM_BLOCK_POWDER_PLACE = this.create("block.item_block.powder.place")
+    @JvmField
+    val ITEM_BLOCK_POWDER_BREAK = this.create("block.item_block.powder.break")
+    @JvmField
+    val ITEM_BLOCK_POWDER_STEP = this.create("block.item_block.powder.step")
+    @JvmField
+    val ITEM_BLOCK_POWDER_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_POWDER_BREAK,
+        ITEM_BLOCK_POWDER_STEP,
+        ITEM_BLOCK_POWDER_PLACE,
+        ITEM_BLOCK_POWDER_STEP,
+        ITEM_BLOCK_POWDER_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_PLACE = this.create("block.item_block.bottle_liquid.place")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_BREAK = this.create("block.item_block.bottle_liquid.break")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_STEP = this.create("block.item_block.bottle_liquid.step")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_BOTTLE_LIQUID_BREAK,
+        ITEM_BLOCK_BOTTLE_LIQUID_STEP,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE
+    )
+
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_PLACE = this.create("block.item_block.bottle_pills.place")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_BREAK = this.create("block.item_block.bottle_pills.break")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_STEP = this.create("block.item_block.bottle_pills.step")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_BOTTLE_PILLS_BREAK,
+        ITEM_BLOCK_BOTTLE_PILLS_STEP,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE
+    )
+
+    @JvmField
+    val ITEM_BLOCK_DICE_PLACE = this.create("block.item_block.dice.place")
+    @JvmField
+    val ITEM_BLOCK_DICE_BREAK = this.create("block.item_block.dice.break")
+    @JvmField
+    val ITEM_BLOCK_DICE_STEP = this.create("block.item_block.dice.step")
+    @JvmField
+    val ITEM_BLOCK_DICE_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_DICE_BREAK,
+        ITEM_BLOCK_DICE_STEP,
+        ITEM_BLOCK_DICE_PLACE,
+        ITEM_BLOCK_DICE_STEP,
+        ITEM_BLOCK_DICE_STEP
+    )
+
     private fun create(name: String): SoundEvent = this.create(name, SoundEvent.createVariableRangeEvent(cobblemonResource(name)))
 }

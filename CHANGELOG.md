@@ -3,6 +3,7 @@
 
 ### Additions
 - The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
+- Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
 ### New rideable Pokémon
 - The following items can now be placed on the ground as blocks:
