@@ -10,12 +10,8 @@ package com.cobblemon.mod.common.client.render.models.blockbench.animation
 
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
-import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.math.geometry.toRadians
-import net.minecraft.util.Mth
 
 /**
  * Animation used to tilt the targeted bone of the entity by a pitch that is proportionate
@@ -36,6 +32,8 @@ class PitchTiltAnimation(
         const val PREVIOUS_ANGLE = "previous_pitch_tilt_angle"
         const val CORRECTED_ANGLE = "corrected_pitch_tilt_angle"
         const val PITCHED_TILT = "has_pitched_tilt"
+        // How much of the tilt has been applied this render, so poses blending together add up to one full tilt
+        const val APPLIED_WEIGHT = "applied_pitch_tilt_weight"
     }
 
     override fun setupAnim(
@@ -49,22 +47,7 @@ class PitchTiltAnimation(
         headPitch: Float,
         intensity: Float
     ) {
-        val entity = context.entity as? PokemonEntity ?: return
-        if (entity.passengers.isNotEmpty()) {
-            return
-        }
-        // Negative is up like Minecraft pitch
-        val pitch = entity.heading.pitch.valueAt(Mth.frac(ageInTicks))
-        // Only tilt as much as the travel is horizontal so straight climbs and dives stay level
-        val tilt = (pitch * Mth.cos(pitch.toRadians())).coerceIn(minPitch, maxPitch)
-
-        if (PITCHED_TILT !in state.renderMarkers) {
-            state.numbers.remove(CORRECTED_ANGLE)
-            val appliedAngle = tilt * intensity
-            bone.addRotation(0, appliedAngle.toRadians())
-            state.numbers[PREVIOUS_ANGLE] = appliedAngle
-        }
-        // A second tilt on the same model doesn't add more, the first already covers it
-        state.renderMarkers += PITCHED_TILT
+        // The whole model is tilted by ModelPitch now so this does nothing\
+        //TODO: remove posers with this anim if we like ModelPitch
     }
 }

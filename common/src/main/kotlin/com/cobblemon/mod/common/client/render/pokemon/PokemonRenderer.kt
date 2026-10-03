@@ -149,7 +149,19 @@ class PokemonRenderer(
         if (entity.passengers.isNotEmpty()) {
             renderRiding(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
         } else {
-            super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+            val tilt = ModelPitch.tiltDegrees(entity, partialTicks)
+            if (tilt != 0F) {
+                poseMatrix.pushPose()
+                val yaw = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot)
+                val transformationMatrix = ModelPitch.aroundCentre(entity, ModelPitch.orientation(yaw, tilt))
+                // Pre-undo yaw rotation, the orientation already has it
+                transformationMatrix.rotate(Axis.YP.rotationDegrees(yaw + 180F))
+                poseMatrix.last().pose().mul(transformationMatrix)
+                super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+                poseMatrix.popPose()
+            } else {
+                super.render(entity, entityYaw, partialTicks, poseMatrix, buffer, packedLight)
+            }
         }
 
         // Call rendering for alpha eye trail

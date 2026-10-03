@@ -33,7 +33,7 @@ class DynamicAnimationData(val ride: PokemonEntity)
 {
     companion object {
         // Blend time for motion values, they catch up within 1.5x this. Longer is smoother but lags more
-        const val MOTION_BLEND_SECONDS = 0.5F
+        const val MOTION_BLEND_SECONDS = 0.8F
         // Rider input comes straight from key presses so it catches up quicker
         const val INPUT_BLEND_SECONDS = 0.3F
     }
@@ -148,7 +148,7 @@ class DynamicAnimationData(val ride: PokemonEntity)
             ).scale(20.0)
             // Unridden turning comes straight from the heading ease, it's already smooth
             if (!activeRide) {
-                angDelta = Vec3(angDelta.x, ride.heading.yaw.velocity().toDouble(), angDelta.z)
+                angDelta = Vec3(angDelta.x, ride.heading.yaw.velocity().toDouble() * -0.5, angDelta.z)
             }
 
             /******************************************************
@@ -177,7 +177,7 @@ class DynamicAnimationData(val ride: PokemonEntity)
         }
         val input = if(driver != null && activeRide) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
         driverInputSpring.update(input)
-        if (activeRide) rotDeltaSpring.update(angDelta) else rotDeltaSpring.snap(angDelta)
+        if (activeRide) rotDeltaSpring.update(angDelta) else rotDeltaSpring.follow(angDelta)
         velocitySpring.update(currentVelocity)
         rotSpring.update(currRot)
 

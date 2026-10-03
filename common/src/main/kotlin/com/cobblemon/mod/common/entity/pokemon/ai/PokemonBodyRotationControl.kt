@@ -10,23 +10,24 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import kotlin.math.abs
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.control.BodyRotationControl
 
 /**
  * Controls body movement of pokemon. Runs on both sides.
  *
- * Server: the body always faces yRot. When stationary and the head is at its limit, the body turns toward the head
- * through the heading ease one turn at a time.
+ * Server: the body always faces yRot. When standing still it turns towards what it's looking at through the heading
+ * ease. Ground mons turn once, just far enough for the head to reach. Floating ones keep following the look.
  * Client: the body follows the same heading ease as the server, run from the synced heading target.
  */
 class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotationControl(pokemon) {
     private var headingStarted = false
 
     companion object {
-        // Grounded mons turn in big steps so their feet don't slide, floating ones drift round
-        const val GROUNDED_BODY_TURN_FRACTION = 0.8F
-        const val FLOATING_BODY_TURN_FRACTION = 0.1F
+        // Share of the head's yaw limit a standing ground mon is happy to look across before turning its body.
+        // Posers usually limit the head well below the full limit so the body turns to keep things in that range
+        const val STANDING_TURN_HEAD_REACH_FRACTION = 0.25F
     }
 
     override fun clientTick() {
@@ -46,13 +47,22 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
 
     private fun followHeading() {
         if (!isMoving()) {
-            val bodyTurnRequest = (pokemon.lookControl as? PokemonLookControl)?.bodyTurnRequest ?: 0F
-            // Finish one turn before starting the next so ground mons step round instead of sliding
-            if (bodyTurnRequest != 0F && pokemon.stationaryTurnTarget == null) {
-                val pose = pokemon.getCurrentPoseType()
-                val floating = pose in PoseType.FLYING_POSES || pose in PoseType.SWIMMING_POSES
-                val fraction = if (floating) FLOATING_BODY_TURN_FRACTION else GROUNDED_BODY_TURN_FRACTION
-                pokemon.stationaryTurnTarget = Mth.wrapDegrees(pokemon.yRot + Mth.wrapDegrees(pokemon.yHeadRot - pokemon.yRot) * fraction)
+            val lookYaw = (pokemon.lookControl as? PokemonLookControl)?.lookTargetYaw
+            val pose = pokemon.getCurrentPoseType()
+            val floating = pose in PoseType.FLYING_POSES || pose in PoseType.SWIMMING_POSES
+            if (floating && lookYaw != null) {
+                // Nothing to plant so keep easing towards whatever it's looking at
+                pokemon.stationaryTurnTarget = Mth.wrapDegrees(lookYaw)
+                pokemon.stationaryTurnFloating = true
+            } else if (lookYaw != null && pokemon.stationaryTurnTarget == null) {
+                val offset = Mth.wrapDegrees(lookYaw - pokemon.yRot)
+                val comfortableReach = pokemon.maxHeadYRot * STANDING_TURN_HEAD_REACH_FRACTION
+                if (abs(offset) > comfortableReach) {
+                    // Turn the body in one go so the head is comfortable looking at it
+                    val turn = offset - Math.copySign(comfortableReach, offset)
+                    pokemon.stationaryTurnTarget = Mth.wrapDegrees(pokemon.yRot + turn)
+                    pokemon.stationaryTurnFloating = false
+                }
             }
         }
 
@@ -71,8 +81,12 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
             headingStarted = true
         }
         val target = pokemon.entityData.get(PokemonEntity.HEADING_TARGET)
-        if (target.z > 0F) {
-            pokemon.heading.steer(target.x, target.y)
+        if (target.z > 2.5F) {
+            pokemon.heading.steer(target.x, target.y, PokemonMoveControl.STANDING_TURN_BLEND_SECONDS)
+        } else if (target.z > 1.5F) {
+            pokemon.heading.steer(target.x, target.y, PokemonMoveControl.FLOATING_TURN_BLEND_SECONDS)
+        } else if (target.z > 0F) {
+            pokemon.heading.steer(target.x, target.y, pokemon.entityData.get(PokemonEntity.HEADING_TRAVEL_BLEND))
         } else {
             // Ease rather than snap so stationary turns from the server don't jump
             pokemon.heading.settle(pokemon.yRot, snap = false)

@@ -48,6 +48,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
+import com.cobblemon.mod.common.client.render.pokemon.ModelPitch
 import com.mojang.math.Axis
 import net.minecraft.Util
 import net.minecraft.client.model.geom.ModelPart
@@ -776,7 +777,14 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 matrixStack.mulPose(transformationMatrix)
             } else {
                 yRot = Mth.lerp(state.getPartialTicks(), entity.yBodyRotO, entity.yBodyRot)
-                yRot = 180f - Mth.wrapDegrees(yRot)
+                val tilt = ModelPitch.tiltDegrees(entity, state.getPartialTicks())
+                if (tilt != 0F) {
+                    // Same as the model tilt in PokemonRenderer
+                    matrixStack.mulPose(ModelPitch.aroundCentre(entity, ModelPitch.orientation(yRot, tilt)))
+                    yRot = 0F
+                } else {
+                    yRot = 180f - Mth.wrapDegrees(yRot)
+                }
             }
         } else if (entity is EmptyPokeBallEntity) {
             scale = 0.7F

@@ -33,12 +33,15 @@ class Vec3Ease(
         private set
 
     private val axes = Array(3) { InertialVals() }
+    // Last tick's value while following a value that's already smooth, null while easing
+    private var followedFrom: Vec3? = null
     // How far along the curve one tick is
     private val step = SECONDS_PER_TICK / blendTime
     private var target = Vec3.ZERO
 
     /** Moves one tick towards [newTarget] */
     fun update(newTarget: Vec3) {
+        followedFrom = null
         val current = doubleArrayOf(value.x, value.y, value.z)
         val oldGoal = doubleArrayOf(target.x, target.y, target.z)
         val goal = doubleArrayOf(newTarget.x, newTarget.y, newTarget.z)
@@ -65,8 +68,16 @@ class Vec3Ease(
         value = Vec3(current[0], current[1], current[2])
     }
 
+    /** Takes [to] as is for something already smooth. Still blends from last tick's value between ticks */
+    fun follow(to: Vec3) {
+        val from = value
+        snap(to)
+        followedFrom = from
+    }
+
     /** Jumps straight to [to] with no easing */
     fun snap(to: Vec3) {
+        followedFrom = null
         val components = floatArrayOf(to.x.toFloat(), to.y.toFloat(), to.z.toFloat())
         for (i in 0..2) {
             axes[i].t = 1F
@@ -79,6 +90,15 @@ class Vec3Ease(
 
     /** Value between last tick and this one read straight off the curve. [lookBackTick] isn't used anymore */
     fun getInterpolated(partialTick: Double, @Suppress("UNUSED_PARAMETER") lookBackTick: Int = 0): Vec3 {
+        followedFrom?.let { from ->
+            if (!isAngle) return from.add(value.subtract(from).scale(partialTick))
+            // Short way around for angles
+            return Vec3(
+                Mth.wrapDegrees(from.x + Mth.wrapDegrees(value.x - from.x) * partialTick),
+                Mth.wrapDegrees(from.y + Mth.wrapDegrees(value.y - from.y) * partialTick),
+                Mth.wrapDegrees(from.z + Mth.wrapDegrees(value.z - from.z) * partialTick)
+            )
+        }
         val back = step * (1 - partialTick.toFloat())
         val x = axes[0].let { it.offset + smoothstep(it.t - back, it.s) }.toDouble()
         val y = axes[1].let { it.offset + smoothstep(it.t - back, it.s) }.toDouble()

@@ -223,8 +223,11 @@ open class PokemonEntity(
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val IS_SPRINTING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
-        // Heading the server is easing towards as yaw, pitch and 1 when steering or 0 when not
+        // Heading the server is easing towards as yaw, pitch and 0 when not steering, 1 when steering, 2 for a floating look turn
+        // and 3 for a standing look turn
         @JvmStatic val HEADING_TARGET = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.VECTOR3)
+        // Blend time in seconds travel turns use for how the pokemon is moving
+        @JvmStatic val HEADING_TRAVEL_BLEND = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -337,6 +340,8 @@ open class PokemonEntity(
     val heading = HeadingEase()
     /** Yaw a standing pokemon is turning its body to, set by PokemonBodyRotationControl and eased by PokemonMoveControl */
     var stationaryTurnTarget: Float? = null
+    /** Whether that turn is a floating one, which uses the slower floating turn blend */
+    var stationaryTurnFloating = false
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -488,6 +493,7 @@ open class PokemonEntity(
         builder.define(IS_ALPHA, false)
         builder.define(IS_SPRINTING, false)
         builder.define(HEADING_TARGET, Vector3f())
+        builder.define(HEADING_TRAVEL_BLEND, PokemonMoveControl.GROUND_HEADING_BLEND_SECONDS)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -732,6 +738,9 @@ open class PokemonEntity(
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
             yRot = yBodyRot
+            // hold the heading here too so turning starts from the spawn direction once this ends
+            heading.settle(yRot, snap = true)
+            stationaryTurnTarget = null
         }
 
         jumping = false

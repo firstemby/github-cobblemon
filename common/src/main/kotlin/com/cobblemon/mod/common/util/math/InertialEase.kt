@@ -17,7 +17,7 @@ import net.minecraft.util.Mth
  * With [isAngle] the value is in degrees and always eases the short way round.
  */
 class InertialEase(
-    private val blendTime: Float,
+    private var blendTime: Float,
     private val isAngle: Boolean = false
 ) {
     companion object {
@@ -29,7 +29,7 @@ class InertialEase(
 
     private val vals = InertialVals()
     // How far along the curve one tick is
-    private val step = SECONDS_PER_TICK / blendTime
+    private var step = SECONDS_PER_TICK / blendTime
     private var target = 0F
 
     /** Moves one tick towards [newTarget] */
@@ -50,6 +50,20 @@ class InertialEase(
                 vals.offset -= turns
                 value -= turns
             }
+        }
+    }
+
+    /** Changes how long easing takes. A curve in progress is re-fit so it keeps the same speed and target */
+    fun setBlendTime(newBlendTime: Float) {
+        if (newBlendTime == blendTime) return
+        val currentVelocity = velocity()
+        blendTime = newBlendTime
+        step = SECONDS_PER_TICK / blendTime
+        if (!isSettled()) {
+            val difference = if (isAngle) Mth.wrapDegrees(target - value) else target - value
+            // Velocity along the curve is per unit of curve time, which is blendTime seconds long
+            smoothstepSolve(vals, difference, currentVelocity * blendTime)
+            vals.offset = value - smoothstep(vals.t, vals.s)
         }
     }
 

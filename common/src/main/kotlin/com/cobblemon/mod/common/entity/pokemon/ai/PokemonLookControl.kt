@@ -9,41 +9,58 @@
 package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.util.math.InertialEase
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.control.LookControl
 
 /**
- * Controls head movement of pokemon. The head is clamped to the body within the look itself, and whatever
- * the head can't cover is left in [bodyTurnRequest] for [PokemonBodyRotationControl].
+ * Controls head movement of pokemon. The head is clamped to the body within the look itself, and
+ * [PokemonBodyRotationControl] turns the body using [lookTargetYaw].
  */
 class PokemonLookControl(private val pokemon: PokemonEntity) : LookControl(pokemon) {
-    /** Signed degrees the look target is past the head's yaw limit this tick. */
-    var bodyTurnRequest = 0F
+    companion object {
+        const val HEAD_BLEND_SECONDS = 0.5F
+    }
+
+    private val headYaw = InertialEase(HEAD_BLEND_SECONDS, isAngle = true)
+    private val headPitch = InertialEase(HEAD_BLEND_SECONDS, isAngle = true)
+    private var headStarted = false
+
+    /** Yaw towards what the pokemon is looking at, null when it isn't looking at anything */
+    var lookTargetYaw: Float? = null
         private set
 
     override fun tick() {
-        bodyTurnRequest = 0F
-        if (this.resetXRotOnTick()) {
-            this.mob.setXRot(0.0f)
+        lookTargetYaw = null
+        // Start from where the head already is instead of turning in from zero
+        if (!headStarted) {
+            headYaw.snap(mob.yHeadRot)
+            headPitch.snap(mob.xRot)
+            headStarted = true
         }
 
+        // Focus on where it's going while travelling looking  starts back up once it stops
+        if (!pokemon.navigation.isDone || pokemon.moveControl.hasWanted()) {
+            this.lookAtCooldown = 0
+        }
+
+        // nothing to look at so face forward and level out
+        var targetYaw = mob.yBodyRot
+        var targetPitch = 0F
+        val maxHeadTurn = mob.maxHeadYRot.toFloat()
         if (this.lookAtCooldown > 0) {
             --this.lookAtCooldown
-            getYRotD().ifPresent { targetYRot ->
-                val attemptedRot = rotateTowards(mob.yHeadRot, targetYRot, yMaxRotSpeed)
-                val headTurnAngle = Mth.wrapDegrees(attemptedRot - mob.yBodyRot)
-                val maxHeadTurn = mob.maxHeadYRot.toFloat()
-                val headTurn = Mth.clamp(headTurnAngle, -maxHeadTurn, maxHeadTurn)
-                bodyTurnRequest = headTurnAngle - headTurn
-                mob.yHeadRot = mob.yBodyRot + headTurn
+            getYRotD().ifPresent { lookYaw ->
+                lookTargetYaw = lookYaw
+                val offset = Mth.wrapDegrees(lookYaw - mob.yBodyRot)
+                targetYaw = mob.yBodyRot + Mth.clamp(offset, -maxHeadTurn, maxHeadTurn)
             }
-            getXRotD().ifPresent { targetXRot ->
-                mob.setXRot(rotateTowards(mob.getXRot(), targetXRot, xMaxRotAngle))
-            }
-        } else {
-            this.mob.yHeadRot = this.rotateTowards(this.mob.yHeadRot, this.mob.yBodyRot, 10.0f)
+            getXRotD().ifPresent { lookPitch -> targetPitch = lookPitch }
         }
 
-        this.clampHeadRotationToBody()
+        headYaw.update(Mth.wrapDegrees(targetYaw))
+        headPitch.update(targetPitch)
+        mob.yHeadRot = mob.yBodyRot + Mth.clamp(Mth.wrapDegrees(headYaw.value - mob.yBodyRot), -maxHeadTurn, maxHeadTurn)
+        mob.setXRot(headPitch.value)
     }
 }
