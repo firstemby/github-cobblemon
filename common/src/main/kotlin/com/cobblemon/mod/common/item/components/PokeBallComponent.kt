@@ -24,11 +24,10 @@ import net.minecraft.world.item.ItemStack
 
 data class PokeBallComponent(val name: ResourceLocation) {
     companion object {
-        // Codec to serialize/deserialize PokeBall
-        val CODEC: Codec<PokeBallComponent> = RecordCodecBuilder.create { instance ->
-            instance.group(
-                ResourceLocation.CODEC.fieldOf("pokeball_type").forGetter { it.name } // Serialize the move's name
-            ).apply(instance) { name -> PokeBallComponent(name) }
+        val CODEC: Codec<PokeBallComponent> = RecordCodecBuilder.create {
+            it
+                .group(ResourceLocation.CODEC.fieldOf("type").forGetter(PokeBallComponent::name))
+                .apply(it, ::PokeBallComponent)
         }
 
         val PACKET_CODEC: StreamCodec<ByteBuf, PokeBallComponent> = ByteBufCodecs.fromCodec(CODEC)
@@ -47,12 +46,6 @@ data class PokeBallComponent(val name: ResourceLocation) {
         }
 
         @JvmStatic
-        fun removePokeBall(stack: ItemStack): ItemStack {
-            stack.remove(CobblemonItemComponents.POKE_BALL)
-            return stack
-        }
-
-        @JvmStatic
         fun createStack(ball: PokeBall?): ItemStack {
             var result = PokeBalls.STRANGE_BALL
             if (ball == null) {
@@ -65,8 +58,6 @@ data class PokeBallComponent(val name: ResourceLocation) {
         }
 
     }
-
-    constructor(component: PokeBallComponent): this(component.name)
 
     val ball: PokeBall
         get() = PokeBalls.getPokeBall(name)
