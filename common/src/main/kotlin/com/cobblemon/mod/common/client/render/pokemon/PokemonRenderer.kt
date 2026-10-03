@@ -325,7 +325,7 @@ class PokemonRenderer(
 
         val beamColorVec4f = when(beamTarget) {
             is EmptyPokeBallEntity -> (beamTarget.delegate as EmptyPokeBallClientDelegate).getBeamColor()
-            else -> Integer.decode(entity.pokemon.caughtBall.beamColor).toRGBA()
+            else -> entity.pokemon.caughtBall.beamColor.rgb.toRGBA()
         }
 
         val beamSourcePosition = when {

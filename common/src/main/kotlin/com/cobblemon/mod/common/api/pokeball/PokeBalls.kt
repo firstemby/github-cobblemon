@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.FloatNumberRangeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.adapters.IntRangeAdapter
+import com.cobblemon.mod.common.util.adapters.LiteralHexColorAdapter
 import com.cobblemon.mod.common.util.asExpressionLike
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
@@ -47,6 +48,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
+import java.awt.Color
 import kotlin.math.roundToInt
 
 /**
@@ -68,6 +70,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
         .registerTypeAdapter(CatchRateModifier::class.java, CobblemonCatchRateModifierAdapter)
         .registerTypeAdapter(CaptureEffect::class.java, CobblemonCaptureEffectAdapter)
+        .registerTypeAdapter(Color::class.java, LiteralHexColorAdapter)
         .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
         .disableHtmlEscaping()
         .setPrettyPrinting()
@@ -384,7 +387,7 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
         throwPower: Float = 1.25f,
         ancient: Boolean = false,
-        color: String = "#ff1111"
+        color: Color = Color.decode("#ff1111")
     ): PokeBall {
         val identifier = cobblemonResource(name)
         val pokeball = PokeBall(identifier, modifier, effects, PokeBall.PokeBallProperties(), waterDragValue, model2d, model3d, throwPower, ancient, color)
@@ -396,6 +399,4 @@ object PokeBalls : JsonDataRegistry<PokeBall> {
         val identifier = cobblemonResource(name)
         return this.custom[identifier] ?: this.defaults[identifier]!!
     }
-
-    fun isAncient(identifier: ResourceLocation) = this.getPokeBall(identifier).ancient
 }

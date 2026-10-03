@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Rarity
+import java.awt.Color
 
 /**
  * Base poke ball object
@@ -48,17 +49,10 @@ class PokeBall(
     val model3d: ResourceLocation,
     val throwPower: Float,
     val ancient: Boolean = false,
-    val beamColor: String
+    val beamColor: Color
 ) {
-    init {
-        // color needs to be a hex string
-        if (!"""#[a-zA-Z0-9]{6}""".toRegex().matches(beamColor)) {
-            throw RuntimeException("")
-        }
-    }
-
     @Transient
-    val struct = ObjectValue<PokeBall>(this)
+    val struct = ObjectValue(this)
         .addPokeBallFunctions(this)
 //        .addFunction("item") {  } // requires a registry which is hard
 
