@@ -86,6 +86,7 @@
 - Make ride rotations less jittery in multiplayer.
 - Changes tm shelf discs to use textures instead of tinting and overlays to line up with item display
 - Blank TM can now be inserted into the Disc Shelf
+- Added TM creative tab
 - Recall animation now renders ball in hand with the player arm raised.
 - Made regional and Vivillon split-evo locations now mutually exclusive
 - Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.

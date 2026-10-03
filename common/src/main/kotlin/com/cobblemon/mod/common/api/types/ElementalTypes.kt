@@ -25,7 +25,8 @@ object ElementalTypes {
         hue = 0xE8E8DA,
         textureXMultiplier = 0,
         primaryColor = 0x8FA689,
-        secondaryColor = 0xFFFBE2
+        secondaryColor = 0xFFFBE2,
+        order = 0
     )
 
     @JvmField
@@ -35,7 +36,8 @@ object ElementalTypes {
         hue = 0xFF6E21,
         textureXMultiplier = 1,
         primaryColor = 0xF92D2D,
-        secondaryColor = 0xF99B1D
+        secondaryColor = 0xF99B1D,
+        order = 1
     )
 
     @JvmField
@@ -45,7 +47,8 @@ object ElementalTypes {
         hue = 0x3FA5FF,
         textureXMultiplier = 2,
         primaryColor = 0x377AF6,
-        secondaryColor = 0x50DDF9
+        secondaryColor = 0x50DDF9,
+        order = 2
     )
 
     @JvmField
@@ -55,7 +58,8 @@ object ElementalTypes {
         hue = 0x62D14F,
         textureXMultiplier = 3,
         primaryColor = 0x0EAE95,
-        secondaryColor = 0xC6F554
+        secondaryColor = 0xC6F554,
+        order = 3
     )
 
     @JvmField
@@ -65,7 +69,8 @@ object ElementalTypes {
         hue = 0xFFD314,
         textureXMultiplier = 4,
         primaryColor = 0xF7AB19,
-        secondaryColor = 0xFFF257
+        secondaryColor = 0xFFF257,
+        order = 4
     )
 
     @JvmField
@@ -75,7 +80,8 @@ object ElementalTypes {
         hue = 0x54F2F2,
         textureXMultiplier = 5,
         primaryColor = 0x41BAED,
-        secondaryColor = 0x91F4F9
+        secondaryColor = 0x91F4F9,
+        order = 5
     )
 
     @JvmField
@@ -85,7 +91,8 @@ object ElementalTypes {
         hue = 0xEF565D,
         textureXMultiplier = 6,
         primaryColor = 0xC8356B,
-        secondaryColor = 0xF36A3F
+        secondaryColor = 0xF36A3F,
+        order = 6
     )
 
     @JvmField
@@ -95,7 +102,8 @@ object ElementalTypes {
         hue = 0xD651FF,
         textureXMultiplier = 7,
         primaryColor = 0x7B41DD,
-        secondaryColor = 0xE568F4
+        secondaryColor = 0xE568F4,
+        order = 7
     )
 
     @JvmField
@@ -105,7 +113,8 @@ object ElementalTypes {
         hue = 0xF4A453,
         textureXMultiplier = 8,
         primaryColor = 0xE08835,
-        secondaryColor = 0xFFD057
+        secondaryColor = 0xFFD057,
+        order = 8
     )
 
     @JvmField
@@ -115,7 +124,8 @@ object ElementalTypes {
         hue = 0xB8B2FF,
         textureXMultiplier = 9,
         primaryColor = 0x6083F6,
-        secondaryColor = 0xD5CCFA
+        secondaryColor = 0xD5CCFA,
+        order = 9
     )
 
     @JvmField
@@ -125,7 +135,8 @@ object ElementalTypes {
         hue = 0xFF5E9E,
         textureXMultiplier = 10,
         primaryColor = 0xE553CE,
-        secondaryColor = 0xF69DD5
+        secondaryColor = 0xF69DD5,
+        order = 10
     )
 
     @JvmField
@@ -135,7 +146,8 @@ object ElementalTypes {
         hue = 0xD3D319,
         textureXMultiplier = 11,
         primaryColor = 0x9FBE1B,
-        secondaryColor = 0xE9FB5B
+        secondaryColor = 0xE9FB5B,
+        order = 11
     )
 
     @JvmField
@@ -145,7 +157,8 @@ object ElementalTypes {
         hue = 0xB7A16E,
         textureXMultiplier = 12,
         primaryColor = 0x9F814A,
-        secondaryColor = 0xEECB7A
+        secondaryColor = 0xEECB7A,
+        order = 12
     )
 
     @JvmField
@@ -155,7 +168,8 @@ object ElementalTypes {
         hue = 0x9C80F7,
         textureXMultiplier = 13,
         primaryColor = 0x4F57DD,
-        secondaryColor = 0xC182F1
+        secondaryColor = 0xC182F1,
+        order = 13
     )
 
     @JvmField
@@ -165,7 +179,8 @@ object ElementalTypes {
         hue = 0x7580FF,
         textureXMultiplier = 14,
         primaryColor = 0x4E68E2,
-        secondaryColor = 0x47C7F7
+        secondaryColor = 0x47C7F7,
+        order = 14
     )
 
     @JvmField
@@ -175,7 +190,8 @@ object ElementalTypes {
         hue = 0x587DA0,
         textureXMultiplier = 15,
         primaryColor = 0x465B99,
-        secondaryColor = 0x689EBF
+        secondaryColor = 0x689EBF,
+        order = 15
     )
 
     @JvmField
@@ -185,7 +201,8 @@ object ElementalTypes {
         hue = 0xABD1F4,
         textureXMultiplier = 16,
         primaryColor = 0x628CB9,
-        secondaryColor = 0xD6F7F3
+        secondaryColor = 0xD6F7F3,
+        order = 16
     )
 
     @JvmField
@@ -195,18 +212,21 @@ object ElementalTypes {
         hue = 0xFF7FE5,
         textureXMultiplier = 17,
         primaryColor = 0xE2678C,
-        secondaryColor = 0xF5A7B7
+        secondaryColor = 0xF5A7B7,
+        order = 17
     )
 
     @JvmStatic
-    fun register(name: String, displayName: MutableComponent, hue: Int, textureXMultiplier: Int, primaryColor: Int, secondaryColor: Int): ElementalType {
+    @JvmOverloads
+    fun register(name: String, displayName: MutableComponent, hue: Int, textureXMultiplier: Int, primaryColor: Int, secondaryColor: Int, order: Int = 1000): ElementalType {
         return ElementalType(
             name = name,
             displayName = displayName,
             hue = hue,
             textureXMultiplier = textureXMultiplier,
             primaryColor =  primaryColor,
-            secondaryColor = secondaryColor
+            secondaryColor = secondaryColor,
+            order = order
         ).also {
             allTypes.add(it)
         }
