@@ -391,6 +391,10 @@
 						"1.0": [0, 0, 0]
 					}
 				}
+			},
+			"timeline": {
+				"0.0833": "q.run_molang('cobblemon:stepsound_minecraft');",
+				"0.5833": "q.run_molang('cobblemon:stepsound_minecraft');"
 			}
 		},
 		"animation.mr_mime.ground_run": {
