@@ -15,6 +15,9 @@
   - Wearable items that can be placed down are exempt from this behaviour.
 - New Cosmetic Item for Pikachu: Paper
 
+### Fixes
+- Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
+### TEST
 ### Pokémon Added
 #### Generation 4
 - Snover
