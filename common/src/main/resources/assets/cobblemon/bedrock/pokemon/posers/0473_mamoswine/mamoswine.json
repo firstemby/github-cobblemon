@@ -65,10 +65,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mamoswine', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mamoswine', 'ride_ground_walk')"
-        }
+        "q.bedrock('mamoswine', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('mamoswine', 'blink')"]
     },
@@ -78,10 +75,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mamoswine', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mamoswine', 'ride_ground_run')"
-        }
+        "q.bedrock('mamoswine', 'ride_ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('mamoswine', 'blink')"]
     },

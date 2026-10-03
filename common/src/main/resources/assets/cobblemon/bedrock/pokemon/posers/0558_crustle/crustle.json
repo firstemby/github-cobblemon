@@ -75,10 +75,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('crustle', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('crustle', 'ride_ground_walk')"
-        }
+        "q.bedrock('crustle', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('crustle', 'blink')"]
     },
@@ -91,10 +88,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('crustle', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('crustle', 'ride_ground_run')"
-        }
+        "q.bedrock('crustle', 'ride_ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('crustle', 'blink')"]
     },

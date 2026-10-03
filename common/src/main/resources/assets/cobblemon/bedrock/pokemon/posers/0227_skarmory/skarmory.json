@@ -54,10 +54,7 @@
       "animations": [
         "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
         "q.bedrock('skarmory', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('skarmory', 'ride_ground_run')"
-        }
+        "q.bedrock('skarmory', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('skarmory', 'blink')"
@@ -79,10 +76,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('skarmory', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('skarmory', 'ride_ground_run')"
-        }
+        "q.bedrock('skarmory', 'ride_ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('skarmory', 'blink')"]
     },

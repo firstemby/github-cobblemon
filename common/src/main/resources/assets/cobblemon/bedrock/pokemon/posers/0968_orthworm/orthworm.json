@@ -38,10 +38,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('orthworm', 'ride_jump')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('orthworm', 'ride_ground_run')"
-        }
+        "q.bedrock('orthworm', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('orthworm', 'blink')"

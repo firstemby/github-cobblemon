@@ -29,10 +29,7 @@
       "isBattle": false,
       "animations": [
         "q.bedrock('klinklang', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('klinklang', 'ride_mount_run')"
-        }
+        "q.bedrock('klinklang', 'ride_mount_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('klinklang', 'idle_quirk')"

@@ -27,7 +27,7 @@
         "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_idle')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('archaludon', 'ride_ground_run')"
         }
       ],
@@ -63,7 +63,7 @@
         "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('archaludon', 'ride_ground_run')"
         }
       ],
@@ -81,7 +81,7 @@
         "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('archaludon', 'ride_ground_run')"
         }
       ],
@@ -95,10 +95,7 @@
       "animations": [
         "q.look('head_ai', 1, 1, 12.5, -12.5, 15, -15)",
         "q.bedrock('archaludon', 'ride_jump')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('archaludon', 'ride_ground_run')"
-        }
+        "q.bedrock('archaludon', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('archaludon', 'blink')"

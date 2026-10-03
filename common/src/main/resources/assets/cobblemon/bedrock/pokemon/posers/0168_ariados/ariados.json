@@ -62,10 +62,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('ariados', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('ariados', 'ride_ground_walk')"
-        }
+        "q.bedrock('ariados', 'ride_ground_walk')"
       ],
         "quirks": ["q.bedrock_quirk('ariados', 'blink')"],
       "transformTicks": 5
@@ -77,10 +74,7 @@
         "animations": [
           "q.look('head')",
           "q.bedrock('ariados', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('ariados', 'ride_ground_run')"
-        }
+        "q.bedrock('ariados', 'ride_ground_run')"
         ],
         "quirks": [
           "q.bedrock_quirk('ariados', 'blink')"

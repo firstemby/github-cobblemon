@@ -66,7 +66,7 @@
         "q.look('head_ai')",
         "q.bedrock('sneasler', 'ground_walk')",
         {
-          "condition": "q.has_entity && q.is_ridden",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('sneasler', 'ride_ground_walk')"
         }
       ],
@@ -82,7 +82,7 @@
         "q.look('head_ai')",
         "q.bedrock('sneasler', 'ground_run')",
         {
-          "condition": "q.has_entity && q.is_ridden",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('sneasler', 'ride_ground_run')"
         }
       ],

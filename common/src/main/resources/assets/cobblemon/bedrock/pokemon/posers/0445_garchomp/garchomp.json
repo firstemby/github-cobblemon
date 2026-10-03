@@ -31,10 +31,7 @@
         "q.look('head', 1, 1, 25, -25, 25, -25)",
         "q.look('neck', 1, 1, 25, -25, 25, -25)",
         "q.bedrock('garchomp', 'ride_jump_liquid')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('garchomp', 'ride_surfacewater_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('garchomp', 'blink')"
@@ -49,10 +46,7 @@
         "q.look('head', 1, 1, 25, -25, 25, -25)",
         "q.look('neck', 1, 1, 25, -25, 25, -25)",
         "q.bedrock('garchomp', 'ride_jump_land')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_ground_run')"
-        }
+        "q.bedrock('garchomp', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('garchomp', 'blink')"
@@ -212,10 +206,7 @@
       "poseTypes": ["WALK"],
       "animations": [
         "q.bedrock('garchomp', 'surfacewater_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('garchomp', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"],
       "transformedParts": [
@@ -236,10 +227,7 @@
         "q.look('head', 1, 1, 25, -25, 25, -25)",
         "q.look('neck', 1, 1, 25, -25, 25, -25)",
         "q.bedrock('garchomp', 'surfacewater_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('garchomp', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"],
       "transformedParts": [
@@ -260,10 +248,7 @@
         "q.look('head', 1, 1, 25, -25, 25, -25)",
         "q.look('neck', 1, 1, 25, -25, 25, -25)",
         "q.bedrock('garchomp', 'surfacewater_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('garchomp', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"],
       "transformTicks": 5,
@@ -278,10 +263,7 @@
         "q.look('head', 1, 1, 25, -25, 25, -25)",
         "q.look('neck', 1, 1, 25, -25, 25, -25)",
         "q.bedrock('garchomp', 'surfacewater_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('garchomp', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('garchomp', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('garchomp', 'blink')"]
     },

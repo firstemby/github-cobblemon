@@ -57,7 +57,7 @@
         "q.look('head')",
         "q.bedrock('salamence', 'air_idle')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_air_fly')"
         }
       ],
@@ -74,7 +74,7 @@
         "q.look('head')",
         "q.bedrock('salamence', 'air_fly')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_air_fly')"
         }
       ],
@@ -92,7 +92,7 @@
         "q.bedrock('salamence', 'air_glide')",
         "q.bedrock('salamence', 'ride_dive')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_air_glide')"
         }
       ],
@@ -109,7 +109,7 @@
         "q.look('head')",
         "q.bedrock('salamence', 'ride_jump')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_ground_run')"
         }
       ],
@@ -125,7 +125,7 @@
         "q.look('head')",
         "q.bedrock('salamence', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_ground_run')"
         }
       ],
@@ -141,7 +141,7 @@
         "q.look('head')",
         "q.bedrock('salamence', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('salamence', 'ride_ground_run')"
         }
       ],

@@ -39,7 +39,7 @@
         "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
         "q.bedrock('braviary_hisuian', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('braviary_hisuian', 'ride_ground_walk')"
         }
       ],
@@ -68,7 +68,7 @@
         "q.look('head_ai', 1, 1, 50, -10, 25, -25)",
         "q.bedrock('braviary_hisuian', 'air_fly')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('braviary_hisuian', 'ride_air_fly')"
         }
       ],
@@ -86,7 +86,7 @@
         "q.bedrock('braviary_hisuian', 'air_glide')",
         "q.bedrock('braviary_hisuian', 'ride_air_dive')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('braviary', 'ride_air_glide')"
         }
       ],

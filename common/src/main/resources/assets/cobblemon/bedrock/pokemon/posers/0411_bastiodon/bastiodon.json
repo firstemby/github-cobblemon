@@ -49,7 +49,7 @@
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_idle')",
         {
-          "condition": "q.has_entity && q.is_ridden",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('bastiodon', 'ride_ground_walk')"
         },
         {
@@ -87,7 +87,7 @@
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_walk')",
         {
-          "condition": "q.has_entity && q.is_ridden",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('bastiodon', 'ride_ground_walk')"
         },
         {
@@ -107,7 +107,7 @@
         "q.look('head')",
         "q.bedrock('bastiodon', 'ground_run')",
         {
-          "condition": "q.has_entity && q.is_ridden",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('bastiodon', 'ride_ground_walk')"
         },
         {

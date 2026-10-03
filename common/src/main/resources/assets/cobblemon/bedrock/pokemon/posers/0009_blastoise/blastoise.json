@@ -88,10 +88,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blastoise', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('blastoise', 'ride_ground_walk')"
-        }
+        "q.bedrock('blastoise', 'ride_ground_walk')"
       ],
       "transformTicks": 5,
       "transformToTicks": 5
@@ -104,10 +101,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blastoise', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('blastoise', 'ride_ground_run')"
-        }
+        "q.bedrock('blastoise', 'ride_ground_run')"
       ],
       "transformTicks": 5,
       "transformToTicks": 5
@@ -209,10 +203,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('blastoise', 'surfacewater_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('blastoise', 'ride_water_swim')"
-        }
+        "q.bedrock('blastoise', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('blastoise', 'blink')"

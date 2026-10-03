@@ -85,7 +85,7 @@
         "q.look('head', 1, 1, 35, -15, 15, -15)",
         "q.bedrock('girafarig', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('girafarig', 'ride_ground_walk')"
         }
       ],
@@ -104,7 +104,7 @@
         "q.look('head', 1, 1, 35, -15, 15, -15)",
         "q.bedrock('girafarig', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('girafarig', 'ride_ground_run')"
         }
       ],

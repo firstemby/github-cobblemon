@@ -59,10 +59,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mantine', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mantine', 'ride_water_swim')"
-        }
+        "q.bedrock('mantine', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('mantine', 'blink')"
@@ -75,10 +72,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mantine', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mantine', 'ride_water_swim')"
-        }
+        "q.bedrock('mantine', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('mantine', 'blink')"
@@ -91,10 +85,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mantine', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mantine', 'ride_water_swim')"
-        }
+        "q.bedrock('mantine', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('mantine', 'blink')"
@@ -107,10 +98,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mantine', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mantine', 'ride_water_swim')"
-        }
+        "q.bedrock('mantine', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('mantine', 'blink')"
@@ -121,10 +109,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('mantine', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('mantine', 'ride_water_swim')"
-        }
+        "q.bedrock('mantine', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('mantine', 'blink')"

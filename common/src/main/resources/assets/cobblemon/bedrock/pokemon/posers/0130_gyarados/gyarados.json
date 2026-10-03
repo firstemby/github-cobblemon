@@ -134,10 +134,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_ground_walk')"
-        }
+        "q.bedrock('gyarados', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -153,10 +150,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_ground_walk')"
-        }
+        "q.bedrock('gyarados', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -170,10 +164,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_water_swim')"
-        }
+        "q.bedrock('gyarados', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -191,10 +182,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_water_swim')"
-        }
+        "q.bedrock('gyarados', 'ride_water_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -258,10 +246,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'surface_water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_surface_water')"
-        }
+        "q.bedrock('gyarados', 'ride_surface_water')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -284,10 +269,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'surface_water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_surface_water')"
-        }
+        "q.bedrock('gyarados', 'ride_surface_water')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -306,10 +288,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'air_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_air_fly')"
-        }
+        "q.bedrock('gyarados', 'ride_air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",
@@ -322,10 +301,7 @@
       "animations": [
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('gyarados', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('gyarados', 'ride_air_fly')"
-        }
+        "q.bedrock('gyarados', 'ride_air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('gyarados', 'blink')",

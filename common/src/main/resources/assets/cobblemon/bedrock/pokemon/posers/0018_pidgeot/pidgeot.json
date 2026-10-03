@@ -383,10 +383,7 @@
           "condition": "q.is_ridden",
           "animation": "q.bedrock('pidgeot', 'ride_air_glide')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('pidgeot', 'ride_dive')"
-        }
+        "q.bedrock('pidgeot', 'ride_dive')"
       ],
       "quirks": [
         "q.bedrock_quirk('pidgeot', 'blink')"

@@ -25,10 +25,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_blaze', 'ride_jump')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_blaze', 'ride_ground_run')"
-        }
+        "q.bedrock('tauros_paldean_blaze', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('tauros_paldean_blaze', 'blink')"
@@ -42,10 +39,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_blaze', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_blaze', 'ride_ground_run')"
-        }
+        "q.bedrock('tauros_paldean_blaze', 'ride_ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_blaze', 'blink')"]
     },
@@ -55,10 +49,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_blaze', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_blaze', 'ride_ground_walk')"
-        }
+        "q.bedrock('tauros_paldean_blaze', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_blaze', 'blink')"]
     },
@@ -68,10 +59,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_blaze', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_blaze', 'ride_ground_walk')"
-        }
+        "q.bedrock('tauros_paldean_blaze', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_blaze', 'blink')"]
     },

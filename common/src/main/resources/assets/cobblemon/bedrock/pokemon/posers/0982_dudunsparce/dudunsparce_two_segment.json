@@ -43,10 +43,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('dudunsparce_two_segment', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('dudunsparce_two_segment', 'ride_ground_walk')"
-        }
+        "q.bedrock('dudunsparce_two_segment', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('dudunsparce_two_segment', 'blink')","q.bedrock_quirk('dudunsparce_two_segment', 'wingflap_quirk')"
@@ -74,10 +71,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('dudunsparce_two_segment', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('dudunsparce_two_segment', 'ride_ground_walk')"
-        }
+        "q.bedrock('dudunsparce_two_segment', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('dudunsparce_two_segment', 'blink')"
@@ -90,10 +84,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('dudunsparce_two_segment', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('dudunsparce_two_segment', 'ride_ground_run')"
-        }
+        "q.bedrock('dudunsparce_two_segment', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('dudunsparce_two_segment', 'blink')"

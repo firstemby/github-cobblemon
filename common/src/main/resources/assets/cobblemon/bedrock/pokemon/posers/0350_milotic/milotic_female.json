@@ -14,10 +14,7 @@
       "isTouchingWater": false,
       "animations": [
         "q.bedrock('milotic', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('milotic', 'ride_water_swim')"
-        }
+        "q.bedrock('milotic', 'ride_water_swim')"
       ],
       "transformTicks": 3,
       "transformToTicks": 3
@@ -62,10 +59,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('milotic', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('milotic', 'ride_water_swim')"
-        }
+        "q.bedrock('milotic', 'ride_water_swim')"
       ],
       "quirks": ["q.bedrock_quirk('milotic', 'blink')"]
     },
@@ -75,10 +69,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('milotic', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('milotic', 'ride_water_swim')"
-        }
+        "q.bedrock('milotic', 'ride_water_swim')"
       ],
       "quirks": ["q.bedrock_quirk('milotic', 'blink')"]
     },

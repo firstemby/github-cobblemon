@@ -25,10 +25,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('noivern', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('noivern', 'ride_ground')"
-        }
+        "q.bedrock('noivern', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
@@ -47,10 +44,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('noivern', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('noivern', 'ride_ground')"
-        }
+        "q.bedrock('noivern', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
@@ -62,10 +56,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('noivern', 'ground_run2')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('noivern', 'ride_ground')"
-        }
+        "q.bedrock('noivern', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
@@ -87,10 +78,7 @@
       "animations": [
         "q.look('head_ai')",
         "q.bedrock('noivern', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('noivern', 'ride_air_fly')"
-        }
+        "q.bedrock('noivern', 'ride_air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"
@@ -103,10 +91,7 @@
         "q.look('head_ai')",
         "q.bedrock('noivern', 'air_glide')",
         "q.bedrock('noivern', 'ride_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('noivern', 'ride_air_glide')"
-        }
+        "q.bedrock('noivern', 'ride_air_glide')"
       ],
       "quirks": [
         "q.bedrock_quirk('noivern', 'blink')"

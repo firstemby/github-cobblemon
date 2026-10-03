@@ -167,10 +167,7 @@
         "condition": "!q.in_air && q.is_sprinting",
         "animations": [
           "q.bedrock('metagross', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('metagross', 'ride_ground_run')"
-        }
+        "q.bedrock('metagross', 'ride_ground_run')"
         ],
         "quirks": [
           "q.bedrock_quirk('metagross', 'blink')"

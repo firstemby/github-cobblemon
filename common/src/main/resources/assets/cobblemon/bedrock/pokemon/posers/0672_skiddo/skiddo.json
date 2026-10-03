@@ -83,7 +83,7 @@
         "q.look('head')",
         "q.bedrock('skiddo', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('skiddo', 'ride_ground_walk')"
         }
       ],
@@ -101,7 +101,7 @@
         "q.look('head')",
         "q.bedrock('skiddo', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('skiddo', 'ride_ground_run')"
         }
       ],

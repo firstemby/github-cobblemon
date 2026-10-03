@@ -26,10 +26,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'ride_jump_liquid')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('tauros_paldean_aqua', 'blink')"
@@ -43,10 +40,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'ride_jump_land')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_ground_run')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('tauros_paldean_aqua', 'blink')"
@@ -61,10 +55,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_ground_run')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_ground_run')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
@@ -75,10 +66,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_ground_walk')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
@@ -89,10 +77,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_ground_walk')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
@@ -101,10 +86,7 @@
       "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.bedrock('tauros_paldean_aqua', 'surfacewater_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },
@@ -114,10 +96,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tauros_paldean_aqua', 'surfacewater_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('tauros_paldean_aqua', 'ride_surfacewater_swim')"
       ],
       "quirks": ["q.bedrock_quirk('tauros_paldean_aqua', 'blink')"]
     },

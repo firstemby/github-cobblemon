@@ -81,10 +81,7 @@
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('altaria', 'hold_item')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('altaria', 'ride_air_fly')"
-        }
+        "q.bedrock('altaria', 'ride_air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('altaria', 'blink')"
@@ -104,10 +101,7 @@
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('altaria', 'hold_item')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('altaria', 'ride_air_fly')"
-        }
+        "q.bedrock('altaria', 'ride_air_fly')"
       ],
       "quirks": [
         "q.bedrock_quirk('altaria', 'blink')"
