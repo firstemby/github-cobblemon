@@ -20,6 +20,7 @@ import com.cobblemon.mod.common.client.entity.PokemonClientDelegate.Companion.BE
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
 import com.cobblemon.mod.common.client.render.item.HeldItemRenderer
+import com.cobblemon.mod.common.client.render.shader.TeraOverlay
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pokemon.PosablePokemonEntityModel
@@ -144,6 +145,7 @@ class PokemonRenderer(
         }
 
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
+        modelNow.teraOverlay = TeraOverlay.forAspects(entity.aspects, getTextureLocation(entity))
 
 
         if (entity.passengers.isNotEmpty()) {

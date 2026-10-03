@@ -1,0 +1,47 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package com.cobblemon.mod.common.client.render.shader
+
+import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.VertexFormat
+import net.minecraft.Util
+import net.minecraft.client.renderer.RenderStateShard
+import net.minecraft.client.renderer.RenderType
+import net.minecraft.resources.ResourceLocation
+
+object TeraOverlay {
+    private const val ASPECT = "terastal"
+
+    private val renderType = Util.memoize { texture: ResourceLocation ->
+        RenderType.create(
+            "cobblemon_tera",
+            DefaultVertexFormat.NEW_ENTITY,
+            VertexFormat.Mode.QUADS,
+            256,
+            true,
+            true,
+            RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.ShaderStateShard { CobblemonShaders.TERA })
+                .setTextureState(RenderStateShard.TextureStateShard(texture, false, false))
+                .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                .setLightmapState(RenderStateShard.LIGHTMAP)
+                .setOverlayState(RenderStateShard.OVERLAY)
+                .setCullState(RenderStateShard.CULL)
+                .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                .createCompositeState(false)
+        )
+    }
+
+    fun forAspects(aspects: Set<String>, texture: ResourceLocation): Pair<RenderType, Int>? {
+        val aspect = aspects.firstOrNull { it == ASPECT || it.startsWith("$ASPECT-") } ?: return null
+        val hue = ElementalTypes.get(aspect.removePrefix(ASPECT).removePrefix("-"))?.hue
+        return renderType.apply(texture) to (0xFF000000.toInt() or (hue ?: 0xFFFFFF))
+    }
+}

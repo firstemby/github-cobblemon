@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
+import com.cobblemon.mod.common.integration.IrisCompatibility;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.DeltaTracker;
@@ -46,6 +47,18 @@ public class GameRendererMixin {
             ClientTaskTracker.INSTANCE.update((newTime - lastTime) / 1000F);
         }
         lastTime = newTime;
+    }
+
+    @Inject(
+        method = "renderLevel",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V",
+            shift = At.Shift.AFTER
+        )
+    )
+    private void cobblemon$drawAfterShaderPack(DeltaTracker deltaTracker, CallbackInfo ci) {
+        IrisCompatibility.INSTANCE.drawDeferred();
     }
 
     @ModifyArg(

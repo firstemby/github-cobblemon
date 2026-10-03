@@ -53,6 +53,7 @@ import net.minecraft.Util
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
+import com.cobblemon.mod.common.integration.IrisCompatibility
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
@@ -176,6 +177,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     var currentState: PosableState? = null
 
     @Transient
+    var teraOverlay: Pair<RenderType, Int>? = null
+
+    @Transient
     val functions = QueryStruct(this.animationFunctions())
 
     @Transient
@@ -264,6 +268,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         currentLayers = emptyList()
         bufferProvider = null
         currentState = null
+        teraOverlay = null
     }
 
     /**
@@ -489,6 +494,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                     tintColor
                 )
                 stack.popPose()
+            }
+            teraOverlay?.let { (renderType, tint) ->
+                IrisCompatibility.renderAfterShaderPack(provider, renderType) { rootPart.render(context, stack, it, packedLight, packedOverlay, tint) }
             }
         }
     }
