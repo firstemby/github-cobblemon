@@ -24,11 +24,11 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 
-class MoLangModifier(
+class ExpressionModifier(
     val query: ExpressionLike = "1.0".asExpressionLike(),
 ) : CatchRateModifier {
     companion object {
-        const val VARIANT = "molang"
+        const val VARIANT = "expression"
         val runtime = MoLangRuntime().setup()
     }
 

@@ -15,8 +15,9 @@ import com.cobblemon.mod.common.api.pokeball.catching.modifiers.BaseStatModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.CatchRateModifierAdapter
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.GuaranteedModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.LabelModifier
-import com.cobblemon.mod.common.api.pokeball.catching.modifiers.MoLangModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.ExpressionModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.PropertyBasedModifier
+import com.cobblemon.mod.common.api.pokeball.catching.modifiers.ScriptModifier
 import com.cobblemon.mod.common.api.pokeball.catching.modifiers.SimpleModifier
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.util.readString
@@ -43,7 +44,8 @@ object CobblemonCatchRateModifierAdapter : CatchRateModifierAdapter {
         this.registerType(GuaranteedModifier.VARIANT, GuaranteedModifier::class)
         this.registerType(PropertyBasedModifier.VARIANT, PropertyBasedModifier::class)
         this.registerType(LabelModifier.VARIANT, LabelModifier::class)
-        this.registerType(MoLangModifier.VARIANT, MoLangModifier::class)
+        this.registerType(ExpressionModifier.VARIANT, ExpressionModifier::class)
+        this.registerType(ScriptModifier.VARIANT, ScriptModifier::class)
     }
 
     val gson: Gson by lazy {
