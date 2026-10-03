@@ -16,8 +16,7 @@ import com.cobblemon.mod.common.block.MintBlock.MintType
 import com.cobblemon.mod.common.block.campfirepot.CampfireBlock
 import com.cobblemon.mod.common.block.campfirepot.CampfirePotBlock
 import com.cobblemon.mod.common.block.chest.GildedChestBlock
-import com.cobblemon.mod.common.block.decor.ActivatableDecorationBlock
-import com.cobblemon.mod.common.block.decor.RingTargetBlock
+import com.cobblemon.mod.common.block.decor.*
 import com.cobblemon.mod.common.block.general.BaleBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationCarpetBlock
 import com.cobblemon.mod.common.block.general.HorizontalRotationalBlock
@@ -28,6 +27,7 @@ import com.cobblemon.mod.common.block.sign.CobblemonSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallHangingSignBlock
 import com.cobblemon.mod.common.block.sign.CobblemonWallSignBlock
 import com.cobblemon.mod.common.block.tmmachine.TMMachineBlock
+import com.cobblemon.mod.common.block.general.MintLitterBlock
 import com.cobblemon.mod.common.mixin.invoker.BlocksInvoker
 import com.cobblemon.mod.common.mixin.invoker.DoorBlockInvoker
 import com.cobblemon.mod.common.mixin.invoker.FireBlockInvoker
@@ -858,6 +858,64 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val POTTED_SACCHARINE_SAPLING = this.create("potted_saccharine_sapling", BlocksInvoker.createFlowerPotBlock(SACCHARINE_SAPLING))
 
     @JvmField
+    val RED_MINT_LEAF_LITTER = this.mintLitter("red_mint_leaf_litter", MapColor.COLOR_RED)
+    @JvmField
+    val POTTED_RED_MINT = this.pottedPlant("potted_red_mint", RED_MINT_LEAF_LITTER)
+    @JvmField
+    val BLUE_MINT_LEAF_LITTER = this.mintLitter("blue_mint_leaf_litter", MapColor.COLOR_BLUE)
+    @JvmField
+    val POTTED_BLUE_MINT = this.pottedPlant("potted_blue_mint", BLUE_MINT_LEAF_LITTER)
+    @JvmField
+    val CYAN_MINT_LEAF_LITTER = this.mintLitter("cyan_mint_leaf_litter", MapColor.COLOR_CYAN)
+    @JvmField
+    val POTTED_CYAN_MINT = this.pottedPlant("potted_cyan_mint", CYAN_MINT_LEAF_LITTER)
+    @JvmField
+    val PINK_MINT_LEAF_LITTER = this.mintLitter("pink_mint_leaf_litter", MapColor.COLOR_PINK)
+    @JvmField
+    val POTTED_PINK_MINT = this.pottedPlant("potted_pink_mint", PINK_MINT_LEAF_LITTER)
+    @JvmField
+    val GREEN_MINT_LEAF_LITTER = this.mintLitter("green_mint_leaf_litter", MapColor.COLOR_GREEN)
+    @JvmField
+    val POTTED_GREEN_MINT = this.pottedPlant("potted_green_mint", GREEN_MINT_LEAF_LITTER)
+    @JvmField
+    val WHITE_MINT_LEAF_LITTER = this.mintLitter("white_mint_leaf_litter", MapColor.SNOW)
+    @JvmField
+    val POTTED_WHITE_MINT = this.pottedPlant("potted_white_mint", WHITE_MINT_LEAF_LITTER)
+
+    @JvmField
+    val LOBAILA = this.create("lobaila", LobailaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    @JvmField
+    val POMOHANA = this.create("pomohana", PomohanaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    @JvmField
+    val PAUVILLEA = this.create("pauvillea",PauvilleaFlowerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY)))
+    @JvmField
+    val WISTENSU = this.create("wistensu", WistensuFlowerHeadBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY).lightLevel{11}))
+    @JvmField
+    val WISTENSU_VINE = this.create("wistensu_vine", WistensuFlowerVineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().sound(SoundType.GRASS).instabreak().ignitedByLava().pushReaction(PushReaction.DESTROY)))
+
+    @JvmField
+    val ELECTRIC_SEED = this.terrainSeed("electric_seed", TerrainSeedBlock.TerrainSeedType.ELECTRIC)
+    @JvmField
+    val PSYCHIC_SEED = this.terrainSeed("psychic_seed", TerrainSeedBlock.TerrainSeedType.PSYCHIC)
+    @JvmField
+    val MISTY_SEED = this.terrainSeed("misty_seed", TerrainSeedBlock.TerrainSeedType.MISTY)
+    @JvmField
+    val GRASSY_SEED = this.terrainSeed("grassy_seed", TerrainSeedBlock.TerrainSeedType.GRASSY)
+    @JvmField
+    val VOLTACONIA = this.terrainPlant("voltaconia") { state -> if (state.getValue(TerrainPlantBlock.GLOWING)) 8 else 0 }
+    @JvmField
+    val VERDROOT = this.terrainPlant("verdroot") { state -> if (state.getValue(TerrainPlantBlock.GLOWING)) 5 else 0 }
+    @JvmField
+    val LUCIBELL = this.terrainPlant("lucibell") { state -> if (state.getValue(TerrainPlantBlock.GLOWING)) 8 else 0 }
+    @JvmField
+    val MISTLEAF = this.create(
+        "mistleaf",
+        MistleafFlowerBlock {
+            if ((it.getValue(MistleafFlowerBlock.GLOWING) >= 1)) it.getValue(MistleafFlowerBlock.GLOWING) + 2 else 0
+        }
+    )
+
+    @JvmField
     val HEARTY_GRAIN_BALE = this.create("hearty_grain_bale", BaleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instrument(NoteBlockInstrument.BANJO).strength(0.5F).sound(CobblemonSounds.HEARTY_GRAIN_BALE_SOUNDS)))
     @JvmField
     val TATAMI_BLOCK = this.create("tatami_block", HorizontalRotationalBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.1F).sound(CobblemonSounds.TATAMI_BLOCK_SOUNDS)))
@@ -1033,6 +1091,147 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     val YACHE_BERRY = this.berryBlock("yache")
     //val BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()))
 
+    @JvmField
+    val POTTED_AGUAV_BERRY = this.create("potted_aguav_berry", BlocksInvoker.createFlowerPotBlock(AGUAV_BERRY))
+    @JvmField
+    val POTTED_APICOT_BERRY = this.create("potted_apicot_berry", BlocksInvoker.createFlowerPotBlock(APICOT_BERRY))
+    @JvmField
+    val POTTED_ASPEAR_BERRY = this.create("potted_aspear_berry", BlocksInvoker.createFlowerPotBlock(ASPEAR_BERRY))
+    @JvmField
+    val POTTED_BABIRI_BERRY = this.create("potted_babiri_berry", BlocksInvoker.createFlowerPotBlock(BABIRI_BERRY))
+    @JvmField
+    val POTTED_BELUE_BERRY = this.create("potted_belue_berry", BlocksInvoker.createFlowerPotBlock(BELUE_BERRY))
+    @JvmField
+    val POTTED_BLUK_BERRY = this.create("potted_bluk_berry", BlocksInvoker.createFlowerPotBlock(BLUK_BERRY))
+    @JvmField
+    val POTTED_CHARTI_BERRY = this.create("potted_charti_berry", BlocksInvoker.createFlowerPotBlock(CHARTI_BERRY))
+    @JvmField
+    val POTTED_CHERI_BERRY = this.create("potted_cheri_berry", BlocksInvoker.createFlowerPotBlock(CHERI_BERRY))
+    @JvmField
+    val POTTED_CHESTO_BERRY = this.create("potted_chesto_berry", BlocksInvoker.createFlowerPotBlock(CHESTO_BERRY))
+    @JvmField
+    val POTTED_CHILAN_BERRY = this.create("potted_chilan_berry", BlocksInvoker.createFlowerPotBlock(CHILAN_BERRY))
+    @JvmField
+    val POTTED_CHOPLE_BERRY = this.create("potted_chople_berry", BlocksInvoker.createFlowerPotBlock(CHOPLE_BERRY))
+    @JvmField
+    val POTTED_COBA_BERRY = this.create("potted_coba_berry", BlocksInvoker.createFlowerPotBlock(COBA_BERRY))
+    @JvmField
+    val POTTED_COLBUR_BERRY = this.create("potted_colbur_berry", BlocksInvoker.createFlowerPotBlock(COLBUR_BERRY))
+    @JvmField
+    val POTTED_CORNN_BERRY = this.create("potted_cornn_berry", BlocksInvoker.createFlowerPotBlock(CORNN_BERRY))
+    @JvmField
+    val POTTED_CUSTAP_BERRY = this.create("potted_custap_berry", BlocksInvoker.createFlowerPotBlock(CUSTAP_BERRY))
+    @JvmField
+    val POTTED_DURIN_BERRY = this.create("potted_durin_berry", BlocksInvoker.createFlowerPotBlock(DURIN_BERRY))
+    @JvmField
+    val POTTED_EGGANT_BERRY = this.create("potted_eggant_berry", BlocksInvoker.createFlowerPotBlock(EGGANT_BERRY))
+    @JvmField
+    val POTTED_ENIGMA_BERRY = this.create("potted_enigma_berry", BlocksInvoker.createFlowerPotBlock(ENIGMA_BERRY))
+    @JvmField
+    val POTTED_FIGY_BERRY = this.create("potted_figy_berry", BlocksInvoker.createFlowerPotBlock(FIGY_BERRY))
+    @JvmField
+    val POTTED_GANLON_BERRY = this.create("potted_ganlon_berry", BlocksInvoker.createFlowerPotBlock(GANLON_BERRY))
+    @JvmField
+    val POTTED_GREPA_BERRY = this.create("potted_grepa_berry", BlocksInvoker.createFlowerPotBlock(GREPA_BERRY))
+    @JvmField
+    val POTTED_HABAN_BERRY = this.create("potted_haban_berry", BlocksInvoker.createFlowerPotBlock(HABAN_BERRY))
+    @JvmField
+    val POTTED_HONDEW_BERRY = this.create("potted_hondew_berry", BlocksInvoker.createFlowerPotBlock(HONDEW_BERRY))
+    @JvmField
+    val POTTED_HOPO_BERRY = this.create("potted_hopo_berry", BlocksInvoker.createFlowerPotBlock(HOPO_BERRY))
+    @JvmField
+    val POTTED_IAPAPA_BERRY = this.create("potted_iapapa_berry", BlocksInvoker.createFlowerPotBlock(IAPAPA_BERRY))
+    @JvmField
+    val POTTED_JABOCA_BERRY = this.create("potted_jaboca_berry", BlocksInvoker.createFlowerPotBlock(JABOCA_BERRY))
+    @JvmField
+    val POTTED_KASIB_BERRY = this.create("potted_kasib_berry", BlocksInvoker.createFlowerPotBlock(KASIB_BERRY))
+    @JvmField
+    val POTTED_KEBIA_BERRY = this.create("potted_kebia_berry", BlocksInvoker.createFlowerPotBlock(KEBIA_BERRY))
+    @JvmField
+    val POTTED_KEE_BERRY = this.create("potted_kee_berry", BlocksInvoker.createFlowerPotBlock(KEE_BERRY))
+    @JvmField
+    val POTTED_KELPSY_BERRY = this.create("potted_kelpsy_berry", BlocksInvoker.createFlowerPotBlock(KELPSY_BERRY))
+    @JvmField
+    val POTTED_LANSAT_BERRY = this.create("potted_lansat_berry", BlocksInvoker.createFlowerPotBlock(LANSAT_BERRY))
+    @JvmField
+    val POTTED_LEPPA_BERRY = this.create("potted_leppa_berry", BlocksInvoker.createFlowerPotBlock(LEPPA_BERRY))
+    @JvmField
+    val POTTED_LIECHI_BERRY = this.create("potted_liechi_berry", BlocksInvoker.createFlowerPotBlock(LIECHI_BERRY))
+    @JvmField
+    val POTTED_LUM_BERRY = this.create("potted_lum_berry", BlocksInvoker.createFlowerPotBlock(LUM_BERRY))
+    @JvmField
+    val POTTED_MAGO_BERRY = this.create("potted_mago_berry", BlocksInvoker.createFlowerPotBlock(MAGO_BERRY))
+    @JvmField
+    val POTTED_MAGOST_BERRY = this.create("potted_magost_berry", BlocksInvoker.createFlowerPotBlock(MAGOST_BERRY))
+    @JvmField
+    val POTTED_MARANGA_BERRY = this.create("potted_maranga_berry", BlocksInvoker.createFlowerPotBlock(MARANGA_BERRY))
+    @JvmField
+    val POTTED_MICLE_BERRY = this.create("potted_micle_berry", BlocksInvoker.createFlowerPotBlock(MICLE_BERRY))
+    @JvmField
+    val POTTED_NANAB_BERRY = this.create("potted_nanab_berry", BlocksInvoker.createFlowerPotBlock(NANAB_BERRY))
+    @JvmField
+    val POTTED_NOMEL_BERRY = this.create("potted_nomel_berry", BlocksInvoker.createFlowerPotBlock(NOMEL_BERRY))
+    @JvmField
+    val POTTED_OCCA_BERRY = this.create("potted_occa_berry", BlocksInvoker.createFlowerPotBlock(OCCA_BERRY))
+    @JvmField
+    val POTTED_ORAN_BERRY = this.create("potted_oran_berry", BlocksInvoker.createFlowerPotBlock(ORAN_BERRY))
+    @JvmField
+    val POTTED_PAMTRE_BERRY = this.create("potted_pamtre_berry", BlocksInvoker.createFlowerPotBlock(PAMTRE_BERRY))
+    @JvmField
+    val POTTED_PASSHO_BERRY = this.create("potted_passho_berry", BlocksInvoker.createFlowerPotBlock(PASSHO_BERRY))
+    @JvmField
+    val POTTED_PAYAPA_BERRY = this.create("potted_payapa_berry", BlocksInvoker.createFlowerPotBlock(PAYAPA_BERRY))
+    @JvmField
+    val POTTED_PECHA_BERRY = this.create("potted_pecha_berry", BlocksInvoker.createFlowerPotBlock(PECHA_BERRY))
+    @JvmField
+    val POTTED_PERSIM_BERRY = this.create("potted_persim_berry", BlocksInvoker.createFlowerPotBlock(PERSIM_BERRY))
+    @JvmField
+    val POTTED_PETAYA_BERRY = this.create("potted_petaya_berry", BlocksInvoker.createFlowerPotBlock(PETAYA_BERRY))
+    @JvmField
+    val POTTED_PINAP_BERRY = this.create("potted_pinap_berry", BlocksInvoker.createFlowerPotBlock(PINAP_BERRY))
+    @JvmField
+    val POTTED_POMEG_BERRY = this.create("potted_pomeg_berry", BlocksInvoker.createFlowerPotBlock(POMEG_BERRY))
+    @JvmField
+    val POTTED_QUALOT_BERRY = this.create("potted_qualot_berry", BlocksInvoker.createFlowerPotBlock(QUALOT_BERRY))
+    @JvmField
+    val POTTED_RABUTA_BERRY = this.create("potted_rabuta_berry", BlocksInvoker.createFlowerPotBlock(RABUTA_BERRY))
+    @JvmField
+    val POTTED_RAWST_BERRY = this.create("potted_rawst_berry", BlocksInvoker.createFlowerPotBlock(RAWST_BERRY))
+    @JvmField
+    val POTTED_RAZZ_BERRY = this.create("potted_razz_berry", BlocksInvoker.createFlowerPotBlock(RAZZ_BERRY))
+    @JvmField
+    val POTTED_RINDO_BERRY = this.create("potted_rindo_berry", BlocksInvoker.createFlowerPotBlock(RINDO_BERRY))
+    @JvmField
+    val POTTED_ROSELI_BERRY = this.create("potted_roseli_berry", BlocksInvoker.createFlowerPotBlock(ROSELI_BERRY))
+    @JvmField
+    val POTTED_ROWAP_BERRY = this.create("potted_rowap_berry", BlocksInvoker.createFlowerPotBlock(ROWAP_BERRY))
+    @JvmField
+    val POTTED_SALAC_BERRY = this.create("potted_salac_berry", BlocksInvoker.createFlowerPotBlock(SALAC_BERRY))
+    @JvmField
+    val POTTED_SHUCA_BERRY = this.create("potted_shuca_berry", BlocksInvoker.createFlowerPotBlock(SHUCA_BERRY))
+    @JvmField
+    val POTTED_SITRUS_BERRY = this.create("potted_sitrus_berry", BlocksInvoker.createFlowerPotBlock(SITRUS_BERRY))
+    @JvmField
+    val POTTED_SPELON_BERRY = this.create("potted_spelon_berry", BlocksInvoker.createFlowerPotBlock(SPELON_BERRY))
+    @JvmField
+    val POTTED_STARF_BERRY = this.create("potted_starf_berry", BlocksInvoker.createFlowerPotBlock(STARF_BERRY))
+    @JvmField
+    val POTTED_TAMATO_BERRY = this.create("potted_tamato_berry", BlocksInvoker.createFlowerPotBlock(TAMATO_BERRY))
+    @JvmField
+    val POTTED_TANGA_BERRY = this.create("potted_tanga_berry", BlocksInvoker.createFlowerPotBlock(TANGA_BERRY))
+    @JvmField
+    val POTTED_TOUGA_BERRY = this.create("potted_touga_berry", BlocksInvoker.createFlowerPotBlock(TOUGA_BERRY))
+    @JvmField
+    val POTTED_WACAN_BERRY = this.create("potted_wacan_berry", BlocksInvoker.createFlowerPotBlock(WACAN_BERRY))
+    @JvmField
+    val POTTED_WATMEL_BERRY = this.create("potted_watmel_berry", BlocksInvoker.createFlowerPotBlock(WATMEL_BERRY))
+    @JvmField
+    val POTTED_WEPEAR_BERRY = this.create("potted_wepear_berry", BlocksInvoker.createFlowerPotBlock(WEPEAR_BERRY))
+    @JvmField
+    val POTTED_WIKI_BERRY = this.create("potted_wiki_berry", BlocksInvoker.createFlowerPotBlock(WIKI_BERRY))
+    @JvmField
+    val POTTED_YACHE_BERRY = this.create("potted_yache_berry", BlocksInvoker.createFlowerPotBlock(YACHE_BERRY))
+
     init {
         /**
          * Makes all blocks in array flammable by adding them to FireBlock's flammableRegistry.
@@ -1134,4 +1333,48 @@ object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<
     }
 
     fun typeGemClusters() = typeGemClusters.toMap()
+
+    private fun pottedPlant(name: String, flower: Block) = this.create(name, BlocksInvoker.createFlowerPotBlock(flower))
+
+    private fun mintLitter(name: String, color: MapColor) = this.create(
+        name,
+        MintLitterBlock(
+            BlockBehaviour.Properties.of()
+                .sound(CobblemonSounds.MINT_SOUNDS)
+                .mapColor(color)
+                .noOcclusion()
+                .noCollission()
+                .pushReaction(PushReaction.DESTROY)
+        )
+    )
+
+    private fun terrainSeed(name: String, type: TerrainSeedBlock.TerrainSeedType) = this.create(
+        name,
+        TerrainSeedBlock(
+            type,
+            BlockBehaviour.Properties.of()
+                .pushReaction(PushReaction.DESTROY)
+                .ignitedByLava()
+                .mapColor(MapColor.PLANT)
+                .offsetType(BlockBehaviour.OffsetType.XZ)
+                .noCollission()
+                .randomTicks()
+                .instabreak()
+        )
+    )
+
+    private fun terrainPlant(name: String, lightLevel: (BlockState) -> Int) = this.create(
+        name,
+        TerrainPlantBlock(
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.PLANT)
+                .noCollission()
+                .instabreak()
+                .sound(SoundType.GRASS)
+                .offsetType(BlockBehaviour.OffsetType.XZ)
+                .ignitedByLava()
+                .pushReaction(PushReaction.DESTROY)
+                .lightLevel(lightLevel)
+        )
+    )
 }

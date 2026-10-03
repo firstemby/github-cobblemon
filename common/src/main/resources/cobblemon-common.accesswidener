@@ -156,3 +156,5 @@ transitive-accessible method net/minecraft/world/food/FoodData add (IF)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel setupAttackAnimation (Lnet/minecraft/world/entity/LivingEntity;F)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightArm (Lnet/minecraft/world/entity/LivingEntity;)V
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
+
+transitive-accessible method net/minecraft/world/level/block/BaseEntityBlock createTickerHelper (Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityTicker;)Lnet/minecraft/world/level/block/entity/BlockEntityTicker;

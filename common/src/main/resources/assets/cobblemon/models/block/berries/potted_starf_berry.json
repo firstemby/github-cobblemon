@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_cornn_berry",
+  "textures": {
+    "1": "cobblemon:block/berries/starf_leaves",
+    "2": "cobblemon:block/berries/starf_tree"
+  }
+}

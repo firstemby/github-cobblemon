@@ -13,6 +13,10 @@
   - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
 - Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
   - Wearable items that can be placed down are exempt from this behaviour.
+- Mint Leaves can now be placed on the ground as Leaf Litter, or in Flower Pots
+- Added Oricorio Flowers
+- Added Terrain Plants
+- Berries can now be placed in Flower Pots
 - The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
 - Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
@@ -81,6 +85,10 @@
 - Bellossom
 
 ### Changes
+- Terrain Seeds can now be planted
+- Terrain Seeds are now consumed during PvP and NPC battles
+- Glow Item Frames can be crafted using Bright Powder as an alternative to Glow Ink Sacs
+- Bright Powder can be used on Signs and Hanging Signs to make text glow, as an alternative to Glow Ink Sacs
 - Updated various recipes to display in Recipe Groups within the Recipe Book
 - Updated most recipes to display more logically/consistently within the Recipe Book's categories
 - Make ride rotations less jittery in multiplayer.

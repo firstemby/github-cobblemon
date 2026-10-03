@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_rabuta_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/watmel_tree"
+  }
+}

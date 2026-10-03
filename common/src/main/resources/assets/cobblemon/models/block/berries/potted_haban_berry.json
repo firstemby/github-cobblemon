@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_persim_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/haban_leaves",
+    "1": "cobblemon:block/berries/haban_stem"
+  }
+}

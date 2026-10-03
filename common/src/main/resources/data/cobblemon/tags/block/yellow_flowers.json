@@ -3,6 +3,7 @@
   "values": [
     "minecraft:dandelion",
     "minecraft:sunflower",
+    "cobblemon:pomohana",
 	{
       "id": "biomesoplenty:goldenrod",
       "required": false

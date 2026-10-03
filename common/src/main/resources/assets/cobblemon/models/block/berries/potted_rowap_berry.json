@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_leppa_berry",
+  "textures": {
+    "1": "cobblemon:block/berries/rowap_tree"
+  }
+}

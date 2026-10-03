@@ -977,6 +977,14 @@
       { "name": "cobblemon:block/item_block/paper_large_break_3", "volume": 0.6 }
     ]
   },
+  "block.bright_powder.use": {
+    "subtitle": "cobblemon.subtitle.item.bright_powder.use",
+    "sounds": [
+      { "name": "cobblemon:block/bright_powder/bright_powder_use_1", "volume": 0.35 },
+      { "name": "cobblemon:block/bright_powder/bright_powder_use_2", "volume": 0.35 },
+      { "name": "cobblemon:block/bright_powder/bright_powder_use_3", "volume": 0.35 }
+    ]
+  },
   "block.item_block.bottle_liquid.place": {
     "subtitle": "subtitles.block.generic.place",
     "sounds": [

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "half=lower,glowing=false": { "model": "cobblemon:block/verdroot_bottom" },
+    "half=upper,glowing=false": { "model": "cobblemon:block/verdroot_top" },
+    "half=lower,glowing=true": { "model": "cobblemon:block/verdroot_bottom_glowing" },
+    "half=upper,glowing=true": { "model": "cobblemon:block/verdroot_top_glowing" }
+  }
+}

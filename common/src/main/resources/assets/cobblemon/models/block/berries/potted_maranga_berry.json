@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_wiki_berry",
+  "textures": {
+    "3": "cobblemon:block/berries/wiki_tree"
+  }
+}

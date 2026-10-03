@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "cobblemon:block/flowers/voltaconia_bottom_glowing"
+  }
+}

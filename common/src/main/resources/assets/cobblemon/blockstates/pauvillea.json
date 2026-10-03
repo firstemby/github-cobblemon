@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cobblemon:block/pauvillea_hanging"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/pauvillea_wall",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cobblemon:block/pauvillea_wall"
+    },
+    "facing=south": {
+      "model": "cobblemon:block/pauvillea_wall",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cobblemon:block/pauvillea_floor"
+    },
+    "facing=west": {
+      "model": "cobblemon:block/pauvillea_wall",
+      "y": 270
+    }
+  }
+}
