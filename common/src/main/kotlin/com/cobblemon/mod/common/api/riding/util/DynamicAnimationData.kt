@@ -146,6 +146,10 @@ class DynamicAnimationData(val ride: PokemonEntity)
                 Mth.degreesDifference(currRot.y.toFloat(), prevRot.y.toFloat()).toDouble(),
                 Mth.degreesDifference(currRot.z.toFloat(), prevRot.z.toFloat()).toDouble()
             ).scale(20.0)
+            // Unridden turning comes straight from the heading ease, it's already smooth
+            if (!activeRide) {
+                angDelta = Vec3(angDelta.x, ride.heading.yaw.velocity().toDouble(), angDelta.z)
+            }
 
             /******************************************************
              * Calculate ride local velocity
@@ -173,7 +177,7 @@ class DynamicAnimationData(val ride: PokemonEntity)
         }
         val input = if(driver != null && activeRide) Vec3(driver.xxa.toDouble() * -1, vertInput, driver.zza.toDouble()) else Vec3.ZERO
         driverInputSpring.update(input)
-        rotDeltaSpring.update(angDelta)
+        if (activeRide) rotDeltaSpring.update(angDelta) else rotDeltaSpring.snap(angDelta)
         velocitySpring.update(currentVelocity)
         rotSpring.update(currRot)
 

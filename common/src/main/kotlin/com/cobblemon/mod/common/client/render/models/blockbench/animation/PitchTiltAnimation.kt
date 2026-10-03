@@ -13,20 +13,21 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.addRotation
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import net.minecraft.util.Mth
 
 /**
  * Animation used to tilt the targeted bone of the entity by a pitch that is proportionate
  * to the direction the entity is moving. This is used to make birds and fish tilt upwards
- * or downwards based on their motion.
+ * or downwards based on their motion. The pitch comes from the eased heading locomotion travels on.
  *
  * @author Hiroku
  * @since August 9th, 2025
  */
 class PitchTiltAnimation(
     val bone: Bone,
+    // Not used anymore since the heading is already eased, kept so existing posers still load
     val maxChangePerTick: Float = 1F,
     val minPitch: Float = -45F,
     val maxPitch: Float = 45F,
@@ -48,36 +49,22 @@ class PitchTiltAnimation(
         headPitch: Float,
         intensity: Float
     ) {
-        val entity = context.entity ?: return
+        val entity = context.entity as? PokemonEntity ?: return
         if (entity.passengers.isNotEmpty()) {
             return
         }
-        val delta = entity.deltaMovement
-        val vertical = delta.y
-        val horizontal = delta.horizontalDistance()
-        // It should be the angle in degrees that becomes higher as the entity's motion becomes more upwards, and negative as the entity's motion becomes more downwards
-        val angleOfMotion = if (horizontal == 0.0) {
-            when {
-                vertical > 0 -> maxPitch
-                vertical < 0 -> minPitch
-                else -> 0F
-            }
-        } else {
-            Mth.atan2(vertical, horizontal).toDegrees()
-        }.coerceIn(minPitch, maxPitch) * -1
+        // Negative is up like Minecraft pitch
+        val pitch = entity.heading.pitch.valueAt(Mth.frac(ageInTicks))
+        // Only tilt as much as the travel is horizontal so straight climbs and dives stay level
+        val tilt = (pitch * Mth.cos(pitch.toRadians())).coerceIn(minPitch, maxPitch)
 
-        val lastAngle = state.numbers[PREVIOUS_ANGLE] ?: 0F
-        val change = (angleOfMotion - lastAngle).coerceIn(-maxChangePerTick, maxChangePerTick)
         if (PITCHED_TILT !in state.renderMarkers) {
             state.numbers.remove(CORRECTED_ANGLE)
-            val correctedAngle = (lastAngle + change) * intensity
-            bone.addRotation(0, correctedAngle.toRadians())
-            state.numbers[PREVIOUS_ANGLE] = correctedAngle
-        } else {
-            // It was already pitched, which means the body bone already has a rotation, so only rotate it a pinch more.
-            bone.addRotation(0, change.toRadians() * intensity)
-            state.numbers[PREVIOUS_ANGLE] = lastAngle + change * intensity
+            val appliedAngle = tilt * intensity
+            bone.addRotation(0, appliedAngle.toRadians())
+            state.numbers[PREVIOUS_ANGLE] = appliedAngle
         }
+        // A second tilt on the same model doesn't add more, the first already covers it
         state.renderMarkers += PITCHED_TILT
     }
 }

@@ -10,34 +10,30 @@ package com.cobblemon.mod.common.entity.pokemon.ai
 
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
-import com.cobblemon.mod.common.util.math.FloatSpring
-import com.cobblemon.mod.common.util.math.simpleSpringDamper
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.ai.control.BodyRotationControl
 
 /**
  * Controls body movement of pokemon. Runs on both sides.
  *
- * Server: the body always faces yRot. When stationary and the head is at its limit, yRot turns toward the head.
- * Client: the body springs toward the synced yRot so heading changes from the server are smoothed out.
+ * Server: the body always faces yRot. When stationary and the head is at its limit, the body turns toward the head
+ * through the heading ease one turn at a time.
+ * Client: the body follows the same heading ease as the server, run from the synced heading target.
  */
 class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotationControl(pokemon) {
+    private var headingStarted = false
+
     companion object {
         // Grounded mons turn in big steps so their feet don't slide, floating ones drift round
         const val GROUNDED_BODY_TURN_FRACTION = 0.8F
         const val FLOATING_BODY_TURN_FRACTION = 0.1F
-
-        // The server already limits how fast heading changes, so this only smooths the steps between ticks
-        const val BODY_TURN_HALFLIFE_SECONDS = 0.175F
-        const val SECONDS_PER_TICK = 0.05F
     }
-
-    private var bodyYawSpring: FloatSpring? = null
 
     override fun clientTick() {
         // Riding sets rotations itself
         if (pokemon.controllingPassenger != null) {
-            bodyYawSpring = null
+            // Keep the heading with the ride so it doesn't swing round on dismount
+            pokemon.heading.settle(pokemon.yRot, snap = true)
             super.clientTick()
             return
         }
@@ -51,11 +47,12 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
     private fun followHeading() {
         if (!isMoving()) {
             val bodyTurnRequest = (pokemon.lookControl as? PokemonLookControl)?.bodyTurnRequest ?: 0F
-            if (bodyTurnRequest != 0F) {
+            // Finish one turn before starting the next so ground mons step round instead of sliding
+            if (bodyTurnRequest != 0F && pokemon.stationaryTurnTarget == null) {
                 val pose = pokemon.getCurrentPoseType()
                 val floating = pose in PoseType.FLYING_POSES || pose in PoseType.SWIMMING_POSES
                 val fraction = if (floating) FLOATING_BODY_TURN_FRACTION else GROUNDED_BODY_TURN_FRACTION
-                pokemon.yRot += Mth.wrapDegrees(pokemon.yHeadRot - pokemon.yRot) * fraction
+                pokemon.stationaryTurnTarget = Mth.wrapDegrees(pokemon.yRot + Mth.wrapDegrees(pokemon.yHeadRot - pokemon.yRot) * fraction)
             }
         }
 
@@ -68,10 +65,19 @@ class PokemonBodyRotationControl(private val pokemon: PokemonEntity) : BodyRotat
     }
 
     private fun smoothTowardsHeading() {
-        val spring = bodyYawSpring ?: FloatSpring(pokemon.yRot).also { bodyYawSpring = it }
-
-        simpleSpringDamper(spring, pokemon.yRot, BODY_TURN_HALFLIFE_SECONDS, SECONDS_PER_TICK, isAngle = true)
+        // Start facing where the pokemon already is instead of turning in from zero
+        if (!headingStarted) {
+            pokemon.heading.settle(pokemon.yRot, snap = true)
+            headingStarted = true
+        }
+        val target = pokemon.entityData.get(PokemonEntity.HEADING_TARGET)
+        if (target.z > 0F) {
+            pokemon.heading.steer(target.x, target.y)
+        } else {
+            // Ease rather than snap so stationary turns from the server don't jump
+            pokemon.heading.settle(pokemon.yRot, snap = false)
+        }
         // Keep continuous with last tick so plain lerps between yBodyRotO and yBodyRot don't spin at the wrap
-        pokemon.yBodyRot = pokemon.yBodyRotO + Mth.wrapDegrees(spring.value - pokemon.yBodyRotO)
+        pokemon.yBodyRot = pokemon.yBodyRotO + Mth.wrapDegrees(pokemon.heading.yaw.value - pokemon.yBodyRotO)
     }
 }

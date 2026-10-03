@@ -79,6 +79,7 @@ import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonBodyRotationControl
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonLookControl
+import com.cobblemon.mod.common.entity.pokemon.ai.HeadingEase
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -178,6 +179,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.math.PI
@@ -221,6 +223,8 @@ open class PokemonEntity(
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
         @JvmStatic val IS_SPRINTING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        // Heading the server is easing towards as yaw, pitch and 1 when steering or 0 when not
+        @JvmStatic val HEADING_TARGET = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.VECTOR3)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -327,12 +331,12 @@ open class PokemonEntity(
     var previousRidingState: RidingBehaviourState? = null
         private set
 
-    /**
-     * Movement at the end of the last unridden travel. Lets PokemonMoveControl restore the tiny components that
-     * aiStep() zeroes, which would otherwise swallow the small forces slow mons like snorlax start moving with.
-     */
-    var lastTravelMovement: Vec3? = null
-        private set
+    /** Push from PokemonMoveControl, added on the next travel right before vanilla moves the mon and applies friction */
+    var pendingThrust: Vec3 = Vec3.ZERO
+    /** Eased travel direction. Moved by PokemonMoveControl on the server and PokemonBodyRotationControl on the client */
+    val heading = HeadingEase()
+    /** Yaw a standing pokemon is turning its body to, set by PokemonBodyRotationControl and eased by PokemonMoveControl */
+    var stationaryTurnTarget: Float? = null
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -483,6 +487,7 @@ open class PokemonEntity(
         builder.define(SCALE_MODIFIER, 1F)
         builder.define(IS_ALPHA, false)
         builder.define(IS_SPRINTING, false)
+        builder.define(HEADING_TARGET, Vector3f())
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -1926,7 +1931,16 @@ open class PokemonEntity(
 
             //Prevent current travel logic when riding a pokemon.
             if (!this.hasRider() || this.controllingPassenger == null) {
+                // Same place vanilla adds walk input. Used up here so a second travel in a tick can't push twice
+                deltaMovement = deltaMovement.add(pendingThrust)
+                pendingThrust = Vec3.ZERO
+                // Powered flight uses its own drag instead of vanilla air friction
+                val poweredFlight = getBehaviourFlag(PokemonBehaviourFlag.FLYING) && !isInLiquid
+                setDiscardFriction(poweredFlight)
                 super.travel(movementInput)
+                if (poweredFlight) {
+                    deltaMovement = deltaMovement.scale(PokemonMoveControl.FLYER_DRAG)
+                }
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                     behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
@@ -1979,14 +1993,7 @@ open class PokemonEntity(
             // Prevent swimmers from sinking in battle
             this.deltaMovement = Vec3(deltaMovement.x, 0.0, deltaMovement.z)
         }
-        lastTravelMovement = if (!this.hasRider() || this.controllingPassenger == null) this.deltaMovement else null
     }
-
-    /** True when vanilla travel will apply water drag this tick. */
-    fun isWaterTravelling() = isInWater && isAffectedByFluids() && !canStandOnFluid(level().getFluidState(blockPosition()))
-
-    /** Horizontal drag vanilla applies each tick while swimming. */
-    fun getHorizontalWaterDrag() = getWaterSlowDown()
 
     private fun updateBlocksTraveled(fromBp: BlockPos) {
         // Riding or falling shouldn't count, other movement sources are fine
