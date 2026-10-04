@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_mago_berry",
+  "textures": {
+    "2": "cobblemon:block/berries/chople_leaves",
+    "4": "cobblemon:block/berries/chople_tree"
+  }
+}

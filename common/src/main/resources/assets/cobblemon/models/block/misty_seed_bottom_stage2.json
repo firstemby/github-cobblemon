@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "cobblemon:block/flowers/misty_seed_bottom_stage2"
+  }
+}

@@ -2,25 +2,28 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        " S ",
-        "GPF",
-        " I "
+        "PSP",
+        "GEF",
+        "PIP"
     ],
     "key": {
         "G": {
-            "item": "minecraft:gunpowder"
+            "tag": "c:gunpowders"
         },
-        "S": {
+        "E": {
             "item": "minecraft:fermented_spider_eye"
         },
         "I": {
             "item": "minecraft:ink_sac"
         },
         "F": {
-            "item": "minecraft:feather"
+            "tag": "c:feathers"
         },
         "P": {
             "item": "minecraft:paper"
+        },
+        "S": {
+            "item": "minecraft:glow_ink_sac"
         }
     },
     "result": {

@@ -9,6 +9,15 @@
     "cobblemon:potted_pink_apricorn_sapling",
     "cobblemon:potted_black_apricorn_sapling",
     "cobblemon:potted_white_apricorn_sapling",
-    "cobblemon:potted_saccharine_sapling"
+    "cobblemon:potted_saccharine_sapling",
+    
+    "cobblemon:potted_red_mint",
+    "cobblemon:potted_blue_mint",
+    "cobblemon:potted_cyan_mint",
+    "cobblemon:potted_pink_mint",
+    "cobblemon:potted_green_mint",
+    "cobblemon:potted_white_mint",
+    
+    "#cobblemon:potted_berries"
   ]
 }

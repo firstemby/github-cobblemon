@@ -1,0 +1,14 @@
+{
+  "ingredient": "cobblemon:wistensu",
+  "colour": "purple",
+  "mobEffects": [
+    {
+      "effect": "minecraft:invisibility",
+      "duration": 120,
+      "amplifier": 0,
+      "ambient": false,
+      "visible": true,
+      "showIcon": true
+    }
+  ]
+}

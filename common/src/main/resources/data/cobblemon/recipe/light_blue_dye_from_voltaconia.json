@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "light_blue_dye",
+  "ingredients": [
+    {
+      "item": "cobblemon:voltaconia"
+    }
+  ],
+  "result": {
+    "id": "minecraft:light_blue_dye",
+    "count": 2
+  }
+}

@@ -4,6 +4,7 @@
     "minecraft:poppy",
 	"minecraft:red_tulip",
 	"minecraft:rose_bush",
+    "cobblemon:lobaila",
 	{
       "id": "ancient_aether:sakura_blossoms",
       "required": false

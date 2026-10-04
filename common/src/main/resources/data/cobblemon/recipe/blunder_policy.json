@@ -2,9 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        " R ",
-        "SPF",
-        " I "
+        "PGP",
+        "SRF",
+        "PIP"
     ],
     "key": {
         "R": {
@@ -17,10 +17,13 @@
             "item": "minecraft:ink_sac"
         },
         "F": {
-            "item": "minecraft:feather"
+            "tag": "c:feathers"
         },
         "P": {
             "item": "minecraft:paper"
+        },
+        "G": {
+            "tag": "c:dusts/glowstone"
         }
     },
     "result": {

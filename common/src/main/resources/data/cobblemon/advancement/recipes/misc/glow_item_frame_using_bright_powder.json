@@ -1,0 +1,43 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_bright_powder": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:bright_powder"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_item_frame": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:item_frame"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:glow_item_frame_using_bright_powder"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_item_frame",
+      "has_bright_powder"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:glow_item_frame_using_bright_powder"
+    ]
+  }
+}
