@@ -9,12 +9,14 @@
 package com.cobblemon.mod.common.api.events.pokemon
 
 import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import com.cobblemon.mod.common.api.events.Cancelable
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.moLangFunctionMap
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.TradeParticipant
+import com.cobblemon.mod.common.util.asArrayValue
 import com.cobblemon.mod.common.util.getPlayer
 
 /**
@@ -31,9 +33,9 @@ interface TradeEvent {
     val tradeParticipant1: TradeParticipant
 
     /**
-     * The [Pokemon] being traded by the first participant.
+     * All the [Pokemon] the first participant receives in the trade.
      */
-    val tradeParticipant1Pokemon: Pokemon
+    val tradeParticipant1Pokemon: List<Pokemon>
 
     /**
      * The second [TradeParticipant].
@@ -41,9 +43,19 @@ interface TradeEvent {
     val tradeParticipant2: TradeParticipant
 
     /**
-     * The [Pokemon] being traded by the second participant.
+     * All the [Pokemon] the second participant receives in the trade.
      */
-    val tradeParticipant2Pokemon: Pokemon
+    val tradeParticipant2Pokemon: List<Pokemon>
+
+    fun createContext(): MutableMap<String, MoValue> = mutableMapOf(
+        "trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
+        "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
+        // Kept for backwards compatibility, this is the first Pokémon of each side.
+        "trade_participant_1_pokemon" to tradeParticipant1Pokemon.first().struct,
+        "trade_participant_2_pokemon" to tradeParticipant2Pokemon.first().struct,
+        "trade_participant_1_pokemon_list" to tradeParticipant1Pokemon.asArrayValue { it.struct },
+        "trade_participant_2_pokemon_list" to tradeParticipant2Pokemon.asArrayValue { it.struct }
+    )
 
     /**
      * Event fired when a trade is about to happen. Cancelling this event prevents the trade from occurring.
@@ -53,16 +65,11 @@ interface TradeEvent {
      */
     data class Pre(
         override val tradeParticipant1: TradeParticipant,
-        override val tradeParticipant1Pokemon: Pokemon,
+        override val tradeParticipant1Pokemon: List<Pokemon>,
         override val tradeParticipant2: TradeParticipant,
-        override val tradeParticipant2Pokemon: Pokemon
+        override val tradeParticipant2Pokemon: List<Pokemon>
     ) : TradeEvent, Cancelable() {
-        val context = mutableMapOf(
-            "trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct,
-            "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct
-        )
+        val context = createContext()
 
         val functions = moLangFunctionMap(
             cancelFunc
@@ -77,15 +84,10 @@ interface TradeEvent {
      */
     data class Post(
         override val tradeParticipant1: TradeParticipant,
-        override val tradeParticipant1Pokemon: Pokemon,
+        override val tradeParticipant1Pokemon: List<Pokemon>,
         override val tradeParticipant2: TradeParticipant,
-        override val tradeParticipant2Pokemon: Pokemon
+        override val tradeParticipant2Pokemon: List<Pokemon>
     ) : TradeEvent {
-        val context = mutableMapOf(
-            "trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct,
-            "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct
-        )
+        val context = createContext()
     }
 }

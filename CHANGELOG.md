@@ -51,6 +51,7 @@
 - Added `FishingSpawnerFactory` which allows influence registration on fishing encounters
 - Added `BattleFleeAttemptEvent` fired from `PokemonBattle.checkFleeAttempt`, allowing developers to intercept and control flee attempts
 - Trade network packets (`TradeUpdatedPacket`, `UpdateTradeOfferPacket`, and `TradeCompletedPacket`) now receive an array of Pokémon instead of a single Pokémon to execute trades
+- `TradeEvent.Pre` and `TradeEvent.Post` now expose every Pokémon each participant receives (`tradeParticipant1Pokemon` and `tradeParticipant2Pokemon` are now lists), and their Molang context includes `trade_participant_1_pokemon_list` and `trade_participant_2_pokemon_list`
 
 ### Molang & Datapacks
 - q.item.is_enchanted()

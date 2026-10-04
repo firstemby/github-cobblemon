@@ -122,7 +122,7 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         }
 
         CobblemonEvents.TRADE_EVENT_PRE.postThen(
-            TradeEvent.Pre(player1, pokemon2.first(), player2, pokemon1.first())
+            TradeEvent.Pre(player1, pokemon2, player2, pokemon1)
         ) {
             pokemon1.forEach { party1.remove(it) }
             pokemon2.forEach { party2.remove(it) }
@@ -162,7 +162,7 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             activeTrade.completeTrade()
 
             CobblemonEvents.TRADE_EVENT_POST.post(
-                TradeEvent.Post(player1, pokemon2.first(), player2, pokemon1.first())
+                TradeEvent.Post(player1, pokemon2, player2, pokemon1)
             )
         }
     }
