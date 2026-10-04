@@ -9,6 +9,8 @@
 package com.cobblemon.mod.common.client.render.shader
 
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.mojang.blaze3d.platform.GlStateManager
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.Util
@@ -18,6 +20,25 @@ import net.minecraft.resources.ResourceLocation
 
 object TeraOverlay {
     private const val ASPECT = "terastal"
+
+    // Adds the shader's rgb and scales what's already drawn by its alpha, so facets can shade the base model.
+    // Destination alpha is left alone
+    private val TERA_TRANSPARENCY = RenderStateShard.TransparencyStateShard(
+        "cobblemon_tera_transparency",
+        {
+            RenderSystem.enableBlend()
+            RenderSystem.blendFuncSeparate(
+                GlStateManager.SourceFactor.ONE,
+                GlStateManager.DestFactor.SRC_ALPHA,
+                GlStateManager.SourceFactor.ZERO,
+                GlStateManager.DestFactor.ONE
+            )
+        },
+        {
+            RenderSystem.disableBlend()
+            RenderSystem.defaultBlendFunc()
+        }
+    )
 
     private val renderType = Util.memoize { texture: ResourceLocation ->
         RenderType.create(
@@ -30,7 +51,7 @@ object TeraOverlay {
             RenderType.CompositeState.builder()
                 .setShaderState(RenderStateShard.ShaderStateShard { CobblemonShaders.TERA })
                 .setTextureState(RenderStateShard.TextureStateShard(texture, false, false))
-                .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                .setTransparencyState(TERA_TRANSPARENCY)
                 .setLightmapState(RenderStateShard.LIGHTMAP)
                 .setOverlayState(RenderStateShard.OVERLAY)
                 .setCullState(RenderStateShard.CULL)
