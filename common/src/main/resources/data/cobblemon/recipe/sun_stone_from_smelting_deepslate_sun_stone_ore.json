@@ -1,5 +1,6 @@
 {
     "type": "minecraft:smelting",
+    "category": "misc",
     "group": "sun_stone",
     "ingredient": {
         "item": "cobblemon:deepslate_sun_stone_ore"

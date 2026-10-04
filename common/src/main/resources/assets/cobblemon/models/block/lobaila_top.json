@@ -1,0 +1,41 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#flower",
+		"flower": "cobblemon:block/flowers/lobaila_top"
+	},
+	"elements": [
+		{
+			"name": "flower_nsf",
+			"from": [0.5, 0, 8],
+			"to": [15.5, 16, 8],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+            "shade": false,
+			"faces": {
+				"north": {"uv": [0, 0, 15, 16], "texture": "#flower"},
+				"south": {"uv": [0, 0, 15, 16], "texture": "#flower"}
+			}
+		},
+		{
+			"name": "flower_ewf",
+			"from": [8, 0, 0.5],
+			"to": [8, 16, 15.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+            "shade": false,
+			"faces": {
+				"east": {"uv": [0, 0, 15, 16], "texture": "#flower"},
+				"west": {"uv": [0, 0, 15, 16], "texture": "#flower"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "top",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

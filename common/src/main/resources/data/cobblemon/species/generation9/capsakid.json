@@ -157,15 +157,19 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
           "pokemon": "capsakid",
           "tier": 1
         },
         {
-          "pokemon": "scovillain",
+          "pokemon": "scovillain mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "scovillain mega",
+          "tier": 3
         }
       ]
     },

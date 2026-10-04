@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "half=lower,glowing=false": { "model": "cobblemon:block/lucibell_bottom" },
+    "half=upper,glowing=false": { "model": "cobblemon:block/lucibell_top" },
+    "half=lower,glowing=true": { "model": "cobblemon:block/lucibell_bottom_glowing" },
+    "half=upper,glowing=true": { "model": "cobblemon:block/lucibell_top_glowing" }
+  }
+}

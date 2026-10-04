@@ -1,5 +1,7 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "group": "cyan_mints",
     "key": {
         "#": {
             "item": "cobblemon:cyan_mint_leaf"

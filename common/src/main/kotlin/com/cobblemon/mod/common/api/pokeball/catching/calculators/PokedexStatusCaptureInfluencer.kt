@@ -36,12 +36,12 @@ interface PokedexStatusCaptureInfluencer {
         val pokedex = player.pokedex()
         val speciesId = target.pokemon.species.resourceIdentifier
         val formName = target.pokemon.form.name
-        val hasCaughtStatus = pokedex.getOrCreateSpeciesRecord(speciesId)
+        val hasOwnedStatus = pokedex.getOrCreateSpeciesRecord(speciesId)
             .getOrCreateFormRecord(formName)
-            .knowledge == PokedexEntryProgress.CAUGHT
+            .knowledge == PokedexEntryProgress.OWNED
         // In modern games when the catch is a success and the Pokémon has already been registered to the Pokédex
         // the catch becomes a critical capture and only requires one shake
-        return if (hasCaughtStatus) {
+        return if (hasOwnedStatus) {
             CaptureContext(
                 numberOfShakes = 1,
                 isSuccessfulCapture = true,

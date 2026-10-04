@@ -127,7 +127,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/poltergeist"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -154,7 +154,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/poltergeist"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -181,7 +181,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/poltergeist"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -208,7 +208,7 @@
                 {
                     "block_entity_modifier": {
                         "type": "minecraft:append_loot",
-                        "loot_table": "cobblemon:ruins/gilded_chests/ruins"
+                        "loot_table": "cobblemon:ruins/gilded_chests/poltergeist"
                     },
                     "input_predicate": {
                         "block_state": {
@@ -1917,7 +1917,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1944,7 +1944,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1971,7 +1971,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"
@@ -1998,7 +1998,7 @@
                             }
                         },
                         "predicate_type": "minecraft:random_blockstate_match",
-                        "probability": 0.5
+                        "probability": 0.1
                     },
                     "location_predicate": {
                         "predicate_type": "minecraft:always_true"

@@ -1,0 +1,11 @@
+{
+    "parent": "item/amethyst_bud",
+    "textures":  {
+                     "layer0":  "cobblemon:block/type_gems/large_ground_gem_bud"
+                 },
+  "display": {
+    "fixed": {
+      "translation": [ 0, 4, 0 ]
+    }
+  }
+}

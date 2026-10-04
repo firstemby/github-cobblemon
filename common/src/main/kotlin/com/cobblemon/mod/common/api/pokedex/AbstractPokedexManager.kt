@@ -13,6 +13,10 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
+import com.cobblemon.mod.common.api.pokemon.feature.WeightedChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData
 import com.cobblemon.mod.common.pokemon.Gender
 import net.minecraft.resources.ResourceLocation
@@ -29,7 +33,6 @@ abstract class AbstractPokedexManager {
 
     fun deleteSpeciesRecord(speciesId: ResourceLocation) {
         speciesRecords.remove(speciesId)
-        markDirty()
     }
 
     fun deleteFormRecord(speciesId: ResourceLocation, formName: String) {
@@ -40,8 +43,6 @@ abstract class AbstractPokedexManager {
             deleteSpeciesRecord(speciesId)
             return
         }
-
-        markDirty()
     }
 
     fun getSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord? {
@@ -58,29 +59,80 @@ abstract class AbstractPokedexManager {
 
     fun getHighestKnowledgeForSpecies(pokemonId: ResourceLocation): PokedexEntryProgress {
         val speciesRecord = getSpeciesRecord(pokemonId)
-        return speciesRecord?.getKnowledge() ?: PokedexEntryProgress.NONE
+        return speciesRecord?.getKnowledge() ?: PokedexEntryProgress.UNREGISTERED
     }
 
     fun getHighestKnowledgeFor(entry: PokedexEntry): PokedexEntryProgress {
-        val speciesRecord = getSpeciesRecord(entry.speciesId) ?: return PokedexEntryProgress.NONE
+        val speciesRecord = getSpeciesRecord(entry.speciesId) ?: return PokedexEntryProgress.UNREGISTERED
         val hasAllAspects = entry.conditionAspects.all(speciesRecord::hasAspect)
         if (!hasAllAspects) {
-            return PokedexEntryProgress.NONE
+            return PokedexEntryProgress.UNREGISTERED
         }
         // For each distinct form in this entry, get the highest knowledge level for the unlock forms, then take the highest of those.
         return entry.forms.maxOfOrNull { form ->
             form.unlockForms.maxOfOrNull {
-                speciesRecord.getFormRecord(it)?.knowledge ?: PokedexEntryProgress.NONE
-            } ?: PokedexEntryProgress.NONE
-        } ?: PokedexEntryProgress.NONE
+                speciesRecord.getFormRecord(it)?.knowledge ?: PokedexEntryProgress.UNREGISTERED
+            } ?: PokedexEntryProgress.UNREGISTERED
+        } ?: PokedexEntryProgress.UNREGISTERED
+    }
+
+    fun getHighestKnowledgeFor(entry: PokedexEntry, form: PokedexForm?): PokedexEntryProgress {
+        if (form == null) return getHighestKnowledgeFor(entry)
+
+        val speciesRecord = getSpeciesRecord(entry.speciesId) ?: return PokedexEntryProgress.UNREGISTERED
+        val hasAllAspects = entry.conditionAspects.all(speciesRecord::hasAspect)
+        if (!hasAllAspects) {
+            return PokedexEntryProgress.UNREGISTERED
+        }
+
+        return speciesRecord.getFormRecord(form.displayForm)?.knowledge ?: PokedexEntryProgress.UNREGISTERED
+    }
+
+    fun getHighestKnowledgeFor(entry: PokedexEntry, form: PokedexForm?, aspects: Iterable<String>): PokedexEntryProgress {
+        val formKnowledge = getHighestKnowledgeFor(entry, form)
+
+        if (formKnowledge == PokedexEntryProgress.UNREGISTERED) return PokedexEntryProgress.UNREGISTERED
+
+        val seenAspects = getSeenAspects(entry)
+
+        // Aspects that select one of the species' own forms are already covered by the form knowledge check above,
+        // so exempt them (and every other value of the same feature, since defaults like "phony" never appear on a form directly).
+        val species = PokemonSpecies.getByIdentifier(entry.speciesId)
+        val formAspects = species?.forms?.flatMapTo(hashSetOf()) { it.aspects } ?: emptySet()
+        val formSelectingFeatureAspects = species?.let(SpeciesFeatures::getFeaturesFor).orEmpty()
+            .mapNotNull { provider ->
+                val allAspects: Collection<String> = when (provider) {
+                    is ChoiceSpeciesFeatureProvider -> provider.getAllAspects()
+                    is WeightedChoiceSpeciesFeatureProvider -> provider.getAllAspects().keys
+                    else -> return@mapNotNull null
+                }
+                allAspects.takeIf { it.any { aspect -> aspect in formAspects } }
+            }
+            .flatten()
+            .toHashSet()
+
+        val allSeenAspects = aspects
+            .filter { aspect ->
+                if (Dexes.equivalentFormsLookup[aspect] != null) return@filter false
+                if (aspect in formAspects || aspect in formSelectingFeatureAspects) return@filter false
+                if (aspect.uppercase() in setOf(Gender.MALE.name, Gender.FEMALE.name, Gender.GENDERLESS.name)) return@filter false
+                if ("shiny".equals(aspect, ignoreCase = true)) return@filter false
+
+                return@filter true
+            }
+            .all { aspect -> seenAspects.contains(aspect) }
+
+        if (!allSeenAspects) return PokedexEntryProgress.UNREGISTERED
+
+        return formKnowledge
     }
 
     fun getEncounteredForms(entry: PokedexEntry) : List<PokedexForm> {
-        return getFormsWithKnowledge(entry, PokedexEntryProgress.ENCOUNTERED)
+        return getFormsWithKnowledge(entry, PokedexEntryProgress.SEEN)
     }
 
     fun getCaughtForms(entry: PokedexEntry) : List<PokedexForm> {
-        return getFormsWithKnowledge(entry, PokedexEntryProgress.CAUGHT)
+        return getFormsWithKnowledge(entry, PokedexEntryProgress.OWNED)
     }
 
     fun getFormsWithKnowledge(entry: PokedexEntry, knowledge: PokedexEntryProgress) : List<PokedexForm> {
@@ -91,17 +143,17 @@ abstract class AbstractPokedexManager {
         }
         // For each distinct form in this entry, get the highest knowledge level for the unlock forms, then take the highest of those.
         return entry.forms.filter { form ->
-            form.unlockForms.any { (speciesRecord.getFormRecord(it)?.knowledge ?: PokedexEntryProgress.NONE) >= knowledge }
+            form.unlockForms.any { (speciesRecord.getFormRecord(it)?.knowledge ?: PokedexEntryProgress.UNREGISTERED) >= knowledge }
         }
     }
 
     fun getNewInformation(pokedexEntityData: PokedexEntityData): PokedexLearnedInformation {
         val speciesRecord = getSpeciesRecord(pokedexEntityData.getApparentSpecies().resourceIdentifier)
-        if (speciesRecord == null || speciesRecord.getKnowledge() == PokedexEntryProgress.NONE) {
+        if (speciesRecord == null || speciesRecord.getKnowledge() == PokedexEntryProgress.UNREGISTERED) {
             return PokedexLearnedInformation.SPECIES
         }
         val formRecord = speciesRecord.getFormRecord(pokedexEntityData.getApparentForm().name)
-        if (formRecord == null || formRecord.knowledge == PokedexEntryProgress.NONE) {
+        if (formRecord == null || formRecord.knowledge == PokedexEntryProgress.UNREGISTERED) {
             return PokedexLearnedInformation.FORM
         }
 
@@ -129,7 +181,7 @@ abstract class AbstractPokedexManager {
     }
 
     fun getKnowledgeForSpecies(speciesId: ResourceLocation): PokedexEntryProgress {
-        return speciesRecords[speciesId]?.getKnowledge() ?: PokedexEntryProgress.NONE
+        return speciesRecords[speciesId]?.getKnowledge() ?: PokedexEntryProgress.UNREGISTERED
     }
 
     open fun onSpeciesRecordUpdated(speciesDexRecord: SpeciesDexRecord) {
@@ -163,9 +215,5 @@ abstract class AbstractPokedexManager {
             globalCalculatedValues[calculatedPokedexValue] = newValue
             return newValue
         }
-    }
-
-    open fun markDirty() {
-        // Save stuff
     }
 }

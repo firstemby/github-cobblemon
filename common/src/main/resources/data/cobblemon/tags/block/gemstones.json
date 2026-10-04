@@ -6,6 +6,8 @@
     "#minecraft:crystal_sound_blocks",
     "#minecraft:diamond_ores",
     "#minecraft:emerald_ores",
+    "#cobblemon:type_gem_blocks",
+    "#cobblemon:type_gem_clusters",
 	{
       "id": "#c:amethyst_ores",
       "required": false

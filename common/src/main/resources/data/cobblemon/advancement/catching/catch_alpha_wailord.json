@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+		"id": "cobblemon:pokemon_model",
+        "components": {
+            "cobblemon:pokemon_item": {"species":"cobblemon:wailord","aspects":["alpha"]}
+      }
+		},
+    "title": {
+      "translate": "advancements.cobblemon.catch_alpha_wailord"
+    },
+    "description": {
+      "translate": "advancements.cobblemon.catch_alpha_wailord.description"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "cobblemon:catching/first_alpha_catch",
+  "criteria": {
+		"alpha": {
+			"trigger": "cobblemon:aspects_collected",
+			"conditions": {
+				"species": "cobblemon:wailord",
+				"aspects": ["alpha"]
+			}
+		}
+  },
+  "requirements": [
+    [
+      "alpha"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -851,6 +851,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "deoxys alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

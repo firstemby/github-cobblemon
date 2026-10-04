@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 60.0,
+            "weight": 600.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -37,7 +37,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 60.0,
+            "weight": 600.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -60,7 +60,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 60.0,
+            "weight": 600.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -79,7 +79,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 60.0,
+            "weight": 600.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -99,7 +99,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "biomes": [
                     "#cobblemon:is_end"
@@ -113,7 +113,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "uncommon",
             "level": "24-49",
-            "weight": 10.0,
+            "weight": 100.0,
             "condition": {
                 "biomes": [
                     "#aether:is_aether"
@@ -130,7 +130,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "24-49",
-            "weight": 6.0,
+            "weight": 60.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:howling_constructs"

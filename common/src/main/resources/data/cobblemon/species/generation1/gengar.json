@@ -59,7 +59,13 @@
       }
     },
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gengar alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [
@@ -163,7 +169,6 @@
     "tm:phantomforce",
     "tm:poisonjab",
     "tm:poltergeist",
-    "tm:powershift",
     "tm:poweruppunch",
     "tm:protect",
     "tm:psychic",
@@ -224,7 +229,6 @@
     "tutor:painsplit",
     "tutor:poisonjab",
     "tutor:poltergeist",
-    "tutor:powershift",
     "tutor:psychic",
     "tutor:rest",
     "tutor:rocksmash",
@@ -257,6 +261,7 @@
     "legacy:mimic",
     "legacy:naturalgift",
     "legacy:poisongas",
+    "legacy:powershift",
     "legacy:rage",
     "legacy:return",
     "legacy:round",
@@ -308,7 +313,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "7"
+          "maxSize": 7
         },
         "resting": {
           "times": [

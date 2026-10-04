@@ -1,0 +1,35 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_flower": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:pauvillea"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:pink_dye_from_pauvillea"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_flower",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:pink_dye_from_pauvillea"
+    ]
+  },
+  "sends_telemetry_event": false
+}

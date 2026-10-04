@@ -1,0 +1,34 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:snowy_plains",
+    {
+      "id": "clifftree:bog",
+      "required": false 
+    },
+    {
+      "id": "clifftree:tundra",
+      "required": false 
+    },
+    {
+      "id": "terralith:skylands_winter",
+      "required": false
+    },
+    {
+      "id": "wythers:crimson_tundra",
+      "required": false
+    },
+    {
+      "id": "wythers:frozen_island",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_bog",
+      "required": false
+    },
+    {
+      "id": "wythers:snowy_tundra",
+      "required": false
+    }
+  ]
+}

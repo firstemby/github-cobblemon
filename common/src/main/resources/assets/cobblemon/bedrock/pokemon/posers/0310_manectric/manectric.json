@@ -4,6 +4,9 @@
   "profileScale": 0.59,
   "profileTranslation": [ -0.03, 0.83, 0],
   "rootBone": "manectric",
+  "animations": {
+    "cry": "q.bedrock_stateful('manectric', 'cry')"
+  },
   "poses": {
     "standing": {
       "poseTypes": [

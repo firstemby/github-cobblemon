@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.chainFutures
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.update
+import net.minecraft.network.chat.Component
 import java.util.concurrent.CompletableFuture
 
 open class NPCBattleActor(
@@ -72,6 +73,11 @@ open class NPCBattleActor(
         }
     }
 
+    override fun onUseMove(user: BattlePokemon, target: BattlePokemon?) {
+        // Play NPC command animation when one of this actor's Pokemon uses a move.
+        npc.playAnimation(NPCEntity.COMMAND_ANIMATION)
+    }
+    
     override fun win(otherWinners: List<BattleActor>, losers: List<BattleActor>) {
         super.win(otherWinners, losers)
         npc.playAnimation(NPCEntity.WIN_ANIMATION)

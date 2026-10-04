@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
-            "weight": 9.9,
+            "weight": 87.5,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -48,7 +48,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
-            "weight": 9.9,
+            "weight": 87.5,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -86,7 +86,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
-            "weight": 9.9,
+            "weight": 87.5,
             "weightMultiplier": {
                 "multiplier": 5.0,
                 "condition": {
@@ -115,7 +115,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-24",
-            "weight": 99.0,
+            "weight": 875.0,
             "condition": {
                 "biomes": [
                     "#the_bumblezone:the_bumblezone"

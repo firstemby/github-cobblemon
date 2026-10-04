@@ -21,12 +21,11 @@ import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.atlas.CobblemonAtlases
 import com.cobblemon.mod.common.client.render.item.CobblemonModelPredicateRegistry
 import com.cobblemon.mod.common.client.render.shader.CobblemonShaders
+import com.cobblemon.mod.common.data.CobblemonDataProvider
 import com.cobblemon.mod.common.item.PokedexItem
 import com.cobblemon.mod.common.particle.CobblemonParticles
 import com.cobblemon.mod.common.particle.SnowstormParticleType
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.isUsingPokedex
-import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import java.util.concurrent.CompletableFuture
 import java.util.function.Supplier
 import net.minecraft.client.Minecraft
@@ -47,8 +46,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
-import net.minecraft.server.packs.resources.PreparableReloadListener
-import net.minecraft.server.packs.resources.ReloadableResourceManager
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -105,6 +102,7 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     }
 
     private fun onRegisterReloadListener(event: RegisterClientReloadListenersEvent) {
+        event.registerReloadListener(CobblemonDataProvider.clientResourceReloader)
         event.registerReloadListener { synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor ->
             val atlasFutures = mutableListOf<CompletableFuture<Void>>()
             CobblemonAtlases.atlases.forEach {
@@ -128,11 +126,10 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
     }
 
     private fun onShaderRegistration(event: RegisterShadersEvent) {
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_add"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_BLEND = it
-        }
-        event.registerShader(ShaderInstance(event.resourceProvider, cobblemonResource("particle_cutout"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP)) {
-            CobblemonShaders.PARTICLE_CUTOUT = it
+        CobblemonShaders.init()
+        CobblemonShaders.SHADERS_TO_REGISTER.forEach { (factory, callback) ->
+            val data = factory(event.resourceProvider)
+            event.registerShader(ShaderInstance(data.resourceFactory, data.shaderName, data.vertexFormat), callback)
         }
     }
 
@@ -235,9 +232,5 @@ object CobblemonNeoForgeClient : CobblemonClientImplementation {
                 pokedexUsageContext.attackKeyHeld(keyAttack.isDown)
             }
         }
-    }
-
-    internal fun registerResourceReloader(reloader: PreparableReloadListener) {
-        (Minecraft.getInstance().resourceManager as ReloadableResourceManager).registerReloadListener(reloader)
     }
 }

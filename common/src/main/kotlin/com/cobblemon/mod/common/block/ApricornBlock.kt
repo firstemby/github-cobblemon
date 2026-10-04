@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.block
 
+import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.apricorn.Apricorn
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.farming.ApricornHarvestEvent
@@ -176,7 +177,7 @@ class ApricornBlock(settings: Properties, val apricorn: Apricorn) : HorizontalDi
         world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, resetState))
 
         if (!world.isClientSide) {
-            world.playSoundServer(position = pos.toVec3d(), sound = SoundEvents.ITEM_PICKUP, volume = 0.7F, pitch = 1.4F)
+            world.playSoundServer(position = pos.toVec3d(), sound = CobblemonSounds.APRICORN_HARVEST, volume = 1.0F, pitch = 1.0F)
 
             if (world is ServerLevel && player is ServerPlayer) {
                 CobblemonEvents.APRICORN_HARVESTED.post(ApricornHarvestEvent(player, apricorn, world, pos))

@@ -15,13 +15,12 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
-            "weight": 7.0,
+            "weight": 70.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
                 "biomes": [
-                    "#cobblemon:is_forest",
-                    "#cobblemon:is_plains",
+                    "#cobblemon:is_temperate",
                     "aether:skyroot_forest",
                     "aether:skyroot_woodland"
                 ]
@@ -44,7 +43,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
-            "weight": 7.0,
+            "weight": 70.0,
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -61,7 +60,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "1-20",
-            "weight": 4.5,
+            "weight": 35.0,
             "condition": {
                 "biomes": [
                     "the_bumblezone:floral_meadow"

@@ -16,6 +16,11 @@
       "locators": ["target"]
     },
     {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == false && q.missed(q.entity.uuid) == false",
+      "expressions": ["q.sound('move.leechlife.target');"]
+    },
+    {
       "type": "pause",
       "pause": 0.125
     },
@@ -30,6 +35,11 @@
       "effect": "cobblemon:leechlife_actor",
       "locators": ["target"],
       "targetLocators": ["target"]
+    },
+    {
+      "type": "entity_molang",
+      "entityCondition": "q.entity.is_user == true",
+      "expressions": ["q.sound('move.leechlife.actor');"]
     },
     {
       "type": "remove_holds",

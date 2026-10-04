@@ -74,6 +74,15 @@
       "willDefendSelf": true,
       "willDefendOwner": true,
       "willFlee": false
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "gholdengo alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

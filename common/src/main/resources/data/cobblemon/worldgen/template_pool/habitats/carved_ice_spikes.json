@@ -1,0 +1,126 @@
+{
+  "name": "cobblemon:habitats/carved_ice_spikes",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes1",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes2",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes3",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes4",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes5",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes6",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes7",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes8",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes9",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes10",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes11",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "cobblemon:habitats/carved_ice_spikes12",
+        "processors": "cobblemon:habitats/carved_ice_spikes",
+        "override_liquid_settings": "apply_waterlogging"
+      }
+    }
+  ]
+}

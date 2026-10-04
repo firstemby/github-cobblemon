@@ -62,7 +62,9 @@ class SpawnPokemonPacket(
     var tickSpawned: Int,
     var rideBoosts: Map<RidingStat, Float>,
     var rideStamina: Float,
+    var isAlpha: Boolean,
     var silent: Boolean,
+    var riders: List<Int>,
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
@@ -95,7 +97,9 @@ class SpawnPokemonPacket(
         entity.tickCount,
         entity.entityData.get(PokemonEntity.RIDE_BOOSTS),
         entity.entityData.get(PokemonEntity.RIDE_STAMINA),
+        entity.entityData.get(PokemonEntity.IS_ALPHA),
         entity.isSilent,
+        entity.occupiedSeats.map { entry -> entry.value.id }.toList(),
         vanillaSpawnPacket
     )
 
@@ -130,7 +134,9 @@ class SpawnPokemonPacket(
             { _, value -> buffer.writeFloat(value) }
         )
         buffer.writeFloat(rideStamina)
+        buffer.writeBoolean(isAlpha)
         buffer.writeBoolean(silent)
+        buffer.writeCollection(this.riders) { pb, value -> pb.writeInt(value) }
     }
 
     override fun applyData(entity: PokemonEntity, level: ClientLevel) {
@@ -176,10 +182,15 @@ class SpawnPokemonPacket(
         entity.entityData.set(PokemonEntity.RIDE_BOOSTS, rideBoosts)
         entity.entityData.set(PokemonEntity.RIDE_STAMINA, rideStamina)
         entity.entityData.set(PokemonEntity.SCALE_MODIFIER, scaleModifier)
+        entity.entityData.set(PokemonEntity.IS_ALPHA, isAlpha)
         entity.isSilent = silent
 
         entity.tickSpawned = this.tickSpawned
         entity.delegate.updateAge(this.tickSpawned)
+
+        if (this.riders.isNotEmpty()) {
+            this.riders.forEach { level.getEntity(it)?.startRiding(entity) }
+        }
     }
 
     override fun checkType(entity: Entity): Boolean = entity is PokemonEntity
@@ -216,7 +227,9 @@ class SpawnPokemonPacket(
                 { buffer.readFloat() }
             )
             val rideStamina = buffer.readFloat()
+            val isAlpha = buffer.readBoolean()
             val silent = buffer.readBoolean()
+            val riders = buffer.readList { it.readInt() }.toList()
             val vanillaPacket = decodeVanillaPacket(buffer)
 
             return SpawnPokemonPacket(
@@ -246,7 +259,9 @@ class SpawnPokemonPacket(
                 tickSpawned,
                 rideBoosts,
                 rideStamina,
+                isAlpha,
                 silent,
+                riders,
                 vanillaPacket
             )
         }

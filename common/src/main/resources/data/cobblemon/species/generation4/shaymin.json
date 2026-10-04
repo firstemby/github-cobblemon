@@ -83,7 +83,6 @@
     "tm:lastresort",
     "tm:leafstorm",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:ominouswind",
     "tm:petalblizzard",
@@ -228,7 +227,6 @@
         "tm:lastresort",
         "tm:leafstorm",
         "tm:magicalleaf",
-        "tm:naturalgift",
         "tm:naturepower",
         "tm:ominouswind",
         "tm:petalblizzard",
@@ -282,7 +280,7 @@
       "battleOnly": false,
       "behaviour": {
         "herd": {
-          "maxSize": "6",
+          "maxSize": 6,
           "toleratedLeaders": [
             {
               "pokemon": "shaymin sky=false",
@@ -317,7 +315,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "6",
+      "maxSize": 6,
       "toleratedLeaders": [
         {
           "pokemon": "shaymin sky",

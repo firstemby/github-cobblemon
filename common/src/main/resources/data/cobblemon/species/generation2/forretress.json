@@ -81,83 +81,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.678125,
-              "z": 0.25
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.6908695,
-              "z": 0.16294661
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.678125,
-              "z": 0.25
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.6908695,
-              "z": 0.16294661
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.678125,
-              "z": 0.25
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.6908695,
-              "z": 0.16294661
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.0,
-              "y": -1.678125,
-              "z": 0.25
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
@@ -185,6 +109,15 @@
       "rouseChance": 0.0042,
       "times": [
         "any"
+      ]
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "forretress alpha",
+          "tier": 1
+        }
       ]
     }
   },
@@ -269,7 +202,6 @@
     "tm:lunge",
     "tm:magnetrise",
     "tm:metalsound",
-    "tm:naturalgift",
     "tm:painsplit",
     "tm:payback",
     "tm:pinmissile",

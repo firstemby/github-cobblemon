@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.entity.PokemonEntityLoadEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveEvent
 import com.cobblemon.mod.common.api.events.entity.PokemonEntitySaveToWorldEvent
+import com.cobblemon.mod.common.api.events.pokemon.PokemonSeenEvent
 import com.cobblemon.mod.common.api.events.pokemon.RidePokemonEvent
 import com.cobblemon.mod.common.api.events.pokemon.ShoulderMountEvent
 import com.cobblemon.mod.common.api.interaction.PokemonEntityInteraction
@@ -164,6 +165,7 @@ import net.minecraft.world.item.ItemUtils
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.SuspiciousEffectHolder
 import net.minecraft.world.level.block.state.BlockState
@@ -214,6 +216,7 @@ open class PokemonEntity(
         @JvmStatic var RIDE_BOOSTS = SynchedEntityData.defineId(PokemonEntity::class.java, RideBoostsDataSerializer)
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
+        @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -287,7 +290,9 @@ open class PokemonEntity(
     val friendship: Int
         get() = entityData.get(FRIENDSHIP)
     val seats: List<Seat>
-        get() = form.riding.seats
+        get() = form.riding.seats.filter { seat ->
+            seat.condition?.let { runtime.resolveBoolean(it) } ?: true
+        }
     val rideProp: RidingProperties
         get() = form.riding
     var shownItem: ItemStack
@@ -338,7 +343,7 @@ open class PokemonEntity(
         if (pokemon.form.riding.behaviours != null) {
             ridingController = RidingController(this, pokemon.form.riding.behaviours!!)
         }
-        occupiedSeats = arrayOfNulls(seats.size)
+        occupiedSeats.clear()
     }
 
     /**
@@ -418,7 +423,7 @@ open class PokemonEntity(
 
     var tickSpawned = 0
 
-    var occupiedSeats = arrayOfNulls<Entity>(seats.size)
+    var occupiedSeats = mutableMapOf<Seat, Entity>()
 
     init {
         delegate.initialize(this)
@@ -461,6 +466,7 @@ open class PokemonEntity(
         builder.define(RIDE_BOOSTS, emptyMap())
         builder.define(RIDE_STAMINA, 1F)
         builder.define(SCALE_MODIFIER, 1F)
+        builder.define(IS_ALPHA, false)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -505,7 +511,7 @@ open class PokemonEntity(
     override fun canStandOnFluid(state: FluidState): Boolean {
         // If the pokemon is currently ridden then return false to prevent mounts that can transition
         // from the air to the water from getting stuck on the water surface.
-        if (this.passengers.filterIsInstance<LivingEntity>().isNotEmpty() && this.controllingPassenger != null) return false
+        if (this.hasRider() && this.controllingPassenger != null) return false
 
         return if (state.`is`(FluidTags.WATER) && !isEyeInFluid(FluidTags.WATER)) {
             exposedForm.behaviour.moving.swim.canWalkOnWater || platform != PlatformType.NONE
@@ -536,10 +542,8 @@ open class PokemonEntity(
     }
 
     public override fun removePassenger(passenger: Entity) {
-        val passengerIndex = occupiedSeats.indexOf(passenger)
-        if (passengerIndex != -1) {
-            occupiedSeats[passengerIndex] = null
-        }
+        occupiedSeats.entries.removeIf { it.value == passenger }
+        (delegate as? PokemonServerDelegate)?.passengerOffsets?.remove(passenger.id)
         if (level().isClientSide) {
             MountedCameraTypeHandler.handleDismount(passenger, this)
         }
@@ -555,6 +559,22 @@ open class PokemonEntity(
             }
         }
     }
+
+    /**
+     * Actively check if all occupied seats are still valid.
+     */
+    fun recheckSeatConditions() {
+        val effectiveSeats = seats
+        occupiedSeats.entries
+            .filter { it.key !in effectiveSeats }
+            .forEach { it.value.stopRiding() }
+    }
+
+    fun getSeatForPassenger(passenger: Entity): Seat? {
+        return occupiedSeats.entries.firstOrNull { it.value == passenger }?.key
+    }
+
+
 
     override fun thunderHit(level: ServerLevel, lightning: LightningBolt) {
         // Ground types shouldn't take lightning damage
@@ -606,6 +626,16 @@ open class PokemonEntity(
     }
 
 
+    /*
+     *  Handles giving spider pokemon immunity to cobweb block's slow effect
+     */
+    override fun makeStuckInBlock(state: BlockState, motionMultiplier: Vec3) {
+        if (!(pokemon.species.behaviour.blockInteract.immuneToCobwebBlock && state.`is`(Blocks.COBWEB))) {
+            super.makeStuckInBlock(state, motionMultiplier)
+        }
+    }
+
+
     override fun tick() {
         /* Addresses watchdog hanging that is completely bloody inexplicable. */
         yBodyRot = Mth.wrapDegrees(yBodyRot)
@@ -633,6 +663,8 @@ open class PokemonEntity(
         flyDistO = flyDist
 
         ridingController?.tick()
+        if (!level().isClientSide) { recheckSeatConditions() }
+
 
         if (isBattling) {
             // Deploy a platform if a non-wild Pokemon is touching water but not underwater.
@@ -764,6 +796,13 @@ open class PokemonEntity(
      */
     override fun fireImmune(): Boolean {
         return pokemon.isFireImmune()
+    }
+
+    /**
+     * Prevents ice type Pokémon from freezing (from powered snow)
+     */
+    override fun canFreeze(): Boolean {
+        return !pokemon.isFreezeImmune() && super.canFreeze()
     }
 
     /**
@@ -1127,7 +1166,7 @@ open class PokemonEntity(
     override fun getBreedOffspring(serverLevel: ServerLevel, ageableMob: AgeableMob) = null
 
     override fun canSitOnShoulder(): Boolean {
-        return pokemon.form.shoulderMountable
+        return pokemon.form.shoulderMountable && !pokemon.isAlpha
     }
 
     override fun wantsToPickUp(stack: ItemStack): Boolean {
@@ -1260,6 +1299,8 @@ open class PokemonEntity(
             if (seats.isEmpty()) return@ifRidingAvailableSupply false;
             if ((owner as? ServerPlayer)?.isInBattle() == true) return@ifRidingAvailableSupply false;
             if (this.owner != player && this.passengers.isEmpty()) return@ifRidingAvailableSupply false;
+            if(pokemon.effectiveScale < Cobblemon.config.minimumRidingScale) return@ifRidingAvailableSupply false;
+            if(beamMode == 3) return@ifRidingAvailableSupply false;
             return@ifRidingAvailableSupply behaviour.isActive(settings, state, this);
         }
         if (pokemon.getOwnerPlayer() == player) {
@@ -1284,7 +1325,7 @@ open class PokemonEntity(
     }
 
     override fun getDimensions(pose: Pose): EntityDimensions {
-        val scale = effects.mockEffect?.scale ?: (form.baseScale * pokemon.scaleModifier)
+        val scale = effects.mockEffect?.scale ?: (form.baseScale * pokemon.effectiveScale)
         var result = this.exposedForm.hitbox.scale(scale)
         result = result.withEyeHeight(this.exposedForm.eyeHeight(this) * result.height)
         result = result.scale(this.scale)
@@ -1442,19 +1483,31 @@ open class PokemonEntity(
 
         // Evolution item logic
         if (pokemon.getOwnerPlayer() == player) {
+            fun evolutionUnlocked(): Boolean {
+                stack.consume(1, player)
+                this.level().playSoundServer(
+                    position = this.position(),
+                    sound = CobblemonSounds.ITEM_USE,
+                    volume = 1F,
+                    pitch = 1F
+                )
+                return true
+            }
             val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
-            pokemon.lockedEvolutions
-                    .filterIsInstance<ItemInteractionEvolution>()
-                    .forEach { evolution ->
-                        if (evolution.attemptEvolution(pokemon, context)) {
-                            stack.consume(1, player)
-                            this.level().playSoundServer(
-                                    position = this.position(),
-                                    sound = CobblemonSounds.ITEM_USE,
-                                    volume = 1F,
-                                    pitch = 1F
-                            )
-                            return true
+            val lockedItemEvolutions = pokemon.lockedEvolutions.filterIsInstance<ItemInteractionEvolution>()
+            // forced evolutions > check those first and do ONLY one if there's multiple
+            lockedItemEvolutions.filter { !it.optional }.forEach {
+                if (it.attemptEvolution(pokemon, context)) {
+                   return evolutionUnlocked()
+                }
+            }
+            // optional evolutions > unlock all with single item use
+            lockedItemEvolutions.filter { it.optional }
+                    // we unlock all evolutions that depend on this single item
+                    .map { evolution -> return@map evolution.attemptEvolution(pokemon, context) }
+                    .let {
+                        if (it.contains(true)) { // if any of the evolutions were unlocked, we take the item
+                            return evolutionUnlocked()
                         }
                     }
         }
@@ -1552,6 +1605,9 @@ open class PokemonEntity(
                 || stack.`is`(CobblemonItemTags.WHITELISTED_ITEMS_TO_HOLD)
 
     fun tryRidingPokemon(player: ServerPlayer): Boolean {
+        if (pokemon.effectiveScale < Cobblemon.config.minimumRidingScale) {
+            return false
+        }
         val event = RidePokemonEvent.Pre(player, this)
         CobblemonEvents.RIDE_EVENT_PRE.post(event)
         if (!event.isCanceled) {
@@ -1563,7 +1619,7 @@ open class PokemonEntity(
     }
 
     fun tryMountingShoulder(player: ServerPlayer): Boolean {
-        if (this.pokemon.belongsTo(player) && this.hasRoomToMount(player)) {
+        if (this.pokemon.belongsTo(player) && this.hasRoomToMount(player) && this.canSitOnShoulder()) {
             CobblemonEvents.SHOULDER_MOUNT.postThen(
                 ShoulderMountEvent(
                     player,
@@ -1621,7 +1677,7 @@ open class PokemonEntity(
         nbt.putString(DataKeys.SHOULDER_SPECIES, this.pokemon.species.resourceIdentifier.toString())
         nbt.putString(DataKeys.SHOULDER_FORM, this.pokemon.form.name)
         nbt.put(DataKeys.SHOULDER_ASPECTS, this.pokemon.aspects.map(StringTag::valueOf).toNbtList())
-        nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, this.pokemon.scaleModifier)
+        nbt.putFloat(DataKeys.SHOULDER_SCALE_MODIFIER, this.pokemon.effectiveScale)
         nbt.put(
             DataKeys.SHOULDER_ITEM,
             this.level().registryAccess()
@@ -1808,8 +1864,7 @@ open class PokemonEntity(
     }
 
     override fun handleRelativeFrictionAndCalculateMovement(deltaMovement: Vec3, friction: Float): Vec3 {
-        val riders = this.passengers.filterIsInstance<LivingEntity>()
-        if (riders.isEmpty() || this.controllingPassenger == null) {
+        if (!this.hasRider() || this.controllingPassenger == null) {
             super.handleRelativeFrictionAndCalculateMovement(deltaMovement, friction)
         } else {
             val velocity = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
@@ -1845,7 +1900,7 @@ open class PokemonEntity(
      */
 
     override fun move(type: MoverType, pos: Vec3) {
-        if (this.controllingPassenger != null || this.passengers.filterIsInstance<LivingEntity>().isNotEmpty()) {
+        if (this.controllingPassenger != null || this.hasRider()) {
             // Reset fall distance every tick if the Pokémon isn't nosediving
             if (this.deltaMovement.y() > -0.5F && this.fallDistance > 1.0F) {
                 this.fallDistance = 1.0F
@@ -1859,8 +1914,7 @@ open class PokemonEntity(
         if (beamMode != 3) { // Don't let Pokémon move during recall
 
             //Prevent current travel logic when riding a pokemon.
-            val riders = this.passengers.filterIsInstance<LivingEntity>()
-            if ( riders.isEmpty() || this.controllingPassenger == null) {
+            if (!this.hasRider() || this.controllingPassenger == null) {
                 super.travel(movementInput)
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
@@ -2053,7 +2107,7 @@ open class PokemonEntity(
             return false
         }
         val lead = player.party().firstOrNull { it.entity != null }?.uuid
-        return BattleBuilder.pve(player, this, lead) is SuccessfulBattleStart
+        return BattleBuilder.pve(player, this, lead).ifSuccessful { CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(player.uuid, this.pokemon)) } is SuccessfulBattleStart
     }
 
     /**
@@ -2211,11 +2265,17 @@ open class PokemonEntity(
         rideStatOverrides[style]!![stat] = value
     }
 
+    /**
+     * Check for a seat in [seats] that is not already in [occupiedSeats]
+     */
     override fun canAddPassenger(passenger: Entity): Boolean {
-        return passengers.size < seats.size
+        val seatsAvailable: Boolean = seats.any { it !in occupiedSeats.keys }
+        val passengerSeated: Boolean = passenger in occupiedSeats.values
+        return seatsAvailable && !passengerSeated
     }
 
     public override fun addPassenger(passenger: Entity) {
+        if (beamMode == 3) return
         if (passenger is ServerPlayer) {
             // Recall all the rest of the player's party pokes
             passenger.party()
@@ -2237,10 +2297,15 @@ open class PokemonEntity(
         } else if (level().isClientSide) {
             MountedCameraTypeHandler.handleMount(passenger, this)
         }
-        val passengerIndex = occupiedSeats.indexOfFirst { it == null }
-        if (passengerIndex != -1) {
-            occupiedSeats[passengerIndex] = passenger
+
+        // Make sure we aren't adding a passenger multiple times. Also blocks reassignment by the client.
+        if (!(passenger in occupiedSeats.values)) {
+            val availableSeat = seats.firstOrNull { it !in occupiedSeats }
+            if (availableSeat != null) {
+                occupiedSeats[availableSeat] = passenger
+            }
         }
+
         super.addPassenger(passenger)
         if (passengers.size == 1) {
             // Someone just started riding, fill in the stamina value! Gets run from both sides.
@@ -2304,7 +2369,6 @@ open class PokemonEntity(
 
             this.yHeadRot = this.yRot
             this.yBodyRot = this.yRot
-            this.passengers.filterIsInstance<LivingEntity>()
 
             if (behaviour.isActive(settings, state, this) && behaviour.canJump(settings, state, this, driver)) {
                 if (this.jumpInputStrength > 0) {
@@ -2649,11 +2713,15 @@ open class PokemonEntity(
      *   represents a kind of 'responsibility' that the leader feels towards their followers - they believe in this
      *   leader with some amount of fervor, and this gets used to ensure that the leader doesn't choose to follow a
      *   different Pokémon that is of an equal or lower tier than this Pokémon is to its followers.
+     * - Alpha Pokémon automatically have the maximum possible tier.
      */
     fun getHerdTier(): Int {
         val world = level() as? ServerLevel ?: return 0
         val herdLeader = this.brain.getMemorySafely(CobblemonMemories.HERD_LEADER).orElse(null)?.let(UUID::fromString)?.let(world::getEntity) as? PokemonEntity
         return if (herdLeader == null) {
+            if (pokemon.isAlpha) {
+                return Int.MAX_VALUE
+            }
             if (!brain.hasMemoryValue(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)) {
                 return 0
             }
@@ -2665,7 +2733,12 @@ open class PokemonEntity(
                 it.behaviour.herd.bestMatchLeader(follower = it, possibleLeader = this)?.tier ?: 0
             } ?: 0
         } else {
+            if (herdLeader.pokemon.isAlpha) {
+                return Int.MAX_VALUE
+            }
             herdLeader.behaviour.herd.bestMatchLeader(follower = this, possibleLeader = herdLeader)?.tier ?: 0
         }
     }
+
+    fun hasRider() = this.passengers.any { it is LivingEntity }
 }

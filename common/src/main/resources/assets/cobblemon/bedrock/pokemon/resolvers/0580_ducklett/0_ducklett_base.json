@@ -1,16 +1,30 @@
 {
-    "species": "cobblemon:ducklett",
-    "order": 0,
-    "variations": [
-      {
-        "aspects": [],
-        "poser": "cobblemon:ducklett",
-        "model": "cobblemon:ducklett.geo",
-        "texture": "cobblemon:textures/pokemon/0580_ducklett/ducklett.png"
-        },
-      {
-        "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0580_ducklett/ducklett_shiny.png"  
-      }
-    ]
-  }
+  "species": "cobblemon:ducklett",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:ducklett",
+      "model": "cobblemon:ducklett.geo",
+      "texture": "cobblemon:textures/pokemon/0580_ducklett/ducklett.png"
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0580_ducklett/ducklett_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0580_ducklett/ducklett_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

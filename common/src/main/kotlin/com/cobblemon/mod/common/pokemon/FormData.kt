@@ -76,7 +76,7 @@ class FormData(
     @SerializedName("moves")
     private var _moves: Learnset? = null,
     @SerializedName("evolutions")
-    private val _evolutions: MutableSet<Evolution>? = null,
+    private var _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("abilities")
     private var _abilities: AbilityPool? = null,
     @SerializedName("drops")
@@ -84,7 +84,7 @@ class FormData(
     @SerializedName("pokedex")
     private var _pokedex: MutableList<String>? = null,
     @SerializedName("preEvolution")
-    private val _preEvolution: PreEvolution? = null,
+    private var _preEvolution: PreEvolution? = null,
     private var standingEyeHeight: Float? = null,
     private var swimmingEyeHeight: Float? = null,
     private var flyingEyeHeight: Float? = null,
@@ -104,6 +104,10 @@ class FormData(
     private var _baseAI: MutableList<BehaviourConfig>? = null,
     @SerializedName("ai")
     private var _ai: MutableList<BehaviourConfig>? = null,
+    @SerializedName("signatureMoves")
+    private var _signatureMoves: MutableList<MoveTemplate>? = null,
+    @SerializedName("defaultWildMovesetBuilder")
+    private val _defaultWildMovesetBuilder: ResourceLocation? = null,
     val requiredMove: String? = null,
     val requiredItem: String? = null,
     /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
@@ -206,6 +210,14 @@ class FormData(
     val evolutions: MutableSet<Evolution>
         get() = _evolutions ?: mutableSetOf()
 
+    /** The evolutions explicitly set on this form, as opposed to [evolutions] which falls back to an empty set. Used to tell whether this form overrides the species' evolutions when syncing. */
+    internal val ownEvolutions: MutableSet<Evolution>?
+        get() = this._evolutions
+
+    /** The preEvolution explicitly set on this form, as opposed to [preEvolution] which falls back to the species'. Used to tell whether this form overrides the species' preEvolution when syncing. */
+    internal val ownPreEvolution: PreEvolution?
+        get() = this._preEvolution
+
     val battleTheme: ResourceLocation
         get() = _battleTheme ?: species.battleTheme
 
@@ -235,6 +247,10 @@ class FormData(
         get() = _baseAI ?: species.baseAI
     val ai: List<BehaviourConfig>
         get() = _ai ?: species.ai
+    val signatureMoves: List<MoveTemplate>
+        get() = _signatureMoves ?: species.signatureMoves
+    val defaultWildMovesetBuilder: ResourceLocation
+        get() = _defaultWildMovesetBuilder ?: species.defaultWildMovesetBuilder
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)
@@ -253,13 +269,22 @@ class FormData(
         this.species = species
         this.behaviour.parent = species.behaviour
         Cobblemon.statProvider.provide(this)
-        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
-        this.preEvolution?.species
-        this.preEvolution?.form
-        this.evolutions.size
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         behaviour.herd.initialize()
         return this
+    }
+
+    /**
+     * Applies decoded evolution data onto this form, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
+     * after every species has already been registered.
+     */
+    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>?, preEvolution: PreEvolution?) {
+        this._evolutions = evolutions
+        this._preEvolution = preEvolution
+        // These properties are lazy, force resolution now that every species is guaranteed to be registered
+        this.preEvolution?.species
+        this.preEvolution?.form
+        this.evolutions.size
     }
 
     internal fun resolveEvolutionMoves() {

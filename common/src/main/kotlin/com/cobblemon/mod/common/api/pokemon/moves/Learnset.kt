@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.api.pokemon.moves
 
-import com.cobblemon.mod.common.api.data.ClientDataSynchronizer
 import com.cobblemon.mod.common.api.moves.MoveTemplate
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.net.IntSize
@@ -18,10 +17,8 @@ import com.cobblemon.mod.common.util.writeSizedInt
 import com.google.gson.JsonElement
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-open class Learnset : ClientDataSynchronizer<Learnset> {
-    class Interpreter(
-        val loadMove: (JsonElement, Learnset) -> Boolean
-    ) {
+open class Learnset {
+    class Interpreter(val loadMove: (JsonElement, Learnset) -> Boolean) {
         companion object {
             fun parseFromPrefixIntoList(prefix: String, list: (Learnset) -> MutableList<MoveTemplate>): Interpreter {
                 return Interpreter { element, learnset ->
@@ -73,8 +70,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
             eggInterpreter,
             tutorInterpreter,
             legacyInterpreter,
-            specialInterpreter,
-            levelUpInterpreter,
+            specialInterpreter, levelUpInterpreter,
             formChangeInterpreter
         )
     }
@@ -99,6 +95,11 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         .flatMap { it.value }
         .toSet()
 
+    fun tmLearnableMoves(): MutableList<MoveTemplate> {
+        return tmMoves.toMutableList()
+    }
+
+
     fun getAllLegalMoves(): Set<MoveTemplate> {
         return levelUpMoves.values.flatten().toSet() +
                 eggMoves +
@@ -108,10 +109,12 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
                 evolutionMoves
     }
 
-    // We only sync level up moves atm
-    override fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves
+    // Syncs level up, TM, and egg moves.
+    fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves
+            || other.tmMoves != this.tmMoves
+            || other.eggMoves != this.eggMoves
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(buffer: RegistryFriendlyByteBuf) {
         this.levelUpMoves.clear()
         repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
             val level = buffer.readSizedInt(IntSize.U_SHORT)
@@ -121,9 +124,11 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
             }
             levelUpMoves[level] = moves
         }
+        decodeMoveList(buffer, this.tmMoves)
+        decodeMoveList(buffer, this.eggMoves)
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(buffer: RegistryFriendlyByteBuf) {
         buffer.writeSizedInt(IntSize.U_BYTE, levelUpMoves.size)
         for ((level, moves) in levelUpMoves) {
             buffer.writeSizedInt(IntSize.U_SHORT, level)
@@ -131,6 +136,22 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
             for (move in moves) {
                 buffer.writeInt(move.num)
             }
+        }
+        encodeMoveList(buffer, this.tmMoves)
+        encodeMoveList(buffer, this.eggMoves)
+    }
+
+    private fun decodeMoveList(buffer: RegistryFriendlyByteBuf, list: MutableList<MoveTemplate>) {
+        list.clear()
+        repeat(times = buffer.readSizedInt(IntSize.U_SHORT)) {
+            Moves.getByNumericalId(buffer.readInt())?.let(list::add)
+        }
+    }
+
+    private fun encodeMoveList(buffer: RegistryFriendlyByteBuf, list: List<MoveTemplate>) {
+        buffer.writeSizedInt(IntSize.U_SHORT, list.size)
+        for (move in list) {
+            buffer.writeInt(move.num)
         }
     }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_pamtre_berry",
+  "textures": {
+    "2": "cobblemon:block/berries/occa_tree"
+  }
+}

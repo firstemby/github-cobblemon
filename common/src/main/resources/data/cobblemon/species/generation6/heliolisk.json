@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 695,
   "name": "Heliolisk",
   "primaryType": "electric",
@@ -43,10 +44,10 @@
   "catchRate": 75,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.5,
   "hitbox": {
     "width": 1,
-    "height": 1,
+    "height": 2,
     "fixed": false
   },
   "moves": [
@@ -181,6 +182,15 @@
     "resting": {
       "drowsyChance": 0.0333,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "heliolisk alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

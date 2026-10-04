@@ -5,9 +5,9 @@
   "profileTranslation": [0, 0.66, 0],
   "rootBone": "grimer_alola",
   "animations": {
-    "cry": "q.bedrock_stateful('grimer_alolan', 'cry')",
-    "recoil": "q.bedrock_stateful('grimer_alolan', 'recoil')",
-    "status": "q.bedrock_stateful('grimer_alolan', 'status', q.curve('symmetrical_wide'))"
+    "cry": "q.bedrock_stateful('grimer', 'cry')",
+    "recoil": "q.bedrock_stateful('grimer', 'recoil')",
+    "status": "q.bedrock_stateful('grimer', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "battle-standing": {
@@ -15,13 +15,14 @@
       "isBattle": true,
       "isTouchingWater": false,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'battle_idle')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'battle_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')",
-        "q.bedrock_quirk('grimer_alolan', 'right_arm_chew')",
-        "q.bedrock_quirk('grimer_alolan', 'left_arm_chew')"
+        "q.bedrock_quirk('grimer', 'blink')",
+        "q.bedrock_quirk('grimer', 'right_arm_chew')",
+        "q.bedrock_quirk('grimer', 'left_arm_chew')"
       ]
     },
     "standing": {
@@ -29,40 +30,50 @@
       "isBattle": false,
       "isTouchingWater": false,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'ground_idle')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'ground_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')",
-        "q.bedrock_quirk('grimer_alolan', 'right_arm_chew')",
-        "q.bedrock_quirk('grimer_alolan', 'left_arm_chew')"
+        "q.bedrock_quirk('grimer', 'blink')",
+        "q.bedrock_quirk('grimer', 'right_arm_chew')",
+        "q.bedrock_quirk('grimer', 'left_arm_chew')"
       ]
     },
     "walking": {
       "poseTypes": ["WALK"],
       "isTouchingWater": false,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'ground_walk')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'ground_walk')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')"
+        "q.bedrock_quirk('grimer', 'blink')"
       ]
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
       "isTouchingWater": false,
-      "animations": ["q.bedrock('grimer_alolan', 'sleep')"]
+      "animations": ["q.bedrock('grimer', 'sleep')"]
     },
     "surface_idle": {
       "poseTypes": ["STAND", "NONE"],
+      "isBattle": false,
       "isTouchingWater": true,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'water_surface_idle')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'water_surface_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')"
+        "q.bedrock_quirk('grimer', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
       ]
     },
     "surface_battle_idle": {
@@ -70,29 +81,49 @@
       "isBattle": true,
       "isTouchingWater": true,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'water_surface_battle_idle')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'water_surface_battle_idle')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')"
+        "q.bedrock_quirk('grimer', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
       ]
     },
     "surface_swimming": {
       "poseTypes": ["SWIM", "WALK"],
       "isTouchingWater": true,
       "animations": [
-        "q.look('head')",
-        "q.bedrock('grimer_alolan', 'water_surface_swim')"
+        "q.look('head', 1, 1, 1, -7, 10, -10)",
+        "q.look('torso', 1, 1, 20, -15, 2, -2)",
+        "q.bedrock('grimer', 'water_surface_swim')"
       ],
       "quirks": [
-        "q.bedrock_quirk('grimer_alolan', 'blink')"
+        "q.bedrock_quirk('grimer', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
       ]
     },
     "surface_sleep": {
       "poseTypes": ["SLEEP"],
       "isTouchingWater": true,
       "animations": [
-        "q.bedrock('grimer_alolan', 'sleep')"
+        "q.bedrock('grimer', 'sleep')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -10, 0]
+        }
       ]
     }
   }

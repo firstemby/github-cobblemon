@@ -1,16 +1,30 @@
 {
-    "species": "cobblemon:druddigon",
-    "order": 0,
-    "variations": [
-      {
-        "aspects": [],
-        "poser": "cobblemon:druddigon",
-        "model": "cobblemon:druddigon.geo",
-        "texture": "cobblemon:textures/pokemon/0621_druddigon/druddigon.png"
-        },
-      {
-        "aspects": ["shiny"],
-        "texture": "cobblemon:textures/pokemon/0621_druddigon/druddigon_shiny.png"  
-      }
-    ]
-  }
+  "species": "cobblemon:druddigon",
+  "order": 0,
+  "variations": [
+    {
+      "aspects": [],
+      "poser": "cobblemon:druddigon",
+      "model": "cobblemon:druddigon.geo",
+      "texture": "cobblemon:textures/pokemon/0621_druddigon/druddigon.png"
+    },
+    {
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0621_druddigon/druddigon_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0621_druddigon/druddigon_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

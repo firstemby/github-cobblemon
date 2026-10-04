@@ -134,15 +134,19 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "arctibax",
           "tier": 1
         },
         {
-          "pokemon": "baxcalibur",
+          "pokemon": "baxcalibur mega=false",
           "tier": 2
+        },
+        {
+          "pokemon": "baxcalibur mega",
+          "tier": 3
         }
       ]
     },

@@ -62,8 +62,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "9",
+      "maxSize": 9,
       "toleratedLeaders": [
+        {
+          "pokemon": "exeggutor alpha",
+          "tier": 1
+        },
         {
           "pokemon": "exeggcute",
           "tier": 1
@@ -144,7 +148,6 @@
     "tm:infestation",
     "tm:leafstorm",
     "tm:lightscreen",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:powerswap",
     "tm:protect",
@@ -230,6 +233,22 @@
       "learnableMoves": [
         "stomp"
       ],
+      "requirements": [
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_beach"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_tropical_island"
+          }
+        }
+      ],
       "requiredContext": "cobblemon:leaf_stone"
     },
     {
@@ -293,6 +312,22 @@
           "consumeHeldItem": false,
           "learnableMoves": [
             "dragonhammer"
+          ],
+          "requirements": [
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_jungle"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_savanna"
+              }
+            }
           ],
           "requiredContext": "cobblemon:leaf_stone"
         }

@@ -18,23 +18,25 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableModel
 import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.pose.Bone
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.RenderContext
+import com.cobblemon.mod.common.client.sound.instances.AlphaCrySoundInstance
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.genericRuntime
 import com.cobblemon.mod.common.util.getString
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveDouble
-import java.util.SortedMap
-import java.util.TreeMap
 import net.minecraft.CrashReport
 import net.minecraft.ReportedException
 import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
+import java.util.*
 
 data class BedrockAnimationGroup(
     val formatVersion: String,
@@ -110,7 +112,13 @@ class BedrockSoundKeyframe(
         if (soundEvent != null) {
             if (entity != null) {
                 if (!entity.isSilent) {
-                    entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                    // If this entity is an alpha then play their cry as such
+                    if (entity is PokemonEntity && entity.pokemon.isAlpha) {
+                        Minecraft.getInstance().soundManager.play(
+                            AlphaCrySoundInstance(soundEvent, entity.soundSource, 1.5f, 0.92f, entity, entity.level().random.nextLong()))
+                    } else {
+                        entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                    }
                 }
             } else {
                 Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
@@ -254,9 +262,9 @@ data class BedrockAnimation(
     fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
         val effectCondition: (effectKeyframe: BedrockEffectKeyframe) -> Boolean =
             if (previousSeconds > newSeconds) {
-                { it.seconds >= previousSeconds || it.seconds <= newSeconds }
+                { it.seconds >= previousSeconds || it.seconds < newSeconds }
             } else {
-                { it.seconds in previousSeconds..newSeconds }
+                { it.seconds >= previousSeconds && it.seconds < newSeconds }
             }
 
         effects.filter(effectCondition).forEach { it.run(entity, state) }

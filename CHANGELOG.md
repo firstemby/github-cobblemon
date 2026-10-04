@@ -1,20 +1,88 @@
 # Changelog
-## [1.7.4 (MONTH Xth, 2026)](#1-7-4)
+## [1.8.2 (MONTH xth, 2026)](#1-8-2)
 
 ### Additions
-- Added config options to award experience to fainted Pokémon for opponents they helped defeat (`awardExperienceToFaintedPokemon`) and to still award experience for defeated enemies even after battle loss/forfeit (`awardExperienceOnBattleLoss`)
-- Party Overlay Exp Gained Animation will now display the amount of EXP the Pokémon gained
-- Added a toast to notify players of how they can scroll through their party. Did you know you can hold R and scroll instead of using arrow keys??!
-- Added new layer property that makes a layer scroll in a direction. "scrolling": {"speedU": 0.1, "speedV": 0.1}
-- Added missing crops to Botany Pots integration
-
-### New rideable Pokémon
+- The following items can now be placed on the ground as blocks:
+  - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Soft Sand, Electirizer, Magmarizer, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
+  - Iron Ball, Metal Coat, Throat Spray, Terrain Extender, Medicinal Brew, Moomoo Milk, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
+- The following items can now be placed on various surfaces:
+  - Galarica Wreath, Magnet, Flame Orb, Life Orb, Toxic Orb, Light Ball, and Smoke Ball.
+- The following items can now be placed as blocks and have additional functionality:
+  - Ring Target, Metronome, and Eject Button.
+- The following items can now be worn by Players and Pokémon:
+  - Galarica Wreath, Cleanse Tag, Spell Tag, Sharp Beak, Covert Cloak, Shell Helmet, and Never-Melt Ice.
+- Wearable items can now be equipped by a player by holding it and right-clicking (or rebound use/interact)
+  - Wearable items that can be placed down are exempt from this behaviour.
+- Mint Leaves can now be placed on the ground as Leaf Litter, or in Flower Pots
+- Added Oricorio Flowers
+- Added Terrain Plants
+- Berries can now be placed in Flower Pots
+- The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
+- Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
 ### Pokémon Added
+#### Generation 4
+- Snover
+- Abomasnow
+- Burmy
+- Wormadam
+- Mothim
+
+#### Generation 5
+- Tympole
+- Palpitoad
+- Seismitoad
+
+#### Generation 6
+- Helioptile
+- Heliolisk
+
+#### Generation 7
+- Grubbin
+- Charjabug
+- Vikavolt
+- Minior
+
+#### Generation 8
+- Eternatus
+
+#### Generation 9
+- Greavard
+- Houndstone
 
 ### Model updates for the following Pokémon
+- Sudowoodo
+- Spheal
+- Cacnea
+- Cacturne
+- Binacle
+- Barbaracle
+- Glimmet
+- Glimmora
+- Deerling
+- Sawsbuck (All forms)
+- Absol
+- Poliwag
+- Politoed
+- Ekans
+- Oddish
+- Gloom
+- Vileplume
+- Bellossom
+- Shroomish
 
 ### Animation updates for the following Pokémon
+- Treecko (New Shoulder Mount!)
+- Bonsly (New Shoulder Mount!)
+- Sudowoodo
+- Cacnea
+- Cacturne
+- Ekans
+- Arbok
+- Oddish
+- Gloom
+- Vileplume
+- Bellossom
 
 ### Changes
 - Restructured Botany Pots integration folder structure
@@ -23,28 +91,52 @@
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
 - Trade functionality has been overhauled to allow trading the entire party at once, along with UI enhancements
+- Terrain Seeds can now be planted
+- Terrain Seeds are now consumed during PvP and NPC battles
+- Glow Item Frames can be crafted using Bright Powder as an alternative to Glow Ink Sacs
+- Bright Powder can be used on Signs and Hanging Signs to make text glow, as an alternative to Glow Ink Sacs
+- Updated various recipes to display in Recipe Groups within the Recipe Book
+- Updated most recipes to display more logically/consistently within the Recipe Book's categories
+- Updated the following recipes
+  - Never-Melt Ice, Focus Sash, Blunder Policy, Weakness Policy, Blank TM
+- Make ride rotations less jittery in multiplayer.
+- Changes Disc Shelf TMs to use textures instead of tinting and overlays to line up with item display
+- Blank TM can now be inserted into the Disc Shelf
+- Added TM creative tab
+- Recall animation now renders ball in hand with the player arm raised.
+- Made regional and Vivillon split-evo locations now mutually exclusive
+- Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.
+  - Exceptions being "forced" evolutions which will continue to stop after the first one
 
 ### Fixes
-- Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
-- Fix occasional crash on retrieving revived fossils
-- Fixed a compatibility issue with World Game Rules which caused some log spam in specific cases.
-- Fixed improper validation of Pokémon when performing a trade.
-- Fixed issue where particle like beam can disappear when you don't see the beginning of the beam or you look away
- - Fixes https://gitlab.com/cable-mc/cobblemon/-/issues/1943
- - Fix occasional crash on retrieving revived fossils
- - Fix brushing not working on Neoforge
- - [Various Submarine Ride Fixes](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2157)
- - Fix Pastured mons despawning and running away.
- - Fix Apricorn trees crashing when other mods bonemeal it
- - [Various UFO Ride Improvements](https://gitlab.com/cable-mc/cobblemon/-/merge_requests/2156)
-- Fixed NeoForge brewing stand unexpectedly crashing users when shift clicking items within it's menu
-- Fixed NPCs switching pokemon very often during battles
-- Fixed Campfire pot causing crashes under certain circumstances
-- Fixed Type Gems not being consumed upon use
-- Fixed Ancient Pokeball's to their respective modifiers
-- Fixed a Server warning when recalling Pokemon
-- Fixed sliding particles incorrectly handling block collision
-- Fixed Full Heal not curing status conditions in battle
+- Correctly grants "They're Minerals!" advancement when planting a type gem
+- Shoulder mounted Pokémon now follow player body animations, improving their positioning with custom player animations and default actions.
+- Shoulder mounted Pokémon now sit slightly higher with chest armor equipped for better alignment, with a configurable blacklist.
+- Type Gem Blocks now have advancements to give you the recipe in the recipe book (the data for the advancements were inside the recipes somehow??)
+- Some other recipes without advancements have also been corrected
+- Corrected the TM Recipes for Charge Beam and Payday
+- Type Gem blocks now properly generate clusters off of the block.
+- Starter Screen Categories will no longer stop rendering if they are bigger than the viewport, and you are not viewing top or bottom edges
+- Random Starter option now properly handled in height calculation, so now it won't run off into other categories or be un-accessible due to scroll limits if it causes a new row
+- Mochi and Feathers no longer drop glass bottles on use
+- Fixed a rare set of concurrency bugs related to reloading packs on NeoForge; fixes a ModernFix issue
+- Removed unnecessary conditions for Mimikyu's standing pose. Hopefully fixes the rare instance of it using its shoulder animations during battle in multiplayer scenarios.
+- Fixed Rockruff line not blinking
+- Fixed Flygon sometimes using its running animation instead of walking
+- Fixed Bramblin always sleeping outside of battle
+- Fixed Dragonair using its battle idle as a normal idle
+- Fixed Lycanroc's head movement
+- Added head movement to Archaludon
+- Fixed Duraludon line not having any sleep animations
+- Fixed Diglett line not having their faint animations
+- Fixed Kingambit moving its legs while walking
+- Fixed Alolan Diglett's cry not playing
+- Fixed shiny alpha Snorlax using the non-shiny texture
+- Various Structure fixes
+- Fixed shiny Pokémon under certain circumstances forgetting taught TMs
+- Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
+- Fixed ball capture beam origin coming from behind the ball.
+- Fixed Safari Ball catch rate outside of battle
 
 ### Developer
 - Added `PokeSnackSpawnerFactory` which allows influence registration on PokeSnack encounters
@@ -53,12 +145,24 @@
 - Trade network packets (`TradeUpdatedPacket`, `UpdateTradeOfferPacket`, and `TradeCompletedPacket`) now receive an array of Pokémon instead of a single Pokémon to execute trades
 - `TradeEvent.Pre` and `TradeEvent.Post` now expose every Pokémon each participant receives (`tradeParticipant1Pokemon` and `tradeParticipant2Pokemon` are now lists), and their Molang context includes `trade_participant_1_pokemon_list` and `trade_participant_2_pokemon_list`
 - When multiple Pokémon are traded at once, trade evolutions now check every Pokémon received in exchange, so trading Karrablast and Shelmet together evolves both
+- Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
+  ```json
+  {
+    "variant": "attack_defence_ratio",
+    "pokedexIcon": "minecraft:diamond_sword",
+    "pokedexTooltip": "cobblemon.ui.pokedex.requirement.attack_defence_ratio.tooltip"
+  }
+  ```
+- Fixed wrong order of operations in the code flow prior to the `FOSSIL_REVIVED` event causing pokemon to appear without entity link
+- Fixed TestPartySlot command not correctly comparing the provided spec with the target Pokémon
 
 ### Molang & Datapacks
-- q.item.is_enchanted()
-- q.item.has_enchantment(minecraft:sharpness, 3)
-- Added `has_chosen_starter` & `get_starter_uuid` as available Molang functions
-- Added `marks`, `has_mark`, & `remove_marks` as available Molang functions for pokemon
+- A new `negate` variant for evolution requirements has been added, which will negate (invert) the provided inner condition.
+- Added Molang functions for individual Pokédex ids, wherein a subdex is passed in as a string to `dex_caught_count` etc.
+
+### Particles
+
+#### New Move Animations
 
 ### Localization
 - Updated translations for:

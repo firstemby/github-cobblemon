@@ -14,7 +14,18 @@
         "shiny"
       ],
       "texture": "cobblemon:textures/pokemon/0453_croagunk/croagunk_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0453_croagunk/croagunk_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }
-  

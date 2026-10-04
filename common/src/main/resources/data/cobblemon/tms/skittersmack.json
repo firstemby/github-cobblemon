@@ -1,0 +1,19 @@
+{
+  "moveName": "skittersmack",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "bug",
+  "recipe": [
+    {
+      "item": "cobblemon:bug_gem",
+      "count": 7
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "count": 1
+    }
+  ]
+}

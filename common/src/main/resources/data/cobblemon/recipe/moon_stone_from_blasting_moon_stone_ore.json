@@ -1,5 +1,6 @@
 {
     "type": "minecraft:blasting",
+    "category": "misc",
     "group": "moon_stone",
     "ingredient": {
         "item": "cobblemon:moon_stone_ore"

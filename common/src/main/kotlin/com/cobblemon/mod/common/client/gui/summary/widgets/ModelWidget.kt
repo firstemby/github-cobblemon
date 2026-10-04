@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.client.gui.summary.widgets
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
+import com.cobblemon.mod.common.client.gui.ProfileTransformType
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
 import com.cobblemon.mod.common.client.gui.calculateHeadYawAndPitch
 import com.cobblemon.mod.common.client.render.models.blockbench.FloatingState
@@ -26,7 +27,7 @@ class ModelWidget(
     pX: Int, pY: Int,
     pWidth: Int, pHeight: Int,
     pokemon: RenderablePokemon,
-    val baseScale: Float = 2.7F,
+    var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
     var offsetY: Double = 0.0,
     val playCryOnClick: Boolean = false,
@@ -35,7 +36,6 @@ class ModelWidget(
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
     companion object {
-        var render = true
         const val MAX_SECONDS_LOOKING = 6L
     }
 
@@ -58,8 +58,10 @@ class ModelWidget(
     var currentYawAndPitch: Pair<Float, Float> = Pair(0f, 0f)
     val rotationVector = Vector3f(13F, rotationY, 0F)
 
+    var shouldRender = true
+
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, partialTicks: Float) {
-        if (!render) {
+        if (!shouldRender) {
             return
         }
         isHovered = pMouseX >= x && pMouseY >= y && pMouseX < x + width && pMouseY < y + height
@@ -116,7 +118,8 @@ class ModelWidget(
             partialTicks = partialTicks,
             headYaw = currentYawAndPitch.first,
             headPitch = currentYawAndPitch.second,
-            blockLight = blockLight
+            blockLight = blockLight,
+            profileTransformType = ProfileTransformType.SUMMARY,
         )
 
         heldItemRenderer.renderOnModel(

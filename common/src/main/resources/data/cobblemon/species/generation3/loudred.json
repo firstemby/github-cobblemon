@@ -207,8 +207,12 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
+        {
+          "pokemon": "loudred alpha",
+          "tier": 1
+        },
         {
           "pokemon": "exploud",
           "tier": 1

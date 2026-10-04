@@ -11,7 +11,20 @@
     },
     {
       "aspects": ["shiny", "alolan"],
-      "texture": "cobblemon:textures/pokemon/0089_muk/muk_alolan_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0089_muk/muk_alola_shiny.png"
+    },
+    {
+      "aspects": [
+        "alolan",
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0089_muk/muk_alola_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

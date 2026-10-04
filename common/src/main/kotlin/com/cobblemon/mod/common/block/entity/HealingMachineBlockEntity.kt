@@ -120,7 +120,7 @@ class HealingMachineBlockEntity(
         updateBlockChargeLevel(HealingMachineBlock.MAX_CHARGE_LEVEL + 1)
         val world = level ?: return
         if (!world.isClientSide) world.playSoundServer(
-            position = blockPos.toVec3d(),
+            position = blockPos.bottomCenter,
             sound = CobblemonSounds.HEALING_MACHINE_ACTIVE,
             volume = 1F,
             pitch = 1F

@@ -10,8 +10,22 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0103_exeggutor/exeggutor_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0103_exeggutor/exeggutor_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -8,8 +8,12 @@ object CobblemonBuildDetails {
     const val VERSION = "{{ version }}"
     const val SNAPSHOT = {{ isSnapshot }}
 
-    const val GIT_COMMIT = "{{ gitCommit | default("Not Specified") }}"
-    const val BRANCH = "{{ branch | default("Not Specified") }}"
+    // Read at runtime rather than templated in, so a new commit doesn't invalidate compiled code.
+    private val git = java.util.Properties().apply {
+        CobblemonBuildDetails::class.java.getResourceAsStream("/cobblemon-git.properties")?.use(::load)
+    }
+    @JvmField val GIT_COMMIT: String = git.getProperty("commit", "Not Specified")
+    @JvmField val BRANCH: String = git.getProperty("branch", "Not Specified")
 
     fun smallCommitHash(): String {
         return this.GIT_COMMIT.substring(0, 7)

@@ -14,7 +14,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "45-55",
-            "weight": 0.01,
+            "weight": 0.08,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "#cobblemon:is_forest",
@@ -45,7 +51,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "45-55",
-            "weight": 0.03,
+            "weight": 0.24,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -65,7 +77,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "45-55",
-            "weight": 0.01,
+            "weight": 0.08,
+            "weightMultiplier": {
+                "multiplier": 1.25,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "biomes": [
                     "the_bumblezone:crystal_canyon",

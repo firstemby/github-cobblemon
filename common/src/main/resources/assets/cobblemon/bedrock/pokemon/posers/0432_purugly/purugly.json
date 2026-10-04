@@ -3,6 +3,7 @@
     "portraitTranslation": [-0.55,0.13,0],
     "profileScale": 0.74,
     "profileTranslation": [0,0.62,0],
+  "rootBone": "purugly",
     "poses": {
       "standing": {
         "poseTypes": [

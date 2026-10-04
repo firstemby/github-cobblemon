@@ -5,13 +5,27 @@
     {
       "aspects": [],
       "poser": "cobblemon:vileplume",
-      "model": "cobblemon:vileplume.geo",
-      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_male.png",
+      "model": "cobblemon:vileplume_male.geo",
+      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume.png",
       "layers": []
     },
     {
-      "aspects": ["shiny"],
-      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_male_shiny.png"
+      "aspects": [
+        "shiny"
+      ],
+      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_shiny.png"
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

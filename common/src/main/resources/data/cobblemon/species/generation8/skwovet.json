@@ -151,6 +151,19 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 2,
+      "toleratedLeaders": [
+        {
+          "pokemon": "skwovert alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "greedent alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

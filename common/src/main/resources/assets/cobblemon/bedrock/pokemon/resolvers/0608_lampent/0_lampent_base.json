@@ -17,7 +17,9 @@
       ]
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_shiny.png",
       "layers": [
         {
@@ -25,6 +27,18 @@
           "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_emissive_shiny.png",
           "emissive": true,
           "translucent": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0608_lampent/lampent_alpha.png",
+          "emissive": true
         }
       ]
     }

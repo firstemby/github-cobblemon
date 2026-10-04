@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/heat_rock",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/heat_rock",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/heat_rock"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/heat_rock",
+      "y": 90
+    }
+  }
+}

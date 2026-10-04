@@ -38,15 +38,8 @@ class ShowdownThread : Thread("Cobblemon Showdown") {
 
     override fun run() {
         LOGGER.info("Starting showdown service...")
-        try {
-            ShowdownService.service.openConnection()
-            LOGGER.info("Showdown has been started!")
-        } catch (e: Exception) {
-            LOGGER.error("Failed to start showdown service!", e)
-        } finally {
-            this.latch.countDown()
-            throw RuntimeException("Showdown service failed to initialize...")
-        }
-
+        ShowdownService.service.openConnection()
+        LOGGER.info("Showdown has been started!")
+        this.latch.countDown()
     }
 }

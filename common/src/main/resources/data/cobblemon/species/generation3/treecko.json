@@ -46,6 +46,7 @@
   "standingEyeHeight": 0.8,
   "swimmingEyeHeight": 0.8,
   "flyingEyeHeight": 0.8,
+  "shoulderMountable": true,
   "baseScale": 0.6,
   "hitbox": {
     "width": 0.72,
@@ -61,8 +62,12 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "treecko alpha",
+          "tier": 1
+        },
         {
           "pokemon": "grovyle",
           "tier": 1
@@ -78,6 +83,9 @@
       ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.16
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -163,7 +171,6 @@
     "tm:magicalleaf",
     "tm:megakick",
     "tm:megapunch",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:poweruppunch",
     "tm:protect",
@@ -245,7 +252,18 @@
           "variant": "level",
           "minLevel": 16
         }
-      ]
+      ],
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ]
 }

@@ -60,7 +60,13 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "wigglytuff alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -137,7 +143,6 @@
     "tm:bounce",
     "tm:brickbreak",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:chillingwater",
     "tm:covet",

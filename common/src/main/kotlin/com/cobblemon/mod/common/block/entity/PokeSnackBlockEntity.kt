@@ -17,15 +17,8 @@ import com.cobblemon.mod.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.fishing.SpawnBait.Effect
 import com.cobblemon.mod.common.api.fishing.SpawnBaitEffects
-import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.SpawnCause
-import com.cobblemon.mod.common.api.spawning.detail.EntitySpawnResult
-import com.cobblemon.mod.common.api.spawning.detail.PokemonHerdSpawnDetail
-import com.cobblemon.mod.common.api.spawning.detail.SpawnAction
-import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
-import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
-import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
+import com.cobblemon.mod.common.api.spawning.detail.*
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition
 import com.cobblemon.mod.common.api.spawning.spawner.FixedAreaSpawner
@@ -37,7 +30,6 @@ import com.cobblemon.mod.common.item.components.FoodColourComponent
 import com.cobblemon.mod.common.item.components.IngredientComponent
 import com.cobblemon.mod.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
 import com.cobblemon.mod.common.util.DataKeys
-import java.util.UUID
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
@@ -49,10 +41,12 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import java.util.*
 
 open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
-    TintBlockEntity(CobblemonBlockEntities.POKE_SNACK, pos, state),
+    BlockEntity(CobblemonBlockEntities.POKE_SNACK, pos, state), TintBlockEntity,
     SpawningInfluence {
 
     companion object {
@@ -62,7 +56,29 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
         const val POKE_SNACK_CRUMBED_ASPECT = "poke_snack_crumbed"
     }
 
-    val spawner: FixedAreaSpawner by lazy {
+    class Spawner(
+        name: String,
+        spawnPool: SpawnPool,
+        buckets: Map<String, Float>,
+        world: ServerLevel,
+        position: BlockPos,
+        horizontalRadius: Int,
+        verticalRadius: Int,
+        maxPokemonPerChunk: Float
+    ) : FixedAreaSpawner(
+        name = name,
+        spawnPool = spawnPool,
+        buckets = buckets,
+        world = world,
+        position = position,
+        horizontalRadius = horizontalRadius,
+        verticalRadius = verticalRadius,
+        maxPokemonPerChunk = maxPokemonPerChunk
+    )
+
+    override var tint: Int? = null
+
+    val spawner: Spawner by lazy {
         val server = level as ServerLevel
 
         val baitEffects = getBaitEffects()
@@ -229,6 +245,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.saveAdditional(tag, registries)
 
+        saveTint(tag)
+
         tag.putInt(DataKeys.AMOUNT_SPAWNED, amountSpawned)
 
         foodColourComponent?.let { component ->
@@ -267,6 +285,8 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
         super.loadAdditional(tag, registries)
+
+        loadTint(tag)
 
         amountSpawned = tag.getInt(DataKeys.AMOUNT_SPAWNED)
 

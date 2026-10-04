@@ -30,4 +30,7 @@ object ToastTracker {
         }
     }
 
+    fun remove(toast: CobblemonToast) {
+        toasts.remove(toast.id)
+    }
 }

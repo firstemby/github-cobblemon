@@ -57,7 +57,13 @@
       }
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 7,
+      "toleratedLeaders": [
+        {
+          "pokemon": "swampert alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,
@@ -296,7 +302,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "6"
+          "maxSize": 8
         },
         "moving": {
           "swim": {

@@ -69,7 +69,7 @@
       "willDefendOwner": true
     },
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "teddiursa",

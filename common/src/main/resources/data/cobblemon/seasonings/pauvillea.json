@@ -1,0 +1,14 @@
+{
+  "ingredient": "cobblemon:pauvillea",
+  "colour": "pink",
+  "mobEffects": [
+    {
+      "effect": "cobblemon:cleanse_negative",
+      "duration": 1,
+      "amplifier": 0,
+      "ambient": false,
+      "visible": true,
+      "showIcon": true
+    }
+  ]
+}

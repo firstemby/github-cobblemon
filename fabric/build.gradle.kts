@@ -37,7 +37,7 @@ repositories {
     mavenLocal()
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://api.modrinth.com/maven")
-    maven(url = "https://maven.terraformersmc.com/")
+    maven(url = "https://maven.terraformersmc.com/releases/")
 }
 
 dependencies {
@@ -85,6 +85,28 @@ dependencies {
 
     minecraftServerLibraries(libs.icu4j)
 
+}
+
+publishing {
+    publications.named<MavenPublication>(project.name) {
+        pom.withXml {
+            val root = asNode()
+            val depsNode = (root["dependencies"] as? groovy.util.NodeList)
+                ?.firstOrNull() as? groovy.util.Node
+                ?: root.appendNode("dependencies")
+
+            configurations.getByName("include").allDependencies
+                .filterIsInstance<ExternalModuleDependency>()
+                .forEach { dep ->
+                    depsNode.appendNode("dependency").apply {
+                        appendNode("groupId", dep.group)
+                        appendNode("artifactId", dep.name)
+                        appendNode("version", dep.version)
+                        appendNode("scope", "compile")
+                    }
+                }
+        }
+    }
 }
 
 tasks {

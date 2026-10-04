@@ -4,11 +4,7 @@
   "variations": [
     {
       "aspects": ["female"],
-      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_female.png"
-    },
-    {
-      "aspects": ["shiny", "female"],
-      "texture": "cobblemon:textures/pokemon/0045_vileplume/vileplume_female_shiny.png"
+      "model": "cobblemon:vileplume_female.geo"
     }
   ]
 }

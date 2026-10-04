@@ -8,15 +8,16 @@
 
 package com.cobblemon.mod.common.api.spawning.spawner
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.fishing.SpawnBait
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnRules
 import com.cobblemon.mod.common.api.spawning.detail.SpawnPool
-import com.cobblemon.mod.common.api.spawning.influence.BucketMultiplyingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.BucketNormalizingInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawnBaitInfluence
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence
 import com.cobblemon.mod.common.api.spawning.rules.SpawnRule
+import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.util.mutableLazy
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -61,26 +62,18 @@ object PokeSnackSpawnerFactory {
                 firstTier = 1.2F
             )
         },
-        { _ ->
-            BucketMultiplyingInfluence(
-                mapOf(
-                    "uncommon" to 2.25f,
-                    "rare" to 5.5f,
-                    "ultra-rare" to 5.5f,
-                )
-            )
-        },
         { ctx ->
             SpawnBaitInfluence(effects = ctx.baitEffects)
         },
     )
 
-    fun create(ctx: Context): FixedAreaSpawner {
+    fun create(ctx: Context): PokeSnackBlockEntity.Spawner {
         val influences = influenceBuilders.mapNotNull { it(ctx) }
 
-        return FixedAreaSpawner(
+        return PokeSnackBlockEntity.Spawner(
             name = ctx.name,
             spawnPool = spawnPool,
+            buckets = Cobblemon.bestSpawner.config.pokeSnackBuckets,
             world = ctx.world,
             position = ctx.pos,
             horizontalRadius = ctx.horizontalRadius,

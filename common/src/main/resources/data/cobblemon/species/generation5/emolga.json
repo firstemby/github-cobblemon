@@ -64,6 +64,15 @@
     },
     "combat": {
       "willDefendOwner": true
+    },
+    "herd": {
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "emolga alpha",
+          "tier": 1
+        }
+      ]
     }
   },
   "drops": {

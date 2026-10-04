@@ -11,7 +11,6 @@ package com.cobblemon.mod.common.api.spawning.detail
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.api.spawning.CobblemonSpawnPools
-import com.cobblemon.mod.common.api.spawning.SpawnBucket
 import com.cobblemon.mod.common.api.spawning.SpawnLoader
 import com.cobblemon.mod.common.api.spawning.SpawnSet
 import com.cobblemon.mod.common.api.spawning.condition.PrecalculationResult
@@ -61,11 +60,12 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
     }
 
     val details = mutableListOf<SpawnDetail>()
+    /** Tracks which buckets are in use by the pool, to prevent spawners for rolling buckets that don't exist. */
+    val buckets = mutableListOf<String>()
     var precalculation: PrecalculationResult<*> = RootPrecalculation.generate(details, emptyList())
     val precalculators = mutableListOf<SpawningPrecalculation<*>>()
 
     override fun iterator() = details.iterator()
-
 
     fun addPrecalculators(vararg precalculators: SpawningPrecalculation<*>): SpawnPool {
         this.precalculators.addAll(precalculators)
@@ -88,6 +88,9 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
      * be slow, especially if there are many precalculators and spawns.
      */
     fun precalculate() {
+        buckets.clear()
+        buckets.addAll(details.asSequence().map(SpawnDetail::bucket).distinct())
+
         if (precalculators.isEmpty()) {
             precalculation = RootPrecalculation.generate(details, emptyList())
         } else {
@@ -103,7 +106,7 @@ class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDe
      * to leverage the precalculation to get a smaller list of spawns as quickly
      * as possible.
      */
-    fun retrieve(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+    fun retrieve(bucket: String, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
         return precalculation.retrieve(bucket, spawnablePosition)
     }
 

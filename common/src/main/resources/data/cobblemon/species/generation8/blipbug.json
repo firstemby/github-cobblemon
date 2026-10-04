@@ -102,6 +102,23 @@
       "swim": {
         "avoidsWater": true
       }
+    },
+    "herd": {
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "blipbug alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "dottler alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "orbeetle alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

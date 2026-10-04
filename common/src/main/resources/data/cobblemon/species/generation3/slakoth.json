@@ -70,7 +70,21 @@
       "rouseChance": 0.002
     },
     "herd": {
-      "maxSize": "6"
+      "maxSize": 6,
+      "toleratedLeaders": [
+        {
+          "pokemon": "slakoth alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vigoroth alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "slaking alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willFlee": false

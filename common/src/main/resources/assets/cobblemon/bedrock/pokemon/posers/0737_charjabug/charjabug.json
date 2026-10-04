@@ -1,0 +1,39 @@
+{
+  "portraitScale": 1.9,
+  "portraitTranslation": [-0.11, -1.21, 0],
+  "profileScale": 0.76,
+  "profileTranslation": [0.01, 0.63, 0],
+  "rootBone": "charjabug",
+  "animations": {
+    "cry": "q.bedrock_stateful('charjabug', 'cry')"
+  },
+  "properties": {
+    "item_display_context": "THIRD_PERSON_RIGHT_HAND"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.look('head', 0.25, 0.25)",
+        "q.look('torso2', 0.25, 0.25)",  
+        "q.bedrock('charjabug', 'ground_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('charjabug', 'hold_tool')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('charjabug', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
+        "q.bedrock('charjabug', 'ground_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('charjabug', 'hold_tool')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('charjabug', 'blink')"]
+    }
+  }
+}

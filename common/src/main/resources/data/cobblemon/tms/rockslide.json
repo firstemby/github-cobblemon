@@ -1,0 +1,19 @@
+{
+  "moveName": "rockslide",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:unlockable"
+    }
+  ],
+  "type": "rock",
+  "recipe": [
+    {
+      "item": "cobblemon:rock_gem",
+      "count": 8
+    },
+    {
+      "item": "cobblemon:kings_rock",
+      "count": 1
+    }
+  ]
+}

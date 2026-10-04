@@ -43,12 +43,13 @@
   "catchRate": 90,
   "eggCycles": 15,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 0.8,
   "hitbox": {
     "height": 1,
     "fixed": false,
-    "width": 1
+    "width": 0.83
   },
+  "standingEyeHeight": 0.5,
   "riding": {
     "behaviours": {
       "LAND": {
@@ -65,83 +66,7 @@
     },
     "seats": [
       {
-        "offset": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "poseOffsets": [
-          {
-            "offset": {
-              "x": 9.895586E-4,
-              "y": -0.6805381,
-              "z": 0.0058082193
-            },
-            "poseTypes": [
-              "STAND"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.008947004,
-              "y": -0.6557218,
-              "z": 5.530901E-4
-            },
-            "poseTypes": [
-              "WALK"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.002574316,
-              "y": -0.6861138,
-              "z": -0.17605162
-            },
-            "poseTypes": [
-              "HOVER"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.002574316,
-              "y": -0.6861138,
-              "z": -0.17605162
-            },
-            "poseTypes": [
-              "FLY"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.002574316,
-              "y": -0.6861138,
-              "z": -0.17605162
-            },
-            "poseTypes": [
-              "FLOAT"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.002574316,
-              "y": -0.6861138,
-              "z": -0.17605162
-            },
-            "poseTypes": [
-              "SWIM"
-            ]
-          },
-          {
-            "offset": {
-              "x": 0.002574316,
-              "y": -0.6861138,
-              "z": -0.17605162
-            },
-            "poseTypes": [
-              "GLIDE"
-            ]
-          }
-        ]
+        "locator": "seat_1"
       }
     ]
   },
@@ -152,7 +77,13 @@
       "willFlee": false
     },
     "herd": {
-      "maxSize": "5"
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "ariados alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {
@@ -170,6 +101,9 @@
     },
     "walking": {
       "walkSpeed": 0.18
+    },
+    "blockInteract": {
+      "immuneToCobwebBlock": true
     }
   },
   "drops": {

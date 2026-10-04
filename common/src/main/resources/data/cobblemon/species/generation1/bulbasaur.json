@@ -68,19 +68,23 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
         {
-          "pokemon": "ivysaur",
+          "pokemon": "bulbasaur",
           "tier": 1
         },
         {
-          "pokemon": "venusaur mega=false",
+          "pokemon": "ivysaur",
           "tier": 2
         },
         {
-          "pokemon": "venusaur mega",
+          "pokemon": "venusaur mega=false",
           "tier": 3
+        },
+        {
+          "pokemon": "venusaur mega",
+          "tier": 4
         }
       ]
     },

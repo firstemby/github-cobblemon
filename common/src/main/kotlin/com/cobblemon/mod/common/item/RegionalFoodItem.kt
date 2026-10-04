@@ -33,16 +33,16 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
             return InteractionResultHolder.pass(stack);
         }
 
-        // Prioritizes healing pokémon with the item
-        val superInteractionResult = super<PokemonSelectingItem>.use(player, stack)
-        if (superInteractionResult.result != InteractionResult.PASS) {
-            return superInteractionResult
-        }
-
-        // Otherwise allow eating normally if player needs food OR in creative
-        if (player.foodData.needsFood() || player.isCreative) {
+        // Prioritizes eating the food
+        if ((player.foodData.needsFood() || player.isCreative) && !player.isShiftKeyDown) {
             player.startUsingItem(hand)
             return InteractionResultHolder.consume(stack)
+        }
+
+        // Otherwise heal pokémon with the item
+        val superInteractionResult = super<PokemonSelectingItem>.use(player, stack, true)
+        if (superInteractionResult.result != InteractionResult.PASS) {
+            return superInteractionResult
         }
 
         return InteractionResultHolder.pass(stack)

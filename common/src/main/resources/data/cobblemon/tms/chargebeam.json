@@ -1,0 +1,19 @@
+{
+  "moveName": "chargebeam",
+  "obtainMethods": [
+    {
+      "variant": "cobblemon:default"
+    }
+  ],
+  "type": "electric",
+  "recipe": [
+    {
+      "item": "cobblemon:electric_gem",
+      "count": 3
+    },
+    {
+      "item": "cobblemon:cyan_mint_leaf",
+      "count": 1
+    }
+  ]
+}

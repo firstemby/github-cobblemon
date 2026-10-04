@@ -14,7 +14,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 5.4,
+            "weight": 9.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,
@@ -26,7 +32,7 @@
             }
         },
         {
-            "id": "natu-3",
+            "id": "natu-2",
             "pokemon": "natu",
             "presets": [
                 "trail_ruins"
@@ -35,7 +41,13 @@
             "spawnablePositionType": "grounded",
             "bucket": "common",
             "level": "7-32",
-            "weight": 90.0,
+            "weight": 450.0,
+            "weightMultiplier": {
+                "multiplier": 2.0,
+                "condition": {
+                    "isPokeSnack": true
+                }
+            },
             "condition": {
                 "minSkyLight": 8,
                 "maxSkyLight": 15,

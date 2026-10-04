@@ -1,4 +1,5 @@
 {
+  "implemented": true,
   "nationalPokedexNumber": 537,
   "name": "Seismitoad",
   "primaryType": "water",
@@ -42,12 +43,13 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 1,
+  "baseScale": 1.1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 1.5,
+    "height": 1.8,
     "fixed": false
   },
+  "standingEyeHeight": 0.82,
   "behaviour": {
     "moving": {
       "swim": {
@@ -56,7 +58,13 @@
       }
     },
     "herd": {
-      "maxSize": "8"
+      "maxSize": 8,
+      "toleratedLeaders": [
+        {
+          "pokemon": "seismitoad alpha",
+          "tier": 1
+        }
+      ]
     },
     "resting": {
       "times": [

@@ -43,10 +43,11 @@
   "baseFriendship": 50,
   "baseScale": 1,
   "hitbox": {
-    "width": 1,
-    "height": 1,
+    "width": 0.7,
+    "height": 0.5,
     "fixed": false
   },
+  "standingEyeHeight": 0.5,
   "drops": {
     "amount": 4,
     "entries": [
@@ -158,7 +159,18 @@
         "thunderbolt"
       ],
       "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
+      "requiredContext": "cobblemon:thunder_stone",
+      "drops": {
+        "amount": 1,
+        "entries": [
+          {
+            "type": "evolution",
+            "item": "cobblemon:shed_shell",
+            "percentage": 100.0,
+            "requirements": []
+          }
+        ]
+      }
     }
   ],
   "behaviour": {
@@ -176,6 +188,19 @@
       ],
       "drowsyChance": 0.0014,
       "rouseChance": 0.0042
+    },
+    "herd": {
+      "maxSize": 5,
+      "toleratedLeaders": [
+        {
+          "pokemon": "charjabug alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "vikavolt alpha",
+          "tier": 1
+        }
+      ]
     }
   }
 }

@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.mojang.brigadier.arguments.ArgumentType
 import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
+import net.minecraft.core.HolderLookup
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
@@ -19,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
 import net.minecraft.tags.TagKey
+import net.minecraft.world.inventory.MenuType
 import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
@@ -167,12 +169,16 @@ interface CobblemonImplementation {
      * TODO
      *
      * @param identifier
-     * @param reloader
+     * @param reloaderFactory
      * @param type
      * @param dependencies
      */
-    fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>)
-
+    fun registerResourceReloader(
+        identifier: ResourceLocation,
+        type: PackType,
+        dependencies: Collection<ResourceLocation>,
+        reloaderFactory: (HolderLookup.Provider) -> PreparableReloadListener
+    )
     /**
      * TODO
      *

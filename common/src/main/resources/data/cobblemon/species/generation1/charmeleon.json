@@ -65,7 +65,21 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "charmander alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "charmeleon alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "charizard alpha",
+          "tier": 1
+        }
+      ]
     },
     "combat": {
       "willDefendSelf": true,

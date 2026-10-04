@@ -5,7 +5,7 @@
     {
       "aspects": [],
       "poser": "cobblemon:sudowoodo",
-      "model": "cobblemon:sudowoodo.geo",
+      "model": "cobblemon:sudowoodo_male.geo",
       "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo.png",
       "layers": []
     },
@@ -19,6 +19,18 @@
         {
           "name": "golden",
           "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_golden.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_alpha.png",
+          "emissive": true
         }
       ]
     }

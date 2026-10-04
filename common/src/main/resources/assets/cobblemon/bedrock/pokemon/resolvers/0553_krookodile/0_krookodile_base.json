@@ -10,14 +10,30 @@
       "layers": []
     },
     {
-      "aspects": ["shiny"],
+      "aspects": [
+        "shiny"
+      ],
       "texture": "cobblemon:textures/pokemon/0553_krookodile/krookodile_shiny.png"
     },
     {
-      "aspects": ["cosmetic_item-black_glasses"],
+      "aspects": [
+        "cosmetic_item-black_glasses"
+      ],
       "layers": [
         {
           "texture": "cobblemon:textures/pokemon/0553_krookodile/krookodile_sunglasses.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0553_krookodile/krookodile_alpha.png",
+          "emissive": true
         }
       ]
     }

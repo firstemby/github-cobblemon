@@ -43,10 +43,10 @@
   "catchRate": 45,
   "eggCycles": 25,
   "baseFriendship": 50,
-  "baseScale": 1.3,
+  "baseScale": 0.8,
   "hitbox": {
-    "width": 0.9,
-    "height": 1.2,
+    "width": 1.5,
+    "height": 2,
     "fixed": false
   },
   "drops": {
@@ -94,7 +94,6 @@
     "tm:bodyslam",
     "tm:brickbreak",
     "tm:calmmind",
-    "tm:captivate",
     "tm:charm",
     "tm:covet",
     "tm:drainingkiss",
@@ -234,7 +233,13 @@
   "evolutions": [],
   "behaviour": {
     "herd": {
-      "maxSize": "3"
+      "maxSize": 3,
+      "toleratedLeaders": [
+        {
+          "pokemon": "jynx alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
       "swim": {

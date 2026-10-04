@@ -61,6 +61,7 @@
       },
       "swim": {
         "swimSpeed": 0.15,
+        "canWalkOnWater": true,
         "avoidsWater": true
       }
     },
@@ -72,7 +73,7 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "5",
+      "maxSize": 5,
       "toleratedLeaders": [
         {
           "pokemon": "pikachu",
@@ -83,8 +84,20 @@
           "tier": 1
         },
         {
-          "pokemon": "raichu",
+          "pokemon": "raichu megax=false",
           "tier": 2
+        },
+        {
+          "pokemon": "raichu megay=false",
+          "tier": 2
+        },
+        {
+          "pokemon": "raichu megax",
+          "tier": 3
+        },
+        {
+          "pokemon": "raichu megay",
+          "tier": 3
         }
       ]
     },
@@ -206,7 +219,6 @@
     "tm:trailblaze",
     "tm:upperhand",
     "tm:voltswitch",
-    "tm:volttackle",
     "tm:wildcharge",
     "tutor:babydolleyes",
     "tutor:covet",
@@ -287,8 +299,32 @@
       ],
       "requirements": [
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_beach"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_tropical_island"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "aether:skyroot_forest"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "aether:skyroot_woodland"
+          }
         }
       ],
       "requiredContext": "cobblemon:thunder_stone"
@@ -307,8 +343,11 @@
           "biomeCondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_forest"
+          }
         }
       ],
       "requiredContext": "cobblemon:thunder_stone"
@@ -386,8 +425,32 @@
           ],
           "requirements": [
             {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_beach"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_tropical_island"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "aether:skyroot_forest"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "aether:skyroot_woodland"
+              }
             },
             {
               "variant": "biome",
@@ -406,8 +469,11 @@
           ],
           "requirements": [
             {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_forest"
+              }
             }
           ],
           "requiredContext": "cobblemon:thunder_stone"

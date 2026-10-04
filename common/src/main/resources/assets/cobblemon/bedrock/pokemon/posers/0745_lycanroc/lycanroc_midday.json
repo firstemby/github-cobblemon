@@ -1,0 +1,42 @@
+{
+  "portraitScale": 2.23,
+  "portraitTranslation": [ -1.13, 0.19, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [ -0.02, 0.79, 0],
+  "rootBone": "lycanroc_midday",
+  "animations": {
+    "cry": "q.bedrock_stateful('lycanroc_midday', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": [
+        "STAND",
+        "NONE",
+        "FLOAT",
+        "PORTRAIT",
+        "PROFILE"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 25, -25, 40, -40)",
+        "q.bedrock('lycanroc_midday', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('lycanroc_midday', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": [
+        "WALK",
+        "SWIM"
+      ],
+      "animations": [
+        "q.look('head_ai', 1, 1, 25, -25, 40, -40)",
+        "q.bedrock('lycanroc_midday', 'ground_idle')",
+        "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('lycanroc_midday', 'blink')"
+      ]
+    }
+  }
+}

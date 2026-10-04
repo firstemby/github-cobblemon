@@ -13,7 +13,6 @@
         "PORTRAIT",
         "PROFILE",
         "FLOAT",
-        "HOVER",
         "SLEEP"
       ],
       "animations": ["q.look('head')", "q.bedrock('cramorant', 'ground_idle')"],
@@ -21,11 +20,30 @@
     },
     "walking": {
       "poseName": "walking",
-      "poseTypes": ["WALK", "SWIM", "FLY"],
+      "poseTypes": ["WALK", "SWIM"],
       "animations": [
         "q.look('head')",
         "q.bedrock('cramorant', 'ground_idle')",
         "q.biped_walk(1, 1, 'leg_left', 'leg_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('cramorant', 'blink', 5, 30, 1)"]
+    },
+    "hover": {
+      "poseTypes": ["HOVER"],
+      "animations": [
+        "q.pitch_tilt('body')",
+        "q.look('head')",
+        "q.bedrock('cramorant', 'ground_idle')",
+        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_left', 'wing_right')"
+      ],
+      "quirks": ["q.bedrock_quirk('cramorant', 'blink', 5, 30, 1)"]
+    },
+    "flying": {
+      "poseTypes": ["FLY"],
+      "animations": [
+        "q.pitch_tilt('body')",
+        "q.bedrock('cramorant', 'ground_idle')",
+        "q.sine_wing_flap(0.9, 0.9, 25, 'z', 'wing_left', 'wing_right')"
       ],
       "quirks": ["q.bedrock_quirk('cramorant', 'blink', 5, 30, 1)"]
     }

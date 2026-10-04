@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "pattern": [
+        "INI",
+        "INI",
+        "INI"
+    ],
+    "key": {
+        "I": {
+            "tag": "c:ingots/iron"
+        },
+        "N": {
+            "tag": "c:nuggets/iron"
+        }
+    },
+    "result": {
+        "id": "cobblemon:disc_shelf"
+    }
+}

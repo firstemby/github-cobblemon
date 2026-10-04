@@ -216,7 +216,7 @@
   "colour": "YELLOW",
   "flavours": {
     "DRY": 10,
-    "SWEET": 15,
+    "SWEET": 10,
     "SOUR": 10
   }
 }

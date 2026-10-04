@@ -1,0 +1,31 @@
+{
+   "portraitScale": 1.82,
+   "portraitTranslation": [ -1.03, 1.63, 0 ],
+   "profileScale": 0.59,
+   "profileTranslation": [ -0.03, 0.82, 0 ],
+   "rootBone": "sawsbuck_summer",
+   "animations": {},
+   "poses": {
+      "standing": {
+         "poseTypes": [ "STAND", "FLOAT", "PORTRAIT", "PROFILE", "NONE" ],
+         "animations": [
+            "q.look('head_ai', 1, 1, 12.5, -30, 0, 0)",
+            "q.bedrock('sawsbuck_summer', 'ground_idle')"
+         ],
+		"quirks": [
+          "q.bedrock_quirk('sawsbuck_summer', 'blink')"
+        ]
+      },
+      "walking": {
+         "poseTypes": [ "WALK", "SWIM" ],
+         "animations": [
+            "q.look('head_ai', 1, 1, 12.5, -30, 0, 0)",
+            "q.bedrock('sawsbuck_summer', 'ground_idle')",
+            "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+         ],
+		"quirks": [
+          "q.bedrock_quirk('sawsbuck_summer', 'blink')"
+        ]
+      }
+   }
+}

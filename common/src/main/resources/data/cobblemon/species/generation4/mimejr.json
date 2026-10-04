@@ -211,6 +211,13 @@
         {
           "variant": "has_move",
           "move": "mimic"
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_freezing"
+          }
         }
       ]
     },
@@ -281,6 +288,13 @@
             {
               "variant": "has_move",
               "move": "mimic"
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_temperate"
+              }
             }
           ]
         }
@@ -289,7 +303,7 @@
   ],
   "behaviour": {
     "herd": {
-      "maxSize": "2",
+      "maxSize": 2,
       "toleratedLeaders": [
         {
           "pokemon": "mrmime",

@@ -1,0 +1,14 @@
+{
+  "ingredient": "cobblemon:lucibell",
+  "colour": "purple",
+  "mobEffects": [
+    {
+      "effect": "cobblemon:mental_restoration",
+      "duration": 100,
+      "amplifier": 0,
+      "ambient": false,
+      "visible": true,
+      "showIcon": true
+    }
+  ]
+}

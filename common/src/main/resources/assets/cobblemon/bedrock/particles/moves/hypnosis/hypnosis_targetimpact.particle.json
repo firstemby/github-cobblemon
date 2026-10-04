@@ -45,7 +45,7 @@
                     "0.75*v.spiralsize",
                     "0.75*v.spiralsize"
                 ],
-                "facing_camera_mode": "rotate_xyz",
+                "facing_camera_mode": "emitter_transform_xy",
                 "uv": {
                     "texture_width": 192,
                     "texture_height": 24,

@@ -54,8 +54,8 @@ enum class Stats(override val identifier: ResourceLocation, override val display
             "hp" -> HP
             "atk", "attack" -> ATTACK // Hyper Cutter states the full stat name "Attack"
             "def", "defense", "defence" -> DEFENCE // Big Pecks states the full stat name "Defense"
-            "spa" -> SPECIAL_ATTACK
-            "spd" -> SPECIAL_DEFENCE
+            "spa", "special_attack" -> SPECIAL_ATTACK
+            "spd", "special_defence", "special_defense" -> SPECIAL_DEFENCE
             "spe", "speed" -> SPEED
             "evasion" -> EVASION
             else -> ACCURACY

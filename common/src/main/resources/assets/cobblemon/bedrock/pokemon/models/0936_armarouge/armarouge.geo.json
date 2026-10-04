@@ -6,7 +6,7 @@
 				"identifier": "geometry.armarouge",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 6,
 				"visible_bounds_height": 4.5,
 				"visible_bounds_offset": [0, 1.75, 0]
 			},
@@ -335,6 +335,14 @@
 					]
 				},
 				{
+					"name": "locator_eye_left",
+					"parent": "pupil_left",
+					"pivot": [2.25, 38.85, -3.15],
+					"locators": {
+						"eye2": [2.25, 38.85, -3.15]
+					}
+				},
+				{
 					"name": "eye_flame_left",
 					"parent": "eye_left",
 					"pivot": [2.76, 39.35, -3.16],
@@ -422,6 +430,14 @@
 					"cubes": [
 						{"origin": [-2.76, 37.85, -3.17], "size": [1, 2, 0], "uv": [0, 6], "mirror": true}
 					]
+				},
+				{
+					"name": "locator_eye_right",
+					"parent": "pupil_right",
+					"pivot": [-2.25, 38.85, -3.15],
+					"locators": {
+						"eye1": [-2.25, 38.85, -3.15]
+					}
 				},
 				{
 					"name": "eye_flame_right",

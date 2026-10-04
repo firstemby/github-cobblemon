@@ -1,5 +1,5 @@
 {
-  "parent": "cobblemon:recipes/root",
+  "parent": "cobblemon:recipes/blocks",
   "rewards": {
     "recipes": [
       "cobblemon:polished_tumblestone"

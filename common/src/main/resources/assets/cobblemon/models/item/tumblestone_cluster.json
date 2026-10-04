@@ -2,5 +2,10 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cobblemon:block/tumblestone/tumblestone_cluster"
+  },
+  "display": {
+    "head": {
+      "translation": [ 0, 14, -5 ]
+    }
   }
 }

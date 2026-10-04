@@ -47,10 +47,13 @@
   ],
   "baseScale": 1,
   "hitbox": {
-    "width": 1.2,
-    "height": 1,
+    "width": 1.8,
+    "height": 1.4,
     "fixed": false
   },
+  "standingEyeHeight": 0.7,
+  "swimmingEyeHeight": 0.7,
+  "flyingEyeHeight": 0.7,
   "behaviour": {
     "resting": {
       "canSleep": true,
@@ -63,9 +66,22 @@
       "rouseChance": 0.0042
     },
     "herd": {
-      "maxSize": "4"
+      "maxSize": 4,
+      "toleratedLeaders": [
+        {
+          "pokemon": "vileplume alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "bellossom alpha",
+          "tier": 1
+        }
+      ]
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.2
+      },
       "swim": {
         "avoidsWater": true
       }
@@ -144,7 +160,6 @@
     "tm:infestation",
     "tm:leafstorm",
     "tm:magicalleaf",
-    "tm:naturalgift",
     "tm:naturepower",
     "tm:petalblizzard",
     "tm:pollenpuff",

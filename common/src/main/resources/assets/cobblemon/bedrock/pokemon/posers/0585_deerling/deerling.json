@@ -1,0 +1,31 @@
+{
+   "portraitScale": 2.09,
+   "portraitTranslation": [ -0.38, 0, 0 ],
+   "profileScale": 1,
+   "profileTranslation": [ 0, 0.24, 0 ],
+   "rootBone": "deerling",
+   "animations": {},
+   "poses": {
+      "standing": {
+         "poseTypes": [ "STAND", "PORTRAIT", "PROFILE", "NONE" ],
+         "animations": [
+            "q.look('head_ai')",
+            "q.bedrock('deerling', 'ground_idle')"
+         ],
+        "quirks": [
+          "q.bedrock_quirk('deerling', 'blink')"
+        ]
+      },
+      "walking": {
+         "poseTypes": [ "WALK" ],
+         "animations": [
+            "q.look('head_ai')",
+            "q.bedrock('deerling', 'ground_idle')",
+            "q.quadruped_walk(1, 1, 'leg_front_left', 'leg_front_right', 'leg_back_left', 'leg_back_right')"
+         ],
+        "quirks": [
+          "q.bedrock_quirk('deerling', 'blink')"
+        ]
+      }
+   }
+}

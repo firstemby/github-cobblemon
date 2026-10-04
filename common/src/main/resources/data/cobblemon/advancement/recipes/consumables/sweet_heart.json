@@ -1,0 +1,36 @@
+{
+  "parent": "cobblemon:recipes/consumables",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:campfire_pot/sweet_heart"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_eggant": {
+      "conditions": {
+        "items": [
+          {
+            "items": "cobblemon:eggant_berry"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "on_correct_version": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+	  "has_eggant",
+      "on_correct_version"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:campfire_pot/sweet_heart"
+    ]
+  }
+}

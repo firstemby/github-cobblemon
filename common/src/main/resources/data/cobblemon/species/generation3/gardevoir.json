@@ -66,8 +66,16 @@
       }
     },
     "herd": {
-      "maxSize": "4",
+      "maxSize": 4,
       "toleratedLeaders": [
+        {
+          "pokemon": "gardevoir alpha",
+          "tier": 1
+        },
+        {
+          "pokemon": "gallade alpha",
+          "tier": 1
+        },
         {
           "pokemon": "gallade mega=false",
           "tier": 1
@@ -144,7 +152,6 @@
     "tm:aurasphere",
     "tm:bodyslam",
     "tm:calmmind",
-    "tm:captivate",
     "tm:chargebeam",
     "tm:charm",
     "tm:confuseray",
@@ -330,7 +337,7 @@
       "battleOnly": true,
       "behaviour": {
         "herd": {
-          "maxSize": "5",
+          "maxSize": 5,
           "toleratedLeaders": [
             {
               "pokemon": "gallade mega",

@@ -5,7 +5,8 @@
   "profileTranslation": [0.0, 0.39, 0.0],
   "rootBone": "staryu",
   "animations": {
-    "cry": "q.bedrock_stateful('staryu', 'cry')"
+    "cry": "q.bedrock_stateful('staryu', 'cry')",
+    "physical": "q.bedrock_primary('staryu', 'physical', q.curve('symmetrical'))"
   },
   "poses": {
     "standing": {
@@ -39,26 +40,9 @@
         "q.bedrock('staryu', 'sleep')"
       ]
     },
-    "surface_idle": {
+    "float": {
       "poseTypes": ["STAND", "FLOAT"],
       "isTouchingWater": true,
-      "isUnderWater": false,
-      "animations": [
-        "q.look('body')",
-        "q.bedrock('staryu', 'surfacewater_idle')"
-      ]
-    },
-    "surface_swim": {
-      "poseTypes": ["WALK", "SWIM"],
-      "isTouchingWater": true,
-      "isUnderWater": false,
-      "animations": [
-        "q.bedrock('staryu', 'surfacewater_swim')"
-      ]
-    },
-    "float": {
-      "poseTypes": ["FLOAT"],
-      "isUnderWater": true,
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.look('body')",
@@ -66,8 +50,8 @@
       ]
     },
     "swim": {
-      "poseTypes": ["SWIM"],
-      "isUnderWater": true,
+      "poseTypes": ["WALK", "SWIM"],
+      "isTouchingWater": true,
       "animations": [
         "q.pitch_tilt('body', 1)",
         "q.bedrock('staryu', 'water_swim')"

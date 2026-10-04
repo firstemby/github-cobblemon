@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "cobblemon:block/wide_lens",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cobblemon:block/wide_lens",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "cobblemon:block/wide_lens"
+    },
+    "facing=east": {
+      "model": "cobblemon:block/wide_lens",
+      "y": 90
+    }
+  }
+}

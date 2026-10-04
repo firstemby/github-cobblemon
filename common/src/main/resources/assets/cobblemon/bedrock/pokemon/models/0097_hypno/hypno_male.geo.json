@@ -335,6 +335,14 @@
 					]
 				},
 				{
+					"name": "mouth_o",
+					"parent": "head_angle",
+					"pivot": [0, 24, 1.35],
+					"cubes": [
+						{"origin": [-0.5, 23.5, -4.65], "size": [1, 2, 0], "inflate": 0.01, "uv": [76, 53]}
+					]
+				},
+				{
 					"name": "neck_fluff",
 					"parent": "upper_torso",
 					"pivot": [0, 22, -0.5],

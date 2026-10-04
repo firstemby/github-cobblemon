@@ -5,6 +5,7 @@
   "profileTranslation": [0,0.74,0],
   "rootBone": "shuppet",
   "animations": {
+    "cry": "q.bedrock_stateful('shuppet', 'cry')"
   },
   "poses": {
     "standing": {

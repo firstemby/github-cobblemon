@@ -318,7 +318,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
         // Hitbox thing looks confusing but if the hitbox volume is more than like, 5, it starts getting pretty
         // fucking slow to use the findAcceptedNodeWalk function
-        val strictlyWalkPathing = !canFly() && !mob.isInWater && mob.boundingBox.size < MAX_HITBOX_SIZE_FOR_WALKING
+        val strictlyWalkPathing = !canFly() && !mob.isInWater
         val doVerticalNeighbourChecks = (canFly() || mob.isInWater) && mob.boundingBox.size < MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS
 
         // Non-diagonal surroundings in 3d space
@@ -623,9 +623,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     override fun getPathTypeOfMob(pfContext: PathfindingContext, x: Int, y: Int, z: Int, mob: Mob): PathType {
         val set = EnumSet.noneOf(PathType::class.java)
-        val sizeX = (mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1
-        val sizeY = (mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1
-        val sizeZ = (mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1
+        // Capping the observed size of hitboxes here to put an upper limit on the cost of larger hitbox mobs
+        // Mobs larger than these caps will inevitably become stuck on obstacles as their pathing will be flawed
+        val sizeX = ((mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1).coerceAtMost(2)
+        val sizeY = ((mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1).coerceAtMost(3)
+        val sizeZ = ((mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1).coerceAtMost(2)
 
         // TODO -- This is experimental code to see if this is meaningful. We should clean this up later when time permits.
         val returnedEarlyPathType = mutableListOf<PathType>()

@@ -124,11 +124,43 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         CobblemonEvents.TRADE_EVENT_PRE.postThen(
             TradeEvent.Pre(player1, pokemon2, player2, pokemon1)
         ) {
-            pokemon1.forEach { party1.remove(it) }
-            pokemon2.forEach { party2.remove(it) }
+            val player1Removed = pokemon1.filter { party1.remove(it) }
+            val player2Removed = pokemon2.filter { party2.remove(it) }
 
-            pokemon1.forEach { it.setFriendship(it.form.baseFriendship) }
-            pokemon2.forEach { it.setFriendship(it.form.baseFriendship) }
+            if (player1Removed.size != pokemon1.size || player2Removed.size != pokemon2.size) {
+                (pokemon1 - player1Removed.toSet()).forEach {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${it.species.resourceIdentifier} from ${player1.name.string}(${player1.uuid}). Aborting trade with ${player2.name.string}(${player2.uuid}), potential exploit abused.")
+                }
+
+                (pokemon2 - player2Removed.toSet()).forEach {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${it.species.resourceIdentifier} from ${player2.name.string}(${player2.uuid}). Aborting trade with ${player1.name.string}(${player1.uuid}), potential exploit abused.")
+                }
+
+                // Revert any changes if one of the removals failed
+                player1Removed.forEach { party1.add(it) }
+                player2Removed.forEach { party2.add(it) }
+                return@postThen
+            }
+
+            // If player1 is the OT, keep track of the friendship
+            pokemon1.forEach { it.cacheFriendship(player1.uuid) }
+            // If player2 is the OT, keep track of the friendship
+            pokemon2.forEach { it.cacheFriendship(player2.uuid) }
+
+            // If a Pokémon received by player1 was originally theirs, set the friendship back to what it was at point of trading
+            pokemon2.forEach {
+                if (!it.restoreFriendship(player1.uuid)) {
+                    // Otherwise, reset the friendship
+                    it.setFriendship(it.form.baseFriendship)
+                }
+            }
+            // If a Pokémon received by player2 was originally theirs, set the friendship back to what it was at point of trading
+            pokemon1.forEach {
+                if (!it.restoreFriendship(player2.uuid)) {
+                    // Otherwise, reset the friendship
+                    it.setFriendship(it.form.baseFriendship)
+                }
+            }
 
             pokemon1.forEach { party2.add(it) }
             pokemon2.forEach { party1.add(it) }

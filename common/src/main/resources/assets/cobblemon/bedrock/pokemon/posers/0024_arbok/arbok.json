@@ -1,0 +1,69 @@
+{
+  "portraitScale": 1.83,
+  "portraitTranslation": [-1.19, 1.67, 0],
+  "profileScale": 0.64,
+  "profileTranslation": [0, 0.78, 0],
+  "rootBone": "arbok",
+  "animations": {
+    "faint": "q.bedrock_primary('arbok', 'faint', q.curve('one'))",
+    "recoil": "q.bedrock_stateful('arbok', 'recoil')",
+    "cry": "q.bedrock_stateful('arbok', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "PORTRAIT", "PROFILE", "FLOAT", "NONE"],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('arbok', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('arbok', 'blink')",
+        "q.bedrock_quirk('arbok', 'quirk')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('arbok', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('arbok', 'blink')",
+        "q.bedrock_quirk('arbok', 'quirk')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('arbok', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('arbok', 'blink')",
+        "q.bedrock_quirk('arbok', 'quirk')"
+      ]
+    },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('arbok', 'ground_run')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('arbok', 'blink')",
+        "q.bedrock_quirk('arbok', 'quirk')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"},
+      "animations": [
+        "q.bedrock('arbok', 'sleep')"
+      ]
+    }
+  }
+}
