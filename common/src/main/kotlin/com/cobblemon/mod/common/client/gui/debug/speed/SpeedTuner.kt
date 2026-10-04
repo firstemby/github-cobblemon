@@ -15,6 +15,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.net.messages.client.debug.SpeedTunerEntry
 import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerSprintSpeedPacket
+import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerWalkSpeedPacket
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.RenderEvent
 import com.cobblemon.mod.common.pokemon.Pokemon
@@ -29,6 +30,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.LevelRenderer
@@ -56,8 +58,6 @@ object SpeedTuner {
     const val PLAYER_SPRINT_SPEED = 5.612
     // Sprint speed shown for species without one yet, matches the data script default
     const val DEFAULT_SPRINT_SPEED = 5.6
-    // Speed modifier most walking tasks use (the walk_speed entity variable), for estimating current walk speeds
-    const val REFERENCE_TASK_SPEED_MODIFIER = 0.35
     // Walk speed values are multiplied by this in PokemonMoveControl
     const val WALK_SPEED_SCALE = 2.5
     // Friction of ordinary blocks, walk estimates assume flat normal ground
@@ -123,7 +123,10 @@ object SpeedTuner {
             load()
             active = true
             // The server starts from the species data, so bring it up to date with the loaded session
-            edits.forEach { (id, speeds) -> speeds[Gait.SPRINT.jsonKey]?.let { sendSprintSpeed(id, it.toFloat()) } }
+            edits.forEach { (id, speeds) ->
+                speeds[Gait.SPRINT.jsonKey]?.let { sendSprintSpeed(id, it.toFloat()) }
+                speeds[Gait.WALK.jsonKey]?.let { sendWalkSpeed(id, walkSpeedFor(it)) }
+            }
         }
         subscribe()
         ensureSelectionVisible()
@@ -178,13 +181,24 @@ object SpeedTuner {
     }
 
     /**
-     * Walk speed is still relative in the species data, so this estimates what it comes out as in blocks per second
-     * for a typical walking task on normal ground.
+     * Walk speed is still relative in the species data, so this works out what it comes to in blocks per second on
+     * normal ground. Walkers always use the same speed modifier so this is exact.
      */
     fun estimatedWalkSpeed(entry: SpeedTunerEntry): Double {
-        val movementAttribute = Attributes.MOVEMENT_SPEED.value().defaultValue
-        val input = movementAttribute * REFERENCE_TASK_SPEED_MODIFIER * entry.walkSpeed * WALK_SPEED_SCALE
+        val input = walkInputPerWalkSpeed() * entry.walkSpeed
         return PokemonMoveControl.vanillaGroundTopSpeed(input, VANILLA_BLOCK_FRICTION) * TICKS_PER_SECOND
+    }
+
+    /** The other way round, walkSpeed that comes out at [blocksPerSecond]. Top speed grows with the square of the input */
+    fun walkSpeedFor(blocksPerSecond: Double): Float {
+        val topSpeedPerInputSquared = PokemonMoveControl.vanillaGroundTopSpeed(1.0, VANILLA_BLOCK_FRICTION)
+        val input = sqrt(blocksPerSecond / TICKS_PER_SECOND / topSpeedPerInputSquared)
+        return (input / walkInputPerWalkSpeed()).toFloat()
+    }
+
+    // Move control input for each unit of walkSpeed
+    private fun walkInputPerWalkSpeed(): Double {
+        return Attributes.MOVEMENT_SPEED.value().defaultValue * PokemonMoveControl.GROUND_SPEED_MODIFIER * WALK_SPEED_SCALE
     }
 
     fun referenceSpeed() = if (gait == Gait.SPRINT) PLAYER_SPRINT_SPEED else PLAYER_WALK_SPEED
@@ -193,7 +207,10 @@ object SpeedTuner {
         val entry = selected ?: return
         edits.getOrPut(entry.speciesId) { mutableMapOf() }[gait.jsonKey] = value
         dirty = true
-        if (gait == Gait.SPRINT) sendSprintSpeed(entry.speciesId, value.toFloat())
+        when (gait) {
+            Gait.SPRINT -> sendSprintSpeed(entry.speciesId, value.toFloat())
+            Gait.WALK -> sendWalkSpeed(entry.speciesId, walkSpeedFor(value))
+        }
     }
 
     fun resetSpeed() {
@@ -203,15 +220,19 @@ object SpeedTuner {
             if (it.isEmpty()) edits.remove(entry.speciesId)
         }
         dirty = true
-        if (gait == Gait.SPRINT) sendSprintSpeed(entry.speciesId, entry.sprintSpeed)
+        when (gait) {
+            Gait.SPRINT -> sendSprintSpeed(entry.speciesId, entry.sprintSpeed)
+            Gait.WALK -> sendWalkSpeed(entry.speciesId, entry.walkSpeed)
+        }
     }
 
-    /**
-     * Only sprint speeds go to the server. Walk speeds in the tuner are blocks per second but species walkSpeed is
-     * still relative, so they stay in the session until walking is absolute too.
-     */
     private fun sendSprintSpeed(speciesId: ResourceLocation, sprintSpeed: Float?) {
         SetSpeedTunerSprintSpeedPacket(speciesId, sprintSpeed).sendToServer()
+    }
+
+    /** Walk speeds go over in the species data's own units, converted from the tuner's blocks per second */
+    private fun sendWalkSpeed(speciesId: ResourceLocation, walkSpeed: Float) {
+        SetSpeedTunerWalkSpeedPacket(speciesId, walkSpeed).sendToServer()
     }
 
     fun isEdited(entry: SpeedTunerEntry) = edits[entry.speciesId]?.containsKey(gait.jsonKey) == true

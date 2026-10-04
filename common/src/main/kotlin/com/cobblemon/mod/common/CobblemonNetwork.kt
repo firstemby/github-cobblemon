@@ -177,6 +177,7 @@ import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyPoke
 import com.cobblemon.mod.common.net.messages.server.debug.OpenRidingStatsDebugGUIPacket
 import com.cobblemon.mod.common.net.messages.server.debug.RequestOpenSpeedTunerPacket
 import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerSprintSpeedPacket
+import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerWalkSpeedPacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
@@ -237,6 +238,7 @@ import com.cobblemon.mod.common.net.serverhandling.callback.partymove.PartyPokem
 import com.cobblemon.mod.common.net.serverhandling.debug.RequestOpenRidingStatsDebugGUIHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.RequestOpenSpeedTunerHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.SetSpeedTunerSprintSpeedHandler
+import com.cobblemon.mod.common.net.serverhandling.debug.SetSpeedTunerWalkSpeedHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatRangeHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
@@ -658,6 +660,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))
         list.add(PacketRegisterInfo(RequestOpenSpeedTunerPacket.ID, RequestOpenSpeedTunerPacket::decode, RequestOpenSpeedTunerHandler))
         list.add(PacketRegisterInfo(SetSpeedTunerSprintSpeedPacket.ID, SetSpeedTunerSprintSpeedPacket::decode, SetSpeedTunerSprintSpeedHandler))
+        list.add(PacketRegisterInfo(SetSpeedTunerWalkSpeedPacket.ID, SetSpeedTunerWalkSpeedPacket::decode, SetSpeedTunerWalkSpeedHandler))
 
 
         return list
