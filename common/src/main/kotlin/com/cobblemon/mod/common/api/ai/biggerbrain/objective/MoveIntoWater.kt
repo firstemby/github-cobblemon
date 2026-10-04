@@ -84,9 +84,9 @@ class MoveIntoWater(
             val runtime = mainThreadRuntime
             val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
             val allowLand = wanderControl?.allowLand
-                ?: runtime.resolveBoolean("(q.entity.behaviour.moving.walk.can_walk && q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression())
+                ?: runtime.resolveBoolean("(q.entity.movement.can_walk && q.entity.movement.avoids_land) || q.entity.movement.can_fly".asExpression())
             val allowAir = wanderControl?.allowAir
-                ?: runtime.resolveBoolean("q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression())
+                ?: runtime.resolveBoolean("q.entity.movement.can_fly && !q.entity.movement.can_walk".asExpression())
 
             val types = mutableSetOf<WanderType>()
             if ((allowLand || allowAir)) {

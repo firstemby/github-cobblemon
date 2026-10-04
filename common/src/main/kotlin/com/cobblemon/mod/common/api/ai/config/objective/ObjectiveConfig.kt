@@ -42,6 +42,7 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.objective.PointToSpawn
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.SkittishBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.TerritorialBehaviour
 import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkTowardsParent
+import com.cobblemon.mod.common.api.ai.biggerbrain.objective.WalkOutOfWater
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
@@ -60,6 +61,7 @@ interface ObjectiveConfig {
             cobblemonResource("maintain_fluid_y") to MaintainFluidY.Config::class.java,
             cobblemonResource("move_out_of_water") to MoveOutOfWater.Config::class.java,
             cobblemonResource("move_into_water") to MoveIntoWater.Config::class.java,
+            cobblemonResource("walk_out_of_water") to WalkOutOfWater.Config::class.java,
             cobblemonResource("jump_out_of_water") to JumpOutOfWater.Config::class.java,
             cobblemonResource("move_to_resting_place") to MoveToRestingPlace.Config::class.java,
             cobblemonResource("go_to_sleep") to GoToSleep.Config::class.java,

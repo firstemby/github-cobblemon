@@ -24,6 +24,8 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookingTrackerFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.MovementTrackerFixation
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
+import com.cobblemon.mod.common.api.ai.movement.MovementIntent
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.api.ai.resolveInt
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.util.asExpression
@@ -111,7 +113,9 @@ class StayNearOwner(
                         owner,
                         speedMultiplier,
                         maxOf(completionRange, ceil(horizontalHitboxRadius).toInt()) - 1
-                    )
+                    ),
+                    // Will put up with some discomfort to keep up, but not as much as when chasing something.
+                    policy = TraversalPolicy.forIntent(entity, MovementIntent.COMFORT)
                 )
                 if (movementTracker != null) {
                     followTask = brain.fixate(

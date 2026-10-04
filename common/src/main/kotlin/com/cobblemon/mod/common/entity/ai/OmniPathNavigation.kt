@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.entity.ai
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
@@ -35,6 +36,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
+import java.util.WeakHashMap
 
 /**
  * A navigator designed to work with the [OmniPathNodeMaker], allowing a path that can cross land, water, and air
@@ -62,6 +64,97 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     var navigationContext = NavigationContext()
 
+    /**
+     * The policy of the path currently being followed. Recomputations of that path (after nearby block changes or
+     * drifting off course) are evaluated under the same policy. Null means the legacy rules.
+     */
+    var activePolicy: TraversalPolicy? = null
+        private set
+
+    /** Where a planned path was headed and under which policy, adopted when that path is followed. */
+    private class Plan(val targetPos: BlockPos?, val reachRange: Int, val policy: TraversalPolicy?)
+
+    /** Weak so that plans which are never followed don't accumulate. */
+    private val plans = WeakHashMap<Path, Plan>()
+
+    private var planning = false
+    private var planningPolicy: TraversalPolicy? = null
+    private var recomputing = false
+
+    /**
+     * Plans a path under the given policy without disturbing the path currently being followed. Unlike [createPath]
+     * this never hands back the in-progress path, since that path may have been made under different rules. Following
+     * the result with [moveTo] makes its policy the [activePolicy].
+     */
+    fun planPath(target: BlockPos, accuracy: Int, policy: TraversalPolicy?): Path? {
+        return plan(policy) { createPath(target, accuracy) }
+    }
+
+    /**
+     * Plans a path to whichever of the targets is best to reach under the given policy. If none can be reached, the
+     * result is a partial path to the closest point, so check [Path.canReach].
+     *
+     * @param searchRange How far from the entity the search may go, in blocks.
+     */
+    fun planPath(targets: Set<BlockPos>, accuracy: Int, policy: TraversalPolicy?, searchRange: Float): Path? {
+        return plan(policy) { createPath(targets, 8, false, accuracy, searchRange) }
+    }
+
+    private fun plan(policy: TraversalPolicy?, block: () -> Path?): Path? {
+        val previousPath = path
+        val previousTargetPos = targetPos
+        val previousReachRange = reachRange
+        val wasPlanning = planning
+        val previousPlanningPolicy = planningPolicy
+        // Vanilla returns the current path if it already heads to one of the targets, so hide it while planning.
+        path = null
+        planning = true
+        planningPolicy = policy
+        try {
+            val planned = block() ?: return null
+            plans[planned] = Plan(targetPos, reachRange, policy)
+            return planned
+        } finally {
+            path = previousPath
+            // Vanilla overwrites these on success, which would redirect recomputation of the path being followed.
+            targetPos = previousTargetPos
+            reachRange = previousReachRange
+            planning = wasPlanning
+            planningPolicy = previousPlanningPolicy
+        }
+    }
+
+    override fun recomputePath() {
+        recomputing = true
+        try {
+            super.recomputePath()
+        } finally {
+            recomputing = false
+        }
+    }
+
+    override fun createPath(
+        targets: Set<BlockPos>,
+        regionOffset: Int,
+        offsetUpward: Boolean,
+        accuracy: Int,
+        followRange: Float
+    ): Path? {
+        val nodeMaker = nodeEvaluator as? OmniPathNodeMaker
+            ?: return super.createPath(targets, regionOffset, offsetUpward, accuracy, followRange)
+        val previousPolicy = nodeMaker.policy
+        nodeMaker.policy = when {
+            planning -> planningPolicy
+            recomputing -> activePolicy
+            else -> null // Ad-hoc requests (vanilla tasks, MoLang walk_to) use the legacy rules.
+        }
+        try {
+            return super.createPath(targets, regionOffset, offsetUpward, accuracy, followRange)
+        } finally {
+            nodeMaker.policy = previousPolicy
+        }
+    }
+
     companion object {
         val verticallyPreciseNodeTypes = setOf(PathType.WATER, PathType.OPEN, PathType.LAVA)
     }
@@ -74,8 +167,9 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     override fun canUpdatePath(): Boolean {
         val (isInLiquid, isTouchingLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
+        // Lava is viscous enough for anything to move through it, so being in it never stops pathing.
         val isAtValidPosition = (!mob.isInLava && !mob.isEyeInFluid(FluidTags.LAVA)) ||
-                (isTouchingLava && pather.canSwimInLava()) ||
+                isTouchingLava ||
                 this.mob.isPassenger
         return if (pather.canSwimInWater()) {
             isInLiquid || ((this.mob.onGround() || pather.isFlying()) || this.mob.isInLiquid || this.mob.isPassenger)
@@ -287,7 +381,21 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
             }
         }
 
-        return super.moveTo(path, speed)
+        val plan = path?.let(plans::remove)
+        val alreadyFollowing = path != null && path === this.path
+        val moving = super.moveTo(path, speed)
+        when {
+            !moving -> activePolicy = null
+            plan != null -> {
+                activePolicy = plan.policy
+                // Vanilla's moveTo doesn't record the destination, so recomputation would head for a stale target.
+                targetPos = plan.targetPos
+                reachRange = plan.reachRange
+            }
+            // A recomputed path is already assigned before whoever follows it calls moveTo, so keep its policy.
+            !alreadyFollowing -> activePolicy = null
+        }
+        return moving
     }
 
     override fun trimPath() {
@@ -395,6 +503,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     override fun stop() {
         super.stop()
+        activePolicy = null
         this.currentNodeDistance = -1F
         this.cachedCurrentNode = null
         path = null

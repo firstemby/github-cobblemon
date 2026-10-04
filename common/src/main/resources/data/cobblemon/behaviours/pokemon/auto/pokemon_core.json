@@ -52,6 +52,12 @@
     },
     {
       "type": "apply_behaviours",
+      "behaviours": [
+        "cobblemon:pokemon_walk_out_of_water"
+      ]
+    },
+    {
+      "type": "apply_behaviours",
       "condition": "q.entity.behaviour.moving.walk.avoids_land",
       "behaviours": [
         "cobblemon:pokemon_move_into_water"

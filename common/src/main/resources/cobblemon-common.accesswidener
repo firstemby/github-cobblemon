@@ -41,6 +41,8 @@ transitive-accessible field net/minecraft/world/entity/player/Inventory compartm
 #transitive-accessible method net/minecraft/world/gen/feature/TreeFeature createStraightBlobTree (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;IIII)Lnet/minecraft/world/level/levelgen/feature/configurations/TreeConfiguration$TreeConfigurationBuilder;
 transitive-accessible method net/minecraft/world/level/block/LeavesBlock updateDistance (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;
 transitive-accessible method net/minecraft/world/entity/ai/navigation/PathNavigation shouldTargetNextNodeInDirection (Lnet/minecraft/world/phys/Vec3;)Z
+transitive-accessible field net/minecraft/world/entity/ai/navigation/PathNavigation targetPos Lnet/minecraft/core/BlockPos;
+transitive-accessible field net/minecraft/world/entity/ai/navigation/PathNavigation reachRange I
 transitive-accessible field net/minecraft/world/effect/MobEffectInstance duration I
 transitive-accessible field net/minecraft/world/effect/MobEffectInstance ambient Z
 transitive-accessible method net/minecraft/client/renderer/LevelRenderer calculateParticleLevel (Z)Lnet/minecraft/client/ParticleStatus;

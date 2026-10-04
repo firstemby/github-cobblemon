@@ -68,7 +68,8 @@ class EatHeldItem(
             return ObjectiveStatus.INACTIVE
         }
         val itemStack: ItemStack = entity.pokemon.heldItem()
-        if (canEat(itemStack, entity)) {
+        // FORCE so it still takes over nearly anything, as before, but respects fixations that refuse everything.
+        if (canEat(itemStack, entity) && brain.distract(Distraction.FORCE)) {
             fixation = brain.fixate(EatHeldItemFixation(this))
             remainingCooldownTicks = 120
             return ObjectiveStatus.FIXATED

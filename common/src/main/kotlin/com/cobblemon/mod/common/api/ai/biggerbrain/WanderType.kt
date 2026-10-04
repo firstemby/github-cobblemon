@@ -10,9 +10,15 @@ package com.cobblemon.mod.common.api.ai.biggerbrain
 
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl.WanderCenter
 import com.cobblemon.mod.common.api.ai.config.task.WanderTaskConfig.Companion.MAX_LOOK_DOWN_DISTANCE
+import com.cobblemon.mod.common.api.ai.movement.FluidKind
+import com.cobblemon.mod.common.api.ai.movement.MovementCapabilities
+import com.cobblemon.mod.common.api.ai.movement.MovementIntent
+import com.cobblemon.mod.common.api.ai.movement.Occupancy
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.ai.CobblemonRandomSurfacePos
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import kotlin.math.ceil
 import kotlin.math.sqrt
 import net.minecraft.core.BlockPos
@@ -22,6 +28,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.HoverRandomPos
 import net.minecraft.world.entity.ai.util.LandRandomPos
+import net.minecraft.world.entity.ai.util.RandomPos
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.level.pathfinder.PathType
 
@@ -68,12 +75,16 @@ enum class WanderType(
 
             return@choosePosition if (depth < requiredDepth) null else pos
         },
-        createWalkTarget = { _, pos, _, speedMultiplier ->
+        createWalkTarget = { entity, pos, _, speedMultiplier ->
             CobblemonWalkTarget(
                 pos = pos,
                 nodeTypeFilter = { it == PathType.WATER || it == PathType.WATER_BORDER },
                 speedModifier = speedMultiplier,
-                completionRange = 0
+                completionRange = 0,
+                // Stays swimming in water, wherever in the water it's comfortable or not.
+                policy = TraversalPolicy.forIntent(entity, MovementIntent.IDLE) { occupancy, fluid ->
+                    fluid == FluidKind.WATER && (occupancy == Occupancy.SWIM || occupancy == Occupancy.SWIM_SUBMERGED)
+                }
             )
         }
     ),
@@ -134,7 +145,27 @@ enum class WanderType(
                     !avoidsTargetingAir || nodeType !in listOf(
                         PathType.OPEN
                     )
-                }
+                },
+                // Only goes through what it's comfortable with while idling, e.g. no swimming for non-breathers.
+                policy = TraversalPolicy.forIntent(entity, MovementIntent.IDLE)
+            )
+        }
+    ),
+    /**
+     * Seafloor walkers in water: they can't swim, but can breathe, so they wander along the bottom (or wade, or step
+     * out onto land) instead. Neither [LAND] nor [WATER] applies to them while they're in water.
+     */
+    SEABED(
+        isValid = { entity -> entity.isInWater && isSeafloorWalker(MovementCapabilities.of(entity)) },
+        choosePosition = { entity, _, _, horizontalRange, verticalRange ->
+            chooseBottomPosition(entity, horizontalRange, verticalRange)
+        },
+        createWalkTarget = { entity, pos, _, speedMultiplier ->
+            CobblemonWalkTarget(
+                pos = pos,
+                speedModifier = speedMultiplier,
+                completionRange = 0,
+                policy = TraversalPolicy.forIntent(entity, MovementIntent.IDLE)
             )
         }
     )
@@ -220,4 +251,43 @@ enum class WanderType(
             return pos
         }
     }
+}
+
+/** Bodies that walk along the bottom of water rather than swimming in it, and can breathe down there. */
+private fun isSeafloorWalker(caps: MovementCapabilities) = caps.canWalk && !caps.canSwimInWater && caps.canBreatheUnderwater
+
+private const val BOTTOM_POSITION_SAMPLES = 10
+private const val MAX_BOTTOM_DROP = 24
+
+/**
+ * Picks a random position the entity could stand at, settling sampled points onto the bottom the way a non-swimmer
+ * would sink onto it. Only positions an idle policy allows are kept; reachability is the pathfinder's job.
+ */
+private fun chooseBottomPosition(entity: PathfinderMob, horizontalRange: Int, verticalRange: Int): BlockPos? {
+    val level = entity.level()
+    val policy = TraversalPolicy.forIntent(entity, MovementIntent.IDLE)
+    val origin = entity.blockPosition()
+    val tethering = (entity as? PokemonEntity)?.tethering
+    repeat(BOTTOM_POSITION_SAMPLES) {
+        var pos = origin.offset(RandomPos.generateRandomDirection(entity.random, horizontalRange, verticalRange))
+        var climbed = 0
+        while (level.getBlockState(pos).isSolid && climbed++ < verticalRange) {
+            pos = pos.above()
+        }
+        var occupancy = Occupancy.at(policy.capabilities, entity.eyeHeight, pos, level::getBlockState)
+        var dropped = 0
+        while (occupancy?.isStandable == false && dropped++ < MAX_BOTTOM_DROP && pos.y > level.minBuildHeight) {
+            pos = pos.below()
+            occupancy = Occupancy.at(policy.capabilities, entity.eyeHeight, pos, level::getBlockState)
+        }
+        if (occupancy == null || pos == origin) {
+            return@repeat
+        } else if (policy.cost(occupancy, FluidKind.of(level.getFluidState(pos))) == null) {
+            return@repeat
+        } else if (tethering?.canRoamTo(pos) == false) {
+            return@repeat
+        }
+        return pos
+    }
+    return null
 }

@@ -44,7 +44,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
  * Handles transition of nearest visible attacker to a valid attack target when wanting to defend owner.
  * Could possibly be more configurable in the future
  */
-class DefendOwner() : Objective {
+class DefendOwner : Objective {
     var cooldownTicks = 0
 
     override fun getDescription(entity: LivingEntity) = "Following parent species"

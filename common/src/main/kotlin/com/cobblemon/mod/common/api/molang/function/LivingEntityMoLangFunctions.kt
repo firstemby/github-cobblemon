@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonMemories
 import com.cobblemon.mod.common.api.ai.CobblemonBlockPosTracker
 import com.cobblemon.mod.common.api.ai.CobblemonWanderControl
+import com.cobblemon.mod.common.api.ai.movement.createMovementStruct
 import com.cobblemon.mod.common.api.molang.ObjectValue
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -55,6 +56,8 @@ object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity>(
         val entity = this
         val functions = hashMapOf<String, (MoParams) -> Any>()
 
+        val movementStruct = createMovementStruct(entity)
+        functions["movement"] = { movementStruct }
         functions["is_player"] = { DoubleValue(entity is Player) }
         functions["is_npc"] = { DoubleValue(entity is NPCEntity) }
         functions["is_mob"] = { DoubleValue(entity is Mob) }

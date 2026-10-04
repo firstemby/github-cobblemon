@@ -1,0 +1,14 @@
+{
+  "name": "cobblemon.behaviour.pokemon_walk_out_of_water.name",
+  "description": "cobblemon.behaviour.pokemon_walk_out_of_water.desc",
+  "configurations": [
+    {
+      "type": "cobblemon:add_objectives",
+      "objectivesByPriority": {
+        "0": [
+          "cobblemon:walk_out_of_water"
+        ]
+      }
+    }
+  ]
+}

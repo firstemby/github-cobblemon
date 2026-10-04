@@ -23,6 +23,10 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.EntityFixation
 import com.cobblemon.mod.common.api.ai.biggerbrain.fixation.LookAndMoveFixation
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementStatus
+import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
+import com.cobblemon.mod.common.api.ai.movement.MovementIntent
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.api.ai.config.objective.ObjectiveConfig
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.api.npc.configuration.MoLangConfigVariable
@@ -46,7 +50,10 @@ class AttackTargetMelee(
     private val attackCooldownTicks: Int = 20
 ) : Objective {
     private var movementTask: EntityFixation? = null
+    private var movementTracker: MovementTracker? = null
     private var remainingCooldownTicks = 0
+    /** Ticks until the chase may plan again after failing, so an unreachable target doesn't get re-pathed every tick. */
+    private var remainingRepathTicks = 0
 
     override val observedMemories = listOf(MemoryModuleType.ATTACK_TARGET)
 
@@ -116,9 +123,26 @@ class AttackTargetMelee(
             return ObjectiveStatus.FIXATED
         }
 
+        if (movementTracker?.lastStatus == MovementStatus.FAILED) {
+            // Got as close as it's willing to (e.g. the bank of a lake it won't enter). Hold there for a bit.
+            movementTracker = null
+            remainingRepathTicks = REPATH_COOLDOWN_TICKS
+        }
+        if (remainingRepathTicks > 0) {
+            remainingRepathTicks--
+            entity.lookControl.setLookAt(target)
+            return ObjectiveStatus.ACTIVE
+        }
+
         if (!brain.distract(Distraction.FORCE)) return ObjectiveStatus.BLOCKED
         val walkTarget = WalkTarget(EntityTracker(target, true), speed, 1)
-        val movementTracker = RegularMovementTracker.attempt(entity, walkTarget) ?: return ObjectiveStatus.ACTIVE
+        val policy = TraversalPolicy.forIntent(entity, MovementIntent.URGENT)
+        val movementTracker = RegularMovementTracker.attempt(entity, walkTarget, policy)
+        this.movementTracker = movementTracker
+        if (movementTracker == null) {
+            remainingRepathTicks = REPATH_COOLDOWN_TICKS
+            return ObjectiveStatus.ACTIVE
+        }
         movementTask = brain.fixate(LookAndMoveFixation(
             distractionTypes = setOf(DistractionType.FORCE),
             lookingTracker = LookingTracker.forTargetEntity(entity, target, trackEyeHeight = true),
@@ -140,6 +164,10 @@ class AttackTargetMelee(
             }
             return@subscribe true
         }
+    }
+
+    companion object {
+        const val REPATH_COOLDOWN_TICKS = 20
     }
 
     class Config : ObjectiveConfig {

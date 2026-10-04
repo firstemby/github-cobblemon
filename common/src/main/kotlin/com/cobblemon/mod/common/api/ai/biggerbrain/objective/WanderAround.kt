@@ -48,9 +48,9 @@ import net.minecraft.world.entity.ai.memory.WalkTarget
 class WanderAround(
     val condition: Expression = "true".asExpression(),
     val cooldownTicks: Int = 80,
-    val allowLand: Expression = "(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression(),
-    val allowWater: Expression = "q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression(),
-    val allowAir: Expression = "q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression(),
+    val allowLand: Expression = "(q.entity.movement.can_walk && !q.entity.movement.avoids_land) || q.entity.movement.can_fly".asExpression(),
+    val allowWater: Expression = "q.entity.movement.can_swim_in_water && !q.entity.movement.avoids_water".asExpression(),
+    val allowAir: Expression = "q.entity.movement.can_fly && !q.entity.movement.can_walk".asExpression(),
     val wanderChance: Expression = "1/(20*6)".asExpression(),
     val horizontalRange: Expression = "10".asExpression(),
     val verticalRange: Expression = "5".asExpression(),
@@ -113,6 +113,10 @@ class WanderAround(
         if (allowWater && WanderType.WATER.isValid(entity)) {
             types.add(WanderType.WATER)
         }
+        // Seafloor walkers can't swim, so allowWater's default never covers them; only an explicit opt-out stops them.
+        if (wanderControl?.allowWater != false && WanderType.SEABED.isValid(entity)) {
+            types.add(WanderType.SEABED)
+        }
 
         if (types.isEmpty()) {
             return ObjectiveStatus.INVALID
@@ -157,9 +161,9 @@ class WanderAround(
     class Config : ObjectiveConfig {
         val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
         val cooldownTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
-        val allowLand: ExpressionOrEntityVariable = Either.left("(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression())
-        val allowWater: ExpressionOrEntityVariable = Either.left("q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
-        val allowAir: ExpressionOrEntityVariable = Either.left("q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression())
+        val allowLand: ExpressionOrEntityVariable = Either.left("(q.entity.movement.can_walk && !q.entity.movement.avoids_land) || q.entity.movement.can_fly".asExpression())
+        val allowWater: ExpressionOrEntityVariable = Either.left("q.entity.movement.can_swim_in_water && !q.entity.movement.avoids_water".asExpression())
+        val allowAir: ExpressionOrEntityVariable = Either.left("q.entity.movement.can_fly && !q.entity.movement.can_walk".asExpression())
         val wanderChance: ExpressionOrEntityVariable = Either.left("1/(20*6)".asExpression())
         val horizontalRange: ExpressionOrEntityVariable = Either.left("10".asExpression())
         val verticalRange: ExpressionOrEntityVariable = Either.left("5".asExpression())
@@ -217,9 +221,9 @@ class WanderAround(
             val wanderControl = entity.brain.getMemorySafely(CobblemonMemories.WANDER_CONTROL).orElse(null)
             runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
 
-            val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean("(q.entity.behaviour.moving.walk.can_walk && !q.entity.behaviour.moving.walk.avoids_land) || q.entity.behaviour.moving.fly.can_fly".asExpression())
-            val allowWater = wanderControl?.allowWater ?: runtime.resolveBoolean("q.entity.behaviour.moving.swim.can_swim_in_water && !q.entity.behaviour.moving.swim.avoids_water".asExpression())
-            val allowAir = wanderControl?.allowAir ?: runtime.resolveBoolean("q.entity.behaviour.moving.fly.can_fly && !q.entity.behaviour.moving.walk.can_walk".asExpression())
+            val allowLand = wanderControl?.allowLand ?: runtime.resolveBoolean("(q.entity.movement.can_walk && !q.entity.movement.avoids_land) || q.entity.movement.can_fly".asExpression())
+            val allowWater = wanderControl?.allowWater ?: runtime.resolveBoolean("q.entity.movement.can_swim_in_water && !q.entity.movement.avoids_water".asExpression())
+            val allowAir = wanderControl?.allowAir ?: runtime.resolveBoolean("q.entity.movement.can_fly && !q.entity.movement.can_walk".asExpression())
 
             val types = mutableSetOf<WanderType>()
             if ((allowLand || allowAir) && WanderType.LAND.isValid(entity)) {
@@ -227,6 +231,9 @@ class WanderAround(
             }
             if (allowWater && WanderType.WATER.isValid(entity)) {
                 types.add(WanderType.WATER)
+            }
+            if (wanderControl?.allowWater != false && WanderType.SEABED.isValid(entity)) {
+                types.add(WanderType.SEABED)
             }
 
             if (types.isEmpty()) {

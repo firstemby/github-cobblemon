@@ -16,6 +16,8 @@ import com.cobblemon.mod.common.api.ai.biggerbrain.MovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.RegularMovementTracker
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.Distraction
 import com.cobblemon.mod.common.api.ai.biggerbrain.distraction.DistractionType
+import com.cobblemon.mod.common.api.ai.movement.MovementIntent
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.pokemon.ai.moves.RealTimeMove
@@ -43,6 +45,8 @@ class AttackFixation(
     var movementTracker: MovementTracker? = null
     var lookingTracker: LookingTracker? = null
     var activeMoveInstance: RealTimeMoveInstance? = null
+    /** Ticks until it may plan again after a failed or impossible path, so it holds instead of re-pathing every tick. */
+    var remainingRepathTicks = 0
     override fun getDescription(entity: LivingEntity): String {
         return "Attacking Target"
     }
@@ -126,6 +130,14 @@ class AttackFixation(
             if (movementStatus != MovementStatus.PENDING) {
                 movementTracker!!.stop()
                 movementTracker = null
+                if (movementStatus == MovementStatus.FAILED) {
+                    remainingRepathTicks = REPATH_COOLDOWN_TICKS
+                }
+            }
+        } else if (remainingRepathTicks > 0) {
+            remainingRepathTicks--
+            if (lookingTracker == null) {
+                lookingTracker = LookingTracker.forTargetEntity(entity, targetedEntity, trackEyeHeight = true)
             }
         } else {
             // Not moving right now and we need to figure out to what distance to the enemy we want to move to
@@ -145,7 +157,11 @@ class AttackFixation(
             }
             if (idealDistanceToTarget < distanceToTarget) {
                 val walkTarget = WalkTarget(EntityTracker(targetedEntity, true), speed, idealDistanceToTarget.toInt())
-                movementTracker = RegularMovementTracker.attempt(entity, walkTarget)
+                val policy = TraversalPolicy.forIntent(entity, MovementIntent.URGENT)
+                movementTracker = RegularMovementTracker.attempt(entity, walkTarget, policy)
+                if (movementTracker == null) {
+                    remainingRepathTicks = REPATH_COOLDOWN_TICKS
+                }
                 lookingTracker = LookingTracker.forTargetEntity(entity, targetedEntity, trackEyeHeight = true)
             } else if (lookingTracker == null) {
                 // Fixate at looking at the target so we don't wander off
@@ -156,6 +172,7 @@ class AttackFixation(
         return true
     }
 
-
-
+    companion object {
+        const val REPATH_COOLDOWN_TICKS = 20
+    }
 }

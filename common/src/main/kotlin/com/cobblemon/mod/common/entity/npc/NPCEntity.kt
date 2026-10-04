@@ -18,6 +18,10 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.ai.biggerbrain.BiggerBrain
+import com.cobblemon.mod.common.api.ai.booleanVariable
+import com.cobblemon.mod.common.api.ai.config.task.SharedEntityVariables
+import com.cobblemon.mod.common.api.ai.movement.MediumPreferences
+import com.cobblemon.mod.common.api.ai.movement.configFlag
 import com.cobblemon.mod.common.api.entity.PokemonSender
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
@@ -96,6 +100,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.npc.Npc
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.tags.FluidTags
 import net.minecraft.world.level.material.FluidState
 
 class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
@@ -289,6 +294,27 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
 
     // This has to be below constructor and entity tracker fields otherwise initialization order is weird and breaks them syncing
     companion object {
+        const val CAN_WALK = "can_walk"
+        const val CAN_SWIM_IN_WATER = "can_swim_in_water"
+        const val CAN_BREATHE_UNDERWATER = "can_breathe_underwater"
+        const val CAN_WALK_ON_WATER = "can_walk_on_water"
+        const val CAN_WALK_ON_LAVA = "can_walk_on_lava"
+        const val FIRE_IMMUNE = "fire_immune"
+
+        private val MOVEMENT_VARIABLES = SharedEntityVariables.MOVEMENT_CATEGORY.let { category ->
+            listOf(
+                booleanVariable(category, CAN_WALK, true),
+                booleanVariable(category, CAN_SWIM_IN_WATER, true),
+                booleanVariable(category, CAN_BREATHE_UNDERWATER, false),
+                booleanVariable(category, CAN_WALK_ON_WATER, false),
+                booleanVariable(category, CAN_WALK_ON_LAVA, false),
+                booleanVariable(category, FIRE_IMMUNE, false),
+                booleanVariable(category, MediumPreferences.AVOIDS_WATER, false),
+                booleanVariable(category, MediumPreferences.AVOIDS_LAND, false),
+                booleanVariable(category, MediumPreferences.PREFERS_LAVA, false),
+            )
+        }
+
         fun createAttributes(): AttributeSupplier.Builder = createMobAttributes()
             .add(Attributes.ATTACK_DAMAGE, 1.0)
             .add(Attributes.ATTACK_KNOCKBACK)
@@ -692,29 +718,26 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     override fun getNavigation() = navigation as OmniPathNavigation
     override fun createNavigation(level: Level) = OmniPathNavigation(level, this)
 
-    // At some point these need to be changeable from MoLang or something.
-    override fun canWalk(): Boolean {
-        return true
-    }
+    /*
+     * Movement capabilities and preferences come from config variables so they can be set per NPC in the editor or by
+     * presets. The defaults match what NPCs could always do. Flight isn't configurable because NPCs can't fly yet.
+     */
+    override fun getExtraVariables(): List<MoLangConfigVariable> = MOVEMENT_VARIABLES
 
-    override fun canSwimInWater(): Boolean {
-        return true
-    }
-
-    override fun canSwimInLava(): Boolean {
-        return false
-    }
-
-    override fun canWalkOnLava(): Boolean {
-        return false
-    }
+    override fun canWalk() = configFlag(CAN_WALK, true)
+    override fun canSwimInWater() = configFlag(CAN_SWIM_IN_WATER, true)
+    // Lava is movable by anything; this is whether the NPC treats it like home, same as a Pokémon species' canSwimInLava.
+    override fun canSwimInLava() = configFlag(MediumPreferences.PREFERS_LAVA, false)
+    override fun canWalkOnLava() = configFlag(CAN_WALK_ON_LAVA, false)
+    override fun canWalkOnWater() = configFlag(CAN_WALK_ON_WATER, false)
+    override fun canBreatheUnderwater() = configFlag(CAN_BREATHE_UNDERWATER, false)
+    override fun fireImmune() = configFlag(FIRE_IMMUNE, false) || super.fireImmune()
 
     override fun canSwimUnderFluid(fluidState: FluidState): Boolean {
-        return false
-    }
-
-    override fun canWalkOnWater(): Boolean {
-        return false
+        return when {
+            fluidState.`is`(FluidTags.WATER) -> canBreatheUnderwater()
+            else -> false
+        }
     }
 
     override fun canPathThroughSaccLeaves(): Boolean {

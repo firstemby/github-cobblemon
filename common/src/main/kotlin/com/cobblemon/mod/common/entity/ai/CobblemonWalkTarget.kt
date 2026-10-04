@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker
 import net.minecraft.world.entity.ai.memory.WalkTarget
@@ -25,7 +26,12 @@ class CobblemonWalkTarget(
     speedModifier: Float,
     completionRange: Int,
     val nodeTypeFilter: (PathType) -> Boolean = { true },
-    val destinationNodeTypeFilter: (PathType) -> Boolean = { true }
+    val destinationNodeTypeFilter: (PathType) -> Boolean = { true },
+    /**
+     * The traversal rules for reaching this target. Where supported (the bigger brain's movement trackers) this is
+     * used instead of [nodeTypeFilter].
+     */
+    val policy: TraversalPolicy? = null
 ) : WalkTarget(
     BlockPosTracker(pos),
     speedModifier,

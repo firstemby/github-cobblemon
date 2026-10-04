@@ -9,6 +9,9 @@
 package com.cobblemon.mod.common.pokemon.ai
 
 import com.cobblemon.mod.common.CobblemonBlocks
+import com.cobblemon.mod.common.api.ai.movement.FluidKind
+import com.cobblemon.mod.common.api.ai.movement.Occupancy
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.entity.OmniPathingEntity
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.util.canFit
@@ -59,16 +62,83 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     var nodeFilter: Predicate<PathType> = Predicate { true }
 
+    /**
+     * The traversal policy for the path being computed, set by the navigation. When null, the legacy rules apply:
+     * the entity's pathfinding malus alone decides costs and its location decides between walking and 3D rules.
+     */
+    var policy: TraversalPolicy? = null
+
+    private val nodePosToOccupancy: Long2ObjectMap<Occupancy?> = Long2ObjectOpenHashMap()
+
     override fun prepare(cachedWorld: PathNavigationRegion, entity: Mob) {
         super.prepare(cachedWorld, entity)
         nodePosToType.clear()
         nodePosToState.clear()
+        nodePosToOccupancy.clear()
     }
 
     override fun done() {
         super.done()
         nodePosToType.clear()
         nodePosToState.clear()
+        nodePosToOccupancy.clear()
+    }
+
+    /** How the mob would occupy the given position, or null if it's obstructed. Only meaningful while pathing. */
+    fun occupancyAt(x: Int, y: Int, z: Int): Occupancy? {
+        val policy = policy ?: return null
+        return nodePosToOccupancy.computeIfAbsent(BlockPos.asLong(x, y, z), Long2ObjectFunction {
+            Occupancy.at(policy.capabilities, mob.eyeHeight, BlockPos(x, y, z)) { currentContext.getCachedBlockState(it) }
+        })
+    }
+
+    /**
+     * The cost of entering the position as the given path type, negative if it can't be entered. Medium types are
+     * priced by the [policy] from how the mob would occupy the position; hazards always use the mob's malus.
+     */
+    fun malusAt(type: PathType, x: Int, y: Int, z: Int): Float {
+        val policy = policy ?: return mob.getPathfindingMalus(type)
+        // Obstructed positions (fences, doors and so on) are left to the mob's malus.
+        val occupancy = occupancyAt(x, y, z) ?: return mob.getPathfindingMalus(type)
+        val fluid = FluidKind.of(currentContext.getCachedBlockState(BlockPos(x, y, z)).fluidState)
+        val cost = policy.cost(occupancy, fluid) ?: return -1F
+        // Fluid positions are entirely the policy's call: lava in particular is typed as a fire hazard.
+        if (type in MEDIUM_PATH_TYPES || fluid != FluidKind.NONE) {
+            return cost
+        }
+        // Hazards in the open (berry bushes, fire nearby) still cost what the mob thinks they cost.
+        val hazard = mob.getPathfindingMalus(type)
+        return if (hazard < 0) hazard else max(hazard, cost)
+    }
+
+    /** Whether the path should be expanded with walking rules rather than moving freely in 3D. */
+    private fun usesWalkingRules(): Boolean {
+        val caps = policy?.capabilities ?: return !canFly() && !mob.isInWater
+        // Lava is swimmable by everyone.
+        return !caps.canFly && !(caps.canSwimInWater && mob.isInWater) && !mob.isInLava
+    }
+
+    /**
+     * For a position the mob would sink or fall through, finds where it would come to rest. Sinking goes all the way
+     * to the bottom; falling is limited by the mob's max fall distance. Returns null if it can't land anywhere usable.
+     */
+    private fun findLandingBelow(x: Int, y: Int, z: Int): Node? {
+        var fallen = 1 // Leaving the position at y is already one block of falling.
+        for (i in y - 1 downTo mob.level().minBuildHeight) {
+            val occupancy = occupancyAt(x, i, z) ?: return null
+            if (occupancy == Occupancy.FALL) {
+                if (++fallen > mob.maxFallDistance) {
+                    return null
+                }
+                continue
+            } else if (occupancy == Occupancy.SINK) {
+                continue
+            }
+            val type = getNodeType(mob, x, i, z)
+            val malus = malusAt(type, x, i, z)
+            return if (malus >= 0) getNodeAndUpdateCostToMax(x, i, z, type, malus) else null
+        }
+        return null
     }
 
     fun PathfindingContext.getCachedBlockState(pos: BlockPos): BlockState {
@@ -83,9 +153,25 @@ class OmniPathNodeMaker : NodeEvaluator() {
         val x = Mth.floor(mob.boundingBox.minX)
         val y = Mth.floor(mob.boundingBox.minY + 0.5)
         val z = Mth.floor(mob.boundingBox.minZ)
-        val node = super.getNode(x, y, z)
+        var startY = y
+        if (policy != null && !mob.onGround() && occupancyAt(x, y, z)?.isStandable == false) {
+            // A sinking or falling mob will have landed by the time it can follow a path, so plan from there.
+            // Falls are capped so a mob that's merely clipping a ledge isn't planned from the bottom of a cliff.
+            var fallen = 0
+            while (startY > mob.level().minBuildHeight && occupancyAt(x, startY, z)?.isStandable == false) {
+                if (occupancyAt(x, startY, z) == Occupancy.FALL && ++fallen > mob.maxFallDistance) {
+                    startY = y
+                    break
+                }
+                startY--
+            }
+            if (occupancyAt(x, startY, z)?.isStandable != true) {
+                startY = y
+            }
+        }
+        val node = super.getNode(x, startY, z)
         node.type = this.getNodeType(mob, node.asBlockPos())
-        node.costMalus = mob.getPathfindingMalus(node.type)
+        node.costMalus = malusAt(node.type, x, startY, z)
         return node
     }
 
@@ -123,13 +209,18 @@ class OmniPathNodeMaker : NodeEvaluator() {
         return if (!canFly() && d - nodeFloorLevel > this.getMobJumpHeight()) {
             null
         } else {
+            if (policy != null && occupancyAt(x, y, z)?.isStandable == false) {
+                // Walking off an edge or into a fluid the mob can't swim in: it ends up wherever it lands.
+                return findLandingBelow(x, y, z)
+            }
+
             var pathType2: PathType = this.getNodeType(this.mob, x, y, z)
 
             if (pathType2 == PathType.WALKABLE && direction == Direction.UP) {
                 pathType2 = PathType.OPEN
             }
 
-            val f = mob.getPathfindingMalus(pathType2)
+            val f = malusAt(pathType2, x, y, z)
             if (f >= 0.0f) {
                 node = this.getNodeAndUpdateCostToMax(x, y, z, pathType2, f)
             }
@@ -150,9 +241,10 @@ class OmniPathNodeMaker : NodeEvaluator() {
                         pathType!!,
                         mutableBlockPos
                     )
-                } else if (pathType2 == PathType.WATER && !canFloat()) {
+                } else if (policy == null && pathType2 == PathType.WATER && !canFloat()) {
+                    // With a policy, sinking is handled up front through findLandingBelow.
                     node = this.tryFindFirstNonWaterBelow(x, y, z, node)
-                } else if (pathType2 == PathType.OPEN) {
+                } else if (policy == null && pathType2 == PathType.OPEN) {
                     node = this.tryFindFirstGroundNodeBelow(x, y, z)
                 } else if (doesBlockHavePartialCollision(pathType2) && node == null) {
                     node = this.getClosedNode(x, y, z, pathType2)
@@ -318,8 +410,8 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
         // Hitbox thing looks confusing but if the hitbox volume is more than like, 5, it starts getting pretty
         // fucking slow to use the findAcceptedNodeWalk function
-        val strictlyWalkPathing = !canFly() && !mob.isInWater
-        val doVerticalNeighbourChecks = (canFly() || mob.isInWater) && mob.boundingBox.size < MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS
+        val strictlyWalkPathing = usesWalkingRules()
+        val doVerticalNeighbourChecks = !strictlyWalkPathing && mob.boundingBox.size < MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS
 
         // Non-diagonal surroundings in 3d space
         for (direction in Direction.entries) {
@@ -430,7 +522,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         // If they're in a blocked node and there are multiple successors, choose whichever is closest to get out of the blocked position.
         // This addresses instances where they're next to a fence and should move away from the fence in the nearest open
         // direction before regular pathing.
-        if (mob.getPathfindingMalus(node.type) < 0 && i > 1) {
+        if (malusAt(node.type, node.x, node.y, node.z) < 0 && i > 1) {
             val x = mob.boundingBox.minX
             val y = mob.boundingBox.minY + 0.5
             val z = mob.boundingBox.minZ
@@ -476,6 +568,11 @@ class OmniPathNodeMaker : NodeEvaluator() {
             return false
         }
 
+        if (policy != null) {
+            // The policy decides per position through malusAt, using the capabilities it was made with.
+            return true
+        }
+
         return when {
             (type == PathType.BREACH || type == PathType.WATER || type == PathType.WATER_BORDER) && canSwimInWater() -> true
             type == PathType.LAVA && canSwimInLava() -> true
@@ -491,7 +588,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
         val type = addNodePos(x, y, z)
         if (isValidPathType(type) &&
-            mob.getPathfindingMalus(type).also { nodePenalty = it } >= 0.0f &&
+            malusAt(type, x, y, z).also { nodePenalty = it } >= 0.0f &&
             super.getNode(x, y, z).also { pathNode = it } != null
         ) {
             pathNode!!.type = type
@@ -767,6 +864,15 @@ class OmniPathNodeMaker : NodeEvaluator() {
     companion object {
         const val MAX_HITBOX_SIZE_FOR_WALKING = 1.6F
         const val MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS = 2F
+        /** Path types that describe the medium a position is in, as opposed to a hazard or obstacle. */
+        val MEDIUM_PATH_TYPES: Set<PathType> = EnumSet.of(
+            PathType.WALKABLE,
+            PathType.OPEN,
+            PathType.WATER,
+            PathType.WATER_BORDER,
+            PathType.LAVA,
+            PathType.BREACH
+        )
     }
 
     fun canWalk(): Boolean {

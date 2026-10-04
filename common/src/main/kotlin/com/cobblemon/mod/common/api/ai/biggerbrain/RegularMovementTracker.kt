@@ -8,7 +8,9 @@
 
 package com.cobblemon.mod.common.api.ai.biggerbrain
 
+import com.cobblemon.mod.common.api.ai.movement.TraversalPolicy
 import com.cobblemon.mod.common.entity.ai.CobblemonWalkTarget
+import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.pokemon.ai.OmniPathNodeMaker
 import com.cobblemon.mod.common.util.deleteNode
 import java.util.function.Predicate
@@ -31,17 +33,32 @@ import net.minecraft.world.phys.Vec3
  */
 class RegularMovementTracker(
     val entity: PathfinderMob,
-    override val walkTarget: WalkTarget
+    override val walkTarget: WalkTarget,
+    /**
+     * The traversal rules for this movement. They stay attached to the path, including when it's recomputed or
+     * re-planned because the target moved. Null uses the legacy rules. Only honoured by [OmniPathNavigation].
+     */
+    policy: TraversalPolicy? = null,
+    /** An already planned path to follow instead of planning one here. */
+    initialPath: Path? = null
 ) : MovementTracker {
     companion object {
         /**
          * Attempts to create a tracker for the given entity and target. Returns null if the path
          * couldn't be created.
          */
-        fun attempt(entity: PathfinderMob, walkTarget: WalkTarget): RegularMovementTracker? {
-            return RegularMovementTracker(entity, walkTarget).takeIf { it.isValid }
+        fun attempt(entity: PathfinderMob, walkTarget: WalkTarget, policy: TraversalPolicy? = null): RegularMovementTracker? {
+            return RegularMovementTracker(entity, walkTarget, policy).takeIf { it.isValid }
+        }
+
+        /** Creates a tracker that follows a path which was already planned, under the policy it was planned with. */
+        fun following(entity: PathfinderMob, walkTarget: WalkTarget, path: Path, policy: TraversalPolicy?): RegularMovementTracker? {
+            return RegularMovementTracker(entity, walkTarget, policy, path).takeIf { it.isValid }
         }
     }
+
+    /** The policy given explicitly, otherwise whatever the walk target asks for. */
+    val policy: TraversalPolicy? = policy ?: (walkTarget as? CobblemonWalkTarget)?.policy
 
     var isValid = false
         private set
@@ -53,7 +70,11 @@ class RegularMovementTracker(
 
     init {
         val hasReached = hasReached(entity, walkTarget)
-        if (!hasReached && hasFinishedPath(entity, walkTarget)) {
+        if (!hasReached && initialPath != null) {
+            this.path = initialPath
+            this.lastKnownTargetPos = walkTarget.target.currentBlockPosition()
+            isValid = true
+        } else if (!hasReached && hasFinishedPath(entity, walkTarget)) {
             this.lastKnownTargetPos = walkTarget.target.currentBlockPosition()
             isValid = true
         } else {
@@ -164,15 +185,25 @@ class RegularMovementTracker(
         target: BlockPos
     ): Path? {
         var path: Path? = null
-        if (walkTarget is CobblemonWalkTarget) {
+        val navigation = entity.navigation
+        if (policy != null && navigation is OmniPathNavigation) {
+            // The policy replaces node filtering; destination filtering still applies below.
+            var planned = navigation.planPath(target, 0, policy)
+            if (planned != null && walkTarget is CobblemonWalkTarget) {
+                while (planned.endNode?.type?.let { walkTarget.destinationNodeTypeFilter(it) } == false) {
+                    planned.deleteNode(planned.nodeCount - 1)
+                }
+                if (planned.nodeCount == 0) {
+                    planned = null
+                }
+            }
+            path = planned
+        } else if (walkTarget is CobblemonWalkTarget) {
             withNodeFilter(
                 entity = entity,
                 nodeFilter = walkTarget.nodeTypeFilter,
             ) {
-                var resolvedPath = entity.navigation.createPath(
-                    walkTarget.target.currentBlockPosition(),
-                    0
-                )
+                var resolvedPath = entity.navigation.createPath(target, 0)
                 if (resolvedPath != null) {
                     // A CobblemonWalkTarget may have a destinationNodeTypeFilter, which is used to filter the end node of the path.
                     // Mainly useful for when the thing setting the target did it a bit crudely or didn't know how far the navigator
