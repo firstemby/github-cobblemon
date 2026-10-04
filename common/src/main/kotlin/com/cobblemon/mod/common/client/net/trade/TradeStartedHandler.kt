@@ -20,7 +20,7 @@ import net.minecraft.client.Minecraft
 
 object TradeStartedHandler : ClientNetworkPacketHandler<TradeStartedPacket> {
     override fun handle(packet: TradeStartedPacket, client: Minecraft) {
-        Cobblemon.LOGGER.error("handle trade start from: " + packet.traderId)
+        Cobblemon.LOGGER.info("Trade started with {}", packet.traderId)
         val trade = ClientTrade()
         CobblemonClient.trade = trade
         Minecraft.getInstance().setScreen(
