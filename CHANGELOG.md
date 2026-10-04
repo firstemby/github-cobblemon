@@ -90,7 +90,11 @@
 - Factor in the weight of pokemon when calculating pushing forces between hitboxes.
 - Remade the Starter Selection Screen with new assets
 - Refactored berry trees to be less impactful on TPS (more performant)
-- Trade functionality has been overhauled to allow trading the entire party at once, along with UI enhancements
+- Trading has been overhauled to allow offering multiple Pokémon, up to the entire party, in a single trade
+  - Selected Pokémon are now highlighted in both parties with new party slot assets
+  - Hovering an offered Pokémon now shows its summary, and clicking the active Pokémon no longer exits the summary view
+  - The trade animation now moves the offered Pokémon towards the Poké Ball
+  - Parties are compacted after a trade so no empty slots are left between Pokémon
 - Terrain Seeds can now be planted
 - Terrain Seeds are now consumed during PvP and NPC battles
 - Glow Item Frames can be crafted using Bright Powder as an alternative to Glow Ink Sacs
@@ -144,7 +148,6 @@
 - Added `BattleFleeAttemptEvent` fired from `PokemonBattle.checkFleeAttempt`, allowing developers to intercept and control flee attempts
 - Trade network packets (`TradeUpdatedPacket`, `UpdateTradeOfferPacket`, and `TradeCompletedPacket`) now receive an array of Pokémon instead of a single Pokémon to execute trades
 - `TradeEvent.Pre` and `TradeEvent.Post` now expose every Pokémon each participant receives (`tradeParticipant1Pokemon` and `tradeParticipant2Pokemon` are now lists), and their Molang context includes `trade_participant_1_pokemon_list` and `trade_participant_2_pokemon_list`
-- When multiple Pokémon are traded at once, trade evolutions now check every Pokémon received in exchange, so trading Karrablast and Shelmet together evolves both
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
   ```json
   {
