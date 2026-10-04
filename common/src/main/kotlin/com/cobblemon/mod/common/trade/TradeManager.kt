@@ -133,17 +133,15 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
             pokemon1.forEach { party2.add(it) }
             pokemon2.forEach { party1.add(it) }
 
-            pokemon1.forEach { p1 ->
-                p1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                    it.attemptEvolution(p1, pokemon2.first())
+            // Each traded Pokémon may evolve if any of the Pokémon it was traded for satisfies its context.
+            // Evolutions are resolved before any are applied so one evolving can't invalidate another's context.
+            (pokemon1.map { it to pokemon2 } + pokemon2.map { it to pokemon1 })
+                .mapNotNull { (pokemon, tradedFor) ->
+                    pokemon.lockedEvolutions.filterIsInstance<TradeEvolution>()
+                        .firstOrNull { evolution -> tradedFor.any { evolution.testContext(pokemon, it) } && evolution.test(pokemon) }
+                        ?.let { pokemon to it }
                 }
-            }
-
-            pokemon2.forEach { p2 ->
-                p2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                    it.attemptEvolution(p2, pokemon1.first())
-                }
-            }
+                .forEach { (pokemon, evolution) -> evolution.evolve(pokemon) }
 
             val compactParty = { party: PartyStore ->
                 var writeIdx = 0
