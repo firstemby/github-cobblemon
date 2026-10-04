@@ -116,6 +116,7 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
         }
 
         if (pokemon1.isEmpty() || pokemon2.isEmpty()) {
+            Cobblemon.LOGGER.warn("Attempted to perform a trade where one side offered no Pokémon between ${player1.name} and ${player2.name}. This should never happen.")
             activeTrade.cancelTrade()
             return
         }
