@@ -26,7 +26,7 @@ object VanillaBiomeSectionParser : CobblemonBiomeSectionParser {
 		val biome = result.result().orElse(null)
 		if (biome == null) {
 			val errorMessage = result.error().map { it.message() }.orElse("unknown error")
-			Cobblemon.LOGGER.error("MEALAM Failed to parse vanilla biome: {}", errorMessage)
+			Cobblemon.LOGGER.error("[BIOME] Failed to parse vanilla biome: {}", errorMessage)
 			return false
 		}
 

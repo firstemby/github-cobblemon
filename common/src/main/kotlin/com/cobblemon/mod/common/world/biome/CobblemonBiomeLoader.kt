@@ -51,7 +51,16 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 		loadedBiomes = result.toMap()
 
 		observable.emit(this)
-		Cobblemon.LOGGER.info("MEALAM Loaded {} cobblemon biomes.", result.size)
+		Cobblemon.LOGGER.info("[BIOME] Loaded {} cobblemon biomes.", result.size)
+		result.forEach { (location, biome) ->
+			val presets = biome.placements.map { it.preset.toString() }.distinct()
+			Cobblemon.LOGGER.info(
+				"[BIOME] Biome {}: {} placement(s) {}",
+				location,
+				biome.placements.size,
+				if (presets.isEmpty()) "(not placed in any preset)" else presets
+			)
+		}
 
 		return result
 	}
@@ -64,12 +73,12 @@ object CobblemonBiomeLoader : JsonDataRegistry<CobblemonBiome> {
 	override fun reload(manager: ResourceManager) = observable.emit(this)
 	override fun reload(data: Map<ResourceLocation, CobblemonBiome>) = Unit
 	override fun sync(player: ServerPlayer) = Unit
-	
+
 	@JvmStatic
 	fun getLoadedBiomes(): Map<ResourceLocation, CobblemonBiome> = loadedBiomes
 
 	@JvmStatic
 	fun getLoadedBiome(location: ResourceLocation): CobblemonBiome =
 		loadedBiomes[location]
-			?: error("MEALAM Unknown location: $location")
+			?: error("[BIOME] Unknown location: $location")
 }

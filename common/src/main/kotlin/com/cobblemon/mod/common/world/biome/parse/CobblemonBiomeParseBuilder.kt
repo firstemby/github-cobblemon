@@ -9,19 +9,17 @@
 package com.cobblemon.mod.common.world.biome.parse
 
 import com.cobblemon.mod.common.world.biome.CobblemonBiome
+import com.cobblemon.mod.common.world.biome.CobblemonBiomePlacement
 import com.google.gson.JsonElement
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.biome.Climate
 
 class CobblemonBiomeParseBuilder {
 	var biome: Biome? = null
-	var parameters: Climate.ParameterPoint? = null
+	val placements: MutableList<CobblemonBiomePlacement> = mutableListOf()
 	val customData: MutableMap<String, JsonElement> = linkedMapOf()
 
 	fun buildOrNull(): CobblemonBiome? {
 		val parsedBiome = biome ?: return null
-		val parsedParameters = parameters ?: return null
-		return CobblemonBiome(parsedBiome, parsedParameters, customData.toMap())
+		return CobblemonBiome(parsedBiome, placements.toList(), customData.toMap())
 	}
 }
-
