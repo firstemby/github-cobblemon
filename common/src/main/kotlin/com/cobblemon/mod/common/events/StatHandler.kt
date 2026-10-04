@@ -110,8 +110,8 @@ object StatHandler : EventHandler {
     }
 
     fun onTradeCompleted(event : TradeEvent.Post) {
-        event.tradeParticipant1Pokemon.getOwnerPlayer()?.awardStat(getStat(Cobblemon.statistics.TRADED))
-        event.tradeParticipant2Pokemon.getOwnerPlayer()?.awardStat(getStat(Cobblemon.statistics.TRADED))
+        event.tradeParticipant1Pokemon.firstOrNull()?.getOwnerPlayer()?.awardStat(getStat(Cobblemon.statistics.TRADED))
+        event.tradeParticipant2Pokemon.firstOrNull()?.getOwnerPlayer()?.awardStat(getStat(Cobblemon.statistics.TRADED))
     }
 
     fun onFossilRevived(event : FossilRevivedEvent) {
