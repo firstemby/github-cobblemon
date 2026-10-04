@@ -416,6 +416,9 @@ object CobblemonClient {
             CobblemonBlocks.WIDE_LENS,
             CobblemonBlocks.ZOOM_LENS,
             CobblemonBlocks.SCOPE_LENS,
+            CobblemonBlocks.MOOMOO_MILK,
+            CobblemonBlocks.MEDICINAL_BREW,
+            CobblemonBlocks.TERRAIN_EXTENDER,
             
             CobblemonBlocks.RED_MINT_LEAF_LITTER,
             CobblemonBlocks.POTTED_RED_MINT,

@@ -1,21 +1,29 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "category": "misc",
-    "group": "never_melt_ice",
-    "pattern": [
-        " S ",
-        "SSS",
-		"SGS"
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "never_melt_ice",
+  "pattern": [
+    " I ",
+    "III",
+    "IGI"
+  ],
+  "key": {
+    "I": [
+      {
+        "item": "minecraft:blue_ice"
+      },
+      {
+        "item": "minecraft:packed_ice"
+      },
+      {
+        "item": "minecraft:ice"
+      }
     ],
-    "key": {
-        "S": {
-            "item": "minecraft:snowball"
-        },
-        "G": {
-			"item": "cobblemon:ice_gem"
-		}
-    },
-    "result": {
-        "id": "cobblemon:never_melt_ice"
+    "G": {
+      "item": "cobblemon:ice_gem"
     }
+  },
+  "result": {
+    "id": "cobblemon:never_melt_ice"
+  }
 }

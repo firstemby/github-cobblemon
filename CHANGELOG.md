@@ -3,8 +3,8 @@
 
 ### Additions
 - The following items can now be placed on the ground as blocks:
-  - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
-  - Iron Ball, Metal Coat, Throat Spray, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
+  - King's Rock, Galarica Cuff, Unremarkable Teacup, Masterpiece Teacup, Chipped Pot, Cracked Pot, Sachet, Metal Powder, Quick Powder, Bright Powder, Soft Sand, Electirizer, Magmarizer, Icy Rock, Heat Rock, Smooth Rock, Damp Rock, Destiny Knot, Luminous Moss, Never-Melt Ice, Wide Lens, Scope Lens, and Zoom Lens.
+  - Iron Ball, Metal Coat, Throat Spray, Terrain Extender, Medicinal Brew, Moomoo Milk, HP Up, Protein, Iron, Carbos, Calcium, Zinc, PP Up, PP Max, Upgrade, Dubious Disc, and Loaded Dice.
 - The following items can now be placed on various surfaces:
   - Galarica Wreath, Magnet, Flame Orb, Life Orb, Toxic Orb, Light Ball, and Smoke Ball.
 - The following items can now be placed as blocks and have additional functionality:
@@ -91,8 +91,10 @@
 - Bright Powder can be used on Signs and Hanging Signs to make text glow, as an alternative to Glow Ink Sacs
 - Updated various recipes to display in Recipe Groups within the Recipe Book
 - Updated most recipes to display more logically/consistently within the Recipe Book's categories
+- Updated the following recipes
+  - Never-Melt Ice, Focus Sash, Blunder Policy, Weakness Policy, Blank TM
 - Make ride rotations less jittery in multiplayer.
-- Changes tm shelf discs to use textures instead of tinting and overlays to line up with item display
+- Changes Disc Shelf TMs to use textures instead of tinting and overlays to line up with item display
 - Blank TM can now be inserted into the Disc Shelf
 - Added TM creative tab
 - Recall animation now renders ball in hand with the player arm raised.
