@@ -1,0 +1,35 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_flower": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:voltaconia"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:light_blue_dye_from_voltaconia"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_flower",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:light_blue_dye_from_voltaconia"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -13,10 +13,12 @@ import com.cobblemon.mod.common.api.battles.model.actor.BattleActor
 import com.cobblemon.mod.common.battles.pokemon.BattlePokemon
 import com.cobblemon.mod.common.item.battle.BagItem
 import com.cobblemon.mod.common.item.battle.SimpleBagItemLike
+import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.Block
 
-class MoomooMilk(properties: Properties) : CobblemonItem(properties), SimpleBagItemLike {
+class MoomooMilk(properties: Properties, block: Block) : ItemNameBlockItem(block, properties), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.moomoo_milk"
         override val returnItem = Items.GLASS_BOTTLE

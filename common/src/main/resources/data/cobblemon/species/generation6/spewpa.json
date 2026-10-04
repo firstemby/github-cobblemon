@@ -132,12 +132,39 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/archipelago"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/archipelago_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_magical"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_spooky"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "cobblemon:is_swamp"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -170,12 +197,46 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/continental"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/continental_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_floral"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mushroom"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_savanna"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "minecraft:sunflower_plains"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -208,12 +269,32 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/elegant"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/elegant_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_deep_dark"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -246,8 +327,11 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/fancy"
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -280,12 +364,95 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/garden"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/garden_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_cherry_blossom"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_floral"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_snowy_forest"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_jungle"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mushroom"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_plains"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_savanna"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_magical"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_spooky"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_swamp"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -318,8 +485,18 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/high_plains"
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -352,12 +529,25 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/icy_snow"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/icy_snow_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -390,12 +580,25 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/jungle"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/jungle_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -428,12 +631,32 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/marine"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/marine_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_warm_ocean"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_frozen_ocean"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -466,12 +689,39 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/meadow"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/meadow_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_cherry_blossom"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "minecraft:sunflower_plains"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_magical"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -534,12 +784,60 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/monsoon"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/monsoon_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_badlands"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_desert"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_floral"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mushroom"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_tropical_island"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_volcanic"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -572,12 +870,53 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/ocean"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/ocean_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_desert"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_cold_ocean"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_frozen_ocean"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_lukewarm_ocean"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_temperate_ocean"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -610,8 +949,18 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/polar"
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -644,12 +993,46 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/river"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/river_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_forest"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_jungle"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_magical"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_spooky"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -682,12 +1065,25 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/sandstorm"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/sandstorm_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_badlands"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -720,12 +1116,46 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/savanna"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/savanna_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_badlands"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_desert"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_floral"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -758,8 +1188,18 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/sun"
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {
@@ -792,12 +1232,25 @@
           "biomeCondition": "#cobblemon:evolution/vivillon/tundra"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/vivillon/tundra_anti"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_mountain"
+          }
         },
         {
-          "variant": "structure",
-          "structureAnticondition": "#minecraft:village"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#aether:is_aether"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "structure",
+            "structureCondition": "#minecraft:village"
+          }
         }
       ],
       "drops": {

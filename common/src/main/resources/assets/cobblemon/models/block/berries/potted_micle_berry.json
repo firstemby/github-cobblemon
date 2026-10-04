@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_wepear_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/micle_leaves",
+    "1": "cobblemon:block/berries/micle_tree"
+  }
+}

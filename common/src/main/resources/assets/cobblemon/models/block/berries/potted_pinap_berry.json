@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_iapapa_berry",
+  "textures": {
+    "1": "cobblemon:block/berries/pinap_tree"
+  }
+}

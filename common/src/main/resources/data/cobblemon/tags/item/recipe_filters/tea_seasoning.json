@@ -16,6 +16,8 @@
     "#cobblemon:herbs",
     "cobblemon:pep_up_flower",
     "minecraft:milk_bucket",
-    "cobblemon:moomoo_milk"
+    "cobblemon:moomoo_milk",
+    "#cobblemon:terrain_plants",
+    "#cobblemon:oricorio_flowers"
   ]
 }

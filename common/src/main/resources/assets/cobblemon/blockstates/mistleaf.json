@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "half=lower,glowing=0": { "model": "cobblemon:block/mistleaf_bottom" },
+    "half=upper,glowing=0": { "model": "cobblemon:block/mistleaf_top" },
+    "half=lower,glowing=1": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=1": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=2": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=2": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=3": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=3": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=4": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=4": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=5": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=5": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=6": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=6": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=7": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=7": { "model": "cobblemon:block/mistleaf_top_glowing" },
+    "half=lower,glowing=8": { "model": "cobblemon:block/mistleaf_bottom_glowing" },
+    "half=upper,glowing=8": { "model": "cobblemon:block/mistleaf_top_glowing" }
+  }
+}

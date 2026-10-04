@@ -219,12 +219,25 @@
           "minLevel": 28
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/cubone_alolabiome"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_volcanic"
+          }
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#minecraft:is_nether"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_beach"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#minecraft:is_nether"
+          }
         }
       ]
     },
@@ -250,12 +263,18 @@
           "biomeCondition": "#cobblemon:evolution/regional/cubone_alolabiome"
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:evolution/regional/cubone_kantobiome"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_arid"
+          }
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#minecraft:is_nether"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#minecraft:is_nether"
+          }
         }
       ]
     },
@@ -271,8 +290,11 @@
           "minLevel": 28
         },
         {
-          "variant": "biome",
-          "biomeAnticondition": "#cobblemon:is_overworld"
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_overworld"
+          }
         },
         {
           "variant": "biome",
@@ -314,15 +336,28 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/cubone_alolabiome"
-            },
-            {
-              "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/cubone_kantobiome"
             },
             {
-              "variant": "biome",
-              "biomeAnticondition": "#minecraft:is_nether"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_volcanic"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_beach"
+              }
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#minecraft:is_nether"
+              }
             }
           ]
         },
@@ -344,12 +379,18 @@
               "range": "night"
             },
             {
-              "variant": "biome",
-              "biomeAnticondition": "#cobblemon:evolution/regional/cubone_kantobiome"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_arid"
+              }
             },
             {
-              "variant": "biome",
-              "biomeAnticondition": "#minecraft:is_nether"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#minecraft:is_nether"
+              }
             }
           ]
         },
@@ -366,11 +407,14 @@
             },
             {
               "variant": "biome",
-              "biomeAnticondition": "#cobblemon:is_overworld"
+              "biomeCondition": "#minecraft:is_nether"
             },
             {
-              "variant": "biome",
-              "biomeCondition": "#minecraft:is_nether"
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:is_overworld"
+              }
             }
           ]
         }

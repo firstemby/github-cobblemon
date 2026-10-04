@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "root=true,facing=north": {
+      "model": "cobblemon:block/wistensu_root_side_end"
+    },
+    "root=true,facing=east": {
+      "model": "cobblemon:block/wistensu_root_side_end",
+      "y": 90
+    },
+    "root=true,facing=south": {
+      "model": "cobblemon:block/wistensu_root_side_end",
+      "y": 180
+    },
+    "root=true,facing=west": {
+      "model": "cobblemon:block/wistensu_root_side_end",
+      "y": 270
+    },
+    "root=true,facing=down": {
+      "model": "cobblemon:block/wistensu_root_end"
+    },
+    "root=true,facing=up": {
+      "model": "cobblemon:block/wistensu_root_end"
+    },
+    "root=false": {
+      "model": "cobblemon:block/wistensu_end"
+    }
+  }
+}

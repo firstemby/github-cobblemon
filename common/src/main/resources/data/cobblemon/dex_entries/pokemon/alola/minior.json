@@ -17,5 +17,19 @@
       ]
     }
   ],
-  "variations": []
+  "variations": [
+    {
+      "displayName": "cobblemon.pokedex.variation.color",
+      "icon": "cobblemon:textures/gui/pokedex/variation/color.png",
+      "aspects": [
+        "red-core",
+        "orange-core",
+        "yellow-core",
+        "green-core",
+        "blue-core",
+        "indigo-core",
+        "violet-core"
+      ]
+    }
+  ]
 }

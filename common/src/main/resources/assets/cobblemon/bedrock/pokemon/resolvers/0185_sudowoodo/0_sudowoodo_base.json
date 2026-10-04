@@ -5,20 +5,16 @@
     {
       "aspects": [],
       "poser": "cobblemon:sudowoodo",
-      "model": "cobblemon:sudowoodo.geo",
+      "model": "cobblemon:sudowoodo_male.geo",
       "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo.png",
       "layers": []
     },
     {
-      "aspects": [
-        "shiny"
-      ],
+      "aspects": ["shiny"],
       "texture": "cobblemon:textures/pokemon/0185_sudowoodo/sudowoodo_shiny.png"
     },
     {
-      "aspects": [
-        "cosmetic_item-gold_armor"
-      ],
+      "aspects": ["cosmetic_item-gold_armor"],
       "layers": [
         {
           "name": "golden",

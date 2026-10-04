@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_kelpsy_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/touga_tree"
+  }
+}

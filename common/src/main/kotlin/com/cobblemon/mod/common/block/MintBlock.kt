@@ -103,15 +103,15 @@ class MintBlock(private val mintType: MintType, settings: Properties) : CropBloc
             GREEN -> CobblemonItems.GREEN_MINT_SEEDS
             WHITE -> CobblemonItems.WHITE_MINT_SEEDS
         }
-
-        fun getLeaf(): MintLeafItem = when (this) {
-            RED -> CobblemonItems.RED_MINT_LEAF
-            BLUE -> CobblemonItems.BLUE_MINT_LEAF
-            CYAN -> CobblemonItems.CYAN_MINT_LEAF
-            PINK -> CobblemonItems.PINK_MINT_LEAF
-            GREEN -> CobblemonItems.GREEN_MINT_LEAF
-            WHITE -> CobblemonItems.WHITE_MINT_LEAF
-        }
+// These don't seem to get called to anywhere besides the direct item, and since I'm trying to do funny stuff there, just commenting this out
+//        fun getLeaf(): MintLeafItem = when (this) {
+//            RED -> CobblemonItems.RED_MINT_LEAF
+//            BLUE -> CobblemonItems.BLUE_MINT_LEAF
+//            CYAN -> CobblemonItems.CYAN_MINT_LEAF
+//            PINK -> CobblemonItems.PINK_MINT_LEAF
+//            GREEN -> CobblemonItems.GREEN_MINT_LEAF
+//            WHITE -> CobblemonItems.WHITE_MINT_LEAF
+//        }
 
         fun getCropBlock(): MintBlock = when (this) {
             RED -> CobblemonBlocks.RED_MINT

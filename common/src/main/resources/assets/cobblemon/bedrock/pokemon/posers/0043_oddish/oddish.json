@@ -1,0 +1,77 @@
+{
+  "portraitScale": 2,
+  "portraitTranslation": [-0.05, -1.27, 0],
+  "profileScale": 0.85,
+  "profileTranslation": [0, 0.5, 0],
+  "rootBone": "oddish",
+  "animations": {
+    "cry": "q.bedrock_stateful('oddish', 'cry')",
+    "recoil": "q.bedrock_stateful('oddish', 'recoil')"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 8, -18, 10, -10)",
+        "q.bedrock('oddish', 'battle_idle')"
+      ],
+      "namedAnimations": {
+          "cry": "q.bedrock_stateful('oddish', 'battle_cry')"
+        },
+      "quirks": ["q.bedrock_quirk('oddish', 'blink')"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
+      "isBattle": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 8, -18, 10, -10)",
+        "q.bedrock('oddish', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('oddish', 'blink')"
+      ]
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.bedrock('oddish', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('oddish', 'blink')"]
+      },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.bedrock('oddish', 'ground_run')"
+      ],
+      "quirks": ["q.bedrock_quirk('oddish', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "!q.is_standing_on_blocks(1, 'minecraft:dirt', 'minecraft:grass_block', 'minecraft:mycelium', 'minecraft:coarse_dirt', 'minecraft:podzol', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:rooted_dirt')",
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('oddish', 'sleep')"]
+    },
+    "battle-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isBattle": true,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('oddish', 'sleep')"]
+    },
+    "wild_sleep": {
+      "poseTypes": ["SLEEP"],
+      "condition": "q.is_standing_on_blocks(1, 'minecraft:dirt', 'minecraft:grass_block', 'minecraft:mycelium', 'minecraft:coarse_dirt', 'minecraft:podzol', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:rooted_dirt')",
+      "isBattle": false,
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      },
+      "animations": ["q.bedrock('oddish', 'wild_sleep')"]
+    }
+  }
+}

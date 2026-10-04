@@ -4,7 +4,7 @@
     "group": "focus_items",
     "pattern": [
         "D  ",
-        "LIL",
+        "LTL",
         "  D"
     ],
     "key": {
@@ -14,8 +14,8 @@
         "D": {
             "item": "minecraft:blaze_powder"
         },
-        "I": {
-            "tag": "c:ingots/copper"
+        "T": {
+            "item": "minecraft:ghast_tear"
         }
     },
     "result": {

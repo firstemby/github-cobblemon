@@ -1,0 +1,10 @@
+{
+  "species": "cobblemon:sudowoodo",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["female"],
+      "model": "cobblemon:sudowoodo_female.geo"
+    }
+  ]
+}

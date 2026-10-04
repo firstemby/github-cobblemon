@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_tamato_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/rindo_leaves",
+    "1": "cobblemon:block/berries/rindo_tree"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_nomel_berry",
+  "textures": {
+    "1": "cobblemon:block/berries/eggant_tree"
+  }
+}

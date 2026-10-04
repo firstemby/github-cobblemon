@@ -5,6 +5,9 @@
 	"minecraft:lilac",
 	"minecraft:peony",
 	"minecraft:pink_tulip",
+    "cobblemon:pauvillea",
+    "cobblemon:lucibell",
+    "cobblemon:mistleaf",
 	{
       "id": "aether_redux:iridia",
       "required": false

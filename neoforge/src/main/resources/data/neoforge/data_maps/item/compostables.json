@@ -428,6 +428,30 @@
     },
     "cobblemon:yellow_apricorn_seed": {
       "chance": 0.3
+    },
+    "cobblemon:pomohana": {
+      "chance": 0.3
+    },
+    "cobblemon:pauvillea": {
+      "chance": 0.65
+    },
+    "cobblemon:lobaila": {
+      "chance": 0.65
+    },
+    "cobblemon:wistensu": {
+      "chance": 0.5
+    },
+    "cobblemon:verdroot": {
+      "chance": 0.85
+    },
+    "cobblemon:voltaconia": {
+      "chance": 0.85
+    },
+    "cobblemon:mistleaf": {
+      "chance": 0.85
+    },
+    "cobblemon:lucibell": {
+      "chance": 0.85
     }
   }
 }

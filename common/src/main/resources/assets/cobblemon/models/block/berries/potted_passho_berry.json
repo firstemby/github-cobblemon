@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_figy_berry",
+  "textures": {
+    "2": "cobblemon:block/berries/passho_tree"
+  }
+}

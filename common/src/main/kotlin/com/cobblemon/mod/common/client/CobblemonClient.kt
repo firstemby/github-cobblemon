@@ -45,6 +45,7 @@ import com.cobblemon.mod.common.client.render.entity.PokeBobberEntityRenderer
 import com.cobblemon.mod.common.client.render.generic.GenericBedrockRenderer
 import com.cobblemon.mod.common.client.render.item.CobblemonBuiltinItemRendererRegistry
 import com.cobblemon.mod.common.client.render.item.PokemonItemRenderer
+import com.cobblemon.mod.common.client.render.layer.PlayerRecallBallRenderer
 import com.cobblemon.mod.common.client.render.layer.PokemonOnShoulderRenderer
 import com.cobblemon.mod.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.BerryModelRepository
@@ -390,7 +391,7 @@ object CobblemonClient {
             CobblemonBlocks.X_SP_ATK,
             CobblemonBlocks.X_SP_DEF,
             CobblemonBlocks.X_SPEED,
-            CobblemonBlocks.TM_MACHINE,
+            CobblemonBlocks.TM_MACHINE,   
 
             CobblemonBlocks.GALARICA_CUFF,
             CobblemonBlocks.GALARICA_WREATH,
@@ -414,7 +415,108 @@ object CobblemonClient {
             CobblemonBlocks.NEVER_MELT_ICE,
             CobblemonBlocks.WIDE_LENS,
             CobblemonBlocks.ZOOM_LENS,
-            CobblemonBlocks.SCOPE_LENS
+            CobblemonBlocks.SCOPE_LENS,
+            CobblemonBlocks.MOOMOO_MILK,
+            CobblemonBlocks.MEDICINAL_BREW,
+            CobblemonBlocks.TERRAIN_EXTENDER,
+            
+            CobblemonBlocks.RED_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_RED_MINT,
+            CobblemonBlocks.BLUE_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_BLUE_MINT,
+            CobblemonBlocks.CYAN_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_CYAN_MINT,
+            CobblemonBlocks.PINK_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_PINK_MINT,
+            CobblemonBlocks.GREEN_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_GREEN_MINT,
+            CobblemonBlocks.WHITE_MINT_LEAF_LITTER,
+            CobblemonBlocks.POTTED_WHITE_MINT,
+
+            CobblemonBlocks.LOBAILA,
+            CobblemonBlocks.POMOHANA,
+            CobblemonBlocks.PAUVILLEA,
+            CobblemonBlocks.WISTENSU,
+            CobblemonBlocks.WISTENSU_VINE,
+            CobblemonBlocks.ELECTRIC_SEED,
+            CobblemonBlocks.VOLTACONIA,
+            CobblemonBlocks.GRASSY_SEED,
+            CobblemonBlocks.VERDROOT,
+            CobblemonBlocks.MISTY_SEED,
+            CobblemonBlocks.MISTLEAF,
+            CobblemonBlocks.PSYCHIC_SEED,
+            CobblemonBlocks.LUCIBELL,
+
+            CobblemonBlocks.POTTED_AGUAV_BERRY,
+            CobblemonBlocks.POTTED_APICOT_BERRY,
+            CobblemonBlocks.POTTED_ASPEAR_BERRY,
+            CobblemonBlocks.POTTED_BABIRI_BERRY,
+            CobblemonBlocks.POTTED_BELUE_BERRY,
+            CobblemonBlocks.POTTED_BLUK_BERRY,
+            CobblemonBlocks.POTTED_CHARTI_BERRY,
+            CobblemonBlocks.POTTED_CHERI_BERRY,
+            CobblemonBlocks.POTTED_CHESTO_BERRY,
+            CobblemonBlocks.POTTED_CHILAN_BERRY,
+            CobblemonBlocks.POTTED_CHOPLE_BERRY,
+            CobblemonBlocks.POTTED_COBA_BERRY,
+            CobblemonBlocks.POTTED_COLBUR_BERRY,
+            CobblemonBlocks.POTTED_CORNN_BERRY,
+            CobblemonBlocks.POTTED_CUSTAP_BERRY,
+            CobblemonBlocks.POTTED_DURIN_BERRY,
+            CobblemonBlocks.POTTED_EGGANT_BERRY,
+            CobblemonBlocks.POTTED_ENIGMA_BERRY,
+            CobblemonBlocks.POTTED_FIGY_BERRY,
+            CobblemonBlocks.POTTED_GANLON_BERRY,
+            CobblemonBlocks.POTTED_GREPA_BERRY,
+            CobblemonBlocks.POTTED_HABAN_BERRY,
+            CobblemonBlocks.POTTED_HONDEW_BERRY,
+            CobblemonBlocks.POTTED_HOPO_BERRY,
+            CobblemonBlocks.POTTED_IAPAPA_BERRY,
+            CobblemonBlocks.POTTED_JABOCA_BERRY,
+            CobblemonBlocks.POTTED_KASIB_BERRY,
+            CobblemonBlocks.POTTED_KEBIA_BERRY,
+            CobblemonBlocks.POTTED_KEE_BERRY,
+            CobblemonBlocks.POTTED_KELPSY_BERRY,
+            CobblemonBlocks.POTTED_LANSAT_BERRY,
+            CobblemonBlocks.POTTED_LEPPA_BERRY,
+            CobblemonBlocks.POTTED_LIECHI_BERRY,
+            CobblemonBlocks.POTTED_LUM_BERRY,
+            CobblemonBlocks.POTTED_MAGOST_BERRY,
+            CobblemonBlocks.POTTED_MAGO_BERRY,
+            CobblemonBlocks.POTTED_MARANGA_BERRY,
+            CobblemonBlocks.POTTED_MICLE_BERRY,
+            CobblemonBlocks.POTTED_NANAB_BERRY,
+            CobblemonBlocks.POTTED_NOMEL_BERRY,
+            CobblemonBlocks.POTTED_OCCA_BERRY,
+            CobblemonBlocks.POTTED_ORAN_BERRY,
+            CobblemonBlocks.POTTED_PAMTRE_BERRY,
+            CobblemonBlocks.POTTED_PASSHO_BERRY,
+            CobblemonBlocks.POTTED_PAYAPA_BERRY,
+            CobblemonBlocks.POTTED_PECHA_BERRY,
+            CobblemonBlocks.POTTED_PERSIM_BERRY,
+            CobblemonBlocks.POTTED_PETAYA_BERRY,
+            CobblemonBlocks.POTTED_PINAP_BERRY,
+            CobblemonBlocks.POTTED_POMEG_BERRY,
+            CobblemonBlocks.POTTED_QUALOT_BERRY,
+            CobblemonBlocks.POTTED_RABUTA_BERRY,
+            CobblemonBlocks.POTTED_RAWST_BERRY,
+            CobblemonBlocks.POTTED_RAZZ_BERRY,
+            CobblemonBlocks.POTTED_RINDO_BERRY,
+            CobblemonBlocks.POTTED_ROSELI_BERRY,
+            CobblemonBlocks.POTTED_ROWAP_BERRY,
+            CobblemonBlocks.POTTED_SALAC_BERRY,
+            CobblemonBlocks.POTTED_SHUCA_BERRY,
+            CobblemonBlocks.POTTED_SITRUS_BERRY,
+            CobblemonBlocks.POTTED_SPELON_BERRY,
+            CobblemonBlocks.POTTED_STARF_BERRY,
+            CobblemonBlocks.POTTED_TAMATO_BERRY,
+            CobblemonBlocks.POTTED_TANGA_BERRY,
+            CobblemonBlocks.POTTED_TOUGA_BERRY,
+            CobblemonBlocks.POTTED_WACAN_BERRY,
+            CobblemonBlocks.POTTED_WATMEL_BERRY,
+            CobblemonBlocks.POTTED_WEPEAR_BERRY,
+            CobblemonBlocks.POTTED_WIKI_BERRY,
+            CobblemonBlocks.POTTED_YACHE_BERRY
         )
 
         this.createBoatModelLayers()
@@ -436,8 +538,10 @@ object CobblemonClient {
         var renderer: LivingEntityRenderer<Player, PlayerModel<Player>>? =
             skinMap?.get(PlayerSkin.Model.WIDE) as LivingEntityRenderer<Player, PlayerModel<Player>>
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
+        renderer?.addLayer(PlayerRecallBallRenderer(renderer))
         renderer = skinMap[PlayerSkin.Model.SLIM] as LivingEntityRenderer<Player, PlayerModel<Player>>?
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
+        renderer?.addLayer(PlayerRecallBallRenderer(renderer))
     }
 
     private fun registerMenuScreens() {
