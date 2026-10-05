@@ -7,13 +7,40 @@
       "poser": "cobblemon:greninja",
       "model": "cobblemon:greninja.geo",
       "texture": "cobblemon:textures/pokemon/0658_greninja/greninja.png",
-      "layers": []
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_emissive.png",
+          "emissive": true,
+          "translucent": true
+        },
+        {
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_transparency.png",
+          "translucent": true,
+          "translucent_cull": true
+        }
+      ]
     },
     {
       "aspects": [
         "shiny"
       ],
-      "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_shiny.png"
+      "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
+        },
+        {
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_transparency_shiny.png",
+          "translucent": true,
+          "translucent_cull": true
+        }
+      ]
     },
     {
       "aspects": [

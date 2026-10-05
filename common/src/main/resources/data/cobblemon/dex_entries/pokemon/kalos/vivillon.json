@@ -11,40 +11,143 @@
       ]
     },
     {
+      "displayForm": "Icy Snow",
+      "unlockForms": [
+        "Icy Snow"
+      ]
+    },
+    {
+      "displayForm": "Polar",
+      "unlockForms": [
+        "Polar"
+      ]
+    },
+    {
+      "displayForm": "Tundra",
+      "unlockForms": [
+        "Tundra"
+      ]
+    },
+    {
+      "displayForm": "Continental",
+      "unlockForms": [
+        "Continental"
+      ]
+    },
+    {
+      "displayForm": "Garden",
+      "unlockForms": [
+        "Garden"
+      ]
+    },
+    {
+      "displayForm": "Elegant",
+      "unlockForms": [
+        "Elegant"
+      ]
+    },
+    {
+      "displayForm": "Meadow",
+      "unlockForms": [
+        "Meadow"
+      ]
+    },
+    {
+      "displayForm": "Modern",
+      "unlockForms": [
+        "Modern"
+      ]
+    },
+    {
+      "displayForm": "Marine",
+      "unlockForms": [
+        "Marine"
+      ]
+    },
+    {
+      "displayForm": "Archipelago",
+      "unlockForms": [
+        "Archipelago"
+      ]
+    },
+    {
+      "displayForm": "High Plains",
+      "unlockForms": [
+        "High Plains"
+      ]
+    },
+    {
+      "displayForm": "Sandstorm",
+      "unlockForms": [
+        "Sandstorm"
+      ]
+    },
+    {
+      "displayForm": "River",
+      "unlockForms": [
+        "River"
+      ]
+    },
+    {
+      "displayForm": "Monsoon",
+      "unlockForms": [
+        "Monsoon"
+      ]
+    },
+    {
+      "displayForm": "Savanna",
+      "unlockForms": [
+        "Savanna"
+      ]
+    },
+    {
+      "displayForm": "Sun",
+      "unlockForms": [
+        "Sun"
+      ]
+    },
+    {
+      "displayForm": "Ocean",
+      "unlockForms": [
+        "Ocean"
+      ]
+    },
+    {
+      "displayForm": "Jungle",
+      "unlockForms": [
+        "Jungle"
+      ]
+    },
+    {
+      "displayForm": "Fancy",
+      "unlockForms": [
+        "Fancy"
+      ]
+    },
+    {
       "displayForm": "Pokeball",
       "unlockForms": [
         "Pokeball"
       ]
-    }
-  ],
-  "variations": [
+    },
     {
-      "displayName": "cobblemon.pokedex.variation.pattern",
-      "icon": "cobblemon:textures/gui/pokedex/variation/pattern.png",
-      "aspects": [
-        "vivillon-wings-meadow",
-        "vivillon-wings-archipelago",
-        "vivillon-wings-continental",
-        "vivillon-wings-elegant",
-        "vivillon-wings-fancy",
-        "vivillon-wings-garden",
-        "vivillon-wings-high-plains",
-        "vivillon-wings-icy-snow",
-        "vivillon-wings-jungle",
-        "vivillon-wings-marine",
-        "vivillon-wings-modern",
-        "vivillon-wings-monsoon",
-        "vivillon-wings-ocean",
-        "vivillon-wings-polar",
-        "vivillon-wings-river",
-        "vivillon-wings-sandstorm",
-        "vivillon-wings-savanna",
-        "vivillon-wings-sun",
-        "vivillon-wings-tundra",
-        "vivillon-wings-inferno",
-        "vivillon-wings-void",
-        "vivillon-wings-forsaken"
+      "displayForm": "Inferno",
+      "unlockForms": [
+        "Inferno"
+      ]
+    },
+    {
+      "displayForm": "Void",
+      "unlockForms": [
+        "Void"
+      ]
+    },
+    {
+      "displayForm": "Forsaken",
+      "unlockForms": [
+        "Forsaken"
       ]
     }
-  ]
+  ],
+  "variations": []
 }

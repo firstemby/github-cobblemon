@@ -30,6 +30,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-rage_candy_bar"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -40,6 +41,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-pewter_crunchies"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -50,6 +52,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-lava_cookie"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -60,6 +63,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-old_gateau"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -70,6 +74,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-casteliacone"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -80,6 +85,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-lumiose_galette"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -90,6 +96,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-big_malasada"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -100,6 +107,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-smoked_tail_curry"],
+      "poser": "cobblemon:pichu_alolan_cap",
       "model": "cobblemon:pichu_alola_bias_cap.geo",
       "layers": [
         {
@@ -124,7 +132,7 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-leather_helmet"],
-      "model": "cobblemon:pichu_alola_bias_detective.geo",
+      "model": "cobblemon:pichu_detective_alola_bias.geo",
       "layers": [
         {
           "name": "detective",
@@ -154,11 +162,24 @@
     },
     {
       "aspects": ["region-bias-alola", "cosmetic_item-music"],
+      "poser": "cobblemon:pichu_alolan_ukulele",
       "model": "cobblemon:pichu_alola_bias_ukulele.geo",
       "layers": [
         {
           "name": "ukulele",
           "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_ukulele.png"
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0172_pichu/pichu_alpha.png",
+          "emissive": true
         }
       ]
     }

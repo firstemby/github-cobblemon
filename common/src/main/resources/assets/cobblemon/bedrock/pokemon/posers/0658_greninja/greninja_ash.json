@@ -1,0 +1,74 @@
+{
+   "portraitScale": 1.7,
+   "portraitTranslation": [ -0.2, 2.92, 0 ],
+   "profileScale": 0.45,
+   "profileTranslation": [ 0, 1.02, 0 ],
+   "rootBone": "greninja_ash",
+   "animations": {
+      "cry": "q.bedrock_stateful('greninja_ash', 'cry')"
+   },
+   "poses": {
+      "battle-standing": {
+        "poseTypes": ["STAND"],
+        "isBattle": true,
+        "isTouchingWater": false,
+        "animations": [
+          "q.look('head_ai')",
+          "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+          "q.bedrock('greninja_ash', 'battle_idle')"
+        ],
+        "quirks": ["q.bedrock_quirk('greninja_ash', 'blink')"]
+      },
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+         "isBattle": false,
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja_ash', 'ground_idle')"
+         ],
+         "quirks": []
+      },
+      "walking": {
+         "poseTypes": ["WALK"],
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja_ash', 'ground_walk')"
+         ],
+         "quirks": []
+      },
+      "swimming": {
+         "poseTypes": ["WALK","SWIM"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja_ash', 'water_swim')"
+         ],
+         "quirks": []
+      },
+      "float": {
+         "poseTypes": ["STAND","FLOAT"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja_ash', 'water_idle')"
+         ],
+         "quirks": []
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+         },
+         "animations": ["q.bedrock('greninja_ash', 'sleep')"]
+      }
+   }
+}
+ 

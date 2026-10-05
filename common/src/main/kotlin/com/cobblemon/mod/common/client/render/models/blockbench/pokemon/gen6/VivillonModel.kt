@@ -29,7 +29,7 @@ class VivillonModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, B
     override var portraitTranslation = Vec3(-0.3, 0.2, 0.0)
 
     override var profileScale = 0.7F
-    override var profileTranslation = Vec3(0.1, 0.8, 0.0)
+    override var profileTranslation = Vec3(0.0, 0.8, 0.0)
 
     lateinit var standing: Pose
     lateinit var walk: Pose

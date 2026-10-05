@@ -1,0 +1,35 @@
+{
+   "portraitScale": 1.59,
+   "portraitTranslation": [ -0.9, 1.82, 0 ],
+   "profileScale": 0.51,
+   "profileTranslation": [ -0.10, 0.96, 0 ],
+   "rootBone": "chesnaught",
+   "animations": {
+      "cry": "q.bedrock_stateful('chesnaught', 'cry')"
+   },
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('chesnaught', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('chesnaught', 'blink')"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK", "SWIM"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('chesnaught', 'ground_idle')",
+            "q.biped_walk(0.66, 1.4, 'leg_left', 'leg_right')",
+            "q.bimanual_swing(0.66, 1.4, 'arm_left', 'arm_right')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('chesnaught', 'blink')"
+         ]
+      }
+   }
+}
+ 

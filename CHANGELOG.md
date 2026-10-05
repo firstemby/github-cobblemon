@@ -19,7 +19,11 @@
 - Berries can now be placed in Flower Pots
 - The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
 - Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
+- New Cosmetic Item for Pikachu: Paper
 
+### Fixes
+- Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
+### TEST
 ### Pokémon Added
 #### Generation 4
 - Snover
@@ -70,6 +74,21 @@
 - Vileplume
 - Bellossom
 - Shroomish
+- Chespin
+- Quilladin
+- Chesnaught
+- Fennekin
+- Braixen
+- Delphox
+- Froakie
+- Frogadier
+- Greninja
+- Shinx
+- Luxio
+- Luxray
+- Slakoth
+- Riolu
+- Lucario
 
 ### Animation updates for the following Pokémon
 - Treecko (New Shoulder Mount!)
@@ -83,6 +102,11 @@
 - Gloom
 - Vileplume
 - Bellossom
+- Pichu
+- Pikachu
+- Raichu (+ Alolan)
+- Greninja
+- Slakoth
 
 ### Changes
 - Terrain Seeds can now be planted
@@ -102,6 +126,7 @@
 - Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.
   - Exceptions being "forced" evolutions which will continue to stop after the first one
 - Removed Mega Drain as a TM
+- Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem

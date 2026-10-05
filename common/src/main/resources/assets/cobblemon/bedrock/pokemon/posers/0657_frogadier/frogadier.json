@@ -1,0 +1,69 @@
+{
+   "portraitScale": 1.9,
+   "portraitTranslation": [ -0.1, 1.4, 0 ],
+   "profileScale": 0.7,
+   "profileTranslation": [ 0, 0.7, 0 ],
+   "rootBone": "frogadier",
+   "animations": {
+      "cry": "q.bedrock_stateful('frogadier', 'cry')",
+      "faint": "q.bedrock_primary('frogadier', 'faint', q.curve('one'))"
+   },
+   "poses": {
+      "battle-standing": {
+        "poseTypes": ["STAND"],
+        "isBattle": true,
+        "isTouchingWater": false,
+        "animations": [
+           "q.look('head_ai', 1, 1, 5, -45, 45, -45)",
+          "q.bedrock('frogadier', 'battle_idle')"
+        ],
+        "quirks": ["q.bedrock_quirk('frogadier', 'blink')"]
+      },
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+         "isBattle": false,
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai', 1, 1, 5, -45, 45, -45)",
+            "q.bedrock('frogadier', 'ground_idle')"
+         ],
+         "quirks": []
+      },
+      "walking": {
+         "poseTypes": ["WALK"],
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai', 1, 1, 0, -45, 45, -45)",
+            "q.bedrock('frogadier', 'ground_walk')"
+         ],
+         "quirks": []
+      },
+      "swimming": {
+         "poseTypes": ["WALK","SWIM"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head_ai')",
+            "q.bedrock('frogadier', 'water_swim')"
+         ],
+         "quirks": []
+      },
+      "float": {
+         "poseTypes": ["STAND","FLOAT"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.look('head_ai')",
+            "q.bedrock('frogadier', 'water_idle')"
+         ],
+         "quirks": []
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+         },
+         "animations": ["q.bedrock('frogadier', 'sleep')"]
+      }
+   }
+}
+ 

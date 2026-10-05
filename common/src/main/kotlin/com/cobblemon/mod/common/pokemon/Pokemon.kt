@@ -211,8 +211,9 @@ open class Pokemon : ShowdownIdentifiable {
             // Species updates already update HP but just a form change may require it
             // Moved to before the field was set else it won't actually do the hp calc proper <3
             val quotient = clamp(currentHealth / maxHealth.toFloat(), 0F, 1F)
+            val oldForm = field
             field = value
-            this.updateMovesOnFormChange(value)
+            this.updateMovesOnFormChange(oldForm)
             // Evo proxy is already cleared on species update but the form may be changed by itself, this is fine and no unnecessary packets will be sent out
             this.evolutionProxy.current().clear()
             checkGender()
@@ -2301,15 +2302,16 @@ open class Pokemon : ShowdownIdentifiable {
      *
      * E.g, Removing Overheat from Rotom when it is no longer Rotom-Heat and the target form is not compatible with Overheat.
      */
-    private fun updateMovesOnFormChange(newForm: FormData) {
+    private fun updateMovesOnFormChange(oldForm: FormData) {
         if (this.isClient) return
 
-        val oldFormChangeMoves = this.form.moves.formChangeMoves.toSet()
+        val newForm = this.form
+        val oldFormChangeMoves = oldForm.moves.formChangeMoves.toSet()
 
         // Only remove moves that were provided by the old form's form-change moves AND are not learnable by the new form
         for (i in 0 until MoveSet.MOVE_COUNT) {
             val move = this.moveSet[i]
-            if (move != null && move.template in oldFormChangeMoves) {
+            if (move != null && move.template in oldFormChangeMoves && !LearnsetQuery.ANY.canLearn(move.template, newForm.moves)) {
                 this.moveSet.setMove(i, null)
             }
         }
@@ -2322,16 +2324,8 @@ open class Pokemon : ShowdownIdentifiable {
             }
         }
 
-        // Add new form's form-change moves
-        newForm.moves.formChangeMoves.forEach { move ->
-            if (this.moveSet.filterNotNull().none { it.template == move }) {
-                if (this.moveSet.hasSpace()) {
-                    this.moveSet.add(move.create())
-                } else {
-                    this.benchedMoves.add(BenchedMove(move, 0))
-                }
-            }
-        }
+        // Add the new form's form-change moves (skipping any the Pokémon isn't high enough level for yet).
+        grantEligibleFormChangeMoves()
 
         // If moveset is empty try to find one valid move to fill it
         if (this.moveSet.filterNotNull().isEmpty()) {
@@ -2339,6 +2333,30 @@ open class Pokemon : ShowdownIdentifiable {
             // This shouldn't ever be null, but you never know with data driven
             if (benchedMove != null) {
                 this.moveSet.setMove(0, Move(benchedMove.moveTemplate, benchedMove.ppRaisedStages))
+            }
+        }
+    }
+
+    /**
+     * Grants any of the current form's `form_change` moves that this Pokémon doesn't already know and is high
+     * enough level for (form-change moves that are also level-up moves, e.g. Glaciate on Kyurem, shouldn't be
+     * granted until that level is reached).
+     */
+    private fun grantEligibleFormChangeMoves() {
+        if (this.isClient) return
+
+        this.form.moves.formChangeMoves.forEach { move ->
+            if (this.moveSet.filterNotNull().none { it.template == move } && this.benchedMoves.none { it.moveTemplate == move }) {
+                val requiredLevel = this.form.moves.levelUpMoves.entries.firstOrNull { move in it.value }?.key
+                if (requiredLevel != null && this.level < requiredLevel) {
+                    return@forEach
+                }
+
+                if (this.moveSet.hasSpace()) {
+                    this.moveSet.add(move.create())
+                } else {
+                    this.benchedMoves.add(BenchedMove(move, 0))
+                }
             }
         }
     }

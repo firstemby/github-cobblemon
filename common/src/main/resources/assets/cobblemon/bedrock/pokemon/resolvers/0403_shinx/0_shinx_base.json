@@ -29,6 +29,18 @@
           "translucent": false
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0403_shinx/shinx_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

@@ -30,7 +30,8 @@
     "compass",
     "shears",
     "gold_armor",
-    "chest"
+    "chest",
+    "paper"
   ],
   "isAspect": true,
   "aspectFormat": "cosmetic_item-{{choice}}"

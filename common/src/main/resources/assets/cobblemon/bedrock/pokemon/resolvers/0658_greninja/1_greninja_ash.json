@@ -1,0 +1,56 @@
+{
+  "species": "cobblemon:greninja",
+  "order": 1,
+  "variations": [
+    {
+      "aspects": ["ash"],
+      "poser": "cobblemon:greninja_ash",
+      "model": "cobblemon:greninja_ash.geo",
+      "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_emissive.png",
+          "emissive": true,
+          "translucent": true
+        },
+        {
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_transparency.png",
+          "translucent": true,
+          "translucent_cull": true
+        }
+      ]
+    },
+    {
+      "aspects": ["shiny", "ash"],
+      "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_shiny.png",
+      "layers": [
+        {
+          "name": "emissive",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_emissive_shiny.png",
+          "emissive": true,
+          "translucent": true
+        },
+        {
+          "name": "transparency",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_transparency_shiny.png",
+          "translucent": true,
+          "translucent_cull": true
+        }
+      ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0658_greninja/greninja_ash_alpha.png",
+          "emissive": true
+        }
+      ]
+    }
+  ]
+}

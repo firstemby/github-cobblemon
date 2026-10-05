@@ -209,6 +209,386 @@
   "evolutions": [],
   "forms": [
     {
+      "name": "Icy Snow",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-icy-snow.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-icy-snow"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Polar",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-polar.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-polar"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Tundra",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-tundra.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-tundra"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Continental",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-continental.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-continental"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Garden",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-garden.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-garden"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Elegant",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-elegant.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-elegant"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Meadow",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-meadow.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-meadow"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Modern",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-modern.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-modern"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Marine",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-marine.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-marine"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Archipelago",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-archipelago.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-archipelago"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "High Plains",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-high-plains.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-high-plains"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Sandstorm",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-sandstorm.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-sandstorm"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "River",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-river.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-river"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Monsoon",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-monsoon.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-monsoon"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Savanna",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-savanna.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-savanna"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Sun",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-sun.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-sun"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Ocean",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-ocean.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-ocean"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Jungle",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-jungle.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-jungle"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Fancy",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-fancy.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-fancy"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
       "name": "Pokeball",
       "primaryType": "bug",
       "secondaryType": "flying",
@@ -223,6 +603,66 @@
       ],
       "aspects": [
         "vivillon-wings-poke-ball"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Inferno",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-inferno.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-inferno"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Void",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-void.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-void"
+      ],
+      "preEvolution": "spewpa",
+      "evolutions": [],
+      "battleOnly": false
+    },
+    {
+      "name": "Forsaken",
+      "primaryType": "bug",
+      "secondaryType": "flying",
+      "maleRatio": 0.5,
+      "height": 12,
+      "weight": 170,
+      "pokedex": [
+        "cobblemon.species.vivillon-forsaken.desc"
+      ],
+      "labels": [
+        "gen6"
+      ],
+      "aspects": [
+        "vivillon-wings-forsaken"
       ],
       "preEvolution": "spewpa",
       "evolutions": [],

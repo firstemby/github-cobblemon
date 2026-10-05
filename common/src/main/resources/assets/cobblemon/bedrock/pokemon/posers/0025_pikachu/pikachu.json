@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.77, 0.0],
   "rootBone": "pikachu",
   "animations": {
+    "faint": "q.bedrock_primary('pikachu', 'faint', q.curve('one'))",
     "recoil": "q.bedrock_stateful('pikachu', 'recoil')",
     "cry": "q.bedrock_stateful('pikachu', 'cry')",
     "volttackle": "q.bedrock_primary('pikachu', 'volttackle', q.curve('symmetrical_wide'))",
@@ -19,7 +20,7 @@
       "isBattle": true,
       "animations": ["q.look('head_ai')", "q.bedrock('pikachu', 'battle_idle')"],
       "quirks": ["q.bedrock_quirk('pikachu', 'blink')","q.bedrock_quirk('pikachu', q.array('battle_quirk1','battle_quirk2'), 20, 60, 1)"],
-      "namedAnimations": {"cry": "q.bedrock_primary('pikachu', 'battle_cry', q.curve('symmetrical_wide'))", "recoil": "q.bedrock_stateful('pikachu', 'battle_recoil')"}
+      "namedAnimations": {"cry": "q.bedrock_primary('pikachu', 'battle_cry', q.curve('symmetrical_wide'))"}
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
