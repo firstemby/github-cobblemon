@@ -32,7 +32,12 @@ class SpeedTunerScreen : Screen("Speed Tuner".text()) {
         const val ROW_HEIGHT = 20
         const val ROW_GAP = 4
         const val TEXT_LINE_HEIGHT = 11
+        // Typed speeds can go up to this, the slider only covers the usual range
         const val MAX_SPEED = 20.0
+        const val SLIDER_MAX_SPEED = 8.0
+        // Blocks per second the - and + buttons change the speed by
+        const val SPEED_STEP = 0.05
+        val PLAYBACK_SPEEDS = listOf(1.0, 0.5, 0.25, 0.1)
         const val MIN_RADIUS = 2.0
         const val MAX_RADIUS = 24.0
         const val MIN_LINE_LENGTH = 4.0
@@ -76,12 +81,16 @@ class SpeedTunerScreen : Screen("Speed Tuner".text()) {
         }
 
         val entry = SpeedTuner.selected
-        speedSlider = addRenderableWidget(
-            DecimalSlider(MARGIN, nextRow(), fullWidth, "Speed", 0.0, MAX_SPEED, entry?.let { SpeedTuner.speed(it) } ?: 0.0) {
-                SpeedTuner.setSpeed(it)
-                speedBox.value = format(it)
-            }
-        )
+        nextRow().let { row ->
+            addRenderableWidget(Button.builder("-".text()) { nudgeSpeed(-SPEED_STEP) }.bounds(MARGIN, row, ROW_HEIGHT, ROW_HEIGHT).build())
+            speedSlider = addRenderableWidget(
+                DecimalSlider(MARGIN + ROW_HEIGHT + ROW_GAP, row, fullWidth - 2 * (ROW_HEIGHT + ROW_GAP), "Speed", 0.0, SLIDER_MAX_SPEED, entry?.let { SpeedTuner.speed(it) } ?: 0.0) {
+                    SpeedTuner.setSpeed(it)
+                    speedBox.value = format(it)
+                }
+            )
+            addRenderableWidget(Button.builder("+".text()) { nudgeSpeed(SPEED_STEP) }.bounds(PANEL_WIDTH - MARGIN - ROW_HEIGHT, row, ROW_HEIGHT, ROW_HEIGHT).build())
+        }
         nextRow().let { row ->
             speedBox = addRenderableWidget(EditBox(font, MARGIN, row, halfWidth, ROW_HEIGHT, "Speed".text())).apply {
                 value = entry?.let { format(SpeedTuner.speed(it)) } ?: ""
@@ -109,6 +118,11 @@ class SpeedTunerScreen : Screen("Speed Tuner".text()) {
                 rebuildWidgets()
             }.bounds(MARGIN + halfWidth + ROW_GAP, row, halfWidth, ROW_HEIGHT).build())
         }
+        addRenderableWidget(Button.builder("Playback: ${format(SpeedTuner.playbackSpeed)}x".text()) {
+            val next = (PLAYBACK_SPEEDS.indexOf(SpeedTuner.playbackSpeed) + 1) % PLAYBACK_SPEEDS.size
+            SpeedTuner.playbackSpeed = PLAYBACK_SPEEDS[next]
+            rebuildWidgets()
+        }.bounds(MARGIN, nextRow(), fullWidth, ROW_HEIGHT).build())
         nextRow().let { row ->
             val reviewed = entry?.let { SpeedTuner.isReviewed(it) } == true
             addRenderableWidget(Button.builder((if (reviewed) "Reviewed ✔" else "Mark reviewed").text()) {
@@ -128,6 +142,12 @@ class SpeedTunerScreen : Screen("Speed Tuner".text()) {
 
     private fun step(offset: Int) {
         SpeedTuner.step(offset)
+        rebuildWidgets()
+    }
+
+    private fun nudgeSpeed(change: Double) {
+        val entry = SpeedTuner.selected ?: return
+        SpeedTuner.setSpeed((SpeedTuner.speed(entry) + change).coerceIn(0.0, MAX_SPEED))
         rebuildWidgets()
     }
 

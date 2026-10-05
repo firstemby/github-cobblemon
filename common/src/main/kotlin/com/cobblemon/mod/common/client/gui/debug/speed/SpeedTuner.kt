@@ -29,6 +29,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.sin
 import kotlin.math.sqrt
 import net.minecraft.client.Minecraft
@@ -99,6 +100,8 @@ object SpeedTuner {
     var radius = DEFAULT_CIRCLE_RADIUS
     var lineLength = DEFAULT_LINE_LENGTH
     var paused = false
+    // How fast the display pokemon plays, movement and animation together. 1 is real time
+    var playbackSpeed = 1.0
 
     // Species id to edited speeds by gait json key, all in blocks per second
     private val edits = mutableMapOf<ResourceLocation, MutableMap<String, Double>>()
@@ -111,6 +114,12 @@ object SpeedTuner {
     private var distance = 0.0
     private var referenceDistance = 0.0
     private var ticks = 0L
+    // The display pokemon's own clock in ticks, so it can run slower than the game or stand still
+    private var displayTime = 0.0
+    // Game ticks since the display pokemon last stepped, for how far between its steps it is
+    private var gameTicksSinceStep = 0
+    // Partial tick it was drawn at last, held while paused so it freezes exactly where it was
+    private var lastPartialTick = 0F
     private var puppet: PokemonEntity? = null
 
     fun open(entries: List<SpeedTunerEntry>) {
@@ -277,11 +286,28 @@ object SpeedTuner {
         val entry = selected ?: return
         val display = puppet?.takeIf { it.level() === level } ?: createPuppet(level, entry)?.also { puppet = it } ?: return
 
-        if (!paused) {
-            distance += speed(entry) / TICKS_PER_SECOND
-            referenceDistance += referenceSpeed() / TICKS_PER_SECOND
-            display.tickCount++
-        }
+        val rate = if (paused) 0.0 else playbackSpeed
+        val before = displayTime
+        displayTime += rate
+        // One display tick each time its clock passes a whole tick, so slow motion moves and animates less often
+        val steps = (floor(displayTime) - floor(before)).toInt()
+        repeat(steps) { stepDisplay(display, entry) }
+        // Hold while paused so it picks up from the same spot when resumed
+        if (steps > 0) gameTicksSinceStep = 0 else if (!paused) gameTicksSinceStep++
+        display.isPokemonSprinting = gait == Gait.SPRINT
+        display.entityData.set(PokemonEntity.POSE_TYPE, PoseType.WALK)
+        display.entityData.set(PokemonEntity.MOVING, !paused)
+
+        val reference = trackPosition(referenceDistance)
+        level.addParticle(ParticleTypes.ELECTRIC_SPARK, reference.x, reference.y + MARKER_HEIGHT, reference.z, 0.0, 0.0, 0.0)
+        if (ticks % TRACK_MARKER_INTERVAL_TICKS == 0L) outlineTrack(level)
+    }
+
+    /** One tick of the display pokemon's own clock, moving it along the track and ticking its animations */
+    private fun stepDisplay(display: PokemonEntity, entry: SpeedTunerEntry) {
+        distance += speed(entry) / TICKS_PER_SECOND
+        referenceDistance += referenceSpeed() / TICKS_PER_SECOND
+        display.tickCount++
         val lapLength = lapLength()
         // Line runs start over from the beginning, so jump without smoothing between the two ends
         val wrapped = distance >= lapLength
@@ -303,18 +329,9 @@ object SpeedTuner {
             display.yBodyRotO = yaw
             display.yHeadRotO = yaw
         }
-        display.isPokemonSprinting = gait == Gait.SPRINT
-        display.entityData.set(PokemonEntity.POSE_TYPE, PoseType.WALK)
-        display.entityData.set(PokemonEntity.MOVING, !paused)
         // Animation age and pose changes advance in the client delegate's tick, which normally runs from the
-        // entity's own tick. The display pokemon is never ticked so do it here, and not while paused so it freezes
-        if (!paused) {
-            display.delegate.tick(display)
-        }
-
-        val reference = trackPosition(referenceDistance)
-        level.addParticle(ParticleTypes.ELECTRIC_SPARK, reference.x, reference.y + MARKER_HEIGHT, reference.z, 0.0, 0.0, 0.0)
-        if (ticks % TRACK_MARKER_INTERVAL_TICKS == 0L) outlineTrack(level)
+        // entity's own tick. The display pokemon is never ticked so do it here
+        display.delegate.tick(display)
     }
 
     private fun render(event: RenderEvent) {
@@ -324,7 +341,14 @@ object SpeedTuner {
         if (puppet.level() !== level) return
 
         val camera = event.camera.position
-        val partialTick = event.tickCounter.getGameTimeDeltaPartialTick(false)
+        // How far between its own steps the display pokemon is, so slow motion stays smooth and paused really stops
+        val partialTick = if (paused) {
+            lastPartialTick
+        } else {
+            val gamePartialTick = event.tickCounter.getGameTimeDeltaPartialTick(false)
+            ((gameTicksSinceStep + gamePartialTick) * playbackSpeed).coerceAtMost(1.0).toFloat()
+        }
+        lastPartialTick = partialTick
         val x = Mth.lerp(partialTick.toDouble(), puppet.xo, puppet.x) - camera.x
         val y = Mth.lerp(partialTick.toDouble(), puppet.yo, puppet.y) - camera.y
         val z = Mth.lerp(partialTick.toDouble(), puppet.zo, puppet.z) - camera.z
