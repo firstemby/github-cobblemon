@@ -29,6 +29,7 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.level.block.Blocks
 import kotlin.jvm.optionals.getOrNull
+import kotlin.random.Random
 
 class IdealNestPlacementSense(
     private var cooldownTicks: Int = 100,
@@ -102,7 +103,7 @@ class IdealNestPlacementSense(
         return BlockPos.betweenClosed(
             entityPos.offset(-detectionRadius, -5, -detectionRadius),
             entityPos.offset(detectionRadius, 5, detectionRadius)
-        ).map { it.immutable() }.shuffled().firstOrNull { pos ->
+        ).map { it.immutable() }.shuffled(Random(entity.random.nextLong())).firstOrNull { pos ->
             val blockBelowState = world.getBlockState(pos)
             val nestPos = pos.above()
             val blockAbove = world.getBlockState(nestPos).block

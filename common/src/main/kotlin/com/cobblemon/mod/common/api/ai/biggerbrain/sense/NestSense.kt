@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.level.block.entity.BlockEntity
+import kotlin.random.Random
 
 class NestSense(
     private var cooldownTicks: Int = 200,
@@ -103,7 +104,7 @@ class NestSense(
         return BlockPos.betweenClosed(
             entityPos.offset(-radiusXZ, -radiusY, -radiusXZ),
             entityPos.offset(radiusXZ, radiusY, radiusXZ)
-        ).firstOrNull { pos ->
+        ).map { it.immutable() }.shuffled(Random(pokemonEntity.random.nextLong())).firstOrNull { pos ->
             val blockEntity: BlockEntity? = world.getBlockEntity(pos)
             if (blockEntity !is NestBlockEntity) return@firstOrNull false
 
