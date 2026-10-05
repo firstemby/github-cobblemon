@@ -1103,7 +1103,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     @JvmField
     val SMOOTH_ROCK = itemNameBlockItem("smooth_rock", CobblemonBlocks.SMOOTH_ROCK)
     @JvmField
-    val ICY_ROCK = heldItem("icy_rock")
+    val ICY_ROCK = itemNameBlockItem("icy_rock", CobblemonBlocks.ICY_ROCK)
 
     // Mulch
     @JvmField

@@ -6,7 +6,7 @@
     ]
   },
   "criteria": {
-    "has_netherrack_fire_stone_ore": {
+    "has_nether_fire_stone_ore": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
