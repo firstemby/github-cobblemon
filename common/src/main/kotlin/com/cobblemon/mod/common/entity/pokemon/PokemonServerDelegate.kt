@@ -26,6 +26,7 @@ import com.cobblemon.mod.common.api.spawning.fishing.FishingSpawnCause.Companion
 import com.cobblemon.mod.common.api.tags.CobblemonItemTags
 import com.cobblemon.mod.common.battles.BattleRegistry
 import com.cobblemon.mod.common.entity.PoseType
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.activestate.ActivePokemonState
 import com.cobblemon.mod.common.pokemon.activestate.SentOutState
@@ -244,11 +245,13 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.entityData.set(PokemonEntity.ASPECTS, trackedAspects)
         entity.entityData.set(PokemonEntity.LABEL_LEVEL, entity.pokemon.level)
 
+        // Slow mons can travel less than the distance check each tick so steering somewhere counts too.
+        val travelling = entity.controllingPassenger == null && (entity.moveControl as? PokemonMoveControl)?.isTravelling == true
         if (entity.getCurrentPoseType() in PoseType.FLYING_POSES) {
-            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying)
+            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonFlying || travelling)
         }
         else {
-            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking)
+            entity.entityData.set(PokemonEntity.MOVING, entity.isPokemonWalking || travelling)
         }
 
         entity.entityData.set(PokemonEntity.FRIENDSHIP, entity.pokemon.friendship)

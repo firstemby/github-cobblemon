@@ -85,6 +85,9 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     private val speedEase = InertialEase(SPEED_BLEND_SECONDS)
     // What steering asked for this tick, null when it isn't steering
     private var steerGoal: SteerGoal? = null
+    /** True while steering somewhere this tick, however slowly. Used for the walk and fly poses */
+    var isTravelling = false
+        private set
 
     private class SteerGoal(
         val yaw: Float,
@@ -421,6 +424,7 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
      */
     private fun updateMotion() {
         val goal = steerGoal
+        isTravelling = goal != null && !pokemonEntity.isDeadOrDying
         val heading = pokemonEntity.heading
         val turnTarget = pokemonEntity.stationaryTurnTarget
         if (goal == null && turnTarget != null) {
