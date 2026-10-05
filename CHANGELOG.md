@@ -132,6 +132,7 @@
 - Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
 - Fixed ball capture beam origin coming from behind the ball.
 - Fixed Safari Ball catch rate outside of battle
+- Fixed a server crash when water reached a Campfire Pot block that held no pot
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:

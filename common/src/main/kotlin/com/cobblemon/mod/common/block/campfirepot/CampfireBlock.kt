@@ -170,13 +170,15 @@ class CampfireBlock(settings: Properties, val isSoul: Boolean) : BaseEntityBlock
     private fun removePotItem(blockEntity: CampfireBlockEntity, blockState: BlockState, level: Level, blockPos: BlockPos, player: Player? = null, byWater: Boolean = false) {
         if (!byWater && player != null && !player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty) return
 
-        val potItem = blockEntity.getPotItem()
+        // The block entity can hold no pot (placed by command or structure, or a pot that failed to load),
+        // so there may be nothing to hand back or drop.
+        val potItem = blockEntity.getPotItem()?.takeUnless { it.isEmpty }
 
         if (!byWater && player != null) {
             if (!player.isCreative && potItem != null) {
                 player.setItemInHand(InteractionHand.MAIN_HAND, potItem)
             }
-        } else {
+        } else if (potItem != null) {
             val direction = blockState.getValue(FACING) as Direction
             val f = 0.25F * direction.stepX.toFloat()
             val g = 0.25F * direction.stepZ.toFloat()
