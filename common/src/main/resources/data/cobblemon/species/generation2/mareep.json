@@ -54,7 +54,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": "q.has_aspect('sheared') ? 0.25 : 0.2"
+        "walkSpeed": 0.184
       },
       "swim": {
         "avoidsWater": true

@@ -54,6 +54,9 @@
       "swim": {
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "walkSpeed": 0.157
       }
     },
     "resting": {

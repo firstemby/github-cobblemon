@@ -56,7 +56,8 @@
         "swimSpeed": "0.2"
       },
       "walk": {
-        "avoidsLand": true
+        "avoidsLand": true,
+        "walkSpeed": 0.248
       }
     },
     "resting": {
