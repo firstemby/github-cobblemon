@@ -171,11 +171,7 @@ open class PokeSnackBlockEntity(pos: BlockPos, state: BlockState) :
     fun attemptSpawn(player: Player) {
         val cause = SpawnCause(spawner = spawner, entity = player)
         val zoneInput = spawner.getZoneInput(cause)
-        val spawnAction = spawner.calculateSpawnActionsForArea(zoneInput, 1).firstOrNull()
-
-        if (spawnAction == null) {
-            return
-        }
+        val spawnAction = spawner.calculateSpawnActionsForArea(zoneInput, 1).firstOrNull() ?: return
 
         CobblemonEvents.POKE_SNACK_SPAWN_POKEMON_PRE.postThen(
             PokeSnackSpawnPokemonEvent.Pre(this, spawnAction),
