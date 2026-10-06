@@ -31,6 +31,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.structure.Structure
+import kotlin.jvm.optionals.getOrNull
 
 data class RenderRequirementData(
     val icon: Item,
@@ -169,8 +170,14 @@ fun renderFriendshipRequirement(friendshipRequirement: FriendshipRequirement): R
 }
 
 fun renderHeldItemRequirement(heldItemRequirement: HeldItemRequirement): RenderRequirementData? {
-    val item = heldItemRequirement.itemCondition.items.get().first().value()
-    val tooltip = lang("ui.pokedex.requirement.held_item.tooltip", item.description.plainCopy().green())
+    val items = heldItemRequirement.itemCondition.items.getOrNull() ?: return null
+    val item = items.firstOrNull()?.value() ?: return null
+    val itemComponent = items.unwrapKey().map { tag ->
+        val id = tag.location()
+        val fallback = id.path.substringAfterLast('/').split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) }
+        Component.translatableWithFallback("tag.item.${id.namespace}.${id.path.replace('/', '.')}", fallback)
+    }.orElseGet { item.description.plainCopy() }
+    val tooltip = lang("ui.pokedex.requirement.held_item.tooltip", itemComponent.green())
 
     return RenderRequirementData(item, tooltip)
 }

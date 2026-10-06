@@ -11,23 +11,22 @@ package com.cobblemon.mod.common.util.adapters
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.Environment
 import com.cobblemon.mod.common.util.server
-import com.google.gson.JsonElement
-import com.mojang.serialization.DynamicOps
-import com.mojang.serialization.JsonOps
 import net.minecraft.client.Minecraft
 import net.minecraft.core.RegistryAccess
-import net.minecraft.resources.RegistryOps
+import net.minecraft.core.registries.BuiltInRegistries
 
 /**
  * Utility for getting RegistryAccess with the correct client/server registry access.
  * Used when as a fallback when manually encoding/decoding registry-backed values (e.g., items, predicates).
  */
 object RegistryAccessResolver {
+    private val builtInAccess: RegistryAccess by lazy { RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY) }
+
     fun getAccess(): RegistryAccess {
         try {
             Cobblemon.implementation
         } catch (e: UninitializedPropertyAccessException) {
-            return RegistryAccess.EMPTY
+            return builtInAccess
         }
         if (Cobblemon.implementation.environment() == Environment.CLIENT) {
             val minecraft = Minecraft.getInstance()
@@ -35,13 +34,12 @@ object RegistryAccessResolver {
                 return minecraft.level!!.registryAccess()
         }
 
-
         if (Cobblemon.implementation.environment() == Environment.SERVER) {
             val server = server()
             if (server != null)
                 return server.registryAccess()
         }
 
-        return RegistryAccess.EMPTY
+        return builtInAccess
     }
 }
