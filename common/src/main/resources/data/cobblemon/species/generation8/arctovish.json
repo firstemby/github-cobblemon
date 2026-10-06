@@ -56,7 +56,7 @@
         "canBreatheUnderwater": true
       },
       "walk": {
-        "walkSpeed": 0.14,
+        "walkSpeed": 0.167,
         "avoidsLand": true
       }
     },

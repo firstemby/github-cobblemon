@@ -125,7 +125,7 @@
       },
       "walk": {
         "avoidsLand": true,
-        "walkSpeed": 0.7
+        "walkSpeed": 0.43
       }
     },
     "resting": {

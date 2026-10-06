@@ -136,6 +136,9 @@
       "swim": {
         "avoidsWater": true,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "walkSpeed": 0.248
       }
     },
     "resting": {

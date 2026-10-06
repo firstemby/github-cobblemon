@@ -67,7 +67,7 @@
         "swimSpeed": "0.2"
       },
       "walk": {
-        "walkSpeed": 0.25
+        "walkSpeed": 0.219
       }
     },
     "herd": {

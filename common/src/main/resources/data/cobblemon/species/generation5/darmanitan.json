@@ -92,7 +92,7 @@
         "canSwimInLava": true
       },
       "walk": {
-        "walkSpeed": 0.3
+        "walkSpeed": 0.324
       }
     },
     "resting": {

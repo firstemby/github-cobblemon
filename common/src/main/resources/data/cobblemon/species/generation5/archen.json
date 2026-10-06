@@ -61,7 +61,7 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.136
       },
       "swim": {
         "swimSpeed": "0.2",

@@ -65,7 +65,7 @@
       },
       "walk": {
         "avoidsLand": true,
-        "walkSpeed": 0.14
+        "walkSpeed": 0.141
       }
     },
     "herd": {

@@ -99,7 +99,7 @@
       },
       "walk": {
         "avoidsLand": true,
-        "walkSpeed": 0.17
+        "walkSpeed": 0.176
       }
     },
     "resting": {

@@ -58,7 +58,8 @@
         "canBreatheUnderwater": true
       },
       "walk": {
-        "avoidsLand": true
+        "avoidsLand": true,
+        "walkSpeed": 0.208
       }
     },
     "herd": {

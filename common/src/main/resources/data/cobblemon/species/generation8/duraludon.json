@@ -81,7 +81,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.179
       }
     },
     "resting": {
