@@ -5,7 +5,7 @@
 			"identifier": "cobblemon:skill_sense_sparkle",
 			"basic_render_parameters": {
 				"material": "particles_xray",
-				"texture": "textures/particle/generic/sparkle/glowingsparkle"
+				"texture": "textures/particles/generic/sparkle/glowingsparkle"
 			}
 		},
 		"components": {
