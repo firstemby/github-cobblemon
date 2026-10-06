@@ -720,5 +720,35 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         ITEM_BLOCK_DICE_STEP
     )
 
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_PLACE = this.create("block.item_block.metal_can.place")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_BREAK = this.create("block.item_block.metal_can.break")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_STEP = this.create("block.item_block.metal_can.step")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_METAL_CAN_BREAK,
+        ITEM_BLOCK_METAL_CAN_STEP,
+        ITEM_BLOCK_METAL_CAN_PLACE,
+        ITEM_BLOCK_METAL_CAN_STEP,
+        ITEM_BLOCK_METAL_CAN_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_PLACE = this.create("block.item_block.jar_glass_liquid.place")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_BREAK = this.create("block.item_block.jar_glass_liquid.break")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_STEP = this.create("block.item_block.jar_glass_liquid.step")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_BREAK,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_PLACE,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP
+    )
+
     private fun create(name: String): SoundEvent = this.create(name, SoundEvent.createVariableRangeEvent(cobblemonResource(name)))
 }
