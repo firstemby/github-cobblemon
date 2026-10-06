@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.api.scheduling.ClientTaskTracker;
+import com.cobblemon.mod.common.client.render.shader.TeraHalo;
 import com.cobblemon.mod.common.integration.IrisCompatibility;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -59,6 +60,7 @@ public class GameRendererMixin {
     )
     private void cobblemon$drawAfterShaderPack(DeltaTracker deltaTracker, CallbackInfo ci) {
         IrisCompatibility.INSTANCE.drawDeferred();
+        TeraHalo.INSTANCE.draw();
     }
 
     @ModifyArg(

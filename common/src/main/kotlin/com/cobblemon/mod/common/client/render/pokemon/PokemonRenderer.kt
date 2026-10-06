@@ -145,7 +145,7 @@ class PokemonRenderer(
         }
 
         modelNow.setLayerContext(buffer, clientDelegate, VaryingModelRepository.getLayers(entity.pokemon.species.resourceIdentifier, clientDelegate))
-        modelNow.teraOverlay = TeraOverlay.forAspects(entity.aspects, getTextureLocation(entity))
+        modelNow.tera = TeraOverlay.forAspects(entity.aspects, getTextureLocation(entity))
 
 
         if (entity.passengers.isNotEmpty()) {

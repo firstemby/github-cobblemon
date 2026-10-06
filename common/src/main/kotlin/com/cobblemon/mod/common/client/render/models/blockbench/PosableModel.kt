@@ -54,6 +54,8 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.RenderStateShard
 import com.cobblemon.mod.common.integration.IrisCompatibility
+import com.cobblemon.mod.common.client.render.shader.TeraHalo
+import com.cobblemon.mod.common.client.render.shader.TeraRender
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.resources.ResourceLocation
@@ -177,7 +179,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     var currentState: PosableState? = null
 
     @Transient
-    var teraOverlay: Pair<RenderType, Int>? = null
+    var tera: TeraRender? = null
 
     @Transient
     val functions = QueryStruct(this.animationFunctions())
@@ -268,7 +270,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         currentLayers = emptyList()
         bufferProvider = null
         currentState = null
-        teraOverlay = null
+        tera = null
     }
 
     /**
@@ -495,8 +497,9 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
                 )
                 stack.popPose()
             }
-            teraOverlay?.let { (renderType, tint) ->
-                IrisCompatibility.renderAfterShaderPack(provider, renderType) { rootPart.render(context, stack, it, packedLight, packedOverlay, tint) }
+            tera?.let { tera ->
+                IrisCompatibility.renderAfterShaderPack(provider, tera.overlay) { rootPart.render(context, stack, it, packedLight, packedOverlay, tera.tint) }
+                TeraHalo.record(tera.halo) { rootPart.render(context, stack, it, packedLight, packedOverlay, tera.tint) }
             }
         }
     }

@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.ResourceLocation
 
+data class TeraRender(val overlay: RenderType, val halo: RenderType, val tint: Int)
+
 object TeraOverlay {
     private const val ASPECT = "terastal"
 
@@ -60,9 +62,9 @@ object TeraOverlay {
         )
     }
 
-    fun forAspects(aspects: Set<String>, texture: ResourceLocation): Pair<RenderType, Int>? {
+    fun forAspects(aspects: Set<String>, texture: ResourceLocation): TeraRender? {
         val aspect = aspects.firstOrNull { it == ASPECT || it.startsWith("$ASPECT-") } ?: return null
         val hue = ElementalTypes.get(aspect.removePrefix(ASPECT).removePrefix("-"))?.hue
-        return renderType.apply(texture) to (0xFF000000.toInt() or (hue ?: 0xFFFFFF))
+        return TeraRender(renderType.apply(texture), TeraHalo.renderType(texture), 0xFF000000.toInt() or (hue ?: 0xFFFFFF))
     }
 }

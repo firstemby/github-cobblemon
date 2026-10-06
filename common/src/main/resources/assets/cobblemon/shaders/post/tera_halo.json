@@ -1,0 +1,60 @@
+{
+    "targets": [
+        "mask",
+        "swap",
+        "glow"
+    ],
+    "passes": [
+        {
+            "name": "cobblemon_tera_halo_blur",
+            "intarget": "mask",
+            "outtarget": "swap",
+            "use_linear_filter": true,
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 1.0, 0.0 ] },
+                { "name": "Radius", "values": [ 16.0 ] }
+            ]
+        },
+        {
+            "name": "cobblemon_tera_halo_blur",
+            "intarget": "swap",
+            "outtarget": "glow",
+            "use_linear_filter": true,
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 0.0, 1.0 ] },
+                { "name": "Radius", "values": [ 16.0 ] }
+            ]
+        },
+        {
+            "name": "cobblemon_tera_halo_blur",
+            "intarget": "glow",
+            "outtarget": "swap",
+            "use_linear_filter": true,
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 1.0, 0.0 ] },
+                { "name": "Radius", "values": [ 32.0 ] }
+            ]
+        },
+        {
+            "name": "cobblemon_tera_halo_blur",
+            "intarget": "swap",
+            "outtarget": "glow",
+            "use_linear_filter": true,
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 0.0, 1.0 ] },
+                { "name": "Radius", "values": [ 32.0 ] }
+            ]
+        },
+        {
+            "name": "cobblemon_tera_halo_composite",
+            "intarget": "glow",
+            "outtarget": "swap",
+            "auxtargets": [
+                { "name": "MaskSampler", "id": "mask" }
+            ],
+            "uniforms": [
+                { "name": "Strength", "values": [ 1.0 ] }
+            ]
+        }
+    ]
+}

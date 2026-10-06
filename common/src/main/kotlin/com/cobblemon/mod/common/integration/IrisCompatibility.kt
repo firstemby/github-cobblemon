@@ -25,10 +25,7 @@ object IrisCompatibility {
     private val shaderPackInUse = api?.getMethod("isShaderPackInUse")
     private val renderingShadowPass = api?.getMethod("isRenderingShadowPass")
 
-    private val bytes = ByteBufferBuilder(1 shl 18)
-    private val deferred = mutableListOf<Pair<RenderType, MeshData>>()
-    private val modelView = Matrix4f()
-    private val projection = Matrix4f()
+    private val deferred = DeferredMeshes()
 
     fun isShaderPackInUse() = shaderPackInUse?.invoke(instance) == true
 
@@ -38,18 +35,36 @@ object IrisCompatibility {
         if (!isShaderPackInUse()) return draw(provider.getBuffer(renderType))
         if (isRenderingShadowPass()) return
 
-        if (deferred.isEmpty()) {
-            modelView.set(RenderSystem.getModelViewMatrix())
-            projection.set(RenderSystem.getProjectionMatrix())
-        }
-        val builder = BufferBuilder(bytes, renderType.mode(), renderType.format())
-        draw(builder)
-        builder.build()?.let { deferred += renderType to it }
+        deferred.record(renderType, draw)
     }
 
     fun drawDeferred() {
         if (deferred.isEmpty()) return
         Minecraft.getInstance().mainRenderTarget.bindWrite(false)
+        deferred.drawAll()
+    }
+}
+
+/** Meshes recorded during level rendering, drawn later with the camera matrices they were recorded under. */
+class DeferredMeshes {
+    private val bytes = ByteBufferBuilder(1 shl 18)
+    private val meshes = mutableListOf<Pair<RenderType, MeshData>>()
+    private val modelView = Matrix4f()
+    private val projection = Matrix4f()
+
+    fun isEmpty() = meshes.isEmpty()
+
+    fun record(renderType: RenderType, draw: (VertexConsumer) -> Unit) {
+        if (meshes.isEmpty()) {
+            modelView.set(RenderSystem.getModelViewMatrix())
+            projection.set(RenderSystem.getProjectionMatrix())
+        }
+        val builder = BufferBuilder(bytes, renderType.mode(), renderType.format())
+        draw(builder)
+        builder.build()?.let { meshes += renderType to it }
+    }
+
+    fun drawAll() {
         RenderSystem.backupProjectionMatrix()
         RenderSystem.setProjectionMatrix(projection, VertexSorting.DISTANCE_TO_ORIGIN)
         val stack = RenderSystem.getModelViewStack()
@@ -57,11 +72,16 @@ object IrisCompatibility {
         stack.set(modelView)
         RenderSystem.applyModelViewMatrix()
 
-        deferred.forEach { (renderType, mesh) -> renderType.draw(mesh) }
-        deferred.clear()
+        meshes.forEach { (renderType, mesh) -> renderType.draw(mesh) }
+        meshes.clear()
 
         stack.popMatrix()
         RenderSystem.applyModelViewMatrix()
         RenderSystem.restoreProjectionMatrix()
+    }
+
+    fun discard() {
+        meshes.forEach { it.second.close() }
+        meshes.clear()
     }
 }
