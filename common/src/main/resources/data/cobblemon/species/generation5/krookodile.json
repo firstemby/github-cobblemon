@@ -58,7 +58,7 @@
     },
     "moving": {
       "walk": {
-        "walkSpeed": 0.255
+        "walkSpeed": "q.is_standing_on_blocks(1, '#minecraft:sand') ? 0.35 : 0.255"
       },
       "swim": {
         "avoidsWater": true
