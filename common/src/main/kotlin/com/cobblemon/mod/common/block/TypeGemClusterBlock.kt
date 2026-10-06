@@ -19,6 +19,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.BlockItemStateProperties
@@ -33,8 +34,8 @@ import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.block.Rotation
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.DirectionProperty
+import net.minecraft.world.level.block.state.properties.EnumProperty
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.material.PushReaction
 import net.minecraft.world.level.storage.loot.LootParams
@@ -61,22 +62,27 @@ class TypeGemClusterBlock(
         }
         val gemToClusterMap: MutableMap<Block, TypeGemClusterBlock> = mutableMapOf()
 
-        val SHOULD_GROW: BooleanProperty = BooleanProperty.create("should_grow")
         val FACING: DirectionProperty = DirectionalBlock.FACING
         val STAGE: IntegerProperty = IntegerProperty.create("stage", 0, 3)
-        val STUNTED: BooleanProperty = BooleanProperty.create("stunted")
+        val GROWTH_TYPE: EnumProperty<GrowthType> = EnumProperty.create("growth_type", GrowthType::class.java)
 
         fun clusterFromGemBlock(gemBlock: Block): TypeGemClusterBlock? {
             return gemToClusterMap[gemBlock]
         }
     }
 
+    enum class GrowthType(private val label: String, val chance: Float): StringRepresentable {
+        DECORATION("none", 0.25f),
+        FULL("full", 0.5f),
+        STUNTED("stunted", 0.25f);
+        override fun getSerializedName(): String = label
+    }
+
     init {
         registerDefaultState(stateDefinition.any()
             .setValue(FACING, Direction.UP)
-            .setValue(SHOULD_GROW, true)
             .setValue(STAGE, 0)
-            .setValue(STUNTED, false)
+            .setValue(GROWTH_TYPE, GrowthType.FULL)
         )
     }
 
@@ -89,15 +95,19 @@ class TypeGemClusterBlock(
 
         return defaultBlockState()
             .setValue(FACING, facing)
-            .setValue(SHOULD_GROW, shouldGrow)
             .setValue(STAGE, 0)
-            .setValue(STUNTED, false)
+            .setValue(GROWTH_TYPE, if(shouldGrow) GrowthType.FULL else GrowthType.DECORATION)
     }
 
-    public override fun isRandomlyTicking(state: BlockState): Boolean = state.getValue(SHOULD_GROW)
+    public override fun isRandomlyTicking(state: BlockState): Boolean {
+        // if growth type is either stunted or full, we need to tick
+        return state.getValue(GROWTH_TYPE) != GrowthType.DECORATION
+    }
 
     override fun randomTick(state: BlockState, level: ServerLevel, pos: BlockPos, random: RandomSource) {
+        /*
         advanceGrowth(state, level, pos, random)
+        */
     }
 
     fun advanceGrowth(state: BlockState, level: LevelAccessor, pos: BlockPos, random: RandomSource) {
@@ -111,14 +121,7 @@ class TypeGemClusterBlock(
             return
         }
 
-        // At STAGE_3
-        val isStunted = state.getValue(STUNTED)
         val facing = state.getValue(FACING)
-
-        if (isStunted) {
-            level.setBlock(pos, state.setValue(SHOULD_GROW, false), UPDATE_ALL)
-            return
-        }
 
         // Check neighboring gem blocks
         val hasConflict = Direction.entries
@@ -132,60 +135,35 @@ class TypeGemClusterBlock(
         if (hasConflict) {
             level.setBlock(
                 pos,
-                state.setValue(STUNTED, true).setValue(SHOULD_GROW, false),
+                state.setValue(GROWTH_TYPE, GrowthType.STUNTED),
                 UPDATE_ALL
             )
-        } else {
+        }
             var nextState = nextStage.defaultBlockState()
             if (nextState.hasProperty(FACING)) {
                 nextState = nextState.setValue(FACING, facing)
             }
             level.setBlock(pos, nextState, UPDATE_ALL)
-            attachDecorativeClusters(level, pos, random)
-        }
+            if (isGem(nextState)) {
+                TypeGemCoreBlock.addClustersToBlock(state, pos, level, random)
+            }
     }
 
     private fun isGem(state: BlockState): Boolean {
         return state.`is`(CobblemonBlockTags.TYPE_GEM_BLOCKS)
     }
 
-    private fun attachDecorativeClusters(level: LevelAccessor, gemPos: BlockPos, random: RandomSource) {
-        val openDirections = Direction.entries.filter { direction ->
-            level.getBlockState(gemPos.relative(direction)).isAir
-        }.toMutableList()
-
-        if (openDirections.isEmpty()) {
-            return
-        }
-
-        val minClusters = maxOf(1, (openDirections.size * 0.75f).toInt())
-        val clusterCount = random.nextInt(minClusters, openDirections.size + 1)
-
-        repeat(clusterCount) {
-            if (openDirections.isEmpty()) return@repeat
-
-            val index = random.nextInt(openDirections.size)
-            val direction = openDirections.removeAt(index)
-            val clusterPos = gemPos.relative(direction)
-            val stage = random.nextInt(0, 4)
-
-            val clusterState = defaultBlockState()
-                .setValue(FACING, direction)
-                .setValue(STAGE, stage)
-                .setValue(SHOULD_GROW, false) // so we can reduce lag... hopefully
-                .setValue(STUNTED, false)
-
-            level.setBlock(clusterPos, clusterState, UPDATE_ALL)
-        }
-    }
 
     fun gemClusterCanGrow(state: BlockState, level: LevelReader, pos: BlockPos): Boolean {
-        if (!state.getValue(SHOULD_GROW)) return false
+        if (state.getValue(GROWTH_TYPE) == GrowthType.DECORATION) return false
+        if (state.getValue(GROWTH_TYPE) == GrowthType.STUNTED
+            && state.getValue(STAGE) == 3) return false
 
         val supportPos = pos.relative(state.getValue(FACING).opposite)
         val supportBlock = level.getBlockState(supportPos).block
         return CobblemonBlocks.typeGemBlocks().containsValue(supportBlock) || (supportBlock == CobblemonBlocks.TYPE_GEM_CORE) // Cannot grow if not on any gem blocks
     }
+
 
     override fun getDrops(state: BlockState, params: LootParams.Builder): List<ItemStack> {
         val drops = super.getDrops(state, params)
@@ -200,8 +178,7 @@ class TypeGemClusterBlock(
                 DataComponents.BLOCK_STATE,
                 BlockItemStateProperties.EMPTY
                     .with(STAGE, state.getValue(STAGE))
-                    .with(SHOULD_GROW, false)
-                    .with(STUNTED, false)
+                    .with(GROWTH_TYPE, GrowthType.DECORATION)
             )
             stack.set(
                 DataComponents.CUSTOM_MODEL_DATA,
@@ -272,7 +249,7 @@ class TypeGemClusterBlock(
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
-        builder.add(FACING, SHOULD_GROW, STAGE, STUNTED)
+        builder.add(FACING, STAGE, GROWTH_TYPE)
     }
 
     override fun getCloneItemStack(level: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
@@ -283,8 +260,7 @@ class TypeGemClusterBlock(
                 DataComponents.BLOCK_STATE,
                 BlockItemStateProperties.EMPTY
                     .with(STAGE, state.getValue(STAGE))
-                    .with(SHOULD_GROW, false)
-                    .with(STUNTED, false)
+                    .with(GROWTH_TYPE, GrowthType.DECORATION)
             )
             stack.set(
                 DataComponents.CUSTOM_MODEL_DATA,

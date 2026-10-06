@@ -127,6 +127,7 @@
   - Exceptions being "forced" evolutions which will continue to stop after the first one
 - Removed Mega Drain as a TM
 - Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
+- Slowed the speed of Type Gem growth, and revamped their generation to grow in a more crystal-like shape
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem

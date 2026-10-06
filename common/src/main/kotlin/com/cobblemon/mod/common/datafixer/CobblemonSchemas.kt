@@ -30,7 +30,7 @@ object CobblemonSchemas {
     private val SAME: (Int, Schema) -> Schema = ::Schema
     private val RESULT: DataFixerBuilder.Result = this.create()
 
-    const val DATA_VERSION = 2
+    const val DATA_VERSION = 3
 
     /**
      * The Cobblemon [DataFixer].
@@ -85,6 +85,8 @@ object CobblemonSchemas {
         builder.addFixer(RaisedPPStagesFix(schema1))
         val schema2 = builder.addSchema(2, SAME)
         builder.addFixer(HypertrainIVFix(schema2))
+        val schema3 = builder.addSchema(3, SAME)
+        builder.addFixer(TypeGemGrowthTypeFix(schema3))
     }
 
     private class CobblemonDataFixerCodec<R>(private val baseCodec: Codec<R>, private val typeReference: TypeReference) : Codec<R> {
