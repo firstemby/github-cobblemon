@@ -67,6 +67,9 @@
     "moving": {
       "swim": {
         "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.229
       }
     },
     "combat": {
@@ -94,7 +97,6 @@
     "19:hypnosis",
     "23:dizzypunch",
     "28:suckerpunch",
-    "32:teeterdance",
     "37:uproar",
     "41:psychup",
     "46:doubleedge",
@@ -164,6 +166,7 @@
     "tm:sunnyday",
     "tm:superpower",
     "tm:swift",
+    "tm:teeterdance",
     "tm:terablast",
     "tm:thief",
     "tm:thunderpunch",

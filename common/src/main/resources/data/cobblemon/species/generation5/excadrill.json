@@ -52,7 +52,7 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": 0.179
+        "walkSpeed": 0.188
       },
       "swim": {
         "avoidsWater": true

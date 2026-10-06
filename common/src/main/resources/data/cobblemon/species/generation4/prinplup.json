@@ -55,7 +55,7 @@
         "swimSpeed": "0.2"
       },
       "walk": {
-        "walkSpeed": 0.3
+        "walkSpeed": 0.135
       }
     },
     "resting": {

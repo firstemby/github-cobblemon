@@ -42,10 +42,10 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "baseScale": 0.6,
+  "baseScale": 0.9,
   "hitbox": {
-    "width": 1.5,
-    "height": 3,
+    "width": 1,
+    "height": 2,
     "fixed": false
   },
   "behaviour": {
@@ -62,6 +62,9 @@
       "swim": {
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"
+      },
+      "walk": {
+        "walkSpeed": 0.324
       }
     },
     "herd": {
@@ -305,9 +308,6 @@
           ]
         },
         "moving": {
-          "walk": {
-            "walkSpeed": 0.3
-          },
           "swim": {
             "canBreatheUnderwater": true
           }

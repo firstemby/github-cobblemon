@@ -59,7 +59,8 @@
         "avoidsWater": true
       },
       "walk": {
-        "canWalk": false
+        "canWalk": false,
+        "walkSpeed": 0.248
       }
     },
     "herd": {

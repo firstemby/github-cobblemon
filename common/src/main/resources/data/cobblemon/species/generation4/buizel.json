@@ -63,7 +63,7 @@
         "canWalkOnWater": true
       },
       "walk": {
-        "walkSpeed": 0.18
+        "walkSpeed": 0.157
       }
     },
     "combat": {

@@ -72,7 +72,7 @@
         "canFly": true
       },
       "walk": {
-        "walkSpeed": 0.145
+        "walkSpeed": 0.172
       },
       "swim": {
         "avoidsWater": true

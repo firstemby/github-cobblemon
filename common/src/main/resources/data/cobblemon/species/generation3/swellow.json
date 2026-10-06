@@ -55,6 +55,9 @@
       },
       "swim": {
         "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.236
       }
     },
     "resting": {

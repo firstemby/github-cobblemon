@@ -57,7 +57,7 @@
         "canWalkOnWater": true
       },
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.111
       }
     },
     "resting": {
