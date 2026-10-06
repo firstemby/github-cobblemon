@@ -15,6 +15,8 @@ import com.cobblemon.mod.common.block.entity.PokeSnackBlockEntity
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.render.MatrixWrapper
 import com.cobblemon.mod.common.util.cobblemonResource
+import net.minecraft.client.Minecraft
+import net.minecraft.client.ParticleStatus
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleTypes
@@ -40,13 +42,25 @@ sealed class ParticleData {
         val chance: Double,
         val amount: Int,
         val locatorResolver: (Map<String, MatrixWrapper>) -> List<String>
-    ): ParticleData()
+    ): ParticleData() {
+        fun amount(): Int = when(Minecraft.getInstance().options.particles().get()) {
+            ParticleStatus.ALL -> amount
+            ParticleStatus.DECREASED -> amount / 2
+            ParticleStatus.MINIMAL -> amount / 4
+        }
+    }
 
     data class MinecraftParticle(
         val particle: ParticleOptions,
         val chance: Double,
         val amount: Int
-    ): ParticleData()
+    ): ParticleData() {
+        fun amount(): Int = when(Minecraft.getInstance().options.particles().get()) {
+            ParticleStatus.ALL -> amount
+            ParticleStatus.DECREASED -> amount / 2
+            ParticleStatus.MINIMAL -> amount / 4
+        }
+    }
 }
 
 /**
