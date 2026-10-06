@@ -54,6 +54,9 @@
         "swimSpeed": 0.1,
         "canSwimInWater": false,
         "canBreatheUnderwater": true
+      },
+      "walk": {
+        "walkSpeed": 0.248
       }
     },
     "herd": {

@@ -315,6 +315,9 @@
       "swim": {
         "avoidsWater": true,
         "canSwimInLava": true
+      },
+      "walk": {
+        "walkSpeed": 0.427
       }
     },
     "combat": {

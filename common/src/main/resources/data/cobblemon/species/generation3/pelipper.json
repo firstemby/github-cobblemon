@@ -58,6 +58,9 @@
       "swim": {
         "swimSpeed": "0.2",
         "canWalkOnWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.2
       }
     },
     "resting": {
