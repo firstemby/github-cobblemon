@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFledEvent
 import com.cobblemon.mod.common.api.events.battles.BattleFleeAttemptEvent
 import com.cobblemon.mod.common.api.events.battles.BattleStartedEvent
+import com.cobblemon.mod.common.api.events.battles.BattleEndedEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.FormeChangeEvent
 import com.cobblemon.mod.common.api.events.battles.instruction.MegaEvolutionEvent
@@ -138,6 +139,9 @@ object CobblemonEvents {
 
     @JvmField
     val BATTLE_FAINTED = EventObservable<BattleFaintedEvent>()
+
+    @JvmField
+    val BATTLE_ENDED = EventObservable<BattleEndedEvent>()
 
     // instructions
     @JvmField

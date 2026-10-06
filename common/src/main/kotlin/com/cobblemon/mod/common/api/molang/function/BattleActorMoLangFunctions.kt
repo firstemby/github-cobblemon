@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
 import com.cobblemon.mod.common.battles.actor.PokemonBattleActor
 import com.cobblemon.mod.common.entity.npc.NPCBattleActor
+import com.cobblemon.mod.common.util.asArrayValue
 
 object BattleActorMoLangFunctions : AbstractMoLangFunctionHolder<BattleActor>() {
     override fun BattleActor.moLangFunctions(): MutableMap<String, (MoParams) -> Any> {
@@ -25,6 +26,7 @@ object BattleActorMoLangFunctions : AbstractMoLangFunctionHolder<BattleActor>() 
         functions["is_npc"] = { DoubleValue(actor.type == ActorType.NPC) }
         functions["is_player"] = { DoubleValue(actor.type == ActorType.PLAYER) }
         functions["is_wild"] = { DoubleValue(actor.type == ActorType.WILD) }
+        functions["battle_pokemon"] = { actor.pokemonList.asArrayValue { it.struct } }
 
         when (actor) {
             is NPCBattleActor -> {
