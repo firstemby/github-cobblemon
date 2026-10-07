@@ -129,6 +129,8 @@
 - Removed Mega Drain as a TM
 - Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
 - Slowed the speed of Type Gem growth, and revamped their generation to grow in a more crystal-like shape
+- PokeSnacks (and other area spawns) will now start the vertical offset checking from the center rather than base coordinate
+  - This will help PokeSnacks to work inside caves or tighter spaces better
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
