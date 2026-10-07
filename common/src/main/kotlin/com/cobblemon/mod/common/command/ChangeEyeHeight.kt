@@ -37,7 +37,12 @@ object ChangeEyeHeight {
                     .then(
                         Commands.literal("swimming").then(Commands.argument("height", FloatArgumentType.floatArg())
                             .executes { setEyeHeight(it) { species, height -> species.swimmingEyeHeight = height } })
-                    ))
+                    )
+                    .then(
+                        Commands.literal("battling").then(Commands.argument("height", FloatArgumentType.floatArg())
+                            .executes { setEyeHeight(it) { species, height -> species.battlingEyeHeight = height } })
+                    )
+            )
         dispatcher.register(command)
     }
 

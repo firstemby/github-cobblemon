@@ -91,6 +91,7 @@ class Species : ShowdownIdentifiable {
     var standingEyeHeight: Float? = null
     var swimmingEyeHeight: Float? = null
     var flyingEyeHeight: Float? = null
+    var battlingEyeHeight: Float? = null
     var behaviour = PokemonBehaviour()
         private set
     var pokedex = mutableListOf<String>()
@@ -221,6 +222,7 @@ class Species : ShowdownIdentifiable {
     private fun resolveEyeHeight(entity: PokemonEntity): Float? = when {
         entity.getCurrentPoseType() in SWIMMING_POSES -> this.swimmingEyeHeight ?: standingEyeHeight
         entity.getCurrentPoseType() in FLYING_POSES -> this.flyingEyeHeight ?: standingEyeHeight
+        entity.isBattling -> this.battlingEyeHeight ?: standingEyeHeight
         else -> this.standingEyeHeight
     }
 
