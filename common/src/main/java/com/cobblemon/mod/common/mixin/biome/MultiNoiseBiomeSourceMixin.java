@@ -23,17 +23,16 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -59,28 +58,12 @@ import java.util.function.Function;
  * Only placements matching the preset used by this biome source are appended.
  * </p>
  *
- * <p>
- * Also logs, once per biome per chunk, whenever a data-driven biome is actually generated
- * (with block coordinates and a ready-to-use /tp command). See {@link #DEBUG_LOG_BIOME_SIGHTINGS}.
- * </p>
- *
  * @author MeAlam
  * @since April 9th 2026
  */
 @Mixin(value = MultiNoiseBiomeSource.class, priority = 850)
 public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 
-	/**
-	 * Flip to false to silence the per-chunk biome sighting log.
-	 */
-	@Unique
-	private static final boolean DEBUG_LOG_BIOME_SIGHTINGS = false;
-
-	/**
-	 * Chunks (as packed long) in which each data-driven biome was already logged.
-	 */
-	@Unique
-	private static final Map<ResourceLocation, Set<Long>> cobblemon$loggedChunks = new ConcurrentHashMap<>();
 
 	@Shadow
 	protected abstract Climate.ParameterList<Holder<Biome>> parameters();
@@ -105,8 +88,12 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 
 	@WrapOperation(
 			method = "parameters",
-			at = @At(value = "INVOKE", target = "Lcom/mojang/datafixers/util/Either;map(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;"),
-			remap = false
+			at = @At(
+					value = "INVOKE",
+					target = "Lcom/mojang/datafixers/util/Either;map(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;",
+					remap = false
+			),
+			require = 1
 	)
 	private Object cobblemon$injectBiomes(
 			Either<Climate.ParameterList<RegistryAccess.RegistryEntry<Biome>>,
@@ -129,6 +116,11 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 				ResourceLocation presetId = cobblemon$resolvePresetId(presetSource.orElse(null));
 
 				if (presetId == null) {
+					Cobblemon.LOGGER.warn(
+							"[BIOME] Could not resolve a preset id for this biome source (left present: {}, right: {}). No cobblemon biomes will be added to it.",
+							instance.left().isPresent(),
+							presetSource.map(source -> source.getClass().getName()).orElse("empty")
+					);
 					cobblemon$parameters = originalEntries;
 					return cobblemon$parameters;
 				}
@@ -180,51 +172,6 @@ public abstract class MultiNoiseBiomeSourceMixin extends BiomeSource {
 				cobblemon$parameters = new Climate.ParameterList<>(parameterList);
 			}
 			return cobblemon$parameters;
-		}
-	}
-
-	/**
-	 * TODO
-	 * TEMPORARY: Logs where data-driven biomes are actually generated.
-	 * Coordinates arrive in quart units (4x4x4 blocks), so they are converted to blocks.
-	 * Logged once per biome per chunk to avoid spam.
-	 */
-	@Inject(method = "getNoiseBiome(IIILnet/minecraft/world/level/biome/Climate$Sampler;)Lnet/minecraft/core/Holder;", at = @At("RETURN"))
-	private void cobblemon$logBiomeSightings(
-			int quartX,
-			int quartY,
-			int quartZ,
-			Climate.Sampler sampler,
-			CallbackInfoReturnable<Holder<Biome>> cir
-	) {
-		if (!DEBUG_LOG_BIOME_SIGHTINGS) {
-			return;
-		}
-
-		Optional<ResourceKey<Biome>> key = cir.getReturnValue().unwrapKey();
-		if (key.isEmpty()) {
-			return;
-		}
-
-		ResourceLocation location = key.get().location();
-		if (!CobblemonBiomeLoader.getLoadedBiomes().containsKey(location)) {
-			return;
-		}
-
-		int blockX = quartX << 2;
-		int blockY = quartY << 2;
-		int blockZ = quartZ << 2;
-		long chunk = ChunkPos.asLong(blockX >> 4, blockZ >> 4);
-
-		Set<Long> seen = cobblemon$loggedChunks.computeIfAbsent(location, k -> ConcurrentHashMap.newKeySet());
-		if (seen.add(chunk)) {
-			Cobblemon.LOGGER.info(
-					"[BIOME] Biome {} generated at x={} y={} z={} (chunk {}, {}) -> /tp @s {} {} {}",
-					location,
-					blockX, blockY, blockZ,
-					blockX >> 4, blockZ >> 4,
-					blockX, blockY, blockZ
-			);
 		}
 	}
 }
