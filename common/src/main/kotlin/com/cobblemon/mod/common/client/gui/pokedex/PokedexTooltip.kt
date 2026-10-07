@@ -16,13 +16,17 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
+import java.util.Optional
 
 private val tooltipEdge = cobblemonResource("textures/gui/pokedex/tooltip_edge.png")
 private val tooltipBackground = cobblemonResource("textures/gui/pokedex/tooltip_background.png")
 
 private const val TOOLTIP_SLICE_SIZE = 11
+private const val TOOLTIP_MAX_TEXT_WIDTH = 160
 
 fun renderTooltip(
     context: GuiGraphics,
@@ -49,7 +53,12 @@ fun renderTooltip(
     posY: Int,
     delta: Float,
     offsetY: Int = 0,
+    maxTextWidth: Int = TOOLTIP_MAX_TEXT_WIDTH,
 ) {
+    val text = text.flatMap { wrapTooltipLine(it, maxTextWidth) }
+    // Only a tooltip that fits on a single line is centered; wrapped text is left-aligned
+    val centered = text.size == 1
+
     val poseStack = context.pose()
     val textWidth = text.maxOf { Minecraft.getInstance().font.width(it.font(CobblemonResources.DEFAULT_LARGE)) }
     val tooltipPadding = 6
@@ -78,8 +87,6 @@ fun renderTooltip(
     blitSlicedVertical(poseStack, tooltipBackground, posX - (tooltipWidth / 2), tooltipTop, tooltipWidth, totalHeight)
     blitSlicedVertical(poseStack, tooltipEdge, posX + (tooltipWidth / 2), tooltipTop, 1, totalHeight)
 
-    val centered = text.size == 1
-
     text.forEachIndexed { index, it ->
         drawScaledText(
             context = context,
@@ -93,6 +100,20 @@ fun renderTooltip(
     }
 
     poseStack.popPose()
+}
+
+private fun wrapTooltipLine(line: MutableComponent, maxWidth: Int): List<MutableComponent> {
+    val styled = line.copy().font(CobblemonResources.DEFAULT_LARGE)
+    if (Minecraft.getInstance().font.width(styled) <= maxWidth) return listOf(line)
+
+    return Minecraft.getInstance().font.splitter.splitLines(styled, maxWidth, Style.EMPTY).map { wrapped ->
+        val component = Component.empty()
+        wrapped.visit({ style, string ->
+            component.append(Component.literal(string).withStyle(style))
+            Optional.empty<Unit>()
+        }, Style.EMPTY)
+        component
+    }
 }
 
 // Stretching the whole 11px image over an arbitrary height thickens the caps as more lines are added, so

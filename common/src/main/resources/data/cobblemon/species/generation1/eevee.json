@@ -166,17 +166,6 @@
   ],
   "evolutions": [
     {
-      "id": "eevee_jolteon",
-      "variant": "item_interact",
-      "result": "jolteon",
-      "consumeHeldItem": false,
-      "learnableMoves": [
-        "thundershock"
-      ],
-      "requirements": [],
-      "requiredContext": "cobblemon:thunder_stone"
-    },
-    {
       "id": "eevee_vaporeon",
       "variant": "item_interact",
       "result": "vaporeon",
@@ -186,6 +175,17 @@
       ],
       "requirements": [],
       "requiredContext": "cobblemon:water_stone"
+    },
+    {
+      "id": "eevee_jolteon",
+      "variant": "item_interact",
+      "result": "jolteon",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "thundershock"
+      ],
+      "requirements": [],
+      "requiredContext": "cobblemon:thunder_stone"
     },
     {
       "id": "eevee_flareon",
@@ -238,26 +238,6 @@
       ]
     },
     {
-      "id": "eevee_sylveon",
-      "variant": "level_up",
-      "result": "sylveon",
-      "consumeHeldItem": false,
-      "learnableMoves": [
-        "fairywind",
-        "disarmingvoice"
-      ],
-      "requirements": [
-        {
-          "variant": "friendship",
-          "amount": 160
-        },
-        {
-          "variant": "has_move_type",
-          "type": "fairy"
-        }
-      ]
-    },
-    {
       "id": "eevee_leafeon",
       "variant": "item_interact",
       "result": "leafeon",
@@ -278,6 +258,26 @@
       ],
       "requirements": [],
       "requiredContext": "cobblemon:ice_stone"
+    },
+    {
+      "id": "eevee_sylveon",
+      "variant": "level_up",
+      "result": "sylveon",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "fairywind",
+        "disarmingvoice"
+      ],
+      "requirements": [
+        {
+          "variant": "friendship",
+          "amount": 160
+        },
+        {
+          "variant": "has_move_type",
+          "type": "fairy"
+        }
+      ]
     }
   ],
   "forms": [

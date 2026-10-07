@@ -241,7 +241,26 @@ class EvolutionTreeWidget(
             }
         }
 
-        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, children, renderData)
+        val renderDataAlternatives = if (evolution != null) listOf(renderData ?: RenderEvolutionData(emptyList(), emptyList())) else emptyList()
+        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, mergeEquivalentChildren(children), renderDataAlternatives)
+    }
+
+    private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {
+        return children
+            .groupBy { Triple(it.pokedexEntry.speciesId, it.pokedexForm.displayForm.lowercase(), it.aspects) }
+            .values
+            .map { group ->
+                if (group.size == 1) return@map group.first()
+                val first = group.first()
+                EvolutionNode(
+                    first.pokedexEntry,
+                    first.pokedexForm,
+                    first.aspects,
+                    first.pokedexEntryProgress,
+                    first.children,
+                    group.flatMap { it.renderDataAlternatives }
+                )
+            }
     }
 
     private fun renderTreeDrawingNode(
@@ -261,10 +280,10 @@ class EvolutionTreeWidget(
             val lineEndX = childX
             val lineY = treeY + SCROLL_SLOT_SIZE / 2
 
-            child.value.renderData?.let { renderData ->
+            child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
                 drawEvolutionInfo(
                     guiGraphics,
-                    renderData,
+                    alternatives,
                     lineStartX,
                     lineEndX,
                     lineY,
@@ -302,10 +321,10 @@ class EvolutionTreeWidget(
                 val lineEndX = childX
                 val lineY = childY + SCROLL_SLOT_SIZE / 2
 
-                child.value.renderData?.let { renderData ->
+                child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
                     drawEvolutionInfo(
                         guiGraphics,
-                        renderData,
+                        alternatives,
                         lineStartX,
                         lineEndX,
                         lineY,
@@ -408,7 +427,7 @@ class EvolutionTreeWidget(
 
     private fun drawEvolutionInfo(
         guiGraphics: GuiGraphics,
-        renderData: RenderEvolutionData,
+        renderDataAlternatives: List<RenderEvolutionData>,
         lineStartX: Int,
         lineEndX: Int,
         lineY: Int,
@@ -416,6 +435,9 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
+        val icons = renderDataAlternatives.flatMap { it.icons }.distinct()
+        val tooltips = combineAlternativeTooltips(renderDataAlternatives.map { it.tooltips })
+
         val lineXMiddle = (lineStartX + lineEndX) / 2
         val iconX = (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt()
         val iconY = (lineY + ICON_Y_PADDING - ICON_SLOT_HALF_PADDING).toInt()
@@ -431,7 +453,7 @@ class EvolutionTreeWidget(
             return
         }
 
-        if (renderData.icons.isEmpty()) {
+        if (icons.isEmpty()) {
             guiGraphics.hLine(
                 lineStartX,
                 lineEndX,
@@ -462,8 +484,8 @@ class EvolutionTreeWidget(
                 height = iconSize,
             )
 
-            val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % renderData.icons.size
-            val item = renderData.icons[index.toInt()]
+            val index = (System.currentTimeMillis() / MILLIS_BETWEEN_ICONS_CYCLE) % icons.size
+            val item = icons[index.toInt()]
 
             renderScaledGuiItemIcon(
                 itemStack = item.defaultInstance,
@@ -484,11 +506,34 @@ class EvolutionTreeWidget(
             iconY.toInt() + iconSize,
         )
 
-        if (renderData.tooltips.isNotEmpty() &&
+        if (tooltips.isNotEmpty() &&
             (isLineHovered || isIconHovered) &&
             this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
-            hoveredTooltips = renderData.tooltips
+            hoveredTooltips = tooltips
+        }
+    }
+
+    private fun combineAlternativeTooltips(alternatives: List<List<MutableComponent>>): List<MutableComponent> {
+        val groups = alternatives.filter { it.isNotEmpty() }
+        if (groups.size <= 1) return groups.firstOrNull() ?: emptyList()
+
+        val sharedStrings = groups.map { group -> group.map { it.string }.toSet() }.reduce { acc, strings -> acc intersect strings }
+        val shared = groups.first().filter { it.string in sharedStrings }.distinctBy { it.string }
+        val remainders = groups
+            .map { group -> group.filter { it.string !in sharedStrings } }
+            .distinctBy { group -> group.map { it.string } }
+
+        // An alternative needing nothing beyond the shared lines makes the others irrelevant
+        if (remainders.any { it.isEmpty() }) return shared
+        if (remainders.size == 1) return shared + remainders.first()
+
+        return if (remainders.all { it.size == 1 }) {
+            shared + lang("ui.pokedex.evolution.one_of").bold() + remainders.map { it.first() }
+        } else {
+            shared + remainders.flatMapIndexed { index, group ->
+                if (index == 0) group else listOf(lang("ui.pokedex.evolution.or").bold()) + group
+            }
         }
     }
 
@@ -566,6 +611,6 @@ class EvolutionTreeWidget(
         val aspects: Set<String>,
         val pokedexEntryProgress: PokedexEntryProgress,
         override val children: List<EvolutionNode>,
-        val renderData: RenderEvolutionData?,
+        val renderDataAlternatives: List<RenderEvolutionData>,
     ) : TreeNode<EvolutionNode>
 }

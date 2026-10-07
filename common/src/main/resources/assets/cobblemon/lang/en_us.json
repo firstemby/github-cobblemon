@@ -1477,6 +1477,8 @@
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_species": "Evolves when traded with %1$s",
   "cobblemon.ui.pokedex.evolution.trade.tooltip.with_any_species": "Evolves when traded",
   "cobblemon.ui.pokedex.evolution.shedder.tooltip": "Also requires a spare Poké Ball and an empty party slot",
+  "cobblemon.ui.pokedex.evolution.or": "OR",
+  "cobblemon.ui.pokedex.evolution.one_of": "One of:",
 
   "cobblemon.ui.pokedex.requirement.advancement.tooltip": "Player must have %1$s advancement",
   "cobblemon.ui.pokedex.requirement.battle_critical_hits.tooltip": "Must hit %1$s critical-hits in battle",
@@ -1493,6 +1495,9 @@
   "cobblemon.ui.pokedex.requirement.level.tooltip.min": "Evolves starting at level %1$s",
   "cobblemon.ui.pokedex.requirement.level.tooltip.between": "Evolves between levels %1$s and %2$s",
   "cobblemon.ui.pokedex.requirement.moon_phase.tooltip": "Must evolve in %1$s moon phase",
+  "cobblemon.ui.pokedex.requirement.nature.toxtricity_amped": "Must have a §aHardy§r, §aBrave§r, §aAdamant§r, §aNaughty§r, §aDocile§r, §aImpish§r, §aLax§r, §aHasty§r, §aJolly§r, §aNaive§r, §aRash§r, §aSassy§r, or §aQuirky§r nature",
+  "cobblemon.ui.pokedex.requirement.nature.toxtricity_low_key": "Must have a §aLonely§r, §aBold§r, §aRelaxed§r, §aTimid§r, §aSerious§r, §aModest§r, §aMild§r, §aQuiet§r, §aBashful§r, §aCalm§r, §aGentle§r, or §aCareful§r nature",
+  "cobblemon.ui.pokedex.requirement.nickname.malamar": "Must be named §aDinnerbone§r or §aGrumm§r",
   "cobblemon.ui.pokedex.requirement.party_member.anticondition.tooltip": "Party must not have a Pokémon with %1$s",
   "cobblemon.ui.pokedex.requirement.party_member.tooltip": "Party must have a Pokémon with %1$s",
   "cobblemon.ui.pokedex.requirement.pokemon_properties.tooltip": "Must be %1$s",
