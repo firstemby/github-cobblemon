@@ -1262,7 +1262,7 @@
     "cobblemon.battle.error.no_pokemon": "戦えるポケモンが いない！",
     "cobblemon.battle.error.no_pokemon_opponent": "相手の 手元に 戦える ポケモンが いない！",
     "cobblemon.battle.error.insufficient_pokemon": "%1$sは 使えるポケモンが %3体 必要なのに %2体しか 持っていない！",
-    "cobblemon.battle.error.insufficient_pokemon.personal": "使えるポケモンが %2体 必要なのに %1体しか 持っていない！",
+    "cobblemon.battle.error.insufficient_pokemon.personal": "使えるポケモンが %2$s体 必要なのに %1$s体しか 持っていない！",
     "cobblemon.battle.error.pokemon_is_trapped": "[無効な選択] 閉じこめられているので ポケモンを 戻すことが できない！",
     "cobblemon.battle.error.canceled": "こういった ものには 使いどきが ある！",
     "cobblemon.battle.immune": "%1$sには 効果が ないようだ……",
