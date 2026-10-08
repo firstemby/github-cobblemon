@@ -92,10 +92,10 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
             }
 
             result.add(DexEvolutionDisplay(
-                fromSpecies = form.species.name,
+                fromSpecies = form.species.resourceIdentifier,
                 fromForm = form.name,
                 fromAspects = form.aspects.toSet(),
-                toSpecies = resultPokemon.species.name,
+                toSpecies = resultPokemon.species.resourceIdentifier,
                 toForm = resultPokemon.form.name,
                 toAspects = resultPokemon.aspects,
                 icons = icons,

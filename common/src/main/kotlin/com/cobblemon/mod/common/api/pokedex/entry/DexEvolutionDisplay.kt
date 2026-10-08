@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
@@ -31,10 +32,10 @@ import net.minecraft.world.level.levelgen.structure.Structure
 import kotlin.jvm.optionals.getOrNull
 
 data class DexEvolutionDisplay(
-    val fromSpecies: String,
+    val fromSpecies: ResourceLocation,
     val fromForm: String,
     val fromAspects: Set<String>,
-    val toSpecies: String,
+    val toSpecies: ResourceLocation,
     val toForm: String,
     val toAspects: Set<String>,
     val icons: List<Item>,

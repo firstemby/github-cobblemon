@@ -25,8 +25,6 @@ interface PreEvolution {
 
     val form: FormData
 
-    fun resolveForm(extraAspects: Set<String> = emptySet()): FormData = form
-
     companion object {
 
         fun of(species: Species, form: FormData = species.standardForm): PreEvolution = StandardPreEvolution(species, form)

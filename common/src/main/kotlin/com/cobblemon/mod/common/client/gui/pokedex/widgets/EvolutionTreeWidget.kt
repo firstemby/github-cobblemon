@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
+import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
@@ -146,9 +147,24 @@ class EvolutionTreeWidget(
         if (pokedexEntry == null || pokedexForm == null) return
 
         updatePositioning()
+        var rootSpecies = pokedexEntry
+        var rootForm = pokedexForm
+        var preEvolution = DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == rootSpecies.speciesId && it.toForm == rootForm.displayForm }
+        while (preEvolution != null) {
+            rootSpecies = Dexes.findDexEntryBySpeciesId(preEvolution.fromSpecies)!!
+            rootForm = rootSpecies.forms.first { it.displayForm.equals(preEvolution.fromForm, ignoreCase = true) }
+            preEvolution = DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == rootSpecies.speciesId && it.toForm == rootForm.displayForm }
+        }
 
-        val (rootPokedexEntry, rootPokedexForm) = Dexes.findRootDexEntryBySpeciesId(pokedexEntry.speciesId, pokedexForm.displayForm)
-        val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, rootPokedexForm, null)
+        val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.speciesId)
+            ?: throw RuntimeException("Root dex entry not found")
+
+        val formEquivalents = Dexes.getFormEquivalents(rootForm.displayForm)
+        val form =
+            entry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
+            entry.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
+
+        val rootEvolutionNode = buildEvolutionTree(entry, form)
 
 //        val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
 //        val isSameForm =
@@ -188,56 +204,21 @@ class EvolutionTreeWidget(
         pokedexEntry: PokedexEntry,
         pokedexForm: PokedexForm,
     ): EvolutionNode {
-        val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
+        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, mutableSetOf())
 
-        val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
-        val form = species.forms.firstOrNull { formEquivalents.contains(it.name.lowercase()) }
-        val parentSpecies = Dexes.findDexEntryBySpeciesId(species.resourceIdentifier)!!
-        val parentPokedexForm = parentSpecies.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
+        val evolutions = DexEntries.evolutionDisplays.filter { it.fromSpecies == pokedexEntry.speciesId }
 
-        val aspects = resultProperties?.aspects?.toMutableSet() ?: mutableSetOf()
-        form?.aspects?.let { aspects.addAll(it) }
-
-        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects)
-
-        val evolutions = form?.evolutions ?: species.evolutions
-
-        val children = evolutions.flatMap { evolution ->
-            val baseRenderData = renderEvolutionData(evolution)
-
-            listOfNotNull(evolution.result, evolution.shedder).mapNotNull { resultProperties ->
-                val resultSpecies = resultProperties.species
-                    ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
-                    ?: return@mapNotNull null
-                
-                val resultForm = resultSpecies.getForm(aspects + resultProperties.aspects)
-
-                val speciesId = resultSpecies.resourceIdentifier
-                val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)
-
-                if (childPokedexEntry == null) {
-                    Cobblemon.LOGGER.warn("Dex entry not found for species: $speciesId")
-                    return@mapNotNull null
-                }
-
-                val formEquivalents = Dexes.getFormEquivalents(resultForm.name.lowercase())
-                val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
-
-                val childRenderData = if (resultProperties === evolution.shedder) {
-                    DexEvolutionDisplay(
-                        icons = (baseRenderData?.icons ?: emptyList()) + CobblemonItems.POKE_BALL,
-                        tooltips = (baseRenderData?.tooltips ?: emptyList()) + lang("ui.pokedex.evolution.shedder.tooltip"),
-                    )
-                } else {
-                    baseRenderData
-                }
-
-                return@mapNotNull buildEvolutionTree(childPokedexEntry, childPokedexForm, evolution, resultProperties, childRenderData)
+        val children = evolutions.mapNotNull {
+            val childPokedexEntry = Dexes.findDexEntryBySpeciesId(it.toSpecies)
+            if (childPokedexEntry == null) {
+                Cobblemon.LOGGER.warn("Dex entry not found for species: ${it.toSpecies}")
+                return@mapNotNull null
             }
+            val formEquivalents = Dexes.getFormEquivalents(it.toForm.lowercase())
+            val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
+            buildEvolutionTree(childPokedexEntry, childPokedexForm)
         }
-
-        val renderDataAlternatives = if (evolution != null) listOf(renderData ?: DexEvolutionDisplay(emptyList(), emptyList())) else emptyList()
-        return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, mergeEquivalentChildren(children), renderDataAlternatives)
+        return EvolutionNode(pokedexEntry, pokedexForm, mutableSetOf(), discoveryLevel, mergeEquivalentChildren(children), emptyList())
     }
 
     private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {

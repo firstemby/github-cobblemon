@@ -27,10 +27,10 @@ class DexEvolutionDisplaySyncPacket(entries: MutableList<DexEvolutionDisplay>)
     override val id = ID
 
     override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: DexEvolutionDisplay) {
-        buffer.writeString(entry.fromSpecies)
+        buffer.writeIdentifier(entry.fromSpecies)
         buffer.writeString(entry.fromForm)
         buffer.writeCollection(entry.fromAspects) { _, aspect -> buffer.writeString(aspect) }
-        buffer.writeString(entry.toSpecies)
+        buffer.writeIdentifier(entry.toSpecies)
         buffer.writeString(entry.toForm)
         buffer.writeCollection(entry.toAspects) { _, aspect -> buffer.writeString(aspect) }
         buffer.writeCollection(entry.icons) { _, icon ->
@@ -40,10 +40,10 @@ class DexEvolutionDisplaySyncPacket(entries: MutableList<DexEvolutionDisplay>)
     }
 
     override fun decodeEntry(buffer: RegistryFriendlyByteBuf): DexEvolutionDisplay? {
-        val fromSpecies = buffer.readString()
+        val fromSpecies = buffer.readIdentifier()
         val fromForm = buffer.readString()
         val fromAspects = buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() }
-        val toSpecies = buffer.readString()
+        val toSpecies = buffer.readIdentifier()
         val toForm = buffer.readString()
         val toAspects = buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() }
         val icons = buffer.readCollection(Sets::newHashSetWithExpectedSize) { BuiltInRegistries.ITEM.get(buffer.readIdentifier()) }.toList()

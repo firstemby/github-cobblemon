@@ -72,30 +72,6 @@ object Dexes : JsonDataRegistry<PokedexDef> {
         return findDexEntryBySpeciesId(cobblemonResource("national"), speciesId)
     }
 
-    fun findRootDexEntryBySpeciesId(speciesId: ResourceLocation, formName: String): Pair<PokedexEntry, PokedexForm> {
-        var rootSpecies = PokemonSpecies.getByIdentifier(speciesId)!!
-        val initialFormEquivalents = getFormEquivalents(formName)
-        var rootForm = rootSpecies.forms.firstOrNull { initialFormEquivalents.contains(it.name.lowercase()) }
-            ?: rootSpecies.standardForm
-
-        var preEvolution = rootForm.preEvolution
-        while (preEvolution != null) {
-            rootSpecies = preEvolution.species
-            rootForm = preEvolution.resolveForm(rootForm.aspects.toSet())
-            preEvolution = rootForm.preEvolution
-        }
-
-        val entry = findDexEntryBySpeciesId(rootSpecies.resourceIdentifier)
-            ?: throw RuntimeException("Root dex entry not found")
-
-        val formEquivalents = getFormEquivalents(rootForm.name)
-        val form =
-            entry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
-            entry.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
-
-        return entry to form
-    }
-
     fun getFormEquivalents(formName: String): List<String> {
         val key = equivalentFormsLookup[formName.lowercase()]
         return equivalentForms[key] ?: listOf(formName.lowercase())

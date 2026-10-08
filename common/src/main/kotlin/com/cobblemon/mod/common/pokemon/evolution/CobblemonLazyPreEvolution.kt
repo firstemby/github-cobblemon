@@ -37,8 +37,4 @@ internal class CobblemonLazyPreEvolution(private val rawData: String) : PreEvolu
         get() = this.lazySpecies
     override val form: FormData
         get() = this.lazyForm
-
-    override fun resolveForm(extraAspects: Set<String>): FormData {
-        return if (extraAspects.isEmpty()) this.form else computeForm(extraAspects)
-    }
 }
