@@ -35,13 +35,16 @@ import com.cobblemon.mod.common.util.DataKeys;
 import com.cobblemon.mod.common.world.gamerules.CobblemonGameRules;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,6 +53,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -369,6 +373,35 @@ public abstract class PlayerMixin extends LivingEntity implements ScannableEntit
     @Override
     public void cobblemon$setRideEyePos(Vec3 rideEyePos) {
         this.cobblemon$rideEyePos = rideEyePos;
+    }
+
+    /**
+     * Sweeping attacks apply post-attack enchantment effects (e.g. Fire Aspect) to every entity caught
+     * in the sweep, even if the damage itself was blocked. Skip them for Pokémon immune to the attack.
+     */
+    @WrapOperation(
+            method = "attack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;doPostAttackEffects(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V")
+    )
+    private void cobblemon$skipPostAttackEffectsOnImmunePokemon(ServerLevel level, Entity target, DamageSource source, Operation<Void> original) {
+        if (target instanceof PokemonEntity pokemonEntity && pokemonEntity.isInvulnerableTo(source)) {
+            return;
+        }
+        original.call(level, target, source);
+    }
+
+    /**
+     * Sweeping attacks also knock back every entity caught in the sweep regardless of whether it took damage.
+     */
+    @WrapOperation(
+            method = "attack",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V")
+    )
+    private void cobblemon$skipKnockbackOnImmunePokemon(LivingEntity target, double strength, double x, double z, Operation<Void> original, @Local DamageSource source) {
+        if (target instanceof PokemonEntity pokemonEntity && pokemonEntity.isInvulnerableTo(source)) {
+            return;
+        }
+        original.call(target, strength, x, z);
     }
 
 }

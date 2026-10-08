@@ -24,6 +24,7 @@
 
 ### Fixes
 - Medicinal Leeks can now be eaten when they aren't being planted, matching their food properties.
+- Sweeping attacks no longer set owned Pokémon on fire (e.g. with Fire Aspect) or knock them back.
 - Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
 ### TEST
 ### Pokémon Added
