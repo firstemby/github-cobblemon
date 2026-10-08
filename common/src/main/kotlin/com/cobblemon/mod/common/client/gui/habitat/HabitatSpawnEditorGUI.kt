@@ -17,6 +17,7 @@ import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.lang
 import java.awt.Color
 import net.minecraft.client.Minecraft
@@ -328,7 +329,7 @@ class HabitatSpawnEditorGUI(
     private fun parseSpecies(value: String): Species? {
         val lowered = value.lowercase()
         pokemonSpeciesByTranslatedName[lowered]?.let { return it }
-        return runCatching { PokemonSpecies.getByName(lowered) }.getOrNull()
+        return runCatching { PokemonSpecies.getByIdentifier(lowered.asIdentifierDefaultingNamespace()) }.getOrNull()
     }
 
     private fun parsePhases(raw: String): IntRanges? {

@@ -18,7 +18,7 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.DummyEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.LevelUpEvolution
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
-import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.itemRegistry
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
@@ -105,7 +105,7 @@ fun renderTradeEvolution(tradeEvolution: TradeEvolution): RenderEvolutionData? {
     if (species == null) {
         tooltips.add(lang("ui.pokedex.evolution.trade.tooltip.with_any_species"))
     } else {
-        PokemonSpecies.getByIdentifier(cobblemonResource(species))?.let {
+        PokemonSpecies.getByIdentifier(species.asIdentifierDefaultingNamespace())?.let {
             tooltips.add(lang("ui.pokedex.evolution.trade.tooltip.with_species", it.translatedName.green()))
         }
     }

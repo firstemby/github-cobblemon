@@ -21,7 +21,6 @@ import com.cobblemon.mod.common.api.text.green
 import com.cobblemon.mod.common.api.types.ElementalTypes
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.locale.Language
@@ -36,7 +35,7 @@ internal fun describePokemonProperties(properties: PokemonProperties): MutableCo
 
     val descriptors = mutableListOf<MutableComponent>()
 
-    properties.species?.let { PokemonSpecies.getByIdentifier(cobblemonResource(it)) }?.let {
+    properties.species?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }?.let {
         descriptors.add(it.translatedName.plainCopy().green())
     }
     properties.gender?.let {
@@ -136,7 +135,7 @@ private fun describeStringSpeciesFeature(property: StringSpeciesFeature): Mutabl
         return null
     }
 
-    val value = PokemonSpecies.getByIdentifier(cobblemonResource(property.value))?.translatedName?.plainCopy()
+    val value = PokemonSpecies.getByIdentifier(property.value.asIdentifierDefaultingNamespace())?.translatedName?.plainCopy()
         ?: Component.literal(property.value)
 
     return lang(key, value.green())
