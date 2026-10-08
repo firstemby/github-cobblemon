@@ -165,6 +165,7 @@
 - Fixed Safari Ball catch rate outside of battle
 - Fixed alpha eye (and other) particles not respecting client particle density setting in video options
 - Fixed TM-Machine UI not closing when player is moving away from it
+- Fixed config category for alpha/shiny chance config fields for fossil machine and honey log slathering to Spawning
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
