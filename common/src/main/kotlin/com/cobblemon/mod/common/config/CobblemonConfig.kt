@@ -405,7 +405,7 @@ class CobblemonConfig {
     var typeGemInitialExpansionCycles = 20
 
     @CobblemonConfigField(Category.World, lang = "type_gem_tick_chance", SERVER)
-    var typeGemTickChance = 0.1f
+    var typeGemTickChance = 1.0f
 
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()
