@@ -167,6 +167,8 @@
 - Fixed TM-Machine UI not closing when player is moving away from it
 - Fixed config category for alpha/shiny chance config fields for fossil machine and honey log slathering to Spawning
 - Fixed crashes for addon species with non-Cobblemon namespaces, in evolution, fishing bait and Pokédex lookups.
+- Bees now grow Apricorns and the Galarica Nut Bush, which were in the bee growables tag but never handled, and correctly spend their nectar when they do
+- Saccharine Leaves can now be bone mealed
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
