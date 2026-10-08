@@ -396,7 +396,7 @@ class CobblemonConfig {
     var typeGemMaxConnected = 16
 
     @CobblemonConfigField(Category.World, lang = "type_gem_min_growth", SERVER)
-    var typeGemMinGrowth = 5
+    var typeGemMinGrowth = 8
 
     @CobblemonConfigField(Category.World, lang = "type_gem_growth_chance", SERVER)
     var typeGemGrowthChance = 0.1f
