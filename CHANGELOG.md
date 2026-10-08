@@ -169,6 +169,7 @@
 - Fixed crashes for addon species with non-Cobblemon namespaces, in evolution, fishing bait and Pokédex lookups.
 - Bees now grow Apricorns and the Galarica Nut Bush, which were in the bee growables tag but never handled, and correctly spend their nectar when they do
 - Saccharine Leaves can now be bone mealed
+- Fixed a server crash when water reached a Campfire Pot block that held no pot
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
