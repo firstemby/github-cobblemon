@@ -13,12 +13,21 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
 
 /**
  * Tails every `update` output from Showdown. Used for picking up any forced switches that need to be done.
+ * Marks every actor that must switch before prompting any of them, since AI actors can respond synchronously.
  *
  * @author Hiroku
  * @since April 13th, 2026
  */
 object PostUpdateInstruction : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
-        battle.dispatchGo { battle.actors.forEach { it.postUpdate() } }
+        battle.dispatchGo {
+            val actors = battle.actors
+            actors.forEach { actor ->
+                if (actor.request?.forceSwitch?.any { it } == true) {
+                    actor.mustChoose = true
+                }
+            }
+            actors.forEach { it.postUpdate() }
+        }
     }
 }
