@@ -5,31 +5,53 @@
   "conditionAspects": [],
   "forms": [
     {
+      "displayForm": "Meteor",
+      "unlockForms": [
+        "Meteor"
+      ]
+    },
+    {
       "displayForm": "Normal",
       "unlockForms": [
         "Normal"
       ]
     },
     {
-      "displayForm": "Meteor",
+      "displayForm": "Orange",
       "unlockForms": [
-        "Meteor"
+        "Orange"
+      ]
+    },
+    {
+      "displayForm": "Yellow",
+      "unlockForms": [
+        "Yellow"
+      ]
+    },
+    {
+      "displayForm": "Green",
+      "unlockForms": [
+        "Green"
+      ]
+    },
+    {
+      "displayForm": "Blue",
+      "unlockForms": [
+        "Blue"
+      ]
+    },
+    {
+      "displayForm": "Indigo",
+      "unlockForms": [
+        "Indigo"
+      ]
+    },
+    {
+      "displayForm": "Violet",
+      "unlockForms": [
+        "Violet"
       ]
     }
   ],
-  "variations": [
-    {
-      "displayName": "cobblemon.pokedex.variation.color",
-      "icon": "cobblemon:textures/gui/pokedex/variation/color.png",
-      "aspects": [
-        "red-core",
-        "orange-core",
-        "yellow-core",
-        "green-core",
-        "blue-core",
-        "indigo-core",
-        "violet-core"
-      ]
-    }
-  ]
+  "variations": []
 }
