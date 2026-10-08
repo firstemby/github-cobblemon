@@ -1,27 +1,24 @@
-/*
- * Copyright (C) 2023 Cobblemon Contributors
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
+package com.cobblemon.mod.common.api.pokedex.entry
 
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.conditional.RegistryLikeCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeIdentifierCondition
 import com.cobblemon.mod.common.api.conditional.RegistryLikeTagCondition
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.pokemon.feature.IntSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.feature.SpeciesFeatures
 import com.cobblemon.mod.common.api.pokemon.requirement.Requirement
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.green
-import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.api.types.ElementalTypes
+import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolution
+import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.pokemon.requirements.*
 import com.cobblemon.mod.common.util.asTranslated
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.itemRegistry
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.core.registries.BuiltInRegistries
@@ -33,76 +30,112 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.structure.Structure
 import kotlin.jvm.optionals.getOrNull
 
-data class RenderRequirementData(
+data class DexEvolutionDisplay(
+    val fromSpecies: String,
+    val fromForm: String,
+    val fromAspects: Set<String>,
+    val toSpecies: String,
+    val toForm: String,
+    val toAspects: Set<String>,
+    val icons: List<Item>,
+    val toolTips: List<Component>,
+)
+
+data class DexEvolutionRequirementDisplay(
     val icon: Item,
     val tooltip: MutableComponent,
 )
 
-fun renderRequirementData(requirement: Requirement): RenderRequirementData? {
-    when (requirement) {
-        is AdvancementRequirement -> return renderAdvancementRequirement(requirement)
-        is AnyRequirement -> return renderAnyRequirement(requirement)
-        is AreaRequirement -> return renderAreaRequirement(requirement)
-        is AttackDefenceRatioRequirement -> return renderAttackDefenceRatioRequirement(requirement)
-        is BattleCriticalHitsRequirement -> return renderBattleCriticalHitsRequirement(requirement)
-        is BiomeRequirement -> return renderBiomeRequirement(requirement)
-        is BlocksTraveledRequirement -> return renderBlocksTraveledRequirement(requirement)
-        is DamageTakenRequirement -> return renderDamageTakenRequirement(requirement)
-        is DefeatRequirement -> return renderDefeatRequirement(requirement)
-        is FriendshipRequirement -> return renderFriendshipRequirement(requirement)
-        is HeldItemRequirement -> return renderHeldItemRequirement(requirement)
-        is LevelRequirement -> return renderLevelRequirement(requirement)
-        is MoonPhaseRequirement -> return renderMoonPhaseRequirement(requirement)
-        is MoveSetRequirement -> return renderMoveSetRequirement(requirement)
-        is MoveTypeRequirement -> return renderMoveTypeRequirement(requirement)
-        is OwnerHoldsItemRequirement -> return renderOwnerHoldsItemRequirement(requirement)
-        is PartyMemberRequirement -> return renderPartyMemberRequirement(requirement)
-        is PokemonPropertiesRequirement -> return renderPokemonPropertiesRequirement(requirement)
-        is PropertyRangeRequirement -> return renderPropertyRangeRequirement(requirement)
-        is RecoilRequirement -> return renderRecoilRequirement(requirement)
-        is StatCompareRequirement -> return renderStatCompareRequirement(requirement)
-        is StatEqualRequirement -> return renderStatEqualRequirement(requirement)
-        is StructureRequirement -> return renderStructureRequirement(requirement)
-        is TimeRangeRequirement -> return renderTimeRangeRequirement(requirement)
-        is UseMoveRequirement -> return renderUseMoveRequirement(requirement)
-        is WeatherRequirement -> return renderWeatherRequirement(requirement)
-        is WorldRequirement -> return renderWorldRequirement(requirement)
+fun getToolTipHeaderIcon(evolution: Evolution): Pair<Item, Component>? {
+    when (evolution) {
+        is ItemInteractionEvolution -> return getToolTipHeaderIcon(evolution)
+        is TradeEvolution -> return getToolTipHeaderIcon(evolution)
     }
 
     return null
 }
 
-fun renderAdvancementRequirement(advancementRequirement: AdvancementRequirement): RenderRequirementData? {
+
+fun getToolTipHeaderIcon(itemInteractionEvolution: ItemInteractionEvolution): Pair<Item, Component> {
+    val item = itemInteractionEvolution.requiredContext.items.get().first().value()
+    return Pair(item, lang("ui.pokedex.evolution.item_interact.tooltip", item.description.plainCopy().green()))
+}
+
+fun getToolTipHeaderIcon(tradeEvolution: TradeEvolution): Pair<Item, Component> {
+    val species = tradeEvolution.requiredContext.species
+    val tooltip = if (species == null) {
+        lang("ui.pokedex.evolution.trade.tooltip.with_any_species")
+    } else {
+        lang("ui.pokedex.evolution.trade.tooltip.with_species", PokemonSpecies.getByIdentifier(cobblemonResource(species))!!.translatedName.green())
+    }
+    return Pair(CobblemonItems.LINK_CABLE, tooltip)
+}
+
+fun resolveRequirementData(requirement: Requirement): DexEvolutionRequirementDisplay? {
+    val icon = requirement.pokedexIcon?.let {
+        Minecraft.getInstance()?.player?.level()?.itemRegistry?.get(it)
+    }
+
+    val tooltip = requirement.pokedexTooltip?.let {
+        Component.translatable(it)
+    }
+
+    if (icon != null && tooltip != null) {
+        return DexEvolutionRequirementDisplay(icon, tooltip)
+    }
+
+    return buildRequirementData(requirement)
+}
+
+fun buildRequirementData(requirement: Requirement): DexEvolutionRequirementDisplay? {
+    when (requirement) {
+        is AdvancementRequirement -> return buildAdvancementRequirement(requirement)
+        is BattleCriticalHitsRequirement -> return buildBattleCriticalHitsRequirement(requirement)
+        is BiomeRequirement -> return buildBiomeRequirement(requirement)
+        is BlocksTraveledRequirement -> return buildBlocksTraveledRequirement(requirement)
+        is DamageTakenRequirement -> return buildDamageTakenRequirement(requirement)
+        is DefeatRequirement -> return buildDefeatRequirement(requirement)
+        is FriendshipRequirement -> return buildFriendshipRequirement(requirement)
+        is HeldItemRequirement -> return buildHeldItemRequirement(requirement)
+        is LevelRequirement -> return buildLevelRequirement(requirement)
+        is MoonPhaseRequirement -> return buildMoonPhaseRequirement(requirement)
+        is MoveSetRequirement -> return buildMoveSetRequirement(requirement)
+        is MoveTypeRequirement -> return buildMoveTypeRequirement(requirement)
+        is OwnerHoldsItemRequirement -> return buildOwnerHoldsItemRequirement(requirement)
+        is PartyMemberRequirement -> return buildPartyMemberRequirement(requirement)
+        is PokemonPropertiesRequirement -> return buildPokemonPropertiesRequirement(requirement)
+        is PropertyRangeRequirement -> return buildPropertyRangeRequirement(requirement)
+        is RecoilRequirement -> return buildRecoilRequirement(requirement)
+        is StatCompareRequirement -> return buildStatCompareRequirement(requirement)
+        is StatEqualRequirement -> return buildStatEqualRequirement(requirement)
+        is StructureRequirement -> return buildStructureRequirement(requirement)
+        is TimeRangeRequirement -> return buildTimeRangeRequirement(requirement)
+        is UseMoveRequirement -> return buildUseMoveRequirement(requirement)
+        is WeatherRequirement -> return buildWeatherRequirement(requirement)
+    }
+
+    return null
+}
+
+fun buildAdvancementRequirement(advancementRequirement: AdvancementRequirement): DexEvolutionRequirementDisplay {
     val icon = Items.BOOK
     val identifier = advancementRequirement.requiredAdvancement
     val advancementLanguageKey = "${identifier.namespace}.${identifier.path.substringAfterLast('/')}"
     val advancementComponent = Component.translatable("advancements.$advancementLanguageKey").green()
     val tooltip = lang("ui.pokedex.requirement.advancement.tooltip", advancementComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderAnyRequirement(anyRequirement: AnyRequirement): RenderRequirementData? {
-    return null
-}
-
-fun renderAreaRequirement(areaRequirement: AreaRequirement): RenderRequirementData? {
-    return null
-}
-
-fun renderAttackDefenceRatioRequirement(attackDefenceRatioRequirement: AttackDefenceRatioRequirement): RenderRequirementData? {
-    return null
-}
-
-fun renderBattleCriticalHitsRequirement(battleCriticalHitsRequirement: BattleCriticalHitsRequirement): RenderRequirementData? {
+fun buildBattleCriticalHitsRequirement(battleCriticalHitsRequirement: BattleCriticalHitsRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.MEDICINAL_LEEK
     val criticalsComponent = Component.literal(battleCriticalHitsRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.battle_critical_hits.tooltip", criticalsComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderBiomeRequirement(biomeRequirement: BiomeRequirement): RenderRequirementData? {
+fun buildBiomeRequirement(biomeRequirement: BiomeRequirement): DexEvolutionRequirementDisplay? {
     val condition = biomeRequirement.biomeCondition
     val anticondition = biomeRequirement.biomeAnticondition
     if (condition == null && anticondition == null) {
@@ -125,32 +158,26 @@ fun renderBiomeRequirement(biomeRequirement: BiomeRequirement): RenderRequiremen
         lang("ui.pokedex.requirement.biome.anticondition.tooltip", displayName(anticondition!!).green())
     }
 
-    val playerBiome = Minecraft.getInstance()?.player?.let { it.level().getBiome(it.blockPosition()) }
-    if (playerBiome != null) {
-        val isMet = (condition == null || condition.fits(playerBiome)) && (anticondition == null || !anticondition.fits(playerBiome))
-        tooltip.add(if (isMet) Component.literal(" ✔").green() else Component.literal(" ✘").red())
-    }
-
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderBlocksTraveledRequirement(blocksTraveledRequirement: BlocksTraveledRequirement): RenderRequirementData? {
+fun buildBlocksTraveledRequirement(blocksTraveledRequirement: BlocksTraveledRequirement): DexEvolutionRequirementDisplay {
     val icon = Items.LEATHER_BOOTS
     val blocksComponent = Component.literal(blocksTraveledRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.blocks_traveled.tooltip", blocksComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderDamageTakenRequirement(damageTakenRequirement: DamageTakenRequirement): RenderRequirementData? {
+fun buildDamageTakenRequirement(damageTakenRequirement: DamageTakenRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.PUNCHING_GLOVE
     val blocksComponent = Component.literal(damageTakenRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.damage_taken.tooltip", blocksComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderDefeatRequirement(defeatRequirement: DefeatRequirement): RenderRequirementData? {
+fun buildDefeatRequirement(defeatRequirement: DefeatRequirement): DexEvolutionRequirementDisplay? {
     val description = describePokemonProperties(defeatRequirement.target) ?: return null
     val icon = CobblemonItems.PUNCHING_GLOVE
     val defeatedAmount = defeatRequirement.amount
@@ -158,18 +185,18 @@ fun renderDefeatRequirement(defeatRequirement: DefeatRequirement): RenderRequire
     val descriptionComponent = Component.literal(defeatedAmount.toString()).green().add(" ").add(description)
     val tooltip = lang("ui.pokedex.requirement.defeat.tooltip", descriptionComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderFriendshipRequirement(friendshipRequirement: FriendshipRequirement): RenderRequirementData? {
+fun buildFriendshipRequirement(friendshipRequirement: FriendshipRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.SOOTHE_BELL
     val friendshipAmountComponent = Component.literal(friendshipRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.friendship.tooltip", friendshipAmountComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderHeldItemRequirement(heldItemRequirement: HeldItemRequirement): RenderRequirementData? {
+fun buildHeldItemRequirement(heldItemRequirement: HeldItemRequirement): DexEvolutionRequirementDisplay? {
     val items = heldItemRequirement.itemCondition.items.getOrNull() ?: return null
     val item = items.firstOrNull()?.value() ?: return null
     val itemComponent = items.unwrapKey().map { tag ->
@@ -179,10 +206,10 @@ fun renderHeldItemRequirement(heldItemRequirement: HeldItemRequirement): RenderR
     }.orElseGet { item.description.plainCopy() }
     val tooltip = lang("ui.pokedex.requirement.held_item.tooltip", itemComponent.green())
 
-    return RenderRequirementData(item, tooltip)
+    return DexEvolutionRequirementDisplay(item, tooltip)
 }
 
-fun renderLevelRequirement(levelRequirement: LevelRequirement): RenderRequirementData? {
+fun buildLevelRequirement(levelRequirement: LevelRequirement): DexEvolutionRequirementDisplay {
     val minLevel = levelRequirement.minLevel
     val maxLevel = levelRequirement.maxLevel
 
@@ -193,25 +220,25 @@ fun renderLevelRequirement(levelRequirement: LevelRequirement): RenderRequiremen
         else
             lang("ui.pokedex.requirement.level.tooltip.between", Component.literal(minLevel.toString()).green(), Component.literal(maxLevel.toString()).green())
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderMoonPhaseRequirement(moonPhaseRequirement: MoonPhaseRequirement): RenderRequirementData? {
+fun buildMoonPhaseRequirement(moonPhaseRequirement: MoonPhaseRequirement): DexEvolutionRequirementDisplay {
     val icon = Items.CLOCK
     val moonPhaseComponent = moonPhaseRequirement.moonPhase.displayName().green()
     val tooltip = lang("ui.pokedex.requirement.moon_phase.tooltip", moonPhaseComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderMoveSetRequirement(moveSetRequirement: MoveSetRequirement): RenderRequirementData? {
+fun buildMoveSetRequirement(moveSetRequirement: MoveSetRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.TECHNICAL_MACHINE
     val tooltip = lang("ui.pokedex.requirement.has_move.tooltip", moveSetRequirement.move.displayName.green())
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): RenderRequirementData? {
+fun buildMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): DexEvolutionRequirementDisplay {
     val type = ElementalTypes.get(moveTypeRequirement.type.name)
     val icon = when (type) {
         ElementalTypes.NORMAL -> CobblemonItems.NORMAL_GEM
@@ -237,17 +264,17 @@ fun renderMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): RenderR
 
     val tooltip = lang("ui.pokedex.requirement.has_move_type.tooltip", moveTypeRequirement.type.displayName.green())
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): RenderRequirementData? {
+fun buildOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): DexEvolutionRequirementDisplay {
     val item = ownerHoldsItemRequirement.itemCondition.items.get().first().value()
     val tooltip = lang("ui.pokedex.requirement.owner_held_item.tooltip", item.description.plainCopy().green())
 
-    return RenderRequirementData(item, tooltip)
+    return DexEvolutionRequirementDisplay(item, tooltip)
 }
 
-fun renderPartyMemberRequirement(partyMemberRequirement: PartyMemberRequirement): RenderRequirementData? {
+fun buildPartyMemberRequirement(partyMemberRequirement: PartyMemberRequirement): DexEvolutionRequirementDisplay? {
     val description = describePokemonProperties(partyMemberRequirement.target) ?: return null
     val icon = CobblemonItems.POKE_BALL
     val tooltip = if (partyMemberRequirement.contains) {
@@ -256,18 +283,18 @@ fun renderPartyMemberRequirement(partyMemberRequirement: PartyMemberRequirement)
         lang("ui.pokedex.requirement.party_member.anticondition.tooltip", description)
     }
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderPokemonPropertiesRequirement(pokemonPropertiesRequirement: PokemonPropertiesRequirement): RenderRequirementData? {
+fun buildPokemonPropertiesRequirement(pokemonPropertiesRequirement: PokemonPropertiesRequirement): DexEvolutionRequirementDisplay? {
     val description = describePokemonProperties(pokemonPropertiesRequirement.target) ?: return null
     val icon = Items.NAME_TAG
     val tooltip = lang("ui.pokedex.requirement.pokemon_properties.tooltip", description)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderPropertyRangeRequirement(propertyRangeRequirement: PropertyRangeRequirement): RenderRequirementData? {
+fun buildPropertyRangeRequirement(propertyRangeRequirement: PropertyRangeRequirement): DexEvolutionRequirementDisplay? {
     val provider = SpeciesFeatures.getFeature(propertyRangeRequirement.feature) as? IntSpeciesFeatureProvider ?: return null
     val displayName = provider.display?.name?.takeIf { it.isNotBlank() }?.asTranslated()?.green() ?: return null
     val icon = provider.itemPoints.keys.firstOrNull()?.let { BuiltInRegistries.ITEM.get(it) } ?: Items.NAME_TAG
@@ -280,18 +307,18 @@ fun renderPropertyRangeRequirement(propertyRangeRequirement: PropertyRangeRequir
         Component.literal(range.last.toString()).green()
     )
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderRecoilRequirement(recoilRequirement: RecoilRequirement): RenderRequirementData? {
+fun buildRecoilRequirement(recoilRequirement: RecoilRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.LIFE_ORB
     val recoilComponent = Component.literal(recoilRequirement.amount.toString()).green()
     val tooltip = lang("ui.pokedex.requirement.recoil.tooltip", recoilComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderStatCompareRequirement(statCompareRequirement: StatCompareRequirement): RenderRequirementData? {
+fun buildStatCompareRequirement(statCompareRequirement: StatCompareRequirement): DexEvolutionRequirementDisplay {
     val highStat = Stats.getStat(statCompareRequirement.highStat)
     val lowStat = Stats.getStat(statCompareRequirement.lowStat)
 
@@ -308,10 +335,10 @@ fun renderStatCompareRequirement(statCompareRequirement: StatCompareRequirement)
     val lowStatComponent = lowStat.displayName.plainCopy().green()
     val tooltip = lang("ui.pokedex.requirement.stat_compare.tooltip", highStatComponent, lowStatComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderStatEqualRequirement(statEqualRequirement: StatEqualRequirement): RenderRequirementData? {
+fun buildStatEqualRequirement(statEqualRequirement: StatEqualRequirement): DexEvolutionRequirementDisplay {
     val statOne = Stats.getStat(statEqualRequirement.statOne)
     val statTwo = Stats.getStat(statEqualRequirement.statTwo)
 
@@ -321,10 +348,10 @@ fun renderStatEqualRequirement(statEqualRequirement: StatEqualRequirement): Rend
     val icon = CobblemonItems.FRESH_START_MOCHI
     val tooltip = lang("ui.pokedex.requirement.stat_equal.tooltip", statOneComponent, statTwoComponent)
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderStructureRequirement(structureRequirement: StructureRequirement): RenderRequirementData? {
+fun buildStructureRequirement(structureRequirement: StructureRequirement): DexEvolutionRequirementDisplay? {
     val condition = structureRequirement.structureCondition
     val anticondition = structureRequirement.structureAnticondition
     if (condition == null && anticondition == null) {
@@ -348,25 +375,25 @@ fun renderStructureRequirement(structureRequirement: StructureRequirement): Rend
         lang("ui.pokedex.requirement.structure.anticondition.tooltip", displayName(anticondition!!).green())
     }
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderTimeRangeRequirement(timeRangeRequirement: TimeRangeRequirement): RenderRequirementData? {
+fun buildTimeRangeRequirement(timeRangeRequirement: TimeRangeRequirement): DexEvolutionRequirementDisplay? {
     val icon = Items.CLOCK
     val timeRangeComponent = timeRangeRequirement.range.displayName() ?: return null
     val tooltip = lang("ui.pokedex.requirement.time_range.tooltip", timeRangeComponent.green())
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderUseMoveRequirement(useMoveRequirement: UseMoveRequirement): RenderRequirementData? {
+fun buildUseMoveRequirement(useMoveRequirement: UseMoveRequirement): DexEvolutionRequirementDisplay {
     val icon = CobblemonItems.CHOICE_BAND
     val tooltip = lang("ui.pokedex.requirement.use_move.tooltip", useMoveRequirement.move.displayName.green())
 
-    return RenderRequirementData(icon, tooltip)
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun renderWeatherRequirement(weatherRequirement: WeatherRequirement): RenderRequirementData? {
+fun buildWeatherRequirement(weatherRequirement: WeatherRequirement): DexEvolutionRequirementDisplay {
     val icon: Item
     val tooltip: MutableComponent
 
@@ -378,9 +405,5 @@ fun renderWeatherRequirement(weatherRequirement: WeatherRequirement): RenderRequ
         tooltip = lang("ui.pokedex.requirement.weather.tooltip.raining")
     }
 
-    return RenderRequirementData(icon, tooltip)
-}
-
-fun renderWorldRequirement(worldRequirement: WorldRequirement): RenderRequirementData? {
-    return null
+    return DexEvolutionRequirementDisplay(icon, tooltip)
 }

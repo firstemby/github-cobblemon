@@ -274,19 +274,6 @@ class FormData(
         return this
     }
 
-    /**
-     * Applies decoded evolution data onto this form, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
-     * after every species has already been registered.
-     */
-    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>?, preEvolution: PreEvolution?) {
-        this._evolutions = evolutions
-        this._preEvolution = preEvolution
-        // These properties are lazy, force resolution now that every species is guaranteed to be registered
-        this.preEvolution?.species
-        this.preEvolution?.form
-        this.evolutions.size
-    }
-
     internal fun resolveEvolutionMoves() {
         this.evolutions.forEach { evolution ->
             if (evolution.learnableMoves.isNotEmpty() && evolution.result.species != null) {

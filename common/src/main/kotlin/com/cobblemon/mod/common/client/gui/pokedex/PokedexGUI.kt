@@ -38,7 +38,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_HEIG
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.BASE_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
-import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HALF_OVERLAY_WIDTH
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.HEADER_BAR_HEIGHT
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.ICONS_ARROW_PADDING_AROUND
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.ICONS_PADDING_AROUND
@@ -52,7 +51,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_MOVES
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.TAB_STATS
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.*
-import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.EvolutionTreeWidget
+import com.cobblemon.mod.common.client.gui.pokedex.widgets.EvolutionTreeWidget
 import com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree.debugEvolutionRequirementRendering
 import com.cobblemon.mod.common.client.pokedex.PokedexType
 import com.cobblemon.mod.common.client.render.drawScaledText

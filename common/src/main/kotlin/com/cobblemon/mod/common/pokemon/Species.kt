@@ -185,7 +185,7 @@ class Species : ShowdownIdentifiable {
     }
 
     /**
-     * Applies decoded evolution data onto this species, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
+     * Applies decoded evolution data onto this species, received separately via [com.cobblemon.mod.common.net.messages.client.data.DexEvolutionDisplaySyncPacket]
      * after every species has already been registered.
      */
     internal fun applyEvolutionData(evolutions: MutableSet<Evolution>, preEvolution: PreEvolution?) {

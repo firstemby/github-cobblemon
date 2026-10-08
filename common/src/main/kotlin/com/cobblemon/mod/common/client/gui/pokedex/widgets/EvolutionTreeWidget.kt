@@ -6,13 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
+package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
+import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -29,7 +30,6 @@ import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.POKEMON_D
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUIConstants.SCROLL_SLOT_SIZE
 import com.cobblemon.mod.common.client.gui.pokedex.ScaledButton
 import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
-import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
@@ -187,9 +187,6 @@ class EvolutionTreeWidget(
     private fun buildEvolutionTree(
         pokedexEntry: PokedexEntry,
         pokedexForm: PokedexForm,
-        evolution: Evolution? = null,
-        resultProperties: PokemonProperties? = evolution?.result,
-        renderData: RenderEvolutionData? = evolution?.let { renderEvolutionData(it) }
     ): EvolutionNode {
         val species = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)!!
 
@@ -205,8 +202,6 @@ class EvolutionTreeWidget(
 
         val evolutions = form?.evolutions ?: species.evolutions
 
-        // Avoid evolution.result.create() here: it builds a full battle-ready Pokemon (initializeMovesetFromDefault
-        // etc.) which relies on server-only data like CobblemonMovesetBuilders and crashes on the client
         val children = evolutions.flatMap { evolution ->
             val baseRenderData = renderEvolutionData(evolution)
 
@@ -229,7 +224,7 @@ class EvolutionTreeWidget(
                 val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
 
                 val childRenderData = if (resultProperties === evolution.shedder) {
-                    RenderEvolutionData(
+                    DexEvolutionDisplay(
                         icons = (baseRenderData?.icons ?: emptyList()) + CobblemonItems.POKE_BALL,
                         tooltips = (baseRenderData?.tooltips ?: emptyList()) + lang("ui.pokedex.evolution.shedder.tooltip"),
                     )
@@ -241,7 +236,7 @@ class EvolutionTreeWidget(
             }
         }
 
-        val renderDataAlternatives = if (evolution != null) listOf(renderData ?: RenderEvolutionData(emptyList(), emptyList())) else emptyList()
+        val renderDataAlternatives = if (evolution != null) listOf(renderData ?: DexEvolutionDisplay(emptyList(), emptyList())) else emptyList()
         return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, mergeEquivalentChildren(children), renderDataAlternatives)
     }
 
@@ -277,7 +272,6 @@ class EvolutionTreeWidget(
             val (childX, _) = getDrawingCoordinates(child)
 
             val lineStartX = treeX + SCROLL_SLOT_SIZE
-            val lineEndX = childX
             val lineY = treeY + SCROLL_SLOT_SIZE / 2
 
             child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
@@ -285,7 +279,7 @@ class EvolutionTreeWidget(
                     guiGraphics,
                     alternatives,
                     lineStartX,
-                    lineEndX,
+                    childX,
                     lineY,
                     mouseX,
                     mouseY,
@@ -317,16 +311,14 @@ class EvolutionTreeWidget(
             treeDrawingNode.children.forEach { child ->
                 val (childX, childY) = getDrawingCoordinates(child)
 
-                val lineStartX = treeForkEnd
-                val lineEndX = childX
                 val lineY = childY + SCROLL_SLOT_SIZE / 2
 
                 child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
                     drawEvolutionInfo(
                         guiGraphics,
                         alternatives,
-                        lineStartX,
-                        lineEndX,
+                        treeForkEnd,
+                        childX,
                         lineY,
                         mouseX,
                         mouseY,
@@ -427,7 +419,7 @@ class EvolutionTreeWidget(
 
     private fun drawEvolutionInfo(
         guiGraphics: GuiGraphics,
-        renderDataAlternatives: List<RenderEvolutionData>,
+        renderDataAlternatives: List<DexEvolutionDisplay>,
         lineStartX: Int,
         lineEndX: Int,
         lineY: Int,
@@ -436,7 +428,7 @@ class EvolutionTreeWidget(
         delta: Float,
     ) {
         val icons = renderDataAlternatives.flatMap { it.icons }.distinct()
-        val tooltips = combineAlternativeTooltips(renderDataAlternatives.map { it.tooltips })
+        val tooltips = combineAlternativeTooltips(renderDataAlternatives.map { it.toolTips })
 
         val lineXMiddle = (lineStartX + lineEndX) / 2
         val iconX = (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt()
@@ -500,21 +492,21 @@ class EvolutionTreeWidget(
         val isIconHovered = isElementHovered(
             mouseX,
             mouseY,
-            iconX.toInt(),
-            iconX.toInt() + iconSize,
-            iconY.toInt(),
-            iconY.toInt() + iconSize,
+            iconX,
+            iconX + iconSize,
+            iconY,
+            iconY + iconSize,
         )
 
         if (tooltips.isNotEmpty() &&
             (isLineHovered || isIconHovered) &&
             this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
-            hoveredTooltips = tooltips
+            hoveredTooltips = tooltips.map { it.copy() }
         }
     }
 
-    private fun combineAlternativeTooltips(alternatives: List<List<MutableComponent>>): List<MutableComponent> {
+    private fun combineAlternativeTooltips(alternatives: List<List<Component>>): List<Component> {
         val groups = alternatives.filter { it.isNotEmpty() }
         if (groups.size <= 1) return groups.firstOrNull() ?: emptyList()
 
@@ -611,6 +603,6 @@ class EvolutionTreeWidget(
         val aspects: Set<String>,
         val pokedexEntryProgress: PokedexEntryProgress,
         override val children: List<EvolutionNode>,
-        val renderDataAlternatives: List<RenderEvolutionData>,
+        val renderDataAlternatives: List<DexEvolutionDisplay>,
     ) : TreeNode<EvolutionNode>
 }
