@@ -193,6 +193,24 @@
   "battleOnly": false,
   "forms": [
     {
+      "name": "Red",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-red.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "red-core"
+      ],
+      "evolutions": []
+    },
+    {
       "name": "Orange",
       "primaryType": "rock",
       "secondaryType": "flying",
