@@ -33,6 +33,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.widgets.PokemonSlotWidget
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -92,6 +93,8 @@ class EvolutionTreeWidget(
 
     private var hoveredTooltips: List<MutableComponent>? = null
 
+    private var viewedForm: FormData? = null
+
     private val expandButton: ScaledButton = ScaledButton(
         0f,
         0f,
@@ -146,6 +149,10 @@ class EvolutionTreeWidget(
         if (pokedexEntry == null || pokedexForm == null) return
 
         updatePositioning()
+
+        val viewedFormEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
+        viewedForm = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
+            ?.forms?.firstOrNull { viewedFormEquivalents.contains(it.name.lowercase()) }
 
         val (rootPokedexEntry, rootPokedexForm) = Dexes.findRootDexEntryBySpeciesId(pokedexEntry.speciesId, pokedexForm.displayForm)
         val rootEvolutionNode = buildEvolutionTree(rootPokedexEntry, rootPokedexForm, null)
@@ -205,17 +212,23 @@ class EvolutionTreeWidget(
 
         val evolutions = form?.evolutions ?: species.evolutions
 
+        // Show the viewed form for forms no evolution leads to explicitly (e.g. Maushold's family size)
+        val viewedForm = viewedForm?.takeIf { viewed ->
+            viewed.preEvolution?.species?.resourceIdentifier == species.resourceIdentifier &&
+                evolutions.none { evolution ->
+                    listOfNotNull(evolution.result, evolution.shedder).any { resolveResultForm(it, aspects) === viewed }
+                }
+        }
+
         // Avoid evolution.result.create() here: it builds a full battle-ready Pokemon (initializeMovesetFromDefault
         // etc.) which relies on server-only data like CobblemonMovesetBuilders and crashes on the client
         val children = evolutions.flatMap { evolution ->
             val baseRenderData = renderEvolutionData(evolution)
 
             listOfNotNull(evolution.result, evolution.shedder).mapNotNull { resultProperties ->
-                val resultSpecies = resultProperties.species
-                    ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
-                    ?: return@mapNotNull null
-                
-                val resultForm = resultSpecies.getForm(aspects + resultProperties.aspects)
+                val naturalForm = resolveResultForm(resultProperties, aspects) ?: return@mapNotNull null
+                val resultSpecies = naturalForm.species
+                val resultForm = if (viewedForm != null && viewedForm.species == resultSpecies) viewedForm else naturalForm
 
                 val speciesId = resultSpecies.resourceIdentifier
                 val childPokedexEntry = Dexes.findDexEntryBySpeciesId(speciesId)
@@ -243,6 +256,13 @@ class EvolutionTreeWidget(
 
         val renderDataAlternatives = if (evolution != null) listOf(renderData ?: RenderEvolutionData(emptyList(), emptyList())) else emptyList()
         return EvolutionNode(pokedexEntry, parentPokedexForm, aspects, discoveryLevel, mergeEquivalentChildren(children), renderDataAlternatives)
+    }
+
+    private fun resolveResultForm(resultProperties: PokemonProperties, aspects: Set<String>): FormData? {
+        val resultSpecies = resultProperties.species
+            ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+            ?: return null
+        return resultSpecies.getForm(aspects + resultProperties.aspects)
     }
 
     private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {
@@ -365,7 +385,7 @@ class EvolutionTreeWidget(
                         if (formName == "normal") null
                         else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
 
-                    formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
+                    formComponent?.let { speciesComponent.copy().add(" (").add(it).add(")") } ?: speciesComponent
                 }
 
             guiGraphics.disableScissor()
