@@ -21,6 +21,8 @@
 - Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 - New Cosmetic Item for Pikachu: Paper
 - Burmy changes its cloak after a battle it took part in, based on the biome: Trash Cloak in the Deep Dark, Nether and End, Plant Cloak in lush biomes such as forests, jungles, plains and swamps, and Sandy Cloak in sandy biomes, beaches and caves.
+- The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
+- Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
 ### Fixes
 - Medicinal Leeks can now be eaten when they aren't being planted, matching their food properties.
@@ -126,6 +128,7 @@
 - Added TM creative tab
 - Recall animation now renders ball in hand with the player arm raised.
 - Made regional and Vivillon split-evo locations now mutually exclusive
+- Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
 - Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.
   - Exceptions being "forced" evolutions which will continue to stop after the first one
 - Removed Mega Drain as a TM

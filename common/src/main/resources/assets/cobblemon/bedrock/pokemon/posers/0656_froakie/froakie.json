@@ -55,13 +55,7 @@
             "q.look('head_ai')",
             "q.bedrock('froakie', 'water_idle')"
          ],
-         "quirks": [],
-         "transformedParts": [
-            {
-               "part": "body",
-               "position": [0, -5, 0]
-            }
-         ]
+         "quirks": []
       },
       "sleep": {
          "poseTypes": ["SLEEP"],

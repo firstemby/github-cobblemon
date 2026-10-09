@@ -8,7 +8,7 @@
   "height": 3,
   "weight": 3,
   "pokedex": [
-    "cobblemon.pokedex.minior.desc"
+    "cobblemon.species.minior.desc"
   ],
   "labels": [
     "gen7"
@@ -193,6 +193,132 @@
   "battleOnly": false,
   "forms": [
     {
+      "name": "Red",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-red.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "red-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Orange",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-orange.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "orange-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Yellow",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-yellow.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "yellow-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Green",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-green.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "green-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Blue",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-blue.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "blue-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Indigo",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-indigo.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "indigo-core"
+      ],
+      "evolutions": []
+    },
+    {
+      "name": "Violet",
+      "primaryType": "rock",
+      "secondaryType": "flying",
+      "maleRatio": -1,
+      "height": 3,
+      "weight": 3,
+      "pokedex": [
+        "cobblemon.species.minior-violet.desc"
+      ],
+      "labels": [
+        "gen7"
+      ],
+      "aspects": [
+        "violet-core"
+      ],
+      "evolutions": []
+    },
+    {
       "name": "Meteor",
       "primaryType": "rock",
       "secondaryType": "flying",
@@ -200,7 +326,7 @@
       "height": 3,
       "weight": 400,
       "pokedex": [
-        "cobblemon.pokedex.minior-meteor.desc"
+        "cobblemon.species.minior-meteor.desc"
       ],
       "labels": [
         "gen7"
