@@ -8,18 +8,25 @@
 
 package com.cobblemon.mod.common.net.messages.client.data
 
+import com.cobblemon.mod.common.api.pokedex.entry.CobblemonBiomeDexEvolutionRequirementDisplay
+import com.cobblemon.mod.common.api.pokedex.entry.CobblemonDexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
+import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.readIdentifier
+import com.cobblemon.mod.common.util.readNullable
 import com.cobblemon.mod.common.util.readString
 import com.cobblemon.mod.common.util.readText
 import com.cobblemon.mod.common.util.writeIdentifier
+import com.cobblemon.mod.common.util.writeNullable
 import com.cobblemon.mod.common.util.writeString
 import com.cobblemon.mod.common.util.writeText
+import com.google.common.collect.Lists
 import com.google.common.collect.Sets
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.util.ExtraCodecs
 
 class DexEvolutionDisplaySyncPacket(entries: MutableList<DexEvolutionDisplay>)
     : DataRegistrySyncPacket<DexEvolutionDisplay, DexEvolutionDisplaySyncPacket>(entries) {
@@ -33,10 +40,28 @@ class DexEvolutionDisplaySyncPacket(entries: MutableList<DexEvolutionDisplay>)
         buffer.writeIdentifier(entry.toSpecies)
         buffer.writeString(entry.toForm)
         buffer.writeCollection(entry.toAspects) { _, aspect -> buffer.writeString(aspect) }
-        buffer.writeCollection(entry.icons) { _, icon ->
-            buffer.writeIdentifier(BuiltInRegistries.ITEM.getKey(icon))
+        buffer.writeCollection(entry.requirements) { _, req ->
+            when (req) {
+                is CobblemonBiomeDexEvolutionRequirementDisplay -> {
+                    buffer.writeByte(1)
+                    buffer.writeIdentifier(BuiltInRegistries.ITEM.getKey(req.icon))
+                    buffer.writeText(req.tooltip)
+                    buffer.writeNullable(req.condition) { b, cond ->
+                        b.writeIdentifier(cond.id)
+                        b.writeBoolean(cond.tag)
+                    }
+                    buffer.writeNullable(req.antiCondition) { b, cond ->
+                        b.writeIdentifier(cond.id)
+                        b.writeBoolean(cond.tag)
+                    }
+                }
+                else -> {
+                    buffer.writeByte(0)
+                    buffer.writeIdentifier(BuiltInRegistries.ITEM.getKey(req.icon))
+                    buffer.writeText(req.tooltip)
+                }
+            }
         }
-        buffer.writeCollection(entry.toolTips) { _, toolTip -> buffer.writeText(toolTip) }
     }
 
     override fun decodeEntry(buffer: RegistryFriendlyByteBuf): DexEvolutionDisplay? {
@@ -46,9 +71,27 @@ class DexEvolutionDisplaySyncPacket(entries: MutableList<DexEvolutionDisplay>)
         val toSpecies = buffer.readIdentifier()
         val toForm = buffer.readString()
         val toAspects = buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() }
-        val icons = buffer.readCollection(Sets::newHashSetWithExpectedSize) { BuiltInRegistries.ITEM.get(buffer.readIdentifier()) }.toList()
-        val toolTips = buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readText() }.toList()
-        return DexEvolutionDisplay(fromSpecies, fromForm, fromAspects, toSpecies, toForm, toAspects, icons, toolTips)
+        val requirements = buffer.readCollection(Lists::newArrayListWithExpectedSize) {
+            val type = buffer.readByte().toInt()
+            val icon = BuiltInRegistries.ITEM.get(buffer.readIdentifier())
+            val tooltip = buffer.readText().copy()
+            if (type == 1) {
+                val condition = buffer.readNullable { b ->
+                    val id = b.readIdentifier()
+                    val tag = b.readBoolean()
+                    ExtraCodecs.TagOrElementLocation(id, tag)
+                }
+                val antiCondition = buffer.readNullable { b ->
+                    val id = b.readIdentifier()
+                    val tag = b.readBoolean()
+                    ExtraCodecs.TagOrElementLocation(id, tag)
+                }
+                CobblemonBiomeDexEvolutionRequirementDisplay(icon, tooltip, condition, antiCondition)
+            } else {
+                CobblemonDexEvolutionRequirementDisplay(icon, tooltip)
+            }
+        }.toList()
+        return DexEvolutionDisplay(fromSpecies, fromForm, fromAspects, toSpecies, toForm, toAspects, requirements)
     }
 
     override fun synchronizeDecoded(entries: Collection<DexEvolutionDisplay>) {

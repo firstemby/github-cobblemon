@@ -76,7 +76,7 @@ class FormData(
     @SerializedName("moves")
     private var _moves: Learnset? = null,
     @SerializedName("evolutions")
-    private var _evolutions: MutableSet<Evolution>? = null,
+    private val _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("abilities")
     private var _abilities: AbilityPool? = null,
     @SerializedName("drops")
@@ -84,7 +84,7 @@ class FormData(
     @SerializedName("pokedex")
     private var _pokedex: MutableList<String>? = null,
     @SerializedName("preEvolution")
-    private var _preEvolution: PreEvolution? = null,
+    private val _preEvolution: PreEvolution? = null,
     private var standingEyeHeight: Float? = null,
     private var swimmingEyeHeight: Float? = null,
     private var flyingEyeHeight: Float? = null,
@@ -269,6 +269,10 @@ class FormData(
         this.species = species
         this.behaviour.parent = species.behaviour
         Cobblemon.statProvider.provide(this)
+        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
+        this.preEvolution?.species
+        this.preEvolution?.form
+        this.evolutions.size
         this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
         behaviour.herd.initialize()
         return this

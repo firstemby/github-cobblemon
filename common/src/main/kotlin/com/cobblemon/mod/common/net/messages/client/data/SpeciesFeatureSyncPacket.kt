@@ -25,7 +25,7 @@ abstract class SpeciesFeatureSyncPacket<T : SpeciesFeatureSyncPacket<T>>(
     speciesFeatureProviders: Map<String, SpeciesFeatureProvider<*>>
 ) : DataRegistrySyncPacket<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>, T>(
     speciesFeatureProviders.entries
-        .filter { (_, v) -> v is SynchronizedSpeciesFeatureProvider<*> }
+        .filter { (_, v) -> v is SynchronizedSpeciesFeatureProvider<*> && v.visible}
         .filterIsInstance<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>>()
 ) {
     override fun encodeEntry(

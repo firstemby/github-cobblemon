@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
+import com.cobblemon.mod.common.api.pokedex.entry.CobblemonBiomeDexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
@@ -22,6 +23,8 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.bold
+import com.cobblemon.mod.common.api.text.green
+import com.cobblemon.mod.common.api.text.red
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI
@@ -39,9 +42,12 @@ import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.tags.TagKey
 
 class EvolutionTreeWidget(
     val parent: PokedexGUI,
@@ -206,7 +212,8 @@ class EvolutionTreeWidget(
     ): EvolutionNode {
         val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, mutableSetOf())
 
-        val evolutions = DexEntries.evolutionDisplays.filter { it.fromSpecies == pokedexEntry.speciesId }
+        val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
+        val evolutions = DexEntries.evolutionDisplays.filter { it.fromSpecies == pokedexEntry.speciesId && formEquivalents.contains(it.fromForm.lowercase()) }
 
         val children = evolutions.mapNotNull {
             val childPokedexEntry = Dexes.findDexEntryBySpeciesId(it.toSpecies)
@@ -218,7 +225,14 @@ class EvolutionTreeWidget(
             val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
             buildEvolutionTree(childPokedexEntry, childPokedexForm)
         }
-        return EvolutionNode(pokedexEntry, pokedexForm, mutableSetOf(), discoveryLevel, mergeEquivalentChildren(children), emptyList())
+        return EvolutionNode(
+            pokedexEntry = pokedexEntry,
+            pokedexForm = pokedexForm,
+            aspects = mutableSetOf(),
+            pokedexEntryProgress = discoveryLevel,
+            children = mergeEquivalentChildren(children),
+            renderDataAlternatives = evolutions,
+        )
     }
 
     private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {
@@ -255,10 +269,15 @@ class EvolutionTreeWidget(
             val lineStartX = treeX + SCROLL_SLOT_SIZE
             val lineY = treeY + SCROLL_SLOT_SIZE / 2
 
-            child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
+            val formEquivalents = Dexes.getFormEquivalents(child.value.pokedexForm.displayForm)
+            val alternatives = treeDrawingNode.value.renderDataAlternatives.filter {
+                it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase())
+            }
+
+            alternatives.takeIf { it.isNotEmpty() }?.let {
                 drawEvolutionInfo(
                     guiGraphics,
-                    alternatives,
+                    it,
                     lineStartX,
                     childX,
                     lineY,
@@ -294,10 +313,15 @@ class EvolutionTreeWidget(
 
                 val lineY = childY + SCROLL_SLOT_SIZE / 2
 
-                child.value.renderDataAlternatives.takeIf { it.isNotEmpty() }?.let { alternatives ->
+                val formEquivalents = Dexes.getFormEquivalents(child.value.pokedexForm.displayForm)
+                val alternatives = treeDrawingNode.value.renderDataAlternatives.filter {
+                    it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase())
+                }
+
+                alternatives.takeIf { it.isNotEmpty() }?.let {
                     drawEvolutionInfo(
                         guiGraphics,
-                        alternatives,
+                        it,
                         treeForkEnd,
                         childX,
                         lineY,
@@ -408,8 +432,25 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
-        val icons = renderDataAlternatives.flatMap { it.icons }.distinct()
-        val tooltips = combineAlternativeTooltips(renderDataAlternatives.map { it.toolTips })
+        val icons = renderDataAlternatives.flatMap { it.requirements.map { req -> req.icon } }.distinct()
+        val playerBiome = Minecraft.getInstance().player?.let { it.level().getBiome(it.blockPosition()) }
+        val alternativeTooltips = renderDataAlternatives.map { alternative ->
+            alternative.requirements.map { req ->
+                if (req is CobblemonBiomeDexEvolutionRequirementDisplay) {
+                    val tooltip = req.tooltip.copy()
+                    if (playerBiome != null) {
+                        val conditionFits = req.condition?.let { if (it.tag) playerBiome.`is`(TagKey.create(Registries.BIOME, it.id)) else playerBiome.`is`(it.id) } ?: true
+                        val antiConditionFits = req.antiCondition?.let { if (it.tag) playerBiome.`is`(TagKey.create(Registries.BIOME, it.id)) else playerBiome.`is`(it.id) } ?: false
+                        val isMet = conditionFits && !antiConditionFits
+                        tooltip.add(if (isMet) Component.literal(" ✔").green() else Component.literal(" ✘").red())
+                    }
+                    tooltip
+                } else {
+                    req.tooltip
+                }
+            }
+        }
+        val tooltips = combineAlternativeTooltips(alternativeTooltips)
 
         val lineXMiddle = (lineStartX + lineEndX) / 2
         val iconX = (lineXMiddle + ICON_X_PADDING - ICON_SLOT_HALF_PADDING).toInt()
@@ -491,7 +532,7 @@ class EvolutionTreeWidget(
         val groups = alternatives.filter { it.isNotEmpty() }
         if (groups.size <= 1) return groups.firstOrNull() ?: emptyList()
 
-        val sharedStrings = groups.map { group -> group.map { it.string }.toSet() }.reduce { acc, strings -> acc intersect strings }
+        val sharedStrings = groups.flatMap { group -> group.map { it.string }.toSet() }.distinct()
         val shared = groups.first().filter { it.string in sharedStrings }.distinctBy { it.string }
         val remainders = groups
             .map { group -> group.filter { it.string !in sharedStrings } }

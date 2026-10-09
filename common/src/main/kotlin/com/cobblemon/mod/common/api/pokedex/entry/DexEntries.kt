@@ -21,11 +21,9 @@ import com.cobblemon.mod.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-import net.minecraft.world.item.Item
 
 object DexEntries : JsonDataRegistry<PokedexEntry> {
     override val id = cobblemonResource("dex_entries")
@@ -80,15 +78,14 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
         val result = mutableListOf<DexEvolutionDisplay>()
         (form.ownEvolutions ?: form.evolutions).forEach { evolution ->
             val resultPokemon = evolution.result.create()
-            val icons = mutableListOf<Item>()
-            val tooltips = mutableListOf<Component>()
+            if (!resultPokemon.species.implemented)
+                return@forEach
+            val requirements = mutableListOf<DexEvolutionRequirementDisplay>()
             getToolTipHeaderIcon(evolution)?.let { header ->
-                icons.add(header.first)
-                tooltips.add(header.second)
+                requirements.add(header)
             }
             evolution.requirements.mapNotNull { resolveRequirementData(it) }.forEach { requirement ->
-                icons.add(requirement.icon)
-                tooltips.add(requirement.tooltip)
+                requirements.add(requirement)
             }
 
             result.add(DexEvolutionDisplay(
@@ -98,8 +95,7 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                 toSpecies = resultPokemon.species.resourceIdentifier,
                 toForm = resultPokemon.form.name,
                 toAspects = resultPokemon.aspects,
-                icons = icons,
-                toolTips = tooltips,
+                requirements = requirements,
             ))
         }
         return result

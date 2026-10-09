@@ -25,13 +25,9 @@ internal class CobblemonLazyPreEvolution(private val rawData: String) : PreEvolu
         this.properties.species?.asIdentifierDefaultingNamespace()?.let { PokemonSpecies.getByIdentifier(it) } ?: throw IllegalArgumentException("A PreEvolution needs a valid species")
     }
 
-    private fun computeForm(extraAspects: Set<String>): FormData {
-        val properties = this.properties
-        return properties.form?.let { formId -> this.species.forms.firstOrNull { it.formOnlyShowdownId().equals(formId, true) } }
-            ?: this.species.getForm(properties.aspects + this.rawData.split(" ").map { it.lowercase() }.toSet() + extraAspects)
+    private val lazyForm: FormData by lazy {
+        this.properties.form?.let { formId -> this.species.forms.firstOrNull { it.formOnlyShowdownId().equals(formId, true) } } ?: this.species.standardForm
     }
-
-    private val lazyForm: FormData by lazy { computeForm(emptySet()) }
 
     override val species: Species
         get() = this.lazySpecies
