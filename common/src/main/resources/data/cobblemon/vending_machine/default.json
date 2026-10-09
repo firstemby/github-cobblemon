@@ -1,0 +1,12 @@
+{
+  "entries": [
+    { "item": "cobblemon:poke_ball", "price": 5 },
+    { "item": "cobblemon:great_ball", "price": 10 },
+    { "item": "cobblemon:ultra_ball", "price": 20 },
+    { "item": "cobblemon:potion", "price": 8 },
+    { "item": "cobblemon:super_potion", "price": 15 },
+    { "item": "cobblemon:hyper_potion", "price": 30 },
+    { "item": "cobblemon:revive", "price": 40 },
+    { "item": "cobblemon:antidote", "price": 6 }
+  ]
+}

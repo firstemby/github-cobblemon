@@ -1,0 +1,86 @@
+{
+  "format_version": 1,
+  "contract_version": "1.1.0",
+  "mode": "screen",
+  "actions": ["buy", "vending_page"],
+  "parameters": {
+    "page": "number",
+    "page_count": "number",
+    "page_text": "string",
+    "row0_item": "string",
+    "row1_item": "string",
+    "row2_item": "string",
+    "row0_price": "string",
+    "row1_price": "string",
+    "row2_price": "string"
+  },
+  "variables": { "v.choice": 0, "v.result": 0 },
+  "root": {
+    "type": "panel", "size": [176, 166], "anchor": "center", "texture": "cobblemon:textures/gui/vending_machine.png",
+    "controls": [
+      { "title": { "type": "label", "offset": [8, 4], "text": "Vending Machine", "color": "0xFF404040" } },
+      { "result_ok": { "type": "label", "offset": [96, 4], "size": [72, 10], "alignment": "right", "text": "Purchased!", "color": "0xFF2E7D32", "visible": { "molang": "v.result == 1" } } },
+      { "result_fail": { "type": "label", "offset": [96, 4], "size": [72, 10], "alignment": "right", "text": "Not enough", "color": "0xFF8B1A1A", "visible": { "molang": "v.result == 2" } } },
+
+      { "row0": {
+        "type": "button", "offset": [6, 16], "size": [118, 18], "color": "0x33000000", "hover": { "color": "0x55FFFFFF" },
+        "visible": { "molang": "q.row0_item != ''" },
+        "on_click_client": { "molang": "v.choice = 0; v.result = 0;" },
+        "controls": [
+          { "row0_selected": { "type": "fill", "offset": [0, 0], "size": ["100%", "100%"], "color": "0x66FFD54F", "visible": { "molang": "v.choice == 0" } } },
+          { "row0_icon": { "type": "item_slot", "offset": [2, 1], "item": { "molang": "q.row0_item" } } },
+          { "row0_name": { "type": "label", "offset": [22, 5], "text": { "molang": "q.item_name(q.row0_item)" } } },
+          { "row0_price_text": { "type": "label", "offset": [84, 5], "size": [16, 10], "alignment": "right", "text": { "molang": "q.row0_price" }, "color": "0xFFFFE066" } },
+          { "row0_coin": { "type": "item_slot", "offset": [100, 1], "item": "cobblemon:relic_coin" } }
+        ]
+      } },
+
+      { "row1": {
+        "type": "button", "offset": [6, 35], "size": [118, 18], "color": "0x33000000", "hover": { "color": "0x55FFFFFF" },
+        "visible": { "molang": "q.row1_item != ''" },
+        "on_click_client": { "molang": "v.choice = 1; v.result = 0;" },
+        "controls": [
+          { "row1_selected": { "type": "fill", "offset": [0, 0], "size": ["100%", "100%"], "color": "0x66FFD54F", "visible": { "molang": "v.choice == 1" } } },
+          { "row1_icon": { "type": "item_slot", "offset": [2, 1], "item": { "molang": "q.row1_item" } } },
+          { "row1_name": { "type": "label", "offset": [22, 5], "text": { "molang": "q.item_name(q.row1_item)" } } },
+          { "row1_price_text": { "type": "label", "offset": [84, 5], "size": [16, 10], "alignment": "right", "text": { "molang": "q.row1_price" }, "color": "0xFFFFE066" } },
+          { "row1_coin": { "type": "item_slot", "offset": [100, 1], "item": "cobblemon:relic_coin" } }
+        ]
+      } },
+
+      { "row2": {
+        "type": "button", "offset": [6, 54], "size": [118, 18], "color": "0x33000000", "hover": { "color": "0x55FFFFFF" },
+        "visible": { "molang": "q.row2_item != ''" },
+        "on_click_client": { "molang": "v.choice = 2; v.result = 0;" },
+        "controls": [
+          { "row2_selected": { "type": "fill", "offset": [0, 0], "size": ["100%", "100%"], "color": "0x66FFD54F", "visible": { "molang": "v.choice == 2" } } },
+          { "row2_icon": { "type": "item_slot", "offset": [2, 1], "item": { "molang": "q.row2_item" } } },
+          { "row2_name": { "type": "label", "offset": [22, 5], "text": { "molang": "q.item_name(q.row2_item)" } } },
+          { "row2_price_text": { "type": "label", "offset": [84, 5], "size": [16, 10], "alignment": "right", "text": { "molang": "q.row2_price" }, "color": "0xFFFFE066" } },
+          { "row2_coin": { "type": "item_slot", "offset": [100, 1], "item": "cobblemon:relic_coin" } }
+        ]
+      } },
+
+      { "page_prev": {
+        "type": "button", "offset": [6, 72], "size": [12, 10], "text": "<", "color": "0x55000000", "hover": { "color": "0x77FFFFFF" },
+        "visible": { "molang": "q.page > 0" },
+        "on_click_client": { "molang": "v.choice = 0; v.result = 0;" },
+        "on_click": { "action": "vending_page", "parameters": { "page": { "molang": "q.page - 1" } } }
+      } },
+      { "page_label": { "type": "label", "offset": [20, 73], "size": [90, 10], "alignment": "center", "text": { "molang": "q.page_text" }, "color": "0xFFCCCCCC" } },
+      { "page_next": {
+        "type": "button", "offset": [112, 72], "size": [12, 10], "text": ">", "color": "0x55000000", "hover": { "color": "0x77FFFFFF" },
+        "visible": { "molang": "q.page + 1 < q.page_count" },
+        "on_click_client": { "molang": "v.choice = 0; v.result = 0;" },
+        "on_click": { "action": "vending_page", "parameters": { "page": { "molang": "q.page + 1" } } }
+      } },
+
+      { "payment_slot": { "type": "slot_grid", "offset": [141, 22], "collection_name": "payment", "grid_dimensions": [1, 1] } },
+      { "buy": { "type": "button", "offset": [129, 44], "size": [40, 14], "text": "Buy", "color": "0xFFB71C1C", "hover": { "color": "0xFFE53935" }, "on_click": { "action": "buy", "parameters": { "choice": { "molang": "v.choice" } } } } },
+      { "output_slot": { "type": "slot_grid", "offset": [141, 62], "collection_name": "output", "grid_dimensions": [1, 1] } },
+
+      { "player_inv": { "type": "slot_grid", "offset": [8, 84], "collection_name": "player_inventory", "grid_dimensions": [9, 3] } },
+      { "player_hotbar": { "type": "slot_grid", "offset": [8, 142], "collection_name": "player_hotbar", "grid_dimensions": [9, 1] } }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+t.item = '';
+t.price = 0;
+v.choice == 0 ? { t.item = q.parameter('row0_item'); t.price = q.to_number(q.parameter('row0_price')); } : 0;
+v.choice == 1 ? { t.item = q.parameter('row1_item'); t.price = q.to_number(q.parameter('row1_price')); } : 0;
+v.choice == 2 ? { t.item = q.parameter('row2_item'); t.price = q.to_number(q.parameter('row2_price')); } : 0;
+t.bought = 0;
+t.item != '' && t.price > 0 && q.slot('payment', 0) == 'cobblemon:relic_coin' ? { t.bought = q.replace_slot('payment', 0, t.price, 'output', 0, t.item, 1); } : 0;
+q.update_variable('v.result', t.bought ? 1 : 2);

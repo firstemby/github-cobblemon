@@ -32,6 +32,10 @@ import com.cobblemon.mod.common.client.net.effect.SpawnSnowstormParticleHandler
 import com.cobblemon.mod.common.client.net.gui.ExpGainedDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.InteractPokemonUIPacketHandler
 import com.cobblemon.mod.common.client.net.gui.PokedexUIPacketHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiCloseHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiCompatibilityRequestHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiOpenHandler
+import com.cobblemon.mod.common.client.net.molangui.MolangUiUpdateHandler
 import com.cobblemon.mod.common.client.net.gui.SetActiveTMPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SetTMMachineContainerDataPacketHandler
 import com.cobblemon.mod.common.client.net.gui.SummaryUIPacketHandler
@@ -83,6 +87,10 @@ import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallba
 import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiClosePacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiCompatibilityRequestPacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiOpenPacket
+import com.cobblemon.mod.common.net.messages.client.molangui.MolangUiUpdatePacket
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
@@ -180,6 +188,9 @@ import com.cobblemon.mod.common.net.messages.server.dialogue.EscapeDialoguePacke
 import com.cobblemon.mod.common.net.messages.server.dialogue.InputToDialoguePacket
 import com.cobblemon.mod.common.net.messages.server.habitat.SaveHabitatBlockSettingsPacket
 import com.cobblemon.mod.common.net.messages.server.npc.SaveNPCPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiActionPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiClosedPacket
+import com.cobblemon.mod.common.net.messages.server.molangui.MolangUiCompatibilityResponsePacket
 import com.cobblemon.mod.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.PasturePokemonPacket
 import com.cobblemon.mod.common.net.messages.server.pasture.SetPastureConflictPacket
@@ -239,6 +250,9 @@ import com.cobblemon.mod.common.net.serverhandling.dialogue.InputToDialogueHandl
 import com.cobblemon.mod.common.net.serverhandling.evolution.AcceptEvolutionHandler
 import com.cobblemon.mod.common.net.serverhandling.habitat.SaveHabitatBlockSettingsHandler
 import com.cobblemon.mod.common.net.serverhandling.npc.SaveNPCHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiActionHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiClosedHandler
+import com.cobblemon.mod.common.net.serverhandling.molangui.MolangUiCompatibilityResponseHandler
 import com.cobblemon.mod.common.net.serverhandling.orientation.ServerboundUpdateOrientationHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.PasturePokemonHandler
 import com.cobblemon.mod.common.net.serverhandling.pasture.SetPastureConflictHandler
@@ -446,6 +460,11 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(RideSettingsSyncPacket.ID, RideSettingsSyncPacket::decode, RideSettingsSyncHandler))
         list.add(PacketRegisterInfo(TechnicalMachineRegistrySyncPacket.ID, TechnicalMachineRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
 
+        list.add(PacketRegisterInfo(MolangUiOpenPacket.ID, MolangUiOpenPacket::decode, MolangUiOpenHandler))
+        list.add(PacketRegisterInfo(MolangUiClosePacket.ID, MolangUiClosePacket::decode, MolangUiCloseHandler))
+        list.add(PacketRegisterInfo(MolangUiUpdatePacket.ID, MolangUiUpdatePacket::decode, MolangUiUpdateHandler))
+        list.add(PacketRegisterInfo(MolangUiCompatibilityRequestPacket.ID, MolangUiCompatibilityRequestPacket::decode, MolangUiCompatibilityRequestHandler))
+
         // Effects
         list.add(PacketRegisterInfo(SpawnSnowstormParticlePacket.ID, SpawnSnowstormParticlePacket::decode, SpawnSnowstormParticleHandler))
         list.add(PacketRegisterInfo(SpawnSnowstormEntityParticlePacket.ID, SpawnSnowstormEntityParticlePacket::decode, SpawnSnowstormEntityParticleHandler))
@@ -643,6 +662,10 @@ object CobblemonNetwork {
         // Behaviour Packets
         list.add(PacketRegisterInfo(SetEntityBehaviourPacket.ID, SetEntityBehaviourPacket::decode, SetEntityBehaviourHandler))
         list.add(PacketRegisterInfo(DamageOnCollisionPacket.ID, DamageOnCollisionPacket::decode, DamageOnCollisionPacketHandler))
+
+        list.add(PacketRegisterInfo(MolangUiActionPacket.ID, MolangUiActionPacket::decode, MolangUiActionHandler))
+        list.add(PacketRegisterInfo(MolangUiClosedPacket.ID, MolangUiClosedPacket::decode, MolangUiClosedHandler))
+        list.add(PacketRegisterInfo(MolangUiCompatibilityResponsePacket.ID, MolangUiCompatibilityResponsePacket::decode, MolangUiCompatibilityResponseHandler))
 
         // Habitat blocks
         list.add(PacketRegisterInfo(SaveHabitatBlockSettingsPacket.ID, SaveHabitatBlockSettingsPacket::decode, SaveHabitatBlockSettingsHandler))

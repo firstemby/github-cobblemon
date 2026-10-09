@@ -413,6 +413,7 @@ object CobblemonItemGroups {
 
 //        entries.accept(CobblemonItems.INCENSE_SWEET) // TODO after 1.7
         entries.accept(CobblemonItems.DISPLAY_CASE)
+        entries.accept(CobblemonItems.VENDING_MACHINE)
         entries.accept(CobblemonItems.APRICORN_LOG)
         entries.accept(CobblemonItems.APRICORN_WOOD)
         entries.accept(CobblemonItems.STRIPPED_APRICORN_LOG)

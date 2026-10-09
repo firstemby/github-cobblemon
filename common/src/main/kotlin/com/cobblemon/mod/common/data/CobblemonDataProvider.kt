@@ -29,6 +29,9 @@ import com.cobblemon.mod.common.api.item.HeldItems
 import com.cobblemon.mod.common.api.mark.Marks
 import com.cobblemon.mod.common.api.moves.Moves
 import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.molangui.MolangUiContractRegistry
+import com.cobblemon.mod.common.api.molangui.MolangUiService
+import com.cobblemon.mod.common.api.vending.VendingMachineCatalogs
 import com.cobblemon.mod.common.api.npc.NPCClasses
 import com.cobblemon.mod.common.api.npc.NPCPresets
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -77,6 +80,14 @@ object CobblemonDataProvider : DataProvider {
 
     fun registerDefaults() {
         this.register(CobblemonScripts, reloadable = true)
+        this.register(MolangUiContractRegistry, reloadable = true)
+        this.register(VendingMachineCatalogs, reloadable = true)
+        MolangUiContractRegistry.observable.subscribe {
+            server()?.execute {
+                MolangUiService.closeAll()
+                server()?.playerList?.players?.forEach(MolangUiService::requestCompatibility)
+            }
+        }
         this.register(SpeciesFeatures, reloadable = false)
         this.register(GlobalSpeciesFeatures, reloadable = false)
         this.register(SpeciesFeatureAssignments, reloadable = false)

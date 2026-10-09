@@ -45,6 +45,11 @@ object GeneralMoLangFunctions {
     val functions: MutableMap<String, (MoParams) -> Any> = mutableMapOf()
 
     init {
+        functions["format"] = { params ->
+            val value = params.get<MoValue>(0).asDouble()
+            val decimals = params.get<MoValue>(1).asDouble().toInt().coerceIn(0, 10)
+            StringValue(String.format("%.${decimals}f", value))
+        }
         functions["print"] = { params ->
             val message = params.get<MoValue>(0).asString()
             LOGGER.info(message)

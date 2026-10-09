@@ -1,0 +1,120 @@
+{
+  "format_version": 1,
+  "contract_version": "1.0.0",
+  "mode": "overlay",
+  "parameters": {
+    "player_name": "string",
+    "opponent_name": "string",
+    "player_party_count": "number",
+    "opponent_party_count": "number"
+  },
+  "actions": [],
+  "root": {
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "controls": [
+      { "top_bar": {
+          "type": "fill",
+          "anchor": "top_center",
+          "size": ["100%", 30],
+          "color": "0xFF000000",
+          "opacity": { "molang": "math.clamp(q.gui_time / 0.4, 0, 1)" }
+      }},
+      { "bottom_bar": {
+          "type": "fill",
+          "anchor": "bottom_center",
+          "size": ["100%", 30],
+          "color": "0xFF000000",
+          "opacity": { "molang": "math.clamp(q.gui_time / 0.4, 0, 1)" }
+      }},
+      { "player_panel": {
+          "type": "fill",
+          "anchor": "center_left",
+          "size": ["45%", 60],
+          "color": "0xCC2244AA",
+          "offset": [{ "molang": "math.lerp(-q.screen_width, 0, math.clamp((q.gui_time - 0.2) / 0.6, 0, 1))" }, -10],
+          "controls": [
+            { "player_name": {
+                "type": "label",
+                "anchor": "center_left",
+                "offset": [{ "molang": "math.lerp(-200, 10, math.clamp((q.gui_time - 0.8) / 2.2, 0, 1))" }, 0],
+                "text": { "molang": "q.player_name == '' ? q.translate('cobblemon.molang_ui.battle_intro.player_fallback') : q.player_name" },
+                "shadow": true
+            }},
+            { "player_balls": {
+                "type": "list",
+                "source": { "molang": "q.player_party_count" },
+                "source_type": "count",
+                "layout": "stack_horizontal",
+                "spacing": 4,
+                "anchor": "bottom_left",
+                "offset": [10, -4],
+                "item_template": {
+                  "type": "fill",
+                  "size": [8, 8],
+                  "color": "0xFFAABBFF",
+                  "opacity": { "molang": "math.clamp((q.gui_time - (0.6 + q.item.index * 0.15)) / 0.3, 0, 1)" }
+                }
+            }}
+          ]
+      }},
+      { "opponent_panel": {
+          "type": "fill",
+          "anchor": "center_right",
+          "size": ["45%", 60],
+          "color": "0xCCAA2244",
+          "offset": [{ "molang": "math.lerp(q.screen_width, 0, math.clamp((q.gui_time - 0.4) / 0.6, 0, 1))" }, 10],
+          "controls": [
+            { "opponent_name": {
+                "type": "label",
+                "anchor": "center_right",
+                "offset": [{ "molang": "math.lerp(200, -10, math.clamp((q.gui_time - 1.0) / 2.2, 0, 1))" }, 0],
+                "text": { "molang": "q.opponent_name == '' ? q.translate('cobblemon.molang_ui.battle_intro.opponent_fallback') : q.opponent_name" },
+                "alignment": "right",
+                "shadow": true
+            }},
+            { "opponent_balls": {
+                "type": "list",
+                "source": { "molang": "q.opponent_party_count" },
+                "source_type": "count",
+                "layout": "stack_horizontal",
+                "spacing": 4,
+                "anchor": "bottom_right",
+                "offset": [-10, -4],
+                "item_template": {
+                  "type": "fill",
+                  "size": [8, 8],
+                  "color": "0xFFFFAABB",
+                  "opacity": { "molang": "math.clamp((q.gui_time - (0.9 + q.item.index * 0.15)) / 0.3, 0, 1)" }
+                }
+            }}
+          ]
+      }},
+      { "vs_text": {
+          "type": "label",
+          "anchor": "center",
+          "text": {"molang": "q.translate('cobblemon.molang_ui.battle_intro.versus')"},
+          "color": "0xFFFFDD44",
+          "shadow": true,
+          "opacity": { "molang": "math.clamp((q.gui_time - 0.8) / 0.5, 0, 1)" },
+          "scale": { "molang": "math.lerp(2.0, 1.0, math.clamp((q.gui_time - 0.8) / 0.5, 0, 1))" }
+      }},
+      { "player_accent": {
+          "type": "fill",
+          "anchor": "top_left",
+          "offset": [0, 30],
+          "size": ["45%", 2],
+          "color": "0xFF4466FF",
+          "opacity": { "molang": "math.clamp((q.gui_time - 0.2) / 0.6, 0, 1)" }
+      }},
+      { "opponent_accent": {
+          "type": "fill",
+          "anchor": "bottom_right",
+          "offset": [0, -30],
+          "size": ["45%", 2],
+          "color": "0xFFFF4466",
+          "opacity": { "molang": "math.clamp((q.gui_time - 0.4) / 0.6, 0, 1)" }
+      }}
+    ]
+  }
+}

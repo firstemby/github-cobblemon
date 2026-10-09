@@ -65,6 +65,8 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    // Static GL mocks must not load a graphics driver on headless CI.
+    systemProperty("org.lwjgl.opengl.explicitInit", "true")
     testLogging {
         setEvents(listOf("failed"))
         setExceptionFormat("full")
