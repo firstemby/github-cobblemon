@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/template_mint_leaf_litter_4",
+  "textures": {
+    "mint": "cobblemon:block/decorative/red_mint_leaf_litter"
+  }
+}

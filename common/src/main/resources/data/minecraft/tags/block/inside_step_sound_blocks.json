@@ -4,6 +4,10 @@
     "cobblemon:small_budding_tumblestone",
     "cobblemon:small_budding_black_tumblestone",
     "cobblemon:small_budding_sky_tumblestone",
-    "#cobblemon:type_gem_clusters"
+    "#cobblemon:type_gem_clusters",
+    
+    "#cobblemon:mint_leaf_litters",
+    "cobblemon:pomohana",
+    "cobblemon:pauvillea"
   ]
 }

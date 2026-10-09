@@ -8,54 +8,42 @@
 
 package com.cobblemon.mod.common.mixin;
 
-import com.cobblemon.mod.common.block.SaccharineLeafBlock;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
 @Mixin(targets = "net.minecraft.world.entity.animal.Bee$BeeGrowCropGoal")
 public abstract class BeeEntityMixin {
 
-    @Unique
-    private BlockState cobblemon$result = null;
+    @Shadow(aliases = {"this$0", "field_20373"}) @Final private Bee bee;
 
-    @Inject(method = "tick()V", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/BonemealableBlock;performBonemeal(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
-            shift = At.Shift.BY,
-            by = 2
-        ),
-        locals = LocalCapture.CAPTURE_FAILHARD
-    )
-    private void injectCustomGrowth(CallbackInfo ci, int i, BlockPos blockPos, BlockState blockState, Block block) {
-        if (block instanceof SaccharineLeafBlock) {
-
-            int age = blockState.getValue(SaccharineLeafBlock.Companion.getAGE());
-            boolean waterlogged = blockState.getValue(BlockStateProperties.WATERLOGGED);
-
-            if (age < 2 && !waterlogged) {
-                this.cobblemon$result = blockState.setValue(SaccharineLeafBlock.Companion.getAGE(), age + 1);
-            }
-        }
-    }
-
+    // Grows bonemealable blocks vanilla's hardcoded checks miss, returning the state so it handles the rest.
     @ModifyVariable(method = "tick", at = @At(value = "LOAD", ordinal = 0), index = 5)
-    private BlockState applyCustomBlockState(BlockState before) {
-        if(this.cobblemon$result != null && before == null) {
-            BlockState result = this.cobblemon$result;
-            this.cobblemon$result = null;
-            return result;
+    private BlockState cobblemon$growBonemealableBlocks(BlockState grownState, @Local(ordinal = 0) BlockState blockState, @Local BlockPos pos) {
+        if (grownState != null || blockState.is(Blocks.CAVE_VINES) || blockState.is(Blocks.CAVE_VINES_PLANT)) {
+            return grownState;
         }
 
-        return before;
+        if (!(blockState.getBlock() instanceof BonemealableBlock bonemealable)) {
+            return null;
+        }
+
+        ServerLevel level = (ServerLevel) this.bee.level();
+        if (!bonemealable.isValidBonemealTarget(level, pos, blockState)) {
+            return null;
+        }
+
+        bonemealable.performBonemeal(level, this.bee.getRandom(), pos, blockState);
+        return level.getBlockState(pos);
     }
 }

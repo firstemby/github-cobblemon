@@ -1,0 +1,130 @@
+{
+   "species": "cobblemon:minior",
+   "order": 0,
+   "variations": [
+      {
+         "aspects": [],
+         "poser": "cobblemon:minior_core",
+         "model": "cobblemon:minior.geo",
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_red.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_red.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "meteor-form" ],
+         "poser": "cobblemon:minior_meteor",
+         "model": "cobblemon:minior.geo",
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_red.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_red.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "orange-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_orange.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_orange.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "orange-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_orange.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_orange.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "yellow-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_yellow.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_yellow.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "green-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_green.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_green.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "blue-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_blue.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_blue.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "indigo-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_indigo.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_indigo.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "violet-core" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_violet.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_violet.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "shiny" ],
+         "texture": "cobblemon:textures/pokemon/0774_minior/minior_shiny.png",
+         "layers": [
+            {
+               "name": "emissive",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_emissive_shiny.png",
+               "emissive": true
+            }
+         ]
+      },
+      {
+         "aspects": [ "alpha_eyes" ],
+         "layers": [
+            {
+               "name": "alpha_eyes",
+               "texture": "cobblemon:textures/pokemon/0774_minior/minior_alpha.png",
+               "emissive": true
+            }
+         ]
+      }
+   ]
+}

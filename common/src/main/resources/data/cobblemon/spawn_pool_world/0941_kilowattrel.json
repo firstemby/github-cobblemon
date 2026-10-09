@@ -4,74 +4,6 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "kilowattrel-6",
-            "pokemon": "kilowattrel",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "uncommon",
-            "level": "25-49",
-            "weight": 9.6,
-            "weightMultiplier": {
-                "multiplier": 5.0,
-                "condition": {
-                    "isThundering": true
-                }
-            },
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_sky"
-                ],
-                "timeRange": "day"
-            },
-            "anticondition": {
-                "minLureLevel": 1,
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
-            "id": "kilowattrel-7",
-            "pokemon": "kilowattrel",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "25-49",
-            "weight": 2.0,
-            "weightMultipliers": [
-                {
-                    "multiplier": 5.0,
-                    "condition": {
-                        "isThundering": true
-                    }
-                },
-                {
-                    "multiplier": 3.0,
-                    "condition": {
-                        "minLureLevel": 3
-                    }
-                }
-            ],
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean",
-                    "#cobblemon:is_sky"
-                ],
-                "timeRange": "day",
-                "minLureLevel": 1
-            },
-            "anticondition": {
-                "biomes": [
-                    "#cobblemon:is_freezing"
-                ]
-            }
-        },
-        {
             "id": "kilowattrel-1",
             "pokemon": "kilowattrel",
             "presets": [
@@ -218,6 +150,74 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_beach",
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
+            "id": "kilowattrel-6",
+            "pokemon": "kilowattrel",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "uncommon",
+            "level": "25-49",
+            "weight": 9.6,
+            "weightMultiplier": {
+                "multiplier": 5.0,
+                "condition": {
+                    "isThundering": true
+                }
+            },
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean",
+                    "#cobblemon:is_sky"
+                ],
+                "timeRange": "day"
+            },
+            "anticondition": {
+                "minLureLevel": 1,
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
+            "id": "kilowattrel-7",
+            "pokemon": "kilowattrel",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "25-49",
+            "weight": 2.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 5.0,
+                    "condition": {
+                        "isThundering": true
+                    }
+                },
+                {
+                    "multiplier": 3.0,
+                    "condition": {
+                        "minLureLevel": 3
+                    }
+                }
+            ],
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean",
+                    "#cobblemon:is_sky"
+                ],
+                "timeRange": "day",
+                "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
                     "#cobblemon:is_freezing"
                 ]
             }

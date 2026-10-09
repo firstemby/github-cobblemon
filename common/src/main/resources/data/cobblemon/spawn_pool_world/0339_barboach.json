@@ -40,6 +40,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "isPokeSnack": true
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -101,6 +106,11 @@
                 "maxSkyLight": 7,
                 "biomes": [
                     "#cobblemon:is_overworld"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
                 ]
             }
         },

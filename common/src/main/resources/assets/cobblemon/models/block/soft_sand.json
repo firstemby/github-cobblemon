@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/relic_coin_pouch",
+  "textures": {
+        "3": "cobblemon:block/decorative/soft_sand",
+		"particle": "cobblemon:block/decorative/soft_sand"
+  }
+}

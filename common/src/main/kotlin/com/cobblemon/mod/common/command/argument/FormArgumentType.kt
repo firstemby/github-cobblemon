@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.command.argument
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Species
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.google.common.base.Splitter
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
@@ -38,7 +39,7 @@ class FormArgumentType : ArgumentType<FormData> {
         }
         speciesBeginning++
         val speciesToken = reader.string.substring(speciesBeginning, formTokenBeginning)
-        val species = PokemonSpecies.getByName(speciesToken) ?: PokemonSpecies.species.first()
+        val species = PokemonSpecies.getByIdentifier(speciesToken.asIdentifierDefaultingNamespace()) ?: PokemonSpecies.species.first()
         val result = species.forms.union(listOf(species.standardForm)).first { it.formOnlyShowdownId().lowercase() == formToken }
         return result
     }
@@ -57,7 +58,7 @@ class FormArgumentType : ArgumentType<FormData> {
             curIdx++
             val speciesToken = builder.input.substring(curIdx, builder.start - 1)
 
-            val species = PokemonSpecies.getByName(speciesToken) ?: PokemonSpecies.species.first()
+            val species = PokemonSpecies.getByIdentifier(speciesToken.asIdentifierDefaultingNamespace()) ?: PokemonSpecies.species.first()
             val forms = species.forms.union(listOf(species.standardForm)).filter { it.formOnlyShowdownId().lowercase().startsWith(formToken) }
             forms.forEach { str ->
                 builder.suggest(str.formOnlyShowdownId())

@@ -1,0 +1,9 @@
+{
+  "pokemon": ["pikachu"],
+  "cosmeticItems": [
+    {
+      "consumedItem": "minecraft:paper",
+      "aspects": ["cosmetic_item-paper"]
+    }
+  ]
+}

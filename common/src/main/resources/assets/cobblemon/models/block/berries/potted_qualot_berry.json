@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_wepear_berry",
+  "textures": {
+    "0": "cobblemon:block/berries/qualot_leaves",
+    "1": "cobblemon:block/berries/qualot_tree"
+  }
+}

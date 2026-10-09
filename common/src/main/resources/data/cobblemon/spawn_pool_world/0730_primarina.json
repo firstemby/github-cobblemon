@@ -4,6 +4,26 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "primarina-1",
+            "pokemon": "primarina",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "ultra-rare",
+            "level": "34-53",
+            "weight": 2.4,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "primarina-2",
             "pokemon": "primarina",
             "presets": [
@@ -13,7 +33,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 3.2,
+            "weight": 1.2,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -59,7 +79,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "34-53",
-            "weight": 3.2,
+            "weight": 1.2,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -97,26 +117,6 @@
                 "biomes": [
                     "#cobblemon:is_freezing"
                 ]
-            }
-        },
-        {
-            "id": "primarina-1",
-            "pokemon": "primarina",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "ultra-rare",
-            "level": "34-53",
-            "weight": 4.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

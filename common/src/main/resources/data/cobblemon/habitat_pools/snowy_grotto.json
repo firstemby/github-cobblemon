@@ -44,7 +44,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "5-31",
-      "modifiers": "hisuibias",
+      "modifiers": "region_bias=hisui",
       "phases": "2"
     },
     {
@@ -53,7 +53,7 @@
       "spawnablePositionType": "grounded",
       "weight": 3.0,
       "levelRange": "17-41",
-      "modifiers": "hisuibias",
+      "modifiers": "region_bias=hisui",
       "phases": "2"
     },
     {
@@ -254,6 +254,22 @@
       "levelRange": "36-51",
       "phases": "1-7, 9",
       "timeRange": "night"
+    },
+    {
+      "species": "Snover",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 6.0,
+      "levelRange": "8-33",
+      "phases": "1-9"
+    },
+    {
+      "species": "Abomasnow",
+      "bucket": "uncommon",
+      "spawnablePositionType": "grounded",
+      "weight": 4.0,
+      "levelRange": "40-49",
+      "phases": "1-9"
     },
     {
       "species": "Glaceon",

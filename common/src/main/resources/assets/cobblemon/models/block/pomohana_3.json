@@ -1,0 +1,75 @@
+{
+	"ambientocclusion": false,
+	"texture_size": [32, 32],
+	"textures": {
+		"particle": "cobblemon:block/flowers/pomohana_particle",
+		"flower": "cobblemon:block/flowers/pomohana"
+	},
+	"elements": [
+		{
+			"name": "stem",
+			"from": [8.5, 0, 2.5],
+			"to": [16.5, 27, 2.5],
+			"shade": false,
+			"rotation": {"angle": -45, "axis": "y", "origin": [12.5, 0, 2.5], "rescale": true},
+			"faces": {
+				"north": {"uv": [0, 2.5, 4.5, 16], "texture": "#flower"},
+				"south": {"uv": [0, 2.5, 4.5, 16], "texture": "#flower"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [12.5, 0, -1.5],
+			"to": [12.5, 27, 6.5],
+			"shade": false,
+			"rotation": {"angle": -45, "axis": "y", "origin": [12.5, 0, 2.5], "rescale": true},
+			"faces": {
+				"east": {"uv": [0, 2.5, 4.5, 16], "texture": "#flower"},
+				"west": {"uv": [0, 2.5, 4.5, 16], "texture": "#flower"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [-0.75, 0, 7.5],
+			"to": [3.75, 11, 7.5],
+			"shade": false,
+			"rotation": {"angle": -45, "axis": "y", "origin": [1.5, 0, 7.5], "rescale": true},
+			"faces": {
+				"north": {"uv": [11, 0, 13.5, 5.5], "texture": "#flower"},
+				"south": {"uv": [11, 0, 13.5, 5.5], "texture": "#flower"}
+			}
+		},
+		{
+			"name": "stem",
+			"from": [1.5, 0, 5.25],
+			"to": [1.5, 11, 9.75],
+			"shade": false,
+			"rotation": {"angle": -45, "axis": "y", "origin": [1.5, 0, 7.5], "rescale": true},
+			"faces": {
+				"east": {"uv": [11, 0, 13.5, 5.5], "texture": "#flower"},
+				"west": {"uv": [11, 0, 13.5, 5.5], "texture": "#flower"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "three",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "flower",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [0, 1]
+				},
+				{
+					"name": "flower",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [2, 3]
+				}
+			]
+		}
+	]
+}

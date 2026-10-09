@@ -1,0 +1,129 @@
+{
+  "portraitScale": 1.9,
+  "portraitTranslation": [-0.3, 0.9, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [0, 0.75, 0],
+  "rootBone": "raichu_alolan",
+  "animations": {
+    "faint": "q.bedrock_primary('raichu_alolan_cap', 'faint', q.curve('one'))",
+    "recoil": "q.bedrock_stateful('raichu_alolan_cap', 'recoil')",
+    "cry": "q.bedrock_stateful('raichu_alolan_cap', 'cry')",
+    "physical": "q.bedrock_primary('raichu_alolan_cap', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('raichu_alolan_cap', 'special', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_stateful('raichu_alolan_cap', 'cry', q.curve('symmetrical_wide'))"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND","HOVER"],
+      "isBattle": true,
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan_cap', 'blink')","q.bedrock_quirk('raichu_alolan_cap','battle_quirk', 20, 40, 1)"]
+    },
+    "standing": {
+      "poseTypes": ["STAND", "HOVER", "NONE", "PORTRAIT"],
+      "isBattle": false,
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('raichu_alolan_cap', 'blink')","q.bedrock_quirk('raichu_alolan_cap', q.array('rub_quirk','look_quirk'), 30, 60, 1)"
+      ]
+    },
+    "portrait": {
+      "poseTypes": ["PROFILE"],
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'ground_idle_sit')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan_cap', 'blink')"]
+    },
+    "walking": {
+      "poseTypes": ["WALK","FLY"],
+      "isTouchingWater": false,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('raichu_alolan_cap', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": false,
+      "animations": ["q.bedrock('raichu_alolan_cap', 'sleep')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+    "surface-sleep": {
+      "poseTypes": ["SLEEP"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.bedrock('raichu_alolan_cap', 'sleep')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+      "surfacewaterbattle-standing": {
+      "poseTypes": ["STAND"],
+      "isBattle": true,
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'battle_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan_cap', 'blink')","q.bedrock_quirk('raichu_alolan_cap','battle_quirk', 30, 60, 1)"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    },
+    "surfacewater-idle": {
+      "poseTypes": ["STAND"],
+      "isBattle": false,
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan_cap', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    },
+    "surfacewater-swim": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": true,
+      "animations": [
+        "q.look('head_ai', 1, 1, 10, -30, 17.5, -17.5)",
+        "q.bedrock('raichu_alolan_cap', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('raichu_alolan_cap', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, -7, 0]
+        }
+      ]
+    }
+  }
+ }

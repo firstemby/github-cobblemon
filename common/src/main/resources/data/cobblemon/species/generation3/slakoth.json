@@ -51,7 +51,7 @@
     "moving": {
       "wanderChance": "400",
       "walk": {
-        "walkSpeed": 0.2
+        "walkSpeed": 0.14
       },
       "swim": {
         "avoidsWater": true

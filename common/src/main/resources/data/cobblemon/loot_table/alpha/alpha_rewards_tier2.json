@@ -5,7 +5,7 @@
       "rolls": {
         "type": "minecraft:uniform",
         "min": 1,
-        "max": 2
+        "max": 1
       },
       "bonus_rolls": 0.0,
       "entries": [
@@ -18,7 +18,7 @@
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 3
+                "max": 1
               }
             }
           ]
@@ -32,19 +32,8 @@
               "function": "set_count",
               "count": {
                 "min": 1,
-                "max": 2
+                "max": 1
               }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "cobblemon:exp_candy_l",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "set_count",
-              "count": 1
             }
           ]
         }

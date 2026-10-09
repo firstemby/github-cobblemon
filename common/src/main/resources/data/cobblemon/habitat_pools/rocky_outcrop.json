@@ -208,7 +208,7 @@
       "spawnablePositionType": "grounded",
       "weight": 6.0,
       "levelRange": "10-35",
-      "modifiers": "hisuibias",
+      "modifiers": "region_bias=hisui",
       "phases": "8"
     },
     {

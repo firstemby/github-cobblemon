@@ -6,6 +6,7 @@
         "cobblemon:bright_powder",
         "cobblemon:quick_powder",
         "cobblemon:metal_powder",
+        "cobblemon:soft_sand",
 		
         "cobblemon:blunder_policy",
         "cobblemon:weakness_policy",
@@ -47,6 +48,9 @@
         "cobblemon:pp_up",
         "cobblemon:pp_max",
         "cobblemon:throat_spray",
+        "cobblemon:medicinal_brew",
+        "cobblemon:moomoo_milk",
+        "cobblemon:terrain_extender",
         
         "cobblemon:metal_coat",
         "cobblemon:luminous_moss",
@@ -63,6 +67,8 @@
         "cobblemon:destiny_knot",
         "cobblemon:kings_rock",
         "cobblemon:iron_ball",
+        "cobblemon:electirizer",
+        "cobblemon:magmarizer",
         
         "cobblemon:flame_orb",
         "cobblemon:toxic_orb",

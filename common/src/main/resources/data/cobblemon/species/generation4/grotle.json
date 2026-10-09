@@ -278,7 +278,7 @@
         },
         {
           "variant": "biome",
-          "biomeConditions": "#cobblemon:is_swamp"
+          "biomeCondition": "#cobblemon:is_swamp"
         },
         {
           "variant": "held_item",

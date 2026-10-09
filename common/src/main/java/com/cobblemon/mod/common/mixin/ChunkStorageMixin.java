@@ -15,6 +15,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.serialization.MapCodec;
 import java.util.Optional;
 import java.util.function.Supplier;
+import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.resources.ResourceKey;
@@ -44,5 +45,25 @@ public class ChunkStorageMixin {
     ) {
         int curVersion = vanillaFixed.contains(VERSION_KEY) ? vanillaFixed.getInt(VERSION_KEY) : 0;
         return DataFixTypes.CHUNK.update(CobblemonSchemas.getDATA_FIXER(), vanillaFixed, curVersion, CobblemonSchemas.DATA_VERSION);
+    }
+
+    // Our update on the same MC version still needs its own fixes so run them here in that case.
+    @Inject(
+        method = "upgradeChunkTag(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Supplier;Lnet/minecraft/nbt/CompoundTag;Ljava/util/Optional;)Lnet/minecraft/nbt/CompoundTag;",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void cobblemon$doChunkFixOnCurrentVersion(
+        ResourceKey<Level> levelKey,
+        Supplier<DimensionDataStorage> storage,
+        CompoundTag chunkData,
+        Optional<ResourceKey<MapCodec<? extends ChunkGenerator>>> chunkGeneratorKey,
+        CallbackInfoReturnable<CompoundTag> cir
+    ) {
+        if (ChunkStorage.getVersion(chunkData) != SharedConstants.getCurrentVersion().getDataVersion().getVersion()) {
+            return;
+        }
+        int curVersion = chunkData.contains(VERSION_KEY) ? chunkData.getInt(VERSION_KEY) : 0;
+        cir.setReturnValue(DataFixTypes.CHUNK.update(CobblemonSchemas.getDATA_FIXER(), chunkData, curVersion, CobblemonSchemas.DATA_VERSION));
     }
 }

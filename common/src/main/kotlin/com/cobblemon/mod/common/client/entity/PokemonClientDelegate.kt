@@ -32,6 +32,7 @@ import com.cobblemon.mod.common.client.render.models.blockbench.PosableState
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.ActiveAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.animation.PrimaryAnimation
 import com.cobblemon.mod.common.client.render.models.blockbench.repository.VaryingModelRepository
+import com.cobblemon.mod.common.client.render.player.RecallArmAnimationTracker
 import com.cobblemon.mod.common.client.render.pokemon.PokemonRenderer.Companion.ease
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
@@ -320,6 +321,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         ballOffset = 0f
                         ballRotOffset = 0f
                         sendOutPosition = null
+                        currentEntity.ownerUUID?.let { RecallArmAnimationTracker.start(it, currentEntity.exposedBall) }
                         afterOnClient(seconds = BEAM_EXTEND_TIME) {
                             activeSendoutScale = 1F
 
@@ -473,7 +475,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                         val locators = particleData.locatorResolver(locatorStates).filter(::isLocatorVisible)
                         if (particleData.chance > random.nextDouble()) {
                             locators.forEach { locator ->
-                                repeat(particleData.amount) {
+                                repeat(particleData.amount()) {
                                     runtime.resolve("q.particle('${particleData.particle}', '$locator')".asExpressionLike())
                                 }
                             }
@@ -483,7 +485,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                     is ParticleData.MinecraftParticle -> {
                         if (particleData.chance > random.nextDouble()) {
                             val box = currentEntity.boundingBox
-                            repeat(particleData.amount) {
+                            repeat(particleData.amount()) {
                                 val x = box.minX + (box.maxX - box.minX) * random.nextDouble()
                                 val y = box.minY + (box.maxY - box.minY) * random.nextDouble()
                                 val z = box.minZ + (box.maxZ - box.minZ) * random.nextDouble()

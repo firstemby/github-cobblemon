@@ -216,19 +216,22 @@ class CobblemonConfig {
     @CobblemonConfigField(Category.Pokemon, lang = "display_entity_labels_when_crouching_only", CLIENT)
     var displayEntityLabelsWhenCrouchingOnly = false
 
+    @CobblemonConfigField(Category.Pokemon, lang = "shoulder_mount_armor_offset_blacklist", CLIENT)
+    var shoulderMountArmorOffsetBlacklist = mutableSetOf<ResourceLocation>()
+
     @CobblemonConfigField(Category.Spawning, lang = "shiny_rate", SERVER)
     var shinyRate = 8192F
 
-    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_alpha_chance", SERVER)
+    @CobblemonConfigField(Category.Spawning, lang = "fossil_machine_alpha_chance", SERVER)
     var fossilMachineAlphaChance = 20
 
-    @CobblemonConfigField(Category.Pokemon, lang = "fossil_machine_shiny_chance", SERVER)
+    @CobblemonConfigField(Category.Spawning, lang = "fossil_machine_shiny_chance", SERVER)
     var fossilMachineShinyChance = 100
 
-    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_alpha_chance", SERVER)
+    @CobblemonConfigField(Category.Spawning, lang = "honey_slather_alpha_chance", SERVER)
     var honeySlatherAlphaChance = 100
 
-    @CobblemonConfigField(Category.Pokemon, lang = "honey_slather_shiny_chance", SERVER)
+    @CobblemonConfigField(Category.Spawning, lang = "honey_slather_shiny_chance", SERVER)
     var honeySlatherShinyChance = 4000
 
     @CobblemonConfigField(Category.Pokemon, lang = "shiny_notice_particles_distance", CLIENT)
@@ -388,6 +391,21 @@ class CobblemonConfig {
 
     @CobblemonConfigField(Category.Spawning, lang = "data_monitor_shiny_rate", SERVER)
     var monitorShinyRate = 200
+
+    @CobblemonConfigField(Category.World, lang = "type_gem_max_connected", SERVER)
+    var typeGemMaxConnected = 16
+
+    @CobblemonConfigField(Category.World, lang = "type_gem_min_growth", SERVER)
+    var typeGemMinGrowth = 8
+
+    @CobblemonConfigField(Category.World, lang = "type_gem_growth_chance", SERVER)
+    var typeGemGrowthChance = 0.1f
+
+    @CobblemonConfigField(Category.World, lang = "type_gem_initial_expansion_cycles", SERVER)
+    var typeGemInitialExpansionCycles = 100
+
+    @CobblemonConfigField(Category.World, lang = "type_gem_tick_chance", SERVER)
+    var typeGemTickChance = 1.0f
 
     fun clone(): CobblemonConfig {
         val newConfig = CobblemonConfig()

@@ -111,6 +111,7 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
     herds_df = download_excel_data(herds_sheet_url, {'Herd ID': str, 'Herd Pokémon': str})
     herd_pokemon_df = download_excel_data(herd_pokemon_sheet_url, {'Entry ID': str, 'No.': str})
     herds_df['Sees Sky'] = herds_df['Sees Sky'].apply(lambda x: str(x).lower())
+    herds_df['Enabled'] = herds_df['Enabled'].apply(lambda x: str(x).lower())
 
     # Verify all biome tags are valid
     invalid_biome_tags = [] # verify_biome_tags() I don't know that this provides much value except to restrict the machines the script can run on
@@ -201,7 +202,7 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
         print_report()
 
     process_habitats(habitats_df)
-    process_herds(herds_df, herd_pokemon_df)
+    process_herds(herds_df, herd_pokemon_df, drops_df)
 
     # Save data to SQLite
     # print("Saving data to SQLite")
@@ -209,13 +210,13 @@ def main(pokemon_data_dir, spawn_spreadsheet_path="", only_update_existing_files
     print_cobblemon_script_footer("Thanks for using the spawn csv to json script, provided to you by Waldleufer")
 
 
-def process_herds(herds_df, herd_pokemon_df):
+def process_herds(herds_df, herd_pokemon_df, drops_df):
     print("Processing herds...")
     # Habitat data comes from two tabs, the top-layer herd sheet, and the herd-pokemon sheet.
     # At the top level the columns are:
     # File, Herd ID, Herd Pokémon, Max Size, Lv. Min, Lv. Max, Bucket, Weight, Biomes, Excluded Biomes, Time, Weather, Multipliers, Context, Presets, Conditions, Anticonditions, Sky Light Min, Sky Light Max, Sees Sky, Min Dist, Enabled
     # This is fairly similar to the regular spawn data for the most part. First let's create the details ignoring the contents of Herd Pokémon.
-    herds_df = herds_df[herds_df['Enabled'] != 'FALSE']
+    herds_df = herds_df[herds_df['Enabled'] != 'false']
     herd_groups = herds_df.groupby('File')
 
     herd_pokemon = herd_pokemon_df.set_index('Entry ID')
@@ -227,7 +228,7 @@ def process_herds(herds_df, herd_pokemon_df):
             "neededUninstalledMods": [],
             "spawns": []
         }
-        
+
         for _, row in group.iterrows():
             if pd.isna(row['Context']):
                 continue
@@ -269,7 +270,7 @@ def process_herds(herds_df, herd_pokemon_df):
                 del spawn_data['presets']
 
             # Handle conditions, anticonditions, and weight multipliers
-            handle_conditionality(row, row['Herd ID'], spawn_data, [])
+            conditions = handle_conditionality(row, row['Herd ID'], spawn_data, [])
 
             spawn_data['herdablePokemon'] = []
             for herd_pokemon_id in row['Herd Pokémon'].split(','):
@@ -303,6 +304,41 @@ def process_herds(herds_df, herd_pokemon_df):
                     "isLeader": herd_pokemon_row['Leader'] != 'no',
                     "isFollower": herd_pokemon_row['Leader'] != 'only'
                 }
+
+                # Spawn specific drops field
+                spawn_specific_drops = drops_df[drops_df['Pokémon'] == herdable_pokemon["pokemon"]]["Spawn Specific Drops"]
+                if not spawn_specific_drops.empty:
+                    # Split spawn specific drops by ;
+                    spawn_specific_drops = spawn_specific_drops.iloc[0].split(';')
+                    # Iterate through the spawn_specific_drops
+                    for drop in spawn_specific_drops:
+                        # Split the string by = and strip each string
+                        dropconditions, unprocessedDrops = drop.split('=')[0].strip(), drop.split('=')[1].strip()
+                        for dropcondition in dropconditions.split(','):
+                            if dropcondition.startswith("preset:"):
+                                # split dropcondition by "," remove ":preset" and strip each string
+                                presets = [drop.strip().replace("preset:", "").lower() for drop in dropcondition.split(',')]
+                                # check if the dropcondition is in the preset_list, if not, then add it to the unknown_conditions list
+                                for preset in presets:
+                                    if preset not in preset_list:
+                                        print_warning(f"Unknown preset: {preset} used by {current_id}")
+                                    # if the current entry's preset matches with the condition, then add the drops to the json_data
+                                    # check if the presets field is in the spawn_data
+                                    if "presets" in spawn_data and preset in spawn_data['presets']:
+                                        herdable_pokemon["dropTable"] = parse_drops(unprocessedDrops)
+                            elif dropcondition.startswith("biome:"):
+                                biomes = [drop.strip().replace("biome:", "").lower() for drop in dropcondition.split(',')]
+                                for biome in biomes:
+                                    biome = biome.lower()
+                                    if biome not in biome_dictionary:
+                                        print_warning(f"Unknown biome: {biome} used by {current_id}")
+                                    # Apply the biome mapping to the condition
+                                    if biome in biome_dictionary:
+                                        biome = biome_dictionary[biome]
+                                    # if the current entry's biome matches with the condition, then add the drops to the json_data
+                                    if biome in conditions['biomes']:
+                                        herdable_pokemon["dropTable"] = parse_drops(unprocessedDrops)
+
 
                 if herd_pokemon_row['Alpha'] == True:
                     herdable_pokemon['pokemon'] = f"{herdable_pokemon['pokemon']} alpha=true"

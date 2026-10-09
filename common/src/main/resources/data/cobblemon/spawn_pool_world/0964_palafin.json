@@ -4,6 +4,46 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "palafin-1",
+            "pokemon": "palafin",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "38-46",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "palafin-2",
+            "pokemon": "palafin",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "38-46",
+            "weight": 6.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "palafin-3",
             "pokemon": "palafin",
             "type": "pokemon",
@@ -85,46 +125,6 @@
                     "#cobblemon:is_ocean"
                 ],
                 "minLureLevel": 1
-            }
-        },
-        {
-            "id": "palafin-1",
-            "pokemon": "palafin",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "38-46",
-            "weight": 6.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "isPokeSnack": true
-            }
-        },
-        {
-            "id": "palafin-2",
-            "pokemon": "palafin",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "38-46",
-            "weight": 6.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

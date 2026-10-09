@@ -1,0 +1,35 @@
+{
+  "parent": "cobblemon:recipes/misc",
+  "criteria": {
+    "has_flower": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "cobblemon:pomohana"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "cobblemon:yellow_dye_from_pomohana"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_flower",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cobblemon:yellow_dye_from_pomohana"
+    ]
+  },
+  "sends_telemetry_event": false
+}

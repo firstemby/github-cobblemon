@@ -10,6 +10,8 @@ package com.cobblemon.mod.common.api.spawning
 
 import com.cobblemon.mod.common.api.spawning.TimeRange.Companion.timeRanges
 import com.cobblemon.mod.common.api.spawning.condition.SpawningCondition
+import com.cobblemon.mod.common.util.lang
+import net.minecraft.network.chat.MutableComponent
 import com.cobblemon.mod.common.util.adapters.IntRangesAdapter
 
 /**
@@ -49,4 +51,25 @@ class TimeRange : IntRanges {
 
     constructor() : super()
     constructor(vararg ranges: IntRange) : super(*ranges)
+
+    fun displayName(): MutableComponent? {
+        val key = timeRanges.entries.firstOrNull { entry -> this == entry.value }?.key ?: return null
+        return lang("ui.time_range.$key")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TimeRange) return false
+
+        if (other.ranges.size != this.ranges.size) return false
+        other.ranges.forEachIndexed { index, otherRange ->
+            if (this.ranges[index] != otherRange) return false
+        }
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return ranges.hashCode()
+    }
 }

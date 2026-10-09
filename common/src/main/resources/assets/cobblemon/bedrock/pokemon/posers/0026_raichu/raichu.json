@@ -5,29 +5,71 @@
   "profileTranslation": [0.0, 0.75, 0.0],
   "rootBone": "raichu",
   "animations": {
-    "cry": "q.bedrock_stateful('raichu', 'cry')"
+    "faint": "q.bedrock_primary('raichu', 'faint', q.curve('one'))",
+    "recoil": "q.bedrock_stateful('raichu', 'recoil')",
+    "cry": "q.bedrock_stateful('raichu', 'cry')",
+    "physical": "q.bedrock_primary('raichu', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('raichu', 'special', q.curve('symmetrical_wide'))",
+    "thunder": "q.bedrock_primary('raichu', 'special2', q.curve('symmetrical_wide'))",
+    "risingvoltage": "q.bedrock_primary('raichu', 'special2', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_primary('raichu', 'status', q.curve('symmetrical_wide'))"
   },
   "poses": {
     "battle-standing": {
       "poseTypes": ["STAND"],
       "isBattle": true,
       "animations": ["q.look('head_ai', 1, 1, 10, -30, 30, -30)", "q.bedrock('raichu', 'battle_idle')"],
-      "quirks": ["q.bedrock_quirk('raichu', 'blink')"]
+      "quirks": ["q.bedrock_quirk('raichu', 'blink')"],
+        "namedAnimations": {
+            "cry": "q.bedrock_primary('raichu', 'battle_cry', q.curve('symmetrical_wide'))"
+          }
     },
     "standing": {
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
+      "isTouchingWater": false,
       "animations": ["q.look('head_ai', 1, 1, 10, -30, 30, -30)", "q.bedrock('raichu', 'ground_idle')"],
-      "quirks": ["q.bedrock_quirk('raichu', 'blink')"]
+      "quirks": ["q.bedrock_quirk('raichu', 'blink')",
+          "q.bedrock_quirk('raichu', 'rub_quirk', 30, 60, 1)",
+          "q.bedrock_primary_quirk('raichu', 'idle_quirk', 30, 60, 1, q.curve('symmetrical_wide'))"]
     },
     "walking": {
       "poseTypes": ["WALK"],
+      "isTouchingWater": false,
       "animations": ["q.look('head_ai', 1, 1, 10, -30, 30, -30)", "q.bedrock('raichu', 'ground_walk')"],
       "quirks": ["q.bedrock_quirk('raichu', 'blink')"]
     },
     "sleep": {
       "poseTypes": ["SLEEP"],
-      "animations": ["q.bedrock('raichu', 'sleep')"]
+      "animations": ["q.bedrock('raichu', 'sleep')"],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    }, 
+    "surface-float": {
+      "poseTypes": ["STAND","FLOAT"],
+      "isTouchingWater": true,
+      "isBattle": false,
+      "animations": ["q.look('head_ai', 1, 1, 10, -30, 30, -30)", "q.bedrock('raichu', 'water_surface_idle')"],
+      "quirks": ["q.bedrock_quirk('raichu', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, 7, 0]
+        }
+      ]
+    },
+    "surface-swim": {
+      "poseTypes": ["WALK","SWIM"],
+      "isTouchingWater": true,
+      "animations": ["q.look('head_ai', 1, 1, 10, -30, 30, -30)", "q.bedrock('raichu', 'water_surface_swim')"],
+      "quirks": ["q.bedrock_quirk('raichu', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [0, 7, 0]
+        }
+      ]
     }
   }
 }

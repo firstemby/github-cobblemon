@@ -66,6 +66,11 @@
           "#cobblemon:is_overworld"
         ]
       },
+      "anticondition": {
+        "biomes": [
+          "minecraft:sulfur_caves"
+        ]
+      },
       "herdablePokemon": [
         {
           "pokemon": "whiscash held_item=cobblemon:water_gem alpha=true",

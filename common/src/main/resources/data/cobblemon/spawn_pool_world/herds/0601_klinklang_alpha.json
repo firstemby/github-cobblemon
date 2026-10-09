@@ -26,7 +26,8 @@
       },
       "anticondition": {
         "biomes": [
-          "#cobblemon:is_deep_dark"
+          "#cobblemon:is_deep_dark",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [
@@ -82,6 +83,11 @@
       "condition": {
         "biomes": [
           "#cobblemon:is_overworld"
+        ]
+      },
+      "anticondition": {
+        "biomes": [
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [

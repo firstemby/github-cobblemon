@@ -1,0 +1,15 @@
+for_each(t.actor, c.players, {
+  t.biome = t.actor.player.biome;
+  t.cloak = t.biome.is_in('#cobblemon:form_change/bagworm_cloak/sandy_cloak') ? 'sandy'
+    : (t.biome.is_in('#cobblemon:form_change/bagworm_cloak/trash_cloak') ? 'trash'
+    : (t.biome.is_in('#cobblemon:form_change/bagworm_cloak/plant_cloak') ? 'plant' : ''));
+
+  !q.is_blank(t.cloak) ? {
+    for_each(t.battle_pokemon, t.actor.battle_pokemon, {
+      t.pokemon = t.battle_pokemon.original_pokemon;
+      (t.battle_pokemon.has_faced_opponents && t.pokemon.matches('burmy') && !t.pokemon.matches('burmy bagworm_cloak=' + t.cloak)) ? {
+        t.pokemon.apply('bagworm_cloak=' + t.cloak);
+      };
+    });
+  };
+});

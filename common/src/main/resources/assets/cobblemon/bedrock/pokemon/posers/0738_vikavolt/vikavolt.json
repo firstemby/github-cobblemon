@@ -1,32 +1,55 @@
 {
-  "portraitScale": 1.46,
-  "portraitTranslation": [-0.41, 0.93, 0],
+  "portraitScale": 1.58,
+  "portraitTranslation": [-0.41, -0.55, 0],
   "profileScale": 0.49,
-  "profileTranslation": [0.02, 1.20, 0],
+  "profileTranslation": [0, 0.75, 0],
   "rootBone": "vikavolt",
-  "transformedParts": [
-    {
-      "part": "body",
-      "position": [0, -12, 0]
-    }
-  ],
   "animations": {
-    "cry": "q.bedrock_stateful('vikavolt', 'cry')"
   },
   "poses": {
     "standing": {
-      "poseTypes": ["STAND", "FLOAT", "HOVER", "NONE", "PORTRAIT", "PROFILE"],
+      "poseTypes": ["STAND", "FLOAT", "NONE"],
       "animations": [
-        "q.look('head')", 
+        "q.bedrock('vikavolt', 'ground_idle')"
+      ],
+      "quirks": ["q.bedrock_quirk('vikavolt', 'blink')"],
+      "transitions": {
+        "hover": "q.bedrock_primary('vikavolt', 'air_transition',  q.curve('one'))",
+        "fly": "q.bedrock_primary('vikavolt', 'air_transition',  q.curve('one'))"
+      }
+    },
+    "walking": {
+      "poseTypes": ["WALK", "SWIM"],
+      "animations": [
         "q.bedrock('vikavolt', 'ground_walk')"
+      ],
+      "quirks": ["q.bedrock_quirk('vikavolt', 'blink')"],
+      "transitions": {
+        "hover": "q.bedrock_primary('vikavolt', 'air_transition',  q.curve('one'))",
+        "fly": "q.bedrock_primary('vikavolt', 'air_transition',  q.curve('one'))"
+      }
+    },
+    "hover": {
+      "poseTypes": ["HOVER", "PORTRAIT", "PROFILE"],
+      "animations": [
+        "q.pitch_tilt('body')",
+        "q.bedrock('vikavolt', 'air_idle')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('vikavolt', 'hold_item')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('vikavolt', 'blink')"]
     },
-    "walking": {
-      "poseTypes": ["WALK", "SWIM", "FLY"],
+    "fly": {
+      "poseTypes": ["FLY"],
       "animations": [
-        "q.look('head')", 
-        "q.bedrock('vikavolt', 'ground_walk')"
+        "q.pitch_tilt('body')",
+        "q.bedrock('vikavolt', 'air_fly')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('vikavolt', 'hold_item')"
+        }
       ],
       "quirks": ["q.bedrock_quirk('vikavolt', 'blink')"]
     }

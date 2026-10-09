@@ -1192,7 +1192,7 @@ open class PokemonEntity(
                 itemStack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND)
                 return InteractionResult.SUCCESS
             } else if (itemStack.`is`(Items.BOWL)) {
-                if (pokemon.aspects.any { it.contains("mooshtank") }) {
+                if (pokemon.aspects.any { it.contains("mooshtank") && !it.contains("mooshtank-false") }) {
                     player.playSound(SoundEvents.MOOSHROOM_MILK, 1.0f, 1.0f)
                     // if the Mooshtank ate a Flower beforehand
                     if (pokemon.lastFlowerFed != ItemStack.EMPTY && pokemon.aspects.any { it.contains("mooshtank-brown") }) {
@@ -1234,7 +1234,8 @@ open class PokemonEntity(
             ) {
                 if (pokemon.aspects.any { it.contains("mooshtank-brown") }) {
                     player.playSound(SoundEvents.MOOSHROOM_EAT, 1.0f, 1.0f)
-                    pokemon.lastFlowerFed = itemStack
+                    pokemon.lastFlowerFed = itemStack.copyWithCount(1)
+                    if (!player.isCreative && !level().isClientSide) itemStack.shrink(1)
                     return InteractionResult.sidedSuccess(level().isClientSide)
                 }
             } else if (!player.isShiftKeyDown && StashHandler.interactMob(player, pokemon, itemStack)) {
@@ -1483,19 +1484,31 @@ open class PokemonEntity(
 
         // Evolution item logic
         if (pokemon.getOwnerPlayer() == player) {
+            fun evolutionUnlocked(): Boolean {
+                stack.consume(1, player)
+                this.level().playSoundServer(
+                    position = this.position(),
+                    sound = CobblemonSounds.ITEM_USE,
+                    volume = 1F,
+                    pitch = 1F
+                )
+                return true
+            }
             val context = ItemInteractionEvolution.ItemInteractionContext(stack, player.level())
-            pokemon.lockedEvolutions
-                    .filterIsInstance<ItemInteractionEvolution>()
-                    .forEach { evolution ->
-                        if (evolution.attemptEvolution(pokemon, context)) {
-                            stack.consume(1, player)
-                            this.level().playSoundServer(
-                                    position = this.position(),
-                                    sound = CobblemonSounds.ITEM_USE,
-                                    volume = 1F,
-                                    pitch = 1F
-                            )
-                            return true
+            val lockedItemEvolutions = pokemon.lockedEvolutions.filterIsInstance<ItemInteractionEvolution>()
+            // forced evolutions > check those first and do ONLY one if there's multiple
+            lockedItemEvolutions.filter { !it.optional }.forEach {
+                if (it.attemptEvolution(pokemon, context)) {
+                   return evolutionUnlocked()
+                }
+            }
+            // optional evolutions > unlock all with single item use
+            lockedItemEvolutions.filter { it.optional }
+                    // we unlock all evolutions that depend on this single item
+                    .map { evolution -> return@map evolution.attemptEvolution(pokemon, context) }
+                    .let {
+                        if (it.contains(true)) { // if any of the evolutions were unlocked, we take the item
+                            return evolutionUnlocked()
                         }
                     }
         }

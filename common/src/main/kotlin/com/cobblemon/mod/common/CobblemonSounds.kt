@@ -149,6 +149,9 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
     val MONITOR_GLITCHING = this.create("block.monitor.glitching")
 
     @JvmField
+    val BRIGHT_POWDER_USE = this.create("block.bright_powder.use")
+
+    @JvmField
     val FOSSIL_MACHINE_ACTIVATE = this.create("block.fossil_machine.activate")
     @JvmField
     val FOSSIL_MACHINE_ACTIVE_LOOP = this.create("block.fossil_machine.active_loop")
@@ -655,6 +658,96 @@ object CobblemonSounds : PlatformRegistry<Registry<SoundEvent>, ResourceKey<Regi
         ITEM_BLOCK_PAPER_LARGE_PLACE,
         SoundEvents.WOOL_HIT,
         SoundEvents.WOOL_FALL
+    )
+
+    @JvmField
+    val ITEM_BLOCK_POWDER_PLACE = this.create("block.item_block.powder.place")
+    @JvmField
+    val ITEM_BLOCK_POWDER_BREAK = this.create("block.item_block.powder.break")
+    @JvmField
+    val ITEM_BLOCK_POWDER_STEP = this.create("block.item_block.powder.step")
+    @JvmField
+    val ITEM_BLOCK_POWDER_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_POWDER_BREAK,
+        ITEM_BLOCK_POWDER_STEP,
+        ITEM_BLOCK_POWDER_PLACE,
+        ITEM_BLOCK_POWDER_STEP,
+        ITEM_BLOCK_POWDER_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_PLACE = this.create("block.item_block.bottle_liquid.place")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_BREAK = this.create("block.item_block.bottle_liquid.break")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_STEP = this.create("block.item_block.bottle_liquid.step")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_LIQUID_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_BOTTLE_LIQUID_BREAK,
+        ITEM_BLOCK_BOTTLE_LIQUID_STEP,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE,
+        ITEM_BLOCK_BOTTLE_LIQUID_PLACE
+    )
+
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_PLACE = this.create("block.item_block.bottle_pills.place")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_BREAK = this.create("block.item_block.bottle_pills.break")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_STEP = this.create("block.item_block.bottle_pills.step")
+    @JvmField
+    val ITEM_BLOCK_BOTTLE_PILLS_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_BOTTLE_PILLS_BREAK,
+        ITEM_BLOCK_BOTTLE_PILLS_STEP,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE,
+        ITEM_BLOCK_BOTTLE_PILLS_PLACE
+    )
+
+    @JvmField
+    val ITEM_BLOCK_DICE_PLACE = this.create("block.item_block.dice.place")
+    @JvmField
+    val ITEM_BLOCK_DICE_BREAK = this.create("block.item_block.dice.break")
+    @JvmField
+    val ITEM_BLOCK_DICE_STEP = this.create("block.item_block.dice.step")
+    @JvmField
+    val ITEM_BLOCK_DICE_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_DICE_BREAK,
+        ITEM_BLOCK_DICE_STEP,
+        ITEM_BLOCK_DICE_PLACE,
+        ITEM_BLOCK_DICE_STEP,
+        ITEM_BLOCK_DICE_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_PLACE = this.create("block.item_block.metal_can.place")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_BREAK = this.create("block.item_block.metal_can.break")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_STEP = this.create("block.item_block.metal_can.step")
+    @JvmField
+    val ITEM_BLOCK_METAL_CAN_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_METAL_CAN_BREAK,
+        ITEM_BLOCK_METAL_CAN_STEP,
+        ITEM_BLOCK_METAL_CAN_PLACE,
+        ITEM_BLOCK_METAL_CAN_STEP,
+        ITEM_BLOCK_METAL_CAN_STEP
+    )
+
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_PLACE = this.create("block.item_block.jar_glass_liquid.place")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_BREAK = this.create("block.item_block.jar_glass_liquid.break")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_STEP = this.create("block.item_block.jar_glass_liquid.step")
+    @JvmField
+    val ITEM_BLOCK_JAR_GLASS_LIQUID_SOUNDS = SoundType(1f, 1.1f,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_BREAK,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_PLACE,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP,
+        ITEM_BLOCK_JAR_GLASS_LIQUID_STEP
     )
 
     private fun create(name: String): SoundEvent = this.create(name, SoundEvent.createVariableRangeEvent(cobblemonResource(name)))

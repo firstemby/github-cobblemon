@@ -83,7 +83,8 @@ open class BattlePokemon(
             "max_health" to Function { DoubleValue(maxHealth.toDouble()) },
             "ivs" to Function { effectedPokemon.ivs.struct },
             "nature" to Function { StringValue(effectedPokemon.nature.name.toString()) },
-            "moveset" to Function { effectedPokemon.moveSet.toStruct() }
+            "moveset" to Function { effectedPokemon.moveSet.toStruct() },
+            "has_faced_opponents" to Function { DoubleValue(facedOpponents.isNotEmpty()) }
         ))
 
     val uuid: UUID

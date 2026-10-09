@@ -5,6 +5,7 @@
   "profileTranslation": [0.0, 0.77, 0.0],
   "rootBone": "pikachu",
   "animations": {
+    "faint": "q.bedrock_primary('pikachu', 'faint', q.curve('one'))",
     "recoil": "q.bedrock_stateful('pikachu', 'recoil')",
     "cry": "q.bedrock_stateful('pikachu', 'alolan_cry')",
     "volttackle": "q.bedrock_primary('pikachu', 'volttackle', q.curve('symmetrical_wide'))",
@@ -63,6 +64,7 @@
     }, "surface-float": {
       "poseTypes": ["STAND","FLOAT"],
       "isTouchingWater": true,
+      "isBattle": false,
       "animations": ["q.look('head_ai')", "q.bedrock('pikachu', 'surfacewater_idle')"],
       "quirks": ["q.bedrock_quirk('pikachu', 'blink')"]
     },

@@ -1,0 +1,78 @@
+{
+  "portraitScale": 2.1,
+  "portraitTranslation": [-0.21, -0.15, 0],
+  "profileScale": 0.65,
+  "profileTranslation": [0.0, 0.77, 0.0],
+  "rootBone": "pikachu",
+  "animations": {
+    "faint": "q.bedrock_primary('pikachu_cap', 'faint', q.curve('one'))",
+    "recoil": "q.bedrock_stateful('pikachu_cap', 'recoil')",
+    "cry": "q.bedrock_stateful('pikachu_cap', 'cry')",
+    "volttackle": "q.bedrock_primary('pikachu_cap', 'volttackle', q.curve('symmetrical_wide'))",
+    "physical": "q.bedrock_primary('pikachu_cap', 'physical', q.curve('symmetrical_wide'))",
+    "special": "q.bedrock_primary('pikachu_cap', 'special', q.curve('symmetrical_wide'))",
+    "status": "q.bedrock_primary('pikachu_cap', 'status', q.curve('symmetrical_wide'))"
+  },
+  "poses": {
+    "battle-standing": {
+      "poseTypes": ["STAND"],
+      "isTouchingWater": false,
+      "isBattle": true,
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'battle_idle')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')","q.bedrock_quirk('pikachu_cap', q.array('battle_quirk1','battle_quirk2'), 20, 60, 1)"],
+      "namedAnimations": {"cry": "q.bedrock_primary('pikachu_cap', 'battle_cry', q.curve('symmetrical_wide'))"}
+    },
+    "standing": {
+      "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+      "isTouchingWater": false,
+      "isBattle": false,
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'ground_idle')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')","q.bedrock_quirk('pikachu_cap', q.array('look_quirk','surprisedquirk'), 20, 60, 1)"]
+    },
+    "walking": {
+      "poseTypes": ["WALK"],
+      "isTouchingWater": false,
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'ground_walk')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')"]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": ["q.bedrock('pikachu_cap', 'sleep')"],
+      "namedAnimations": {"cry": "q.bedrock_stateful('dummy', 'cry')"}
+    },    
+      "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'shoulder_left')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-6, 0, 0]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'shoulder_right')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')"],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [6, 0, 0]
+        }
+      ]
+    }, "surface-float": {
+      "poseTypes": ["STAND","FLOAT"],
+      "isTouchingWater": true,
+      "isBattle": false,
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'surfacewater_idle')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')"]
+    },
+    "surface-swim": {
+      "poseTypes": ["WALK","SWIM"],
+      "isTouchingWater": true,
+      "animations": ["q.look('head_ai')", "q.bedrock('pikachu_cap', 'surfacewater_swim')"],
+      "quirks": ["q.bedrock_quirk('pikachu_cap', 'blink')"]
+    }
+  }
+}

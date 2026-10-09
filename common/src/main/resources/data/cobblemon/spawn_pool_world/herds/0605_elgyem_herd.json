@@ -26,7 +26,28 @@
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 4,
+            "entries": [
+              {
+                "item": "minecraft:ender_pearl",
+                "quantityRange": "0-1"
+              },
+              {
+                "item": "minecraft:chorus_fruit",
+                "quantityRange": "0-1"
+              },
+              {
+                "item": "cobblemon:light_clay",
+                "percentage": 2.5
+              },
+              {
+                "item": "cobblemon:colbur_berry",
+                "percentage": 2.5
+              }
+            ]
+          }
         },
         {
           "pokemon": "beheeyem",
@@ -35,7 +56,28 @@
           "levelRangeOffset": "-2-4",
           "maxTimes": 1,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 6,
+            "entries": [
+              {
+                "item": "minecraft:ender_pearl",
+                "quantityRange": "0-2"
+              },
+              {
+                "item": "minecraft:chorus_fruit",
+                "quantityRange": "0-2"
+              },
+              {
+                "item": "cobblemon:light_clay",
+                "percentage": 5.0
+              },
+              {
+                "item": "cobblemon:colbur_berry",
+                "percentage": 5.0
+              }
+            ]
+          }
         }
       ]
     },

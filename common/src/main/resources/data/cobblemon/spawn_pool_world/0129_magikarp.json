@@ -141,6 +141,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -1053,6 +1058,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -1071,6 +1081,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -1221,6 +1236,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -1239,6 +1259,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "minLureLevel": 1
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {

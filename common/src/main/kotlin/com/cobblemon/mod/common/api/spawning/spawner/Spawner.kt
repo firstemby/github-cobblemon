@@ -27,6 +27,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.isBoxLoaded
 import com.cobblemon.mod.common.util.removeIf
 import com.cobblemon.mod.common.util.squeezeWithinBounds
+import com.cobblemon.mod.common.util.toBlockPos
 import com.cobblemon.mod.common.util.toVec3f
 import com.cobblemon.mod.common.util.weightedSelection
 import kotlin.math.max
@@ -190,73 +191,60 @@ interface Spawner {
     }
 
     fun isValidStartPoint(world: Level, chunk: ChunkAccess, startPos: BlockPos.MutableBlockPos): Boolean {
-        val y = startPos.y
-        if (!world.isLoaded(startPos) || !world.isLoaded(startPos.setY(y + 1))) {
+        val abovePos = startPos.above()
+        if (!world.isLoaded(startPos) || !world.isLoaded(abovePos)) {
             return false
         }
+        val mid = chunk.getBlockState(startPos)
+        val above = chunk.getBlockState(abovePos)
 
-        val mid = chunk.getBlockState(startPos.setY(y))
-        val above = chunk.getBlockState(startPos.setY(y + 1))
-
-        // Above must be non-solid
-        if (!above.isPathfindable(PathComputationType.AIR)) {
-            return false
-        }
-
-        // Position must be non-air
-        if (mid.isAir) {
-            return false
-        }
-
-        return true
+        return above.isPathfindable(PathComputationType.AIR) && mid.isAir
     }
 
     fun constrainArea(area: SpawningZoneInput): SpawningZoneInput? {
-        val basePos = BlockPos.MutableBlockPos(area.baseX, area.baseY, area.baseZ)
-        val originalY = area.baseY
+        val world = area.world
+        val centerPos = area.getCenter().toBlockPos()
 
-        val (chunkX, chunkZ) = Pair(SectionPos.blockToSectionCoord(area.baseX), SectionPos.blockToSectionCoord(area.baseZ))
-
+        val (centerChunkX, centerChunkZ) = Pair(SectionPos.blockToSectionCoord(centerPos.x), SectionPos.blockToSectionCoord(centerPos.z))
         // if the chunk isn't loaded, we don't want to go further & we don't want the getChunk function below to load/create the chunk.
-        if (!area.world.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ))) return null
+        if (!world.areEntitiesLoaded(ChunkPos.asLong(centerChunkX, centerChunkZ))) return null
 
-        val chunk = area.world.getChunk(chunkX, chunkZ, ChunkStatus.FULL) ?: return null
+        val chunk = world.getChunk(centerChunkX, centerChunkZ, ChunkStatus.FULL) ?: return null
 
-        var valid = isValidStartPoint(area.world, chunk, basePos)
+        val probePos = centerPos.mutable()
+        var validY = if (isValidStartPoint(world, chunk, probePos)) centerPos.y else null
 
-        if (!valid) {
-            var offset = 1
-            do {
-                if (isValidStartPoint(area.world, chunk, basePos.setY(originalY + offset))) {
-                    valid = true
-                    basePos.y = originalY + offset
+        if (validY == null) {
+            for (offset in 1..Cobblemon.config.maxVerticalCorrectionBlocks) {
+                if (isValidStartPoint(world, chunk, probePos.set(centerPos.x, centerPos.y + offset, centerPos.z))) {
+                    validY = centerPos.y + offset
                     break
-                } else if (isValidStartPoint(area.world, chunk, basePos.setY(originalY - offset))) {
-                    valid = true
-                    basePos.y = originalY - offset
+                } else if (isValidStartPoint(world, chunk, probePos.set(centerPos.x, centerPos.y - offset, centerPos.z))) {
+                    validY = centerPos.y - offset
                     break
                 }
-                offset++
-            } while (offset <= Cobblemon.config.maxVerticalCorrectionBlocks)
-        }
-
-        if (valid) {
-            val min = area.world.squeezeWithinBounds(basePos)
-            val max = area.world.squeezeWithinBounds(basePos.move(area.length, area.height, area.width))
-            if (area.world.isLoaded(min) && area.world.isLoaded(max) &&
-                min.x < max.x && min.y < max.y && min.z < max.z
-            ) {
-                return SpawningZoneInput(
-                    cause = area.cause,
-                    world = area.world,
-                    baseX = min.x,
-                    baseY = min.y,
-                    baseZ = min.z,
-                    length = max.x - min.x,
-                    height = max.y - min.y,
-                    width = max.z - min.z
-                )
             }
+        }
+        val targetY = validY ?: return null
+        val newBaseY = (targetY - (area.height / 2)).coerceIn(world.minBuildHeight, world.maxBuildHeight)
+        val minPos = world.squeezeWithinBounds(BlockPos(area.baseX, newBaseY, area.baseZ))
+        val maxPos = world.squeezeWithinBounds(BlockPos(area.baseX + area.length, newBaseY + area.height, area.baseZ + area.width))
+
+        val finalBox = AABB(
+            minPos.x.toDouble(), minPos.y.toDouble(), minPos.z.toDouble(),
+            maxPos.x.toDouble(), maxPos.y.toDouble(), maxPos.z.toDouble()
+        )
+        if (minPos.x < maxPos.x && minPos.y < maxPos.y && minPos.z < maxPos.z && world.isBoxLoaded(finalBox)) {
+            return SpawningZoneInput(
+                cause = area.cause,
+                world = world,
+                baseX = minPos.x,
+                baseY = minPos.y,
+                baseZ = minPos.z,
+                length = maxPos.x - minPos.x,
+                height = maxPos.y - minPos.y,
+                width = maxPos.z - minPos.z
+            )
         }
 
         return null

@@ -20,5 +20,4 @@ dependencies {
 
     implementation(libs.blossom)
     implementation(libs.ideaExt)
-    implementation(libs.versioning)
 }

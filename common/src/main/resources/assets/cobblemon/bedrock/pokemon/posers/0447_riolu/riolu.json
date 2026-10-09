@@ -1,6 +1,6 @@
 {
-  "portraitScale": 2.44,
-  "portraitTranslation": [-0.11, 0.5, 0],
+  "portraitScale": 2.25,
+  "portraitTranslation": [-0.14, 0.5, 0],
   "profileScale": 0.68,
   "profileTranslation": [0, 0.74, 0],
   "rootBone": "riolu",
@@ -12,7 +12,7 @@
       "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
       "isBattle": false,
       "animations": [
-        "q.look('head')",
+        "q.look('head_ai')",
         "q.bedrock('riolu', 'ground_idle')",
         {
           "condition": "q.is_holding_item",
@@ -25,7 +25,7 @@
       "poseTypes": ["STAND"],
       "isTouchingWater": false,
       "isBattle": true,
-      "animations": ["q.look('head')",
+      "animations": ["q.look('head_ai')",
         "q.bedrock('riolu', 'battle_idle')",
         {
           "condition": "q.is_holding_item",
@@ -36,10 +36,23 @@
     },
     "walking": {
       "poseTypes": ["WALK", "SWIM"],
-      "isBattle": false,
+      "condition": "!q.is_sprinting",
       "animations": [
-        "q.look('head')",
+        "q.look('head_ai')",
         "q.bedrock('riolu', 'ground_walk')",
+        {
+          "condition": "q.is_holding_item",
+          "animation": "q.bedrock('riolu', 'hold_item')"
+        }
+      ],
+      "quirks": ["q.bedrock_quirk('riolu', 'blink')"]
+    },
+    "running": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "q.is_sprinting",
+      "animations": [
+        "q.look('head_ai')",
+        "q.bedrock('riolu', 'ground_run')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('riolu', 'hold_item')"
@@ -54,7 +67,7 @@
     },
     "shoulder_left": {
       "poseTypes": ["SHOULDER_LEFT"],
-      "animations": ["q.look('head')", "q.bedrock('riolu', 'shoulder_left')"],
+      "animations": ["q.look('head_ai')", "q.bedrock('riolu', 'shoulder_left')"],
       "quirks": ["q.bedrock_quirk('riolu', 'blink')"],
       "transformedParts": [
         {

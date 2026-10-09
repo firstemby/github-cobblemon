@@ -108,7 +108,7 @@ object CatchRateModifiers {
      * Used by [PokeBalls.SAFARI_BALL].
      * Checks if the target is not battling, if true boost by *1.5
      */
-    val SAFARI = WorldStateModifier { _, entity -> if (!entity.isBattling) 1.5F else 1F }
+    val SAFARI = MultiplierModifier(1.5f) { _, poke -> !poke.entity?.isBattling!! }
 
     /**
      * Used by [PokeBalls.PARK_BALL].

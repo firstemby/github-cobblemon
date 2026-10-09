@@ -10,7 +10,6 @@ package com.cobblemon.mod.common.api.gui
 
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import net.minecraft.client.gui.components.AbstractWidget
-import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.network.chat.Component
@@ -55,6 +54,8 @@ abstract class ParentWidget(
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
+        if (!active) return false
+
         return children.any {
             it.mouseClicked(pMouseX, pMouseY, pButton)
         }

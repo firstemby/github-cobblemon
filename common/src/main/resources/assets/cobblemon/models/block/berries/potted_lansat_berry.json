@@ -1,0 +1,7 @@
+{
+  "parent": "cobblemon:block/berries/potted_charti_berry",
+  "textures": {
+    "2": "cobblemon:block/berries/lansat_tree",
+    "3": "cobblemon:block/berries/lansat_leaves"
+  }
+}

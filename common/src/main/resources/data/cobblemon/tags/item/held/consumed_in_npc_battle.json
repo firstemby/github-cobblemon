@@ -4,6 +4,7 @@
     "#cobblemon:berries",
     "#cobblemon:herbs",
     "#cobblemon:type_gems",
-    "minecraft:snowball"
+    "minecraft:snowball",
+    "#cobblemon:held/terrain_seeds"
   ]
 }

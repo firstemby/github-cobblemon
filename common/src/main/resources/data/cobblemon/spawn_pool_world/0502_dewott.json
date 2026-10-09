@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -43,7 +43,7 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -96,7 +96,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -126,7 +126,7 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -156,7 +156,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -181,7 +181,7 @@
             "spawnablePositionType": "surface",
             "bucket": "ultra-rare",
             "level": "17-41",
-            "weight": 18.0,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {

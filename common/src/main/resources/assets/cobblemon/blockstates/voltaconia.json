@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "half=lower,glowing=false": { "model": "cobblemon:block/voltaconia_bottom" },
+    "half=upper,glowing=false": { "model": "cobblemon:block/voltaconia_top" },
+    "half=lower,glowing=true": { "model": "cobblemon:block/voltaconia_bottom_glowing" },
+    "half=upper,glowing=true": { "model": "cobblemon:block/voltaconia_top_glowing" }
+  }
+}

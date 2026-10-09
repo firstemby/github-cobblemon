@@ -4,6 +4,46 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "finizen-1",
+            "pokemon": "finizen",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "7-32",
+            "weight": 54.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "finizen-2",
+            "pokemon": "finizen",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "7-32",
+            "weight": 54.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "finizen-3",
             "pokemon": "finizen",
             "type": "pokemon",
@@ -85,46 +125,6 @@
                     "#cobblemon:is_ocean"
                 ],
                 "minLureLevel": 1
-            }
-        },
-        {
-            "id": "finizen-1",
-            "pokemon": "finizen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "7-32",
-            "weight": 54.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "isPokeSnack": true
-            }
-        },
-        {
-            "id": "finizen-2",
-            "pokemon": "finizen",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "7-32",
-            "weight": 54.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

@@ -217,6 +217,20 @@
         {
           "variant": "level",
           "minLevel": 35
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_magical"
+          }
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:is_spooky"
+          }
         }
       ]
     },
@@ -291,6 +305,13 @@
             {
               "variant": "level",
               "minLevel": 35
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:nether/is_toxic"
+              }
             }
           ]
         }

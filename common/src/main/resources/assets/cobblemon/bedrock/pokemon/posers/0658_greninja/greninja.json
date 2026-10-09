@@ -1,0 +1,133 @@
+{
+   "portraitScale": 1.7,
+   "portraitTranslation": [ -0.2, 2.92, 0 ],
+   "profileScale": 0.45,
+   "profileTranslation": [ 0, 1.02, 0 ],
+   "rootBone": "greninja",
+   "animations": {
+      "cry": "q.bedrock_stateful('greninja', 'cry')",
+      "faint": "q.bedrock_primary('greninja', 'faint', q.curve('one'))",
+      "recoil": "q.bedrock_stateful('greninja', 'recoil')",
+      "physical": "q.bedrock_primary('greninja', 'physical', q.curve('symmetrical'))",
+      "lick": "q.bedrock_primary('greninja', 'physical_tongue', q.curve('symmetrical'))",
+      "punch": "q.bedrock_primary('greninja', 'physical_tongue', q.curve('symmetrical'))",
+      "cut": "q.bedrock_primary('greninja', 'physical_katana', q.curve('symmetrical'))",
+      "special": "q.bedrock_primary('greninja', 'special', q.curve('symmetrical'))",
+      "status": "q.bedrock_primary('greninja', 'status', q.curve('symmetrical'))"
+   },
+   "poses": {
+      "battle-standing": {
+        "poseTypes": ["STAND"],
+        "isBattle": true,
+        "isTouchingWater": false,
+        "animations": [
+          "q.look('head_ai')",
+          "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+          "q.bedrock('greninja', 'battle_idle')"
+        ],
+        "namedAnimations": {
+            "cry": "q.bedrock_primary('greninja', 'battle_cry', q.curve('symmetrical'))"
+         },
+        "quirks": ["q.bedrock_quirk('greninja', 'blink')","q.bedrock_quirk('greninja','battle_quirk', 20, 40, 1)"]
+      },
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
+         "isBattle": false,
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('greninja', q.array('quirk_look_left', 'quirk_look_right'), 8, 30, 1)"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK"],
+         "condition": "!q.is_sprinting",
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'ground_walk')"
+         ],
+         "quirks": []
+      },
+      "running": {
+         "poseTypes": ["WALK"],
+         "condition": "q.is_sprinting",
+         "isTouchingWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'ground_run')"
+         ],
+         "quirks": []
+      },
+      "surface-swimming": {
+         "poseTypes": ["WALK","SWIM"],
+         "isTouchingWater": true,
+         "isUnderWater": false,
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'water_swim')"
+         ],
+         "quirks": []
+      },
+      "surface-float": {
+         "poseTypes": ["STAND","FLOAT"],
+         "isTouchingWater": true,
+         "isUnderWater": false,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'water_idle')"
+         ],
+         "quirks": [],
+         "transformedParts": [
+            {
+               "part": "body",
+               "position": [0, 5, 0]
+            }
+         ]
+      },
+      "swimming": {
+         "poseTypes": ["WALK","SWIM"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'water_swim')"
+         ],
+         "quirks": [],
+         "transformedParts": [
+            {
+               "part": "body",
+               "position": [0, 24, 0]
+            }
+         ]
+      },
+      "float": {
+         "poseTypes": ["STAND","FLOAT"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.look('head_ai')",
+            "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
+            "q.bedrock('greninja', 'water_idle')"
+         ],
+         "quirks": []
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+         },
+         "animations": ["q.bedrock('greninja', 'sleep')"]
+      }
+   }
+}
+ 

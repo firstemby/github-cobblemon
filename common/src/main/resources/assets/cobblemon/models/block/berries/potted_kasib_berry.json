@@ -1,0 +1,6 @@
+{
+  "parent": "cobblemon:block/berries/potted_hondew_berry",
+  "textures": {
+    "4": "cobblemon:block/berries/kasib_tree"
+  }
+}

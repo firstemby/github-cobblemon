@@ -77,7 +77,24 @@
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 3,
+            "entries": [
+              {
+                "item": "minecraft:rotten_flesh",
+                "quantityRange": "0-1"
+              },
+              {
+                "item": "minecraft:blaze_powder",
+                "percentage": 5.0
+              },
+              {
+                "item": "cobblemon:rawst_berry",
+                "percentage": 2.5
+              }
+            ]
+          }
         },
         {
           "pokemon": "pyroar female",

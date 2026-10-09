@@ -1,0 +1,40 @@
+{
+   "portraitScale": 1.64,
+   "portraitTranslation": [ -0.17, -0.03, 0 ],
+   "profileScale": 0.79,
+   "profileTranslation": [ 0, 0.53, 0 ],
+   "rootBone": "chespin",
+   "animations": {
+      "cry": "q.bedrock_stateful('chespin', 'cry')"
+   },
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE", "FLOAT"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('chespin', 'ground_idle')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('chespin', 'blink')"
+         ]
+      },
+      "walking": {
+         "poseTypes": ["WALK", "SWIM"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('chespin', 'ground_walk')"
+         ],
+         "quirks": [
+            "q.bedrock_quirk('chespin', 'blink')"
+         ]
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "namedAnimations": {
+            "cry": "q.bedrock_stateful('dummy', 'cry')"
+         },
+         "animations": ["q.bedrock('chespin', 'sleep')"]
+      }
+   }
+}
+ 

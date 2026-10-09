@@ -29,6 +29,18 @@
           "translucent": false
         }
       ]
+    },
+    {
+      "aspects": [
+        "alpha_eyes"
+      ],
+      "layers": [
+        {
+          "name": "alpha_eyes",
+          "texture": "cobblemon:textures/pokemon/0404_luxio/luxio_alpha.png",
+          "emissive": true
+        }
+      ]
     }
   ]
 }

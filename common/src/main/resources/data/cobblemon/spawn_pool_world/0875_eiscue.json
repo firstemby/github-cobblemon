@@ -4,6 +4,26 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "eiscue-1",
+            "pokemon": "eiscue",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "22-47",
+            "weight": 20.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "eiscue-2",
             "pokemon": "eiscue",
             "presets": [
@@ -59,26 +79,6 @@
                     "#cobblemon:is_glacial",
                     "#cobblemon:is_tundra"
                 ]
-            }
-        },
-        {
-            "id": "eiscue-1",
-            "pokemon": "eiscue",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "common",
-            "level": "22-47",
-            "weight": 20.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_frozen_ocean"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

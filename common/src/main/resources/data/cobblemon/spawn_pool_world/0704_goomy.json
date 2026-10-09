@@ -173,7 +173,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -199,7 +200,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -267,7 +269,8 @@
                 "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -292,7 +295,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -316,7 +320,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -340,7 +345,8 @@
                 "minLureLevel": 2,
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -370,7 +376,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_dripstone",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         }

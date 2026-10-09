@@ -59,6 +59,9 @@
       "rouseChance": 0.0042
     },
     "moving": {
+      "walk": {
+        "walkSpeed": 0.25
+      },
       "swim": {
         "canBreatheUnderwater": true,
         "swimSpeed": "0.2"

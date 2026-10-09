@@ -1,0 +1,85 @@
+{
+  "portraitScale": 2.2,
+  "portraitTranslation": [-0.2, -0.8, 0.0],
+  "profileScale": 0.72,
+  "profileTranslation": [0.0, 0.65, 0.0],
+  "rootBone": "bonsly",
+  "animations": {
+    "cry": "q.bedrock_stateful('bonsly', 'cry')"
+  },
+  "poses": {
+    "standing": {
+      "poseTypes": ["STAND", "FLOAT", "NONE", "PORTRAIT", "PROFILE"],
+      "condition": "q.has_entity ? !q.in_air : 1.0",
+      "isBattle": false,
+      "animations": [
+        "q.look('torso', 1, 1, 12.5, -7.5, 12.5, -12.5)",
+        "q.bedrock('bonsly', 'ground_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bonsly', 'blink')"
+      ]
+    },
+    "battle-standing": {
+      "poseTypes": ["STAND", "FLOAT"],
+      "isBattle": true,
+      "animations": [
+        "q.look('torso', 1, 1, 12.5, -7.5, 12.5, -12.5)",
+        "q.bedrock('bonsly', 'battle_idle')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bonsly', 'blink')"
+      ]
+    },
+    "walk": {
+      "poseTypes": ["WALK", "SWIM"],
+      "condition": "!q.is_sprinting",
+      "animations": [
+        "q.look('torso', 1, 1, 12.5, -7.5, 12.5, -12.5)",
+        "q.bedrock('bonsly', 'ground_walk')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bonsly', 'blink')"
+      ]
+    },
+    "sleep": {
+      "poseTypes": ["SLEEP"],
+      "animations": [
+        "q.bedrock('bonsly', 'sleep')"
+      ],
+      "namedAnimations": {
+        "cry": "q.bedrock_stateful('dummy', 'cry')"
+      }
+    },
+    "shoulder_left": {
+      "poseTypes": ["SHOULDER_LEFT"],
+      "animations": [
+        "q.bedrock('bonsly', 'shoulder_left')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bonsly', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [1.5, 4, -0.5]
+        }
+      ]
+    },
+    "shoulder_right": {
+      "poseTypes": ["SHOULDER_RIGHT"],
+      "animations": [
+        "q.bedrock('bonsly', 'shoulder_right')"
+      ],
+      "quirks": [
+        "q.bedrock_quirk('bonsly', 'blink')"
+      ],
+      "transformedParts": [
+        {
+          "part": "body",
+          "position": [-1.5, 4, -0.5]
+        }
+      ]
+    }
+  }
+}

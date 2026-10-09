@@ -6,6 +6,66 @@
         {
             "id": "empoleon-1",
             "pokemon": "empoleon",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "ultra-rare",
+            "level": "36-53",
+            "weight": 2.4,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "empoleon-2",
+            "pokemon": "empoleon",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "ultra-rare",
+            "level": "36-53",
+            "weight": 2.4,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "empoleon-3",
+            "pokemon": "empoleon",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "ultra-rare",
+            "level": "36-53",
+            "weight": 2.4,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_frozen_ocean"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "empoleon-4",
+            "pokemon": "empoleon",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "ultra-rare",
@@ -23,7 +83,7 @@
             }
         },
         {
-            "id": "empoleon-2",
+            "id": "empoleon-5",
             "pokemon": "empoleon",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
