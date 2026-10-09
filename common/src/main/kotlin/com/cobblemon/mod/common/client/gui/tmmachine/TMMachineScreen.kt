@@ -1041,7 +1041,10 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                     // Scroll to move if moves list contains held TM move
                     if (tmList.get().contains(heldStackTm)) {
                         val moveListIndex = tmList.get().indexOf(heldStackTm)
-                        movesScrollingList.scrollAmount = (if (moveListIndex == tmList.get().lastIndex) 1.0 else (moveListIndex / tmList.get().size.toDouble()))* movesScrollingList.maxScroll
+                        movesScrollingList.scrollAmount = movesScrollingList.maxScroll * when (moveListIndex) {
+                            tmList.get().lastIndex -> 1.0
+                            else -> (moveListIndex / tmList.get().size.toDouble())
+                        }
                     }
                 }
             }
