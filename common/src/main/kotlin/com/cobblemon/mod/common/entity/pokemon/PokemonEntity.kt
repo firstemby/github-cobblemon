@@ -485,11 +485,11 @@ open class PokemonEntity(
             }
 
             BATTLE_ID -> {
+                // refresh dimensions in case this pokemon has a battlingEyeHeight
+                refreshDimensions()
                 if (battleId != null) {
                     busyLocks.remove(BATTLE_LOCK) // Remove in case it's hopped across to another battle, don't want extra battle locks
                     busyLocks.add(BATTLE_LOCK)
-                    // refresh dimensions in case this pokemon has a battlingEyeHeight
-                    refreshDimensions()
                     brain.setMemory(CobblemonMemories.POKEMON_BATTLE, battleId)
                 } else {
                     busyLocks.remove(BATTLE_LOCK)

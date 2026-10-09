@@ -42,8 +42,8 @@
   "catchRate": 45,
   "eggCycles": 20,
   "baseFriendship": 50,
-  "standingEyeHeight": 0.8,
-  "battlingEyeHeight": 0.35,
+  "standingEyeHeight": 0.9,
+  "battlingEyeHeight": 0.5,
   "baseScale": 0.6,
   "hitbox": {
     "width": 1.5,
