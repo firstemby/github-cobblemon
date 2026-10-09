@@ -184,6 +184,7 @@
 - Added a `battle_ended` callback, backed by the new `BATTLE_ENDED` event, which fires whenever a battle ends for any reason, alongside a multitude of flags not previously covered by `BATTLE_VICTORY`.
 - Added `battle_pokemon` to battle actor structs and `has_faced_opponents` to battle Pokémon structs.
 - Added the `cobblemon:form_change/bagworm_cloak/plant_cloak`, `sandy_cloak` and `trash_cloak` biome tags, which control Burmy's cloak after battle.
+- Added a `battlingEyeHeight` field to set the eye height of a Pokémon while battling
 
 ### Particles
 
