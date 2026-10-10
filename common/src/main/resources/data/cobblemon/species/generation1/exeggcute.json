@@ -233,22 +233,6 @@
       "learnableMoves": [
         "stomp"
       ],
-      "requirements": [
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_beach"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/exeggcute_alolabiome"
-          }
-        }
-      ],
       "requiredContext": "cobblemon:leaf_stone"
     },
     {

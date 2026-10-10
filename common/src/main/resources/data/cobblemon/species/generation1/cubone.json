@@ -217,13 +217,6 @@
         {
           "variant": "level",
           "minLevel": 28
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/cubone_alolabiome"
-          }
         }
       ]
     },

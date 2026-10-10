@@ -211,13 +211,6 @@
         {
           "variant": "has_move",
           "move": "mimic"
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/mimejr_galarbiome"
-          }
         }
       ]
     },

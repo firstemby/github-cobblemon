@@ -217,13 +217,6 @@
         {
           "variant": "level",
           "minLevel": 35
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/koffing_galarbiome"
-          }
         }
       ]
     },

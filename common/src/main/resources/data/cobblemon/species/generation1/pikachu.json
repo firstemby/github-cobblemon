@@ -297,15 +297,6 @@
       "learnableMoves": [
         "thunderpunch"
       ],
-      "requirements": [
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
-          }
-        }
-      ],
       "requiredContext": "cobblemon:thunder_stone"
     },
     {
@@ -397,15 +388,15 @@
           ],
           "requirements": [
             {
+              "variant": "biome",
+              "biomeCondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
+            },
+            {
               "variant": "negate",
               "inner": {
                 "variant": "biome",
                 "biomeCondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
               }
-            },
-            {
-              "variant": "biome",
-              "biomeCondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
             }
           ],
           "requiredContext": "cobblemon:thunder_stone"

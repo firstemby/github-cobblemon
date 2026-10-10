@@ -226,13 +226,6 @@
         {
           "variant": "level",
           "minLevel": 36
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_cold"
-          }
         }
       ]
     },
@@ -322,13 +315,6 @@
             {
               "variant": "level",
               "minLevel": 36
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:beach"
-              }
             }
           ]
         }

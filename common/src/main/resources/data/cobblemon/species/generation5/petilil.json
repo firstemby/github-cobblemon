@@ -195,6 +195,16 @@
   ],
   "evolutions": [
     {
+      "id": "petilil_lilligant",
+      "variant": "item_interact",
+      "result": "lilligant",
+      "consumeHeldItem": false,
+      "learnableMoves": [
+        "petaldance"
+      ],
+      "requiredContext": "cobblemon:sun_stone"
+    },
+    {
       "id": "petilil_lilliganthisui",
       "variant": "item_interact",
       "result": "lilligant hisuian",
@@ -206,25 +216,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/petilil_hisuibiome"
-        }
-      ],
-      "requiredContext": "cobblemon:sun_stone"
-    },
-    {
-      "id": "petilil_lilligant",
-      "variant": "item_interact",
-      "result": "lilligant",
-      "consumeHeldItem": false,
-      "learnableMoves": [
-        "petaldance"
-      ],
-      "requirements": [
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/petilil_hisuibiome"
-          }
         }
       ],
       "requiredContext": "cobblemon:sun_stone"
