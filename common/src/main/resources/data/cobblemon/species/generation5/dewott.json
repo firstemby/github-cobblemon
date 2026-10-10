@@ -231,7 +231,7 @@
           "variant": "negate",
           "inner": {
             "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
+            "biomeCondition": "#cobblemon:is_cold"
           }
         }
       ]
@@ -257,7 +257,7 @@
           "variant": "negate",
           "inner": {
             "variant": "biome",
-            "biomeCondition": "#cobblemon:evolution/regional/dewott_unovabiome"
+            "biomeCondition": "#cobblemon:beach"
           }
         }
       ]
@@ -305,7 +305,7 @@
               "variant": "negate",
               "inner": {
                 "variant": "biome",
-                "biomeCondition": "#cobblemon:evolution/regional/dewott_hisuibiome"
+                "biomeCondition": "#cobblemon:is_cold"
               }
             }
           ]
@@ -327,7 +327,7 @@
               "variant": "negate",
               "inner": {
                 "variant": "biome",
-                "biomeCondition": "#cobblemon:evolution/regional/dewott_unovabiome"
+                "biomeCondition": "#cobblemon:beach"
               }
             }
           ]
