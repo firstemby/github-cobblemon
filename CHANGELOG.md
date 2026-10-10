@@ -87,6 +87,8 @@
 - Slakoth
 - Riolu
 - Lucario
+- Corsola
+- Mime Jr.
 
 ### Animation updates for the following Pokémon
 - Treecko (New Shoulder Mount!)
@@ -153,6 +155,8 @@
 - Fixed Kingambit moving its legs while walking
 - Fixed Alolan Diglett's cry not playing
 - Fixed shiny alpha Snorlax using the non-shiny texture
+- Fixed Crabominable's head breaking when looking around
+- Fixed Shiny Dipplin and Hydrapple's textures
 - Various Structure fixes
 - Fixed shiny Pokémon under certain circumstances forgetting taught TMs
 - Fixed certain Pokémon sounds sometimes being doubled when played at specific times in their animations
