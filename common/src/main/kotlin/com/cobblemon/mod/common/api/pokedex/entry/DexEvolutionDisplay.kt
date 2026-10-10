@@ -25,8 +25,8 @@ import com.cobblemon.mod.common.pokemon.evolution.variants.ItemInteractionEvolut
 import com.cobblemon.mod.common.pokemon.evolution.variants.TradeEvolution
 import com.cobblemon.mod.common.pokemon.requirements.*
 import com.cobblemon.mod.common.util.adapters.RegistryAccessResolver
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.asTranslated
-import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -87,7 +87,7 @@ fun getToolTipHeaderIcon(tradeEvolution: TradeEvolution): CobblemonDexEvolutionR
     val tooltip = if (species == null) {
         lang("ui.pokedex.evolution.trade.tooltip.with_any_species")
     } else {
-        lang("ui.pokedex.evolution.trade.tooltip.with_species", PokemonSpecies.getByIdentifier(cobblemonResource(species))!!.translatedName.green())
+        lang("ui.pokedex.evolution.trade.tooltip.with_species", PokemonSpecies.getByIdentifier(species.asIdentifierDefaultingNamespace())!!.translatedName.green())
     }
     return CobblemonDexEvolutionRequirementDisplay(CobblemonItems.LINK_CABLE, tooltip)
 }
