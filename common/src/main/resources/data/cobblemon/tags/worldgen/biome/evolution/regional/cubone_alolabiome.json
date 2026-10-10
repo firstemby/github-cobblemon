@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_beach",
     "#cobblemon:is_volcanic",
+    "#cobblemon:nether/is_desert",
     "#cobblemon:nether/is_soul_fire"
   ]
 }

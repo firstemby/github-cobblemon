@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_hills",
-    "#cobblemon:is_freezing"
+    "#cobblemon:is_snowy_forest",
+    "#cobblemon:is_snowy_taiga"
   ]
 }

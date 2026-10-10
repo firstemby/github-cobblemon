@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#cobblemon:is_temperate"
+    "#cobblemon:is_badlands",
+    "#cobblemon:is_hills"
   ]
 }
