@@ -50,6 +50,8 @@ import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import kotlin.isInitialized
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.util.FastColor
+import kotlin.math.absoluteValue
 
 class PCGUI(
     val pc: ClientPC,
@@ -127,6 +129,26 @@ class PCGUI(
     var selectPointerOffsetY = 0
     var selectPointerOffsetIncrement = false
     var displayOptions = false
+
+    private var dragStartX: Int? = null
+    private var dragStartY: Int? = null
+    private var dragEndX: Int? = null
+    private var dragEndY: Int? = null
+
+    private data class BoxGridBounds(val left: Int, val top: Int, val right: Int, val bottom: Int) {
+        fun contains(x: Int, y: Int) = x in left..< right && y >= top && y < bottom
+    }
+
+    private fun getBoxGridBounds(): BoxGridBounds {
+        val left = storageWidget.x
+        val top = storageWidget.y
+        return BoxGridBounds(
+            left,
+            top,
+            left + StorageWidget.SCREEN_WIDTH,
+            top + StorageWidget.SCREEN_HEIGHT
+        )
+    }
 
     override fun renderBlurredBackground(delta: Float) {}
 
@@ -312,6 +334,23 @@ class PCGUI(
         this.setPreviewPokemon(null)
 
         super.init()
+    }
+
+    private fun renderSelectionBox(context: GuiGraphics, startX: Int, startY: Int, endX: Int, endY: Int) {
+        context.pose().pushPose()
+        context.pose().translate(0.0, 0.0, 1500.0)
+        val left = minOf(startX, endX)
+        val top = minOf(startY, endY)
+        val right = maxOf(startX, endX) + 1
+        val bottom = maxOf(startY, endY) + 1
+        val borderColor = FastColor.ARGB32.color(255, 205, 212, 255)
+        val thickness = 1
+        context.fill(left, top, right, bottom, 0x6600A0FF)
+        context.fill(left, top, right, top + thickness, borderColor)
+        context.fill(left, bottom - thickness, right, bottom, borderColor)
+        context.fill(left, top, left + thickness, bottom, borderColor)
+        context.fill(right - thickness, top, right, bottom, borderColor)
+        context.pose().popPose()
     }
 
     override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -690,6 +729,20 @@ class PCGUI(
 
         super.render(context, mouseX, mouseY, delta)
 
+        val startX = dragStartX
+        val startY = dragStartY
+        val endX = dragEndX
+        val endY = dragEndY
+        val gridBounds = getBoxGridBounds()
+        if (startX != null && startY != null && endX != null && endY != null && gridBounds.contains(startX, startY)) {
+            val clippedEndX = endX.coerceIn(gridBounds.left, gridBounds.right - 1)
+            val clippedEndY = endY.coerceIn(gridBounds.top, gridBounds.bottom - 1)
+            val selectionArea = (startX - clippedEndX) * (startY - clippedEndY)
+            if (selectionArea.absoluteValue > 25) {
+                renderSelectionBox(context, startX, startY, clippedEndX, clippedEndY)
+            }
+        }
+
         // Item Tooltip
         if (pokemon != null) {
             val displayedItem = if (showCosmeticItem) pokemon.cosmeticItem else pokemon.heldItemNoCopy()
@@ -711,6 +764,16 @@ class PCGUI(
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        val clickX = mouseX.toInt()
+        val clickY = mouseY.toInt()
+        if (button == 0 && getBoxGridBounds().contains(clickX, clickY)) {
+            dragStartX = clickX
+            dragStartY = clickY
+        } else {
+            dragStartX = null
+            dragStartY = null
+        }
+
         // Trigger child component function as they will need to check the entire screen click area
         if (::boxNameWidget.isInitialized) boxNameWidget.mouseClicked(mouseX, mouseY, button)
         return super.mouseClicked(mouseX, mouseY, button)
@@ -739,7 +802,17 @@ class PCGUI(
         storageWidget.pastureWidget?.let { pasture ->
             if (pasture.pastureScrollList.isHovered) pasture.pastureScrollList.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
         }
+        dragEndX = mouseX.toInt()
+        dragEndY = mouseY.toInt()
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        dragStartX = null
+        dragStartY = null
+        dragEndX = null
+        dragEndY = null
+        return super.mouseReleased(mouseX, mouseY, button)
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
