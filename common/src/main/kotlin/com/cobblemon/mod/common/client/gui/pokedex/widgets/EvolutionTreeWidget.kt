@@ -16,6 +16,7 @@ import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.api.pokedex.entry.CobblemonBiomeDexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
 import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
+import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionRequirementDisplay
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
 import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -46,6 +47,7 @@ import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.registries.Registries
+import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
@@ -110,10 +112,13 @@ class EvolutionTreeWidget(
         resource = expandResource,
         clickAction = {
             parent.evolutionTreeExpanded = !parent.evolutionTreeExpanded
-            expandButton.resource = if (parent.evolutionTreeExpanded) minimizeResource else expandResource
             updatePositioning()
         }
     ).apply { addWidget(this) }
+
+    init {
+        updatePositioning()
+    }
 
     override fun renderWidget(
         guiGraphics: GuiGraphics,
@@ -216,6 +221,7 @@ class EvolutionTreeWidget(
         panningX = 0.0
         panningY = 0.0
 
+        expandButton.resource = if (parent.evolutionTreeExpanded) minimizeResource else expandResource
         expandButton.buttonX = x + EXPAND_BUTTON_X_MARGIN
         expandButton.buttonY = y + EXPAND_BUTTON_Y_MARGIN
     }
@@ -448,10 +454,10 @@ class EvolutionTreeWidget(
         mouseY: Int,
         delta: Float,
     ) {
-        val icons = renderDataAlternatives.flatMap { it.requirements.map { req -> req.icon } }.distinct()
+        val icons = renderDataAlternatives.flatMap { it.requirements.filter(::isDisplayable).map { req -> req.icon } }.distinct()
         val playerBiome = Minecraft.getInstance().player?.let { it.level().getBiome(it.blockPosition()) }
         val alternativeTooltips = renderDataAlternatives.map { alternative ->
-            alternative.requirements.map { req ->
+            alternative.requirements.filter(::isDisplayable).map { req ->
                 if (req is CobblemonBiomeDexEvolutionRequirementDisplay) {
                     val tooltip = req.tooltip.copy()
                     if (playerBiome != null) {
@@ -541,6 +547,14 @@ class EvolutionTreeWidget(
             this.isHovered(mouseX.toDouble(), mouseY.toDouble())
         ) {
             hoveredTooltips = tooltips.map { it.copy() }
+        }
+    }
+
+    /** Hides biome requirements naming untranslated biomes, e.g. from mods that aren't installed (aether:skyroot_forest) */
+    private fun isDisplayable(requirement: DexEvolutionRequirementDisplay): Boolean {
+        if (requirement !is CobblemonBiomeDexEvolutionRequirementDisplay) return true
+        return listOfNotNull(requirement.condition, requirement.antiCondition).all {
+            it.tag || Language.getInstance().has("biome.${it.id.namespace}.${it.id.path}")
         }
     }
 

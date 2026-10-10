@@ -414,7 +414,7 @@ fun buildStructureRequirement(structureRequirement: StructureRequirement, negate
         return null
     }
 
-    val icon = Items.STRUCTURE_BLOCK
+    val icon = Items.FILLED_MAP
     val displayName: (RegistryLikeCondition<Structure>) -> MutableComponent = {
         when (it) {
             is RegistryLikeTagCondition -> tagDisplayName("worldgen.structure", it.tag.location())

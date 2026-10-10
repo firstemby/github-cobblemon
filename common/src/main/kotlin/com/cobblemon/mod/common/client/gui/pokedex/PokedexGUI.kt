@@ -192,6 +192,7 @@ class PokedexGUI private constructor(
     public override fun init() {
         super.init()
         clearWidgets()
+        evolutionTreeExpanded = false
 
         availableRegions = Dexes.dexEntryMap.keys.toList()
         selectedRegionIndex = 0

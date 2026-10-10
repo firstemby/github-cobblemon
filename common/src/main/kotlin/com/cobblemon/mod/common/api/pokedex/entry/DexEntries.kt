@@ -93,9 +93,6 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                     ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
                     ?: return@resultLoop
 
-                if (!resultSpecies.implemented)
-                    return@resultLoop
-
                 // Carry the source form's aspects over like a real evolution does (Alola-Bias Pichu -> Alola-Bias Pikachu)
                 val resultForm = resultSpecies.getForm(form.aspects.toSet() + resultProperties.aspects)
                 val toAspects = resultProperties.aspects + resultForm.aspects
