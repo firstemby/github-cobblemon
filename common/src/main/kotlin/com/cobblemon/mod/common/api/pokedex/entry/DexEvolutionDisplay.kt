@@ -122,6 +122,7 @@ fun buildRequirementData(requirement: Requirement): DexEvolutionRequirementDispl
         is MoonPhaseRequirement -> return buildMoonPhaseRequirement(requirement)
         is MoveSetRequirement -> return buildMoveSetRequirement(requirement)
         is MoveTypeRequirement -> return buildMoveTypeRequirement(requirement)
+        is NegateRequirement -> return buildNegateRequirement(requirement)
         is OwnerHoldsItemRequirement -> return buildOwnerHoldsItemRequirement(requirement)
         is PartyMemberRequirement -> return buildPartyMemberRequirement(requirement)
         is PokemonPropertiesRequirement -> return buildPokemonPropertiesRequirement(requirement)
@@ -156,9 +157,29 @@ fun buildBattleCriticalHitsRequirement(battleCriticalHitsRequirement: BattleCrit
     return CobblemonDexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun buildBiomeRequirement(biomeRequirement: BiomeRequirement): DexEvolutionRequirementDisplay? {
-    val condition = biomeRequirement.biomeCondition
-    val antiCondition = biomeRequirement.biomeAnticondition
+private fun tagDisplayName(registry: String, id: ResourceLocation): MutableComponent {
+    return Component.translatableWithFallback("tag.$registry.${id.namespace}.${id.path.replace('/', '.')}", prettifyPath(id.path))
+}
+
+private fun prettifyPath(path: String): String {
+    return path.substringAfterLast('/').removePrefix("is_").split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) }
+}
+
+fun buildNegateRequirement(negateRequirement: NegateRequirement): DexEvolutionRequirementDisplay? {
+    val inner = negateRequirement.inner
+    when (inner) {
+        is BiomeRequirement -> buildBiomeRequirement(inner, negated = true)?.let { return it }
+        is StructureRequirement -> buildStructureRequirement(inner, negated = true)?.let { return it }
+    }
+    val innerDisplay = resolveRequirementData(inner) ?: return null
+    return CobblemonDexEvolutionRequirementDisplay(innerDisplay.icon, lang("ui.pokedex.requirement.negate.tooltip", innerDisplay.tooltip))
+}
+
+fun buildBiomeRequirement(biomeRequirement: BiomeRequirement, negated: Boolean = false): DexEvolutionRequirementDisplay? {
+    // Negating "in X" is "not in X"; negating both a condition and an anticondition isn't expressible as one line
+    if (negated && biomeRequirement.biomeCondition != null && biomeRequirement.biomeAnticondition != null) return null
+    val condition = if (negated) biomeRequirement.biomeAnticondition else biomeRequirement.biomeCondition
+    val antiCondition = if (negated) biomeRequirement.biomeCondition else biomeRequirement.biomeAnticondition
     if (condition == null && antiCondition == null) {
         return null
     }
@@ -166,11 +187,12 @@ fun buildBiomeRequirement(biomeRequirement: BiomeRequirement): DexEvolutionRequi
     val icon = Items.COMPASS
     val displayName: (RegistryLikeCondition<Biome>) -> MutableComponent = {
         when (it) {
-            is RegistryLikeTagCondition -> Component.literal(it.tag.location().path.substringAfterLast('/').split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) })
+            is RegistryLikeTagCondition -> tagDisplayName("worldgen.biome", it.tag.location())
             is RegistryLikeIdentifierCondition -> Component.translatable("biome.${it.identifier.namespace}.${it.identifier.path}")
             else -> Component.literal(it.toString())
         }
     }
+
     val tooltip = if (condition != null && antiCondition != null) {
         lang("ui.pokedex.requirement.biome.both.tooltip", displayName(condition).green(), displayName(antiCondition).green())
     } else if (condition != null) {
@@ -178,6 +200,7 @@ fun buildBiomeRequirement(biomeRequirement: BiomeRequirement): DexEvolutionRequi
     } else {
         lang("ui.pokedex.requirement.biome.anticondition.tooltip", displayName(antiCondition!!).green())
     }
+
     var conditionConverted: ExtraCodecs.TagOrElementLocation? = null
     if (condition != null) {
         val conditionIdentifier = if (condition is RegistryLikeIdentifierCondition) condition.identifier else (condition as RegistryLikeTagCondition).tag.location
@@ -383,21 +406,21 @@ fun buildStatEqualRequirement(statEqualRequirement: StatEqualRequirement): DexEv
     return CobblemonDexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun buildStructureRequirement(structureRequirement: StructureRequirement): DexEvolutionRequirementDisplay? {
-    val condition = structureRequirement.structureCondition
-    val anticondition = structureRequirement.structureAnticondition
+fun buildStructureRequirement(structureRequirement: StructureRequirement, negated: Boolean = false): DexEvolutionRequirementDisplay? {
+    if (negated && structureRequirement.structureCondition != null && structureRequirement.structureAnticondition != null) return null
+    val condition = if (negated) structureRequirement.structureAnticondition else structureRequirement.structureCondition
+    val anticondition = if (negated) structureRequirement.structureCondition else structureRequirement.structureAnticondition
     if (condition == null && anticondition == null) {
         return null
     }
 
     val icon = Items.STRUCTURE_BLOCK
     val displayName: (RegistryLikeCondition<Structure>) -> MutableComponent = {
-        val path = when (it) {
-            is RegistryLikeTagCondition -> it.tag.location().path
-            is RegistryLikeIdentifierCondition -> it.identifier.path
-            else -> it.toString()
+        when (it) {
+            is RegistryLikeTagCondition -> tagDisplayName("worldgen.structure", it.tag.location())
+            is RegistryLikeIdentifierCondition -> Component.literal(prettifyPath(it.identifier.path))
+            else -> Component.literal(it.toString())
         }
-        Component.literal(path.substringAfterLast('/').split('_').joinToString(" ") { part -> part.replaceFirstChar(Char::titlecase) })
     }
     val tooltip = if (condition != null && anticondition != null) {
         lang("ui.pokedex.requirement.structure.both.tooltip", displayName(condition).green(), displayName(anticondition).green())

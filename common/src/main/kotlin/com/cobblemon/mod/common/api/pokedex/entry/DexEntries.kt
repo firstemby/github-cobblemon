@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokedex.entry
 
+import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
@@ -17,7 +18,9 @@ import com.cobblemon.mod.common.net.messages.client.data.DexEvolutionDisplaySync
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.lang
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -77,9 +80,6 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
     fun buildDisplays(form: FormData): List<DexEvolutionDisplay> {
         val result = mutableListOf<DexEvolutionDisplay>()
         (form.ownEvolutions ?: form.evolutions).forEach { evolution ->
-            val resultPokemon = evolution.result.create()
-            if (!resultPokemon.species.implemented)
-                return@forEach
             val requirements = mutableListOf<DexEvolutionRequirementDisplay>()
             getToolTipHeaderIcon(evolution)?.let { header ->
                 requirements.add(header)
@@ -88,15 +88,33 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                 requirements.add(requirement)
             }
 
-            result.add(DexEvolutionDisplay(
-                fromSpecies = form.species.resourceIdentifier,
-                fromForm = form.name,
-                fromAspects = form.aspects.toSet(),
-                toSpecies = resultPokemon.species.resourceIdentifier,
-                toForm = resultPokemon.form.name,
-                toAspects = resultPokemon.aspects,
-                requirements = requirements,
-            ))
+            listOfNotNull(evolution.result, evolution.shedder).forEach resultLoop@{ resultProperties ->
+                val resultSpecies = resultProperties.species
+                    ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+                    ?: return@resultLoop
+
+                if (!resultSpecies.implemented)
+                    return@resultLoop
+
+                // Carry the source form's aspects over like a real evolution does (Alola-Bias Pichu -> Alola-Bias Pikachu)
+                val resultForm = resultSpecies.getForm(form.aspects.toSet() + resultProperties.aspects)
+                val toAspects = resultProperties.aspects + resultForm.aspects
+                val resultRequirements = if (resultProperties === evolution.shedder) {
+                    requirements + CobblemonDexEvolutionRequirementDisplay(CobblemonItems.POKE_BALL, lang("ui.pokedex.evolution.shedder.tooltip"))
+                } else {
+                    requirements
+                }
+
+                result.add(DexEvolutionDisplay(
+                    fromSpecies = form.species.resourceIdentifier,
+                    fromForm = form.name,
+                    fromAspects = form.aspects.toSet(),
+                    toSpecies = resultSpecies.resourceIdentifier,
+                    toForm = resultForm.name,
+                    toAspects = toAspects,
+                    requirements = resultRequirements,
+                ))
+            }
         }
         return result
     }

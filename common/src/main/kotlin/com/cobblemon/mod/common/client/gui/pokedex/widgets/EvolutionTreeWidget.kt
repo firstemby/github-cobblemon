@@ -158,11 +158,11 @@ class EvolutionTreeWidget(
         updatePositioning()
         var rootSpecies = pokedexEntry
         var rootForm = pokedexForm
-        var preEvolution = DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == rootSpecies.speciesId && it.toForm == rootForm.displayForm }
+        var preEvolution = findPreEvolution(rootSpecies, rootForm)
         while (preEvolution != null) {
             rootSpecies = Dexes.findDexEntryBySpeciesId(preEvolution.fromSpecies)!!
             rootForm = rootSpecies.forms.first { it.displayForm.equals(preEvolution.fromForm, ignoreCase = true) }
-            preEvolution = DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == rootSpecies.speciesId && it.toForm == rootForm.displayForm }
+            preEvolution = findPreEvolution(rootSpecies, rootForm)
         }
 
         val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.speciesId)
@@ -201,6 +201,13 @@ class EvolutionTreeWidget(
         panningY = 0.0
     }
 
+    /** The evolution leading to [form]; the standard form falls back to any form of the species (no evolution leads to regular Vivillon). */
+    private fun findPreEvolution(entry: PokedexEntry, form: PokedexForm): DexEvolutionDisplay? {
+        return DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == entry.speciesId && it.toForm == form.displayForm }
+            ?: DexEntries.evolutionDisplays.takeIf { form.displayForm.equals("Normal", ignoreCase = true) }
+                ?.firstOrNull { it.toSpecies == entry.speciesId }
+    }
+
     fun updatePositioning() {
         x = pX + X_MARGIN
         y = pY + if (parent.evolutionTreeExpanded) Y_MARGIN_EXPANDED else Y_MARGIN_MINIMIZED
@@ -216,8 +223,9 @@ class EvolutionTreeWidget(
     private fun buildEvolutionTree(
         pokedexEntry: PokedexEntry,
         pokedexForm: PokedexForm,
+        aspects: Set<String> = emptySet(),
     ): EvolutionNode {
-        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, mutableSetOf())
+        val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects.toMutableSet())
 
         val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
         val evolutions = DexEntries.evolutionDisplays.filter { it.fromSpecies == pokedexEntry.speciesId && formEquivalents.contains(it.fromForm.lowercase()) }
@@ -230,23 +238,17 @@ class EvolutionTreeWidget(
             }
             val formEquivalents = Dexes.getFormEquivalents(it.toForm.lowercase())
             val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
-            buildEvolutionTree(childPokedexEntry, childPokedexForm)
+            buildEvolutionTree(childPokedexEntry, childPokedexForm, it.toAspects)
         }
+
         return EvolutionNode(
             pokedexEntry = pokedexEntry,
             pokedexForm = pokedexForm,
-            aspects = mutableSetOf(),
+            aspects = aspects,
             pokedexEntryProgress = discoveryLevel,
             children = mergeEquivalentChildren(children),
             renderDataAlternatives = evolutions,
         )
-    }
-
-    private fun resolveResultForm(resultProperties: PokemonProperties, aspects: Set<String>): FormData? {
-        val resultSpecies = resultProperties.species
-            ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
-            ?: return null
-        return resultSpecies.getForm(aspects + resultProperties.aspects)
     }
 
     private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {
@@ -285,7 +287,7 @@ class EvolutionTreeWidget(
 
             val formEquivalents = Dexes.getFormEquivalents(child.value.pokedexForm.displayForm)
             val alternatives = treeDrawingNode.value.renderDataAlternatives.filter {
-                it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase())
+                it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase()) && it.toAspects == child.value.aspects
             }
 
             alternatives.takeIf { it.isNotEmpty() }?.let {
@@ -329,7 +331,7 @@ class EvolutionTreeWidget(
 
                 val formEquivalents = Dexes.getFormEquivalents(child.value.pokedexForm.displayForm)
                 val alternatives = treeDrawingNode.value.renderDataAlternatives.filter {
-                    it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase())
+                    it.toSpecies == child.value.pokedexEntry.speciesId && formEquivalents.contains(it.toForm.lowercase()) && it.toAspects == child.value.aspects
                 }
 
                 alternatives.takeIf { it.isNotEmpty() }?.let {
@@ -546,7 +548,7 @@ class EvolutionTreeWidget(
         val groups = alternatives.filter { it.isNotEmpty() }
         if (groups.size <= 1) return groups.firstOrNull() ?: emptyList()
 
-        val sharedStrings = groups.flatMap { group -> group.map { it.string }.toSet() }.distinct()
+        val sharedStrings = groups.map { group -> group.map { it.string }.toSet() }.reduce { acc, strings -> acc intersect strings }
         val shared = groups.first().filter { it.string in sharedStrings }.distinctBy { it.string }
         val remainders = groups
             .map { group -> group.filter { it.string !in sharedStrings } }
@@ -556,10 +558,11 @@ class EvolutionTreeWidget(
         if (remainders.any { it.isEmpty() }) return shared
         if (remainders.size == 1) return shared + remainders.first()
 
-        return if (remainders.all { it.size == 1 }) {
+        return if (remainders.size >= 3 && remainders.all { it.size == 1 }) {
             shared + lang("ui.pokedex.evolution.one_of").bold() + remainders.map { it.first() }
         } else {
-            shared + remainders.flatMapIndexed { index, group ->
+            // Show each alternative in full, otherwise it's unclear where the first one starts
+            groups.distinctBy { group -> group.map { it.string } }.flatMapIndexed { index, group ->
                 if (index == 0) group else listOf(lang("ui.pokedex.evolution.or").bold()) + group
             }
         }
