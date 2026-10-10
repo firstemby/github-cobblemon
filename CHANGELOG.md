@@ -172,6 +172,7 @@
 - Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
 - Fixed Oricorio Pa'u form dex description
 - Fixed PC playing sound on close when opened via command
+- Fixed party overlay not hiding when player opens the pokedex scanner 
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:
