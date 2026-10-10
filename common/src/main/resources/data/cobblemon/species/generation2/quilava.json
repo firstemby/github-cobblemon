@@ -281,6 +281,13 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/quilava_johtobiome"
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:evolution/regional/quilava_hisuibiome"
+              }
             }
           ]
         },

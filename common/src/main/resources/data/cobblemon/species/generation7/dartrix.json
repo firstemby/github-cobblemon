@@ -293,6 +293,13 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/dartrix_alolabiome"
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:evolution/regional/datrix_hisuibiome"
+              }
             }
           ]
         },

@@ -297,36 +297,6 @@
       "learnableMoves": [
         "thunderpunch"
       ],
-      "requirements": [
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_beach"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_tropical_island"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "aether:skyroot_forest"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "aether:skyroot_woodland"
-          }
-        }
-      ],
       "requiredContext": "cobblemon:thunder_stone"
     },
     {
@@ -341,13 +311,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_forest"
-          }
         }
       ],
       "requiredContext": "cobblemon:thunder_stone"
@@ -425,36 +388,15 @@
           ],
           "requirements": [
             {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_beach"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_tropical_island"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "aether:skyroot_forest"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "aether:skyroot_woodland"
-              }
-            },
-            {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/pikachu_kantobiome"
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:evolution/regional/pikachu_alolabiome"
+              }
             }
           ],
           "requiredContext": "cobblemon:thunder_stone"
@@ -466,15 +408,6 @@
           "consumeHeldItem": false,
           "learnableMoves": [
             "psychic"
-          ],
-          "requirements": [
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_forest"
-              }
-            }
           ],
           "requiredContext": "cobblemon:thunder_stone"
         }

@@ -211,13 +211,6 @@
         {
           "variant": "has_move",
           "move": "mimic"
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_freezing"
-          }
         }
       ]
     },
@@ -275,6 +268,13 @@
             {
               "variant": "biome",
               "biomeCondition": "#cobblemon:evolution/regional/mimejr_sinnohbiome"
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:evolution/regional/mimejr_galarbiome"
+              }
             }
           ]
         },
@@ -288,13 +288,6 @@
             {
               "variant": "has_move",
               "move": "mimic"
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_temperate"
-              }
             }
           ]
         }
