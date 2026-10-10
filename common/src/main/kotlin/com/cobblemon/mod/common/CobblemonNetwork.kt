@@ -425,7 +425,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(MovesRegistrySyncPacket.ID, MovesRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(BerryRegistrySyncPacket.ID, BerryRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(SpeciesRegistrySyncPacket.ID, SpeciesRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
-        list.add(PacketRegisterInfo(SpeciesEvolutionSyncPacket.ID, SpeciesEvolutionSyncPacket::decode, DataRegistrySyncPacketHandler()))
+        list.add(PacketRegisterInfo(DexEvolutionDisplaySyncPacket.ID, DexEvolutionDisplaySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(PropertiesCompletionRegistrySyncPacket.ID, PropertiesCompletionRegistrySyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(StandardSpeciesFeatureSyncPacket.ID, StandardSpeciesFeatureSyncPacket::decode, DataRegistrySyncPacketHandler()))
         list.add(PacketRegisterInfo(GlobalSpeciesFeatureSyncPacket.ID, GlobalSpeciesFeatureSyncPacket::decode, DataRegistrySyncPacketHandler()))

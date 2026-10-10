@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package com.cobblemon.mod.common.client.gui.pokedex.widgets.evolutiontree
+package com.cobblemon.mod.common.api.pokedex.entry
 
 import com.cobblemon.mod.common.api.pokemon.Natures
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties
@@ -28,7 +28,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.item.Items
 
-internal fun describePokemonProperties(properties: PokemonProperties): MutableComponent? {
+fun describePokemonProperties(properties: PokemonProperties): MutableComponent? {
     if (hasUndescribedProperty(properties)) {
         return null
     }

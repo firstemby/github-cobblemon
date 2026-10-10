@@ -258,7 +258,9 @@
         },
         {
           "variant": "properties",
-          "target": "nickname=Dinnerbone"
+          "target": "nickname=Dinnerbone",
+          "pokedexIcon": "minecraft:name_tag",
+          "pokedexTooltip": "cobblemon.ui.pokedex.requirement.nickname.malamar"
         }
       ]
     },
@@ -275,7 +277,9 @@
         },
         {
           "variant": "properties",
-          "target": "nickname=Grumm"
+          "target": "nickname=Grumm",
+          "pokedexIcon": "minecraft:name_tag",
+          "pokedexTooltip": "cobblemon.ui.pokedex.requirement.nickname.malamar"
         }
       ]
     }

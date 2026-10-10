@@ -12,12 +12,10 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 import net.minecraft.world.phys.AABB
 
-object BoxAdapter : JsonDeserializer<AABB>, JsonSerializer<AABB> {
+object BoxAdapter : JsonDeserializer<AABB> {
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): AABB {
         json as JsonObject
         return AABB(
@@ -28,16 +26,5 @@ object BoxAdapter : JsonDeserializer<AABB>, JsonSerializer<AABB> {
             json.get("maxY")?.asDouble ?: 9999999.0,
             json.get("maxZ")?.asDouble ?: 9999999.0
         )
-    }
-
-    override fun serialize(src: AABB, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
-        val json = JsonObject()
-        json.addProperty("minX", src.minX)
-        json.addProperty("minY", src.minY)
-        json.addProperty("minZ", src.minZ)
-        json.addProperty("maxX", src.maxX)
-        json.addProperty("maxY", src.maxY)
-        json.addProperty("maxZ", src.maxZ)
-        return json
     }
 }
