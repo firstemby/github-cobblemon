@@ -566,6 +566,7 @@ object CobblemonNetwork {
         list.add(PacketRegisterInfo(SwapPartyPokemonPacket.ID, SwapPartyPokemonPacket::decode, SwapPartyPokemonHandler))
 
         list.add(PacketRegisterInfo(MovePCPokemonPacket.ID, MovePCPokemonPacket::decode, MovePCPokemonHandler))
+        list.add(PacketRegisterInfo(MovePCPokemonBatchPacket.ID, MovePCPokemonBatchPacket::decode, MovePCPokemonBatchHandler))
         list.add(PacketRegisterInfo(MovePartyPokemonPacket.ID, MovePartyPokemonPacket::decode, MovePartyPokemonHandler))
 
         list.add(PacketRegisterInfo(SwapPCPartyPokemonPacket.ID, SwapPCPartyPokemonPacket::decode, SwapPCPartyPokemonHandler))

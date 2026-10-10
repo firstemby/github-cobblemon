@@ -270,6 +270,34 @@ open class PCStore(
         }
     }
 
+    fun moveBatch(moves: List<Triple<UUID, PCPosition, PCPosition>>): Boolean {
+        if (moves.isEmpty() || moves.size > POKEMON_PER_BOX) return false
+        if (moves.map { it.second }.toSet().size != moves.size ||
+            moves.map { it.third }.toSet().size != moves.size ||
+            moves.map { it.first }.toSet().size != moves.size
+        ) return false
+        if (moves.any { (_, source, target) -> !isValidPosition(source) || !isValidPosition(target) }) return false
+
+        val sourcePositions = moves.mapTo(mutableSetOf()) { it.second }
+        val pokemonMoves = moves.map { (pokemonID, source, target) ->
+            val pokemon = get(source)?.takeIf { it.uuid == pokemonID } ?: return false
+            Triple(source, target, pokemon)
+        }
+        if (pokemonMoves.any { (_, target, _) -> get(target) != null && target !in sourcePositions }) return false
+
+        pokemonMoves.forEach { (source, _, _) -> setAtPosition(source, null) }
+        pokemonMoves.forEach { (_, target, pokemon) -> setAtPosition(target, pokemon) }
+
+        pokemonMoves.forEach { (_, _, pokemon) ->
+            sendPacketToObservers(RemoveClientPokemonPacket(this, pokemon.uuid))
+        }
+        pokemonMoves.forEach { (_, target, pokemon) ->
+            sendPacketToObservers(SetPCPokemonPacket(uuid, target) { pokemon })
+        }
+        pcChangeObservable.emit(Unit)
+        return true
+    }
+
     override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PCPosition> {
         return StoreCoordinates(this, PCPosition(nbt.getShort(DataKeys.STORE_BOX).toInt(), nbt.getByte(DataKeys.STORE_SLOT).toInt()))
     }

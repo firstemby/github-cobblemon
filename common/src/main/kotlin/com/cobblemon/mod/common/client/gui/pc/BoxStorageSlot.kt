@@ -29,7 +29,8 @@ class BoxStorageSlot(
 
         val grabbedSlot = parent.grabbedSlot
         return if (grabbedSlot == null) {
-            true
+            val pokemon = getPokemon()
+            pokemon == null || !parent.isInMultiSelection(pokemon, position)
         } else {
             grabbedSlot.getPokemon() != getPokemon()
         }

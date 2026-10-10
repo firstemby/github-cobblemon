@@ -51,7 +51,6 @@ import net.minecraft.sounds.SoundEvent
 import kotlin.isInitialized
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.FastColor
-import kotlin.math.absoluteValue
 
 class PCGUI(
     val pc: ClientPC,
@@ -135,6 +134,8 @@ class PCGUI(
     private var dragEndX: Int? = null
     private var dragEndY: Int? = null
 
+    internal data class SelectionArea(val left: Int, val top: Int, val right: Int, val bottom: Int)
+
     private data class BoxGridBounds(val left: Int, val top: Int, val right: Int, val bottom: Int) {
         fun contains(x: Int, y: Int) = x in left..< right && y >= top && y < bottom
     }
@@ -148,6 +149,23 @@ class PCGUI(
             left + StorageWidget.SCREEN_WIDTH,
             top + StorageWidget.SCREEN_HEIGHT
         )
+    }
+
+    internal fun getSelectionArea(): SelectionArea? {
+        val startX = dragStartX ?: return null
+        val startY = dragStartY ?: return null
+        val endX = dragEndX ?: return null
+        val endY = dragEndY ?: return null
+        val bounds = getBoxGridBounds()
+        if (!bounds.contains(startX, startY)) return null
+
+        val clippedEndX = endX.coerceIn(bounds.left, bounds.right - 1)
+        val clippedEndY = endY.coerceIn(bounds.top, bounds.bottom - 1)
+        val left = minOf(startX, clippedEndX)
+        val top = minOf(startY, clippedEndY)
+        val right = maxOf(startX, clippedEndX) + 1
+        val bottom = maxOf(startY, clippedEndY) + 1
+        return if ((right - left) * (bottom - top) > 25) SelectionArea(left, top, right, bottom) else null
     }
 
     override fun renderBlurredBackground(delta: Float) {}
@@ -336,20 +354,16 @@ class PCGUI(
         super.init()
     }
 
-    private fun renderSelectionBox(context: GuiGraphics, startX: Int, startY: Int, endX: Int, endY: Int) {
+    private fun renderSelectionBox(context: GuiGraphics, area: SelectionArea) {
         context.pose().pushPose()
         context.pose().translate(0.0, 0.0, 1500.0)
-        val left = minOf(startX, endX)
-        val top = minOf(startY, endY)
-        val right = maxOf(startX, endX) + 1
-        val bottom = maxOf(startY, endY) + 1
         val borderColor = FastColor.ARGB32.color(255, 205, 212, 255)
         val thickness = 1
-        context.fill(left, top, right, bottom, 0x6600A0FF)
-        context.fill(left, top, right, top + thickness, borderColor)
-        context.fill(left, bottom - thickness, right, bottom, borderColor)
-        context.fill(left, top, left + thickness, bottom, borderColor)
-        context.fill(right - thickness, top, right, bottom, borderColor)
+        context.fill(area.left, area.top, area.right, area.bottom, 0x6600A0FF)
+        context.fill(area.left, area.top, area.right, area.top + thickness, borderColor)
+        context.fill(area.left, area.bottom - thickness, area.right, area.bottom, borderColor)
+        context.fill(area.left, area.top, area.left + thickness, area.bottom, borderColor)
+        context.fill(area.right - thickness, area.top, area.right, area.bottom, borderColor)
         context.pose().popPose()
     }
 
@@ -729,19 +743,7 @@ class PCGUI(
 
         super.render(context, mouseX, mouseY, delta)
 
-        val startX = dragStartX
-        val startY = dragStartY
-        val endX = dragEndX
-        val endY = dragEndY
-        val gridBounds = getBoxGridBounds()
-        if (startX != null && startY != null && endX != null && endY != null && gridBounds.contains(startX, startY)) {
-            val clippedEndX = endX.coerceIn(gridBounds.left, gridBounds.right - 1)
-            val clippedEndY = endY.coerceIn(gridBounds.top, gridBounds.bottom - 1)
-            val selectionArea = (startX - clippedEndX) * (startY - clippedEndY)
-            if (selectionArea.absoluteValue > 25) {
-                renderSelectionBox(context, startX, startY, clippedEndX, clippedEndY)
-            }
-        }
+        getSelectionArea()?.let { renderSelectionBox(context, it) }
 
         // Item Tooltip
         if (pokemon != null) {
@@ -766,7 +768,7 @@ class PCGUI(
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         val clickX = mouseX.toInt()
         val clickY = mouseY.toInt()
-        if (button == 0 && getBoxGridBounds().contains(clickX, clickY)) {
+        if (storageWidget.multiSelection == null && button == 0 && getBoxGridBounds().contains(clickX, clickY)) {
             dragStartX = clickX
             dragStartY = clickY
         } else {
@@ -808,6 +810,7 @@ class PCGUI(
     }
 
     override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button == 0 && getSelectionArea() != null) storageWidget.updateSelection()
         dragStartX = null
         dragStartY = null
         dragEndX = null

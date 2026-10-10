@@ -39,8 +39,9 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
+import java.util.UUID
+import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonBatchPacket.PCPokemonMove
 
 class StorageWidget(
     pX: Int, pY: Int,
@@ -79,6 +80,9 @@ class StorageWidget(
     var screenLoaded = false
     var selectedPosition: StorePosition? = null
     var grabbedSlot: GrabbedStorageSlot? = null
+
+    var multiSelection: PCMultiSelection? = null
+    private val multiGrabbedSlots = mutableMapOf<UUID, GrabbedStorageSlot>()
 
     var box = 0
         set(value) {
@@ -217,6 +221,84 @@ class StorageWidget(
         }
     }
 
+    fun updateSelection() {
+        val area = pcGui.getSelectionArea()
+        if (area == null) {
+            multiSelection = null
+            return
+        }
+
+        selectedPosition = null
+        grabbedSlot = null
+        pcGui.setPreviewPokemon(null)
+
+        val intersectingSlots = boxSlots.filter { slot ->
+            slot.x < area.right && slot.x + StorageSlot.SIZE > area.left &&
+                slot.y < area.bottom && slot.y + StorageSlot.SIZE > area.top
+        }
+
+        if (intersectingSlots.isEmpty()) {
+            multiSelection = null
+            return
+        }
+
+        val selectedSlots = intersectingSlots.filter { slot ->
+            slot.getPokemon()?.let(pcGui.search::passes) == true
+        }
+        if (selectedSlots.isEmpty()) {
+            multiSelection = null
+            return
+        }
+
+        val minColumn = selectedSlots.minOf { it.position.slot % 6 }
+        val maxColumn = selectedSlots.maxOf { it.position.slot % 6 }
+        val minRow = selectedSlots.minOf { it.position.slot / 6 }
+        val maxRow = selectedSlots.maxOf { it.position.slot / 6 }
+        val selection = PCMultiSelection(maxColumn - minColumn + 1, maxRow - minRow + 1, box, minColumn, minRow)
+
+        selectedSlots.forEach { slot ->
+            val pokemon = slot.getPokemon() ?: return@forEach
+            val slotIndex = slot.position.slot
+            val column = slotIndex % 6
+            val row = slotIndex / 6
+            if (column in minColumn..maxColumn && row in minRow..maxRow) {
+                selection.setPokemon(column - minColumn, row - minRow, pokemon)
+            }
+        }
+        playSound(CobblemonSounds.PC_GRAB)
+
+        multiSelection = selection
+    }
+
+    private fun moveMultiSelectionTo(destination: PCPosition): Boolean {
+        val selection = multiSelection ?: return false
+
+        val width = selection.getHorizontalSize()
+        val height = selection.getVerticalSize()
+        val destinationColumn = destination.slot % 6
+        val destinationRow = destination.slot / 6
+        if (destinationColumn + width > 6 || destinationRow + height > 5) return false
+
+        val moves = mutableListOf<PCPokemonMove>()
+        for (row in 0 until height) {
+            for (column in 0 until width) {
+                val pokemon = selection.getPokemon(column, row) ?: continue
+                val source = PCPosition(selection.sourceBox, (selection.sourceRow + row) * 6 + selection.sourceColumn + column)
+                val target = PCPosition(destination.box, (destinationRow + row) * 6 + destinationColumn + column)
+                moves.add(PCPokemonMove(pokemon.uuid, source, target))
+            }
+        }
+
+        if (moves.isEmpty()) return false
+        MovePCPokemonBatchPacket(moves).sendToServer()
+        return true
+    }
+
+    fun isInMultiSelection(pokemon: Pokemon, position: PCPosition): Boolean {
+        val selection = multiSelection ?: return false
+        return selection.sourceBox == position.box && selection.pokemonEntries().any { it.third == pokemon }
+    }
+
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val matrices = context.pose()
         // Party  Label
@@ -335,8 +417,29 @@ class StorageWidget(
         pastureWidget?.render(context, mouseX, mouseY, delta)
         matrices.pushPose()
         matrices.translate(0.0, 0.0, 1000.0)
-        grabbedSlot?.render(context, mouseX, mouseY, delta)
+        renderSelectedPokemon(context, mouseX, mouseY, delta)
         matrices.popPose()
+    }
+
+    private fun renderSelectedPokemon(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        val selection = multiSelection
+        if (selection == null) {
+            grabbedSlot?.render(context, mouseX, mouseY, delta)
+            return
+        }
+
+        val slotOffset = StorageSlot.SIZE + BOX_SLOT_PADDING
+        selection.pokemonEntries().forEach { (column, row, pokemon) ->
+            val grabbed = multiGrabbedSlots.getOrPut(pokemon.uuid) {
+                GrabbedStorageSlot(0, 0, this, pokemon)
+            }
+            grabbed.render(
+                context,
+                mouseX + column * slotOffset,
+                mouseY + row * slotOffset,
+                delta
+            )
+        }
     }
 
     override fun mouseClicked(pMouseX: Double, pMouseY: Double, pButton: Int): Boolean {
@@ -371,6 +474,44 @@ class StorageWidget(
             else -> return
         }
 
+        val clickedPokemon = when (clickedPosition) {
+            is PCPosition -> pc.get(clickedPosition)
+            is PartyPosition -> party.get(clickedPosition)
+            else -> null
+        }
+
+        multiSelection?.let { selection ->
+            when (clickedPosition) {
+                is PCPosition -> {
+                    if (clickedPosition.box == selection.sourceBox &&
+                        clickedPosition.slot == selection.sourceRow * 6 + selection.sourceColumn
+                    ) {
+                        resetSelected()
+                    } else if (moveMultiSelectionTo(clickedPosition)) {
+                        playSound(CobblemonSounds.PC_DROP)
+                        resetSelected()
+                    }
+                }
+                is PartyPosition -> {
+                    val selectedPokemon = selection.pokemonEntries().singleOrNull() ?: return
+                    val (column, row, pokemon) = selectedPokemon
+                    val source = PCPosition(
+                        selection.sourceBox,
+                        (selection.sourceRow + row) * 6 + selection.sourceColumn + column
+                    )
+                    if (pc.get(source) !== pokemon) return
+                    val packet = clickedPokemon?.let {
+                        SwapPCPartyPokemonPacket(it.uuid, clickedPosition, pokemon.uuid, source)
+                    } ?: MovePCPokemonToPartyPacket(pokemon.uuid, source, clickedPosition)
+                    packet.sendToServer()
+                    playSound(CobblemonSounds.PC_DROP)
+                    resetSelected()
+                }
+                else -> Unit
+            }
+            return
+        }
+
         // Reset release confirmation
         displayConfirmRelease = false
 
@@ -382,12 +523,6 @@ class StorageWidget(
         }
 
         // Check for selecting a Pokémon
-        val clickedPokemon = when(button) {
-            is BoxStorageSlot -> pc.get(clickedPosition as PCPosition)
-            is PartyStorageSlot -> party.get(clickedPosition as PartyPosition)
-            else -> null
-        }
-
         val selectOverride = pcGui.configuration.selectOverride
         if (selectOverride != null) {
             selectOverride(pcGui, clickedPosition, clickedPokemon)
@@ -418,6 +553,24 @@ class StorageWidget(
                             return
                         }
                     }
+                }
+
+                if (clickedPosition is PCPosition) {
+                    val column = clickedPosition.slot % 6
+                    val row = clickedPosition.slot / 6
+                    multiSelection = PCMultiSelection(1, 1, clickedPosition.box, column, row).also {
+                        it.setPokemon(0, 0, clickedPokemon)
+                    }
+                    selectedPosition = clickedPosition
+                    grabbedSlot = GrabbedStorageSlot(
+                        x = button.x,
+                        y = button.y,
+                        parent = this,
+                        pokemon = clickedPokemon
+                    )
+                    pcGui.setPreviewPokemon(clickedPokemon, false)
+                    playSound(CobblemonSounds.PC_GRAB)
+                    return
                 }
 
                 this.selectedPosition = clickedPosition
@@ -480,6 +633,8 @@ class StorageWidget(
     fun resetSelected() {
         selectedPosition = null
         grabbedSlot = null
+        multiSelection = null
+        multiGrabbedSlots.clear()
         pcGui.setPreviewPokemon(null)
     }
 }
