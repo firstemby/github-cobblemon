@@ -48,21 +48,26 @@ class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike):
             && super.canUseOnPokemon(stack, pokemon)
 
     override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon, move: Move) {
-        if (canUseOnPokemon(stack, pokemon) && canUseOnMove(stack, move)) {
-            pokemon.feedPokemon(1)
-            val moveToRecover = pokemon.moveSet.find { it.template == move.template }
-            if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
-                moveToRecover.currentPp =
-                    min(moveToRecover.maxPp, moveToRecover.currentPp + genericRuntime.resolveInt(amount(), pokemon))
+        if (!canUseOnPokemon(stack, pokemon) && canUseOnMove(stack, move)) {
+            return
+        }
 
-                stack.consume(1, player)
-            }
+        if (!pokemon.feedPokemon(1)) {
+            return
+        }
+
+        val moveToRecover = pokemon.moveSet.find { it.template == move.template }
+        if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
+            moveToRecover.currentPp =
+                min(moveToRecover.maxPp, moveToRecover.currentPp + genericRuntime.resolveInt(amount(), pokemon))
+
+            stack.consume(1, player)
         }
     }
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
         super.applyToBattlePokemon(player, stack, battlePokemon, move)
-        battlePokemon.originalPokemon.feedPokemon(1)
+        battlePokemon.originalPokemon.feedPokemon(1, playMoodParticle = false)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

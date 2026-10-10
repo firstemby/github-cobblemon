@@ -58,19 +58,23 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
         stack: ItemStack,
         pokemon: Pokemon
     ): InteractionResultHolder<ItemStack>? {
-        return if (canUseOnPokemon(stack, pokemon)) {
-            pokemon.feedPokemon(1)
-            pokemon.status = null
-            stack.consume(1, player)
-            InteractionResultHolder.success(stack)
-        } else {
-            InteractionResultHolder.fail(stack)
+        if (!canUseOnPokemon(stack, pokemon)) {
+            return InteractionResultHolder.fail(stack)
         }
+
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
+        pokemon.status = null
+        stack.consume(1, player)
+
+        return InteractionResultHolder.success(stack)
     }
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        battlePokemon.originalPokemon.feedPokemon(1)
+        battlePokemon.originalPokemon.feedPokemon(1, playMoodParticle = false)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

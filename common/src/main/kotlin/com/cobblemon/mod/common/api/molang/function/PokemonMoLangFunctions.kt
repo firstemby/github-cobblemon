@@ -55,8 +55,9 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         }
         functions["feed_pokemon"] = { params ->
             val amount = params.getDouble(0)
-            val playSound = params.getBooleanOrNull(1) ?: true
-            pokemon.feedPokemon(amount.toInt(), playSound)
+            val playSound = params.getBooleanOrNull(1) != false
+            val playMoodParticles = params.getBooleanOrNull(2) != false
+            DoubleValue(pokemon.feedPokemon(amount.toInt(), playSound, playMoodParticles))
         }
         functions["behaviour"] = { pokemon.form.behaviour.struct }
         functions["behavior"] = { pokemon.form.behaviour.struct } // Inferior

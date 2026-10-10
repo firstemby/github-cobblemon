@@ -44,6 +44,11 @@ class DefendOwnerSensor : Sensor<PokemonEntity>(10) {
             return@findClosest false
         }.map { mob -> mob as LivingEntity }
 
+        val previousAttacker = entity.brain.getMemorySafely(CobblemonMemories.NEAREST_VISIBLE_ATTACKER)
+        val isNewAttacker = nearestAttacker.isPresent && previousAttacker.isEmpty
         entity.brain.setMemory(CobblemonMemories.NEAREST_VISIBLE_ATTACKER, nearestAttacker)
+        if (isNewAttacker) {
+            entity.playMoodParticle("mood_anger_steam")
+        }
     }
 }

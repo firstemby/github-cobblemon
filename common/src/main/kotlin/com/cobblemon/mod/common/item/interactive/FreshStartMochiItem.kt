@@ -33,7 +33,9 @@ class FreshStartMochiItem : CobblemonItem(Properties()), PokemonSelectingItem {
             return InteractionResultHolder.fail(stack)
         }
 
-        pokemon.feedPokemon(1)
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
 
         pokemon.evs.forEach {
             pokemon.setEV(it.key, 0)

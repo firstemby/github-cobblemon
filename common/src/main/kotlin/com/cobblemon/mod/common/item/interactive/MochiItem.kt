@@ -27,7 +27,9 @@ class MochiItem(override val stat: Stat): CobblemonItem(Properties()), EVIncreas
             return InteractionResultHolder.fail(stack)
         }
 
-        pokemon.feedPokemon(1)
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
         
         return super.applyToPokemon(player, stack, pokemon)
     }

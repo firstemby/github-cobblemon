@@ -96,8 +96,9 @@ class PokePuffItem : Item(Properties().stacksTo(64)), PokemonSelectingItem {
             return InteractionResultHolder.fail(stack)
         }
 
-        // Feed the Pokémon 4 fullness points
-        pokemon.feedPokemon(4)
+        if (!pokemon.feedPokemon(4)) {
+            return InteractionResultHolder.fail(stack)
+        }
 
         val friendshipChange = PokePuffUtils.calculateFriendshipChange(stack, pokemon.nature)
 

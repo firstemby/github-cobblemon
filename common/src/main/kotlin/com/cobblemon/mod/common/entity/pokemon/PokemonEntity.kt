@@ -34,6 +34,9 @@ import com.cobblemon.mod.common.api.molang.MoLangFunctions.addPokemonFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.addStandardFunctions
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.molang.ObjectValue
+import com.cobblemon.mod.common.api.moves.animations.ActionEffectContext
+import com.cobblemon.mod.common.api.moves.animations.ActionEffects
+import com.cobblemon.mod.common.api.moves.animations.UsersProvider
 import com.cobblemon.mod.common.api.net.serializers.PlatformTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.PoseTypeDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.RideBoostsDataSerializer
@@ -424,6 +427,9 @@ open class PokemonEntity(
     var tickSpawned = 0
 
     var occupiedSeats = mutableMapOf<Seat, Entity>()
+
+    var moodParticleLock = false
+    var playedZeroStaminaParticle = false
 
     init {
         delegate.initialize(this)
@@ -902,6 +908,27 @@ open class PokemonEntity(
         }
 
         return future
+    }
+
+    fun playMoodParticle(particleName: String) {
+        if (moodParticleLock) return
+
+        val actionEffect = ActionEffects.actionEffects[cobblemonResource(particleName)] ?: return
+
+        cry()
+
+        val context = ActionEffectContext(
+            actionEffect = actionEffect,
+            providers = mutableListOf(UsersProvider(this)),
+            runtime = runtime,
+            level = level()
+        )
+        actionEffect.run(context)
+
+        moodParticleLock = true
+        after(5.0f) {
+            moodParticleLock = false
+        }
     }
 
     override fun saveWithoutId(nbt: CompoundTag): CompoundTag {
@@ -2313,6 +2340,8 @@ open class PokemonEntity(
             ifRidingAvailable { _, _, state ->
                 state.stamina.set(entityData.get(RIDE_STAMINA))
             }
+
+            playedZeroStaminaParticle = false
         }
     }
 
@@ -2341,10 +2370,24 @@ open class PokemonEntity(
 
     override fun tickRidden(driver: Player, movementInput: Vec3) {
         super.tickRidden(driver, movementInput)
+
         ifRidingAvailable { behaviour, settings, state ->
             behaviour.tick(settings, state, this, driver, movementInput)
             if (entityData.get(RIDE_STAMINA) == -1F) {
                 state.stamina.set(1F, forced = true)
+            }
+
+            if (!level().isClientSide) {
+                val stamina = state.stamina.get()
+
+                if (stamina <= 0f) {
+                    if (!playedZeroStaminaParticle) {
+                        playMoodParticle("mood_stress")
+                        playedZeroStaminaParticle = true
+                    }
+                } else {
+                    playedZeroStaminaParticle = false
+                }
             }
 
             if (!this.level().isClientSide) {

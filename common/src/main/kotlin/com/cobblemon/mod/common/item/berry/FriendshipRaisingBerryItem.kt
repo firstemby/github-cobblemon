@@ -54,14 +54,16 @@ class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(
         val evLowerAmount = max(genericRuntime.resolveInt(CobblemonMechanics.berries.evLowerAmount), 0)
         val decreasedEVs = pokemon.evs.add(stat, -evLowerAmount, ItemEvSource(player, stack, pokemon)) != 0
 
-        return if (increasedFriendship || decreasedEVs) {
-            pokemon.feedPokemon(1)
-
-            stack.consume(1, player)
-            InteractionResultHolder.success(stack)
-        } else {
-            InteractionResultHolder.pass(stack)
+        if (!increasedFriendship && !decreasedEVs) {
+            return InteractionResultHolder.pass(stack)
         }
+
+        if (!pokemon.feedPokemon(1)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
+        stack.consume(1, player)
+        return InteractionResultHolder.success(stack)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

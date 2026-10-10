@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.ai
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
@@ -24,10 +25,16 @@ object GetAngryAtAttackerTask {
                 Trigger { _, entity, _ ->
                     val hurtByEntity = it.get(hurtByEntity)
                     val angryAt = it.tryGet(angryAt).orElse(null)
+
                     if (angryAt != null && angryAt == hurtByEntity.uuid) {
                         return@Trigger false
                     }
+
+                    val becomingAngry = angryAt == null
                     entity.brain.setMemory(MemoryModuleType.ANGRY_AT, hurtByEntity.uuid)
+                    if (becomingAngry) {
+                        (entity as PokemonEntity?)?.playMoodParticle("mood_anger_steam")
+                    }
                     return@Trigger true
                 }
             }

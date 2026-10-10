@@ -59,7 +59,9 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
         }
 
         // count these berries as multiple feedings due to the amount they heal
-        pokemon.feedPokemon(5)
+        if (!pokemon.feedPokemon(5)) {
+            return InteractionResultHolder.fail(stack)
+        }
 
         var amount = Integer.min(pokemon.currentHealth + (genericRuntime.resolveFloat(portion(), pokemon) * pokemon.maxHealth).toInt(), pokemon.maxHealth)
         CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
@@ -73,7 +75,7 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
 
     override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
-        battlePokemon.originalPokemon.feedPokemon(5)
+        battlePokemon.originalPokemon.feedPokemon(5, playMoodParticle = false)
     }
 
     override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {

@@ -91,7 +91,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
                     }
                     this.timelastEaten = time
                     if (itemConfig != null && itemConfig.fullnessValue > 0) {
-                        entity.pokemon.feedPokemon(itemConfig.fullnessValue, false)
+                        entity.pokemon.feedPokemon(itemConfig.fullnessValue, false, false)
                     }
                     // Check if the result item is something that should be dropped
                     resultItemStack = entity.pokemon.heldItem()
