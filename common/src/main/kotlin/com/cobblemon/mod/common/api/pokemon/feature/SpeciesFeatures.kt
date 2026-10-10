@@ -74,22 +74,8 @@ object SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
     fun getResourceFeature(name: String) = resourceFeatures[name]
     @JvmStatic
     fun getFeature(name: String) = getCodeFeature(name) ?: getResourceFeature(name) ?: GlobalSpeciesFeatures.getFeature(name)
-
-    /** Providers that [loadOnClient] registered as aspect providers / custom properties, removed again on the next sync. */
-    private val clientRegisteredProviders = mutableListOf<SpeciesFeatureProvider<*>>()
-
     fun loadOnClient(entries: Collection<Map.Entry<String, SpeciesFeatureProvider<*>>>) {
-        clientRegisteredProviders.forEach { provider ->
-            if (provider is AspectProvider) AspectProvider.unregister(provider)
-            if (provider is CustomPokemonPropertyType<*>) CustomPokemonProperty.unregister(provider)
-        }
-        clientRegisteredProviders.clear()
         codeFeatures.putAll(entries.map { it.toPair() })
-        entries.forEach { (_, provider) ->
-            if (provider is AspectProvider) AspectProvider.register(provider)
-            if (provider is CustomPokemonPropertyType<*>) CustomPokemonProperty.register(provider)
-            clientRegisteredProviders.add(provider)
-        }
     }
 
     @JvmStatic

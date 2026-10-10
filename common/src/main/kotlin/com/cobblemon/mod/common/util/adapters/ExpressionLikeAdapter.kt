@@ -13,9 +13,6 @@ import com.cobblemon.mod.common.util.asExpressionLike
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
 /**
@@ -25,7 +22,7 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since October 22nd, 2023
  */
-object ExpressionLikeAdapter : JsonDeserializer<ExpressionLike>, JsonSerializer<ExpressionLike> {
+object ExpressionLikeAdapter : JsonDeserializer<ExpressionLike> {
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): ExpressionLike {
         return if (json.isJsonPrimitive) {
             json.asString.asExpressionLike()
@@ -34,9 +31,5 @@ object ExpressionLikeAdapter : JsonDeserializer<ExpressionLike>, JsonSerializer<
         } else {
             throw IllegalArgumentException("Invalid expression JSON: $json")
         }
-    }
-
-    override fun serialize(src: ExpressionLike, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
-        return JsonPrimitive(src.getString())
     }
 }

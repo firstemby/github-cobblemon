@@ -10,8 +10,11 @@ package com.cobblemon.mod.common.api.pokedex.entry
 
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.reactive.SimpleObservable
 import com.cobblemon.mod.common.net.messages.client.data.DexEntrySyncPacket
+import com.cobblemon.mod.common.net.messages.client.data.DexEvolutionDisplaySyncPacket
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.util.adapters.ExpressionLikeAdapter
 import com.cobblemon.mod.common.util.adapters.IdentifierAdapter
 import com.cobblemon.mod.common.util.cobblemonResource
@@ -38,6 +41,8 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
 
     val entries = mutableMapOf<ResourceLocation, PokedexEntry>()
 
+    val evolutionDisplays = mutableListOf<DexEvolutionDisplay>()
+
     override fun reload(data: Map<ResourceLocation, PokedexEntry>) {
         data.forEach { _, entry ->
             entries[entry.id] = entry
@@ -50,6 +55,7 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                 }
             }
         }
+        computeEvolutionDisplays()
         observable.emit(this)
     }
 
@@ -57,5 +63,41 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
 
     override fun sync(player: ServerPlayer) {
         DexEntrySyncPacket(entries.values).sendToPlayer(player)
+        DexEvolutionDisplaySyncPacket(evolutionDisplays).sendToPlayer(player)
+    }
+
+    fun computeEvolutionDisplays() {
+        evolutionDisplays.clear()
+        PokemonSpecies.species.forEach {
+            evolutionDisplays.addAll(buildDisplays(it.standardForm))
+            evolutionDisplays.addAll(it.forms.flatMap { form -> buildDisplays(form) })
+        }
+    }
+
+    fun buildDisplays(form: FormData): List<DexEvolutionDisplay> {
+        val result = mutableListOf<DexEvolutionDisplay>()
+        (form.ownEvolutions ?: form.evolutions).forEach { evolution ->
+            val resultPokemon = evolution.result.create()
+            if (!resultPokemon.species.implemented)
+                return@forEach
+            val requirements = mutableListOf<DexEvolutionRequirementDisplay>()
+            getToolTipHeaderIcon(evolution)?.let { header ->
+                requirements.add(header)
+            }
+            evolution.requirements.mapNotNull { resolveRequirementData(it) }.forEach { requirement ->
+                requirements.add(requirement)
+            }
+
+            result.add(DexEvolutionDisplay(
+                fromSpecies = form.species.resourceIdentifier,
+                fromForm = form.name,
+                fromAspects = form.aspects.toSet(),
+                toSpecies = resultPokemon.species.resourceIdentifier,
+                toForm = resultPokemon.form.name,
+                toAspects = resultPokemon.aspects,
+                requirements = requirements,
+            ))
+        }
+        return result
     }
 }

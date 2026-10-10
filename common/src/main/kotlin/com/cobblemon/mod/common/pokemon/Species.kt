@@ -181,20 +181,11 @@ class Species : ShowdownIdentifiable {
             this.forms.add(0, this.standardForm)
         }
         this.lightingData?.let { this.lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
-        behaviour.herd.initialize()
-    }
-
-    /**
-     * Applies decoded evolution data onto this species, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
-     * after every species has already been registered.
-     */
-    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>, preEvolution: PreEvolution?) {
-        // Mutate in place rather than reassign: standardForm may have already captured this.evolutions by reference.
-        this.evolutions.clear()
-        this.evolutions.addAll(evolutions)
-        this.preEvolution = preEvolution
+        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species
         this.preEvolution?.form
+        this.evolutions.size
+        behaviour.herd.initialize()
     }
 
     // Ran after initialize due to us creating a Pokémon here which requires all the properties in #initialize to be present for both this and the results, this is the easiest way to quickly resolve species + form

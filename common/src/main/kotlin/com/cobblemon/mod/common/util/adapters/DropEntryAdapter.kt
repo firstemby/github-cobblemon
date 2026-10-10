@@ -13,8 +13,6 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
 /**
@@ -24,20 +22,12 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since July 24th, 2022
  */
-object DropEntryAdapter : JsonDeserializer<DropEntry>, JsonSerializer<DropEntry> {
+object DropEntryAdapter : JsonDeserializer<DropEntry> {
     override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): DropEntry {
         json as JsonObject
         val entryClass = json.get("type")?.asString
             ?.let { DropEntry.getByName(it) ?: throw IllegalArgumentException("Unrecognized drop entry type: $it") }
             ?: DropEntry.defaultType
         return ctx.deserialize(json, entryClass)
-    }
-
-    override fun serialize(src: DropEntry, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
-        val json = ctx.serialize(src, src::class.java).asJsonObject
-        val name = DropEntry.entryTypes.entries.find { it.value == src::class.java }?.key
-            ?: throw IllegalArgumentException("Cannot resolve drop entry type for ${src::class.qualifiedName}")
-        json.addProperty("type", name)
-        return json
     }
 }

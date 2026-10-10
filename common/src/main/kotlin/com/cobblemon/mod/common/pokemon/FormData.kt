@@ -76,7 +76,7 @@ class FormData(
     @SerializedName("moves")
     private var _moves: Learnset? = null,
     @SerializedName("evolutions")
-    private var _evolutions: MutableSet<Evolution>? = null,
+    private val _evolutions: MutableSet<Evolution>? = null,
     @SerializedName("abilities")
     private var _abilities: AbilityPool? = null,
     @SerializedName("drops")
@@ -84,7 +84,7 @@ class FormData(
     @SerializedName("pokedex")
     private var _pokedex: MutableList<String>? = null,
     @SerializedName("preEvolution")
-    private var _preEvolution: PreEvolution? = null,
+    private val _preEvolution: PreEvolution? = null,
     private var standingEyeHeight: Float? = null,
     private var swimmingEyeHeight: Float? = null,
     private var flyingEyeHeight: Float? = null,
@@ -269,22 +269,13 @@ class FormData(
         this.species = species
         this.behaviour.parent = species.behaviour
         Cobblemon.statProvider.provide(this)
-        this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
-        behaviour.herd.initialize()
-        return this
-    }
-
-    /**
-     * Applies decoded evolution data onto this form, received separately via [com.cobblemon.mod.common.net.messages.client.data.SpeciesEvolutionSyncPacket]
-     * after every species has already been registered.
-     */
-    internal fun applyEvolutionData(evolutions: MutableSet<Evolution>?, preEvolution: PreEvolution?) {
-        this._evolutions = evolutions
-        this._preEvolution = preEvolution
-        // These properties are lazy, force resolution now that every species is guaranteed to be registered
+        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
         this.preEvolution?.species
         this.preEvolution?.form
         this.evolutions.size
+        this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
+        behaviour.herd.initialize()
+        return this
     }
 
     internal fun resolveEvolutionMoves() {
