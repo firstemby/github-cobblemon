@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.client.gui.pokedex.renderTooltip
 import com.cobblemon.mod.common.client.gui.summary.widgets.SoundlessWidget
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
+import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
 import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
@@ -98,6 +99,8 @@ class EvolutionTreeWidget(
     private var panningY: Double = 0.0
 
     private var hoveredTooltips: List<MutableComponent>? = null
+
+    private var viewedForm: FormData? = null
 
     private val expandButton: ScaledButton = ScaledButton(
         0f,
@@ -164,6 +167,10 @@ class EvolutionTreeWidget(
 
         val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.speciesId)
             ?: throw RuntimeException("Root dex entry not found")
+
+        val viewedFormEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
+        viewedForm = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
+            ?.forms?.firstOrNull { viewedFormEquivalents.contains(it.name.lowercase()) }
 
         val formEquivalents = Dexes.getFormEquivalents(rootForm.displayForm)
         val form =
@@ -233,6 +240,13 @@ class EvolutionTreeWidget(
             children = mergeEquivalentChildren(children),
             renderDataAlternatives = evolutions,
         )
+    }
+
+    private fun resolveResultForm(resultProperties: PokemonProperties, aspects: Set<String>): FormData? {
+        val resultSpecies = resultProperties.species
+            ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+            ?: return null
+        return resultSpecies.getForm(aspects + resultProperties.aspects)
     }
 
     private fun mergeEquivalentChildren(children: List<EvolutionNode>): List<EvolutionNode> {
@@ -362,7 +376,7 @@ class EvolutionTreeWidget(
                         if (formName == "normal") null
                         else lang("ui.pokedex.info.form.${species}-${formName.replace("-", "")}")
 
-                    formComponent?.add(" ")?.add(speciesComponent) ?: speciesComponent
+                    formComponent?.let { speciesComponent.copy().add(" (").add(it).add(")") } ?: speciesComponent
                 }
 
             guiGraphics.disableScissor()
