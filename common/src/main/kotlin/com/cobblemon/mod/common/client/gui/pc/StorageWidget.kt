@@ -221,6 +221,14 @@ class StorageWidget(
         }
     }
 
+    fun getSelectedPokemon(area: PCGUI.SelectionArea): List<BoxStorageSlot> {
+        return boxSlots.filter { slot ->
+            slot.x < area.right && slot.x + StorageSlot.SIZE > area.left &&
+                slot.y < area.bottom && slot.y + StorageSlot.SIZE > area.top &&
+                slot.getPokemon()?.let(pcGui.search::passes) == true
+        }
+    }
+
     fun updateSelection() {
         val area = pcGui.getSelectionArea()
         if (area == null) {
@@ -232,19 +240,7 @@ class StorageWidget(
         grabbedSlot = null
         pcGui.setPreviewPokemon(null)
 
-        val intersectingSlots = boxSlots.filter { slot ->
-            slot.x < area.right && slot.x + StorageSlot.SIZE > area.left &&
-                slot.y < area.bottom && slot.y + StorageSlot.SIZE > area.top
-        }
-
-        if (intersectingSlots.isEmpty()) {
-            multiSelection = null
-            return
-        }
-
-        val selectedSlots = intersectingSlots.filter { slot ->
-            slot.getPokemon()?.let(pcGui.search::passes) == true
-        }
+        val selectedSlots = getSelectedPokemon(area)
         if (selectedSlots.isEmpty()) {
             multiSelection = null
             return

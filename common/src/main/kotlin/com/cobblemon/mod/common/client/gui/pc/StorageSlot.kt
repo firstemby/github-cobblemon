@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.gui.pc
 
 import com.cobblemon.mod.common.Cobblemon
+import com.cobblemon.mod.common.api.gui.ColourLibrary
 import com.cobblemon.mod.common.api.gui.blitk
 import com.cobblemon.mod.common.client.gui.CobblemonRenderable
 import com.cobblemon.mod.common.client.gui.drawProfilePokemon
@@ -54,9 +55,17 @@ open class StorageSlot(
     }
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        val selectionArea = parent.pcGui.getSelectionArea()
+        if (selectionArea != null && parent.getSelectedPokemon(selectionArea).contains(this)) {
+            val highlightColor = 0x40FFFFFF
+            context.fill(x + 1, y, x + (SIZE - 1), y + SIZE, highlightColor)
+            context.fill(x, y + 1, x + 1, y + (SIZE - 1), highlightColor)
+            context.fill(x + SIZE - 1, y + 1, x + SIZE, y + (SIZE - 1), highlightColor)
+        }
         if (shouldRender()) {
             renderSlot(context, x, y, delta)
         }
+
     }
 
     fun renderSlot(context: GuiGraphics, posX: Int, posY: Int, partialTicks: Float) {
