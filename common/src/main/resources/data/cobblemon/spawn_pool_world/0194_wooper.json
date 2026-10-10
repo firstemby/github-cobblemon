@@ -97,7 +97,8 @@
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -128,7 +129,8 @@
             },
             "anticondition": {
                 "biomes": [
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -237,6 +239,11 @@
                 "biomes": [
                     "#aether:is_aether",
                     "#cobblemon:is_overworld"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -453,6 +460,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "rodType": "cobblemon:love_rod"
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -508,6 +520,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "bait": "cobblemon:love_sweet"
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {

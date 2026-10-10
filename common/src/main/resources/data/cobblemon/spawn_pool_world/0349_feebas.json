@@ -21,7 +21,8 @@
                 "minLureLevel": 1,
                 "biomes": [
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_ocean",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -58,7 +59,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
+                    "#cobblemon:is_ocean",
+                    "minecraft:sulfur_caves"
                 ]
             }
         }

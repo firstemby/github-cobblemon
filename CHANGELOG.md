@@ -21,8 +21,12 @@
 - Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 - New Cosmetic Item for Pikachu: Paper
 - Burmy changes its cloak after a battle it took part in, based on the biome: Trash Cloak in the Deep Dark, Nether and End, Plant Cloak in lush biomes such as forests, jungles, plains and swamps, and Sandy Cloak in sandy biomes, beaches and caves.
+- The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
+- Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
 ### Fixes
+- Medicinal Leeks can now be eaten when they aren't being planted, matching their food properties.
+- Sweeping attacks no longer set owned Pokémon on fire (e.g. with Fire Aspect) or knock them back.
 - Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
 ### TEST
 ### Pokémon Added
@@ -124,11 +128,14 @@
 - Added TM creative tab
 - Recall animation now renders ball in hand with the player arm raised.
 - Made regional and Vivillon split-evo locations now mutually exclusive
+- Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
 - Item evolutions now unlock **all** locked evolutions whose requirements are met instead of stopping after the first.
   - Exceptions being "forced" evolutions which will continue to stop after the first one
 - Removed Mega Drain as a TM
 - Vivillon's patterns are now viewable as forms with form names and unique Pokedex entries displayed.
 - Slowed the speed of Type Gem growth, and revamped their generation to grow in a more crystal-like shape
+- PokeSnacks (and other area spawns) will now start the vertical offset checking from the center rather than base coordinate
+  - This will help PokeSnacks to work inside caves or tighter spaces better
 
 ### Fixes
 - Correctly grants "They're Minerals!" advancement when planting a type gem
@@ -160,6 +167,14 @@
 - Fixed ball capture beam origin coming from behind the ball.
 - Fixed Safari Ball catch rate outside of battle
 - Fixed alpha eye (and other) particles not respecting client particle density setting in video options
+- Fixed TM-Machine UI not closing when player is moving away from it
+- Fixed config category for alpha/shiny chance config fields for fossil machine and honey log slathering to Spawning
+- Fixed crashes for addon species with non-Cobblemon namespaces, in evolution, fishing bait and Pokédex lookups.
+- Bees now grow Apricorns and the Galarica Nut Bush, which were in the bee growables tag but never handled, and correctly spend their nectar when they do
+- Saccharine Leaves can now be bone mealed
+- Fixed equipping a stack of items instead of one item of a stack
+- Fixed TM stack consumption in TMM screen when player teaches a move to species
+- Fixed every Miltank giving mushroom stew, not only mushroom variants 
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:

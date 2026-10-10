@@ -12,7 +12,7 @@
       "spawnablePositionType": "surface",
       "maxHerdSize": 7,
       "levelRange": "9-52",
-      "weight": 10.0,
+      "weight": 30.0,
       "condition": {
         "canSeeSky": true,
         "biomes": [
@@ -67,7 +67,8 @@
         "maxY": 13,
         "biomes": [
           "#cobblemon:is_dripstone",
-          "#cobblemon:is_lush"
+          "#cobblemon:is_lush",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [

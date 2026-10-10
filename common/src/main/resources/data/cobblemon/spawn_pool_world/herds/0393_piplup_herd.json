@@ -12,7 +12,7 @@
       "spawnablePositionType": "grounded",
       "maxHerdSize": 5,
       "levelRange": "5-53",
-      "weight": 64.0,
+      "weight": 38.4,
       "condition": {
         "minSkyLight": 8,
         "maxSkyLight": 15,
@@ -51,7 +51,7 @@
       "spawnablePositionType": "submerged",
       "maxHerdSize": 5,
       "levelRange": "5-53",
-      "weight": 64.0,
+      "weight": 38.4,
       "condition": {
         "canSeeSky": true,
         "biomes": [
@@ -89,7 +89,7 @@
       "spawnablePositionType": "submerged",
       "maxHerdSize": 5,
       "levelRange": "5-53",
-      "weight": 64.0,
+      "weight": 38.4,
       "condition": {
         "canSeeSky": false,
         "minSkyLight": 8,

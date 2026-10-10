@@ -165,24 +165,24 @@ class TypeGemCoreBlock(properties: Properties) : Block(properties) {
         expand(level, pos, random)
     }
 
-    fun expand(level: LevelAccessor, pos: BlockPos, random: RandomSource) {
+    fun expand(level: LevelAccessor, pos: BlockPos, random: RandomSource, forceGrow: Boolean = false) {
         getConnectedGemBlocks(level, pos).forEach {
             val state = it.first
             val pos = it.second
             addClustersToBlock(state, pos, level, random)
-            growClusters(pos, level, random)
+            growClusters(pos, level, random, forceGrow)
         }
     }
 
-    private fun growClusters(pos: BlockPos, level: LevelAccessor, random: RandomSource) {
+    private fun growClusters(pos: BlockPos, level: LevelAccessor, random: RandomSource, forceGrow: Boolean) {
         Direction.entries.forEach { direction ->
             val relativePos = pos.relative(direction)
             val relativeState = level.getBlockState(relativePos)
             val clusterBlock = relativeState.block as? TypeGemClusterBlock ?: return@forEach
 
-            if (relativeState.getValue(DirectionalBlock.FACING) == direction &&
-                random.nextFloat() < Cobblemon.config.typeGemGrowthChance
-            ) {
+            if ((relativeState.getValue(DirectionalBlock.FACING) == direction &&
+                random.nextFloat() < Cobblemon.config.typeGemGrowthChance) || forceGrow
+                ) {
                 clusterBlock.advanceGrowth(relativeState, level, relativePos, random)
             }
         }

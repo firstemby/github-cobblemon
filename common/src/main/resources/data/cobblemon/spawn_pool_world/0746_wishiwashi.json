@@ -4,40 +4,6 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "wishiwashi-3",
-            "pokemon": "wishiwashi",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "1-18",
-            "weight": 100.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "wishiwashi-4",
-            "pokemon": "wishiwashi",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "1-18",
-            "weight": 100.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast",
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
             "id": "wishiwashi-1",
             "pokemon": "wishiwashi",
             "presets": [
@@ -75,6 +41,40 @@
                     "#cobblemon:is_ocean"
                 ],
                 "isPokeSnack": true
+            }
+        },
+        {
+            "id": "wishiwashi-3",
+            "pokemon": "wishiwashi",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "1-18",
+            "weight": 100.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ]
+            }
+        },
+        {
+            "id": "wishiwashi-4",
+            "pokemon": "wishiwashi",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "1-18",
+            "weight": 100.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast",
+                    "#cobblemon:is_ocean"
+                ]
             }
         }
     ]

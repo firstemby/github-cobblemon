@@ -199,7 +199,8 @@
       },
       "anticondition": {
         "biomes": [
-          "#cobblemon:is_lush"
+          "#cobblemon:is_lush",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [
@@ -244,7 +245,8 @@
       },
       "anticondition": {
         "biomes": [
-          "#cobblemon:is_lush"
+          "#cobblemon:is_lush",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [

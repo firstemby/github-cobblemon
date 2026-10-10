@@ -4,6 +4,26 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "brionne-1",
+            "pokemon": "brionne",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "ultra-rare",
+            "level": "17-42",
+            "weight": 21.6,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "brionne-2",
             "pokemon": "brionne",
             "presets": [
@@ -13,7 +33,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "17-42",
-            "weight": 28.8,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -59,7 +79,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "17-42",
-            "weight": 28.8,
+            "weight": 10.8,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -97,26 +117,6 @@
                 "biomes": [
                     "#cobblemon:is_freezing"
                 ]
-            }
-        },
-        {
-            "id": "brionne-1",
-            "pokemon": "brionne",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "ultra-rare",
-            "level": "17-42",
-            "weight": 36.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

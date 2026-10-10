@@ -79,7 +79,8 @@
       },
       "anticondition": {
         "biomes": [
-          "#cobblemon:is_deep_dark"
+          "#cobblemon:is_deep_dark",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [
@@ -131,7 +132,8 @@
       },
       "anticondition": {
         "biomes": [
-          "#cobblemon:is_deep_dark"
+          "#cobblemon:is_deep_dark",
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [
@@ -226,6 +228,11 @@
         ],
         "neededNearbyBlocks": [
           "minecraft:cobweb"
+        ]
+      },
+      "anticondition": {
+        "biomes": [
+          "minecraft:sulfur_caves"
         ]
       },
       "herdablePokemon": [

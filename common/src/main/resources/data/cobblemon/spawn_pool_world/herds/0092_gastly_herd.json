@@ -182,7 +182,24 @@
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 3,
+            "entries": [
+              {
+                "item": "cobblemon:spell_tag",
+                "percentage": 2.5
+              },
+              {
+                "item": "cobblemon:payapa_berry",
+                "percentage": 2.5
+              },
+              {
+                "item": "minecraft:ghast_tear",
+                "percentage": 5.0
+              }
+            ]
+          }
         },
         {
           "pokemon": "haunter",
@@ -191,7 +208,24 @@
           "levelRangeOffset": "-2-4",
           "maxTimes": 2,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 3,
+            "entries": [
+              {
+                "item": "cobblemon:spell_tag",
+                "percentage": 5.0
+              },
+              {
+                "item": "cobblemon:payapa_berry",
+                "percentage": 5.0
+              },
+              {
+                "item": "minecraft:ghast_tear",
+                "percentage": 10.0
+              }
+            ]
+          }
         },
         {
           "pokemon": "gengar",
@@ -200,7 +234,24 @@
           "levelRangeOffset": "-1-5",
           "maxTimes": 1,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 3,
+            "entries": [
+              {
+                "item": "cobblemon:spell_tag",
+                "percentage": 10.0
+              },
+              {
+                "item": "cobblemon:payapa_berry",
+                "percentage": 10.0
+              },
+              {
+                "item": "minecraft:ghast_tear",
+                "percentage": 25.0
+              }
+            ]
+          }
         }
       ]
     }

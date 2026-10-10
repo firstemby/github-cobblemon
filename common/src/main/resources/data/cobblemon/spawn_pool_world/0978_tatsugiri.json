@@ -4,6 +4,46 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "tatsugiri-1",
+            "pokemon": "tatsugiri",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "rare",
+            "level": "23-48",
+            "weight": 50.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "tatsugiri-2",
+            "pokemon": "tatsugiri",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "rare",
+            "level": "23-48",
+            "weight": 50.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "tatsugiri-3",
             "pokemon": "tatsugiri",
             "presets": [
@@ -117,46 +157,6 @@
                     "#cobblemon:is_swamp"
                 ],
                 "minLureLevel": 1
-            }
-        },
-        {
-            "id": "tatsugiri-1",
-            "pokemon": "tatsugiri",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "rare",
-            "level": "23-48",
-            "weight": 50.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "isPokeSnack": true
-            }
-        },
-        {
-            "id": "tatsugiri-2",
-            "pokemon": "tatsugiri",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "rare",
-            "level": "23-48",
-            "weight": 50.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

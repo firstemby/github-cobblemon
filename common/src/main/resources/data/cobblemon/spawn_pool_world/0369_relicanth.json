@@ -80,7 +80,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_deep_ocean",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -162,7 +163,8 @@
                 "minLureLevel": 1,
                 "biomes": [
                     "#cobblemon:is_deep_ocean",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },
@@ -192,7 +194,8 @@
             "anticondition": {
                 "biomes": [
                     "#cobblemon:is_deep_ocean",
-                    "#cobblemon:is_lush"
+                    "#cobblemon:is_lush",
+                    "minecraft:sulfur_caves"
                 ]
             }
         },

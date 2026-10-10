@@ -334,8 +334,6 @@ class TMMachineBlockEntity(pos: BlockPos, state: BlockState) :
         level?.updateNeighborsAt(blockPos, currentState.block)
     }
 
-    override fun stillValid(player: Player): Boolean = tmMachineInventory.stillValid(player)
-
     override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean = tmMachineInventory.canPlaceItem(slot, stack)
 
     override fun canTakeItem(target: Container, slot: Int, stack: ItemStack): Boolean =

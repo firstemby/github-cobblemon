@@ -40,6 +40,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "isPokeSnack": true
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -102,6 +107,11 @@
                 "biomes": [
                     "#cobblemon:is_overworld"
                 ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {
@@ -145,6 +155,11 @@
                     "#cobblemon:is_overworld"
                 ],
                 "rodType": "cobblemon:master_rod"
+            },
+            "anticondition": {
+                "biomes": [
+                    "minecraft:sulfur_caves"
+                ]
             }
         },
         {

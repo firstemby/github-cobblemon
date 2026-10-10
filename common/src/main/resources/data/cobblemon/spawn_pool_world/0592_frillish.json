@@ -4,92 +4,6 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "frillish-5",
-            "pokemon": "frillish",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "9-34",
-            "weight": 90.0,
-            "weightMultipliers": [
-                {
-                    "multiplier": 10.0,
-                    "condition": {
-                        "structures": [
-                            "#minecraft:shipwreck"
-                        ]
-                    }
-                },
-                {
-                    "multiplier": 0.6,
-                    "condition": {
-                        "minLureLevel": 0,
-                        "maxLureLevel": 1
-                    }
-                }
-            ],
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "frillish-6",
-            "pokemon": "frillish",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "9-34",
-            "weight": 90.0,
-            "weightMultipliers": [
-                {
-                    "multiplier": 10.0,
-                    "condition": {
-                        "structures": [
-                            "#minecraft:shipwreck"
-                        ]
-                    }
-                },
-                {
-                    "multiplier": 0.6,
-                    "condition": {
-                        "minLureLevel": 0,
-                        "maxLureLevel": 1
-                    }
-                }
-            ],
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ]
-            }
-        },
-        {
-            "id": "frillish-7",
-            "pokemon": "frillish",
-            "type": "pokemon",
-            "spawnablePositionType": "fishing",
-            "bucket": "common",
-            "level": "9-34",
-            "weight": 540.0,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13
-            }
-        },
-        {
             "id": "frillish-1",
             "pokemon": "frillish",
             "presets": [
@@ -191,6 +105,92 @@
                 "minY": -60,
                 "maxY": 13,
                 "isPokeSnack": true
+            }
+        },
+        {
+            "id": "frillish-5",
+            "pokemon": "frillish",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "9-34",
+            "weight": 90.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 10.0,
+                    "condition": {
+                        "structures": [
+                            "#minecraft:shipwreck"
+                        ]
+                    }
+                },
+                {
+                    "multiplier": 0.6,
+                    "condition": {
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
+                    }
+                }
+            ],
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ]
+            }
+        },
+        {
+            "id": "frillish-6",
+            "pokemon": "frillish",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "9-34",
+            "weight": 90.0,
+            "weightMultipliers": [
+                {
+                    "multiplier": 10.0,
+                    "condition": {
+                        "structures": [
+                            "#minecraft:shipwreck"
+                        ]
+                    }
+                },
+                {
+                    "multiplier": 0.6,
+                    "condition": {
+                        "minLureLevel": 0,
+                        "maxLureLevel": 1
+                    }
+                }
+            ],
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ]
+            }
+        },
+        {
+            "id": "frillish-7",
+            "pokemon": "frillish",
+            "type": "pokemon",
+            "spawnablePositionType": "fishing",
+            "bucket": "common",
+            "level": "9-34",
+            "weight": 540.0,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13
             }
         }
     ]

@@ -105,6 +105,7 @@ import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
 import com.cobblemon.mod.common.pokemon.requirements.BlocksTraveledRequirement
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer
+import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP1
 import com.cobblemon.mod.common.util.codec.internal.ClientPokemonP2
@@ -470,7 +471,7 @@ open class Pokemon : ShowdownIdentifiable {
      */
     var gmaxFactor = false
         set(value) {
-            val evolutions = species.standardForm.evolutions.mapNotNull { it.result.species }.mapNotNull { PokemonSpecies.getByName(it) }
+            val evolutions = species.standardForm.evolutions.mapNotNull { it.result.species }.mapNotNull { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
             if (species.canGmax() || evolutions.find { it.canGmax() } != null) {
                 field = value
                 onChange(GmaxFactorUpdatePacket({ this }, value))

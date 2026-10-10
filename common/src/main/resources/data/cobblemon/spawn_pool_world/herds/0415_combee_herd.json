@@ -12,7 +12,7 @@
       "spawnablePositionType": "grounded",
       "maxHerdSize": 7,
       "levelRange": "1-47",
-      "weight": 12.5,
+      "weight": 2.5,
       "weightMultiplier": {
         "multiplier": 5.0,
         "condition": {
@@ -38,8 +38,8 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "combee",
-          "weight": 98.0,
+          "pokemon": "combee male",
+          "weight": 87.5,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -47,13 +47,22 @@
           "isFollower": true
         },
         {
+          "pokemon": "combee female",
+          "weight": 10.0,
+          "levelRange": "4-21",
+          "levelRangeOffset": "-3-3",
+          "maxTimes": 7,
+          "isLeader": true,
+          "isFollower": true
+        },
+        {
           "pokemon": "vespiquen",
-          "weight": 2.0,
+          "weight": 2.5,
           "levelRange": "23-43",
           "levelRangeOffset": "-2-4",
           "maxTimes": 1,
           "isLeader": true,
-          "isFollower": true
+          "isFollower": false
         }
       ]
     },
@@ -96,8 +105,8 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "combee",
-          "weight": 98.0,
+          "pokemon": "combee male",
+          "weight": 87.5,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -105,13 +114,22 @@
           "isFollower": true
         },
         {
+          "pokemon": "combee female",
+          "weight": 10.0,
+          "levelRange": "4-21",
+          "levelRangeOffset": "-3-3",
+          "maxTimes": 7,
+          "isLeader": true,
+          "isFollower": true
+        },
+        {
           "pokemon": "vespiquen",
-          "weight": 2.0,
+          "weight": 2.5,
           "levelRange": "23-43",
           "levelRangeOffset": "-2-4",
           "maxTimes": 1,
           "isLeader": true,
-          "isFollower": true
+          "isFollower": false
         }
       ]
     },
@@ -148,8 +166,8 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "combee",
-          "weight": 98.0,
+          "pokemon": "combee male",
+          "weight": 87.5,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -157,13 +175,22 @@
           "isFollower": true
         },
         {
+          "pokemon": "combee female",
+          "weight": 10.0,
+          "levelRange": "4-21",
+          "levelRangeOffset": "-3-3",
+          "maxTimes": 7,
+          "isLeader": true,
+          "isFollower": true
+        },
+        {
           "pokemon": "vespiquen",
-          "weight": 2.0,
+          "weight": 2.5,
           "levelRange": "23-43",
           "levelRangeOffset": "-2-4",
           "maxTimes": 1,
           "isLeader": true,
-          "isFollower": true
+          "isFollower": false
         }
       ]
     },
@@ -187,8 +214,8 @@
       },
       "herdablePokemon": [
         {
-          "pokemon": "combee",
-          "weight": 98.0,
+          "pokemon": "combee male",
+          "weight": 87.5,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -196,13 +223,22 @@
           "isFollower": true
         },
         {
+          "pokemon": "combee female",
+          "weight": 10.0,
+          "levelRange": "4-21",
+          "levelRangeOffset": "-3-3",
+          "maxTimes": 7,
+          "isLeader": true,
+          "isFollower": true
+        },
+        {
           "pokemon": "vespiquen",
-          "weight": 2.0,
+          "weight": 2.5,
           "levelRange": "23-43",
           "levelRangeOffset": "-2-4",
           "maxTimes": 1,
           "isLeader": true,
-          "isFollower": true
+          "isFollower": false
         }
       ]
     }

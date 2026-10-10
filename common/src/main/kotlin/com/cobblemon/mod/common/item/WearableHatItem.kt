@@ -19,14 +19,13 @@ import net.minecraft.world.level.Level
 
 class WearableHatItem(override val name: String): CobblemonItem(Properties()), WearableItem {
     override fun use(level: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
-        val itemStack = player.getItemInHand(usedHand)
         val hitPokemon = player.traceFirstEntityCollision(
             entityClass = PokemonEntity::class.java,
             maxDistance = player.entityInteractionRange().toFloat()
         )
         // If the player is looking at a Pokémon within range, block the ability to swap the item onto their head
-        return if (player.isCrouching && hitPokemon != null && hitPokemon.isOwnedBy(player)) {
-            InteractionResultHolder.fail(itemStack)
-        } else this.swapWithEquipmentSlot(this, level, player, usedHand)
+        if (player.isCrouching && hitPokemon != null && hitPokemon.isOwnedBy(player)) return InteractionResultHolder.fail(player.getItemInHand(usedHand))
+
+        return this.swapStackWithEquipmentSlot(level, player, usedHand)
     }
 }

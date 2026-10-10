@@ -58,6 +58,11 @@
           "#cobblemon:is_overworld"
         ]
       },
+      "anticondition": {
+        "biomes": [
+          "minecraft:sulfur_caves"
+        ]
+      },
       "herdablePokemon": [
         {
           "pokemon": "barboach",

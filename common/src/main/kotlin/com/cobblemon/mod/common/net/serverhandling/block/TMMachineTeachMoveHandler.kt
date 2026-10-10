@@ -43,6 +43,8 @@ object TMMachineTeachMoveHandler : ServerNetworkPacketHandler<TMMachineTeachMove
             !pokemon.moveSet.getMoveTemplates().contains(moveTemplate) &&
             !pokemon.allAccessibleMoves.contains(moveTemplate)
         ) {
+            menu.incrementStateId()
+
             if (!player.isCreative && !Cobblemon.config.infiniteTmUses) menu.carried.shrink(1)
 
             if (pokemon.moveSet.hasSpace()) {

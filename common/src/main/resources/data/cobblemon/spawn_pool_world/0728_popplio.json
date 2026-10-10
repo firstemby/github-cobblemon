@@ -4,6 +4,26 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "popplio-1",
+            "pokemon": "popplio",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "ultra-rare",
+            "level": "5-32",
+            "weight": 36.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_coast"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "popplio-2",
             "pokemon": "popplio",
             "presets": [
@@ -13,7 +33,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 30.0,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -59,7 +79,7 @@
             "spawnablePositionType": "submerged",
             "bucket": "ultra-rare",
             "level": "5-32",
-            "weight": 30.0,
+            "weight": 18.0,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -97,26 +117,6 @@
                 "biomes": [
                     "#cobblemon:is_freezing"
                 ]
-            }
-        },
-        {
-            "id": "popplio-1",
-            "pokemon": "popplio",
-            "presets": [
-                "natural"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "grounded",
-            "bucket": "ultra-rare",
-            "level": "5-32",
-            "weight": 60.0,
-            "condition": {
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_coast"
-                ],
-                "isPokeSnack": true
             }
         }
     ]

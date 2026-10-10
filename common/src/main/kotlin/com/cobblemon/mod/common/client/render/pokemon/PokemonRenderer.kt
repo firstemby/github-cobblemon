@@ -319,32 +319,37 @@ class PokemonRenderer(
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
         val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
-        var beamSourcePosition = if (recallBallOrigin != null) {
-            recallBallOrigin
-        } else if (beamTarget is EmptyPokeBallEntity) {
-            (beamTarget.delegate as PokeBallPosableState).locatorStates["beam"]?.transformPosition(Vec3(0.0, 0.2, 0.45)) ?: beamTarget.position()
-        } else {
-            if (beamTarget.uuid == Minecraft.getInstance().player?.uuid) {
+
+        val beamSourcePosition = when {
+            // cover the recall ball origin presence
+            recallBallOrigin != null -> recallBallOrigin
+            // cover the pokeball catching a specimen
+            beamTarget is EmptyPokeBallEntity -> (beamTarget.delegate as PokeBallPosableState)
+                .locatorStates["beam"]
+                ?.transformPosition(Vec3(0.0, 0.2, 0.45)) ?: beamTarget.position()
+            // player recall
+            beamTarget.uuid == Minecraft.getInstance().player?.uuid -> {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.4, 0.0).subtract(lookVec.scale(0.3))
-            } else if (beamTarget is NPCEntity) {
+            }
+            // npc recall
+            beamTarget is NPCEntity -> {
                 val npcDelegate = beamTarget.delegate as NPCClientDelegate
                 val baseScale = beamTarget.renderScale * beamTarget.hitboxScale
 
                 (npcDelegate.locatorStates["beam"]?.getOrigin()?.scale(baseScale.toDouble()))
                     ?: beamTarget.position().add(0.0, (beamTarget.bbHeight / 2.0) * baseScale, 0.0)
-            } else {
+            }
+            clientDelegate.sendOutPosition != null -> clientDelegate.sendOutPosition!!
+            // ???
+            else -> {
                 val lookVec = beamTarget.lookAngle.yRot((PI / 2 - (beamTarget.visualRotationYInDegrees - beamTarget.xRot).toRadians()).toFloat()).multiply(1.0, 0.0, 1.0).normalize()
                 beamTarget.getEyePosition(partialTicks).subtract(0.0, 0.7, 0.0).subtract(lookVec.scale(0.4))
             }
         }
-        if (clientDelegate.sendOutPosition != null) {
-            beamSourcePosition = clientDelegate.sendOutPosition!!
-        }
 
-        if (beamSourcePosition.distanceTo(pokemonPosition) > 20) {
-            return
-        }
+        if (beamSourcePosition.distanceTo(pokemonPosition) > 20) return
+
         var newOffset = offset.scale(2.0)
         // the further away the source position is, the smaller the newOffset should be. Max distance is 20 blocks
         val distance = beamSourcePosition.distanceTo(entity.position())

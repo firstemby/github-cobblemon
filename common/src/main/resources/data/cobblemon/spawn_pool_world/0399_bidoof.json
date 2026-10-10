@@ -6,6 +6,77 @@
         {
             "id": "bidoof-1",
             "pokemon": "bidoof",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "1-25",
+            "weight": 54.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_freshwater"
+                ],
+                "isPokeSnack": true
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_freezing"
+                ]
+            }
+        },
+        {
+            "id": "bidoof-2",
+            "pokemon": "bidoof",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "uncommon",
+            "level": "1-25",
+            "weight": 84.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_taiga"
+                ],
+                "neededNearbyBlocks": [
+                    "minecraft:water"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "bidoof-3",
+            "pokemon": "bidoof",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "surface",
+            "bucket": "uncommon",
+            "level": "1-25",
+            "weight": 84.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_forest",
+                    "#cobblemon:is_freshwater",
+                    "#cobblemon:is_taiga"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "bidoof-4",
+            "pokemon": "bidoof",
             "type": "pokemon",
             "spawnablePositionType": "fishing",
             "bucket": "common",
@@ -29,7 +100,7 @@
             }
         },
         {
-            "id": "bidoof-2",
+            "id": "bidoof-5",
             "pokemon": "bidoof",
             "type": "pokemon",
             "spawnablePositionType": "fishing",

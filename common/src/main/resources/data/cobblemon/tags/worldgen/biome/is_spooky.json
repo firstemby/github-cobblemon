@@ -3,6 +3,10 @@
   "values": [
     "minecraft:dark_forest",
     {
+      "id": "minecraft:pale_garden",
+      "required": false
+    },
+    {
       "id": "#c:is_spooky",
       "required": false
     },

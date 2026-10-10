@@ -3,7 +3,7 @@
   "keys": [
     "core_color"
   ],
-  "default": "red",
+  "default": "random",
   "choices": [
     "red",
     "orange",

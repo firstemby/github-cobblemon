@@ -13,7 +13,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 2.0,
+            "weight": 1.2,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -43,7 +43,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 2.0,
+            "weight": 1.2,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {
@@ -69,7 +69,7 @@
             "spawnablePositionType": "grounded",
             "bucket": "ultra-rare",
             "level": "36-53",
-            "weight": 2.0,
+            "weight": 1.2,
             "weightMultiplier": {
                 "multiplier": 2.0,
                 "condition": {

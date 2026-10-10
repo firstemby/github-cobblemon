@@ -34,7 +34,9 @@ import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LevelAccessor
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.BonemealableBlock
 import net.minecraft.world.level.block.DispenserBlock
 import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.state.BlockState
@@ -52,7 +54,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
+class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings), BonemealableBlock {
     companion object {
         val AGE: IntegerProperty = BlockStateProperties.AGE_2
         val DISTANCE: IntegerProperty = BlockStateProperties.DISTANCE
@@ -179,6 +181,15 @@ class SaccharineLeafBlock(settings: Properties) : LeavesBlock(settings) {
         }
 
         super.randomTick(state, world, pos, random)
+    }
+
+    override fun isValidBonemealTarget(level: LevelReader, pos: BlockPos, state: BlockState): Boolean =
+        state.getValue(AGE) < MAX_AGE && !state.getValue(BlockStateProperties.WATERLOGGED)
+
+    override fun isBonemealSuccess(level: Level, random: RandomSource, pos: BlockPos, state: BlockState) = true
+
+    override fun performBonemeal(level: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState) {
+        level.setBlock(pos, changeAge(state, 1), UPDATE_CLIENTS)
     }
 
     override fun placeLiquid(level: LevelAccessor, pos: BlockPos, state: BlockState, fluidState: FluidState): Boolean {

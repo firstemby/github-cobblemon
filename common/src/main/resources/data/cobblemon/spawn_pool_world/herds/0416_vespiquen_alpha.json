@@ -47,7 +47,7 @@
         },
         {
           "pokemon": "combee",
-          "weight": 98.0,
+          "weight": 80.0,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -104,7 +104,7 @@
         },
         {
           "pokemon": "combee",
-          "weight": 98.0,
+          "weight": 80.0,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -155,7 +155,7 @@
         },
         {
           "pokemon": "combee",
-          "weight": 98.0,
+          "weight": 80.0,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
@@ -193,7 +193,7 @@
         },
         {
           "pokemon": "combee",
-          "weight": 98.0,
+          "weight": 80.0,
           "levelRange": "4-21",
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,

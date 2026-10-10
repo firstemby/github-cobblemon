@@ -132,7 +132,28 @@
           "levelRangeOffset": "-3-3",
           "maxTimes": 7,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 4,
+            "entries": [
+              {
+                "item": "minecraft:string",
+                "quantityRange": "0-1"
+              },
+              {
+                "item": "minecraft:blaze_powder",
+                "percentage": 5.0
+              },
+              {
+                "item": "cobblemon:silver_powder",
+                "percentage": 2.5
+              },
+              {
+                "item": "cobblemon:charti_berry",
+                "percentage": 2.5
+              }
+            ]
+          }
         },
         {
           "pokemon": "volcarona",
@@ -141,7 +162,24 @@
           "levelRangeOffset": "-2-3",
           "maxTimes": 5,
           "isLeader": false,
-          "isFollower": true
+          "isFollower": true,
+          "dropTable": {
+            "amount": 3,
+            "entries": [
+              {
+                "item": "minecraft:blaze_powder",
+                "percentage": 10.0
+              },
+              {
+                "item": "cobblemon:silver_powder",
+                "percentage": 5.0
+              },
+              {
+                "item": "cobblemon:charti_berry",
+                "percentage": 5.0
+              }
+            ]
+          }
         }
       ]
     },

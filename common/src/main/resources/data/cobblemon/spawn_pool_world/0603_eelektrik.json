@@ -4,6 +4,80 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "eelektrik-1",
+            "pokemon": "eelektrik",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "common",
+            "level": "39-41",
+            "weight": 1.9,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ],
+                "maxY": 48,
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "eelektrik-2",
+            "pokemon": "eelektrik",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "uncommon",
+            "level": "39-41",
+            "weight": 7.12,
+            "condition": {
+                "minSkyLight": 0,
+                "maxSkyLight": 7,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "maxY": 48,
+                "isPokeSnack": true
+            },
+            "anticondition": {
+                "structures": [
+                    "#cobblemon:shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
+                "biomes": [
+                    "#cobblemon:is_lush"
+                ]
+            }
+        },
+        {
+            "id": "eelektrik-3",
+            "pokemon": "eelektrik",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "common",
+            "level": "39-41",
+            "weight": 5.7,
+            "condition": {
+                "canSeeSky": false,
+                "biomes": [
+                    "#cobblemon:is_overworld"
+                ],
+                "structures": [
+                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
+                ],
+                "minY": -60,
+                "maxY": 13,
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "eelektrik-4",
             "pokemon": "eelektrik",
             "type": "pokemon",
@@ -91,80 +165,6 @@
                 "biomes": [
                     "#cobblemon:is_ocean"
                 ]
-            }
-        },
-        {
-            "id": "eelektrik-1",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "39-41",
-            "weight": 1.9,
-            "condition": {
-                "biomes": [
-                    "#cobblemon:is_ocean"
-                ],
-                "maxY": 48,
-                "isPokeSnack": true
-            }
-        },
-        {
-            "id": "eelektrik-2",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "uncommon",
-            "level": "39-41",
-            "weight": 7.12,
-            "condition": {
-                "minSkyLight": 0,
-                "maxSkyLight": 7,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "maxY": 48,
-                "isPokeSnack": true
-            },
-            "anticondition": {
-                "structures": [
-                    "#cobblemon:shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13,
-                "biomes": [
-                    "#cobblemon:is_lush"
-                ]
-            }
-        },
-        {
-            "id": "eelektrik-3",
-            "pokemon": "eelektrik",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "common",
-            "level": "39-41",
-            "weight": 5.7,
-            "condition": {
-                "canSeeSky": false,
-                "biomes": [
-                    "#cobblemon:is_overworld"
-                ],
-                "structures": [
-                    "cobblemon:shipwreck_coves/submerged_shipwreck_cove"
-                ],
-                "minY": -60,
-                "maxY": 13,
-                "isPokeSnack": true
             }
         }
     ]

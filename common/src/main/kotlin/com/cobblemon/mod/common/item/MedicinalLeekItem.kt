@@ -35,14 +35,10 @@ class MedicinalLeekItem(block: MedicinalLeekBlock, settings: Properties) : ItemN
         val blockHitResult2 = blockHitResult.withPosition(blockHitResult.blockPos.above())
         val placeResult = this.place(BlockPlaceContext(UseOnContext(user, hand, blockHitResult2)))
         val stack = user.getItemInHand(hand)
-        // This will always be true but just in case we change it down the line.
-        /*
-        if (!placeResult.isAccepted && this.isFood && user.canConsume(this.foodComponent?.isAlwaysEdible == true)) {
-            user.setCurrentHand(hand)
-            return TypedInteractionResult.consume(stack)
+        // If the leek couldn't be planted, fall back to the default item behaviour so its food component lets it be eaten
+        if (!placeResult.consumesAction()) {
+            return super.use(world, user, hand)
         }
-
-         */
         return InteractionResultHolder(placeResult, stack)
     }
 

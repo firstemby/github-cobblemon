@@ -4,6 +4,46 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
+            "id": "dondozo-1",
+            "pokemon": "dondozo",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "rare",
+            "level": "28-53",
+            "weight": 50.0,
+            "condition": {
+                "canSeeSky": true,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
+            "id": "dondozo-2",
+            "pokemon": "dondozo",
+            "presets": [
+                "water"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "submerged",
+            "bucket": "rare",
+            "level": "28-53",
+            "weight": 50.0,
+            "condition": {
+                "canSeeSky": false,
+                "minSkyLight": 8,
+                "maxSkyLight": 15,
+                "biomes": [
+                    "#cobblemon:is_swamp"
+                ],
+                "isPokeSnack": true
+            }
+        },
+        {
             "id": "dondozo-3",
             "pokemon": "dondozo",
             "type": "pokemon",
@@ -97,46 +137,6 @@
                     "#cobblemon:is_swamp"
                 ],
                 "minLureLevel": 1
-            }
-        },
-        {
-            "id": "dondozo-1",
-            "pokemon": "dondozo",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "rare",
-            "level": "28-53",
-            "weight": 50.0,
-            "condition": {
-                "canSeeSky": true,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "isPokeSnack": true
-            }
-        },
-        {
-            "id": "dondozo-2",
-            "pokemon": "dondozo",
-            "presets": [
-                "water"
-            ],
-            "type": "pokemon",
-            "spawnablePositionType": "submerged",
-            "bucket": "rare",
-            "level": "28-53",
-            "weight": 50.0,
-            "condition": {
-                "canSeeSky": false,
-                "minSkyLight": 8,
-                "maxSkyLight": 15,
-                "biomes": [
-                    "#cobblemon:is_swamp"
-                ],
-                "isPokeSnack": true
             }
         }
     ]
