@@ -1,0 +1,35 @@
+{
+    "enabled": true,
+    "neededInstalledMods": [],
+    "neededUninstalledMods": [],
+    "spawns": [
+        {
+            "presets": [
+                "water"
+            ],
+            "type": "empty",
+            "spawnablePositionType": "surface",
+            "bucket": "common",
+            "weight": 200.0,
+            "condition": {
+                "biomes": [
+                    "#cobblemon:is_ocean"
+                ]
+            },
+            "anticondition": {
+                "biomes": [
+                    "#cobblemon:is_deep_ocean"
+                ]
+            }
+        },
+        {
+            "presets": [
+                "lava"
+            ],
+            "type": "empty",
+            "spawnablePositionType": "surface",
+            "bucket": "common",
+            "weight": 200.0
+        }
+    ]
+}

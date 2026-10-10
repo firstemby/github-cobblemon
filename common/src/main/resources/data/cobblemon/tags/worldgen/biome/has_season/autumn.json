@@ -7,6 +7,10 @@
     "#cobblemon:is_mushroom",
     "#cobblemon:is_taiga",
     {
+      "id": "minecraft:dappled_forest",
+      "required": false
+    },
+    {
       "id": "biomesoplenty:aspen_forest",
       "required": false
     },

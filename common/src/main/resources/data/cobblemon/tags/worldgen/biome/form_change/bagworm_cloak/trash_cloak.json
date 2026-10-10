@@ -3,14 +3,8 @@
   "values": [
     "#cobblemon:is_deep_dark",
     "#minecraft:is_end",
-    {
-      "id": "#cobblemon:nether/is_snowy",
-      "required": false
-    },
-    {
-      "id": "#cobblemon:nether/is_taiga",
-      "required": false
-    },
+    "#cobblemon:is_snowy",
+    "#cobblemon:is_taiga",
     "#cobblemon:is_mushroom",
     "#cobblemon:nether/is_fungus",
     "#cobblemon:nether/is_frozen"
