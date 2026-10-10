@@ -1,0 +1,69 @@
+{
+   "portraitScale": 2.3,
+   "portraitTranslation": [-0.53, -1.9, 0],
+   "profileScale": 0.80,
+   "profileTranslation": [0, 0.51, 0],
+   "rootBone": "weedle",
+   "animations": {
+      "cry": "q.bedrock_stateful('weedle', 'cry')",
+      "faint": "q.bedrock_primary('weedle', 'faint', q.curve('one'))"
+   },
+   "poses": {
+      "standing": {
+        "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
+        "animations": [
+          "q.look('head')",
+          "q.bedrock('weedle', 'ground_idle2')"
+        ],
+        "quirks": ["q.bedrock_quirk('weedle', 'blink')"]
+      },
+      "walking": {
+         "poseTypes": ["WALK"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('weedle', 'ground_walk')"
+         ],
+         "quirks": ["q.bedrock_quirk('weedle', 'blink')"]
+      },
+      "swimming": {
+         "poseTypes": ["WALK","SWIM"],
+         "isTouchingWater": true,
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head')",
+            "q.bedrock('weedle', 'ground_walk')"
+         ],
+         "quirks": ["q.bedrock_quirk('weedle', 'blink')"]
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "namedAnimations": {
+         "cry": "q.bedrock_stateful('dummy', 'cry')"
+         },
+         "animations": ["q.bedrock('weedle', 'sleep')"]
+      },
+      "shoulder_left": {
+         "poseTypes": ["SHOULDER_LEFT"],
+         "animations": ["q.look('head')", "q.bedrock('weedle', 'ground_idle')"],
+         "quirks": ["q.bedrock_quirk('weedle', 'blink')"],
+         "transformedParts": [
+            {
+               "part": "body",
+               "position": [3.8, 0, -3]
+            }
+         ]
+      },
+      "shoulder_right": {
+         "poseTypes": ["SHOULDER_RIGHT"],
+         "animations": ["q.look('head')", "q.bedrock('weedle', 'ground_idle')"],
+         "quirks": ["q.bedrock_quirk('weedle', 'blink')"],
+         "transformedParts": [
+            {
+               "part": "body",
+               "position": [-3.8, 0, -3]
+            }
+         ]
+      }
+   }
+}
+ 

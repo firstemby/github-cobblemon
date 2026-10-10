@@ -1,0 +1,42 @@
+{
+   "portraitScale": 1.13,
+   "portraitTranslation": [-0.56, 1.64, 0],
+   "profileScale": 0.51,
+   "profileTranslation": [0, 1.05, 0],
+   "rootBone": "jellicent",
+   "animations": {
+      "recoil": "q.bedrock_stateful('jellicent', 'recoil')"
+   },
+   "poses": {
+      "standing": {
+         "poseTypes": ["STAND", "NONE", "FLOAT", "PORTRAIT", "PROFILE"],
+         "animations": [
+           "q.look('head')",
+           "q.bedrock('jellicent', 'water_idle')"
+         ],
+         "quirks": ["q.bedrock_quirk('jellicent', 'blink')"]
+      },
+      "walking": {
+         "poseTypes": ["WALK"],
+         "animations": [
+            "q.look('head')",
+            "q.bedrock('jellicent', 'water_swim')"
+         ],
+         "quirks": ["q.bedrock_quirk('jellicent', 'blink')"]
+      },
+      "flying": {
+         "poseTypes": ["FLY", "SWIM"],
+         "animations": [
+            "q.pitch_tilt('body')",
+            "q.look('head')",
+            "q.bedrock('jellicent', 'water_swim')"
+         ],
+         "quirks": ["q.bedrock_quirk('jellicent', 'blink')"]
+      },
+      "sleep": {
+         "poseTypes": ["SLEEP"],
+         "animations": ["q.bedrock('jellicent', 'sleep')"]
+      }
+   }
+}
+ 

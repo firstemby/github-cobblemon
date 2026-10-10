@@ -39,7 +39,7 @@
         "isBattle": true,
         "isTouchingWater": false,
         "animations": [
-          "q.look('head_ai')",
+          "q.look('head_ai', -1, 1, 0, 0, 45, -45)",
           "q.look('tongue1', -1, 1, 70, -45, 0, 0)",
           "q.bedrock('greninja', 'battle_idle')"
         ],
