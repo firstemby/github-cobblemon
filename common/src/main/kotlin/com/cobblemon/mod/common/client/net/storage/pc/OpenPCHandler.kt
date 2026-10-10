@@ -24,7 +24,8 @@ object OpenPCHandler : ClientNetworkPacketHandler<OpenPCPacket> {
                 party = CobblemonClient.storage.party,
                 configuration = PCGUIConfiguration(),
                 openOnBox = packet.box ?: CobblemonClient.lastPcBoxViewed,
-                unseenWallpapers = packet.unseenWallpapers.toMutableSet()
+                unseenWallpapers = packet.unseenWallpapers.toMutableSet(),
+                silent = packet.silent
             )
         )
     }

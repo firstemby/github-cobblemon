@@ -8,7 +8,6 @@
 
 package com.cobblemon.mod.common.command
 
-import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.permission.CobblemonPermissions
 import com.cobblemon.mod.common.api.storage.pc.link.PCLinkManager
 import com.cobblemon.mod.common.api.storage.pc.link.PermissiblePcLink
@@ -54,7 +53,7 @@ object PcCommand {
             throw SimpleCommandExceptionType(lang("command.pc.invalid-box", box, pc.boxes.size).red()).create()
         }
         PCLinkManager.addLink(PermissiblePcLink(pc, player, CobblemonPermissions.PC))
-        OpenPCPacket(pc, box = if (box != null) (box - 1) else null).sendToPlayer(player)
+        OpenPCPacket(pc, box = if (box != null) (box - 1) else null, silent = true).sendToPlayer(player)
         return Command.SINGLE_SUCCESS
     }
 

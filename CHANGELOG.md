@@ -170,6 +170,8 @@
 - Medicinal Leeks can now be eaten when they aren't being planted, matching their food properties.
 - Sweeping attacks no longer set owned Pokémon on fire (e.g. with Fire Aspect) or knock them back.
 - Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
+- Fixed Oricorio Pa'u form dex description
+- Fixed PC playing sound on close when opened via command
 
 ### Developer
 - Evolution requirements can now set `pokedexIcon` and `pokedexTooltip` directly in their JSON to control how they're shown on the Pokédex's evolution tree, for example:

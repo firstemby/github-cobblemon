@@ -34,17 +34,19 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
     val storeID: UUID
     val box: Int?
     val unseenWallpapers: Set<ResourceLocation>
+    val silent: Boolean
 
     @JvmOverloads
     @Deprecated("Use the constructor with the PCStore object instead, this will become private in a future title update", level = DeprecationLevel.WARNING)
-    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
+    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet(), silent: Boolean? = false) {
         this.storeID = storeID
         this.box = box
         this.unseenWallpapers = unseenWallpapers
+        this.silent = silent ?: false
     }
 
     @JvmOverloads
-    constructor(pc: PCStore, box: Int? = null): this(pc.uuid, box, pc.unseenWallpapers)
+    constructor(pc: PCStore, box: Int? = null, silent: Boolean? = false): this(pc.uuid, box, pc.unseenWallpapers, silent ?: false)
 
     override val id = ID
 
@@ -52,6 +54,7 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
         buffer.writeUUID(storeID)
         buffer.writeNullable(box) { buf, value -> buf.writeInt(value)}
         buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeResourceLocation(it) }
+        buffer.writeBoolean(silent)
     }
 
     companion object {
@@ -59,7 +62,8 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
         fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(
             buffer.readUUID(),
             buffer.readNullable { it.readInt() },
-            buffer.readList { buffer.readResourceLocation() }.toSet()
+            buffer.readList { buffer.readResourceLocation() }.toSet(),
+            buffer.readBoolean()
         )
     }
 }
