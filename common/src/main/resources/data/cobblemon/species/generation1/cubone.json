@@ -222,21 +222,7 @@
           "variant": "negate",
           "inner": {
             "variant": "biome",
-            "biomeCondition": "#cobblemon:is_volcanic"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_beach"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#minecraft:is_nether"
+            "biomeCondition": "#cobblemon:evolution/regional/cubone_alolabiome"
           }
         }
       ]
@@ -261,20 +247,6 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/cubone_alolabiome"
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#cobblemon:is_arid"
-          }
-        },
-        {
-          "variant": "negate",
-          "inner": {
-            "variant": "biome",
-            "biomeCondition": "#minecraft:is_nether"
-          }
         }
       ]
     },
@@ -342,21 +314,7 @@
               "variant": "negate",
               "inner": {
                 "variant": "biome",
-                "biomeCondition": "#cobblemon:is_volcanic"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_beach"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#minecraft:is_nether"
+                "biomeCondition": "#cobblemon:evolution/regional/cubone_alolabiome"
               }
             }
           ]
@@ -377,20 +335,6 @@
             {
               "variant": "time_range",
               "range": "night"
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#cobblemon:is_arid"
-              }
-            },
-            {
-              "variant": "negate",
-              "inner": {
-                "variant": "biome",
-                "biomeCondition": "#minecraft:is_nether"
-              }
             }
           ]
         },

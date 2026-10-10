@@ -237,6 +237,13 @@
         {
           "variant": "biome",
           "biomeCondition": "#cobblemon:evolution/regional/rufflet_hisuibiome"
+        },
+        {
+          "variant": "negate",
+          "inner": {
+            "variant": "biome",
+            "biomeCondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
+          }
         }
       ]
     }
@@ -293,6 +300,13 @@
             {
               "variant": "level",
               "minLevel": 54
+            },
+            {
+              "variant": "negate",
+              "inner": {
+                "variant": "biome",
+                "biomeCondition": "#cobblemon:evolution/regional/rufflet_unovabiome"
+              }
             }
           ]
         }
