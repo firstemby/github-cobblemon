@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokemon.TradeEvent
 import com.cobblemon.mod.common.api.interaction.ServerPlayerActionRequest
 import com.cobblemon.mod.common.api.net.NetworkPacket
+import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.text.aqua
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferExpiredPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeOfferNotificationPacket
@@ -101,71 +102,98 @@ object TradeManager : RequestManager<TradeManager.TradeRequest>() {
     fun performTrade(
         activeTrade: ActiveTrade,
         player1: TradeParticipant,
-        pokemon1: Pokemon,
+        pokemon1: List<Pokemon>,
         player2: TradeParticipant,
-        pokemon2: Pokemon
+        pokemon2: List<Pokemon>
     ) {
         val party1 = player1.party
         val party2 = player2.party
 
-        if (pokemon1 !in party1 || pokemon2 !in party2) {
+        if (pokemon1.any { it !in party1 } || pokemon2.any { it !in party2 }) {
             Cobblemon.LOGGER.warn("Attempted to perform a trade with Pokémon that aren't in the party anymore. Could be attempted duping between ${player1.name} and ${player2.name}")
             activeTrade.cancelTrade()
             return
         }
 
-        CobblemonEvents.TRADE_EVENT_PRE.postThen(TradeEvent.Pre(player1, pokemon2, player2, pokemon1)) {
-            val party1 = player1.party
-            val party2 = player2.party
+        if (pokemon1.isEmpty() || pokemon2.isEmpty()) {
+            Cobblemon.LOGGER.warn("Attempted to perform a trade where one side offered no Pokémon between ${player1.name} and ${player2.name}. This should never happen.")
+            activeTrade.cancelTrade()
+            return
+        }
 
-            val player1Removed = party1.remove(pokemon1)
-            val player2Removed = party2.remove(pokemon2)
+        CobblemonEvents.TRADE_EVENT_PRE.postThen(
+            TradeEvent.Pre(player1, pokemon2, player2, pokemon1)
+        ) {
+            val player1Removed = pokemon1.filter { party1.remove(it) }
+            val player2Removed = pokemon2.filter { party2.remove(it) }
 
-            if (!player1Removed || !player2Removed) {
-                if (!player1Removed) {
-                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${pokemon1.species.resourceIdentifier} from ${player1.name.string}(${player1.uuid}). Aborting trade with ${player2.name.string}(${player2.uuid}), potential exploit abused.")
+            if (player1Removed.size != pokemon1.size || player2Removed.size != pokemon2.size) {
+                (pokemon1 - player1Removed.toSet()).forEach {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${it.species.resourceIdentifier} from ${player1.name.string}(${player1.uuid}). Aborting trade with ${player2.name.string}(${player2.uuid}), potential exploit abused.")
                 }
 
-                if (!player2Removed) {
-                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${pokemon2.species.resourceIdentifier} from ${player2.name.string}(${player2.uuid}). Aborting trade with ${player1.name.string}(${player1.uuid}), potential exploit abused.")
+                (pokemon2 - player2Removed.toSet()).forEach {
+                    Cobblemon.LOGGER.warn("Failed to remove traded Pokémon ${it.species.resourceIdentifier} from ${player2.name.string}(${player2.uuid}). Aborting trade with ${player1.name.string}(${player1.uuid}), potential exploit abused.")
                 }
 
                 // Revert any changes if one of the removals failed
-                if (player1Removed) party1.add(pokemon1)
-                if (player2Removed) party2.add(pokemon2)
+                player1Removed.forEach { party1.add(it) }
+                player2Removed.forEach { party2.add(it) }
                 return@postThen
             }
 
             // If player1 is the OT, keep track of the friendship
-            pokemon1.cacheFriendship(player1.uuid)
+            pokemon1.forEach { it.cacheFriendship(player1.uuid) }
             // If player2 is the OT, keep track of the friendship
-            pokemon2.cacheFriendship(player2.uuid)
+            pokemon2.forEach { it.cacheFriendship(player2.uuid) }
 
-            // If pokemon2 was originally player1's, set the friendship back to what it was at point of trading
-            if ( !pokemon2.restoreFriendship(player1.uuid) ) {
-                // Otherwise, reset the friendship
-                pokemon2.setFriendship(pokemon2.form.baseFriendship)
+            // If a Pokémon received by player1 was originally theirs, set the friendship back to what it was at point of trading
+            pokemon2.forEach {
+                if (!it.restoreFriendship(player1.uuid)) {
+                    // Otherwise, reset the friendship
+                    it.setFriendship(it.form.baseFriendship)
+                }
             }
-            // If pokemon1 was originally player2's, set the friendship back to what it was at point of trading
-            if ( !pokemon1.restoreFriendship(player2.uuid) ) {
-                // Otherwise, reset the friendship
-                pokemon1.setFriendship(pokemon1.form.baseFriendship)
-            }
-
-            party2.add(pokemon1)
-            party1.add(pokemon2)
-
-            pokemon1.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon1, pokemon2)
+            // If a Pokémon received by player2 was originally theirs, set the friendship back to what it was at point of trading
+            pokemon1.forEach {
+                if (!it.restoreFriendship(player2.uuid)) {
+                    // Otherwise, reset the friendship
+                    it.setFriendship(it.form.baseFriendship)
+                }
             }
 
-            pokemon2.lockedEvolutions.filterIsInstance<TradeEvolution>().firstOrNull {
-                it.attemptEvolution(pokemon2, pokemon1)
+            pokemon1.forEach { party2.add(it) }
+            pokemon2.forEach { party1.add(it) }
+
+            // Each traded Pokémon may evolve if any of the Pokémon it was traded for satisfies its context.
+            // Evolutions are resolved before any are applied so one evolving can't invalidate another's context.
+            (pokemon1.map { it to pokemon2 } + pokemon2.map { it to pokemon1 })
+                .mapNotNull { (pokemon, tradedFor) ->
+                    pokemon.lockedEvolutions.filterIsInstance<TradeEvolution>()
+                        .firstOrNull { evolution -> tradedFor.any { evolution.testContext(pokemon, it) } && evolution.test(pokemon) }
+                        ?.let { pokemon to it }
+                }
+                .forEach { (pokemon, evolution) -> evolution.evolve(pokemon) }
+
+            val compactParty = { party: PartyStore ->
+                var writeIdx = 0
+                for (readIdx in 0 until party.size()) {
+                    if (party.get(readIdx) != null) {
+                        if (readIdx != writeIdx) {
+                            party.swap(readIdx, writeIdx)
+                        }
+                        writeIdx++
+                    }
+                }
             }
+            compactParty(party1)
+            compactParty(party2)
 
             activeTrade.completeTrade()
 
-            CobblemonEvents.TRADE_EVENT_POST.post(TradeEvent.Post(player1, pokemon2, player2, pokemon1))
+            CobblemonEvents.TRADE_EVENT_POST.post(
+                TradeEvent.Post(player1, pokemon2, player2, pokemon1)
+            )
         }
     }
 }

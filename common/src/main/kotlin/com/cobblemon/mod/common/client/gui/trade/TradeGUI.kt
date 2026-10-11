@@ -25,6 +25,7 @@ import com.cobblemon.mod.common.client.gui.summary.widgets.common.reformatNature
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.client.render.drawScaledTextJustifiedRight
 import com.cobblemon.mod.common.client.trade.ClientTrade
+import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket
 import com.cobblemon.mod.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
 import com.cobblemon.mod.common.net.messages.server.trade.*
 import com.cobblemon.mod.common.pokemon.Gender
@@ -98,14 +99,22 @@ class TradeGUI(
         private val tradeAnimationArrowsResource = cobblemonResource("textures/gui/trade/trade_animation_arrows.png")
     }
 
-    private var offeredPokemonModel: ModelWidget? = null
-    private var opposingOfferedPokemonModel: ModelWidget? = null
+    private var offeredPokemonModels: MutableList<ModelWidget> = mutableListOf()
+    private var opposingOfferedPokemonModels: MutableList<ModelWidget> = mutableListOf()
 
     private lateinit var offeredPokemonMarkings: MarkingsWidget
     private lateinit var opposingOfferedPokemonMarkings: MarkingsWidget
 
+    var selectedPartyIndices = mutableListOf<Int>()
+    var offeredPokemons: MutableList<Pokemon> = mutableListOf()
+    var opposingPokemons: MutableList<Pokemon> = mutableListOf()
+
+    // For backwards compatibility where single is referenced in rendering text info
     var offeredPokemon: Pokemon? = null
     var opposingOfferedPokemon: Pokemon? = null
+
+    var myGridMode = true
+    var opposingGridMode = true
 
     var ticksElapsed = 0
     var protectiveTicks = 0
@@ -125,30 +134,67 @@ class TradeGUI(
         }
 
         trade.completedEmitter.subscribe {
-            val (pokemonId1, pokemonId2) = it
-            val myTradedPokemon = party.find { it?.pokemonId == pokemonId1 }
-            val theirTradedPokemon = traderParty.find { it?.pokemonId == pokemonId2 }
-            if (myTradedPokemon == null || theirTradedPokemon == null) {
+            val (pokemonIds1, pokemonIds2) = it
+            val myTradedPokemons = pokemonIds1.mapNotNull { id -> party.find { it?.pokemonId == id } }
+            val theirTradedPokemons = pokemonIds2.mapNotNull { id -> traderParty.find { it?.pokemonId == id } }
+            if (myTradedPokemons.isEmpty() || theirTradedPokemons.isEmpty()) {
                 CobblemonNetwork.sendToServer(CancelTradePacket())
                 return@subscribe onClose()
             }
-            val tradedSlot = party.indexOf(myTradedPokemon)
-            val opposingTradedSlot = traderParty.indexOf(theirTradedPokemon)
-            party[tradedSlot] = theirTradedPokemon
-            traderParty[opposingTradedSlot] = myTradedPokemon
+
+            myTradedPokemons.forEach { pk ->
+                val idx = party.indexOf(pk)
+                if (idx != -1) party[idx] = null
+            }
+            theirTradedPokemons.forEach { pk ->
+                val idx = traderParty.indexOf(pk)
+                if (idx != -1) traderParty[idx] = null
+            }
+
+            val newSelectedIndices = mutableListOf<Int>()
+            theirTradedPokemons.forEach { pk ->
+                val emptyIdx = party.indexOf(null)
+                if (emptyIdx != -1) {
+                    party[emptyIdx] = pk
+                }
+            }
+            myTradedPokemons.forEach { pk ->
+                val emptyIdx = traderParty.indexOf(null)
+                if (emptyIdx != -1) traderParty[emptyIdx] = pk
+            }
+
+            val compactUI = { list: MutableList<TradeStartedPacket.TradeablePokemon?> ->
+                val nonNulls = list.filterNotNull()
+                list.clear()
+                list.addAll(nonNulls)
+                while (list.size < 6) list.add(null)
+            }
+            compactUI(party)
+            compactUI(traderParty)
+
+            theirTradedPokemons.forEach { pk ->
+                val idx = party.indexOf(pk)
+                if (idx != -1) newSelectedIndices.add(idx)
+            }
 
             trade.oppositeAcceptedMyOffer.set(false)
-            CobblemonNetwork.sendToServer(UpdateTradeOfferPacket(Pair(theirTradedPokemon.pokemonId, PartyPosition(tradedSlot))))
+            selectedPartyIndices.clear()
+            selectedPartyIndices.addAll(newSelectedIndices)
+
+            val newOffers = selectedPartyIndices.mapNotNull { idx ->
+                party[idx]?.let { it.pokemonId to PartyPosition(idx) }
+            }
+            CobblemonNetwork.sendToServer(UpdateTradeOfferPacket(newOffers))
 
             rebuildWidgets()
         }
 
-        trade.oppositeOffer.subscribe { newOffer: Pokemon? ->
-            setOfferedPokemon(pokemon = newOffer, isOpposing = true)
+        trade.oppositeOffer.subscribe { newOffer: List<Pokemon> ->
+            setOfferedPokemon(pokemonList = newOffer, isOpposing = true)
         }
 
-        trade.myOffer.subscribe { myOffer: Pokemon? ->
-            setOfferedPokemon(pokemon = myOffer)
+        trade.myOffer.subscribe { myOffer: List<Pokemon> ->
+            setOfferedPokemon(pokemonList = myOffer)
         }
 
         trade.oppositeAcceptedMyOffer.subscribe {
@@ -216,9 +262,16 @@ class TradeGUI(
                 pokemon = pokemon,
                 parent = this,
                 onPress = {
-                    if (!trade.acceptedOppositeOffer && !tradeProcessing) {
-                        val pk = if (offeredPokemon?.uuid == pokemon?.pokemonId) null else pokemon
-                        CobblemonNetwork.sendToServer(UpdateTradeOfferPacket(pk?.let { it.pokemonId to PartyPosition(partyIndex) }))
+                    if (!trade.acceptedOppositeOffer && !tradeProcessing && pokemon != null) {
+                        if (selectedPartyIndices.contains(partyIndex)) {
+                            selectedPartyIndices.remove(partyIndex)
+                        } else if (selectedPartyIndices.size < 6) {
+                            selectedPartyIndices.add(partyIndex)
+                        }
+                        val newOffers = selectedPartyIndices.mapNotNull { idx ->
+                            party[idx]?.let { it.pokemonId to PartyPosition(idx) }
+                        }
+                        CobblemonNetwork.sendToServer(UpdateTradeOfferPacket(newOffers))
                         playSound(CobblemonSounds.GUI_CLICK)
                     }
                 }
@@ -250,8 +303,8 @@ class TradeGUI(
             ).also { widget -> addRenderableWidget(widget) }
         }
 
-        setOfferedPokemon(pokemon = offeredPokemon, isOpposing = false)
-        setOfferedPokemon(pokemon = opposingOfferedPokemon, isOpposing = true)
+        setOfferedPokemon(pokemonList = offeredPokemons.toList(), isOpposing = false)
+        setOfferedPokemon(pokemonList = opposingPokemons.toList(), isOpposing = true)
 
         offeredPokemonMarkings = MarkingsWidget(x + 74.5, y + 21, offeredPokemon, false)
         opposingOfferedPokemonMarkings = MarkingsWidget(x + 177.5, y + 21, opposingOfferedPokemon, false)
@@ -284,7 +337,7 @@ class TradeGUI(
                 if (tradeAnimationProgress > REVERSE_ANIMATION_TICK)
                     (REVERSE_ANIMATION_TICK + TRADE_ANIMATION_FRAMES - tradeAnimationProgress)
                 else (tradeAnimationProgress - MODEL_SCALE_BUFFER_FRAMES)
-            ) * TRADE_ANIMATION_HEIGHT
+                ) * TRADE_ANIMATION_HEIGHT
             blitk(
                 matrixStack = matrices,
                 texture = tradeAnimationResource,
@@ -313,20 +366,56 @@ class TradeGUI(
         // Render Model Portraits
         var scale = PORTRAIT_SCALE
         var scaleOffsetY = PORTRAIT_MODEL_OFFSET_Y
+        var isShrinking = false
         if (tradeProcessing) {
             val scaleInterval = if (tradeAnimationProgress > REVERSE_ANIMATION_TICK) (MAX_TRADE_PROGRESS - tradeAnimationProgress) else tradeAnimationProgress
             scale = (PORTRAIT_SCALE - (scaleInterval * PORTRAIT_SCALE_MULTIPLIER)).coerceIn(0F, PORTRAIT_SCALE)
             scaleOffsetY = (45.0 - (45.0 / PORTRAIT_SCALE) * scale) + PORTRAIT_MODEL_OFFSET_Y
+            isShrinking = true
         }
+        val shrinkPercentage = if (isShrinking) 1.0F - (scale / PORTRAIT_SCALE) else 0.0F
+        val myCenterXDest = x + 70 + (PORTRAIT_SIZE / 2.0)
+        val myCenterYDest = y + 30 + (PORTRAIT_SIZE / 2.0)
+        val opCenterXDest = x + 145 + (PORTRAIT_SIZE / 2.0)
+        val opCenterYDest = y + 30 + (PORTRAIT_SIZE / 2.0)
+
         if (scale > 0F) {
             context.enableScissor(backgroundX, backgroundY, backgroundX + BASE_BACKGROUND_WIDTH, backgroundY +  BASE_BACKGROUND_HEIGHT)
-            offeredPokemonModel?.baseScale = scale
-            offeredPokemonModel?.offsetY = scaleOffsetY
-            offeredPokemonModel?.render(context, mouseX, mouseY, delta)
 
-            opposingOfferedPokemonModel?.baseScale = scale
-            opposingOfferedPokemonModel?.offsetY = scaleOffsetY
-            opposingOfferedPokemonModel?.render(context, mouseX, mouseY, delta)
+            offeredPokemonModels.forEachIndexed { i, model ->
+                val posAndScale = getModelPositionAndScale(i, offeredPokemons.size, x + 70, y + 30)
+                val originalScale = posAndScale.second
+                model.baseScale = if (isShrinking) (originalScale / PORTRAIT_SCALE) * scale else originalScale
+                model.offsetY = if (isShrinking) scaleOffsetY else PORTRAIT_MODEL_OFFSET_Y
+
+                val startCenterX = posAndScale.first.first + (PORTRAIT_SIZE / 2.0)
+                val startCenterY = posAndScale.first.second + (PORTRAIT_SIZE / 2.0)
+
+                context.pose().pushPose()
+                context.pose().translate((myCenterXDest - startCenterX) * shrinkPercentage, (myCenterYDest - startCenterY) * shrinkPercentage, 0.0)
+
+                model.render(context, mouseX, mouseY, delta)
+
+                context.pose().popPose()
+            }
+
+            opposingOfferedPokemonModels.forEachIndexed { i, model ->
+                val posAndScale = getModelPositionAndScale(i, opposingPokemons.size, x + 145, y + 30)
+                val originalScale = posAndScale.second
+                model.baseScale = if (isShrinking) (originalScale / PORTRAIT_SCALE) * scale else originalScale
+                model.offsetY = if (isShrinking) scaleOffsetY else PORTRAIT_MODEL_OFFSET_Y
+
+                val startCenterX = posAndScale.first.first + (PORTRAIT_SIZE / 2.0)
+                val startCenterY = posAndScale.first.second + (PORTRAIT_SIZE / 2.0)
+
+                context.pose().pushPose()
+                context.pose().translate((opCenterXDest - startCenterX) * shrinkPercentage, (opCenterYDest - startCenterY) * shrinkPercentage, 0.0)
+
+                model.render(context, mouseX, mouseY, delta)
+
+                context.pose().popPose()
+            }
+
             context.disableScissor()
         }
 
@@ -341,8 +430,46 @@ class TradeGUI(
 
         renderInfoLabels(context, x, y)
 
-        renderPokemonInfo(offeredPokemon, false, context, x, y, mouseX, mouseY)
-        renderPokemonInfo(opposingOfferedPokemon, true, context, x, y, mouseX, mouseY)
+        children().filterIsInstance<PartySlot>().forEach { slot ->
+            if (slot.isHovered(mouseX, mouseY)) {
+                val hoveredId = slot.pokemon?.pokemonId
+                if (slot.isOpposing && slot.hasSelected()) {
+                    opposingPokemons.find { it.uuid == hoveredId }?.let { opposingOfferedPokemon = it }
+                } else if (!slot.isOpposing) {
+                    val matchingModel = offeredPokemons.find { it.uuid == hoveredId }
+                    if (matchingModel != null) {
+                        offeredPokemon = matchingModel
+                    } else {
+                        val realPokemon = com.cobblemon.mod.common.client.CobblemonClient.storage.party.find { it?.uuid == hoveredId }
+                        if (realPokemon != null) {
+                            offeredPokemon = realPokemon
+                        }
+                    }
+                }
+            }
+        }
+
+        val currentOffered = offeredPokemon
+        if (currentOffered != null) {
+            renderPokemonInfo(currentOffered, false, context, x, y, mouseX, mouseY)
+            if (::offeredPokemonMarkings.isInitialized) {
+                offeredPokemonMarkings.visible = true
+                if (offeredPokemonMarkings.pokemon != currentOffered) offeredPokemonMarkings.setActivePokemon(currentOffered)
+            }
+        } else {
+            if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.visible = false
+        }
+
+        val currentOpposing = opposingOfferedPokemon
+        if (currentOpposing != null) {
+            renderPokemonInfo(currentOpposing, true, context, x, y, mouseX, mouseY)
+            if (::opposingOfferedPokemonMarkings.isInitialized) {
+                opposingOfferedPokemonMarkings.visible = true
+                if (opposingOfferedPokemonMarkings.pokemon != currentOpposing) opposingOfferedPokemonMarkings.setActivePokemon(currentOpposing)
+            }
+        } else {
+            if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.visible = false
+        }
 
         if (trade.acceptedOppositeOffer) {
             blitk(
@@ -431,19 +558,25 @@ class TradeGUI(
 
         super.render(context, mouseX, mouseY, delta)
 
-        // Item Tooltip
-        if (offeredPokemon != null && !offeredPokemon!!.heldItemNoCopy().isEmpty) {
-            val itemX = x + 50
-            val itemY = y + 125
-            val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, offeredPokemon!!.heldItemNoCopy(), mouseX, mouseY)
+        val ttOffered = offeredPokemon
+        if (ttOffered != null) {
+            // Item Tooltip
+            if (!ttOffered.heldItemNoCopy().isEmpty) {
+                val itemX = x + 50
+                val itemY = y + 125
+                val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
+                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, ttOffered.heldItemNoCopy(), mouseX, mouseY)
+            }
         }
 
-        if (opposingOfferedPokemon != null && !opposingOfferedPokemon!!.heldItemNoCopy().isEmpty) {
-            val itemX = x + 227
-            val itemY = y + 125
-            val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
-            if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, opposingOfferedPokemon!!.heldItemNoCopy(), mouseX, mouseY)
+        val ttOpposing = opposingOfferedPokemon
+        if (ttOpposing != null) {
+            if (!ttOpposing.heldItemNoCopy().isEmpty) {
+                val itemX = x + 227
+                val itemY = y + 125
+                val itemHovered = mouseX.toFloat() in (itemX.toFloat()..(itemX.toFloat() + 16)) && mouseY.toFloat() in (itemY.toFloat()..(itemY.toFloat() + 16))
+                if (itemHovered) context.renderTooltip(Minecraft.getInstance().font, ttOpposing.heldItemNoCopy(), mouseX, mouseY)
+            }
         }
     }
 
@@ -480,11 +613,13 @@ class TradeGUI(
             }
 
             if (tradeAnimationProgress == (MAX_TRADE_PROGRESS + CRY_BUFFER)) {
-                if (offeredPokemonModel !== null && opposingOfferedPokemonModel !== null) {
-                    offeredPokemonModel!!.state.activeAnimations.clear()
-                    offeredPokemonModel!!.state.addFirstAnimation(setOf("cry"))
-                    opposingOfferedPokemonModel!!.state.activeAnimations.clear()
-                    opposingOfferedPokemonModel!!.state.addFirstAnimation(setOf("cry"))
+                offeredPokemonModels.forEach {
+                    it.state.activeAnimations.clear()
+                    it.state.addFirstAnimation(setOf("cry"))
+                }
+                opposingOfferedPokemonModels.forEach {
+                    it.state.activeAnimations.clear()
+                    it.state.addFirstAnimation(setOf("cry"))
                 }
             }
 
@@ -515,39 +650,138 @@ class TradeGUI(
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
-    private fun setOfferedPokemon(pokemon: Pokemon?, isOpposing: Boolean = false) {
+    private fun setOfferedPokemon(pokemonList: List<Pokemon>, isOpposing: Boolean = false) {
         protectiveTicks = 20
+        if (isOpposing) {
+            val wasEmpty = opposingPokemons.isEmpty()
+            val currentViewedUuid = if (opposingGridMode) null else opposingOfferedPokemon?.uuid
+            opposingPokemons.clear()
+            opposingPokemons.addAll(pokemonList)
+
+            val matchingPokemon = opposingPokemons.find { it.uuid == currentViewedUuid }
+
+            if (matchingPokemon != null) {
+                opposingOfferedPokemon = matchingPokemon
+                if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.setActivePokemon(opposingOfferedPokemon)
+            } else {
+                opposingOfferedPokemon = opposingPokemons.lastOrNull()
+                if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.setActivePokemon(opposingOfferedPokemon)
+                if (wasEmpty && opposingOfferedPokemon != null) {
+                    opposingGridMode = false
+                } else if (!opposingGridMode) {
+                    opposingGridMode = true
+                }
+            }
+            trade.acceptedOppositeOffer = false
+        } else {
+            val wasEmpty = offeredPokemons.isEmpty()
+            val currentViewedUuid = if (myGridMode) null else offeredPokemon?.uuid
+            offeredPokemons.clear()
+            offeredPokemons.addAll(pokemonList)
+
+            val matchingPokemon = offeredPokemons.find { it.uuid == currentViewedUuid }
+
+            if (matchingPokemon != null) {
+                offeredPokemon = matchingPokemon
+                if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.setActivePokemon(offeredPokemon)
+            } else {
+                offeredPokemon = offeredPokemons.lastOrNull()
+                if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.setActivePokemon(offeredPokemon)
+                if (wasEmpty && offeredPokemon != null) {
+                    myGridMode = false
+                } else if (!myGridMode) {
+                    myGridMode = true
+                }
+            }
+        }
+        rebuildSelectedModels(isOpposing)
+    }
+
+    private fun rebuildSelectedModels(isOpposing: Boolean) {
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
 
         if (isOpposing) {
-            opposingOfferedPokemon = pokemon
-            opposingOfferedPokemonModel = if (pokemon != null) ModelWidget(
-                pX = x + 145,
-                pY = y + 30,
-                pWidth = PORTRAIT_SIZE,
-                pHeight = PORTRAIT_SIZE,
-                pokemon = pokemon.asRenderablePokemon(),
-                baseScale = PORTRAIT_SCALE,
-                rotationY = 35F,
-                offsetY = PORTRAIT_MODEL_OFFSET_Y
-            ) else null
-            if (::opposingOfferedPokemonMarkings.isInitialized) opposingOfferedPokemonMarkings.setActivePokemon(opposingOfferedPokemon)
-            trade.acceptedOppositeOffer = false
+            opposingOfferedPokemonModels.clear()
+            val total = opposingPokemons.size
+            opposingPokemons.forEachIndexed { i, pk ->
+                val (pos, currentScale) = getModelPositionAndScale(i, total, x + 145, y + 30)
+                opposingOfferedPokemonModels.add(ModelWidget(
+                    pX = pos.first, pY = pos.second,
+                    pWidth = PORTRAIT_SIZE, pHeight = PORTRAIT_SIZE,
+                    pokemon = pk.asRenderablePokemon(),
+                    baseScale = currentScale,
+                    rotationY = 35F,
+                    offsetY = PORTRAIT_MODEL_OFFSET_Y
+                ))
+            }
         } else {
-            offeredPokemon = pokemon
-            offeredPokemonModel = if (pokemon != null) ModelWidget(
-                pX = x + 70,
-                pY = y + 30,
-                pWidth = PORTRAIT_SIZE,
-                pHeight = PORTRAIT_SIZE,
-                pokemon = pokemon.asRenderablePokemon(),
-                baseScale = PORTRAIT_SCALE,
-                rotationY = 325F,
-                offsetY = PORTRAIT_MODEL_OFFSET_Y
-            ) else null
-            if (::offeredPokemonMarkings.isInitialized) offeredPokemonMarkings.setActivePokemon(offeredPokemon)
+            offeredPokemonModels.clear()
+            val total = offeredPokemons.size
+            offeredPokemons.forEachIndexed { i, pk ->
+                val (pos, currentScale) = getModelPositionAndScale(i, total, x + 70, y + 30)
+                offeredPokemonModels.add(ModelWidget(
+                    pX = pos.first, pY = pos.second,
+                    pWidth = PORTRAIT_SIZE, pHeight = PORTRAIT_SIZE,
+                    pokemon = pk.asRenderablePokemon(),
+                    baseScale = currentScale,
+                    rotationY = 325F,
+                    offsetY = PORTRAIT_MODEL_OFFSET_Y
+                ))
+            }
         }
+    }
+
+    private fun getModelPositionAndScale(index: Int, total: Int, baseX: Int, baseY: Int): Pair<Pair<Int, Int>, Float> {
+        val scale = when (total) {
+            1 -> PORTRAIT_SCALE
+            2 -> PORTRAIT_SCALE * 0.75f
+            3 -> PORTRAIT_SCALE * 0.65f
+            4 -> PORTRAIT_SCALE * 0.55f
+            else -> PORTRAIT_SCALE * 0.5f
+        }
+
+        if (total <= 1) {
+            return Pair(Pair(baseX, baseY), scale)
+        }
+
+        val rowLength1 = when (total) {
+            2, 3, 4 -> 2
+            else -> 3
+        }
+        val rowLength2 = total - rowLength1
+
+        val isBottomRow = index >= rowLength1
+        val row = if (isBottomRow) 1 else 0
+        val col = if (isBottomRow) index - rowLength1 else index
+        val currentRowLength = if (isBottomRow) rowLength2 else rowLength1
+
+        val colSpacing = when (total) {
+            2 -> 35
+            3 -> 30
+            4 -> 25
+            else -> 23
+        }
+        val rowSpacing = when (total) {
+            2, 3 -> 30
+            4 -> 28
+            else -> 25
+        }
+
+        val totalWidth = (currentRowLength - 1) * colSpacing
+        val startX = baseX - (totalWidth / 2)
+
+        val totalHeight = if (rowLength2 > 0) rowSpacing else 0
+        var startY = baseY + 12 - (totalHeight / 2)
+
+        if (total >= 4) {
+            startY += 8
+        }
+
+        val posX = startX + (col * colSpacing)
+        val posY = startY + (row * rowSpacing)
+
+        return Pair(Pair(posX, posY), scale)
     }
 
     private fun playSound(soundEvent: SoundEvent): SoundInstance {
@@ -557,10 +791,10 @@ class TradeGUI(
     }
 
     private fun cancelTradeSound() {
-        if (tradeSoundInstance !== null) Minecraft.getInstance().soundManager.stop(tradeSoundInstance)
+        if (tradeSoundInstance != null) Minecraft.getInstance().soundManager.stop(tradeSoundInstance!!)
     }
 
-    private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+    public fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         if (pokemon != null) {
             val matrices = context.pose()
             // Level

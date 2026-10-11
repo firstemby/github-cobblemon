@@ -12,6 +12,7 @@ import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
 import com.cobblemon.mod.common.api.net.ServerNetworkPacketHandler
 import com.cobblemon.mod.common.net.messages.server.trade.CancelTradePacket
 import com.cobblemon.mod.common.net.messages.server.trade.UpdateTradeOfferPacket
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.trade.TradeManager
 import com.cobblemon.mod.common.util.party
 import net.minecraft.server.MinecraftServer
@@ -21,20 +22,16 @@ object UpdateTradeOfferHandler : ServerNetworkPacketHandler<UpdateTradeOfferPack
     override fun handle(packet: UpdateTradeOfferPacket, server: MinecraftServer, player: ServerPlayer) {
         val trade = TradeManager.getActiveTrade(player.uuid) ?: return player.sendPacket(CancelTradePacket())
         val tradeParticipant = trade.getTradeParticipant(player.uuid)
-        val newOffer = packet.newOffer
-        if (newOffer == null) {
-            trade.updateOffer(tradeParticipant, null)
-        } else {
-            val (pokemonId, partyPosition) = newOffer
-            val party = player.party()
+        val newOffers = packet.newOffers
+
+        val validPokemons = mutableListOf<Pokemon>()
+        val party = player.party()
+        for ((pokemonId, partyPosition) in newOffers) {
             val pokemon = party[partyPosition]
-            if (pokemon == null || pokemon.uuid != pokemonId) {
-                return
-            } else if (!pokemon.tradeable) {
-                return
-            } else {
-                trade.updateOffer(tradeParticipant, pokemon)
+            if (pokemon != null && pokemon.uuid == pokemonId && pokemon.tradeable) {
+                validPokemons.add(pokemon)
             }
         }
+        trade.updateOffer(tradeParticipant, validPokemons)
     }
 }

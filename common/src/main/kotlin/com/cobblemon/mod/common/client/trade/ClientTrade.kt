@@ -14,12 +14,12 @@ import com.cobblemon.mod.common.pokemon.Pokemon
 import java.util.UUID
 
 class ClientTrade {
-    var myOffer = SettableObservable<Pokemon?>(null)
-    var oppositeOffer = SettableObservable<Pokemon?>(null)
+    var myOffer = SettableObservable<List<Pokemon>>(emptyList())
+    var oppositeOffer = SettableObservable<List<Pokemon>>(emptyList())
     var tradeProcessing = SettableObservable(Pair(false, false))
     var oppositeAcceptedMyOffer = SettableObservable(false)
     var acceptedOppositeOffer = false
 
-    var completedEmitter = SimpleObservable<Pair<UUID, UUID>>()
+    var completedEmitter = SimpleObservable<Pair<List<UUID>, List<UUID>>>()
     var cancelEmitter = SimpleObservable<Unit>()
 }

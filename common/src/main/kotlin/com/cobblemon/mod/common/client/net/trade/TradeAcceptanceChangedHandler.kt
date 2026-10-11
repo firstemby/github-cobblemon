@@ -15,9 +15,9 @@ import net.minecraft.client.Minecraft
 
 object TradeAcceptanceChangedHandler : ClientNetworkPacketHandler<TradeAcceptanceChangedPacket> {
     override fun handle(packet: TradeAcceptanceChangedPacket, client: Minecraft) {
-        if (CobblemonClient.trade?.myOffer?.get()?.uuid == packet.pokemonId) {
+        if (CobblemonClient.trade?.myOffer?.get()?.any { it.uuid == packet.pokemonId } == true) {
             CobblemonClient.trade!!.oppositeAcceptedMyOffer.set(packet.accepted)
-        } else if (CobblemonClient.trade?.oppositeOffer?.get()?.uuid == packet.pokemonId) {
+        } else if (CobblemonClient.trade?.oppositeOffer?.get()?.any { it.uuid == packet.pokemonId } == true) {
             CobblemonClient.trade!!.acceptedOppositeOffer = packet.accepted
         }
     }

@@ -28,9 +28,9 @@ import org.joml.Vector3f
 
 open class PartySlot(
     x: Int, y: Int,
-    private val pokemon: TradeStartedPacket.TradeablePokemon?,
+    val pokemon: TradeStartedPacket.TradeablePokemon?,
     private val parent: TradeGUI,
-    private val isOpposing: Boolean = false,
+    val isOpposing: Boolean = false,
     onPress: OnPress
 ) : Button(x, y, SIZE, SIZE, Component.literal("PartySlot"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     val state = FloatingState()
@@ -42,6 +42,8 @@ open class PartySlot(
         private val genderIconFemale = cobblemonResource("textures/gui/pc/gender_icon_female.png")
         private val selectPointerResource = cobblemonResource("textures/gui/pc/pc_pointer.png")
         private val untradeableResource = cobblemonResource("textures/gui/trade/trade_slot_icon_locked.png")
+        private val tradePartySlotSelectedResource = cobblemonResource("textures/gui/trade/trade_party_slot_selected.png")
+        private val tradePartySlotSelectedOpposingResource = cobblemonResource("textures/gui/trade/trade_party_slot_selected_opposing.png")
     }
 
     override fun playDownSound(soundManager: SoundManager) {
@@ -57,6 +59,17 @@ open class PartySlot(
                 y = y,
                 width = SIZE,
                 height = SIZE
+            )
+        }
+
+        if (hasSelected()) {
+            blitk(
+                matrixStack = matrices,
+                texture = if (isOpposing) tradePartySlotSelectedOpposingResource else tradePartySlotSelectedResource,
+                x = x - 2,
+                y = y - 2,
+                width = 29,
+                height = 29
             )
         }
 
@@ -118,7 +131,16 @@ open class PartySlot(
             }
 
             matrices.popPose()
-            if (hasSelected()) {
+            
+            val isViewed = if (isOpposing) {
+                parent.opposingOfferedPokemon?.uuid == pokemon.pokemonId
+            } else {
+                parent.offeredPokemon?.uuid == pokemon.pokemonId
+            }
+
+            if (isViewed && pokemon.tradeable) {
+                matrices.pushPose()
+                matrices.translate(0.0, 0.0, 200.0)
                 blitk(
                     matrixStack = matrices,
                     texture = selectPointerResource,
@@ -128,6 +150,7 @@ open class PartySlot(
                     height = 8,
                     scale = TradeGUI.SCALE
                 )
+                matrices.popPose()
             }
 
             // Held Item
@@ -145,8 +168,9 @@ open class PartySlot(
     }
 
     open fun hasSelected(): Boolean {
-        val offeredPokemon = if (isOpposing) parent.trade.oppositeOffer.get() else parent.trade.myOffer.get()
-        return pokemon?.pokemonId == offeredPokemon?.uuid && pokemon != null
+        if (pokemon == null) return false
+        val offeredPokemons = if (isOpposing) parent.trade.oppositeOffer.get() else parent.trade.myOffer.get()
+        return offeredPokemons.any { it.uuid == pokemon.pokemonId }
     }
 
     fun isHovered(mouseX: Int, mouseY: Int) = pokemon?.tradeable != false && mouseX.toFloat() in (x.toFloat()..(x.toFloat() + SIZE)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + SIZE))

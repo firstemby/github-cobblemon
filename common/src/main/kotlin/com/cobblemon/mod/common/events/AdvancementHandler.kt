@@ -31,6 +31,7 @@ import net.minecraft.world.item.BlockItem
 import com.cobblemon.mod.common.platform.events.ServerPlayerEvent
 import com.cobblemon.mod.common.api.storage.player.PlayerInstancedDataStoreTypes
 import com.cobblemon.mod.common.item.GemItem
+import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.util.effectiveName
 import com.cobblemon.mod.common.util.getPlayer
@@ -164,26 +165,21 @@ object AdvancementHandler : EventHandler {
     }
 
     fun onTradeCompleted(event : TradeEvent.Post) {
-        val player1 = event.tradeParticipant1Pokemon.getOwnerPlayer()
-        val player2 = event.tradeParticipant2Pokemon.getOwnerPlayer()
-        if (player1 != null) {
-            CobblemonCriteria.TRADE_POKEMON.trigger(player1, TradePokemonContext(event.tradeParticipant1Pokemon, event.tradeParticipant2Pokemon))
-            val playerData = Cobblemon.playerDataManager.getGenericData(player1)
-            val advancementData = playerData.advancementData
-            advancementData.updateTotalTradedCount()
-            advancementData.updateAspectsCollected(player1, event.tradeParticipant2Pokemon)
-            CobblemonCriteria.COLLECT_ASPECT.trigger(player1, advancementData.aspectsCollected)
-            Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
+        onTradeCompleted(event.tradeParticipant1Pokemon, event.tradeParticipant2Pokemon)
+        onTradeCompleted(event.tradeParticipant2Pokemon, event.tradeParticipant1Pokemon)
+    }
+
+    private fun onTradeCompleted(received: List<Pokemon>, traded: List<Pokemon>) {
+        val player = received.firstOrNull()?.getOwnerPlayer() ?: return
+        received.forEach { receivedPokemon ->
+            traded.forEach { tradedPokemon -> CobblemonCriteria.TRADE_POKEMON.trigger(player, TradePokemonContext(tradedPokemon, receivedPokemon)) }
         }
-        if (player2 != null) {
-            CobblemonCriteria.TRADE_POKEMON.trigger(player2, TradePokemonContext(event.tradeParticipant2Pokemon, event.tradeParticipant1Pokemon))
-            val playerData = Cobblemon.playerDataManager.getGenericData(player2)
-            val advancementData = playerData.advancementData
-            advancementData.updateTotalTradedCount()
-            advancementData.updateAspectsCollected(player2, event.tradeParticipant1Pokemon)
-            CobblemonCriteria.COLLECT_ASPECT.trigger(player2, advancementData.aspectsCollected)
-            Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
-        }
+        val playerData = Cobblemon.playerDataManager.getGenericData(player)
+        val advancementData = playerData.advancementData
+        advancementData.updateTotalTradedCount()
+        received.forEach { advancementData.updateAspectsCollected(player, it) }
+        CobblemonCriteria.COLLECT_ASPECT.trigger(player, advancementData.aspectsCollected)
+        Cobblemon.playerDataManager.saveSingle(playerData, PlayerInstancedDataStoreTypes.GENERAL)
     }
 
     /**

@@ -11,10 +11,10 @@ package com.cobblemon.mod.common.trade
 import com.cobblemon.mod.common.pokemon.Pokemon
 
 class TradeOffer {
-    var pokemon: Pokemon? = null
+    var pokemon: List<Pokemon> = emptyList()
     var accepted = false
 
-    fun updateOffer(pokemon: Pokemon?) {
+    fun updateOffer(pokemon: List<Pokemon>) {
         this.pokemon = pokemon
         accepted = false
     }

@@ -20,7 +20,7 @@ object PerformTradeHandler : ServerNetworkPacketHandler<PerformTradePacket> {
     override fun handle(packet: PerformTradePacket, server: MinecraftServer, player: ServerPlayer) {
         val trade = TradeManager.getActiveTrade(player.uuid) ?: return player.sendPacket(TradeCancelledPacket())
         val tradeParticipant = trade.getTradeParticipant(player.uuid)
-        if (trade.getOpposingOffer(tradeParticipant).pokemon?.uuid == packet.pokemonOfferId) {
+        if (trade.getOpposingOffer(tradeParticipant).pokemon.any { it.uuid == packet.pokemonOfferId }) {
             trade.performTrade(tradeParticipant)
         }
     }
