@@ -48,6 +48,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.registries.Registries
 import net.minecraft.locale.Language
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.tags.TagKey
@@ -164,9 +165,14 @@ class EvolutionTreeWidget(
         var rootSpecies = pokedexEntry
         var rootForm = pokedexForm
         var preEvolution = findPreEvolution(rootSpecies, rootForm)
+        // Stop at whatever the dex can't resolve, and at cycles (datapacks)
+        val visited = mutableSetOf(rootSpecies.speciesId to rootForm.displayForm)
         while (preEvolution != null) {
-            rootSpecies = Dexes.findDexEntryBySpeciesId(preEvolution.fromSpecies)!!
-            rootForm = rootSpecies.forms.first { it.displayForm.equals(preEvolution.fromForm, ignoreCase = true) }
+            val preEvolutionSpecies = Dexes.findDexEntryBySpeciesId(preEvolution.fromSpecies) ?: break
+            val preEvolutionForm = preEvolutionSpecies.forms.firstOrNull { it.displayForm.equals(preEvolution.fromForm, ignoreCase = true) } ?: break
+            if (!visited.add(preEvolutionSpecies.speciesId to preEvolutionForm.displayForm)) break
+            rootSpecies = preEvolutionSpecies
+            rootForm = preEvolutionForm
             preEvolution = findPreEvolution(rootSpecies, rootForm)
         }
 
@@ -230,7 +236,10 @@ class EvolutionTreeWidget(
         pokedexEntry: PokedexEntry,
         pokedexForm: PokedexForm,
         aspects: Set<String> = emptySet(),
+        ancestors: Set<Pair<ResourceLocation, String>> = emptySet(),
     ): EvolutionNode {
+        // Datapack evolutions can loop back (A -> B -> A), so stop at anything already on this branch
+        val path = ancestors + (pokedexEntry.speciesId to pokedexForm.displayForm.lowercase())
         val discoveryLevel = CobblemonClient.clientPokedexData.getHighestKnowledgeFor(pokedexEntry, pokedexForm, aspects.toMutableSet())
 
         val formEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
@@ -243,8 +252,16 @@ class EvolutionTreeWidget(
                 return@mapNotNull null
             }
             val formEquivalents = Dexes.getFormEquivalents(it.toForm.lowercase())
-            val childPokedexForm = childPokedexEntry.forms.first { formEquivalents.contains(it.displayForm.lowercase()) }
-            buildEvolutionTree(childPokedexEntry, childPokedexForm, it.toAspects)
+            val childPokedexForm = childPokedexEntry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) }
+            if (childPokedexForm == null) {
+                Cobblemon.LOGGER.warn("Dex form ${it.toForm} not found for species: ${it.toSpecies}")
+                return@mapNotNull null
+            }
+            if ((childPokedexEntry.speciesId to childPokedexForm.displayForm.lowercase()) in path) {
+                Cobblemon.LOGGER.warn("Evolution loop found at species: ${it.toSpecies} form: ${it.toForm}")
+                return@mapNotNull null
+            }
+            buildEvolutionTree(childPokedexEntry, childPokedexForm, it.toAspects, path)
         }
 
         return EvolutionNode(

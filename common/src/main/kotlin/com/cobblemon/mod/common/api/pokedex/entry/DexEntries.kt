@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.api.pokedex.entry
 
+import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.data.JsonDataRegistry
 import com.cobblemon.mod.common.api.molang.ExpressionLike
@@ -72,8 +73,12 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
     fun computeEvolutionDisplays() {
         evolutionDisplays.clear()
         PokemonSpecies.species.forEach {
-            evolutionDisplays.addAll(buildDisplays(it.standardForm))
-            evolutionDisplays.addAll(it.forms.flatMap { form -> buildDisplays(form) })
+            // A broken datapack evolution shouldn't stop the world from loading
+            try {
+                evolutionDisplays.addAll(buildDisplays(it.standardForm) + it.forms.flatMap { form -> buildDisplays(form) })
+            } catch (e: Exception) {
+                Cobblemon.LOGGER.error("Failed to build dex evolution displays for ${it.resourceIdentifier}", e)
+            }
         }
     }
 
@@ -93,8 +98,10 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
                     ?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
                     ?: return@resultLoop
 
-                // Carry the source form's aspects over like a real evolution does (Alola-Bias Pichu -> Alola-Bias Pikachu)
-                val resultForm = resultSpecies.getForm(form.aspects.toSet() + resultProperties.aspects)
+                // The result's own aspects win, otherwise carry the source form's aspects over
+                // like a real evolution does (Alola-Bias Pichu -> Alola-Bias Pikachu)
+                val resultForm = resultSpecies.getForm(resultProperties.aspects).takeIf { it != resultSpecies.standardForm }
+                    ?: resultSpecies.getForm(form.aspects.toSet() + resultProperties.aspects)
                 val toAspects = resultProperties.aspects + resultForm.aspects
                 val resultRequirements = if (resultProperties === evolution.shedder) {
                     requirements + CobblemonDexEvolutionRequirementDisplay(CobblemonItems.POKE_BALL, lang("ui.pokedex.evolution.shedder.tooltip"))
