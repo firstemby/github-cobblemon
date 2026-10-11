@@ -144,7 +144,7 @@
         "canSwimInWater": false
       },
       "walk": {
-        "walkSpeed": 0.35
+        "walkSpeed": 0.333
       }
     },
     "resting": {

@@ -66,6 +66,9 @@
       "swim": {
         "canSwimInWater": false,
         "avoidsWater": true
+      },
+      "walk": {
+        "walkSpeed": 0.222
       }
     },
     "herd": {

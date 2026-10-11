@@ -72,6 +72,9 @@
         "avoidsWater": true,
         "canSwimInLava": true,
         "canWalkOnLava": true
+      },
+      "walk": {
+        "walkSpeed": 0.192
       }
     },
     "combat": {

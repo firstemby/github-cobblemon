@@ -86,7 +86,7 @@
         "canSwimInWater": false
       },
       "walk": {
-        "walkSpeed": 0.15
+        "walkSpeed": 0.215
       },
       "wanderChance": "750"
     },

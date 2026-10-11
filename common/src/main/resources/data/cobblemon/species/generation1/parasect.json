@@ -91,7 +91,7 @@
         "avoidsWater": true
       },
       "walk": {
-        "walkSpeed": 0.45
+        "walkSpeed": 0.222
       },
       "wanderChance": 20
     },
