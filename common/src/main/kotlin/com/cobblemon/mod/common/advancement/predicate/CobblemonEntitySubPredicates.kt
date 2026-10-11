@@ -21,7 +21,7 @@ object CobblemonEntitySubPredicates : PlatformRegistry<Registry<MapCodec<out Ent
     @JvmStatic
     val POKE_POBBER = this.create("poke_bobber", FishingBobberPredicate.CODEC)
 
-    override val registry: Registry<MapCodec<out EntitySubPredicate>> = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE
+    override var registry: Registry<MapCodec<out EntitySubPredicate>>? = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE
 
     override val resourceKey: ResourceKey<Registry<MapCodec<out EntitySubPredicate>>> = Registries.ENTITY_SUB_PREDICATE_TYPE
 

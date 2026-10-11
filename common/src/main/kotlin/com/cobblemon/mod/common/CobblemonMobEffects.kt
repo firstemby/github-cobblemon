@@ -19,7 +19,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.effect.MobEffect
 
 object CobblemonMobEffects : PlatformRegistry<Registry<MobEffect>, ResourceKey<Registry<MobEffect>>, MobEffect>() {
-    override val registry: Registry<MobEffect> = BuiltInRegistries.MOB_EFFECT
+    override var registry: Registry<MobEffect>? = BuiltInRegistries.MOB_EFFECT
     override val resourceKey: ResourceKey<Registry<MobEffect>> = Registries.MOB_EFFECT
 
     @JvmField

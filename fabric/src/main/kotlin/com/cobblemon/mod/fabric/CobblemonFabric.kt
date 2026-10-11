@@ -407,6 +407,12 @@ object CobblemonFabric : CobblemonImplementation {
         }
     }
 
+	override fun registerBiomes() {
+		CobblemonBiomes.register { location, biome -> 
+			Registry.register(CobblemonBiomes.registry, location, biome)
+		}
+	}
+
     private class CobblemonReloadListener(private val identifier: ResourceLocation, private val reloader: PreparableReloadListener, private val dependencies: Collection<ResourceLocation>) : IdentifiableResourceReloadListener {
 
         override fun reload(synchronizer: PreparableReloadListener.PreparationBarrier, manager: ResourceManager, prepareProfiler: ProfilerFiller, applyProfiler: ProfilerFiller, prepareExecutor: Executor, applyExecutor: Executor): CompletableFuture<Void> = this.reloader.reload(synchronizer, manager, prepareProfiler, applyProfiler, prepareExecutor, applyExecutor)

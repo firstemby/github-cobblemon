@@ -59,7 +59,7 @@ import net.minecraft.world.level.material.PushReaction
 @Suppress("SameParameterValue", "HasPlatformType", "MemberVisibilityCanBePrivate", "unused")
 object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Block>>, Block>() {
 
-    override val registry: Registry<Block> = BuiltInRegistries.BLOCK
+    override var registry: Registry<Block>? = BuiltInRegistries.BLOCK
     override val resourceKey: ResourceKey<Registry<Block>> = Registries.BLOCK
 
     val APRICORN_BLOCK_SET_TYPE = BlockSetType("apricorn")

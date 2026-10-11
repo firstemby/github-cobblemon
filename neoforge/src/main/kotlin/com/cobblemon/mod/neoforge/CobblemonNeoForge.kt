@@ -445,6 +445,14 @@ class CobblemonNeoForge : CobblemonImplementation {
         }
     }
 
+	override fun registerBiomes() {
+		MOD_BUS.addListener<RegisterEvent> { event ->
+			event.register(CobblemonBiomes.resourceKey) { helper ->
+				CobblemonBiomes.register { identifier, biome -> helper.register(identifier, biome) }
+			}
+		}
+	}
+
     override fun registerResourceReloader(
         identifier: ResourceLocation,
         type: PackType,

@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 
 object CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, ResourceKey<Registry<BlockEntityType<*>>>, BlockEntityType<*>>() {
 
-    override val registry: Registry<BlockEntityType<*>> = BuiltInRegistries.BLOCK_ENTITY_TYPE
+    override var registry: Registry<BlockEntityType<*>>? = BuiltInRegistries.BLOCK_ENTITY_TYPE
     override val resourceKey: ResourceKey<Registry<BlockEntityType<*>>> = Registries.BLOCK_ENTITY_TYPE
 
     @JvmField

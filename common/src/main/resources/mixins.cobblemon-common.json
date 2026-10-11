@@ -96,6 +96,8 @@
     "accessor.SinglePoolElementAccessor",
     "accessor.StatusEffectInstanceAccessor",
     "accessor.TrackedEntityAccessor",
+    "biome.MultiNoiseBiomeSourceMixin",
+    "biome.RegistryDataLoaderMixin",
     "brewing.BrewingStandBlockEntityMixin",
     "brewing.BrewingStandMenuMixin",
     "brewing.IngredientSlotMixin",

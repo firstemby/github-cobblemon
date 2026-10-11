@@ -27,8 +27,7 @@ object CobblemonRecipeSerializers : PlatformRegistry<Registry<RecipeSerializer<*
 
     val BREWING_STAND: RecipeSerializer<*> = register("cobblemon:brewing_stand", BrewingStandRecipe.Serializer())
     
-    override val registry: Registry<RecipeSerializer<*>>
-        get() = BuiltInRegistries.RECIPE_SERIALIZER
+    override var registry: Registry<RecipeSerializer<*>>? = BuiltInRegistries.RECIPE_SERIALIZER
     override val resourceKey: ResourceKey<Registry<RecipeSerializer<*>>>
         get() = Registries.RECIPE_SERIALIZER
 

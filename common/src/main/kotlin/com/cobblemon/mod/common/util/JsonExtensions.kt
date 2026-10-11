@@ -52,6 +52,10 @@ fun Collection<JsonElement>.toJsonArray(): JsonArray {
     return array
 }
 
+
+fun JsonElement.asJsonObjectOrNull(): JsonObject? =
+	if (isJsonObject) asJsonObject else null
+
 fun JsonObject.isEmpty() = size() <= 0
 
 fun JsonObject.isNotEmpty() = size() > 0

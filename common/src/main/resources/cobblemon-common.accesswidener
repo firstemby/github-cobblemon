@@ -138,6 +138,8 @@ transitive-accessible method net/minecraft/world/inventory/MenuType <init> (Lnet
 transitive-accessible class net/minecraft/client/gui/screens/MenuScreens$ScreenConstructor
 transitive-accessible method net/minecraft/client/gui/screens/MenuScreens register (Lnet/minecraft/world/inventory/MenuType;Lnet/minecraft/client/gui/screens/MenuScreens$ScreenConstructor;)V
 transitive-accessible method net/minecraft/resources/ResourceLocation <init> (Ljava/lang/String;Ljava/lang/String;)V
+transitive-accessible class net/minecraft/resources/RegistryDataLoader$LoadingFunction
+transitive-accessible method net/minecraft/resources/RegistryDataLoader$LoadingFunction apply (Lnet/minecraft/resources/RegistryDataLoader$Loader;Lnet/minecraft/resources/RegistryOps$RegistryInfoLookup;)V
 transitive-accessible field net/minecraft/stats/RecipeBookSettings states Ljava/util/Map;
 transitive-accessible class net/minecraft/stats/RecipeBookSettings$TypeSettings
 transitive-accessible field net/minecraft/client/gui/screens/recipebook/RecipeBookComponent tabButtons Ljava/util/List;

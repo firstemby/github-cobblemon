@@ -95,6 +95,6 @@ object CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, Resou
     @JvmField
     val LEARN_TM_COUNT = this.create("tms_learned", SimpleCriterionTrigger(CountableCriterion.CODEC))
 
-    override val registry = BuiltInRegistries.TRIGGER_TYPES
+    override var registry = BuiltInRegistries.TRIGGER_TYPES
     override val resourceKey = Registries.TRIGGER_TYPE
 }

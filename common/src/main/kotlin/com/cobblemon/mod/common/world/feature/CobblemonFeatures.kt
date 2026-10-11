@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.feature.Feature
 
 object CobblemonFeatures : PlatformRegistry<Registry<Feature<*>>, ResourceKey<Registry<Feature<*>>>, Feature<*>>() {
 
-    override val registry: Registry<Feature<*>> = BuiltInRegistries.FEATURE
+    override var registry: Registry<Feature<*>>? = BuiltInRegistries.FEATURE
     override val resourceKey: ResourceKey<Registry<Feature<*>>> = Registries.FEATURE
 
     @JvmField

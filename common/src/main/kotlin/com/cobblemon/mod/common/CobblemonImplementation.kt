@@ -123,6 +123,8 @@ interface CobblemonImplementation {
      * TODO
      */
     fun registerMobEffects()
+	
+	fun registerBiomes()
 
 
     /**

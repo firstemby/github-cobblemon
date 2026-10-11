@@ -30,7 +30,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 object CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
 
 
-    override val registry: Registry<EntityType<*>> = BuiltInRegistries.ENTITY_TYPE
+    override var registry: Registry<EntityType<*>>? = BuiltInRegistries.ENTITY_TYPE
     override val resourceKey: ResourceKey<Registry<EntityType<*>>> = Registries.ENTITY_TYPE
     
     @JvmField

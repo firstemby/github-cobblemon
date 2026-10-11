@@ -27,8 +27,7 @@ object CobblemonRecipeTypes : PlatformRegistry<Registry<RecipeType<*>>, Resource
 
     val BREWING_STAND: RecipeType<BrewingStandRecipe> = register("cobblemon:brewing_stand")
     
-    override val registry: Registry<RecipeType<*>>
-        get() = BuiltInRegistries.RECIPE_TYPE
+    override var registry: Registry<RecipeType<*>>? = BuiltInRegistries.RECIPE_TYPE
     override val resourceKey: ResourceKey<Registry<RecipeType<*>>>
         get() = Registries.RECIPE_TYPE
 

@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 
 object CobblemonPoiTypes: PlatformRegistry<Registry<PoiType>, ResourceKey<Registry<PoiType>>, PoiType>() {
-    override val registry: Registry<PoiType> = BuiltInRegistries.POINT_OF_INTEREST_TYPE
+    override var registry: Registry<PoiType>? = BuiltInRegistries.POINT_OF_INTEREST_TYPE
     override val resourceKey: ResourceKey<Registry<PoiType>> = Registries.POINT_OF_INTEREST_TYPE
 
     @JvmField

@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceKey
 
 object CobblemonParticles : PlatformRegistry<Registry<ParticleType<*>>, ResourceKey<Registry<ParticleType<*>>>, ParticleType<*>>() {
 
-    override val registry: Registry<ParticleType<*>> = BuiltInRegistries.PARTICLE_TYPE
+    override var registry: Registry<ParticleType<*>>? = BuiltInRegistries.PARTICLE_TYPE
     override val resourceKey: ResourceKey<Registry<ParticleType<*>>> = Registries.PARTICLE_TYPE
 
     val SNOWSTORM_PARTICLE_TYPE = this.create("snowstorm", SnowstormParticleType())
