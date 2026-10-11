@@ -32,6 +32,7 @@
 ### Developer
 
 ### Molang & Datapacks
+- Fixed `q.pokemon.nature` returning class instance instead of proper string value (`cobblemon:adamant`)
 
 ### Localization
 - Updated translations for:
