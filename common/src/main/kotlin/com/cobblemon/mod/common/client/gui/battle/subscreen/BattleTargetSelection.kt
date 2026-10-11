@@ -21,6 +21,7 @@ import com.cobblemon.mod.common.battles.ShowdownMoveset
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.CobblemonResources
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
+import com.cobblemon.mod.common.client.battle.ClientRaidState
 import com.cobblemon.mod.common.client.battle.SingleActionRequest
 import com.cobblemon.mod.common.client.gui.battle.BattleGUI
 import com.cobblemon.mod.common.client.gui.battle.BattleOverlay
@@ -126,7 +127,7 @@ class BattleTargetSelection(
         var moveTemplate = MoveTemplate.dummy(target.battlePokemon?.displayName.toString())
         private val responseTarget = selectableTargetList?.firstOrNull { it.getPNX() == target.getPNX() }?.getPNX()
         private val isMultiTarget = multiTargetList?.firstOrNull { it.getPNX() == target.getPNX() } != null
-        private val isCurrentPokemon = request.activePokemon.battlePokemon?.uuid == target.battlePokemon!!.uuid
+        private val isCurrentPokemon = request.activePokemon.battlePokemon?.uuid == target.battlePokemon?.uuid
 
         open val response: MoveActionResponse get() = MoveActionResponse(targetSelection.move.id, responseTarget, gimmickID)
         val state = FloatingState()
@@ -298,6 +299,24 @@ class BattleTargetSelection(
                     scale = 0.5F,
                     shadow = true,
                     opacity = selectConditionOpacity
+                )
+            } else if (ClientRaidState.isInRaidBattle) {
+                // Fainted indicator for raid battles
+                drawScaledText(
+                    context = context,
+                    text = battlePokemon.displayName.bold(),
+                    x = x + 5,
+                    y = y + 10,
+                    colour = 0x888888,
+                    shadow = true
+                )
+                drawScaledText(
+                    context = context,
+                    text = "FAINTED".text().bold(),
+                    x = x + 5,
+                    y = y + 20,
+                    colour = 0xFF4444,
+                    shadow = true
                 )
             }
         }

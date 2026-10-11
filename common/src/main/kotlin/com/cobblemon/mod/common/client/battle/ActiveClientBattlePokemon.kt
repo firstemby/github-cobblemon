@@ -29,6 +29,12 @@ class ActiveClientBattlePokemon(val actor: ClientBattleActor, var battlePokemon:
     override fun getFormat() = actor.side.battle.battleFormat
     override fun isAllied(other: Targetable) = actor.side == (other as ActiveClientBattlePokemon).actor.side
     override fun hasPokemon() = battlePokemon != null
+    override fun getAdjacent(): List<Targetable> {
+        if (ClientRaidState.isInRaidBattle) {
+            return getAllActivePokemon().filter { it.hasPokemon() }
+        }
+        return getFormat().battleType.getAdjacent(this)
+    }
     fun getHue(): Int {
         val playerUUID = Minecraft.getInstance().player?.uuid ?: return 0xFAFAFA
         val actor = battlePokemon?.actor ?: return 0xFAFAFA
