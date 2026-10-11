@@ -23,6 +23,11 @@
 ### Changes
 
 ### Fixes
+- Fixed datapacks with item interaction evolutions that don't specify an item crashing the world on load.
+- Fixed the Pokédex evolution tree crashing when a datapack's dex entry is missing an evolution's form.
+- Fixed the Pokédex evolution tree crashing with a stack overflow on evolutions that loop back on themselves.
+- Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
+- Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
 
 ### Developer
 
