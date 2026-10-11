@@ -45,8 +45,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.commands.arguments.item.ItemParser
 import net.minecraft.sounds.SoundEvent
+import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
@@ -289,7 +291,22 @@ abstract class PosableState : Schedulable {
                         entity.level().playLocalSound(entity, soundEvent, entity.soundSource, volume, pitch)
                     }
                 } else {
-                    Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, volume, pitch))
+                    Minecraft.getInstance().soundManager.play(
+                        SimpleSoundInstance(
+                            soundEvent.location,
+                            SoundSource.NEUTRAL,
+                            volume,
+                            pitch,
+                            SoundInstance.createUnseededRandom(),
+                            false,
+                            0,
+                            SoundInstance.Attenuation.NONE,
+                            0.0,
+                            0.0,
+                            0.0,
+                            true
+                        )
+                    )
                 }
             }
         }
