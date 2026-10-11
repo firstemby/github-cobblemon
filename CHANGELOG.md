@@ -48,6 +48,7 @@
 - Fixed Alolan Raticate's cry not playing
 - Fixed Pokémon cries and animation sounds played from GUIs, such as the starter selection screen and the Pokédex, being tied to the Master volume slider instead of Friendly Creatures
 
+
 ### Developer
 
 ### Molang & Datapacks
