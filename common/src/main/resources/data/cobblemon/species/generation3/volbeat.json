@@ -101,6 +101,8 @@
   "moves": [
     "1:flash",
     "1:tackle",
+    "1:playnice",
+    "1:signalbeam",
     "5:doubleteam",
     "8:confuseray",
     "12:quickattack",
@@ -119,6 +121,7 @@
     "egg:roost",
     "egg:seismictoss",
     "egg:swagger",
+    "egg:silverwind",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:aircutter",
@@ -152,7 +155,6 @@
     "tm:metronome",
     "tm:mudslap",
     "tm:ominouswind",
-    "tm:playnice",
     "tm:playrough",
     "tm:pounce",
     "tm:poweruppunch",
@@ -228,7 +230,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:thunderbolt",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:agility",
+    "legacy:dualwingbeat",
+    "legacy:faketears"
   ],
   "evolutions": [],
   "lightingData": {

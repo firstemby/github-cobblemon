@@ -112,7 +112,6 @@
   "moves": [
     "1:peck",
     "1:growl",
-    "1:astonish",
     "4:disarmingvoice",
     "8:mist",
     "12:furyattack",
@@ -155,7 +154,6 @@
     "tm:featherdance",
     "tm:fly",
     "tm:haze",
-    "tm:healbell",
     "tm:heatwave",
     "tm:helpinghand",
     "tm:hurricane",
@@ -171,7 +169,6 @@
     "tm:roost",
     "tm:round",
     "tm:safeguard",
-    "tm:skyattack",
     "tm:sleeptalk",
     "tm:solarbeam",
     "tm:steelwing",
@@ -184,13 +181,13 @@
     "tm:thief",
     "tm:trailblaze",
     "tm:twister",
+    "tm:sing",
     "tutor:aerialace",
     "tutor:dazzlinggleam",
     "tutor:defog",
     "tutor:dragonpulse",
     "tutor:dualwingbeat",
     "tutor:endeavor",
-    "tutor:healbell",
     "tutor:heatwave",
     "tutor:helpinghand",
     "tutor:hypervoice",
@@ -199,7 +196,6 @@
     "tutor:playrough",
     "tutor:rest",
     "tutor:roost",
-    "tutor:skyattack",
     "tutor:sleeptalk",
     "tutor:swift",
     "tutor:tailwind",
@@ -222,7 +218,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:healbell",
+    "legacy:skyattack"
   ],
   "evolutions": [
     {

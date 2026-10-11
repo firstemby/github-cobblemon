@@ -107,6 +107,7 @@
     "egg:seismictoss",
     "egg:soak",
     "egg:suckerpunch",
+    "egg:machpunch",
     "tm:bind",
     "tm:bodyslam",
     "tm:brickbreak",
@@ -140,6 +141,11 @@
     "tm:terablast",
     "tm:waterfall",
     "tm:workup",
+    "tm:chillingwater",
+    "tm:circlethrow",
+    "tm:cometpunch",
+    "tm:dualchop",
+    "tm:stormthrow",
     "tutor:bind",
     "tutor:bulkup",
     "tutor:coaching",
@@ -152,9 +158,16 @@
     "tutor:sleeptalk",
     "tutor:suckerpunch",
     "tutor:superpower",
+    "tutor:dualchop",
     "legacy:attract",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:bulletpunch",
+    "legacy:doublehit",
+    "legacy:drainpunch",
+    "legacy:knockoff",
+    "legacy:vacuumwave",
+    "legacy:whirlpool"
   ],
   "evolutions": [
     {

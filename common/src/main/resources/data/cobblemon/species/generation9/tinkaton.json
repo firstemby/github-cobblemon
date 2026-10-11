@@ -96,6 +96,8 @@
     "1:gigatonhammer",
     "1:fairywind",
     "1:astonish",
+    "1:rockthrow",
+    "1:woodhammer",
     "5:babydolleyes",
     "8:metalclaw",
     "11:covet",
@@ -113,6 +115,7 @@
     "egg:feint",
     "egg:icehammer",
     "egg:quash",
+    "egg:rockthrow",
     "tm:babydolleyes",
     "tm:brickbreak",
     "tm:brutalswing",
@@ -156,6 +159,9 @@
     "tm:terablast",
     "tm:thief",
     "tm:thunderwave",
+    "tm:fakeout",
+    "tm:poweruppunch",
+    "tm:screech",
     "tutor:babydolleyes",
     "tutor:bulldoze",
     "tutor:covet",
@@ -173,7 +179,10 @@
     "tutor:sleeptalk",
     "tutor:stealthrock",
     "tutor:steelbeam",
-    "tutor:stoneedge"
+    "tutor:stoneedge",
+    "legacy:bulkup",
+    "legacy:falseswipe",
+    "legacy:hyperbeam"
   ],
   "preEvolution": "tinkatuff",
   "evolutions": []

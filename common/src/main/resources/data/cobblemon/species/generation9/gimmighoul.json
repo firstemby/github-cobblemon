@@ -118,7 +118,8 @@
     "tm:thief",
     "tutor:rest",
     "tutor:shadowball",
-    "tutor:sleeptalk"
+    "tutor:sleeptalk",
+    "legacy:facade"
   ],
   "evolutions": [
     {

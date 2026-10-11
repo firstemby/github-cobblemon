@@ -105,7 +105,6 @@
   "moves": [
     "1:tackle",
     "1:thunderwave",
-    "1:spark",
     "4:leer",
     "8:howl",
     "12:quickattack",
@@ -122,6 +121,7 @@
     "egg:headbutt",
     "egg:spark",
     "egg:switcheroo",
+    "egg:thundershock",
     "tm:agility",
     "tm:bodyslam",
     "tm:charge",
@@ -139,8 +139,6 @@
     "tm:icefang",
     "tm:irontail",
     "tm:lightscreen",
-    "tm:magnetrise",
-    "tm:mudslap",
     "tm:protect",
     "tm:psychicfangs",
     "tm:raindance",
@@ -163,13 +161,12 @@
     "tm:uproar",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
     "tutor:chargebeam",
     "tutor:firefang",
     "tutor:flamethrower",
     "tutor:icefang",
     "tutor:irontail",
-    "tutor:magnetrise",
-    "tutor:mudslap",
     "tutor:rest",
     "tutor:risingvoltage",
     "tutor:shockwave",
@@ -195,7 +192,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:magnetrise",
+    "legacy:mudslap"
   ],
   "evolutions": [
     {

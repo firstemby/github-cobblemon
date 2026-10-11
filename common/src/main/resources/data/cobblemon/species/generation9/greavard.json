@@ -85,6 +85,7 @@
     "egg:memento",
     "egg:shadowsneak",
     "egg:yawn",
+    "egg:smokescreen",
     "tm:allyswitch",
     "tm:bulldoze",
     "tm:charm",
@@ -126,6 +127,8 @@
     "tm:thunderfang",
     "tm:trick",
     "tm:uproar",
+    "tm:dreameater",
+    "tm:ominouswind",
     "tutor:allyswitch",
     "tutor:bulldoze",
     "tutor:endeavor",
@@ -143,7 +146,11 @@
     "tutor:stompingtantrum",
     "tutor:thunderfang",
     "tutor:trick",
-    "tutor:uproar"
+    "tutor:uproar",
+    "tutor:ominouswind",
+    "legacy:swagger",
+    "legacy:willowisp",
+    "legacy:zenheadbutt"
   ],
   "evolutions": [
     {

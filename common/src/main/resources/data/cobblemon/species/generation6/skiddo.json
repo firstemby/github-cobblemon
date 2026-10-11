@@ -163,7 +163,6 @@
     "tm:retaliate",
     "tm:roar",
     "tm:rockslide",
-    "tm:rocksmash",
     "tm:rollout",
     "tm:seedbomb",
     "tm:sleeptalk",
@@ -194,7 +193,6 @@
     "tutor:playrough",
     "tutor:rest",
     "tutor:rockslide",
-    "tutor:rocksmash",
     "tutor:rollout",
     "tutor:seedbomb",
     "tutor:sleeptalk",
@@ -213,7 +211,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:megahorn",
+    "legacy:rocksmash"
   ],
   "evolutions": [
     {

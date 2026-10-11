@@ -105,6 +105,7 @@
   "moves": [
     "1:tackle",
     "1:poisonsting",
+    "1:watergun",
     "4:harden",
     "8:bite",
     "12:fellstinger",
@@ -130,6 +131,7 @@
     "egg:selfdestruct",
     "egg:supersonic",
     "egg:waterpulse",
+    "egg:watergun",
     "tm:acidspray",
     "tm:agility",
     "tm:aquatail",
@@ -207,7 +209,9 @@
     "tutor:spite",
     "tutor:swift",
     "tutor:throatchop",
-    "tutor:waterpulse"
+    "tutor:waterpulse",
+    "legacy:mortalspin",
+    "legacy:thunderwave"
   ],
   "preEvolution": "qwilfish hisuian",
   "evolutions": []

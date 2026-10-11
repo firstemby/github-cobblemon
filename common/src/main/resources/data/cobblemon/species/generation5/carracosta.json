@@ -101,6 +101,7 @@
     "1:watergun",
     "1:protect",
     "1:aquajet",
+    "1:rollout",
     "9:smackdown",
     "12:ancientpower",
     "15:bite",
@@ -116,7 +117,6 @@
     "51:shellsmash",
     "egg:bide",
     "egg:block",
-    "egg:flail",
     "egg:knockoff",
     "egg:rockthrow",
     "egg:rollout",
@@ -215,7 +215,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:flail"
   ],
   "preEvolution": "tirtouga",
   "evolutions": []

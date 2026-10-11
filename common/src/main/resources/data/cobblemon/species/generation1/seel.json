@@ -147,10 +147,11 @@
     "egg:horndrill",
     "egg:lick",
     "egg:perishsong",
-    "egg:slam",
     "egg:spitup",
     "egg:stockpile",
     "egg:swallow",
+    "egg:signalbeam",
+    "egg:watergun",
     "tm:aquatail",
     "tm:avalanche",
     "tm:blizzard",
@@ -196,10 +197,10 @@
     "tm:tripleaxel",
     "tm:uproar",
     "tm:waterfall",
-    "tm:watergun",
     "tm:waterpulse",
     "tm:weatherball",
     "tm:whirlpool",
+    "tm:fakeout",
     "tutor:aquatail",
     "tutor:dive",
     "tutor:drillrun",
@@ -234,7 +235,8 @@
     "legacy:snore",
     "legacy:strength",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:slam"
   ],
   "evolutions": [
     {

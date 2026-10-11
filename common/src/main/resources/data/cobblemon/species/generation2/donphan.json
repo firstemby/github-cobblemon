@@ -111,6 +111,11 @@
     "1:tackle",
     "1:odorsleuth",
     "1:naturalgift",
+    "1:charm",
+    "1:doubleedge",
+    "1:endure",
+    "1:lastresort",
+    "1:takedown",
     "6:rapidspin",
     "10:rollout",
     "15:assurance",
@@ -205,6 +210,7 @@
     "tm:throatchop",
     "tm:thunderfang",
     "tm:trailblaze",
+    "tm:fissure",
     "tutor:ancientpower",
     "tutor:block",
     "tutor:bounce",
@@ -254,7 +260,8 @@
     "legacy:secretpower",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:watergun"
+    "legacy:watergun",
+    "legacy:scorchingsands"
   ],
   "preEvolution": "phanpy",
   "evolutions": []

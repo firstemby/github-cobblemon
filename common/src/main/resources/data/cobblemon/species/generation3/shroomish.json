@@ -208,6 +208,7 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swordsdance",
+    "legacy:grassyglide",
     "special:refresh"
   ],
   "evolutions": [

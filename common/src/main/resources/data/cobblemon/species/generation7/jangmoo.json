@@ -83,7 +83,6 @@
     "egg:counter",
     "egg:dragonbreath",
     "egg:focuspunch",
-    "tm:aquatail",
     "tm:bodyslam",
     "tm:breakingswipe",
     "tm:brickbreak",
@@ -116,7 +115,6 @@
     "tm:roar",
     "tm:rockslide",
     "tm:rocktomb",
-    "tm:safeguard",
     "tm:sandstorm",
     "tm:scaleshot",
     "tm:scaryface",
@@ -130,7 +128,6 @@
     "tm:terablast",
     "tm:workup",
     "tm:xscissor",
-    "tutor:aquatail",
     "tutor:bulkup",
     "tutor:bulldoze",
     "tutor:dracometeor",
@@ -161,7 +158,9 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:aquatail",
+    "legacy:safeguard"
   ],
   "evolutions": [
     {

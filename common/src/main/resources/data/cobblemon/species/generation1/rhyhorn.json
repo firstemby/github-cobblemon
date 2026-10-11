@@ -138,7 +138,6 @@
     "55:megahorn",
     "60:horndrill",
     "egg:counter",
-    "egg:crushclaw",
     "egg:curse",
     "egg:dragonrush",
     "egg:guardsplit",
@@ -148,8 +147,7 @@
     "egg:rototiller",
     "egg:skullbash",
     "egg:stomp",
-    "tm:ancientpower",
-    "tm:aquatail",
+    "egg:rockclimb",
     "tm:blizzard",
     "tm:bodypress",
     "tm:bodyslam",
@@ -216,8 +214,7 @@
     "tm:thunderbolt",
     "tm:thunderfang",
     "tm:uproar",
-    "tutor:ancientpower",
-    "tutor:aquatail",
+    "tm:skullbash",
     "tutor:bulldoze",
     "tutor:dragonpulse",
     "tutor:drillrun",
@@ -270,7 +267,11 @@
     "legacy:swagger",
     "legacy:thrash",
     "legacy:toxic",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:ancientpower",
+    "legacy:aquatail",
+    "legacy:crushclaw",
+    "legacy:gigaimpact"
   ],
   "evolutions": [
     {

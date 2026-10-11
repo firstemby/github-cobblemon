@@ -69,7 +69,6 @@
   "moves": [
     "1:growl",
     "1:boneclub",
-    "1:leer",
     "1:mudslap",
     "4:tailwhip",
     "8:falseswipe",
@@ -124,12 +123,10 @@
     "tm:irondefense",
     "tm:ironhead",
     "tm:irontail",
-    "tm:knockoff",
     "tm:lowkick",
     "tm:megakick",
     "tm:megapunch",
     "tm:mudslap",
-    "tm:poweruppunch",
     "tm:protect",
     "tm:rest",
     "tm:retaliate",
@@ -153,6 +150,7 @@
     "tm:thief",
     "tm:thunderpunch",
     "tm:uproar",
+    "tm:skullbash",
     "tutor:aerialace",
     "tutor:ancientpower",
     "tutor:bulldoze",
@@ -169,7 +167,6 @@
     "tutor:irondefense",
     "tutor:ironhead",
     "tutor:irontail",
-    "tutor:knockoff",
     "tutor:lowkick",
     "tutor:mudslap",
     "tutor:rest",
@@ -204,7 +201,9 @@
     "legacy:swagger",
     "legacy:takedown",
     "legacy:toxic",
-    "legacy:watergun"
+    "legacy:watergun",
+    "legacy:knockoff",
+    "legacy:poweruppunch"
   ],
   "evolutions": [
     {

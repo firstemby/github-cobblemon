@@ -135,9 +135,10 @@
     "egg:stomp",
     "egg:wideguard",
     "egg:yawn",
+    "egg:bubblebeam",
+    "egg:iceball",
     "tm:amnesia",
     "tm:ancientpower",
-    "tm:aquatail",
     "tm:avalanche",
     "tm:blizzard",
     "tm:bodyslam",
@@ -152,7 +153,6 @@
     "tm:endure",
     "tm:facade",
     "tm:hail",
-    "tm:headbutt",
     "tm:hydropump",
     "tm:iceball",
     "tm:icebeam",
@@ -187,7 +187,6 @@
     "tm:whirlpool",
     "tm:workup",
     "tutor:ancientpower",
-    "tutor:aquatail",
     "tutor:dive",
     "tutor:earthpower",
     "tutor:endeavor",
@@ -222,7 +221,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:aquatail",
+    "legacy:headbutt",
+    "legacy:sludgebomb"
   ],
   "evolutions": [
     {

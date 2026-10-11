@@ -133,6 +133,7 @@
     "egg:spitup",
     "egg:stockpile",
     "egg:swallow",
+    "egg:poweruppunch",
     "tm:acidspray",
     "tm:afteryou",
     "tm:amnesia",

@@ -121,7 +121,6 @@
     "tm:bravebird",
     "tm:brickbreak",
     "tm:bulletseed",
-    "tm:defog",
     "tm:dualwingbeat",
     "tm:echoedvoice",
     "tm:endeavor",
@@ -157,7 +156,6 @@
     "tm:workup",
     "tutor:aerialace",
     "tutor:aircutter",
-    "tutor:defog",
     "tutor:dualwingbeat",
     "tutor:endeavor",
     "tutor:gunkshot",
@@ -181,7 +179,8 @@
     "legacy:round",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:defog"
   ],
   "evolutions": [
     {

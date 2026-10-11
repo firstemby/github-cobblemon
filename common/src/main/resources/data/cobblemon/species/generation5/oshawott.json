@@ -135,7 +135,6 @@
     "tm:blizzard",
     "tm:brine",
     "tm:chillingwater",
-    "tm:covet",
     "tm:cut",
     "tm:dig",
     "tm:dive",
@@ -180,9 +179,9 @@
     "tm:whirlpool",
     "tm:workup",
     "tm:xscissor",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:aquatail",
-    "tutor:covet",
     "tutor:dive",
     "tutor:falseswipe",
     "tutor:flipturn",
@@ -212,7 +211,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:covet"
   ],
   "evolutions": [
     {

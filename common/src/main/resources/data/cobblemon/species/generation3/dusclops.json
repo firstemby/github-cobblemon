@@ -123,13 +123,13 @@
     "36:curse",
     "42:shadowball",
     "48:futuresight",
-    "egg:destinybond",
     "egg:feintattack",
     "egg:grudge",
     "egg:haze",
     "egg:memento",
     "egg:painsplit",
     "egg:pursuit",
+    "egg:ominouswind",
     "tm:allyswitch",
     "tm:bind",
     "tm:blizzard",
@@ -199,6 +199,7 @@
     "tm:trickroom",
     "tm:willowisp",
     "tm:wonderroom",
+    "tm:shadowpunch",
     "tutor:allyswitch",
     "tutor:bind",
     "tutor:calmmind",
@@ -255,7 +256,8 @@
     "legacy:seismictoss",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:destinybond"
   ],
   "preEvolution": "duskull",
   "evolutions": [

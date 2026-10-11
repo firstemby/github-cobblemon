@@ -89,7 +89,6 @@
     "44:gastroacid",
     "48:bugbuzz",
     "egg:camouflage",
-    "egg:disable",
     "egg:doubleteam",
     "egg:feintattack",
     "egg:infestation",
@@ -97,6 +96,7 @@
     "egg:poisonsting",
     "egg:pursuit",
     "egg:strugglebug",
+    "egg:rockclimb",
     "tm:agility",
     "tm:bounce",
     "tm:bugbite",
@@ -147,6 +147,7 @@
     "tm:voltswitch",
     "tm:wildcharge",
     "tm:xscissor",
+    "tm:discharge",
     "tutor:bounce",
     "tutor:bugbite",
     "tutor:chargebeam",
@@ -180,7 +181,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:disable"
   ],
   "evolutions": [
     {

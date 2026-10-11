@@ -114,7 +114,7 @@
     "egg:leechseed",
     "egg:morningsun",
     "egg:naturalgift",
-    "egg:sweetscent",
+    "egg:naturepower",
     "tm:afteryou",
     "tm:bulletseed",
     "tm:curse",
@@ -177,7 +177,9 @@
     "legacy:swagger",
     "legacy:swordsdance",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:grassyglide",
+    "legacy:sweetscent"
   ],
   "evolutions": [
     {

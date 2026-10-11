@@ -129,10 +129,10 @@
     "egg:fakeout",
     "egg:partingshot",
     "egg:powertrip",
+    "egg:revenge",
     "tm:acrobatics",
     "tm:bodyslam",
     "tm:bulkup",
-    "tm:covet",
     "tm:crunch",
     "tm:doubleedge",
     "tm:endeavor",
@@ -167,13 +167,11 @@
     "tm:taunt",
     "tm:temperflare",
     "tm:terablast",
-    "tm:torment",
     "tm:trailblaze",
-    "tm:uturn",
     "tm:willowisp",
     "tm:workup",
+    "tm:fakeout",
     "tutor:bulkup",
-    "tutor:covet",
     "tutor:endeavor",
     "tutor:firefang",
     "tutor:firepledge",
@@ -193,7 +191,10 @@
     "legacy:return",
     "legacy:round",
     "legacy:snore",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:covet",
+    "legacy:torment",
+    "legacy:uturn"
   ],
   "evolutions": [
     {

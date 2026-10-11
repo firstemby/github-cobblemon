@@ -129,6 +129,7 @@
     "egg:poisonpowder",
     "egg:sleeppowder",
     "egg:stunspore",
+    "egg:naturepower",
     "tm:ancientpower",
     "tm:block",
     "tm:bulletseed",

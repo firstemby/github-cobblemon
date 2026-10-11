@@ -128,8 +128,9 @@
     "egg:naturalgift",
     "egg:pursuit",
     "egg:skyattack",
-    "egg:supersonic",
     "egg:whirlwind",
+    "egg:leer",
+    "egg:wingattack",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -145,7 +146,6 @@
     "tm:featherdance",
     "tm:helpinghand",
     "tm:knockoff",
-    "tm:leer",
     "tm:lowkick",
     "tm:lunge",
     "tm:mudslap",
@@ -168,8 +168,9 @@
     "tm:throatchop",
     "tm:triattack",
     "tm:uproar",
-    "tm:wingattack",
     "tm:workup",
+    "tm:doublehit",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:endeavor",
     "tutor:helpinghand",
@@ -204,7 +205,8 @@
     "legacy:skullbash",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:supersonic"
   ],
   "evolutions": [
     {

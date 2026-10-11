@@ -143,6 +143,8 @@
     "tm:trailblaze",
     "tm:weatherball",
     "tm:worryseed",
+    "tm:babydolleyes",
+    "tm:petaldance",
     "tutor:afteryou",
     "tutor:covet",
     "tutor:energyball",
@@ -160,6 +162,7 @@
     "tutor:sleeptalk",
     "tutor:synthesis",
     "tutor:worryseed",
+    "tutor:babydolleyes",
     "legacy:attract",
     "legacy:confide",
     "legacy:doubleteam",
@@ -364,7 +367,8 @@
         "legacy:secretpower",
         "legacy:snore",
         "legacy:swagger",
-        "legacy:toxic"
+        "legacy:toxic",
+        "legacy:drainpunch"
       ],
       "preEvolution": "petilil",
       "evolutions": [],

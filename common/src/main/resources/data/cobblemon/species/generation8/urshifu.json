@@ -164,6 +164,7 @@
     "tutor:throatchop",
     "tutor:thunderpunch",
     "tutor:zenheadbutt",
+    "tutor:coaching",
     "legacy:attract",
     "legacy:round",
     "legacy:snore"
@@ -268,6 +269,7 @@
         "tm:whirlpool",
         "tm:workup",
         "tm:zenheadbutt",
+        "tm:metalclaw",
         "tutor:aerialace",
         "tutor:bulkup",
         "tutor:dive",
@@ -293,6 +295,7 @@
         "tutor:swift",
         "tutor:thunderpunch",
         "tutor:zenheadbutt",
+        "tutor:coaching",
         "legacy:attract",
         "legacy:round",
         "legacy:scald",
@@ -423,9 +426,9 @@
         "tm:whirlpool",
         "tm:workup",
         "tm:zenheadbutt",
+        "tm:metalclaw",
         "tutor:aerialace",
         "tutor:bulkup",
-        "tutor:coaching",
         "tutor:dive",
         "tutor:drainpunch",
         "tutor:falseswipe",
@@ -448,7 +451,12 @@
         "tutor:superpower",
         "tutor:swift",
         "tutor:thunderpunch",
-        "tutor:zenheadbutt"
+        "tutor:zenheadbutt",
+        "tutor:coaching",
+        "legacy:attract",
+        "legacy:round",
+        "legacy:scald",
+        "legacy:snore"
       ],
       "evolutions": [],
       "battleOnly": true

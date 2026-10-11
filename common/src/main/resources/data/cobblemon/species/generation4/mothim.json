@@ -63,9 +63,10 @@
   },
   "moves": [
     "1:tackle",
-    "1:protect",
-    "1:bugbite",
     "1:quiverdance",
+    "1:silverwind",
+    "10:protect",
+    "15:bugbite",
     "20:stringshot",
     "23:confusion",
     "26:gust",

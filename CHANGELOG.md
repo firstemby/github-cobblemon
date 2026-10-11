@@ -24,10 +24,18 @@
 - The evolution tree can now be viewed on the Pokédex, showing a Pokémon's full family line and what's needed to evolve into each stage.
 - Added custom sounds to a bunch of items that can be placed as blocks: liquid bottles, pill bottles, powders and dice.
 
+### Changes
+- Pokémon learnsets have been updated to include the additional contexts up to Champions, and existing learnsets have been tweaked to apply past-gen level-up moves more generously for TM unlocks.
+
 ### Fixes
 - Medicinal Leeks can now be eaten when they aren't being planted, matching their food properties.
 - Sweeping attacks no longer set owned Pokémon on fire (e.g. with Fire Aspect) or knock them back.
 - Fixed #updateMovesOnFormChange not properly initializing a form-swapped Pokemon's non-form_change moves.
+- Fixed Ampharos' eyes not emitting particles
+- Fixed Alolan Raticate's cry not playing
+- Fixed Spinda's level up learnset from BDSP data mixups
+- Removed Freeze-Dry from Darmanitan-Zen
+
 ### TEST
 ### Pokémon Added
 #### Generation 4

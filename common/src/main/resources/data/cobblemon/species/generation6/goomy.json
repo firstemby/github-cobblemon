@@ -86,7 +86,6 @@
     "50:muddywater",
     "egg:counter",
     "egg:lifedew",
-    "tm:acidarmor",
     "tm:bodyslam",
     "tm:charm",
     "tm:chillingwater",
@@ -95,7 +94,6 @@
     "tm:dragonpulse",
     "tm:endure",
     "tm:facade",
-    "tm:infestation",
     "tm:irontail",
     "tm:muddywater",
     "tm:mudshot",
@@ -138,7 +136,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:acidarmor",
+    "legacy:infestation",
+    "legacy:surf"
   ],
   "evolutions": [
     {

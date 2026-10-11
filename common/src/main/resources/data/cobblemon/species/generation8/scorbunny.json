@@ -87,7 +87,6 @@
     "egg:superfang",
     "tm:acrobatics",
     "tm:agility",
-    "tm:allyswitch",
     "tm:assurance",
     "tm:batonpass",
     "tm:blazekick",
@@ -129,7 +128,6 @@
     "tm:trailblaze",
     "tm:uturn",
     "tm:workup",
-    "tutor:allyswitch",
     "tutor:bounce",
     "tutor:burningjealousy",
     "tutor:firefang",
@@ -148,7 +146,8 @@
     "legacy:attract",
     "legacy:mudshot",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:allyswitch"
   ],
   "evolutions": [
     {

@@ -170,7 +170,10 @@
     "tutor:sleeptalk",
     "tutor:snarl",
     "tutor:stompingtantrum",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:bounce",
+    "legacy:drainingkiss",
+    "legacy:flamecharge"
   ],
   "evolutions": [
     {

@@ -157,6 +157,9 @@
     "tm:trailblaze",
     "tm:uturn",
     "tm:venoshock",
+    "tm:healblock",
+    "tm:mimic",
+    "tm:poisonfang",
     "tutor:endeavor",
     "tutor:foulplay",
     "tutor:gunkshot",
@@ -169,7 +172,10 @@
     "tutor:sleeptalk",
     "tutor:sludgebomb",
     "tutor:superfang",
-    "tutor:throatchop"
+    "tutor:throatchop",
+    "legacy:lightscreen",
+    "legacy:reflect",
+    "legacy:toxicspikes"
   ],
   "evolutions": [
     {

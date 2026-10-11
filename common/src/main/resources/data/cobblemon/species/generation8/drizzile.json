@@ -125,7 +125,6 @@
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:safeguard",
     "tm:sleeptalk",
     "tm:substitute",
     "tm:suckerpunch",
@@ -152,7 +151,8 @@
     "tutor:waterpulse",
     "legacy:attract",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:safeguard"
   ],
   "preEvolution": "sobble",
   "evolutions": [

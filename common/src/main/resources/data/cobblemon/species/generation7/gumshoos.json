@@ -83,6 +83,7 @@
     "egg:lastresort",
     "egg:thunderfang",
     "egg:yawn",
+    "egg:revenge",
     "tm:block",
     "tm:bodyslam",
     "tm:bulldoze",

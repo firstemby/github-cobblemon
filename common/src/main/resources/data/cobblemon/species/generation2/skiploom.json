@@ -123,7 +123,6 @@
     "41:bounce",
     "44:memento",
     "egg:aromatherapy",
-    "egg:confusion",
     "egg:cottonguard",
     "egg:encore",
     "egg:grassyterrain",
@@ -211,7 +210,8 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:sweetscent",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:confusion"
   ],
   "preEvolution": "hoppip",
   "evolutions": [

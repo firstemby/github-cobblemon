@@ -121,7 +121,6 @@
     "egg:lick",
     "egg:mudslap",
     "egg:pursuit",
-    "egg:sandattack",
     "egg:yawn",
     "tm:aerialace",
     "tm:afteryou",
@@ -196,7 +195,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:sandattack"
   ],
   "evolutions": [
     {

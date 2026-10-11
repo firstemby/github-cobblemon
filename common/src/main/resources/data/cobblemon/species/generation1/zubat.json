@@ -123,7 +123,6 @@
   },
   "moves": [
     "1:supersonic",
-    "1:wingattack",
     "1:absorb",
     "5:astonish",
     "10:meanlook",
@@ -192,6 +191,9 @@
     "tm:venomdrench",
     "tm:venoshock",
     "tm:zenheadbutt",
+    "tm:poisonfang",
+    "tm:razorwind",
+    "tm:whirlwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:defog",
@@ -226,14 +228,14 @@
     "legacy:mimic",
     "legacy:naturalgift",
     "legacy:rage",
-    "legacy:razorwind",
     "legacy:return",
     "legacy:round",
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
     "legacy:takedown",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:crosspoison"
   ],
   "evolutions": [
     {

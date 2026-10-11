@@ -75,7 +75,6 @@
     "egg:bugbite",
     "egg:counter",
     "egg:feintattack",
-    "egg:hornattack",
     "egg:knockoff",
     "egg:nightslash",
     "egg:pursuit",
@@ -113,6 +112,7 @@
     "tm:takedown",
     "tm:terablast",
     "tm:xscissor",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:bugbite",
     "tutor:drillrun",
@@ -138,7 +138,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:hornattack"
   ],
   "evolutions": [
     {

@@ -140,6 +140,10 @@
     "tm:uproar",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:fakeout",
+    "tm:round",
+    "tm:skullbash",
+    "tm:snore",
     "tutor:chargebeam",
     "tutor:darkpulse",
     "tutor:electroweb",
@@ -164,9 +168,8 @@
     "tutor:thunderpunch",
     "tutor:uproar",
     "tutor:wildcharge",
-    "legacy:attract",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:snore",
+    "legacy:attract"
   ],
   "evolutions": [],
   "forms": [

@@ -69,15 +69,22 @@
     "tm:terablast",
     "tm:thunderbolt",
     "tm:thunderwave",
+    "tm:chargebeam",
+    "tm:magnetbomb",
     "tutor:flashcannon",
     "tutor:irondefense",
     "tutor:rest",
     "tutor:sleeptalk",
     "tutor:steelbeam",
     "tutor:thunderbolt",
+    "tutor:chargebeam",
     "legacy:round",
     "legacy:snore",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:brutalswing",
+    "legacy:gigaimpact",
+    "legacy:ironhead",
+    "legacy:selfdestruct"
   ],
   "evolutions": [],
   "behaviour": {

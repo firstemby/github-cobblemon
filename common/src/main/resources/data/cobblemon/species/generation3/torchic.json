@@ -70,7 +70,6 @@
   "moves": [
     "1:scratch",
     "1:growl",
-    "1:peck",
     "3:ember",
     "6:quickattack",
     "9:flamecharge",
@@ -93,7 +92,6 @@
     "egg:nightslash",
     "egg:peck",
     "egg:smellingsalts",
-    "egg:swagger",
     "tm:aerialace",
     "tm:agility",
     "tm:assurance",
@@ -115,7 +113,6 @@
     "tm:flamethrower",
     "tm:flareblitz",
     "tm:focusenergy",
-    "tm:headbutt",
     "tm:heatwave",
     "tm:helpinghand",
     "tm:honeclaws",
@@ -136,7 +133,6 @@
     "tm:strength",
     "tm:substitute",
     "tm:sunnyday",
-    "tm:swagger",
     "tm:swift",
     "tm:swordsdance",
     "tm:takedown",
@@ -145,6 +141,7 @@
     "tm:uproar",
     "tm:willowisp",
     "tm:workup",
+    "tm:nightslash",
     "tutor:aerialace",
     "tutor:bounce",
     "tutor:firepledge",
@@ -176,7 +173,9 @@
     "legacy:secretpower",
     "legacy:seismictoss",
     "legacy:snore",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:headbutt",
+    "legacy:swagger"
   ],
   "evolutions": [
     {

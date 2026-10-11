@@ -117,11 +117,12 @@
   "moves": [
     "1:scratch",
     "1:tailwhip",
+    "1:mudbomb",
     "4:sandattack",
     "8:astonish",
     "11:batonpass",
     "15:tickle",
-    "18:mudbomb",
+    "18:furyswipes",
     "22:swift",
     "25:screech",
     "29:agility",
@@ -135,12 +136,12 @@
     "egg:covet",
     "egg:doubleslap",
     "egg:fakeout",
-    "egg:furyswipes",
     "egg:irontail",
     "egg:pursuit",
     "egg:quickguard",
     "egg:slam",
     "egg:switcheroo",
+    "egg:revenge",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:agility",
@@ -219,6 +220,8 @@
     "tm:uturn",
     "tm:waterpulse",
     "tm:workup",
+    "tm:doublehit",
+    "tm:fakeout",
     "tutor:aerialace",
     "tutor:bounce",
     "tutor:covet",
@@ -272,7 +275,9 @@
     "legacy:swagger",
     "legacy:toxic",
     "legacy:uproar",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:encore",
+    "legacy:faketears"
   ],
   "evolutions": [
     {

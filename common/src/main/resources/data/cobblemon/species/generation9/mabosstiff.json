@@ -116,7 +116,6 @@
     "egg:playrough",
     "egg:retaliate",
     "tm:bodyslam",
-    "tm:charm",
     "tm:crunch",
     "tm:curse",
     "tm:darkpulse",
@@ -160,6 +159,9 @@
     "tm:thunderfang",
     "tm:trailblaze",
     "tm:wildcharge",
+    "tm:focusenergy",
+    "tm:rocksmash",
+    "tm:skullbash",
     "tutor:darkpulse",
     "tutor:endeavor",
     "tutor:firefang",
@@ -177,7 +179,14 @@
     "tutor:snarl",
     "tutor:spite",
     "tutor:thunderfang",
-    "tutor:wildcharge"
+    "tutor:wildcharge",
+    "tutor:focusenergy",
+    "tutor:rocksmash",
+    "legacy:bounce",
+    "legacy:charm",
+    "legacy:knockoff",
+    "legacy:lunge",
+    "legacy:seedbomb"
   ],
   "preEvolution": "maschiff",
   "evolutions": []

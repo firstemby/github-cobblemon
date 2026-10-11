@@ -156,6 +156,12 @@
     "tm:torment",
     "tm:uproar",
     "tm:uturn",
+    "tm:headbutt",
+    "tm:lunge",
+    "tm:mimic",
+    "tm:seedbomb",
+    "tm:skullbash",
+    "tm:workup",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:dualwingbeat",
@@ -171,7 +177,12 @@
     "tutor:roost",
     "tutor:sleeptalk",
     "tutor:tailwind",
-    "tutor:uproar"
+    "tutor:uproar",
+    "tutor:seedbomb",
+    "legacy:bulkup",
+    "legacy:ironhead",
+    "legacy:knockoff",
+    "legacy:skyattack"
   ],
   "evolutions": [],
   "forms": [

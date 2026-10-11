@@ -122,6 +122,9 @@
     "tm:terablast",
     "tm:thunderfang",
     "tm:zenheadbutt",
+    "tm:round",
+    "tm:skullbash",
+    "tm:snore",
     "tutor:bulldoze",
     "tutor:drillrun",
     "tutor:earthpower",
@@ -145,9 +148,8 @@
     "tutor:stoneedge",
     "tutor:thunderfang",
     "tutor:zenheadbutt",
-    "legacy:attract",
-    "legacy:round",
-    "legacy:snore"
+    "tutor:snore",
+    "legacy:attract"
   ],
   "preEvolution": "silicobra",
   "evolutions": [],

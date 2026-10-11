@@ -321,7 +321,8 @@
         "tutor:stoneedge",
         "tutor:swift",
         "tutor:thunderbolt",
-        "tutor:trick"
+        "tutor:trick",
+        "legacy:aerialace"
       ],
       "evolutions": [],
       "battleOnly": false,

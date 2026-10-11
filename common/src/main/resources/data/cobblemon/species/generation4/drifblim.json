@@ -145,6 +145,7 @@
     "1:focusenergy",
     "1:phantomforce",
     "1:strengthsap",
+    "1:ominouswind",
     "12:payback",
     "16:hex",
     "20:shadowball",
@@ -277,7 +278,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:mysticalfire"
   ],
   "preEvolution": "drifloon",
   "evolutions": []

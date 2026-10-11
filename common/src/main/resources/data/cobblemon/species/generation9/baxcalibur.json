@@ -121,6 +121,7 @@
     "tm:terablast",
     "tm:thunderfang",
     "tm:zenheadbutt",
+    "tm:frostbreath",
     "tutor:aerialace",
     "tutor:aquatail",
     "tutor:bulldoze",
@@ -142,7 +143,10 @@
     "tutor:sleeptalk",
     "tutor:stompingtantrum",
     "tutor:thunderfang",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:icehammer",
+    "legacy:psychicfangs",
+    "legacy:sheercold"
   ],
   "preEvolution": "arctibax",
   "evolutions": [],

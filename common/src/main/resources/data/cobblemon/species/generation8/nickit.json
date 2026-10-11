@@ -114,6 +114,8 @@
     "egg:knockoff",
     "egg:quickguard",
     "egg:torment",
+    "egg:doubleteam",
+    "egg:partingshot",
     "tm:agility",
     "tm:assurance",
     "tm:batonpass",
@@ -142,6 +144,14 @@
     "tm:terablast",
     "tm:thief",
     "tm:torment",
+    "tm:doubleteam",
+    "tm:firstimpression",
+    "tm:healblock",
+    "tm:mimic",
+    "tm:nightslash",
+    "tm:razorwind",
+    "tm:roar",
+    "tm:trailblaze",
     "tutor:foulplay",
     "tutor:knockoff",
     "tutor:lashout",
@@ -153,7 +163,11 @@
     "tutor:swift",
     "legacy:attract",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:darkpulse",
+    "legacy:fakeout",
+    "legacy:icywind",
+    "legacy:willowisp"
   ],
   "evolutions": [
     {

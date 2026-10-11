@@ -132,13 +132,12 @@
     "egg:hypnosis",
     "egg:magicroom",
     "egg:wish",
+    "egg:magiccoat",
     "tm:agility",
     "tm:burningjealousy",
     "tm:calmmind",
     "tm:charm",
-    "tm:covet",
     "tm:cut",
-    "tm:dreameater",
     "tm:echoedvoice",
     "tm:embargo",
     "tm:encore",
@@ -188,7 +187,6 @@
     "tm:workup",
     "tutor:burningjealousy",
     "tutor:calmmind",
-    "tutor:covet",
     "tutor:firepledge",
     "tutor:flamethrower",
     "tutor:foulplay",
@@ -215,7 +213,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:covet",
+    "legacy:dreameater",
+    "legacy:firepunch"
   ],
   "evolutions": [
     {

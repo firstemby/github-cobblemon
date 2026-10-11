@@ -321,6 +321,7 @@
     "tutor:uproar",
     "tutor:waterpulse",
     "tutor:zenheadbutt",
+    "tutor:skyattack",
     "legacy:attract",
     "legacy:captivate",
     "legacy:confide",
@@ -340,7 +341,8 @@
     "legacy:softboiled",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:zapcannon"
+    "legacy:zapcannon",
+    "legacy:calmmind"
   ],
   "preEvolution": "togetic",
   "evolutions": [],

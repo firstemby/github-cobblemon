@@ -114,7 +114,6 @@
     "40:liquidation",
     "44:leechlife",
     "48:mirrorcoat",
-    "egg:aurorabeam",
     "egg:powersplit",
     "egg:spitup",
     "egg:stickyweb",
@@ -127,7 +126,6 @@
     "tm:endeavor",
     "tm:endure",
     "tm:facade",
-    "tm:frostbreath",
     "tm:gigadrain",
     "tm:headbutt",
     "tm:hydropump",
@@ -184,7 +182,9 @@
     "legacy:scald",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:aurorabeam",
+    "legacy:frostbreath"
   ],
   "evolutions": [
     {

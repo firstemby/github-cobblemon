@@ -119,6 +119,7 @@
     "egg:captivate",
     "egg:growth",
     "egg:roost",
+    "egg:silverwind",
     "tm:acrobatics",
     "tm:aerialace",
     "tm:aircutter",
@@ -230,7 +231,9 @@
     "legacy:seismictoss",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:dualwingbeat",
+    "legacy:pollenpuff"
   ],
   "evolutions": [],
   "lightingData": {

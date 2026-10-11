@@ -156,6 +156,8 @@
     "tm:takedown",
     "tm:terablast",
     "tm:zenheadbutt",
+    "tm:fissure",
+    "tm:skullbash",
     "tutor:ancientpower",
     "tutor:bulldoze",
     "tutor:earthpower",
@@ -172,7 +174,8 @@
     "tutor:stealthrock",
     "tutor:stompingtantrum",
     "tutor:stoneedge",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "legacy:rocktomb"
   ],
   "preEvolution": "nacli",
   "evolutions": [

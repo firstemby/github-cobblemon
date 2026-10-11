@@ -178,6 +178,7 @@
     "tm:weatherball",
     "tm:whirlpool",
     "tm:zenheadbutt",
+    "tm:fissure",
     "tutor:aquatail",
     "tutor:bounce",
     "tutor:bulldoze",
@@ -218,7 +219,8 @@
     "legacy:secretpower",
     "legacy:swagger",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:aerialace"
   ],
   "preEvolution": "barboach",
   "evolutions": []

@@ -119,7 +119,6 @@
     "48:playrough",
     "52:reversal",
     "56:flareblitz",
-    "egg:burnup",
     "egg:covet",
     "egg:doubleedge",
     "egg:doublekick",
@@ -158,7 +157,6 @@
     "tm:reversal",
     "tm:roar",
     "tm:rocksmash",
-    "tm:safeguard",
     "tm:scaryface",
     "tm:sleeptalk",
     "tm:snarl",
@@ -209,7 +207,9 @@
     "legacy:skullbash",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:burnup",
+    "legacy:safeguard"
   ],
   "evolutions": [
     {
@@ -339,7 +339,11 @@
         "tutor:stealthrock",
         "tutor:stoneedge",
         "tutor:thunderfang",
-        "tutor:wildcharge"
+        "tutor:wildcharge",
+        "legacy:aerialace",
+        "legacy:playrough",
+        "legacy:snarl",
+        "legacy:swift"
       ],
       "evolutions": [
         {

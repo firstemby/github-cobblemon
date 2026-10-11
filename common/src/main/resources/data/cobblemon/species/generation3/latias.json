@@ -157,6 +157,7 @@
     "1:psychoshift",
     "1:charm",
     "1:storedpower",
+    "1:safeguard",
     "5:helpinghand",
     "10:recover",
     "15:confusion",
@@ -265,6 +266,7 @@
     "tm:weatherball",
     "tm:whirlpool",
     "tm:zenheadbutt",
+    "tm:razorwind",
     "tutor:aerialace",
     "tutor:aircutter",
     "tutor:allyswitch",
@@ -325,6 +327,7 @@
     "legacy:snore",
     "legacy:swagger",
     "legacy:toxic",
+    "legacy:psybeam",
     "special:sweetkiss"
   ],
   "evolutions": [],

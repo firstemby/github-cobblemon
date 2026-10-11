@@ -102,7 +102,6 @@
   "moves": [
     "1:harden",
     "1:mudslap",
-    "1:healblock",
     "3:rapidspin",
     "6:confusion",
     "9:rocktomb",
@@ -181,6 +180,7 @@
     "tm:trickroom",
     "tm:wonderroom",
     "tm:zenheadbutt",
+    "tm:healblock",
     "tutor:allyswitch",
     "tutor:ancientpower",
     "tutor:bulldoze",

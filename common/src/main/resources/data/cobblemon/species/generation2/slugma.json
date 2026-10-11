@@ -123,9 +123,7 @@
     "egg:memento",
     "egg:rollout",
     "egg:smokescreen",
-    "egg:spitup",
     "egg:stockpile",
-    "egg:swallow",
     "tm:afteryou",
     "tm:amnesia",
     "tm:ancientpower",
@@ -206,7 +204,12 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:burningjealousy",
+    "legacy:scorchingsands",
+    "legacy:skittersmack",
+    "legacy:spitup",
+    "legacy:swallow"
   ],
   "evolutions": [
     {

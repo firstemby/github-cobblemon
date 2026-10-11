@@ -182,7 +182,6 @@
     "tm:reversal",
     "tm:roar",
     "tm:rocksmash",
-    "tm:roleplay",
     "tm:scaryface",
     "tm:shadowball",
     "tm:sleeptalk",
@@ -219,7 +218,6 @@
     "tutor:painsplit",
     "tutor:rest",
     "tutor:rocksmash",
-    "tutor:roleplay",
     "tutor:shadowball",
     "tutor:sleeptalk",
     "tutor:sludgebomb",
@@ -247,6 +245,7 @@
     "legacy:swagger",
     "legacy:swift",
     "legacy:uproar",
+    "legacy:roleplay",
     "special:charm"
   ],
   "evolutions": [

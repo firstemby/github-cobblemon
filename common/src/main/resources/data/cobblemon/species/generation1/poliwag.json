@@ -140,6 +140,7 @@
     "egg:wakeupslap",
     "egg:waterpulse",
     "egg:watersport",
+    "egg:iceball",
     "tm:amnesia",
     "tm:blizzard",
     "tm:bodyslam",

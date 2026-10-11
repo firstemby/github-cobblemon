@@ -147,7 +147,6 @@
     "tm:roar",
     "tm:rockblast",
     "tm:rockclimb",
-    "tm:rockpolish",
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
@@ -174,6 +173,7 @@
     "tm:trailblaze",
     "tm:uproar",
     "tm:zenheadbutt",
+    "tm:whirlwind",
     "tutor:ancientpower",
     "tutor:bulldoze",
     "tutor:dragonpulse",
@@ -212,7 +212,9 @@
     "legacy:snore",
     "legacy:spite",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:meteorbeam",
+    "legacy:rockpolish"
   ],
   "evolutions": [
     {

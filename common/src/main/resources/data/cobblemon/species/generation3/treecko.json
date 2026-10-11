@@ -110,7 +110,6 @@
   "moves": [
     "1:pound",
     "1:leer",
-    "1:absorb",
     "3:leafage",
     "6:quickattack",
     "9:megadrain",
@@ -125,7 +124,6 @@
     "36:endeavor",
     "39:leafstorm",
     "egg:absorb",
-    "egg:crushclaw",
     "egg:doublekick",
     "egg:dragonbreath",
     "egg:grasswhistle",
@@ -134,7 +132,6 @@
     "egg:naturalgift",
     "egg:nightslash",
     "egg:pursuit",
-    "egg:razorwind",
     "egg:slash",
     "egg:synthesis",
     "egg:worryseed",
@@ -163,7 +160,6 @@
     "tm:grasspledge",
     "tm:grassyglide",
     "tm:grassyterrain",
-    "tm:headbutt",
     "tm:helpinghand",
     "tm:irontail",
     "tm:leafstorm",
@@ -178,7 +174,6 @@
     "tm:rockslide",
     "tm:rocksmash",
     "tm:rocktomb",
-    "tm:safeguard",
     "tm:screech",
     "tm:seedbomb",
     "tm:sleeptalk",
@@ -197,6 +192,8 @@
     "tm:upperhand",
     "tm:workup",
     "tm:worryseed",
+    "tm:nightslash",
+    "tm:razorwind",
     "tutor:aerialace",
     "tutor:drainpunch",
     "tutor:endeavor",
@@ -236,7 +233,10 @@
     "legacy:seismictoss",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:crushclaw",
+    "legacy:headbutt",
+    "legacy:safeguard"
   ],
   "evolutions": [
     {

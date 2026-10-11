@@ -109,7 +109,8 @@
     "tutor:bugbite",
     "tutor:electroweb",
     "tutor:skittersmack",
-    "tutor:stringshot"
+    "tutor:stringshot",
+    "legacy:facade"
   ],
   "evolutions": [
     {

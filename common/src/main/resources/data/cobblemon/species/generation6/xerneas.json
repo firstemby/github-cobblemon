@@ -107,7 +107,6 @@
     "tm:raindance",
     "tm:reflect",
     "tm:rest",
-    "tm:roar",
     "tm:rockslide",
     "tm:sleeptalk",
     "tm:smartstrike",
@@ -122,6 +121,10 @@
     "tm:thunderwave",
     "tm:wonderroom",
     "tm:zenheadbutt",
+    "tm:nightslash",
+    "tm:petaldance",
+    "tm:silverwind",
+    "tm:trailblaze",
     "tutor:block",
     "tutor:calmmind",
     "tutor:dazzlinggleam",
@@ -155,7 +158,10 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:roar",
+    "legacy:seedbomb",
+    "legacy:solarblade"
   ],
   "evolutions": [],
   "forms": [

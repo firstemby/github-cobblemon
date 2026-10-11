@@ -172,7 +172,10 @@
     "tutor:sleeptalk",
     "tutor:snarl",
     "tutor:stompingtantrum",
-    "tutor:thunderfang"
+    "tutor:thunderfang",
+    "legacy:bounce",
+    "legacy:flamecharge",
+    "legacy:seedbomb"
   ],
   "preEvolution": "fidough",
   "evolutions": []

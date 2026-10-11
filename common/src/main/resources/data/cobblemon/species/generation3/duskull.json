@@ -123,13 +123,13 @@
     "36:curse",
     "40:shadowball",
     "44:futuresight",
-    "egg:destinybond",
     "egg:feintattack",
     "egg:grudge",
     "egg:haze",
     "egg:memento",
     "egg:painsplit",
     "egg:pursuit",
+    "egg:ominouswind",
     "tm:allyswitch",
     "tm:blizzard",
     "tm:calmmind",
@@ -224,7 +224,8 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:destinybond"
   ],
   "evolutions": [
     {

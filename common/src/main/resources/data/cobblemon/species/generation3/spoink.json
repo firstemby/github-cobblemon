@@ -90,6 +90,7 @@
     "egg:trick",
     "egg:whirlwind",
     "egg:zenheadbutt",
+    "egg:hypnosis",
     "tm:allyswitch",
     "tm:amnesia",
     "tm:bodyslam",
@@ -110,7 +111,6 @@
     "tm:flashcannon",
     "tm:futuresight",
     "tm:grassknot",
-    "tm:headbutt",
     "tm:healbell",
     "tm:helpinghand",
     "tm:icywind",
@@ -158,6 +158,8 @@
     "tm:trickroom",
     "tm:uproar",
     "tm:zenheadbutt",
+    "tm:shadowpunch",
+    "tm:whirlwind",
     "tutor:allyswitch",
     "tutor:bounce",
     "tutor:calmmind",
@@ -202,7 +204,10 @@
     "legacy:round",
     "legacy:secretpower",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:headbutt",
+    "legacy:mudshot",
+    "legacy:payday"
   ],
   "evolutions": [
     {

@@ -125,7 +125,6 @@
     "egg:superfang",
     "tm:acrobatics",
     "tm:agility",
-    "tm:allyswitch",
     "tm:assurance",
     "tm:batonpass",
     "tm:blazekick",
@@ -171,7 +170,6 @@
     "tm:uturn",
     "tm:weatherball",
     "tm:workup",
-    "tutor:allyswitch",
     "tutor:bounce",
     "tutor:bulkup",
     "tutor:burningjealousy",
@@ -190,7 +188,8 @@
     "tutor:swift",
     "legacy:attract",
     "legacy:round",
-    "legacy:snore"
+    "legacy:snore",
+    "legacy:allyswitch"
   ],
   "preEvolution": "scorbunny",
   "evolutions": [

@@ -79,10 +79,6 @@
   },
   "moves": [
     "1:sketch",
-    "tutor:falseswipe",
-    "tutor:flamethrower",
-    "legacy:captivate",
-    "legacy:sleeptalk",
     "special:falseswipe",
     "special:flamethrower",
     "special:furyswipes",

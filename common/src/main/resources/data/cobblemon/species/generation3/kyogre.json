@@ -124,6 +124,7 @@
     "tm:waterfall",
     "tm:waterpulse",
     "tm:whirlpool",
+    "tm:sheercold",
     "tutor:ancientpower",
     "tutor:aquatail",
     "tutor:block",
@@ -162,7 +163,8 @@
     "legacy:swagger",
     "legacy:swift",
     "legacy:toxic",
-    "legacy:uproar"
+    "legacy:uproar",
+    "legacy:iciclespear"
   ],
   "evolutions": [],
   "forms": [

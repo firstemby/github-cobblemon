@@ -99,7 +99,6 @@
     "tm:endure",
     "tm:facade",
     "tm:icebeam",
-    "tm:infestation",
     "tm:irontail",
     "tm:muddywater",
     "tm:mudshot",
@@ -144,7 +143,9 @@
     "legacy:round",
     "legacy:secretpower",
     "legacy:snore",
-    "legacy:swagger"
+    "legacy:swagger",
+    "legacy:infestation",
+    "legacy:surf"
   ],
   "preEvolution": "goomy",
   "evolutions": [
@@ -235,7 +236,6 @@
         "1:tackle",
         "1:watergun",
         "1:absorb",
-        "1:acidarmor",
         "1:dragonbreath",
         "1:bide",
         "15:protect",
@@ -263,7 +263,6 @@
         "tm:heavyslam",
         "tm:icebeam",
         "tm:icespinner",
-        "tm:infestation",
         "tm:ironhead",
         "tm:irontail",
         "tm:muddywater",
@@ -288,6 +287,7 @@
         "tm:thunder",
         "tm:thunderbolt",
         "tm:waterpulse",
+        "tm:magnetbomb",
         "tutor:dracometeor",
         "tutor:dragonpulse",
         "tutor:flashcannon",
@@ -315,7 +315,11 @@
         "legacy:secretpower",
         "legacy:snore",
         "legacy:swagger",
-        "legacy:toxic"
+        "legacy:toxic",
+        "legacy:acidarmor",
+        "legacy:infestation",
+        "legacy:irondefense",
+        "legacy:surf"
       ],
       "preEvolution": "goomy",
       "evolutions": [

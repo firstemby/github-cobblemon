@@ -120,13 +120,12 @@
     "egg:counter",
     "egg:defog",
     "egg:detect",
-    "egg:forcepalm",
     "egg:foresight",
     "egg:machpunch",
     "egg:slam",
     "egg:smellingsalts",
     "egg:wideguard",
-    "tm:block",
+    "egg:poweruppunch",
     "tm:brickbreak",
     "tm:brutalswing",
     "tm:bulkup",
@@ -178,7 +177,7 @@
     "tm:thief",
     "tm:thunderpunch",
     "tm:workup",
-    "tutor:block",
+    "tm:cometpunch",
     "tutor:bulkup",
     "tutor:coaching",
     "tutor:defog",
@@ -208,7 +207,9 @@
     "legacy:secretpower",
     "legacy:snore",
     "legacy:swagger",
-    "legacy:toxic"
+    "legacy:toxic",
+    "legacy:block",
+    "legacy:forcepalm"
   ],
   "evolutions": [
     {

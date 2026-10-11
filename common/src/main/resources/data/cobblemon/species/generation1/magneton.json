@@ -182,6 +182,8 @@
     "tm:triattack",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
+    "tm:magnetbomb",
     "tutor:chargebeam",
     "tutor:electroweb",
     "tutor:flashcannon",

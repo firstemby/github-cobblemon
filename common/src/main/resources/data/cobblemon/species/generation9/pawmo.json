@@ -114,6 +114,8 @@
     "tm:upperhand",
     "tm:voltswitch",
     "tm:wildcharge",
+    "tm:discharge",
+    "tm:fakeout",
     "tutor:chargebeam",
     "tutor:coaching",
     "tutor:electroweb",

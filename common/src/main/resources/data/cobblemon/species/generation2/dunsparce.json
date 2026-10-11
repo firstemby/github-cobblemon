@@ -124,6 +124,7 @@
     "egg:secretpower",
     "egg:snore",
     "egg:trumpcard",
+    "egg:magiccoat",
     "tm:agility",
     "tm:airslash",
     "tm:amnesia",

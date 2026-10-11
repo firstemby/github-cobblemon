@@ -127,6 +127,11 @@
     "tm:willowisp",
     "tm:worryseed",
     "tm:zenheadbutt",
+    "tm:doublehit",
+    "tm:firespin",
+    "tm:flareblitz",
+    "tm:swagger",
+    "tm:thunderfang",
     "tutor:burningjealousy",
     "tutor:endeavor",
     "tutor:energyball",
@@ -146,7 +151,10 @@
     "tutor:stompingtantrum",
     "tutor:superfang",
     "tutor:worryseed",
-    "tutor:zenheadbutt"
+    "tutor:zenheadbutt",
+    "tutor:thunderfang",
+    "legacy:nastyplot",
+    "legacy:outrage"
   ],
   "preEvolution": "capsakid",
   "evolutions": [],
