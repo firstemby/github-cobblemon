@@ -14,6 +14,7 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
 import com.cobblemon.mod.common.client.CobblemonClient
+import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.entity.PlatformType
 import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
@@ -74,7 +75,7 @@ class SpawnPokemonPacket(
         entity.ownerUUID,
         entity.pokemon.uuid,
         entity.pokemon.storeCoordinates.get()?.store?.uuid,
-        entity.pokemon.scaleModifier,
+        entity.entityData.get(PokemonEntity.SCALE_MODIFIER),
         entity.exposedSpecies.resourceIdentifier,
         entity.pokemon.gender,
         entity.pokemon.shiny,
@@ -147,7 +148,13 @@ class SpawnPokemonPacket(
         this@SpawnPokemonPacket.storageUUID?.let {
             val storedPokemon = CobblemonClient.storage.locatePokemon(it, this@SpawnPokemonPacket.pokemonUUID)
             if (storedPokemon != null) {
-                entity.pokemon = storedPokemon
+                (entity.delegate as? PokemonClientDelegate)?.storedPokemon = storedPokemon
+                val disguised = this@SpawnPokemonPacket.battleId != null &&
+                    (storedPokemon.species.resourceIdentifier != this@SpawnPokemonPacket.speciesId ||
+                        storedPokemon.form.formOnlyShowdownId() != this@SpawnPokemonPacket.formName)
+                if (!disguised) {
+                    entity.pokemon = storedPokemon
+                }
             }
         }
 

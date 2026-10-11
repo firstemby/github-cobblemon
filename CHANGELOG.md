@@ -28,6 +28,9 @@
 - Fixed the Pokédex evolution tree crashing with a stack overflow on evolutions that loop back on themselves.
 - Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
 - Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
+- Fixed Illusion, Imposter and Transform overwriting the species, form and EXP group of the owner's party Pokémon on the client, which made its level and HP display incorrectly and could leave the copied form showing in the party after battle
+- Fixed Illusion, Imposter and Transform not copying the size and alpha status of the Pokémon they turn into, which made disguises keep their original size
+
 
 ### Developer
 
