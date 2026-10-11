@@ -36,10 +36,7 @@
         "animations": [
           "q.look('head')",
           "q.bedrock('wyrdeer', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('wyrdeer', 'ride_ground_run')"
-        }
+        "q.bedrock('wyrdeer', 'ride_ground_run')"
         ],
         "quirks": [
           "q.bedrock_quirk('wyrdeer', 'blink')","q.bedrock_quirk('wyrdeer', 'quirk_idle', 30, 60, 1)"
@@ -71,10 +68,7 @@
         "animations": [
           "q.look('head')",
           "q.bedrock('wyrdeer', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('wyrdeer', 'ride_ground_run')"
-        }
+        "q.bedrock('wyrdeer', 'ride_ground_run')"
         ],
         "quirks": [
           "q.bedrock_quirk('wyrdeer', 'blink')"
@@ -89,10 +83,7 @@
         "animations": [
           "q.look('head')",
           "q.bedrock('wyrdeer', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('wyrdeer', 'ride_ground_run')"
-        }
+        "q.bedrock('wyrdeer', 'ride_ground_run')"
         ],
         "quirks": [
           "q.bedrock_quirk('wyrdeer', 'blink')"

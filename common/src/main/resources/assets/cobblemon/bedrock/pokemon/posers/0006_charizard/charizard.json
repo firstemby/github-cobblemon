@@ -121,10 +121,7 @@
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
         "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
         "q.bedrock('charizard', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('charizard', 'ride_ground_run')"
-        },
+        "q.bedrock('charizard', 'ride_ground_run')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('charizard', 'hold_item')"
@@ -167,10 +164,7 @@
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
         "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
         "q.bedrock('charizard', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('charizard', 'ride_ground_run')"
-        },
+        "q.bedrock('charizard', 'ride_ground_run')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('charizard', 'hold_item')"
@@ -208,10 +202,7 @@
         "q.look('neck4', 0.35, 0.35, 5, -5, 15, -15)",
         "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
         "q.bedrock('charizard', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('charizard', 'ride_air_fly')"
-        },
+        "q.bedrock('charizard', 'ride_air_fly')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('charizard', 'hold_item')"
@@ -233,10 +224,7 @@
         "q.look('head', 0.4, 0.25, 5, -5, 10, -10)",
         "q.bedrock('charizard', 'air_glide')",
         "q.bedrock('charizard', 'ride_air_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('charizard', 'ride_air_fly')"
-        },
+        "q.bedrock('charizard', 'ride_air_fly')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('charizard', 'hold_item')"

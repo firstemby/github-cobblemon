@@ -63,7 +63,7 @@
         "q.look('head_ai')",
         "q.bedrock('dewgong', 'water_swim')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dewgong', 'ride_water_swim')"
         }
       ],
@@ -77,7 +77,7 @@
         "q.look('head_ai')",
         "q.bedrock('dewgong', 'water_swim')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dewgong', 'ride_water_swim')"
         }
       ],
@@ -91,7 +91,7 @@
         "q.look('head_ai')",
         "q.bedrock('dewgong', 'water_idle')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dewgong', 'ride_water_swim')"
         }
       ],
@@ -106,7 +106,7 @@
         "q.look('head_ai')",
         "q.bedrock('dewgong', 'water_idle')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dewgong', 'ride_water_swim')"
         }
       ],

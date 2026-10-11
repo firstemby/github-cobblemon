@@ -72,10 +72,7 @@
       "animations": [
         "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
         "q.bedrock('honchkrow', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('honchkrow', 'ride_ground_walk')"
-        },
+        "q.bedrock('honchkrow', 'ride_ground_walk')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('honchkrow', 'hold_item')"
@@ -100,10 +97,7 @@
       "animations": [
         "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
         "q.bedrock('honchkrow', 'air_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('honchkrow', 'ride_air_fly')"
-        },
+        "q.bedrock('honchkrow', 'ride_air_fly')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('honchkrow', 'hold_item')"
@@ -129,10 +123,7 @@
       "animations": [
         "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
         "q.bedrock('honchkrow', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('honchkrow', 'ride_air_fly')"
-        },
+        "q.bedrock('honchkrow', 'ride_air_fly')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('honchkrow', 'hold_item')"
@@ -159,14 +150,8 @@
       "animations": [
         "q.look('head_ai', 1, 1, 10, -10, 45, -45)",
         "q.bedrock('honchkrow', 'air_glide')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('honchkrow', 'ride_air_glide')"
-        },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('honchkrow', 'ride_dive')"
-        },
+        "q.bedrock('honchkrow', 'ride_air_glide')",
+        "q.bedrock('honchkrow', 'ride_dive')",
         {
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('honchkrow', 'hold_item')"

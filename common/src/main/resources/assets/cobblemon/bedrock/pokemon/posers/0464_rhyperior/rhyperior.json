@@ -43,10 +43,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('rhyperior', 'ride_jump')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('rhyperior', 'ride_ground_run')"
-        }
+        "q.bedrock('rhyperior', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('rhyperior', 'blink')"
@@ -60,10 +57,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('rhyperior', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('rhyperior', 'ride_ground_run')"
-        }
+        "q.bedrock('rhyperior', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('rhyperior', 'blink')"
@@ -87,10 +81,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('rhyperior', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('rhyperior', 'ride_ground_walk')"
-        }
+        "q.bedrock('rhyperior', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('rhyperior', 'blink')"]
     },

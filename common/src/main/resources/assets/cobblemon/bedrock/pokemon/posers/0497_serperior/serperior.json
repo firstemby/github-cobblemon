@@ -58,7 +58,7 @@
         "q.look('head', 1, 1, 17.5, -45, 30, -30)",
         "q.bedrock('serperior', 'ride_jump')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('serperior', 'ride_ground_run')"
         }
       ],
@@ -90,7 +90,7 @@
         "q.look('head', 1, 1, 17.5, -45, 30, -30)",
         "q.bedrock('serperior', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('serperior', 'ride_ground_run')"
         }
       ],

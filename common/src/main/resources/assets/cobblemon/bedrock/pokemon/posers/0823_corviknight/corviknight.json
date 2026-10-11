@@ -79,7 +79,7 @@
         "q.bedrock('corviknight', 'air_fly')",
         "q.bedrock('corviknight', 'wangs')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('corviknight', 'ride_air_fly')"
         }
       ],
@@ -99,7 +99,7 @@
         "q.bedrock('corviknight', 'ride_dive')",
         "q.bedrock('corviknight', 'wangs')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('corviknight', 'ride_air_fly')"
         }
       ],
@@ -118,7 +118,7 @@
         "q.bedrock('corviknight', 'ride_jump')",
         "q.bedrock('corviknight', 'folded_wangs')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('corviknight', 'ride_ground_run')"
         }
       ],
@@ -136,7 +136,7 @@
         "q.bedrock('corviknight', 'ground_walk')",
         "q.bedrock('corviknight', 'folded_wangs')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('corviknight', 'ride_ground_walk')"
         }
       ],
@@ -154,7 +154,7 @@
         "q.bedrock('corviknight', 'ground_run')",
         "q.bedrock('corviknight', 'folded_wangs')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('corviknight', 'ride_ground_run')"
         }
       ],

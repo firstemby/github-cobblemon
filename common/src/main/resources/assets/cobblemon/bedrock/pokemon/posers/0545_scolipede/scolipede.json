@@ -85,7 +85,7 @@
         "q.look('head_ai', 1, 1, 30, -5, 25, -25)",
         "q.bedrock('scolipede', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('scolipede', 'ride_ground_walk')"
         }
       ],
@@ -103,7 +103,7 @@
         "q.look('head_ai', 1, 1, 30, -5, 25, -25)",
         "q.bedrock('scolipede', 'ground_run')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('scolipede', 'ride_ground_run')"
         }
       ],

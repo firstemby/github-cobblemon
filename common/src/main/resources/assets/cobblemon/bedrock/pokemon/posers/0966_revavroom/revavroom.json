@@ -23,10 +23,7 @@
       "poseTypes": ["STAND", "NONE", "PORTRAIT", "PROFILE"],
       "animations": [
         "q.bedrock('revavroom', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('revavroom', 'ride_ground')"
-        }
+        "q.bedrock('revavroom', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('revavroom', 'blink')"
@@ -37,10 +34,7 @@
       "condition": "!q.in_air && !q.is_sprinting",
       "animations": [
         "q.bedrock('revavroom', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('revavroom', 'ride_ground')"
-        }
+        "q.bedrock('revavroom', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('revavroom', 'blink')"
@@ -51,10 +45,7 @@
       "condition": "!q.in_air && q.is_sprinting",
       "animations": [
         "q.bedrock('revavroom', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('revavroom', 'ride_ground')"
-        }
+        "q.bedrock('revavroom', 'ride_ground')"
       ],
       "quirks": [
         "q.bedrock_quirk('revavroom', 'blink')"
@@ -71,10 +62,7 @@
       "condition": "q.in_air",
       "animations": [
         "q.bedrock('revavroom', 'ride_jump')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('revavroom', 'ride_ground')"
-        }
+        "q.bedrock('revavroom', 'ride_ground')"
       ],
       "transformTicks": 5,
       "transformToTicks": 5,

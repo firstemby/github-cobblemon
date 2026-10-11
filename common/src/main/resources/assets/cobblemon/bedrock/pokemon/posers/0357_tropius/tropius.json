@@ -82,10 +82,7 @@
          "q.look('neck4', 0.5, 0.5, 5, -5, 10, -10)",
          "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tropius', 'ride_air_fly')"
-        }
+        "q.bedrock('tropius', 'ride_air_fly')"
        ],
        "quirks": [
          "q.bedrock_quirk('tropius', 'blink')"
@@ -102,10 +99,7 @@
          "q.look('neck5', 0.5, 0.5, 5, -5, 5, -5)",
          "q.bedrock('tropius', 'air_glide')",
          "q.bedrock('tropius', 'ride_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tropius', 'ride_air_glide')"
-        }
+        "q.bedrock('tropius', 'ride_air_glide')"
       ],
        "quirks": [
          "q.bedrock_quirk('tropius', 'blink')"

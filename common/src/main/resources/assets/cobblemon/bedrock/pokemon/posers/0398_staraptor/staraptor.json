@@ -72,10 +72,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('staraptor', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('staraptor', 'ride_air_fly')"
-        }
+        "q.bedrock('staraptor', 'ride_air_fly')"
       ],
       "quirks": ["q.bedrock_quirk('staraptor', 'blink')"]
     },
@@ -86,10 +83,7 @@
         "q.look('head')",
         "q.bedrock('staraptor', 'air_glide')",
         "q.bedrock('staraptor', 'ride_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('staraptor', 'ride_air_glide')"
-        }
+        "q.bedrock('staraptor', 'ride_air_glide')"
       ],
       "quirks": ["q.bedrock_quirk('staraptor', 'blink')"
       ]

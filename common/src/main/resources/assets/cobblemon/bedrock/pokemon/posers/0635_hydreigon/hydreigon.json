@@ -133,7 +133,7 @@
         "q.bedrock('hydreigon', 'air_glide')",
         "q.bedrock('hydreigon', 'ride_dive')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('hydreigon', 'ride_air_glide')"
         }
       ],

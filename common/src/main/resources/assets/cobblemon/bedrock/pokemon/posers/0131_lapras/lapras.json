@@ -73,10 +73,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('lapras', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('lapras', 'ride_ground_walk')"
-        }
+        "q.bedrock('lapras', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('lapras', 'blink')",
@@ -89,10 +86,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('lapras', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('lapras', 'ride_ground_walk')"
-        }
+        "q.bedrock('lapras', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('lapras', 'blink')"]
     },
@@ -124,10 +118,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('lapras', 'surfacewater_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('lapras', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('lapras', 'ride_surfacewater_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('lapras', 'blink')",
@@ -160,10 +151,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('lapras', 'surfacewater_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('lapras', 'ride_surfacewater_swim')"
-        }
+        "q.bedrock('lapras', 'ride_surfacewater_swim')"
       ],
       "quirks": [
         "q.bedrock_quirk('lapras', 'blink')",

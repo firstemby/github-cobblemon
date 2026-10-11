@@ -33,10 +33,7 @@
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('venusaur', 'hold_item')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('venusaur', 'ride_ground_run')"
-        },
+        "q.bedrock('venusaur', 'ride_ground_run')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('venusaur', 'rider_overlay')"
@@ -96,10 +93,7 @@
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('venusaur', 'hold_item')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('venusaur', 'ride_ground_walk')"
-        },
+        "q.bedrock('venusaur', 'ride_ground_walk')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('venusaur', 'rider_overlay')"
@@ -120,10 +114,7 @@
           "condition": "q.is_holding_item",
           "animation": "q.bedrock('venusaur', 'hold_item')"
         },
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('venusaur', 'ride_ground_run')"
-        },
+        "q.bedrock('venusaur', 'ride_ground_run')",
         {
           "condition": "q.is_ridden",
           "animation": "q.bedrock('venusaur', 'rider_overlay')"

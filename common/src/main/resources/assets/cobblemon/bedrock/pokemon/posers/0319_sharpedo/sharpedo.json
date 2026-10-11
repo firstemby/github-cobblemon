@@ -27,10 +27,7 @@
       "isTouchingWater": false,
       "animations": [
         "q.bedrock('sharpedo', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('sharpedo', 'ride_water_swim')"
-        }
+        "q.bedrock('sharpedo', 'ride_water_swim')"
       ],
       "transformTicks": 3,
       "transformToTicks": 3
@@ -66,10 +63,7 @@
       "isUnderWater": true,
       "animations": [
         "q.bedrock('sharpedo', 'water_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('sharpedo', 'ride_water_swim')"
-        }
+        "q.bedrock('sharpedo', 'ride_water_swim')"
       ]
     },
     "swimming": {
@@ -78,10 +72,7 @@
       "isUnderWater": true,
       "animations": [
         "q.bedrock('sharpedo', 'water_swim')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('sharpedo', 'ride_water_swim')"
-        }
+        "q.bedrock('sharpedo', 'ride_water_swim')"
       ]
     }
   }

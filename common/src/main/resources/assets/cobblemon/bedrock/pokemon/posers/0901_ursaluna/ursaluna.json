@@ -104,7 +104,7 @@
           "animation": "q.bedrock('ursaluna', 'hold_item')"
         },
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('ursaluna', 'ride_ground_walk')"
         }
       ],
@@ -126,7 +126,7 @@
           "animation": "q.bedrock('ursaluna', 'hold_item')"
         },
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('ursaluna', 'ride_ground_run')"
         }
       ],

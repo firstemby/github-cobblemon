@@ -62,10 +62,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('kilowattrel', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('kilowattrel', 'ride_ground_walk')"
-        }
+        "q.bedrock('kilowattrel', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
       "transformedParts": [
@@ -146,10 +143,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('kilowattrel', 'air_fly')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('kilowattrel', 'ride_air_fly')"
-        }
+        "q.bedrock('kilowattrel', 'ride_air_fly')"
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')"],
       "transformedParts": [
@@ -178,10 +172,7 @@
         "q.look('head')",
         "q.bedrock('kilowattrel', 'air_glide')",
         "q.bedrock('kilowattrel', 'ride_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('kilowattrel', 'ride_air_glide')"
-        }
+        "q.bedrock('kilowattrel', 'ride_air_glide')"
       ],
       "quirks": ["q.bedrock_quirk('kilowattrel', 'blink')",
         "q.bedrock_quirk('kilowattrel', 'air_glide_quirk')"

@@ -316,6 +316,9 @@
     "moving": {
       "swim": {
         "avoidsWater": true
+      },
+      "walk": {
+        "sprintSpeed": 5.6
       }
     }
   }

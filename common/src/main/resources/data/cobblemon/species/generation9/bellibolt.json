@@ -51,7 +51,8 @@
   "behaviour": {
     "moving": {
       "walk": {
-        "walkSpeed": "0.2"
+        "walkSpeed": "0.2",
+        "sprintSpeed": 5.6
       },
       "swim": {
         "swimSpeed": "0.2",

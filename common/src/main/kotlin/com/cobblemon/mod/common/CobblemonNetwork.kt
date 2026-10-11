@@ -22,6 +22,7 @@ import com.cobblemon.mod.common.client.net.data.CobblemonMechanicsSyncHandler
 import com.cobblemon.mod.common.client.net.data.DataRegistrySyncPacketHandler
 import com.cobblemon.mod.common.client.net.data.RideSettingsSyncHandler
 import com.cobblemon.mod.common.client.net.debug.OpenRidingStatsDebugGUIHandler
+import com.cobblemon.mod.common.client.net.debug.OpenSpeedTunerHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueClosedHandler
 import com.cobblemon.mod.common.client.net.dialogue.DialogueOpenedHandler
 import com.cobblemon.mod.common.client.net.effect.PokeSnackBlockParticlesHandler
@@ -83,6 +84,7 @@ import com.cobblemon.mod.common.net.messages.client.callback.OpenPartyMoveCallba
 import com.cobblemon.mod.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
 import com.cobblemon.mod.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import com.cobblemon.mod.common.net.messages.client.data.*
+import com.cobblemon.mod.common.net.messages.client.debug.OpenSpeedTunerPacket
 import com.cobblemon.mod.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueClosedPacket
 import com.cobblemon.mod.common.net.messages.client.dialogue.DialogueOpenedPacket
@@ -173,6 +175,9 @@ import com.cobblemon.mod.common.net.messages.server.callback.party.PartySelectCa
 import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyMoveSelectCancelledPacket
 import com.cobblemon.mod.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket
 import com.cobblemon.mod.common.net.messages.server.debug.OpenRidingStatsDebugGUIPacket
+import com.cobblemon.mod.common.net.messages.server.debug.RequestOpenSpeedTunerPacket
+import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerSprintSpeedPacket
+import com.cobblemon.mod.common.net.messages.server.debug.SetSpeedTunerWalkSpeedPacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket
 import com.cobblemon.mod.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
@@ -231,6 +236,9 @@ import com.cobblemon.mod.common.net.serverhandling.callback.party.PartySelectCan
 import com.cobblemon.mod.common.net.serverhandling.callback.partymove.PartyMoveSelectCancelledHandler
 import com.cobblemon.mod.common.net.serverhandling.callback.partymove.PartyPokemonMoveSelectedHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.RequestOpenRidingStatsDebugGUIHandler
+import com.cobblemon.mod.common.net.serverhandling.debug.RequestOpenSpeedTunerHandler
+import com.cobblemon.mod.common.net.serverhandling.debug.SetSpeedTunerSprintSpeedHandler
+import com.cobblemon.mod.common.net.serverhandling.debug.SetSpeedTunerWalkSpeedHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatRangeHandler
 import com.cobblemon.mod.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
@@ -517,6 +525,7 @@ object CobblemonNetwork {
 
         // Debug
         list.add(PacketRegisterInfo(OpenRidingStatsDebugGUIPacket.ID, OpenRidingStatsDebugGUIPacket::decode, OpenRidingStatsDebugGUIHandler))
+        list.add(PacketRegisterInfo(OpenSpeedTunerPacket.ID, OpenSpeedTunerPacket::decode, OpenSpeedTunerHandler))
 
 
         return list
@@ -649,6 +658,9 @@ object CobblemonNetwork {
 
         // Debug / cheats
         list.add(PacketRegisterInfo(RequestOpenRidingStatsDebugGUIPacket.ID, RequestOpenRidingStatsDebugGUIPacket::decode, RequestOpenRidingStatsDebugGUIHandler))
+        list.add(PacketRegisterInfo(RequestOpenSpeedTunerPacket.ID, RequestOpenSpeedTunerPacket::decode, RequestOpenSpeedTunerHandler))
+        list.add(PacketRegisterInfo(SetSpeedTunerSprintSpeedPacket.ID, SetSpeedTunerSprintSpeedPacket::decode, SetSpeedTunerSprintSpeedHandler))
+        list.add(PacketRegisterInfo(SetSpeedTunerWalkSpeedPacket.ID, SetSpeedTunerWalkSpeedPacket::decode, SetSpeedTunerWalkSpeedHandler))
 
 
         return list

@@ -124,7 +124,8 @@
         "avoidsWater": true
       },
       "walk": {
-        "canWalk": false
+        "canWalk": false,
+        "sprintSpeed": 5.6
       }
     },
     "resting": {

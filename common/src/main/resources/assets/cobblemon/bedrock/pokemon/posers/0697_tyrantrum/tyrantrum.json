@@ -68,10 +68,7 @@
       "animations": [
         "q.look('head')",
         "q.bedrock('tyrantrum', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tyrantrum', 'ride_ground_run')"
-        }
+        "q.bedrock('tyrantrum', 'ride_ground_run')"
       ]
     },
       "run": {
@@ -81,10 +78,7 @@
         "animations": [
           "q.look('head')",
           "q.bedrock('tyrantrum', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('tyrantrum', 'ride_ground_run')"
-        }
+        "q.bedrock('tyrantrum', 'ride_ground_run')"
         ]
       },
         "sleep": {

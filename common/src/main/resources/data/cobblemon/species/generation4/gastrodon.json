@@ -84,7 +84,8 @@
       },
       "walk": {
         "avoidsLand": true,
-        "walkSpeed": "0.2"
+        "walkSpeed": "0.2",
+        "sprintSpeed": 5.6
       }
     },
     "resting": {
@@ -269,7 +270,8 @@
         },
         "moving": {
           "walk": {
-            "avoidsLand": true
+            "avoidsLand": true,
+            "sprintSpeed": 5.6
           },
           "swim": {
             "canSwimInWater": false,

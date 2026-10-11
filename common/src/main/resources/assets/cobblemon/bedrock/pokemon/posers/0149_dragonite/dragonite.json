@@ -61,7 +61,7 @@
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('dragonite', 'ground_idle')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dragonite', 'ride_ground_walk')"
         }
       ],
@@ -76,7 +76,7 @@
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('dragonite', 'ground_walk')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dragonite', 'ride_ground_walk')"
         }
       ],
@@ -116,7 +116,7 @@
         "q.look('head', 1, 0.25, 10, -15, 5, -5)",
         "q.bedrock('dragonite', 'air_glide')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dragonite', 'ride_air_fly')"
         }
       ],
@@ -133,7 +133,7 @@
         "q.bedrock('dragonite', 'air_glide')",
         "q.bedrock('dragonite', 'ride_air_dive')",
         {
-          "condition": "q.is_ridden && q.has_entity",
+          "condition": "q.has_entity",
           "animation": "q.bedrock('dragonite', 'ride_air_glide')"
         }
       ],

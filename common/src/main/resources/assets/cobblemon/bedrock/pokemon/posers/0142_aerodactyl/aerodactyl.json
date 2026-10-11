@@ -58,10 +58,7 @@
         "q.look('neck', 1, 1, 25, -20, 20, -20)",
         "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_idle')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('aerodactyl', 'ride_ground_walk')"
-        }
+        "q.bedrock('aerodactyl', 'ride_ground_walk')"
       ],
       "quirks": [
         "q.bedrock_quirk('aerodactyl', 'blink')"
@@ -83,10 +80,7 @@
         "q.look('neck', 1, 1, 25, -20, 20, -20)",
         "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_walk')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('aerodactyl', 'ride_ground_walk')"
-        }
+        "q.bedrock('aerodactyl', 'ride_ground_walk')"
       ],
       "quirks": ["q.bedrock_quirk('aerodactyl', 'blink')"]
     },
@@ -97,10 +91,7 @@
         "q.look('neck', 1, 1, 25, -20, 20, -20)",
         "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'ground_run')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('aerodactyl', 'ride_ground_run')"
-        }
+        "q.bedrock('aerodactyl', 'ride_ground_run')"
       ],
       "quirks": [
         "q.bedrock_quirk('aerodactyl', 'blink')"
@@ -170,10 +161,7 @@
         "q.look('head', 1, 1, 22.5, -10, 15, -15)",
         "q.bedrock('aerodactyl', 'air_glide')",
         "q.bedrock('aerodactyl', 'air_dive')",
-        {
-          "condition": "q.is_ridden",
-          "animation": "q.bedrock('aerodactyl', 'ride_air_glide')"
-        }
+        "q.bedrock('aerodactyl', 'ride_air_glide')"
       ],
       "quirks": [
         "q.bedrock_quirk('aerodactyl', 'blink')"

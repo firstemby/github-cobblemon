@@ -158,3 +158,9 @@ transitive-accessible method net/minecraft/client/model/HumanoidModel poseRightA
 transitive-accessible method net/minecraft/client/model/HumanoidModel poseLeftArm (Lnet/minecraft/world/entity/LivingEntity;)V
 
 transitive-accessible method net/minecraft/world/level/block/BaseEntityBlock createTickerHelper (Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityType;Lnet/minecraft/world/level/block/entity/BlockEntityTicker;)Lnet/minecraft/world/level/block/entity/BlockEntityTicker;
+
+transitive-accessible field net/minecraft/world/entity/ai/control/BodyRotationControl mob Lnet/minecraft/world/entity/Mob;
+transitive-accessible field net/minecraft/world/entity/ai/control/BodyRotationControl headStableTime I
+transitive-accessible field net/minecraft/world/entity/ai/control/BodyRotationControl lastStableYHeadRot F
+transitive-accessible method net/minecraft/world/entity/ai/control/BodyRotationControl isMoving ()Z
+transitive-accessible method net/minecraft/world/entity/ai/control/BodyRotationControl rotateHeadIfNecessary ()V

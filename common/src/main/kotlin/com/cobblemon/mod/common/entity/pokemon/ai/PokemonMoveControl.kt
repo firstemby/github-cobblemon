@@ -16,7 +16,8 @@ import com.cobblemon.mod.common.entity.PoseType
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
 import com.cobblemon.mod.common.util.getWaterAndLavaIn
-import com.cobblemon.mod.common.util.math.geometry.toDegrees
+import com.cobblemon.mod.common.util.math.InertialEase
+import com.cobblemon.mod.common.util.math.arriveSpeed
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.resolveFloat
 import kotlin.math.abs
@@ -33,11 +34,41 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import kotlin.math.sqrt
 
 class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
     companion object {
         const val VERY_CLOSE = 2.500000277905201E-3
+        const val TICKS_PER_SECOND = 20.0
+
+        // Travel turns get to a new direction within these times
+        const val GROUND_HEADING_BLEND_SECONDS = 0.5F
+        const val WATER_HEADING_BLEND_SECONDS = 0.8F
+        const val AIR_HEADING_BLEND_SECONDS = 1.0F
+        const val FLOATING_TURN_BLEND_SECONDS = 1.0F
+        const val STANDING_TURN_BLEND_SECONDS = 0.8F
+        // Speed gets to a new target
+        const val SPEED_BLEND_SECONDS = 0.3F
+        // Velocity kept each tick in powered flight
+        const val FLYER_DRAG = 0.7
+        // walkers ignore the task's speed so walk animations always match
+        const val GROUND_SPEED_MODIFIER = 0.35F
+        const val ARRIVAL_TOLERANCE = 0.05
+        const val FLUID_EXIT_Y_OFFSET = 0.05
+
+        // Vanilla values from LivingEntity.travel and aiStep
+        const val VANILLA_INPUT_SCALE = 0.98
+        const val VANILLA_GROUND_SPEED_FACTOR = 0.21600002
+        const val VANILLA_AIR_FRICTION = 0.91
+        const val VANILLA_FLYING_SPEED = 0.02
+
+        /** Speed where vanilla ground friction on a block with [blockFriction] balances a walk input of [speed]. */
+        fun vanillaGroundTopSpeed(speed: Double, blockFriction: Double): Double {
+            val frictionInfluencedSpeed = speed * (VANILLA_GROUND_SPEED_FACTOR / (blockFriction * blockFriction * blockFriction))
+            val inputForce = speed * VANILLA_INPUT_SCALE * frictionInfluencedSpeed
+            return inputForce / (1 - blockFriction * VANILLA_AIR_FRICTION)
+        }
     }
 
     val runtime = MoLangRuntime().also {
@@ -46,7 +77,32 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
 
     private var waterLevel : Double = 0.0
     var banking = false
+    // Where path following is steering this tick, null when not following a path
+    private var currentSteerTarget: Vec3? = null
     var bankDurationTicks = -1
+
+    // Speed along the heading in blocks per tick of travel, eased so speed changes are smooth. Heading lives on the entity
+    private val speedEase = InertialEase(SPEED_BLEND_SECONDS)
+    // What steering asked for this tick, null when it isn't steering
+    private var steerGoal: SteerGoal? = null
+    /** True while steering somewhere this tick, however slowly. Used for the walk and fly poses */
+    var isTravelling = false
+        private set
+
+    private class SteerGoal(
+        val yaw: Float,
+        val pitch: Float,
+        val direction: Vec3,
+        val speed: Double,
+        val topSpeed: Double,
+        val distance: Double,
+        val horizontalOnly: Boolean,
+        val headingBlend: Float,
+        // Close enough to slide straight onto the target instead of turning to it. Attempting to prevent spinning
+        val slide: Boolean
+    )
+    // Travel turn blend for the way the mon is moving this tick
+    private var headingBlend = GROUND_HEADING_BLEND_SECONDS
     var bankForwardBlocksPerTick = 0.1F
     var bankUpwardsBlocksPerTick = 0F
     var bankRightDegreesPerTick = 1F
@@ -74,6 +130,14 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
     }
 
     override fun tick() {
+        steerGoal = null
+        tickOperation()
+        updateMotion()
+    }
+
+    private fun tickOperation() {
+        val followedPath = currentSteerTarget != null
+        currentSteerTarget = null
         if (banking && operation != Operation.WAIT) {
             banking = false
         }
@@ -92,17 +156,29 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
         }
 
         val behaviour = pokemonEntity.behaviour
-        val mediumSpeed = runtime.resolveFloat(if (pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)) {
+        val flying = pokemonEntity.getCurrentPoseType() in setOf(PoseType.FLY, PoseType.HOVER)
+        val swimming = pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)
+        // Sprinting is ground only and has to be asked for by whatever started the path
+        val sprintSpeed = behaviour.moving.walk.sprintSpeed
+            ?.takeIf { operation == Operation.MOVE_TO && !flying && !swimming && pokemonEntity.navigation.sprinting }
+        pokemonEntity.isPokemonSprinting = sprintSpeed != null
+
+        val mediumSpeed = runtime.resolveFloat(if (flying) {
             behaviour.moving.fly.flySpeedHorizontal
-        } else if (pokemonEntity.isEyeInFluid(FluidTags.WATER) || pokemonEntity.isEyeInFluid(FluidTags.LAVA)) {
+        } else if (swimming) {
             behaviour.moving.swim.swimSpeed
         } else {
             behaviour.moving.walk.walkSpeed
         }) * 2.5F
 
-        val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * this.speedModifier.toFloat()
+        val taskSpeed = if (flying || swimming) this.speedModifier.toFloat() else GROUND_SPEED_MODIFIER
+        val baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED).toFloat() * taskSpeed
         // Mult the baseSpeed by the square root of the effectivescale to prevent foot slide (alpha/baby scaling)
         val adjustedSpeed = baseSpeed * mediumSpeed * sqrt(pokemonEntity.pokemon.effectiveScale)
+        // Sprint speed is an exact top speed in blocks per second, so it skips attributes, task speed and friction
+        val sprintTopSpeed = sprintSpeed?.let {
+            runtime.resolveFloat(it).toDouble() / TICKS_PER_SECOND * sqrt(pokemonEntity.pokemon.effectiveScale.toDouble())
+        }
 
         if (banking) {
             pokemonEntity.yRot += bankRightDegreesPerTick
@@ -144,9 +220,46 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
             if (!pokemonEntity.isFlying() && !pokemonEntity.isInLiquid) {
                 operation = Operation.WAIT
             }
-            var xDist = wantedX - mob.x
-            var zDist = wantedZ - mob.z
-            var yDist = wantedY - mob.y
+            val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
+            val inFluid = inWater || inLava
+            val fluidMover = pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid
+            val walkTopSpeed = if (fluidMover) adjustedSpeed.toDouble() else groundTopSpeed(adjustedSpeed.toDouble())
+            var topSpeed = if (fluidMover) walkTopSpeed else sprintTopSpeed ?: walkTopSpeed
+            val speedBlendTicks = SPEED_BLEND_SECONDS * TICKS_PER_SECOND
+
+            headingBlend = when {
+                inFluid -> WATER_HEADING_BLEND_SECONDS
+                pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) -> AIR_HEADING_BLEND_SECONDS
+                else -> GROUND_HEADING_BLEND_SECONDS
+            }
+            // The speed ease is the step size this is how far we go while a turn finishes
+            val turnDistance = (speedEase.value * headingBlend * TICKS_PER_SECOND).toDouble()
+
+            // Follow the path when there is one otherwise go straight for the wanted position
+            var steerTarget = pokemonEntity.navigation.getSteerTarget(topSpeed, speedBlendTicks, turnDistance)
+            if (steerTarget != null && steerTarget.narrowAhead && topSpeed > walkTopSpeed) {
+                // No room to sprint on a narrow path, walk through it instead
+                topSpeed = walkTopSpeed
+                pokemonEntity.isPokemonSprinting = false
+                steerTarget = pokemonEntity.navigation.getSteerTarget(topSpeed, speedBlendTicks, turnDistance)
+            }
+            currentSteerTarget = steerTarget?.position
+            if (steerTarget == null && followedPath && fluidMover) {
+                // The path just ended or was cancelled, so glide to a stop instead of carrying on to the last waypoint.
+                // walkers stop on friction already
+                val velocity = mob.deltaMovement
+                // The speed ease stops in its blend time at half the speed on average
+                val brakingDistance = velocity.length() * speedBlendTicks / 2
+                val stop = mob.position().add(velocity.normalize().scale(brakingDistance))
+                setWantedPosition(stop.x, stop.y, stop.z, speedModifier)
+            }
+            val target = steerTarget?.position ?: Vec3(wantedX, wantedY, wantedZ)
+            val arrive = steerTarget?.isFinal ?: true
+            val maxSpeed = steerTarget?.maxSpeed ?: topSpeed
+
+            val xDist = target.x - mob.x
+            val zDist = target.z - mob.z
+            var yDist = target.y - mob.y
 
             if (xDist * xDist + yDist * yDist + zDist * zDist < VERY_CLOSE) {
                 // If we're close enough, pull up stumps here.
@@ -156,52 +269,34 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 if ((pokemonEntity.isFlying() || pokemonEntity.isInLiquid)) {
                     operation = Operation.WAIT
                     mob.deltaMovement = Vec3.ZERO
+                    speedEase.snap(0F)
                 }
                 return
             }
 
             val horizontalDistanceFromTarget = xDist * xDist + zDist * zDist
             val closeHorizontally = horizontalDistanceFromTarget < VERY_CLOSE
-            if (!closeHorizontally) {
-                val angleToTarget = Mth.atan2(zDist, xDist).toDegrees() - 90.0f
-                val currentMovingAngle = mob.yRot
-                val steppedAngle = Mth.approachDegrees(currentMovingAngle, angleToTarget,  100 * mediumSpeed)
-                mob.yRot = steppedAngle
-            }
 
-            val (inWater, inLava) = mob.level().getWaterAndLavaIn(mob.boundingBox)
-            val inFluid = inWater || inLava
             var verticalHandled = false
             val blockPos = mob.blockPosition()
             val blockState = mob.level().getBlockState(blockPos)
             val voxelShape = blockState.getCollisionShape(mob.level(), blockPos)
 
-            if (pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING) || inFluid) {
+            if (fluidMover) {
                 verticalHandled = true
-                mob.yya = 0F
-                mob.speed = 0F
-                // Refinement is to prevent the entity from spinning around trying to get to a super precise location.
-                val refine: (Double) -> Double = { if (abs(it) < 0.05) 0.0 else it }
+                val fluidTarget = if (inFluid) target.add(0.0, FLUID_EXIT_Y_OFFSET, 0.0) else target
+                yDist = fluidTarget.y - mob.y
 
-                val fullDistance = Vec3(
-                    xDist,
-                    refine(yDist + 0.05), // + 0.05 for dealing with swimming out of water, they otherwise get stuck on the lip
-                    zDist
-                )
-
-                val direction = fullDistance.normalize()
-
-                val scale = min(adjustedSpeed.toDouble(), fullDistance.length())
-
-                mob.deltaMovement = direction.scale(scale)
-
-                xDist = fullDistance.x
-                zDist = fullDistance.z
-                yDist = fullDistance.y
+                if (arrive && fluidTarget.distanceTo(mob.position()) < ARRIVAL_TOLERANCE) {
+                    operation = Operation.WAIT
+                    mob.deltaMovement = Vec3.ZERO
+                    speedEase.snap(0F)
+                    stopInputs()
+                    return
+                }
+                steerTowards(fluidTarget, maxSpeed, topSpeed, speedBlendTicks, arrive, steerTarget?.afterDirection, horizontalOnly = false)
             } else {
-                // division is to slow the speed down a bit so they don't overshoot when they get there.
-                val forwardSpeed = min(adjustedSpeed, max(horizontalDistanceFromTarget.toFloat() / 2, 0.15F))
-                mob.speed = forwardSpeed
+                steerTowards(target, maxSpeed, topSpeed, speedBlendTicks, arrive, steerTarget?.afterDirection, horizontalOnly = true)
             }
 
             if (!verticalHandled) {
@@ -210,10 +305,17 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 val zComponent = Mth.cos(mob.yRot.toRadians()).toDouble()
 
                 val motion = Vec3(xComponent, 0.0, zComponent).normalize()
-                val offset = motion.scale(mob.speed.toDouble())
+                val offset = motion.scale(adjustedSpeed.toDouble())
                 val closeEnoughToJump = !mob.isFree(offset.x, 0.0, offset.z)// sqrt(xDist * xDist + zDist * zDist) - 0.5 <  entity.width / 2 + entity.movementSpeed * 4
+                // Vanilla's jump check against the next node itself, doesn't depend on the wanted position or where we're facing
+                val nextNodeNeedsJump = pokemonEntity.navigation.path?.takeUnless { it.isDone }?.getNextEntityPos(mob)?.let { node ->
+                    val dx = node.x - mob.x
+                    val dz = node.z - mob.z
+                    node.y - mob.y > pokemonEntity.behaviour.moving.stepHeight && dx * dx + dz * dz < max(1F, mob.bbWidth)
+                } ?: false
 
-                if (tooBigToStep &&
+                if (nextNodeNeedsJump ||
+                    tooBigToStep &&
                     closeEnoughToJump ||
                     !voxelShape.isEmpty && mob.y < voxelShape.max(Direction.Axis.Y) + blockPos.y.toDouble() &&
                     !blockState.`is`(BlockTags.DOORS) &&
@@ -280,6 +382,122 @@ class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemon
                 }
             }
         }
+    }
+
+    /** Works out the heading and speed steering wants this tick. Locomotion turns them into thrust in [updateMotion] */
+    private fun steerTowards(
+        target: Vec3,
+        maxSpeed: Double,
+        topSpeed: Double,
+        speedBlendTicks: Double,
+        arrive: Boolean,
+        afterDirection: Vec3?,
+        horizontalOnly: Boolean
+    ) {
+        stopInputs()
+        val offset = target.subtract(mob.position()).let { if (horizontalOnly) Vec3(it.x, 0.0, it.z) else it }
+        val distance = offset.length()
+        if (distance < VERY_CLOSE) return
+        val direction = offset.scale(1 / distance)
+        // Target is inside our own footprint so turning to it would just spin. Slide onto it and face where the
+        // path goes next instead, or keep facing the same way if there's nowhere next
+        val slide = distance < mob.bbWidth / 2.0
+        val onwards = afterDirection?.let { if (horizontalOnly) Vec3(it.x, 0.0, it.z) else it }?.takeIf { it.lengthSqr() > 0 }
+        val faceDirection = if (slide) onwards?.normalize() else direction
+        steerGoal = SteerGoal(
+            yaw = faceDirection?.let { (Mth.atan2(it.z, it.x) * Mth.RAD_TO_DEG).toFloat() - 90F } ?: mob.yRot,
+            // Minecraft pitch is negative looking up
+            pitch = faceDirection?.let { -(Mth.atan2(it.y, it.horizontalDistance()) * Mth.RAD_TO_DEG).toFloat() } ?: pokemonEntity.heading.pitch.value,
+            direction = direction,
+            speed = if (arrive || slide) arriveSpeed(distance, maxSpeed, speedBlendTicks) else maxSpeed,
+            topSpeed = topSpeed,
+            distance = distance,
+            horizontalOnly = horizontalOnly,
+            headingBlend = headingBlend,
+            slide = slide
+        )
+    }
+
+    /**
+     * Eases heading and speed towards this tick's goal and works out the push that makes this tick's step match.
+     * Vanilla moves by velocity plus push and then applies friction, so knockback, ice and falling all work like vanilla.
+     */
+    private fun updateMotion() {
+        val goal = steerGoal
+        isTravelling = goal != null && !pokemonEntity.isDeadOrDying
+        val heading = pokemonEntity.heading
+        val turnTarget = pokemonEntity.stationaryTurnTarget
+        if (goal == null && turnTarget != null) {
+            // Standing still and turning to look at something
+            val floating = pokemonEntity.stationaryTurnFloating
+            heading.steer(turnTarget, 0F, if (floating) FLOATING_TURN_BLEND_SECONDS else STANDING_TURN_BLEND_SECONDS)
+            mob.yRot = heading.yaw.value
+            // 2 and 3 tell the client which look turn blend to use
+            pokemonEntity.entityData.set(PokemonEntity.HEADING_TARGET, Vector3f(turnTarget, 0F, if (floating) 2F else 3F))
+            if (heading.yaw.isSettled()) {
+                pokemonEntity.stationaryTurnTarget = null
+            }
+        } else if (goal == null) {
+            heading.settle(mob.yRot, snap = true)
+            pokemonEntity.entityData.set(PokemonEntity.HEADING_TARGET, Vector3f(mob.yRot, 0F, 0F))
+        } else {
+            pokemonEntity.stationaryTurnTarget = null
+            heading.steer(goal.yaw, goal.pitch, goal.headingBlend)
+            pokemonEntity.entityData.set(PokemonEntity.HEADING_TRAVEL_BLEND, goal.headingBlend)
+            mob.yRot = heading.yaw.value
+            pokemonEntity.entityData.set(PokemonEntity.HEADING_TARGET, Vector3f(goal.yaw, goal.pitch, 1F))
+        }
+
+        val forward = heading.forward()
+        val currentSpeed = mob.deltaMovement.dot(forward)
+        // Walkers can't push off the air so a jump or fall just coasts
+        val airborneWalker = goal != null && goal.horizontalOnly && !mob.onGround()
+        if (goal == null || airborneWalker || pokemonEntity.isDeadOrDying) {
+            // Not pushing, follow the real speed so steering picks up from it without a jump
+            speedEase.snap(currentSpeed.toFloat())
+            pokemonEntity.pendingThrust = Vec3.ZERO
+            return
+        }
+
+        if (goal.slide) {
+            // Push straight at the target whichever way we're facinge
+            val velocity = mob.deltaMovement.let { if (goal.horizontalOnly) Vec3(it.x, 0.0, it.z) else it }
+            val push = goal.direction.scale(goal.speed).subtract(velocity)
+            pokemonEntity.pendingThrust = if (push.length() > goal.topSpeed) push.normalize().scale(goal.topSpeed) else push
+            speedEase.snap(currentSpeed.toFloat())
+            return
+        }
+
+        // Only go as fast as we're facing the right way
+        val facing = forward.dot(goal.direction).coerceAtLeast(0.0)
+        speedEase.update((goal.speed * facing).toFloat())
+
+        // Vanilla steps velocity plus push
+        val push = (speedEase.value - currentSpeed).coerceIn(-goal.topSpeed, goal.topSpeed)
+        pokemonEntity.pendingThrust = forward.scale(push)
+    }
+
+    private fun blockFriction(): Double {
+        return mob.level().getBlockState(mob.getBlockPosBelowThatAffectsMyMovement()).block.getFriction().toDouble()
+    }
+
+    private fun stopInputs() {
+        mob.speed = 0F
+        mob.yya = 0F
+        mob.setZza(0F)
+        mob.setXxa(0F)
+    }
+
+    /**
+     * Speed where vanilla ground friction balances the walk input force
+     */
+    private fun groundTopSpeed(speed: Double): Double {
+        val blockFriction = blockFriction()
+        if (mob.onGround()) {
+            return vanillaGroundTopSpeed(speed, blockFriction)
+        }
+        val inputForce = speed * VANILLA_INPUT_SCALE * VANILLA_FLYING_SPEED
+        return inputForce / (1 - blockFriction * VANILLA_AIR_FRICTION)
     }
 
     /*

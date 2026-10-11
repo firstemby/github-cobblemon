@@ -56,7 +56,7 @@ import com.cobblemon.mod.common.api.riding.behaviour.RidingController
 import com.cobblemon.mod.common.api.riding.events.SelectDriverEvent
 import com.cobblemon.mod.common.api.riding.sound.RideSoundManager
 import com.cobblemon.mod.common.api.riding.stats.RidingStat
-import com.cobblemon.mod.common.api.riding.util.RidingAnimationData
+import com.cobblemon.mod.common.api.riding.util.DynamicAnimationData
 import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.scheduling.SchedulingTracker
 import com.cobblemon.mod.common.api.scheduling.afterOnServer
@@ -77,6 +77,9 @@ import com.cobblemon.mod.common.entity.ai.OmniPathNavigation
 import com.cobblemon.mod.common.entity.generic.GenericBedrockEntity
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonBodyRotationControl
+import com.cobblemon.mod.common.entity.pokemon.ai.PokemonLookControl
+import com.cobblemon.mod.common.entity.pokemon.ai.HeadingEase
 import com.cobblemon.mod.common.entity.pokemon.ai.PokemonMoveControl
 import com.cobblemon.mod.common.entity.pokemon.ai.sensors.PokemonItemSensor
 import com.cobblemon.mod.common.entity.pokemon.effects.EffectTracker
@@ -150,6 +153,7 @@ import net.minecraft.world.entity.*
 import net.minecraft.world.entity.ai.Brain
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.ai.control.BodyRotationControl
 import net.minecraft.world.entity.ai.control.MoveControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
@@ -175,6 +179,7 @@ import net.minecraft.world.level.material.FluidState
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import org.joml.Vector3f
 import java.util.*
 import java.util.concurrent.CompletableFuture
 import kotlin.math.PI
@@ -217,6 +222,12 @@ open class PokemonEntity(
         @JvmStatic var RIDE_STAMINA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var SCALE_MODIFIER = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
         @JvmStatic var IS_ALPHA = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        @JvmStatic val IS_SPRINTING = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.BOOLEAN)
+        // Heading the server is easing towards as yaw, pitch and 0 when not steering, 1 when steering, 2 for a floating look turn
+        // and 3 for a standing look turn
+        @JvmStatic val HEADING_TARGET = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.VECTOR3)
+        // Blend time in seconds travel turns use for how the pokemon is moving
+        @JvmStatic val HEADING_TRAVEL_BLEND = SynchedEntityData.defineId(PokemonEntity::class.java, EntityDataSerializers.FLOAT)
 
         const val BATTLE_LOCK = "battle"
         const val EVOLUTION_LOCK = "evolving"
@@ -298,6 +309,9 @@ open class PokemonEntity(
     var shownItem: ItemStack
         get() = entityData.get(SHOWN_HELD_ITEM)
         set(value) = entityData.set(SHOWN_HELD_ITEM, value)
+    var isPokemonSprinting: Boolean
+        get() = entityData.get(IS_SPRINTING)
+        set(value) { entityData.set(IS_SPRINTING, value) }
 
     var lastLightningBoltUUID: UUID? = null
 
@@ -310,7 +324,7 @@ open class PokemonEntity(
 
     var enablePoseTypeRecalculation = true
 
-    val ridingAnimationData: RidingAnimationData = RidingAnimationData(this)
+    val ridingAnimationData: DynamicAnimationData = DynamicAnimationData(this)
     var rideSoundManager: RideSoundManager = RideSoundManager(this)
 
     private val rideStatOverrides = mutableMapOf<RidingStyle, MutableMap<RidingStat, Double>>()
@@ -319,6 +333,15 @@ open class PokemonEntity(
 
     var previousRidingState: RidingBehaviourState? = null
         private set
+
+    /** Push from PokemonMoveControl, added on the next travel right before vanilla moves the mon and applies friction */
+    var pendingThrust: Vec3 = Vec3.ZERO
+    /** Eased travel direction. Moved by PokemonMoveControl on the server and PokemonBodyRotationControl on the client */
+    val heading = HeadingEase()
+    /** Yaw a standing pokemon is turning its body to, set by PokemonBodyRotationControl and eased by PokemonMoveControl */
+    var stationaryTurnTarget: Float? = null
+    /** Whether that turn is a floating one, which uses the slower floating turn blend */
+    var stationaryTurnFloating = false
 
     val runtime: MoLangRuntime by lazy {
         MoLangRuntime()
@@ -430,6 +453,7 @@ open class PokemonEntity(
         delegate.changePokemon(pokemon)
         addPosableFunctions(struct)
         moveControl = PokemonMoveControl(this)
+        lookControl = PokemonLookControl(this)
         if (!level().isClientSide) {
             remakeBrain()
         }
@@ -467,6 +491,9 @@ open class PokemonEntity(
         builder.define(RIDE_STAMINA, 1F)
         builder.define(SCALE_MODIFIER, 1F)
         builder.define(IS_ALPHA, false)
+        builder.define(IS_SPRINTING, false)
+        builder.define(HEADING_TARGET, Vector3f())
+        builder.define(HEADING_TRAVEL_BLEND, PokemonMoveControl.GROUND_HEADING_BLEND_SECONDS)
     }
 
     override fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {
@@ -653,11 +680,13 @@ open class PokemonEntity(
         isPokemonFlying = flyDist - flyDistO > 0.005F
         isPokemonWalking = walkDist - walkDistO > 0.005F
 
-        if (passengers.isNotEmpty() && level().isClientSide) {
-            rideSoundManager.tick()
+        if (level().isClientSide) {
             ridingAnimationData.update()
-        } else if (!passengers.isNotEmpty() && level().isClientSide) {
-            rideSoundManager.stop()
+            if (passengers.isNotEmpty()) {
+                rideSoundManager.tick()
+            } else {
+                rideSoundManager.stop()
+            }
         }
 
         flyDistO = flyDist
@@ -708,6 +737,10 @@ open class PokemonEntity(
             clearRestriction()
             val spawnDirection = entityData.get(SPAWN_DIRECTION).takeIf { it.isFinite() } ?: 0F
             yBodyRot = (spawnDirection * 1000F).toInt() / 1000F
+            yRot = yBodyRot
+            // hold the heading here too so turning starts from the spawn direction once this ends
+            heading.settle(yRot, snap = true)
+            stationaryTurnTarget = null
         }
 
         jumping = false
@@ -782,6 +815,10 @@ open class PokemonEntity(
 
     fun setMoveControl(moveControl: MoveControl) {
         this.moveControl = moveControl
+    }
+
+    override fun createBodyControl(): BodyRotationControl {
+        return PokemonBodyRotationControl(this)
     }
 
     /**
@@ -1916,7 +1953,16 @@ open class PokemonEntity(
 
             //Prevent current travel logic when riding a pokemon.
             if (!this.hasRider() || this.controllingPassenger == null) {
+                // Same place vanilla adds walk input. Used up here so a second travel in a tick can't push twice
+                deltaMovement = deltaMovement.add(pendingThrust)
+                pendingThrust = Vec3.ZERO
+                // Powered flight uses its own drag instead of vanilla air friction
+                val poweredFlight = getBehaviourFlag(PokemonBehaviourFlag.FLYING) && !isInLiquid
+                setDiscardFriction(poweredFlight)
                 super.travel(movementInput)
+                if (poweredFlight) {
+                    deltaMovement = deltaMovement.scale(PokemonMoveControl.FLYER_DRAG)
+                }
             } else {
                 val inp = ifRidingAvailableSupply(fallback = Vec3.ZERO) { behaviour, settings, state ->
                     behaviour.velocity(settings, state, this, this.controllingPassenger as Player, deltaMovement)
