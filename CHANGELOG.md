@@ -48,6 +48,7 @@
 - Fixed Alolan Raticate's cry not playing
 - Fixed the `alpha` property having no tab completion in commands such as `/pokespawn`, `/pokegive` and `/pokeedit`, and added the missing `dmax_level`, `gmax_factor` and `tradable` aliases to tab completion
 
+
 ### Developer
 
 ### Molang & Datapacks
