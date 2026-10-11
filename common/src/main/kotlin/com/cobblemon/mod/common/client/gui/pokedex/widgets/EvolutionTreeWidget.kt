@@ -9,19 +9,11 @@
 package com.cobblemon.mod.common.client.gui.pokedex.widgets
 
 import com.cobblemon.mod.common.Cobblemon
-import com.cobblemon.mod.common.CobblemonItems
 import com.cobblemon.mod.common.api.gui.*
 import com.cobblemon.mod.common.api.pokedex.Dexes
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
-import com.cobblemon.mod.common.api.pokedex.entry.CobblemonBiomeDexEvolutionRequirementDisplay
-import com.cobblemon.mod.common.api.pokedex.entry.DexEntries
-import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionDisplay
-import com.cobblemon.mod.common.api.pokedex.entry.DexEvolutionRequirementDisplay
-import com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry
-import com.cobblemon.mod.common.api.pokedex.entry.PokedexForm
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
+import com.cobblemon.mod.common.api.pokedex.entry.*
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies
-import com.cobblemon.mod.common.api.pokemon.evolution.Evolution
 import com.cobblemon.mod.common.api.text.add
 import com.cobblemon.mod.common.api.text.bold
 import com.cobblemon.mod.common.api.text.green
@@ -41,16 +33,15 @@ import com.cobblemon.mod.common.client.render.renderScaledGuiItemIcon
 import com.cobblemon.mod.common.pokemon.FormData
 import com.cobblemon.mod.common.pokemon.Gender
 import com.cobblemon.mod.common.pokemon.RenderablePokemon
-import com.cobblemon.mod.common.util.asIdentifierDefaultingNamespace
 import com.cobblemon.mod.common.util.cobblemonResource
 import com.cobblemon.mod.common.util.lang
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.core.registries.Registries
 import net.minecraft.locale.Language
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 
 class EvolutionTreeWidget(
@@ -168,7 +159,8 @@ class EvolutionTreeWidget(
         // Stop at whatever the dex can't resolve, and at cycles (datapacks)
         val visited = mutableSetOf(rootSpecies.speciesId to rootForm.displayForm)
         while (preEvolution != null) {
-            val preEvolutionSpecies = Dexes.findDexEntryBySpeciesId(preEvolution.fromSpecies) ?: break
+            val preEvolutionSpecies = DexEntries.entries.values.firstOrNull { it.speciesId == preEvolution.fromSpecies &&
+                    it.forms.any {form -> form.displayForm.equals(preEvolution.fromForm, ignoreCase = true)}} ?: break
             val preEvolutionForm = preEvolutionSpecies.forms.firstOrNull { it.displayForm.equals(preEvolution.fromForm, ignoreCase = true) } ?: break
             if (!visited.add(preEvolutionSpecies.speciesId to preEvolutionForm.displayForm)) break
             rootSpecies = preEvolutionSpecies
@@ -176,19 +168,16 @@ class EvolutionTreeWidget(
             preEvolution = findPreEvolution(rootSpecies, rootForm)
         }
 
-        val entry = Dexes.findDexEntryBySpeciesId(rootSpecies.speciesId)
-            ?: throw RuntimeException("Root dex entry not found")
-
         val viewedFormEquivalents = Dexes.getFormEquivalents(pokedexForm.displayForm)
         viewedForm = PokemonSpecies.getByIdentifier(pokedexEntry.speciesId)
             ?.forms?.firstOrNull { viewedFormEquivalents.contains(it.name.lowercase()) }
 
         val formEquivalents = Dexes.getFormEquivalents(rootForm.displayForm)
         val form =
-            entry.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
-            entry.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
+            rootSpecies.forms.firstOrNull { formEquivalents.contains(it.displayForm.lowercase()) } ?:
+            rootSpecies.forms.first { it.displayForm.equals("Normal", ignoreCase = true) }
 
-        val rootEvolutionNode = buildEvolutionTree(entry, form)
+        val rootEvolutionNode = buildEvolutionTree(rootSpecies, form)
 
 //        val isSameEntry = previousRootPokedexEntry != null && pokedexEntry?.id == previousRootPokedexEntry?.id
 //        val isSameForm =
@@ -214,7 +203,7 @@ class EvolutionTreeWidget(
 
     /** The evolution leading to [form]; the standard form falls back to any form of the species (no evolution leads to regular Vivillon). */
     private fun findPreEvolution(entry: PokedexEntry, form: PokedexForm): DexEvolutionDisplay? {
-        return DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == entry.speciesId && it.toForm == form.displayForm }
+        return DexEntries.evolutionDisplays.firstOrNull { it.toSpecies == entry.speciesId && form.displayForm.equals(it.toForm, ignoreCase = true) }
             ?: DexEntries.evolutionDisplays.takeIf { form.displayForm.equals("Normal", ignoreCase = true) }
                 ?.firstOrNull { it.toSpecies == entry.speciesId }
     }
@@ -246,7 +235,8 @@ class EvolutionTreeWidget(
         val evolutions = DexEntries.evolutionDisplays.filter { it.fromSpecies == pokedexEntry.speciesId && formEquivalents.contains(it.fromForm.lowercase()) }
 
         val children = evolutions.mapNotNull {
-            val childPokedexEntry = Dexes.findDexEntryBySpeciesId(it.toSpecies)
+            val childPokedexEntry = DexEntries.entries.values.firstOrNull { entry -> entry.speciesId == it.toSpecies &&
+                    entry.forms.any {form -> form.displayForm.equals(it.toForm, ignoreCase = true)}}
             if (childPokedexEntry == null) {
                 Cobblemon.LOGGER.warn("Dex entry not found for species: ${it.toSpecies}")
                 return@mapNotNull null
