@@ -234,11 +234,11 @@ fun Entity.isDusk(): Boolean {
 }
 
 fun Entity.isStandingOn(blocks: Set<String>, depth: Int = 2): Boolean {
-    for (currentDepth in 1..depth) {
-        val bellowBlockPos = blockPosition().below(currentDepth)
+    for (currentDepth in 0..depth) {
+        val bellowBlockPos = blockPosBelowThatAffectsMyMovement.below(currentDepth)
         val blockState = level().getBlockState(bellowBlockPos)
 
-        if (blockState.isAir || !blockState.isCollisionShapeFullBlock(level(), bellowBlockPos)) continue
+        if (blockState.isAir) continue
 
         val elementOrTags = ExtraCodecs.TAG_OR_ELEMENT_ID.listOf().decode(JavaOps.INSTANCE, blocks.toList()).result().get().first
         elementOrTags.forEach {

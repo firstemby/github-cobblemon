@@ -6,6 +6,7 @@
   "maleRatio": 0.75,
   "height": 19,
   "weight": 1550,
+  "silenceStepSounds": true,
   "pokedex": [
     "cobblemon.species.arcanine.desc"
   ],

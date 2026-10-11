@@ -1,0 +1,48 @@
+{
+    "values": [
+        { "id": "minecraft:stone", "required": false },
+        { "id": "minecraft:granite", "required": false },
+        { "id": "minecraft:andesite", "required": false },
+        { "id": "minecraft:diorite", "required": false },
+        { "id": "minecraft:sulfur", "required": false },
+        { "id": "minecraft:cinnabar", "required": false },
+        { "id": "minecraft:tuff", "required": false },
+        { "id": "minecraft:calcite", "required": false },
+        { "id": "minecraft:dripstone", "required": false },
+        { "id": "minecraft:netherrack", "required": false },
+        { "id": "minecraft:bedrock", "required": false },
+        { "id": "#c:stones", "required": false },
+        { "id": "#c:netherracks", "required": false },
+        { "id": "#c:endstones", "required": false },
+        { "id": "#c:cobblestones", "required": false },
+        
+        { "id": "#c:ore_bearing_ground/deepslate", "required": false },
+        { "id": "#minecraft:deepslate_ore_replaceables", "required": false },
+        { "id": "#c:ore_bearing_ground/stone", "required": false },
+        { "id": "#minecraft:stone_ore_replaceables", "required": false },
+        { "id": "#minecraft:height_specific_ore_replaceables", "required": false },
+        { "id": "#c:ore_bearing_ground/netherrack", "required": false },
+        { "id": "#minecraft:base_stone_nether", "required": false },
+        { "id": "#minecraft:base_stone_overworld", "required": false },
+        { "id": "#c:ores_in_ground/deepslate", "required": false },
+        { "id": "#c:ores_in_ground/stone", "required": false },
+        { "id": "#c:ores_in_ground/netherrack", "required": false },
+        
+        { "id": "#minecraft:terracotta", "required": false },
+        { "id": "#c:glazed_terracottas", "required": false },
+        { "id": "#c:concretes", "required": false },
+        { "id": "#minecraft:concrete_slabs", "required": false },
+        { "id": "#minecraft:concrete_stairs", "required": false },
+        { "id": "#cobblemon:concrete_blocks", "required": false },
+        
+        { "id": "#minecraft:coral_blocks", "required": false },
+        { "id": "#cobblemon:dead_coral", "required": false },
+        { "id": "#minecraft:shulker_boxes", "required": false },
+        { "id": "#c:obsidians", "required": false },
+        { "id": "#c:sandstones/blocks", "required": false },
+        
+        { "id": "#cobblemon:red_tumblestones", "required": false },
+        { "id": "#cobblemon:black_tumblestones", "required": false },
+        { "id": "#cobblemon:sky_tumblestones", "required": false }
+    ]
+}

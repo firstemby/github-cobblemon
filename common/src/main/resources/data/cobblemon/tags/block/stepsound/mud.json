@@ -1,0 +1,6 @@
+{
+    "values": [
+        { "id": "minecraft:mud", "required": false },
+        { "id": "minecraft:muddy_mangrove_roots", "required": false }
+    ]
+}
