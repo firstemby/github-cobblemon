@@ -1,9 +1,0 @@
-{
-    "type": "cobblemon:structure",
-    "config": {
-        "cobblemon_structures": [
-            "cobblemon:ruins/crumbling_arch"
-        ],
-        "cobblemon_processors": "cobblemon:ruins/crumbling_arch_ruins"
-    }
-}

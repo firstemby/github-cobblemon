@@ -1,8 +1,0 @@
-{
-  "match": {
-    "items": "cobblemon:luminous_moss"
-  },
-  "luminance": {
-    "type": "block_self"
-  }
-}

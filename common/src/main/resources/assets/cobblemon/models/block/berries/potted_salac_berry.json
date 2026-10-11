@@ -1,6 +1,0 @@
-{
-  "parent": "cobblemon:block/berries/potted_aguav_berry",
-  "textures": {
-    "3": "cobblemon:block/berries/salac_tree"
-  }
-}

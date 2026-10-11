@@ -1,7 +1,0 @@
-{
-  "parent": "cobblemon:block/electirizer",
-  "textures": {
-        "0": "cobblemon:block/decorative/magmarizer",
-		"particle": "cobblemon:block/decorative/magmarizer"
-  }
-}

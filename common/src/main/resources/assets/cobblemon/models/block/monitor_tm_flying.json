@@ -1,6 +1,0 @@
-{
-  "parent": "cobblemon:block/monitor",
-  "textures": {
-    "screen": "cobblemon:block/functional/monitor/monitor_screen_type_flying"
-  }
-}

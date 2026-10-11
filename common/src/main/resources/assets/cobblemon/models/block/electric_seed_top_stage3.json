@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "cobblemon:block/flowers/electric_seed_top_stage3"
-  }
-}

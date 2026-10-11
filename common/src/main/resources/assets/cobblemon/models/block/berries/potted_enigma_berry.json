@@ -1,6 +1,0 @@
-{
-  "parent": "cobblemon:block/berries/potted_durin_berry",
-  "textures": {
-    "2": "cobblemon:block/berries/enigma_tree"
-  }
-}

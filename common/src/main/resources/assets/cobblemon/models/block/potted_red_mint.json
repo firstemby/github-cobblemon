@@ -1,6 +1,0 @@
-{
-  "parent": "cobblemon:block/potted_mint_template",
-  "textures": {
-    "mint": "cobblemon:block/crops/red_mint"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "parent": "cobblemon:block/monitor_overlay_screen",
-  "textures": {
-    "screen": "cobblemon:block/functional/monitor/monitor_screen_scanning",
-    "screen_overlay": "cobblemon:block/functional/monitor/monitor_screen_progress_7"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "parent": "cobblemon:block/berries/potted_hondew_berry",
-  "textures": {
-    "4": "cobblemon:block/berries/belue_tree"
-  }
-}
