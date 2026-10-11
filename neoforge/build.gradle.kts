@@ -29,6 +29,8 @@ repositories {
     maven(url = "https://thedarkcolour.github.io/KotlinForForge/")
     maven(url = "https://api.modrinth.com/maven")
     maven(url = "https://maven.neoforged.net/releases")
+    maven(url = "https://maven.terraformersmc.com/")
+    maven(url = "https://maven.shedaniel.me")
     mavenLocal()
 }
 
@@ -68,6 +70,7 @@ dependencies {
         bundle(it)
     }
 
+    modCompileOnlyApi(libs.rei.neoforge.api)
 }
 
 tasks {

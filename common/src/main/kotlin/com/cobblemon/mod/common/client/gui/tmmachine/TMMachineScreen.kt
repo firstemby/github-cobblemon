@@ -68,7 +68,7 @@ import kotlin.math.ceil
 class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, title: Component) : AbstractContainerScreen<TMMachineMenu>(containerMenu, inventory, title) {
     companion object {
         const val HEIGHT = 226
-        const val WIDTH = 191
+        const val WIDTH = 251
         const val HALF_SCALE = 0.5F
 
         const val DISC_DIAMETER = 56
@@ -167,6 +167,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
         super.init()
 
+        leftPos -= 60 / 2 // Adjust for the left slots
+
         logoResource = getLogoResource(minecraft?.languageManager?.selected)
 
         logoPosX = leftPos + 1
@@ -178,7 +180,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         partySlotList.clear()
         CobblemonClient.storage.party.forEachIndexed { index, pokemon ->
             partySlotList.add(TMPartySlotWidget(
-                pX = leftPos - 60,
+                pX = leftPos,
                 pY = topPos + 9 + ((TMPartySlotWidget.HEIGHT + 3) * index),
                 pokemon = pokemon,
                 onPress = {
@@ -208,7 +210,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
 
         moveDescriptionWidget = MoveDescriptionWidget(
-            leftPos + 125,
+            leftPos + 185,
             topPos + 42,
             60,
             34
@@ -216,7 +218,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (!children().contains(moveDescriptionWidget)) addRenderableWidget(moveDescriptionWidget)
 
         typesScrollList = TypesScrollingWidget(
-            pX = leftPos + 6,
+            pX = leftPos + 66,
             pY = topPos + 11,
             setType = { type ->
                 sortType = type
@@ -227,7 +229,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (!children().contains(typesScrollList)) addRenderableWidget(typesScrollList)
 
         movesScrollingList = MovesScrollingWidget(
-            pX = leftPos + 4,
+            pX = leftPos + 64,
             pY = topPos + 29,
             tmList,
             setTM = { tm, clicked ->
@@ -241,7 +243,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         )
         if (!children().contains(movesScrollingList)) addRenderableWidget(movesScrollingList)
 
-        moveSearchWidget = MoveSearchWidget(pX = leftPos + 16, pY = topPos + 13) {
+        moveSearchWidget = MoveSearchWidget(pX = leftPos + 76, pY = topPos + 13) {
             if (::movesScrollingList.isInitialized && moveSearchWidget.isFocused) {
                 val input = moveSearchWidget.value
                 setMoveList(filter = if (input.isBlank()) null else input)
@@ -250,7 +252,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (!children().contains(moveSearchWidget)) addRenderableWidget(moveSearchWidget)
 
         backButton = IconButton(
-            leftPos + 106F,
+            leftPos + 166F,
             topPos + 1F,
             20,
             18,
@@ -261,7 +263,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         if (!children().contains(backButton)) addRenderableWidget(backButton)
 
         selectedMoveButton = MoveSlotButton(
-            leftPos + 6,
+            leftPos + 66,
             topPos + 6,
             move = menu.currentlySelectedTM?.moveName,
             pp = menu.currentlySelectedTM?.moveName?.pp ?: 0,
@@ -275,7 +277,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         }
         if (!children().contains(selectedMoveButton)) addRenderableWidget(selectedMoveButton)
 
-        startButton = StartButton(leftPos + 5F, topPos + 35F) {
+        startButton = StartButton(leftPos + 65F, topPos + 35F) {
             if (!(it as StartButton).disabled) {
                 menu.currentlySelectedTM?.let {
                     val burnActive = menu.containerData?.get(TMMachineBlockEntity.BURN_ACTIVE_INDEX) ?: 0
@@ -368,11 +370,11 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             logoPosY = logoPosY + (if (logoSlideDown) 1 else -1)
             var borderHit = false
 
-            if (logoSlideRight && (logoPosX + (LOGO_WIDTH * HALF_SCALE).toInt()) >= (leftPos + SCREEN_SAVER_WIDTH + 1)) {
+            if (logoSlideRight && (logoPosX + (LOGO_WIDTH * HALF_SCALE).toInt()) >= (leftPos + SCREEN_SAVER_WIDTH + 61)) {
                 logoSlideRight = false
                 borderHit = true
             }
-            if ((!logoSlideRight) && logoPosX <= (leftPos + 1)) {
+            if ((!logoSlideRight) && logoPosX <= (leftPos + 61)) {
                 logoSlideRight = true
                 borderHit = true
             }
@@ -404,7 +406,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
     private fun isBurnActive(): Boolean = (menu.containerData?.get(TMMachineBlockEntity.BURN_ACTIVE_INDEX) ?: 0) == 1
 
-    private fun setScreenFromMode(screen: Int) {
+    fun setScreenFromMode(screen: Int) {
         mode = screen
         when (mode) {
             TYPE_SELECT_MODE -> {
@@ -426,7 +428,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         updateHeldStackMove()
     }
 
-    private fun setMoveList(filter: String? = null, pokemon: Pokemon? = null) {
+    fun setMoveList(filter: String? = null, pokemon: Pokemon? = null) {
         val filteredList = TechnicalMachine.filterTms(
             search = filter,
             type = sortType,
@@ -542,7 +544,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = discBase,
-                x = leftPos + 32,
+                x = leftPos + 92,
                 y = topPos + 50,
                 width = DISC_DIAMETER,
                 height = DISC_DIAMETER,
@@ -557,7 +559,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 blitk(
                     matrixStack = poseStack,
                     texture = discReflectiveRotating,
-                    x = leftPos + 32,
+                    x = leftPos + 92,
                     y = topPos + 50,
                     width = DISC_DIAMETER,
                     height = DISC_DIAMETER,
@@ -573,7 +575,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 blitk(
                     matrixStack = poseStack,
                     texture = discRotating,
-                    x = leftPos + 32,
+                    x = leftPos + 92,
                     y = topPos + 50,
                     width = DISC_DIAMETER,
                     height = DISC_DIAMETER,
@@ -588,7 +590,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 blitk(
                     matrixStack = poseStack,
                     texture = discReflective,
-                    x = leftPos + 32,
+                    x = leftPos + 92,
                     y = topPos + 50,
                     width = DISC_DIAMETER,
                     height = DISC_DIAMETER,
@@ -610,7 +612,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
                 blitk(
                     matrixStack = poseStack,
                     texture = discOverlay,
-                    x = leftPos + 32,
+                    x = leftPos + 92,
                     y = topPos + 50,
                     width = DISC_DIAMETER,
                     height = DISC_DIAMETER,
@@ -624,7 +626,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = poseStack,
             texture = discBase,
-            x = leftPos + 32,
+            x = leftPos + 92,
             y = topPos + 50,
             width = DISC_DIAMETER,
             height = DISC_DIAMETER,
@@ -636,7 +638,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = discReflectiveRotating,
-                x = leftPos + 32,
+                x = leftPos + 92,
                 y = topPos + 50,
                 width = DISC_DIAMETER,
                 height = DISC_DIAMETER,
@@ -649,7 +651,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = discRotating,
-                x = leftPos + 32,
+                x = leftPos + 92,
                 y = topPos + 50,
                 width = DISC_DIAMETER,
                 height = DISC_DIAMETER,
@@ -661,7 +663,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = discReflective,
-                x = leftPos + 32,
+                x = leftPos + 92,
                 y = topPos + 50,
                 width = DISC_DIAMETER,
                 height = DISC_DIAMETER,
@@ -676,7 +678,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = poseStack,
             texture = discBorder,
-            x = leftPos + 32,
+            x = leftPos + 92,
             y = topPos + 50,
             width = DISC_DIAMETER,
             height = DISC_DIAMETER,
@@ -690,7 +692,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = context.pose(),
             texture = MovesWidget.movesPowerIconResource,
-            x = leftPos + 127.5,
+            x = leftPos + 187.5,
             y = topPos + 7.5,
             width = 5,
             height = 5
@@ -699,7 +701,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = context.pose(),
             texture = MovesWidget.movesAccuracyIconResource,
-            x = leftPos + 127.5,
+            x = leftPos + 187.5,
             y = topPos + 19.5,
             width = 5,
             height = 5
@@ -708,7 +710,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = context.pose(),
             texture = MovesWidget.movesEffectIconResource,
-            x = leftPos + 127.5,
+            x = leftPos + 187.5,
             y = topPos + 31.5,
             width = 5,
             height = 5
@@ -717,7 +719,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledText(
             context = context,
             text = lang("ui.power"),
-            x = leftPos + 134.5,
+            x = leftPos + 194.5,
             y = topPos + 8,
             shadow = true,
             scale = HALF_SCALE
@@ -726,7 +728,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledText(
             context = context,
             text = lang("ui.accuracy"),
-            x = leftPos + 134.5,
+            x = leftPos + 194.5,
             y = topPos + 20,
             shadow = true,
             scale = HALF_SCALE
@@ -735,7 +737,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledText(
             context = context,
             text = lang("ui.effect"),
-            x = leftPos + 134.5,
+            x = leftPos + 194.5,
             y = topPos + 32,
             shadow = true,
             scale = HALF_SCALE
@@ -745,7 +747,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledTextJustifiedRight(
             context = context,
             text = movePower,
-            x = leftPos + 183,
+            x = leftPos + 243,
             y = topPos + 8,
             shadow = true,
             scale = HALF_SCALE
@@ -755,7 +757,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledTextJustifiedRight(
             context = context,
             text = moveAccuracy,
-            x = leftPos + 183,
+            x = leftPos + 243,
             y = topPos + 20,
             shadow = true,
             scale = HALF_SCALE
@@ -765,7 +767,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         drawScaledTextJustifiedRight(
             context = context,
             text = moveEffect,
-            x = leftPos + 183,
+            x = leftPos + 243,
             y = topPos + 32,
             shadow = true,
             scale = HALF_SCALE
@@ -775,7 +777,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             val recipe = TechnicalMachines.moveToTM[moveTemplate]?.getClampedRecipe() ?: listOf()
             // Render material cost
             recipe.forEachIndexed { index, recipe ->
-                val itemX = (leftPos + 129 + (index * 18))
+                val itemX = (leftPos + 189 + (index * 18))
                 val itemY = (topPos + 90)
 
                 val stacks = recipe.ingredient.items
@@ -953,7 +955,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = screenSaver,
-                x = leftPos + 1,
+                x = leftPos + 61,
                 y = topPos + 1,
                 width = SCREEN_SAVER_WIDTH,
                 height = SCREEN_SAVER_HEIGHT,
@@ -977,7 +979,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = cobblemonResource("textures/white.png"),
-                x = leftPos + 1,
+                x = leftPos + 61,
                 y = scanPosY * 0.5,
                 width = SCREEN_SAVER_WIDTH,
                 height = 1,
@@ -988,15 +990,15 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             )
 
             context.enableScissor(
-                leftPos + 1,
+                leftPos + 61,
                 topPos + 1,
-                leftPos + 1 + SCREEN_SAVER_WIDTH,
+                leftPos + 61 + SCREEN_SAVER_WIDTH,
                 topPos + 1 + SCREEN_SAVER_HEIGHT
             )
             blitk(
                 matrixStack = poseStack,
                 texture = scanLines,
-                x = leftPos + 1,
+                x = leftPos + 61,
                 y = topPos + 1 - scanLineOffsetY,
                 width = 118,
                 height = 114,
@@ -1007,7 +1009,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = poseStack,
                 texture = screenOverlay,
-                x = leftPos + 1,
+                x = leftPos + 61,
                 y = topPos + 1,
                 width = SCREEN_SAVER_WIDTH,
                 height = SCREEN_SAVER_HEIGHT,
@@ -1156,9 +1158,8 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    override fun renderBackground(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {}
-
     override fun renderBg(guiGraphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {}
+    override fun renderTransparentBackground(guiGraphics: GuiGraphics) {}
 
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         super.renderTransparentBackground(graphics)
@@ -1167,16 +1168,16 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
         blitk(
             matrixStack = matrices,
             texture = baseResource,
-            x = leftPos,
+            x = leftPos + 60,
             y = topPos,
-            width = WIDTH,
+            width = WIDTH - 60,
             height = HEIGHT
         )
 
         blitk(
             matrixStack = matrices,
             texture = emptyDiscSlot,
-            x = leftPos + 105,
+            x = leftPos + 165,
             y = topPos + 116,
             width = 16,
             height = 16
@@ -1188,7 +1189,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             context = graphics,
             font = CobblemonResources.DEFAULT_LARGE,
             text = label.bold(),
-            x = leftPos + 5,
+            x = leftPos + 65,
             y = topPos + 1
         )
 
@@ -1196,7 +1197,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = matrices,
                 texture = tmTray,
-                x = leftPos,
+                x = leftPos + 60,
                 y = topPos,
                 width = 120,
                 height = 112
@@ -1206,7 +1207,7 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
             blitk(
                 matrixStack = matrices,
                 texture = CobblemonResources.WHITE,
-                x = leftPos + 33,
+                x = leftPos + 93,
                 y = topPos + 36,
                 width = burnProgressWidth,
                 height = 2
@@ -1268,19 +1269,6 @@ class TMMachineScreen(containerMenu: TMMachineMenu, val inventory: Inventory, ti
 
     fun playSound(soundEvent: SoundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
-    }
-
-    override fun hasClickedOutside(
-        mouseX: Double,
-        mouseY: Double,
-        guiLeft: Int,
-        guiTop: Int,
-        mouseButton: Int
-    ): Boolean {
-        partySlotList.forEach {
-            if (it.pokemon != null && it.isMouseOver(mouseX, mouseY)) return false
-        }
-        return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, mouseButton)
     }
 
     class MoveDescriptionWidget(pX: Int, pY: Int, width: Int, height: Int) : ScrollingWidget<MoveDescriptionWidget.TextSlot>(

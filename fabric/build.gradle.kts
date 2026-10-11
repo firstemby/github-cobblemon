@@ -84,7 +84,6 @@ dependencies {
     }
 
     minecraftServerLibraries(libs.icu4j)
-
 }
 
 publishing {

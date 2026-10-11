@@ -76,7 +76,7 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
     }
 
     private fun initiateSlots() {
-        val startX = 15
+        val startX = 75
         val startY = 144
         val slotWidth = 18
         val slotHeight = 18
@@ -160,7 +160,7 @@ class TMMachineMenu(menuType: MenuType<*>, syncId: Int) : AbstractContainerMenu(
     }
 
     class BlankTMSlot(container: Container, slot: Int, x: Int, y: Int) : Slot(container, slot, x, y) {
-        override fun mayPlace(stack: ItemStack): Boolean = super.mayPlace(stack) && (stack.item == CobblemonItems.BLANK_TM)
+        override fun mayPlace(stack: ItemStack): Boolean = super.mayPlace(stack) && ((stack.item == CobblemonItems.BLANK_TM) || stack.isEmpty)
     }
 
     override fun slotChanged(containerToSend: AbstractContainerMenu, dataSlotIndex: Int, stack: ItemStack) {

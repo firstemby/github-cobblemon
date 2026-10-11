@@ -33,6 +33,12 @@
     ],
     "modmenu": [
       "com.cobblemon.mod.fabric.client.integration.modmenu.CobblemonModMenu"
+    ],
+    "emi": [
+      "com.cobblemon.mod.common.integration.emi.CobblemonEmiPlugin"
+    ],
+    "rei_client": [
+      "com.cobblemon.mod.common.integration.rei.CobblemonReiClientPlugin"
     ]
   },
   "mixins": [
