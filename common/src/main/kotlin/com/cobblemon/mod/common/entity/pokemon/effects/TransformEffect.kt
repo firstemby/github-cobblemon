@@ -35,7 +35,8 @@ class TransformEffect(
 ) : BattleEffect(), MocKEffect {
 
     constructor(mimic: Pokemon, doCry: Boolean = true) : this(
-        mock = mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM),
+        // effectiveScale is used instead of scaleModifier so alpha sized targets are copied without copying the alpha flag itself
+        mock = mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM).also { it.scaleModifier = mimic.effectiveScale },
         scale = mimic.form.baseScale * mimic.effectiveScale,
         doCry = doCry
     )

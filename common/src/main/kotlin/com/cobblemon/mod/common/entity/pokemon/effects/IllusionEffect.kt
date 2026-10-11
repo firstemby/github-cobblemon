@@ -38,7 +38,8 @@ class IllusionEffect(
 ) : BattleEffect(), MocKEffect {
 
     constructor(disguise: Pokemon) : this(
-        mock = disguise.createPokemonProperties(PokemonPropertyExtractor.ILLUSION),
+        // effectiveScale is used instead of scaleModifier so alpha sized disguises are copied without copying the alpha flag itself
+        mock = disguise.createPokemonProperties(PokemonPropertyExtractor.ILLUSION).also { it.scaleModifier = disguise.effectiveScale },
         scale = disguise.form.baseScale * disguise.effectiveScale
     )
 
