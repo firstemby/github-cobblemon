@@ -30,6 +30,7 @@
 - Fixed evolution trees not building properly when a pokemon has several pokedex entries for different regions.
 - Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
 - Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
+- Fixed friendship booster items not being recognised as such
 
 ### Developer
 

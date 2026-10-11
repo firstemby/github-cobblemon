@@ -120,7 +120,7 @@ object CobblemonItemTags {
     @JvmField val DESTINY_KNOT = create("held/destiny_knot")
     @JvmField val EVERSTONE = create("held/everstone")
     @JvmField val EXPERIENCE_SHARE = create("held/experience_share")
-    @JvmField val IS_FRIENDSHIP_BOOSTER = create("is_friendship_booster")
+    @JvmField val IS_FRIENDSHIP_BOOSTER = create("held/is_friendship_booster")
     @JvmField val ANY_HELD_ITEM = create("held/is_held_item")
     @JvmField val BLACKLISTED_ITEMS_TO_HOLD = create("held/blacklisted_items_to_hold")
     @JvmField val WHITELISTED_ITEMS_TO_HOLD = create("held/whitelisted_items_to_hold")
