@@ -28,6 +28,8 @@
 - Fixed the Pokédex evolution tree crashing with a stack overflow on evolutions that loop back on themselves.
 - Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
 - Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
+- Fixed `/spectatebattle` not starting the battle theme music, unlike spectating through the interaction wheel 
+- Fixed spectating not being cancelled when a battle starts for the spectator, which merged the two battles into an unplayable state, and fixed spectating a second battle leaving the first one still sending updates
 
 ### Developer
 
