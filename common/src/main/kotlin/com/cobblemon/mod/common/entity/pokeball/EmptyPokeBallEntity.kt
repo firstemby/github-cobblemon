@@ -8,6 +8,7 @@
 
 package com.cobblemon.mod.common.entity.pokeball
 
+import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
@@ -18,7 +19,9 @@ import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import com.cobblemon.mod.common.api.events.pokeball.ThrownPokeballHitEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import com.cobblemon.mod.common.api.molang.MoLangFunctions.setup
 import com.cobblemon.mod.common.api.net.serializers.StringSetDataSerializer
 import com.cobblemon.mod.common.api.net.serializers.Vec3DataSerializer
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
@@ -49,7 +52,16 @@ import com.cobblemon.mod.common.net.messages.client.spawn.SpawnPokeballPacket
 import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.ai.PokemonBrain
 import com.cobblemon.mod.common.pokemon.properties.UncatchableProperty
-import com.cobblemon.mod.common.util.*
+import com.cobblemon.mod.common.util.asArrayValue
+import com.cobblemon.mod.common.util.cobblemonResource
+import com.cobblemon.mod.common.util.isServerSide
+import com.cobblemon.mod.common.util.lang
+import com.cobblemon.mod.common.util.party
+import com.cobblemon.mod.common.util.playSoundServer
+import com.cobblemon.mod.common.util.sendParticlesServer
+import com.cobblemon.mod.common.util.setPositionSafely
+import com.cobblemon.mod.common.util.update
+import com.cobblemon.mod.common.util.withQueryValue
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
@@ -65,7 +77,10 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.util.Mth.PI
-import net.minecraft.world.entity.*
+import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile
 import net.minecraft.world.item.Item
@@ -97,7 +112,9 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         const val SECONDS_BETWEEN_SHAKES = 1.25F
         const val SECONDS_BEFORE_SHAKE = 1F
 
-        val DIMENSIONS = EntityDimensions.fixed(0.4F, 0.4F)
+        val DIMENSIONS: EntityDimensions = EntityDimensions.fixed(0.4F, 0.4F)
+
+        val runtime = MoLangRuntime().setup()
     }
 
     val dataTrackerEmitter = SimpleObservable<EntityDataAccessor<*>>()
@@ -125,7 +142,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         .addFunction("thrower") { owner?.asMostSpecificMoLangValue() ?: DoubleValue.ZERO }
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
-        pokeBall = PokeBalls.POKE_BALL
+        pokeBall = PokeBalls.STRANGE_BALL
         super.defineSynchedData(builder)
         builder.define(CAPTURE_STATE, CaptureState.NOT.ordinal.toByte())
         builder.define(ASPECTS, emptySet())
@@ -158,7 +175,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         addPosableFunctions(struct)
     }
 
-    constructor(world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
+    constructor(world: Level) : this(pokeBall = PokeBalls.STRANGE_BALL, world = world)
     constructor(
         pokeBall: PokeBall,
         world: Level,
@@ -176,7 +193,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         this.pokeBall = pokeBall
     }
 
-    var pokeBall: PokeBall = PokeBalls.POKE_BALL
+    var pokeBall: PokeBall = PokeBalls.STRANGE_BALL
 
     override fun onHitBlock(hitResult: BlockHitResult) {
         if (captureState == CaptureState.NOT) {
@@ -187,7 +204,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 discard()
                 val player = this.owner as? ServerPlayer
                 if (player?.isCreative == false) {
-                    spawnAtLocation(defaultItem)
+                    spawnAtLocation(pokeBall.stack())
                 }
             }
         } else {
@@ -245,7 +262,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         lang(
                             "capture.attempted_capture",
                             throwerActor.getName(),
-                            pokeBall.item().description,
+                            pokeBall.item().getDescriptionId(pokeBall.stack),
                             pokemonEntity.exposedSpecies.translatedName
                         ).yellow()
                     )
@@ -283,7 +300,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         val owner = owner
         discard()
         val player = owner?.takeIf { it is ServerPlayer } as? ServerPlayer
-        if (player?.isCreative != true) spawnAtLocation(defaultItem)
+        if (player?.isCreative != true) spawnAtLocation(pokeBall.stack())
         return
     }
 
@@ -295,7 +312,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         delegate.tick(this)
 
         if (level().isServerSide()) {
-        
+
 
             if (this.tickCount > 600 && this.capturingPokemon == null) {
                 this.remove(RemovalReason.DISCARDED)
@@ -345,7 +362,8 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                 // Do a capture
                 val pokemon = capturingPokemon ?: return
                 val player = this.owner as? ServerPlayer ?: return
-                val captureTime = if (pokeBall.ancient == true) 1.8F else 1F
+
+                val captureTime = if (pokeBall.ancient) 1.8F else 1F
                 after(seconds = captureTime) {
                     // Dupes occurred by double-adding Pokémon, this hopefully prevents it triple-condom style
                     // wtf did I just read above me
@@ -354,8 +372,13 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
                         discard()
                         captureFuture.complete(true)
                         val party = player.party()
+
+                        val effectsRuntime = runtime
+                            .withQueryValue("pokeball", struct)
+                            .withQueryValue("pokemon", pokemon.asMoLangValue())
+
                         pokemon.pokemon.caughtBall = pokeBall
-                        pokeBall.effects.forEach { effect -> effect.apply(player, pokemon.pokemon) }
+                        pokeBall.effects.forEach { effect -> effect.resolve(effectsRuntime) }
                         party.add(pokemon.pokemon)
                         val leashHolder = pokemon.leashHolder
 
@@ -379,7 +402,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         }
         // Emits a shake by changing the value to the opposite of what it currently is. Sends an update to the client basically.
         // We could replace this with a packet, but it feels awfully excessive when we already have 5 bajillion packets.
-        if (this.pokeBall.ancient) {
+        if (pokeBall.ancient) {
             when (captureResult.numberOfShakes) {
                 1 -> ancientBallShake(setOf("q.bedrock_stateful('ancient_poke_ball', 'weirdhop')"))
                 2 -> ancientBallShake(setOf("q.bedrock_stateful('ancient_poke_ball', 'bighop')"))
@@ -394,7 +417,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     private fun breakFree() {
         val pokemon = capturingPokemon ?: return
         pokemon.setPositionSafely(position())
-        
+
         pokemon.beamMode = 2
         pokemon.isInvisible = false
         pokemon.isSilent = false
@@ -424,8 +447,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
         after(seconds = 0.1F) {
             captureFuture.complete(false)
-            val ballType =
-                this.pokeBall.name.path.lowercase().replace("_", "")
+            val ballType = pokeBall.name.path.lowercase().replace("_", "")
             val mode = "casual"
             val sendflash =
                 BedrockParticleOptionsRepository.getEffect(cobblemonResource("${ballType}/${mode}/sendflash"))
@@ -442,7 +464,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     override fun getDefaultItem(): Item = pokeBall.item()
 
-    override fun getDimensions(pPose: Pose) = DIMENSIONS
+    override fun getDimensions(pPose: Pose): EntityDimensions = DIMENSIONS
 
     private fun attemptCatch(pokemonEntity: PokemonEntity) {
         pokemonEntity.busyLocks.add(this)

@@ -133,11 +133,11 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         val pokeBobberBaitItemStack = fishingBobberEntity.entityData.get(PokeRodFishingBobberEntity.POKEBOBBER_BAIT)
         val pokeRodId = ResourceLocation.tryParse(pokeRodIdStr)
         val pokeRod = PokeRods.getPokeRod(pokeRodId!!)
-        val ballItem = PokeBalls.getPokeBall(pokeRod?.pokeBallId!!)!!.item
+        val ballItem = PokeBalls.getPokeBall(pokeRod?.pokeBallId!!)!!.stack
 
         // render the pokebobber
         Minecraft.getInstance().itemRenderer.renderStatic(
-            ballItem.defaultInstance,
+            ballItem,
             ItemDisplayContext.GROUND,
             light,
             OverlayTexture.NO_OVERLAY,

@@ -22,20 +22,22 @@ import net.minecraft.world.entity.LivingEntity
  * @property matching Will this multiplier should be applied if the labels match?
  * @property labels The literal labels being queried.
  */
-class LabelModifier(
-    val multiplier: Float,
-    val matching: Boolean,
-    vararg val labels: String
-) : CatchRateModifier {
+data class LabelModifier(val multiplier: Float, val matching: Boolean, val labels: List<String>) : CatchRateModifier {
+    companion object {
+        const val VARIANT = "labels"
+    }
 
     override fun isGuaranteed(): Boolean = false
 
     override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior =
+        CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = if (this.matching) pokemon.hasLabels(*this.labels) else !pokemon.hasLabels(*this.labels)
+    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean =
+        if (this.matching) pokemon.hasLabels(*this.labels.toSet().toTypedArray()) else !pokemon.hasLabels(*this.labels.toSet().toTypedArray())
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float =
+        this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
 }

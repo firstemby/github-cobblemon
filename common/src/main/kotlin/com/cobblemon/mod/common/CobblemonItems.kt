@@ -172,6 +172,8 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
     val ANCIENT_GIGATON_BALL = pokeBallItem(PokeBalls.ANCIENT_GIGATON_BALL)
     @JvmField
     val ANCIENT_ORIGIN_BALL = pokeBallItem(PokeBalls.ANCIENT_ORIGIN_BALL)
+    @JvmField
+    val STRANGE_BALL = pokeBallItem(PokeBalls.STRANGE_BALL)
 
     val pokedexes = mutableListOf<PokedexItem>()
     @JvmField
@@ -1591,7 +1593,7 @@ object CobblemonItems : PlatformRegistry<Registry<Item>, ResourceKey<Registry<It
 
     private fun pokeBallItem(pokeBall: PokeBall): PokeBallItem {
         val item = create(pokeBall.name.path, PokeBallItem(pokeBall))
-        pokeBall.item = item
+        pokeBall.stack = item.defaultInstance
         pokeBalls.add(item)
         return item
     }

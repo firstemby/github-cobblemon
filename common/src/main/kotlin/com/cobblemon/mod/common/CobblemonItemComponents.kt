@@ -99,6 +99,12 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
             .networkSynchronized(ByteBufCodecs.BOOL)
             .build())
 
+    @JvmField
+    val POKE_BALL: DataComponentType<PokeBallComponent> = create("poke_ball", DataComponentType.builder<PokeBallComponent>()
+        .persistent(PokeBallComponent.CODEC)
+        .networkSynchronized(PokeBallComponent.PACKET_CODEC)
+        .build())
+
     fun register() {
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:pokemon_item"), POKEMON_ITEM)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:bait"), BAIT)
@@ -112,6 +118,7 @@ object CobblemonItemComponents : PlatformRegistry<Registry<DataComponentType<*>>
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:food"), FOOD)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:mob_effects"), MOB_EFFECTS)
         Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:held_item_effect"), HELD_ITEM_EFFECT)
+        Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, ResourceLocation.parse("cobblemon:poke_ball"), POKE_BALL)
     }
 
     override val registry = BuiltInRegistries.DATA_COMPONENT_TYPE

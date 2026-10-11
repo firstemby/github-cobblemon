@@ -11,6 +11,7 @@ package com.cobblemon.mod.common.api.pokeball.catching.modifiers
 import com.cobblemon.mod.common.api.pokeball.catching.CatchRateModifier
 import com.cobblemon.mod.common.api.pokemon.stats.Stat
 import com.cobblemon.mod.common.pokemon.Pokemon
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.entity.LivingEntity
 
 /**
@@ -26,9 +27,13 @@ import net.minecraft.world.entity.LivingEntity
  */
 class BaseStatModifier(
     val stat: Stat,
-    val comparator: (value: Int) -> Boolean,
-    val multiplier: Float
+    val value: Int,
+    val comparator: Comparator,
+    val multiplier: Float,
 ) : CatchRateModifier {
+    companion object {
+        const val VARIANT = "bst"
+    }
 
     init {
         if (stat.type != Stat.Type.PERMANENT) {
@@ -44,9 +49,36 @@ class BaseStatModifier(
 
     override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
         val valStat = pokemon.form.baseStats[this.stat] ?: return false
-        return comparator(valStat)
+        return when (comparator) {
+            Comparator.GT -> value > valStat
+            Comparator.LT -> value < valStat
+            Comparator.GTE -> value >= valStat
+            Comparator.LTE -> value <= valStat
+            Comparator.EQ -> value == valStat
+            Comparator.NOT -> value != valStat
+        }
     }
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(
+        currentCatchRate: Float,
+        thrower: LivingEntity,
+        pokemon: Pokemon,
+    ): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
+    enum class Comparator : StringRepresentable {
+        @JvmField
+        GT,
+        @JvmField
+        LT,
+        @JvmField
+        GTE,
+        @JvmField
+        LTE,
+        @JvmField
+        EQ,
+        @JvmField
+        NOT,
+        ;
+        override fun getSerializedName(): String = this.name.lowercase()
+    }
 }

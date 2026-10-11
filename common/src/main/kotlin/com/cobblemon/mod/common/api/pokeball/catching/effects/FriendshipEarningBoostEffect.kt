@@ -18,6 +18,10 @@ import net.minecraft.world.entity.LivingEntity
  *
  * @property multiplier The multiplier for friendship gains
  */
-class FriendshipEarningBoostEffect(val multiplier: Float) : CaptureEffect {
+data class FriendshipEarningBoostEffect(val multiplier: Float) : CaptureEffect {
+    companion object {
+        const val VARIANT = "friendship_boost"
+    }
+
     override fun apply(thrower: LivingEntity, pokemon: Pokemon) {}
 }

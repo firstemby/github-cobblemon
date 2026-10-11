@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.mixin.client;
 
 import com.cobblemon.mod.common.client.CobblemonBakingOverrides;
+import com.cobblemon.mod.common.client.CobblemonClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.renderer.block.model.BlockModel;
@@ -19,6 +20,7 @@ import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Mixin(ModelBakery.class)
 public abstract class ModelLoaderMixin {
@@ -38,8 +41,10 @@ public abstract class ModelLoaderMixin {
 
     @Shadow protected abstract void loadItemModelAndDependencies(ResourceLocation resourceLocation);
 
+    @Shadow protected abstract void loadSpecialItemModelAndDependencies(ModelResourceLocation modelResourceLocation);
+
     @Unique
-    List<String> dynamicFolders = Arrays.asList("egg", "tm");
+    List<String> dynamicFolders = Arrays.asList("egg", "tm", "poke_ball");
 
     @Inject(
             method = "<init>",
@@ -67,6 +72,9 @@ public abstract class ModelLoaderMixin {
          * hacky at the init stage and hacky at the render stage. Pretty cool in the gameplay stage though.
          *
          * - Hiro
+         *
+         * We also want to load different contexts (first/third person etc.) for poke ball models, so additional check was added for them.
+         * - Gito
          */
 
         dynamicFolders.forEach(folder -> {
@@ -74,6 +82,15 @@ public abstract class ModelLoaderMixin {
             map.forEach((key, value) -> {
                 ResourceLocation resourceLocation = new ResourceLocation(key.getNamespace(), key.getPath().replace("models/item/", "").replace(".json", ""));
                 this.loadItemModelAndDependencies(resourceLocation);
+
+                if (folder.equals("poke_ball")) {
+                    // also load variants for different display ctx
+                    Arrays.stream(ItemDisplayContext.values())
+                            .forEach(item -> {
+                                ModelResourceLocation model = new ModelResourceLocation(resourceLocation, item.getSerializedName());
+                                this.loadSpecialItemModelAndDependencies(model);
+                            });
+                }
             });
         });
     }

@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.OrientationControllable
 import com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ClientBallDisplay
+import com.cobblemon.mod.common.client.entity.EmptyPokeBallClientDelegate
 import com.cobblemon.mod.common.client.entity.NPCClientDelegate
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate
 import com.cobblemon.mod.common.client.entity.PokemonClientDelegate.Companion.BEAM_EXTEND_TIME
@@ -43,6 +44,7 @@ import com.cobblemon.mod.common.util.lang
 import com.cobblemon.mod.common.util.math.DoubleRange
 import com.cobblemon.mod.common.util.math.geometry.toRadians
 import com.cobblemon.mod.common.util.math.remap
+import com.cobblemon.mod.common.util.toRGBA
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.ChatFormatting
@@ -64,6 +66,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.*
+import java.lang.Integer
 import kotlin.math.*
 
 class PokemonRenderer(
@@ -320,6 +323,11 @@ class PokemonRenderer(
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.activeSendoutScale.toDouble(), 0.0)
         val recallBallOrigin = (beamTarget as? Player)?.let { RecallArmAnimationTracker.get(it.uuid)?.beamOrigin }
 
+        val beamColorVec4f = when(beamTarget) {
+            is EmptyPokeBallEntity -> (beamTarget.delegate as EmptyPokeBallClientDelegate).getBeamColor()
+            else -> entity.pokemon.caughtBall.beamColor.rgb.toRGBA()
+        }
+
         val beamSourcePosition = when {
             // cover the recall ball origin presence
             recallBallOrigin != null -> recallBallOrigin
@@ -385,10 +393,10 @@ class PokemonRenderer(
             partialTicks = partialTicks,
             totalLevelTime = entity.level().gameTime,
             height = pokemonPosition.distanceTo(beamSourcePosition.add(offset)).toFloat() * ratio,
-            red = recallBeamColour.x,
-            green = recallBeamColour.y,
-            blue = recallBeamColour.z,
-            alpha = recallBeamColour.w,
+            red = beamColorVec4f.x,
+            green = beamColorVec4f.y,
+            blue = beamColorVec4f.z,
+            alpha = beamColorVec4f.w,
             beamRadius = 0.03F,
             glowRadius = 0.07F,
             glowAlpha = 0.4F

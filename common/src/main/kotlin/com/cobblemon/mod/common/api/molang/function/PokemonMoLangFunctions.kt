@@ -47,6 +47,10 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         functions["max_hp"] = { DoubleValue(pokemon.maxHealth.toDouble()) }
         functions["current_hp"] = { DoubleValue(pokemon.currentHealth.toDouble()) }
         functions["friendship"] = { DoubleValue(pokemon.friendship.toDouble()) }
+        functions["set_friendship"] = { params ->
+            val amount = params.getDouble(0)
+            pokemon.setFriendship(amount.toInt())
+        }
         functions["max_fullness"] = { DoubleValue(pokemon.getMaxFullness().toDouble()) }
         functions["fullness"] = { DoubleValue(pokemon.currentFullness.toDouble()) }
         functions["lose_fullness"] = { params ->
@@ -452,6 +456,7 @@ object PokemonMoLangFunctions : AbstractMoLangFunctionHolder<Pokemon>() {
         functions["entity"] = { pokemon.entity?.asMoLangValue() ?: DoubleValue.ZERO }
         functions["is_alpha"] = { DoubleValue(pokemon.isAlpha) }
         functions["size_category"] = { StringValue(pokemon.getSizeCategory().name) }
+        functions["full_heal"] = { pokemon.heal() }
 
         return functions
     }

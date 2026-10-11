@@ -37,6 +37,7 @@ import com.cobblemon.mod.common.api.molang.function.NPCMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PCMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PartyMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PlayerMoLangFunctions
+import com.cobblemon.mod.common.api.molang.function.PokeBallMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PokedexMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PokemonEntityMoLangFunctions
 import com.cobblemon.mod.common.api.molang.function.PokemonMoLangFunctions
@@ -56,6 +57,7 @@ import com.cobblemon.mod.common.api.storage.party.PartyStore
 import com.cobblemon.mod.common.api.storage.pc.PCStore
 import com.cobblemon.mod.common.entity.npc.NPCEntity
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity
+import com.cobblemon.mod.common.pokeball.PokeBall
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
 import com.cobblemon.mod.common.util.effectiveName
@@ -262,6 +264,18 @@ object MoLangFunctions {
         return value
     }
 
+    fun PokeBall.asMoLangValue(): ObjectValue<PokeBall> {
+        val value =
+            ObjectValue(
+                obj = this,
+                stringify = { it.name.toString() }
+            )
+
+        value.addFunctions(PokeBallMoLangFunctions.attach(this))
+
+        return value
+    }
+
     fun Vec3.asMoLangValue(): ObjectValue<Vec3> {
         val value =
             ObjectValue(
@@ -385,6 +399,12 @@ object MoLangFunctions {
 
     fun QueryStruct.addPokemonStoreFunctions(store: PokemonStore<*>): QueryStruct {
         val addedFunctions = PokemonStoreMoLangFunctions.attach(store)
+        addFunctions(addedFunctions)
+        return this
+    }
+
+    fun QueryStruct.addPokeBallFunctions(ball: PokeBall): QueryStruct {
+        val addedFunctions = PokeBallMoLangFunctions.attach(ball)
         addFunctions(addedFunctions)
         return this
     }

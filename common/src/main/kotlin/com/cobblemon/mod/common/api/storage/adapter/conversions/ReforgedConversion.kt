@@ -145,7 +145,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
         // result.nickname = this.find(nbt, "Nickname", NbtCompound::getString)
 
         val ball = this.find(nbt, "CaughtBall", CompoundTag::getString)
-        result.caughtBall = if(ball != null) PokeBalls.getPokeBall(ResourceLocation.parse(ball)) ?: PokeBalls.POKE_BALL else PokeBalls.POKE_BALL
+        result.caughtBall = if(ball != null) PokeBalls.getPokeBall(ResourceLocation.parse(ball)) else PokeBalls.STRANGE_BALL
 
         return result
     }

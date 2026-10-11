@@ -23,6 +23,7 @@ import com.cobblemon.mod.common.api.scheduling.Schedulable
 import com.cobblemon.mod.common.api.text.text
 import com.cobblemon.mod.common.entity.MoLangScriptingEntity
 import com.cobblemon.mod.common.entity.PosableEntity
+import com.cobblemon.mod.common.entity.pokeball.EmptyPokeBallEntity
 import com.cobblemon.mod.common.net.messages.client.animation.PlayPosableAnimationPacket
 import com.cobblemon.mod.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import com.cobblemon.mod.common.util.asArrayValue
@@ -306,6 +307,15 @@ object EntityMoLangFunctions : AbstractMoLangFunctionHolder<Entity>() {
 
                 functions["face"] = { params ->
                     ObjectValue(ReferenceDialogueFaceProvider(entity.id, params.getBooleanOrNull(0) != false))
+                }
+
+                // EmptyPokeBallEntity is a subclass of PosableEntity
+                // meaning we need to add a condition here to attach our func
+                // only to instance of EmptyPokeBallEntity
+                if (entity is EmptyPokeBallEntity) {
+                    functions["capture_state"] = {
+                        StringValue(entity.captureState.toString())
+                    }
                 }
             }
 
