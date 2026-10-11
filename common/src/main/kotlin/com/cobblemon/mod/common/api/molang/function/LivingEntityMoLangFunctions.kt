@@ -98,14 +98,14 @@ object LivingEntityMoLangFunctions : AbstractMoLangFunctionHolder<LivingEntity>(
             val targetEntity = params.get<MoValue>(0)
             val maxDistance = params.getDoubleOrNull(1)?.toFloat() ?: 2.0F
 
-            val entity =
+            val target =
                 if (targetEntity is ObjectValue<*> && targetEntity.obj is Entity) {
                     targetEntity.obj as Entity
                 } else {
                     return@isLookingAt DoubleValue.ZERO
                 }
 
-            DoubleValue(entity.isLookingAt(entity, maxDistance))
+            DoubleValue(entity.isLookingAt(target, maxDistance))
         }
         functions["is_living_entity"] = { DoubleValue.ONE }
         functions["is_flying"] = { DoubleValue(entity.isFallFlying) }

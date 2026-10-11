@@ -33,6 +33,7 @@
 
 ### Molang & Datapacks
 - Fixed `q.pokemon.nature` returning class instance instead of proper string value (`cobblemon:adamant`)
+- Fixed `q.entity.is_looking_at` result being always `1` for whatever entity passed as target
 
 ### Localization
 - Updated translations for:
