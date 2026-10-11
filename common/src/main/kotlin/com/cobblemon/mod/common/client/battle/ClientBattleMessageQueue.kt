@@ -9,6 +9,7 @@
 package com.cobblemon.mod.common.client.battle
 
 import net.minecraft.util.FormattedCharSequence
+import net.minecraft.network.chat.Component
 
 /**
  * A wrapper around the client battle message information. This is essentially an appending list of all
@@ -21,6 +22,21 @@ import net.minecraft.util.FormattedCharSequence
 class ClientBattleMessageQueue {
     var listeners = mutableListOf<(FormattedCharSequence) -> Unit>()
     private val messages = mutableListOf<FormattedCharSequence>()
+    private val components = mutableListOf<Component>()
+    private val componentListeners = mutableListOf<(Component) -> Unit>()
+
+    fun addComponents(messages: Iterable<Component>) {
+        messages.forEach { message ->
+            components.add(message)
+            componentListeners.toList().forEach { it(message) }
+        }
+    }
+
+    fun subscribeComponents(listener: (Component) -> Unit): () -> Unit {
+        componentListeners.add(listener)
+        components.forEach(listener)
+        return { componentListeners.remove(listener) }
+    }
 
     fun add(messages: Iterable<FormattedCharSequence>) {
         this.messages.addAll(messages)

@@ -20,10 +20,12 @@ import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionS
 import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleSwitchPokemonSelection
 import com.cobblemon.mod.common.client.gui.battle.subscreen.ForfeitConfirmationSelection
 import com.cobblemon.mod.common.client.gui.battle.widgets.BattleMessagePane
+import com.cobblemon.mod.common.client.gui.battle.widgets.BattleOptionTile
 import com.cobblemon.mod.common.client.keybind.boundKey
 import com.cobblemon.mod.common.client.keybind.keybinds.PartySendBinding
 import com.cobblemon.mod.common.client.render.drawScaledText
 import com.cobblemon.mod.common.net.messages.server.battle.RemoveSpectatorPacket
+import com.cobblemon.mod.common.util.asTranslated
 import com.cobblemon.mod.common.util.battleLang
 import com.cobblemon.mod.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
@@ -44,15 +46,16 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         val forfeitResource = cobblemonResource("textures/gui/battle/battle_menu_forfeit.png")
     }
 
-    private lateinit var messagePane: BattleMessagePane
+    lateinit var messagePane: BattleMessagePane
     var opacity = 0F
     val actor = CobblemonClient.battle?.side1?.actors?.find { it.uuid == Minecraft.getInstance().player?.uuid }
-    val specBackButton = BattleBackButton(12f, Minecraft.getInstance().window.guiScaledHeight - 32f)
+    val specBackButton = BattleBackButton(OPTION_ROOT_X - 3F, Minecraft.getInstance().window.guiScaledHeight - 22F)
 
     var queuedActions = mutableListOf<() -> Unit>()
 
     override fun init() {
         super.init()
+        if (this::messagePane.isInitialized) messagePane.dispose()
         messagePane = BattleMessagePane(CobblemonClient.battle!!.messages)
         messagePane.opacity = CobblemonClient.battleOverlay.opacityRatio.toFloat().coerceAtLeast(0.3F)
         addRenderableWidget(messagePane)
@@ -121,16 +124,17 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         }
 
         val currentSelection = getCurrentActionSelection()
-        if (currentSelection == null || currentSelection is BattleGeneralActionSelection ) {
+        if (currentSelection == null || currentSelection is BattleGeneralActionSelection) {
             drawScaledText(
                 context = context,
                 text = battleLang("ui.hide_label", PartySendBinding.boundKey().displayName),
                 x = Minecraft.getInstance().window.guiScaledWidth / 2,
-                y = (Minecraft.getInstance().window.guiScaledHeight / 5),
+                y = Minecraft.getInstance().window.guiScaledHeight / 5,
                 opacity = 0.75F * opacity,
                 centered = true
             )
-        } else if (currentSelection is ForfeitConfirmationSelection) {
+        }
+        if (currentSelection is ForfeitConfirmationSelection) {
             drawScaledText(
                 context = context,
                 text = battleLang("ui.forfeit_confirmation", PartySendBinding.boundKey().displayName),
@@ -144,6 +148,11 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
 
         queuedActions.forEach { it() }
         queuedActions.clear()
+        CobblemonClient.battleOverlay.mouseX = mouseX
+        CobblemonClient.battleOverlay.mouseY = mouseY
+        // The benched-team portrait columns + active hover panels are queued during the HUD pass and drawn
+        // here, last, so they sit above the switch-menu underlay, our own widgets and the chat.
+        CobblemonClient.battleOverlay.renderDeferredColumns(context)
     }
 
     override fun renderBackground(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
@@ -151,8 +160,6 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
     }
 
     fun deriveRootActionSelection(actor: ClientBattleActor, request: SingleActionRequest): BattleActionSelection? {
-
-
         return if (request.forceSwitch) {
             BattleSwitchPokemonSelection(this, request)
         } else {
@@ -175,9 +182,21 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
         CobblemonClient.battle?.minimised = true
     }
 
+    override fun removed() {
+        if (this::messagePane.isInitialized) messagePane.dispose()
+        super.removed()
+    }
+
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
-        if (this::messagePane.isInitialized) messagePane.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+        if (CobblemonClient.battleOverlay.columnMouseDragged(mouseX, mouseY)) return true
+        if (this::messagePane.isInitialized && messagePane.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) return true
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
+    }
+
+    override fun mouseReleased(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (this::messagePane.isInitialized) messagePane.mouseReleased(mouseX, mouseY, button)
+        if (CobblemonClient.battleOverlay.columnMouseReleased()) return true
+        return super.mouseReleased(mouseX, mouseY, button)
     }
 
     override fun charTyped(chr: Char, modifiers: Int): Boolean {
@@ -188,14 +207,18 @@ class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        // Grab a benched-team portrait column to drag it (left-click). Consumes the click if one was hit.
+        if (button == 0 && CobblemonClient.battleOverlay.columnMouseClicked(mouseX, mouseY)) return true
         if (button == PartySendBinding.boundKey().value && CobblemonClient.battleOverlay.opacity == BattleOverlay.MAX_OPACITY && PartySendBinding.canAction()) {
             return minimizeBattle()
         }
 
         val battle = CobblemonClient.battle
-        if (battle?.spectating == true && specBackButton.isHovered(mouseX, mouseY)) {
-            RemoveSpectatorPacket(battle.battleId).sendToServer()
-            CobblemonClient.endBattle()
+        if (battle?.spectating == true) {
+            if (specBackButton.isHovered(mouseX, mouseY)) {
+                RemoveSpectatorPacket(battle.battleId).sendToServer()
+                CobblemonClient.endBattle()
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button)
     }

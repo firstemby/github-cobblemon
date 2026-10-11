@@ -26,6 +26,8 @@ class ClearAllBoostInstruction(val message: BattleMessage): InterpreterInstructi
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {
             battle.activePokemon.forEach {
+                it.battlePokemon?.statChanges?.clear()
+                it.battlePokemon?.sendUpdate()
                 it.battlePokemon?.contextManager?.clear(BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
             }
             battle.broadcastChatMessage(battleLang("clearallboost"))

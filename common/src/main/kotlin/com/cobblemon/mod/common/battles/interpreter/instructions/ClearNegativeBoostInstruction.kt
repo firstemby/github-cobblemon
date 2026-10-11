@@ -36,6 +36,8 @@ class ClearNegativeBoostInstruction(val message: BattleMessage): InterpreterInst
                 battle.broadcastChatMessage(lang)
             }
 
+            battlePokemon.statChanges.entries.removeIf { it.value < 0 }
+            battlePokemon.sendUpdate()
             battlePokemon.contextManager.clear(BattleContext.Type.UNBOOST)
             battle.minorBattleActions[battlePokemon.uuid] = message
         }

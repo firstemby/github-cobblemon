@@ -37,7 +37,7 @@ class AbilityInstruction(val instructionSet: InstructionSet, val message: Battle
         val optionalPokemon = message.battlePokemonFromOptional(battle)
 
         // If there is an optional effect causing the activation, broadcast that instead of the standard effect
-        ShowdownInterpreter.broadcastAbility(battle, optionalEffect ?: effect, pokemon)
+        ShowdownInterpreter.broadcastAbility(battle, optionalEffect ?: effect, pokemon, revealedAbility = effect)
 
         battle.dispatch {
             val pokemonName = pokemon.getName()

@@ -8,6 +8,34 @@
 
 package com.cobblemon.mod.common
 
+import com.cobblemon.mod.common.net.serverhandling.battle.TeamPreviewSelectPokemonHandler
+
+import com.cobblemon.mod.common.net.messages.server.battle.TeamPreviewSelectPokemonPacket
+
+import com.cobblemon.mod.common.client.net.battle.CloseTeamPreviewHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.CloseTeamPreviewPacket
+
+import com.cobblemon.mod.common.client.net.battle.TeamPreviewHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.TeamPreviewPacket
+
+import com.cobblemon.mod.common.client.net.battle.BattleTimerHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleTimerPacket
+
+import com.cobblemon.mod.common.client.net.battle.BattleInformationHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInformationPacket
+
+import com.cobblemon.mod.common.client.net.battle.BattleActorTeamHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorTeamPacket
+
+import com.cobblemon.mod.common.client.net.battle.BattleActorInformationHandler
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleActorInformationPacket
+
 import com.cobblemon.mod.common.api.net.NetworkPacket
 import com.cobblemon.mod.common.client.net.OpenBehaviourEditorHandler
 import com.cobblemon.mod.common.client.net.PlayerInteractOptionsHandler
@@ -386,6 +414,12 @@ object CobblemonNetwork {
         // Battle packets
         list.add(PacketRegisterInfo(BattleEndPacket.ID, BattleEndPacket::decode, BattleEndHandler))
         list.add(PacketRegisterInfo(BattleInitializePacket.ID, BattleInitializePacket::decode, BattleInitializeHandler))
+        list.add(PacketRegisterInfo(BattleActorInformationPacket.ID, BattleActorInformationPacket::decode, BattleActorInformationHandler))
+        list.add(PacketRegisterInfo(BattleActorTeamPacket.ID, BattleActorTeamPacket::decode, BattleActorTeamHandler))
+        list.add(PacketRegisterInfo(BattleInformationPacket.ID, BattleInformationPacket::decode, BattleInformationHandler))
+        list.add(PacketRegisterInfo(BattleTimerPacket.ID, BattleTimerPacket::decode, BattleTimerHandler))
+        list.add(PacketRegisterInfo(TeamPreviewPacket.ID, TeamPreviewPacket::decode, TeamPreviewHandler))
+        list.add(PacketRegisterInfo(CloseTeamPreviewPacket.ID, CloseTeamPreviewPacket::decode, CloseTeamPreviewHandler))
         list.add(PacketRegisterInfo(BattleQueueRequestPacket.ID, BattleQueueRequestPacket::decode, BattleQueueRequestHandler))
         list.add(PacketRegisterInfo(BattleFaintPacket.ID, BattleFaintPacket::decode, BattleFaintHandler))
         list.add(PacketRegisterInfo(BattleMakeChoicePacket.ID, BattleMakeChoicePacket::decode, BattleMakeChoiceHandler))
@@ -574,6 +608,7 @@ object CobblemonNetwork {
 
         // Battle packets
         list.add(PacketRegisterInfo(BattleSelectActionsPacket.ID, BattleSelectActionsPacket::decode, BattleSelectActionsHandler))
+        list.add(PacketRegisterInfo(TeamPreviewSelectPokemonPacket.ID, TeamPreviewSelectPokemonPacket::decode, TeamPreviewSelectPokemonHandler))
         list.add(PacketRegisterInfo(SpectateBattlePacket.ID, SpectateBattlePacket::decode, SpectateBattleHandler))
         list.add(PacketRegisterInfo(RemoveSpectatorPacket.ID, RemoveSpectatorPacket::decode, RemoveSpectatorHandler))
 

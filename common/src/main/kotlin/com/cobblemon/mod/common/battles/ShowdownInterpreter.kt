@@ -211,7 +211,16 @@ object ShowdownInterpreter {
     }
 
     // Broadcasts a generic lang to notify players of ability activations (effects are broadcasted separately)
-    fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
+    @JvmOverloads
+    fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon, revealedAbility: Effect = effect) {
+        // Direct -ability messages omit the ability: prefix. A copied ability can also differ
+        // from the effect announced in chat (for example, Trace).
+        if (revealedAbility.type == Effect.Type.ABILITY || revealedAbility.type == Effect.Type.PURE) {
+            battle.dispatchGo {
+                pokemon.revealedAbility = revealedAbility.id
+                pokemon.sendUpdate()
+            }
+        }
         battle.dispatchWaiting(0.5F) {
             val lang = battleLang("ability.generic", pokemon.getName(), effect.typelessData).yellow()
             battle.broadcastChatMessage(lang)

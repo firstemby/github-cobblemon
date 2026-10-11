@@ -83,6 +83,10 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
             }
             battle.broadcastChatMessage(lang)
 
+            val changedStat = Stats.getStat(statKey)
+            val delta = if (isBoost) stages else -stages
+            pokemon.statChanges[changedStat] = ((pokemon.statChanges[changedStat] ?: 0) + delta).coerceIn(-6, 6)
+            pokemon.sendUpdate()
             val boostBucket = if (isBoost) BattleContext.Type.BOOST else BattleContext.Type.UNBOOST
             val context = ShowdownInterpreter.getContextFromAction(message, boostBucket, battle)
             // TODO: replace with context that tracks detailed information such as # of stages

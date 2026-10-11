@@ -19,6 +19,13 @@ import com.cobblemon.mod.common.battles.dispatch.InterpreterInstruction
  */
 object PostUpdateInstruction : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
-        battle.dispatchGo { battle.actors.forEach { it.postUpdate() } }
+        battle.dispatchGo {
+            battle.actors.forEach { it.postUpdate() }
+            battle.notifyAllOfUpdates()
+            val viewers = battle.actors.flatMap { it.getPlayerUUIDs() } + battle.spectators
+            battle.actors.forEach { actor ->
+                actor.pokemonList.forEach { it.updateBattleActorInformation(viewers) }
+            }
+        }
     }
 }

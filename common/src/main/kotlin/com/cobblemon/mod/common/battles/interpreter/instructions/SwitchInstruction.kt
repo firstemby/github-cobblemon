@@ -129,6 +129,14 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
 
                 activePokemon.battlePokemon?.let { oldPokemon ->
                     if (publicMessage.effect()?.id == "batonpass") oldPokemon.contextManager.swap(pokemon.contextManager, BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
+                    pokemon.statChanges.clear()
+                    if (publicMessage.effect()?.id == "batonpass") pokemon.statChanges.putAll(oldPokemon.statChanges)
+                    oldPokemon.statChanges.clear()
+                    if (oldPokemon.transformed != null) {
+                        oldPokemon.revealedMoves.indices.forEach { oldPokemon.revealedMoves[it] = null }
+                        oldPokemon.revealedAbility = null
+                    }
+                    oldPokemon.transformed = null
                     oldPokemon.contextManager.clear(BattleContext.Type.VOLATILE, BattleContext.Type.BOOST, BattleContext.Type.UNBOOST)
                     battle.majorBattleActions[oldPokemon.uuid] = publicMessage
 
@@ -215,6 +223,8 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
         }
 
         private fun broadcastSwitch(battle: PokemonBattle, actor: BattleActor, newPokemon: BattlePokemon, illusion: BattlePokemon?) {
+            // The active slot and its illusion are now set, so reveal the identity that entered battle.
+            newPokemon.sendUpdate()
             val publicPokemon = (illusion ?: newPokemon).effectedPokemon
             val publicLang = publicPokemon.nickname?.let { nickname ->
                 battleLang("switch.other.nickname", actor.getName(), nickname, publicPokemon.species.translatedName)

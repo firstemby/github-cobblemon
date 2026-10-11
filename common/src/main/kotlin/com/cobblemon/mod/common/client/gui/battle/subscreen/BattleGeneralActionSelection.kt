@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.gui.battle.subscreen
 
+import com.cobblemon.mod.common.util.cobblemonResource
+
 import com.cobblemon.mod.common.CobblemonSounds
 import com.cobblemon.mod.common.api.battles.model.actor.ActorType
 import com.cobblemon.mod.common.battles.FleeAttemptActionResponse
@@ -73,6 +75,12 @@ class BattleGeneralActionSelection(
                 addOption(rank++, battleLang("ui.forfeit"), BattleGUI.forfeitResource) {
                     battleGUI.changeActionSelection(ForfeitConfirmationSelection(battleGUI, request))
                     playDownSound(Minecraft.getInstance().soundManager)
+                }
+                if (battle.side2.actors.all { it.type == ActorType.PLAYER }) {
+                    addOption(rank++, battleLang("ui.team_info.button"), cobblemonResource("textures/gui/battle/team_info.png")) {
+                        battleGUI.changeActionSelection(BattleTeamInfoSelection(battleGUI, request))
+                        playDownSound(Minecraft.getInstance().soundManager)
+                    }
                 }
             }
         }

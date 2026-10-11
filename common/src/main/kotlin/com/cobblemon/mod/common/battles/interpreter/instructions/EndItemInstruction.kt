@@ -35,6 +35,8 @@ class EndItemInstruction(val message: BattleMessage): InterpreterInstruction {
             val battlePokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
             val itemEffect = message.effectAt(1) ?: return@dispatchWaiting
             battlePokemon.heldItemManager.handleEndInstruction(battlePokemon, battle, message)
+            battlePokemon.revealedHeldItem = net.minecraft.world.item.ItemStack.EMPTY
+            battlePokemon.sendUpdate()
             battle.minorBattleActions[battlePokemon.uuid] = message
             battlePokemon.contextManager.remove(itemEffect.id, BattleContext.Type.ITEM)
             if (message.hasOptionalArgument("eat")) {

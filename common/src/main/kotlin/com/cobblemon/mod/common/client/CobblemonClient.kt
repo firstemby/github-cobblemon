@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client
 
+import com.cobblemon.mod.common.client.battle.ClientBattleInformationRepository
+
 import com.cobblemon.mod.common.Cobblemon.LOGGER
 import com.cobblemon.mod.common.CobblemonBlockEntities
 import com.cobblemon.mod.common.CobblemonBlocks
@@ -126,6 +128,7 @@ object CobblemonClient {
         storage.onLogout()
         battle = null
         battleOverlay.onLogout()
+        ClientBattleInformationRepository.clear()
         ClientTaskTracker.clear()
         checkedStarterScreen = false
         overlay.resetAttachedToast()
@@ -618,6 +621,7 @@ object CobblemonClient {
     }
 
     fun endBattle() {
+        ClientBattleInformationRepository.clear()
         battle = null
         battleOverlay.lastKnownBattle = null
         BattleMusicController.endMusic()

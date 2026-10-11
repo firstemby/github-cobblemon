@@ -8,6 +8,16 @@
 
 package com.cobblemon.mod.common.api.battles.model
 
+import com.cobblemon.mod.common.net.messages.client.battle.FieldEffect
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInformationPacket
+
+import com.cobblemon.mod.common.net.messages.client.battle.BattleInformationDTO
+
+import com.cobblemon.mod.common.api.battles.interpreter.BattleContext
+
+import com.cobblemon.mod.common.CobblemonNetwork.sendPacket
+
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -254,6 +264,38 @@ open class PokemonBattle(
             }
         }
         this.turn = newTurnNumber
+        notifyAllOfUpdates()
+    }
+
+    fun notifyAllOfUpdates() {
+        val uuids = this.actors.flatMap { it.getPlayerUUIDs() } + this.spectators
+        notifyOfUpdates(uuids)
+    }
+
+    fun notifyOfUpdates(uuids: List<UUID>) {
+        val weather = this.contextManager.get(BattleContext.Type.WEATHER)?.firstOrNull()
+        val terrain = this.contextManager.get(BattleContext.Type.TERRAIN)?.firstOrNull()
+        val room = this.contextManager.get(BattleContext.Type.ROOM)?.firstOrNull()
+        val side1SidedEffects = getSidedFieldEffects(side1)
+        val side2SidedEffects = getSidedFieldEffects(side2)
+        val updatePacket = BattleInformationPacket(this.battleId, BattleInformationDTO(
+            turn = turn,
+            weather = weather?.let { FieldEffect(it.id, it.turn, it.origin?.entity?.id) },
+            terrain = terrain?.let { FieldEffect(it.id, it.turn, it.origin?.entity?.id) },
+            room = room?.let { FieldEffect(it.id, it.turn, it.origin?.entity?.id) },
+            side1SidedEffects = side1SidedEffects,
+            side2SidedEffects = side2SidedEffects,
+        ))
+        uuids.mapNotNull { it.getPlayer() }.forEach {
+            it.sendPacket(updatePacket)
+        }
+    }
+
+    private fun getSidedFieldEffects(side: BattleSide): List<FieldEffect> {
+        val hazards = side.contextManager.get(BattleContext.Type.HAZARD)?.map { FieldEffect(it.id, it.turn, it.origin?.entity?.id) } ?: emptyList()
+        val screens = side.contextManager.get(BattleContext.Type.SCREEN)?.map { FieldEffect(it.id, it.turn, it.origin?.entity?.id) } ?: emptyList()
+        val tailwind = side.contextManager.get(BattleContext.Type.TAILWIND)?.firstOrNull()?.let { FieldEffect(it.id, it.turn, it.origin?.entity?.id) }
+        return hazards + screens + listOfNotNull(tailwind)
     }
 
     fun end() {
@@ -470,6 +512,7 @@ open class PokemonBattle(
     }
 
     fun tick() {
+        if (!ended) actors.filterIsInstance<PlayerBattleActor>().forEach { it.timer?.tick() }
         try {
             while (dispatchResult.canProceed()) {
                 val dispatch = dispatches.poll() ?: break

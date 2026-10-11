@@ -8,6 +8,8 @@
 
 package com.cobblemon.mod.common.client.net.battle
 
+import com.cobblemon.mod.common.client.battle.ClientBattleInformationRepository
+
 import com.cobblemon.mod.common.api.net.ClientNetworkPacketHandler
 import com.cobblemon.mod.common.client.CobblemonClient
 import com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon
@@ -20,6 +22,9 @@ import net.minecraft.client.Minecraft
 
 object BattleInitializeHandler : ClientNetworkPacketHandler<BattleInitializePacket> {
     override fun handle(packet: BattleInitializePacket, client: Minecraft) {
+        ClientBattleInformationRepository.clear()
+        packet.side1.actors.forEach { ClientBattleInformationRepository.actorActualSides[it.uuid] = 1 }
+        packet.side2.actors.forEach { ClientBattleInformationRepository.actorActualSides[it.uuid] = 2 }
         val playerUUID = Minecraft.getInstance().player?.uuid
         CobblemonClient.battle = ClientBattle(
             packet.battleId,

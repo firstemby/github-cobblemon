@@ -8,6 +8,10 @@
 
 package com.cobblemon.mod.common.api.battles.model.actor
 
+import com.cobblemon.mod.common.net.messages.client.battle.BattleTimerPacket
+
+import com.cobblemon.mod.common.battles.actor.PlayerBattleActor
+
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle
 import com.cobblemon.mod.common.api.molang.MoLangFunctions.asMoLangValue
 import com.cobblemon.mod.common.api.net.NetworkPacket
@@ -48,6 +52,20 @@ abstract class BattleActor(
     var responses = mutableListOf<ShowdownActionResponse>()
     val expectingPassActions = mutableListOf<ShowdownActionResponse>()
     var mustChoose = false
+        set(value) {
+            if (field == value) return
+            field = value
+            if (this is PlayerBattleActor) {
+                timer?.let {
+                    if (value) {
+                        it.startSelection()
+                        sendUpdate(BattleTimerPacket(it.mustChooseBy()))
+                    } else {
+                        it.endSelection()
+                    }
+                }
+            }
+        }
 
     var itemsUsed = mutableListOf<BagItem>()
     /** For when battles start, it's the number of Pokémon that are still in the process of being sent out (animation wise) */

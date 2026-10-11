@@ -155,6 +155,13 @@ class DamageInstruction(
 
             val newHealthRatio: Float
             val remainingHealth = newHealth.split("/")[0].toInt()
+            val previousHealth = battlePokemon.effectedPokemon.currentHealth
+            val damageDealt = (previousHealth - remainingHealth).coerceAtLeast(0)
+            val maxHp = battlePokemon.effectedPokemon.maxHealth
+            if (damageDealt > 0 && maxHp > 0) {
+                val percent = Math.round(damageDealt.toFloat() / maxHp * 100F).coerceAtLeast(1)
+                battle.broadcastChatMessage(battleLang("damage_dealt", battlePokemon.getName(), "$percent%"))
+            }
 
             if (effect != null) {
                 val lang = when (effect.id) {
