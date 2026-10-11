@@ -73,7 +73,6 @@ object DexEntries : JsonDataRegistry<PokedexEntry> {
     fun computeEvolutionDisplays() {
         evolutionDisplays.clear()
         PokemonSpecies.species.forEach {
-            // A broken datapack evolution shouldn't stop the world from loading
             try {
                 evolutionDisplays.addAll(buildDisplays(it.standardForm) + it.forms.flatMap { form -> buildDisplays(form) })
             } catch (e: Exception) {
