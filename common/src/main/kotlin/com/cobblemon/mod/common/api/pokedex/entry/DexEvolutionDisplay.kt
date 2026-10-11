@@ -77,8 +77,8 @@ fun getToolTipHeaderIcon(evolution: Evolution): DexEvolutionRequirementDisplay? 
 }
 
 
-fun getToolTipHeaderIcon(itemInteractionEvolution: ItemInteractionEvolution): CobblemonDexEvolutionRequirementDisplay {
-    val item = itemInteractionEvolution.requiredContext.items.get().first().value()
+fun getToolTipHeaderIcon(itemInteractionEvolution: ItemInteractionEvolution): CobblemonDexEvolutionRequirementDisplay? {
+    val item = itemInteractionEvolution.requiredContext.items.orElse(null)?.firstOrNull()?.value() ?: return null
     return CobblemonDexEvolutionRequirementDisplay(item, lang("ui.pokedex.evolution.item_interact.tooltip", item.description.plainCopy().green()))
 }
 
@@ -87,7 +87,9 @@ fun getToolTipHeaderIcon(tradeEvolution: TradeEvolution): CobblemonDexEvolutionR
     val tooltip = if (species == null) {
         lang("ui.pokedex.evolution.trade.tooltip.with_any_species")
     } else {
-        lang("ui.pokedex.evolution.trade.tooltip.with_species", PokemonSpecies.getByIdentifier(species.asIdentifierDefaultingNamespace())!!.translatedName.green())
+        PokemonSpecies.getByIdentifier(species.asIdentifierDefaultingNamespace())
+            ?.let { lang("ui.pokedex.evolution.trade.tooltip.with_species", it.translatedName.green()) }
+            ?: lang("ui.pokedex.evolution.trade.tooltip.with_any_species")
     }
     return CobblemonDexEvolutionRequirementDisplay(CobblemonItems.LINK_CABLE, tooltip)
 }
@@ -322,8 +324,8 @@ fun buildMoveTypeRequirement(moveTypeRequirement: MoveTypeRequirement): DexEvolu
     return CobblemonDexEvolutionRequirementDisplay(icon, tooltip)
 }
 
-fun buildOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): DexEvolutionRequirementDisplay {
-    val item = ownerHoldsItemRequirement.itemCondition.items.get().first().value()
+fun buildOwnerHoldsItemRequirement(ownerHoldsItemRequirement: OwnerHoldsItemRequirement): DexEvolutionRequirementDisplay? {
+    val item = ownerHoldsItemRequirement.itemCondition.items.orElse(null)?.firstOrNull()?.value() ?: return null
     val tooltip = lang("ui.pokedex.requirement.owner_held_item.tooltip", item.description.plainCopy().green())
 
     return CobblemonDexEvolutionRequirementDisplay(item, tooltip)
