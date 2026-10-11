@@ -36,6 +36,7 @@
 - Added `cobblemon:catch_alpha_pokemon` advancement trigger and `totalAlphaCaptureCount` stat for captured Alpha Pokémon.
 
 ### New rideable Pokémon
+- Pidgeot
 - Crobat
 - Skarmory
 - Milotic
@@ -106,7 +107,9 @@
 - Avalugg (Hisuian Form)
 
 ### Model updates for the following Pokémon
-
+- Pidgey
+- Pidgeotto
+- Pidgeot
 - Sandshrew
 - Sandslash
 - Nidoking
