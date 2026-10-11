@@ -28,6 +28,7 @@
 - Fixed the Pokédex evolution tree crashing with a stack overflow on evolutions that loop back on themselves.
 - Fixed form-changing evolutions sometimes resolving to the source form in the Pokédex evolution tree.
 - Broken datapack evolutions are now logged and skipped in the Pokédex evolution tree instead of crashing.
+- Fixed the `alpha` property having no tab completion in commands such as `/pokespawn`, `/pokegive` and `/pokeedit`, and added the missing `dmax_level`, `gmax_factor` and `tradable` aliases to tab completion
 
 ### Developer
 
