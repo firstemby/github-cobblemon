@@ -13,6 +13,8 @@ import com.cobblemon.mod.common.api.abilities.Abilities
 import com.cobblemon.mod.common.api.data.DataRegistry
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.pokemon.Natures
+import com.cobblemon.mod.common.api.pokemon.feature.AbstractChoiceSpeciesFeatureProvider
+import com.cobblemon.mod.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider
 import com.cobblemon.mod.common.api.pokemon.stats.Stats
 import com.cobblemon.mod.common.api.pokemon.status.Statuses
 import com.cobblemon.mod.common.api.properties.CustomPokemonProperty
@@ -134,7 +136,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
     private fun addDefaults() {
         this.inject(setOf("level", "lvl", "l"), setOf("1", "${Cobblemon.config.maxPokemonLevel}") )
         this.inject(setOf("shiny", "s"), setOf("yes", "no"))
-        this.inject(setOf("gender"), Gender.values().map { it.name.lowercase() })
+        this.inject(setOf("gender"), Gender.entries.map { it.name.lowercase() })
         this.inject(setOf("friendship"), setOf("0", Cobblemon.config.maxPokemonFriendship.toString()))
         this.inject(setOf("fullness"), setOf("0", "255"))
         this.inject(setOf("pokeball"), PokeBalls.all().map { it.name.simplify() })
@@ -164,7 +166,11 @@ internal object PropertiesCompletionProvider : DataRegistry {
     private fun addCustom() {
         CustomPokemonProperty.properties.forEach { property ->
             // We won't tab complete properties that have no key attached to them as it would be fairly hard to determine which one to suggest
-            if (property.needsKey) {
+            if (property.needsKey && property !is AbstractChoiceSpeciesFeatureProvider<*>) {
+                this.inject(property.keys, property.examples())
+            }
+            // Except choice features that fill examples with all available choices - Gito
+            if (property is AbstractChoiceSpeciesFeatureProvider<*>) {
                 this.inject(property.keys, property.examples())
             }
         }
